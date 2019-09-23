@@ -7,7 +7,7 @@ CommonwealthCurator::Engine.routes.draw do
   #TODO Make Below only avaialable to admins
 
   namespace :controlled_terms do
-    CommonwealthCurator::ControlledTerms::ALLOWED_NOM_TYPES.each do |nom_type|
+    CommonwealthCurator::ControlledTerms.nomenclature_types.each do |nom_type|
       resources nom_type.underscore.pluralize.to_sym, only: [:index, :show, :update, :create], controller: 'nomenclatures', type: nom_type
     end
     resources :authorities

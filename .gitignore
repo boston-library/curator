@@ -2,3 +2,7 @@
 log/*.log
 pkg/
 Gemfile.lock
+.ruby-version
+storage/
+log/
+tmp/

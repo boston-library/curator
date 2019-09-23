@@ -1,5 +1,6 @@
+# frozen_string_literal: true
 module CommonwealthCurator
-  class ApplicationSerializer < ActiveModel::Serializer
+  class CuratorSerializer < ActiveModel::Serializer
     attributes :id, :created_at, :updated_at
 
     def serializable_hash(adapter_options = nil, options = {}, adapter_instance = self.class.serialization_adapter_instance)

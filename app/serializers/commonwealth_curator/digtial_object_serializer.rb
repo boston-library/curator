@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module CommonwealthCurator
-  class DigtialObjectSerializer < ApplicationSerializer
+  class DigtialObjectSerializer < CuratorSerializer
     attributes :ark_id
   end
 end

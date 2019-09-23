@@ -1,37 +1,42 @@
 # frozen_string_literal: true
 module CommonwealthCurator
-  module Cannonicable
-    extend ActiveSupport::Concern
-    #Key of the JSON Element where the cannonical label resides in the remote service
-    AUTH_LABEL_KEY='http://www.w3.org/2000/01/rdf-schema#label'.freeze
-    NOM_LABEL_KEY='http://www.w3.org/2004/02/skos/core#prefLabel'.freeze
-    included do
-      before_validation :get_canonical_label, if: proc {|c| c.respond_to?(:should_get_cannonical?) && c.should_get_cannonical? }
+  module ControlledTerms
+    module Cannonicable
+      extend ActiveSupport::Concern
+      #Key of the JSON Element where the cannonical label resides in the remote service
+      NOM_LABEL_KEY='http://www.w3.org/2004/02/skos/core#prefLabel'.freeze
+      private_constant :NOM_LABEL_KEY
+      included do
+        before_validation :get_canonical_label, if: proc {|c| c.should_get_cannonical_label? }
 
-      private
-      def cannonical_format(code)
-        case code
-        when 'gmgpc', 'lctgm', 'naf', 'lcsh', 'lcgft', 'iso639-2', 'marcrelators', 'resourceTypes'
-          '.skos.json'
-        when 'aat', 'tgn', 'ulan'
-          '.jsonld'
+
+        protected
+        def should_get_cannonical_label?
+          self.label.blank? && self.label_required? && self.value_uri.present?
+        end
+
+        def label_required?
+          self.class.validators.flat_map{|c| c.attributes if c.kind == :presence}.compact.include?(:label)
+        end
+
+        private
+        def get_canonical_label
+          label_json_block = case self.cannonical_json_format
+          when 'jsonld'
+            ->(json_body){ json_body[NOM_LABEL_KEY] if json_body[NOM_LABEL_KEY].present? }
+          when 'skos.json'
+            ->(json_body){
+              label_el = json_body.collect{|aj| aj[NOM_LABEL_KEY] if aj.key?(NOM_LABEL_KEY)}.compact.flatten.shift
+              label_el['@value'] if label_el.present?
+            }
+          else
+            nil
+          end
+          unless label_json_block.blank?
+            self.label = ControlledTerms::CannonicalLabelService.call(url: value_uri, json_path: json_path, &post_fetch)
+          end
         end
       end
-      # def get_canonical_label
-      #   if authority_is_getty?
-      #     json_path = '.jsonld'
-      #     post_fetch = ->(auth_json){
-      #       auth_json[NOM_LABEL_KEY] if auth_json[NOM_LABEL_KEY].present?
-      #     }
-      #   else
-      #     json_path = '.skos.json'
-      #     post_fetch = ->(auth_json){
-      #       label_el = auth_json.collect{|aj| aj[NOM_LABEL_KEY] if aj.key?(NOM_LABEL_KEY)}.compact.flatten.shift
-      #       label_el['@value'] if label_el.present?
-      #     }
-      #   end
-      #   self.label = ControlledTerms::RemoteAuthorityService.call(url: value_uri, json_path: json_path, &post_fetch)
-      # end
     end
   end
 end

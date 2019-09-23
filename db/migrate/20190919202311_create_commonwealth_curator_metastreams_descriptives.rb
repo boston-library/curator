@@ -10,7 +10,6 @@ class CreateCommonwealthCuratorMetastreamsDescriptives < ActiveRecord::Migration
       t.jsonb :subject_json, index: { using: :gin, opclass: :jsonb_path_ops }, default: '{}', null: false#/uniform_title/temporal/date
       t.jsonb :related_json, index: {using: :gin,  opclass: :jsonb_path_ops }, default: '{}', null: false
       t.jsonb :cartographics_json, index: { using: :gin, opclass: :jsonb_path_ops }, default: '{}', null: false
-      t.integer :lock_version
       t.integer :digital_origin, default: 1, null: false
       t.integer :origin_event, default: 0, null: false
       t.boolean :resource_type_manuscript, default: false, null: false
@@ -30,8 +29,9 @@ class CreateCommonwealthCuratorMetastreamsDescriptives < ActiveRecord::Migration
       t.string :toc_url
       t.text :toc, default: ''
       t.text :abstract, default: ''
+      t.integer :lock_version
       t.timestamps null: false
-      t.datetime :deleted_at, index: { where: 'deleted_at is null' }
+      t.datetime :deleted_at, index: { where: 'deleted_at is null', using: :btree }
     end
   end
 end

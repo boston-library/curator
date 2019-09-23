@@ -1,15 +1,14 @@
 # frozen_string_literal: true
 module CommonwealthCurator
-  class ApplicationService
+  class CuratorService
     class << self
       def call(*args, &block)
-        self.new(&args).call(&block)
+        new(*args).call(&block)
       end
     end
 
-
     def call(&block)
-      fail NotImplementedError, 'Abstract call cannot be called!'
+      fail NotImplementedError, "#{self.class}#call is unimplemented."
     end
   end
 end
