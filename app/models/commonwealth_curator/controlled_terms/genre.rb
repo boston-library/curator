@@ -3,7 +3,8 @@ module CommonwealthCurator
   class ControlledTerms::Genre < ControlledTerms::Nomenclature
     include ControlledTerms::AuthorityDelegation
     include ControlledTerms::Cannonicable
-    
+    include Mappings::Mappable
+
     belongs_to :authority, class_name: 'CommonwealthCurator::ControlledTerms::Authority', foreign_key: :authority_id, inverse_of: :genres, optional: true
 
     validates :label, presence: true

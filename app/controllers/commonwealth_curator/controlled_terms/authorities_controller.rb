@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-require_dependency 'commonwealth_curator/application_controller'
-
 module CommonwealthCurator
   class ControlledTerms::AuthoritiesController < ApplicationController
     before_action :set_controlled_terms_authority, only: [:show, :update]

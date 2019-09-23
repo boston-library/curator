@@ -10,7 +10,6 @@ class CreateCommonwealthCuratorMetastreamsWorkflows < ActiveRecord::Migration[5.
       t.string :ingest_datastream
       t.integer :lock_version
       t.timestamps null: false
-      t.datetime :deleted_at, index: { using: :btree, where: 'deleted_at is null' }
     end
   end
 end

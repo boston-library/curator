@@ -1,4 +1,6 @@
-# desc "Explaining what the task does"
-# task :commonwealth_curator do
-#   # Task goes here
-# end
+namespace :commonwealth_curator do
+  desc "Load and run seed task"
+  task :run_seed do
+    CommonwealthCurator::Engine.load_seed
+  end
+end

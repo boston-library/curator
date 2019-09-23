@@ -7,7 +7,6 @@ class CreateCommonwealthCuratorControlledTermsNomenclatures < ActiveRecord::Migr
       t.string :type, index: { using: :btree }, null: false
       t.integer :lock_version
       t.timestamps null: false
-      t.datetime :deleted_at, index: { using: :btree, where: 'deleted_at is null' }
       t.index '(term_data->"id_from_auth")', using: :gin, opclass: :jsonb_path_ops
     end
   end

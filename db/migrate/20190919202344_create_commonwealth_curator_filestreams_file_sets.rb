@@ -7,11 +7,10 @@ class CreateCommonwealthCuratorFilestreamsFileSets < ActiveRecord::Migration[5.2
       t.string :file_name_base, null: false
       t.string :page_label
       t.string :page_type
-      t.integer :sequence, default: 0, index: { using: :btree, order: 'sequence asc' }
+      t.integer :position, default: 0, index: { using: :btree, order: 'sequence asc' } #Alias as Sequenece
       t.jsonb :checksum_data, default: '{}', null: false
       t.integer :lock_version
       t.timestamps null: false
-      t.datetime :deleted_at, index: { using: :btree, where: 'deleted_at is null'}
     end
   end
 end

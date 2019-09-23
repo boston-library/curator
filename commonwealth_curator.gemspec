@@ -33,6 +33,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'attr_json', '~> 0.7.0'
   spec.add_dependency 'oj', '~> 3.9.1'
   spec.add_dependency 'ox', '~> 2.11'
+  spec.add_dependency 'paper_trail', '~> 10.3'
+  spec.add_dependency 'acts_as_list', '~> 0.9'
 
   spec.add_development_dependency 'redis', '~> 4.1'
   spec.add_development_dependency 'net-http-persistent', '~> 3.1'

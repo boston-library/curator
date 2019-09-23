@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require_dependency "commonwealth_curator/application_controller"
 module CommonwealthCurator
   class CollectionsController < ApplicationController
     before_action :set_collection, only: [:show, :update, :destroy]
