@@ -3,8 +3,14 @@ module CommonwealthCurator
   class Institution < ApplicationRecord
     include CommonwealthCurator::Mintable
     include CommonwealthCurator::Metastreamable
+
+    belongs_to :location, inverse_of: :institution_locations, class_name: 'CommonwealthCurator::ControlledTerms::Geographic'
+
     has_many :host_collections, inverse_of: :institution, class_name: 'CommonwealthCurator::Mappings::HostCollection'
-    #host_collections is a mapping object
-    has_many :collections, inverse_of: :institution, class_name: 'CommonwealthCurator::Collection'
+    #host_collections is a mapping object not to be consfused with collections
+    has_many :collections, inverse_of: :institution, class_name: 'CommonwealthCurator::Collection', dependent: :destroy
+
+    has_many :collection_admin_set_digital_objects, through: :collections, source: :admin_set_digital_objects
+    
   end
 end

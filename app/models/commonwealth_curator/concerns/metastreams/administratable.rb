@@ -3,9 +3,9 @@ module CommonwealthCurator
   module Metastreams
     module Administratable
       extend ActiveSupport::Concern
-
       included do
-        has_one :administrative, as: :administratable, inverse_of: :administratable, class_name: 'CommonwealthCurator::Metastreams::Administrative'
+        default_scope { joins(:administrative).preload(:administrative) }
+        has_one :administrative, as: :administratable, inverse_of: :administratable, class_name: 'CommonwealthCurator::Metastreams::Administrative', dependent: :destroy
       end
     end
   end

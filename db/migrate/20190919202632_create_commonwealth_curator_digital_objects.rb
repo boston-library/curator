@@ -5,6 +5,8 @@ class CreateCommonwealthCuratorDigitalObjects < ActiveRecord::Migration[5.2]
       t.belongs_to :admin_set, index: { unique: true, using: :btree }, foreign_key: { to_table: :curator_collections }, null: false
       t.integer :lock_version
       t.timestamps null: false
+      t.boolean :archived, index: { using: :btree }, default: false, null: false
+      t.index :archived, where: 'archived = false', using: :btree
     end
   end
 end

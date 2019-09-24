@@ -4,7 +4,7 @@ module CommonwealthCurator
     module ExemplaryImagable
       extend ActiveSupport::Concern
       included do
-        has_many :exemplary_image_mappings, as: :exemplary_image_of, inverse_of: :exemplary_image_of, class_name: 'CommonwealthCurator::Mappings::ExemplaryImage'
+        has_many :exemplary_image_mappings, as: :exemplary, inverse_of: :exemplary, class_name: 'CommonwealthCurator::Mappings::ExemplaryImage'
       end
     end
   end

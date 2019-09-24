@@ -4,7 +4,8 @@ module CommonwealthCurator
     module Descriptable
       extend ActiveSupport::Concern
       included do
-        has_one :descriptive, as: :descriptable, inverse_of: :descriptable, class_name: 'CommonwealthCurator::Metastreams::Descriptive'
+        default_scope { joins(:descriptive).preload(:descriptive) }
+        has_one :descriptive, as: :descriptable, inverse_of: :descriptable, class_name: 'CommonwealthCurator::Metastreams::Descriptive', dependent: :destroy
       end
     end
   end

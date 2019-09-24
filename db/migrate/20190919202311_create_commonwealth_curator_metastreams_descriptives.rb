@@ -13,7 +13,6 @@ class CreateCommonwealthCuratorMetastreamsDescriptives < ActiveRecord::Migration
       t.integer :digital_origin, default: 1, null: false
       t.integer :origin_event, default: 0, null: false
       t.boolean :resource_type_manuscript, default: false, null: false
-      t.string :name
       t.string :place_of_publication
       t.string :publisher
       t.string :edition
@@ -31,6 +30,8 @@ class CreateCommonwealthCuratorMetastreamsDescriptives < ActiveRecord::Migration
       t.text :abstract, default: ''
       t.integer :lock_version
       t.timestamps null: false
+      t.boolean :archived, index: { using: :btree }, default: false, null: false
+      t.index :archived, where: 'archived = false', using: :btree
     end
   end
 end

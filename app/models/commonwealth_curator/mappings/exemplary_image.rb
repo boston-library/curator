@@ -3,7 +3,7 @@ module CommonwealthCurator
   class Mappings::ExemplaryImage < ApplicationRecord
     VALID_EXEMPLARY_IMAGE_TYPES=%w(Collection DigitalObject)
 
-    belongs_to :exemplary_image_of, inverse_of: :exemplary_image_mappings, polymorphic: true
+    belongs_to :exemplary, inverse_of: :exemplary_image_mappings, polymorphic: true
 
     belongs_to :file_set, inverse_of: :exemplary_image_mappings, class_name: 'CommonwealthCurator::Filestreams::FileSet'
 

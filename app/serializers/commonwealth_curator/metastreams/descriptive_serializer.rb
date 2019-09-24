@@ -21,7 +21,7 @@ module CommonwealthCurator
       end
     end
 
-    attributes :abstract, :access_restrictions, :digital_origin, :edition, :frequency, :issuance, :name, :origin_event, :physical_description_extent, :physical_location_department, :physical_location_shelf_locator, :place_of_publication, :publisher, :resource_type_manuscript, :rights, :series, :subseries, :toc, :toc_url, :name_role, :genre, :license, :language, :resource_type, :physical_location
+    attributes :abstract, :access_restrictions, :digital_origin, :edition, :frequency, :issuance, :origin_event, :physical_description_extent, :physical_location_department, :physical_location_shelf_locator, :place_of_publication, :publisher, :resource_type_manuscript, :rights, :series, :subseries, :toc, :toc_url, :name_role, :genre, :license, :language, :resource_type, :physical_location
 
     attribute :cartographic do
       object.cartographic.as_json

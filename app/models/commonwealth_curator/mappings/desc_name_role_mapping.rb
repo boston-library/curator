@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 module CommonwealthCurator
   class Mappings::DescNameRoleMapping < ApplicationRecord
-    default_scope { includes(:name, :role) }
     belongs_to :descriptive, inverse_of: :name_roles, class_name: 'CommonwealthCurator::Metastreams::Descriptive'
     belongs_to :name, inverse_of: :descriptive_name_roles, class_name: 'CommonwealthCurator::ControlledTerms::Name'
     belongs_to :role, inverse_of: :descriptive_name_roles, class_name: 'CommonwealthCurator::ControlledTerms::Role'

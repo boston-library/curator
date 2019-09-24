@@ -10,7 +10,7 @@ module CommonwealthCurator
     enum origin_event: %w(production publication distribution manufacture).freeze
     #JSON ATTRS
 
-    default_scope { includes(:term_mappings, :name_roles) }
+    default_scope { includes(:term_mappings, :name_roles, :desc_host_collections) }
 
     #Identifier
     attr_json :identifier, CommonwealthCurator::Descriptives::Identifier.to_type, container_attribute: :identifier_json, array: true, default: []
@@ -34,11 +34,15 @@ module CommonwealthCurator
     attr_json :subject_other, CommonwealthCurator::Descriptives::Subject.to_type, container_attribute: :subject_json
 
     #RELS
+    #PARENTS
     belongs_to :descriptable, polymorphic: true, inverse_of: :descriptive
     belongs_to :physical_location, inverse_of: :is_physical_location_of, class_name: 'CommonwealthCurator::ControlledTerms::Name'
 
-    has_many :term_mappings, inverse_of: :descriptive, class_name: 'CommonwealthCurator::Metastreams::DescriptiveTermMapping'
+    #MAPPING OBJECTS
+    has_many :term_mappings, inverse_of: :descriptive, ->{ joins(:mappable).preload(:mappable) } ,class_name: 'CommonwealthCurator::Metastreams::DescriptiveTermMapping'
     #POLYMORPHIC MAP OBJECT
+    has_many :name_roles, inverse_of: :descriptive, ->{ includes(:name, :role) }, class_name: 'CommonwealthCurator::Mappings::DescNameRoleMapping'
+    has_many :desc_host_collections, inverse_of: :descriptive, -> { includes(:host_collection) } class_name: 'CommonwealthCurator::Mappings::DescHostCollection'
 
     #TERMS
     has_many :genres, through: :term_mappings, source: :mappable, source_type: 'CommonwealthCurator::ControlledTerms::Genre'
@@ -50,7 +54,7 @@ module CommonwealthCurator
     has_many :subject_names, through: :term_mappings, source: :mappable, source_type: 'CommonwealthCurator::ControlledTerms::Name'
     has_many :subject_geos, through: :term_mappings, source: :mappable, source_type: 'CommonwealthCurator::ControlledTerms::Geographic'
 
-    #NAME ROLE MAPPINGS
-    has_many :name_roles, inverse_of: :descriptive, class_name: 'CommonwealthCurator::Mappings::DescNameRoleMapping'
+    #HOST COLLECTIONS
+    has_many :host_collections, through: :desc_host_collections, source: :host_collection
   end
 end

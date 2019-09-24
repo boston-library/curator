@@ -5,7 +5,7 @@ module CommonwealthCurator
     include ControlledTerms::Cannonicable
     include Mappings::Mappable
 
-    belongs_to :authority, class_name: 'CommonwealthCurator::ControlledTerms::Authority', foreign_key: :authority_id, inverse_of: :genres, optional: true
+    belongs_to :authority, inverse_of: :genres, class_name: 'CommonwealthCurator::ControlledTerms::Authority', optional: true
 
     validates :label, presence: true
 
