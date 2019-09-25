@@ -16,9 +16,9 @@ AUTHORITY_INPUTS=[
 
 
 AUTHORITY_INPUTS.each do |auth_input|
-  ControlledTerms::Authority.transaction do
+  CommonwealthCurator::ControlledTerms::Authority.transaction do
     begin
-      ControlledTerms::Authority.where(auth_input).first_or_create!
+      CommonwealthCurator::ControlledTerms::Authority.where(auth_input).first_or_create!
     rescue ActiveRecord::ActiveRecordError => e
       Rails.logger.error "Failed to seed Authority Record with the following input #{auth_input.inspect}"
       Rails.logger.error e.inspect
@@ -35,9 +35,9 @@ BASIC_GENRE_INPUTS={
 
 
 BASIC_GENRE_INPUTS.each do |auth_code, ids_from_auth|
-  ControlledTerms::Genre.transaction do
+  CommonwealthCurator::ControlledTerms::Genre.transaction do
     begin
-      auth = ControlledTerms::Authority.find_by(code: auth_code)
+      auth = CommonwealthCurator::ControlledTerms::Authority.find_by(code: auth_code)
       ids_from_auth.each do |id_from_auth|
         puts "Seeding Basic Genre #{id_from_auth}..."
         auth.genres.where(term_data: {basic: true, id_from_auth: id_from_auth}).first_or_create!

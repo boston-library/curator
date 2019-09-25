@@ -4,6 +4,8 @@ require 'addressable'
 require 'attr_json'
 require 'active_model_serializers'
 
+require "commonwealth_curator/engine"
+
 module CommonwealthCurator
   extend ActiveSupport::Autoload
 
@@ -17,5 +19,3 @@ module CommonwealthCurator
     CommonwealthCurator::Descriptives.eager_load!
   end
 end
-
-require "commonwealth_curator/engine"

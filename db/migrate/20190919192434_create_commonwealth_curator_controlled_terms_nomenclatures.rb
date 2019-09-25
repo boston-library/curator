@@ -7,9 +7,8 @@ class CreateCommonwealthCuratorControlledTermsNomenclatures < ActiveRecord::Migr
       t.string :type, index: { using: :btree }, null: false
       t.integer :lock_version
       t.timestamps null: false
-      t.boolean :archived, index: { using: :btree }, default: false, null: false
-      t.index '(term_data->"id_from_auth")', using: :gin, opclass: :jsonb_path_ops
-      t.index :archived, where: 'archived = false', using: :btree
+      t.datetime :archived_at, index: { using: :btree, where: 'archived_at is null' }
+      t.index "((term_data ->> 'id_from_auth'))", using: :btree, name: 'index_ctl_terms_nom_id_from_auth_jsonb_field'
     end
   end
 end

@@ -10,8 +10,7 @@ class CreateCommonwealthCuratorMetastreamsWorkflows < ActiveRecord::Migration[5.
       t.string :ingest_datastream, null: false
       t.integer :lock_version
       t.timestamps null: false
-      t.boolean :archived, index: { using: :btree }, default: false, null: false
-      t.index :archived, where: 'archived = false', using: :btree
+      t.datetime :archived_at, index: { using: :btree, where: 'archived_at is null' }
     end
   end
 end

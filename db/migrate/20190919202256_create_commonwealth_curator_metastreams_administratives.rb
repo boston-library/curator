@@ -5,11 +5,10 @@ class CreateCommonwealthCuratorMetastreamsAdministratives < ActiveRecord::Migrat
       t.integer :description_standard
       t.boolean :harvestable, index: { using: :btree }, default: true, null: false
       t.boolean :flagged, default: false, null: false
-      t.string :destination_site, index: { using: :gin, opclass: :pg_trgm_ops}, array: true, null: false, default: ['commonwealth']
+      t.string :destination_site, index: { using: :gin }, array: true, null: false, default: ['commonwealth']
       t.integer :lock_version
       t.timestamps null: false
-      t.boolean :archived, index: { using: :btree }, default: false, null: false
-      t.index :archived, where: 'archived = false', using: :btree
+      t.datetime :archived_at, index: { using: :btree, where: 'archived_at is null' }
     end
   end
 end

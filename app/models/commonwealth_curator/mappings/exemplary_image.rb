@@ -7,8 +7,15 @@ module CommonwealthCurator
 
     belongs_to :file_set, inverse_of: :exemplary_image_mappings, class_name: 'CommonwealthCurator::Filestreams::FileSet'
 
-    validates :exemplary_image_of_type, inclusion: {in: VALID_EXEMPLARY_IMAGE_TYPES.collect{|type| "CommonwealthCurator::#{type}"}, allow_nil: true }
+    validates :exemplary_type, inclusion: {in: VALID_EXEMPLARY_IMAGE_TYPES.collect{|type| "CommonwealthCurator::#{type}"}, allow_nil: true }
 
-    validates :file_set_id, uniqueness: {scope: [:exemplary_image_of_type, :exemplary_image_of_id], allow_nil: true }
+    validates :file_set_id, uniqueness: {scope: [:exemplary_type, :exemplary_id], allow_nil: true }
+
+    validate :validate_file_set_type, if: proc {|ei| ei.file_set.present? }
+
+    private
+    def validate_file_set_type
+      self.errors.add(:file_set, "file_set_type is not a image, document, video!") unless %w(image document video).include?(self.file_set_type)
+    end
   end
 end

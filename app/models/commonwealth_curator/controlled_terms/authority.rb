@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 module CommonwealthCurator
   class ControlledTerms::Authority < ApplicationRecord
-    AUTH_LABEL_KEY='http://www.w3.org/2000/01/rdf-schema#label'.freeze
-    private_constant :AUTH_LABEL_KEY
+    AUTH_NAME_KEY='http://www.w3.org/2000/01/rdf-schema#label'.freeze
+    private_constant :AUTH_NAME_KEY
 
     before_validation :get_canonical_name, if: :should_get_cannonical_name?
 
@@ -39,9 +39,9 @@ module CommonwealthCurator
     private
     def get_canonical_name
       name_json_block = case self.cannonical_json_format
-      when 'jsonld'
+      when '.jsonld'
         ->(json_body){ json_body[AUTH_NAME_KEY] if json_body[AUTH_NAME_KEY].present? }
-      when 'skos.json'
+      when '.skos.json'
         ->(json_body){
           label_el = json_body.collect{|aj| aj[AUTH_NAME_KEY] if aj.key?(AUTH_NAME_KEY)}.compact.flatten.shift
           label_el['@value'] if label_el.present?
@@ -49,8 +49,10 @@ module CommonwealthCurator
       else
         nil
       end
+
       unless name_json_block.blank?
-        self.name = ControlledTerms::CannonicalLabelService.call(url: value_uri, json_path: json_path, &name_json_block)
+        awesome_print "IM Here!"
+        self.name = ControlledTerms::CannonicalLabelService.call(url: base_url, json_path: self.cannonical_json_format, &name_json_block)
       end
     end
   end
