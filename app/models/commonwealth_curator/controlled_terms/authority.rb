@@ -51,7 +51,6 @@ module CommonwealthCurator
       end
 
       unless name_json_block.blank?
-        awesome_print "IM Here!"
         self.name = ControlledTerms::CannonicalLabelService.call(url: base_url, json_path: self.cannonical_json_format, &name_json_block)
       end
     end

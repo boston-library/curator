@@ -6,11 +6,7 @@ module CommonwealthCurator
     include AttrJson::Record
     include AttrJson::Record::Dirty
     include AttrJson::Record::QueryScopes
-
-    def self.attribute_names
-      super + attr_json_registry.attribute_names
-    end
-
+    
     attr_json_config(default_container_attribute: :term_data)
 
     attr_json :label, :string

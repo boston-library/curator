@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateCommonwealthCuratorDigitalObjects < ActiveRecord::Migration[5.2]
   def change
     create_table :curator_digital_objects do |t|

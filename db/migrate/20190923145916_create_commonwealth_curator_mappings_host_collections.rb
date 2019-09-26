@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateCommonwealthCuratorMappingsHostCollections < ActiveRecord::Migration[5.2]
   def change
     create_table :curator_mappings_host_collections do |t|

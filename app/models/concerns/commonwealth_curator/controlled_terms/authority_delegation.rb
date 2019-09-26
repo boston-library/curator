@@ -11,12 +11,11 @@ module CommonwealthCurator
 
         delegate :cannonical_json_format, to: :authority, prefix: false, allow_nil: true
 
-        validates :id_from_auth, uniqueness: { scope: :authority_id, allow_nil: true }, if: Proc.new {|n| n.authority.present? && n.id_from_auth.present? } #We want these to be unique if the authority is present
+        validates :authority_id, uniqueness: { conditions: -> { where(term_data: { id_from_auth: select(Arel.sql("term_data ->> 'id_from_auth'")).pluck(Arel.sql("term_data ->> 'id_from_auth'")) }) }, allow_nil: true }, if: Proc.new {|n| n.authority.present? && n.id_from_auth.present? } #We want these to be unique if the authority is present
 
         def value_uri
           Addressable::URI.join("#{authority_base_url}/", id_from_auth).to_s if authority_base_url.present? && id_from_auth.present?
         end
-
       end
     end
   end

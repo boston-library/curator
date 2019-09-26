@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateCommonwealthCuratorFilestreamsFileSets < ActiveRecord::Migration[5.2]
   def change
     create_table :curator_filestreams_file_sets do |t|

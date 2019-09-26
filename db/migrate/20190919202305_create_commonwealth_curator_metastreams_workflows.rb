@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateCommonwealthCuratorMetastreamsWorkflows < ActiveRecord::Migration[5.2]
   def change
     create_table :curator_metastreams_workflows do |t|
