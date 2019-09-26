@@ -4,7 +4,7 @@ module CommonwealthCurator
     module Workflowable
       extend ActiveSupport::Concern
       included do
-        default_scope { joins(:workflow).preload(:workflow) }
+        scope :with_workflow, -> { joins(:workflow).preload(:workflow) }
         has_one :workflow, as: :workflowable, inverse_of: :workflowable, class_name: 'CommonwealthCurator::Metastreams::Workflow', dependent: :destroy
       end
     end
