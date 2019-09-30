@@ -1,6 +1,6 @@
 require "rails_helper"
 
-module CommonwealthCurator
+module Curator
   RSpec.describe ControlledTerms::NomenclaturesController, type: :routing do
     describe "routing" do
       it "routes to #index" do

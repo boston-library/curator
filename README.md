@@ -1,4 +1,4 @@
-# CommonwealthCurator
+# Curator
 Short description and motivation.
 
 ## Usage

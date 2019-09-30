@@ -14,7 +14,7 @@ require "action_view/railtie"
 # require "rails/test_unit/railtie"
 
 Bundler.require(*Rails.groups)
-require "commonwealth_curator"
+require "curator"
 
 module Internal
   class Application < Rails::Application
