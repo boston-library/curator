@@ -16,9 +16,10 @@ AUTHORITY_INPUTS=[
 
 
 AUTHORITY_INPUTS.each do |auth_input|
-  Curator::ControlledTerms::Authority.transaction do
+  Curator.controlled_terms.authority_class.transaction do
     begin
-      Curator::ControlledTerms::Authority.where(auth_input).first_or_create!
+      puts "Seeding authority with attributes #{auth_input.inspect}"
+      Curator.controlled_terms.authority_class.where(auth_input).first_or_create!
     rescue => e
       Rails.logger.error "Failed to seed Authority Record with the following input #{auth_input.inspect}"
       Rails.logger.error e.inspect
@@ -35,9 +36,10 @@ BASIC_GENRE_INPUTS={
 
 
 BASIC_GENRE_INPUTS.each do |auth_code, ids_from_auth|
-  Curator::ControlledTerms::Genre.transaction do
+  Curator.controlled_terms.genre_class.transaction do
     begin
-      auth = Curator::ControlledTerms::Authority.find_by(code: auth_code)
+      puts "seeding with authority code #{auth_code}..."
+      auth = Curator.controlled_terms.authority_class.find_by(code: auth_code)
       ids_from_auth.each do |id_from_auth|
         puts "Seeding Basic Genre #{id_from_auth}..."
         auth.genres.where(term_data: {basic: true, id_from_auth: id_from_auth}).first_or_create!
@@ -67,9 +69,10 @@ LICENSE_INPUTS=[
 
 
 LICENSE_INPUTS.each do |license_input|
-  Curator::ControlledTerms::License.transaction do
+  puts "Seeding License with attributes #{license_input}"
+  Curator.controlled_terms.license_class.transaction do
     begin
-      Curator::ControlledTerms::License.where(term_data: license_input).first_or_create!
+      Curator.controlled_terms.license_class.where(term_data: license_input).first_or_create!
     rescue => e
       puts "Failed to seed License for the following inpput #{license_input.inspect}"
       puts e.inspect

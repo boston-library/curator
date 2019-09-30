@@ -39,10 +39,10 @@ module Curator
     belongs_to :physical_location, inverse_of: :is_physical_location_of, class_name: Curator.controlled_terms.name_class.to_s
 
     #MAPPING OBJECTS
-    has_many :desc_term_mappings, inverse_of: :descriptive, ->{ joins(:mappable).preload(:mappable) }, class_name: Curator.mappings.desc_term_class.to_s
+    has_many :desc_term_mappings, -> { joins(:mappable).preload(:mappable) }, inverse_of: :descriptive, class_name: Curator.mappings.desc_term_class.to_s
     #POLYMORPHIC MAP OBJECT
-    has_many :name_roles, inverse_of: :descriptive, ->{ includes(:name, :role) }, class_name: Curator.mappings.desc_name_role_class.to_s
-    has_many :desc_host_collections, inverse_of: :descriptive, -> { includes(:host_collection) } class_name: Curator.mappings.desc_host_collection_class.to_s
+    has_many :name_roles,  -> { includes(:name, :role) } ,inverse_of: :descriptive, class_name: Curator.mappings.desc_name_role_class.to_s
+    has_many :desc_host_collections, -> { includes(:host_collection) }, inverse_of: :descriptive, class_name: Curator.mappings.desc_host_collection_class.to_s
 
     #TERMS
     has_many :genres, through: :term_mappings, source: :mappable, source_type: Curator.controlled_terms.genre_class.to_s

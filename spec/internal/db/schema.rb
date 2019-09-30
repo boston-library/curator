@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(version: 2019_09_25_164513) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "archived_at"
+    t.index "((term_data ->> 'basic'::text))", name: "index_ctl_terms_basic_genre_jsonb_field"
     t.index "((term_data ->> 'id_from_auth'::text))", name: "index_ctl_terms_nom_id_from_auth_jsonb_field"
     t.index ["archived_at"], name: "index_curator_controlled_terms_nomenclatures_on_archived_at", where: "(archived_at IS NULL)"
     t.index ["authority_id"], name: "index_curator_controlled_terms_nomenclatures_on_authority_id"
@@ -125,21 +126,21 @@ ActiveRecord::Schema.define(version: 2019_09_25_164513) do
     t.index ["ark_id"], name: "index_curator_institutions_on_ark_id", unique: true
   end
 
-  create_table "curator_mapping_desc_name_role_mappings", force: :cascade do |t|
+  create_table "curator_mapping_desc_name_roles", force: :cascade do |t|
     t.bigint "descriptive_id", null: false
     t.bigint "name_id", null: false
     t.bigint "role_id", null: false
     t.index ["descriptive_id", "name_id", "role_id"], name: "unique_idx_on_meta_desc_name_role_on_desc_name_role", unique: true
-    t.index ["descriptive_id"], name: "index_curator_mapping_desc_name_role_mappings_on_descriptive_id"
-    t.index ["name_id"], name: "index_curator_mapping_desc_name_role_mappings_on_name_id"
-    t.index ["role_id"], name: "index_curator_mapping_desc_name_role_mappings_on_role_id"
+    t.index ["descriptive_id"], name: "index_curator_mapping_desc_name_roles_on_descriptive_id"
+    t.index ["name_id"], name: "index_curator_mapping_desc_name_roles_on_name_id"
+    t.index ["role_id"], name: "index_curator_mapping_desc_name_roles_on_role_id"
   end
 
-  create_table "curator_mapping_desc_term_mappings", force: :cascade do |t|
+  create_table "curator_mapping_desc_terms", force: :cascade do |t|
     t.bigint "descriptive_id", null: false
     t.string "mappable_type", null: false
     t.bigint "mappable_id", null: false
-    t.index ["descriptive_id"], name: "index_curator_mapping_desc_term_mappings_on_descriptive_id"
+    t.index ["descriptive_id"], name: "index_curator_mapping_desc_terms_on_descriptive_id"
     t.index ["mappable_id", "mappable_type", "descriptive_id"], name: "unique_idx_desc_map_on_mappable_poly_and_descriptive", unique: true
     t.index ["mappable_type", "mappable_id"], name: "index_meta_desc_map_on_mappable_poly"
   end
@@ -261,10 +262,10 @@ ActiveRecord::Schema.define(version: 2019_09_25_164513) do
   add_foreign_key "curator_collections", "curator_institutions", column: "institution_id"
   add_foreign_key "curator_controlled_terms_nomenclatures", "curator_controlled_terms_authorities", column: "authority_id", on_delete: :cascade
   add_foreign_key "curator_digital_objects", "curator_collections", column: "admin_set_id"
-  add_foreign_key "curator_mapping_desc_name_role_mappings", "curator_controlled_terms_nomenclatures", column: "name_id", on_delete: :cascade
-  add_foreign_key "curator_mapping_desc_name_role_mappings", "curator_controlled_terms_nomenclatures", column: "role_id", on_delete: :cascade
-  add_foreign_key "curator_mapping_desc_name_role_mappings", "curator_metastreams_descriptives", column: "descriptive_id", on_delete: :cascade
-  add_foreign_key "curator_mapping_desc_term_mappings", "curator_metastreams_descriptives", column: "descriptive_id", on_delete: :cascade
+  add_foreign_key "curator_mapping_desc_name_roles", "curator_controlled_terms_nomenclatures", column: "name_id", on_delete: :cascade
+  add_foreign_key "curator_mapping_desc_name_roles", "curator_controlled_terms_nomenclatures", column: "role_id", on_delete: :cascade
+  add_foreign_key "curator_mapping_desc_name_roles", "curator_metastreams_descriptives", column: "descriptive_id", on_delete: :cascade
+  add_foreign_key "curator_mapping_desc_terms", "curator_metastreams_descriptives", column: "descriptive_id", on_delete: :cascade
   add_foreign_key "curator_mappings_collection_members", "curator_collections", column: "collection_id", on_delete: :cascade
   add_foreign_key "curator_mappings_collection_members", "curator_digital_objects", column: "digital_object_id", on_delete: :cascade
   add_foreign_key "curator_mappings_desc_host_collections", "curator_mappings_host_collections", column: "host_collection_id", on_delete: :cascade

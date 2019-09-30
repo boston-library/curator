@@ -4,9 +4,9 @@ module Curator
     include ControlledTerms::AuthorityDelegation
     include ControlledTerms::Cannonicable
     include Mappings::Mappable
-    belongs_to :authority, class_name: 'Curator::ControlledTerms::Authority', foreign_key: :authority_id, inverse_of: :resource_types
+    belongs_to :authority, class_name: ControlledTerms.authority_class.to_s, foreign_key: :authority_id, inverse_of: :resource_types
 
-    has_many :descriptive_name_roles, inverse_of: :role, class_name: 'Curator::Metastreams::DescriptiveNameRole', foreign_key: :role_id 
+    has_many :descriptive_name_roles, inverse_of: :role, class_name: Curator.mappings.desc_name_role_class.to_s, foreign_key: :role_id
 
     validates :label, :id_from_auth, presence: true
   end
