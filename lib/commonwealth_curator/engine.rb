@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 module CommonwealthCurator
   class Engine < ::Rails::Engine
-
     config.generators do |g|
       g.orm :active_record
       g.api_only = true
@@ -10,6 +9,15 @@ module CommonwealthCurator
 
     isolate_namespace CommonwealthCurator
     engine_name 'commonwealth_curator'
+
+
+    config.to_prepare do
+      CommonwealthCurator.init_namespace_accessors
+    end
+
+    initializer 'commonwealth_curator.rails_requires' do
+      require 'acts_as_list'
+    end
 
     # config.eager_load_namespaces << CommonwealthCurator
 

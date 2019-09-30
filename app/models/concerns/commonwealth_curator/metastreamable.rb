@@ -2,8 +2,11 @@
 module CommonwealthCurator
   #includes all metastream concerns in one
   module Metastreamable
-    include Metastreams::Administratable
-    include Metastreams::Workflowable
-    include Metastreams::Descriptable
+    extend ActiveSupport::Concern
+    included do
+      include Metastreams::Administratable
+      include Metastreams::Workflowable
+      include Metastreams::Descriptable
+    end
   end
 end

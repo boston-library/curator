@@ -36,7 +36,7 @@ module CommonwealthCurator
     #RELS
     #PARENTS
     belongs_to :descriptable, polymorphic: true, inverse_of: :descriptive
-    belongs_to :physical_location, inverse_of: :is_physical_location_of, class_name: 'CommonwealthCurator::ControlledTerms::Name'
+    belongs_to :physical_location, inverse_of: :is_physical_location_of, class_name: CommonwealthCurator.controlled_terms.name_class.to_s
 
     #MAPPING OBJECTS
     has_many :term_mappings, inverse_of: :descriptive, ->{ joins(:mappable).preload(:mappable) } ,class_name: 'CommonwealthCurator::Metastreams::DescriptiveTermMapping'
