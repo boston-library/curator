@@ -4,7 +4,7 @@ module Curator
     include Curator::Mintable
     include Curator::Metastreamable
 
-    belongs_to :location, inverse_of: :institution_locations, class_name: Curator.controlled_terms.geographic_class.to_s
+    belongs_to :location, inverse_of: :institution_locations, class_name: Curator.controlled_terms.geographic_class.to_s, optional: true
 
     has_many :host_collections, inverse_of: :institution, class_name: Curator.mappings.host_collection_class.to_s
     #host_collections is a mapping object not to be consfused with collections

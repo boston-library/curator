@@ -7,6 +7,8 @@ module Curator
       include Metastreams::Administratable
       include Metastreams::Workflowable
       include Metastreams::Descriptable
+
+      scope :with_metastreams, -> { merge(with_workflow).merge(with_administrative).merge(with_descriptive) }
     end
   end
 end

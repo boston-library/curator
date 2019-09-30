@@ -115,8 +115,10 @@ ActiveRecord::Schema.define(version: 2019_09_25_164513) do
   end
 
   create_table "curator_institutions", force: :cascade do |t|
+    t.bigint "location_id"
     t.string "ark_id", null: false
     t.string "name", null: false
+    t.string "url"
     t.text "abstract", default: ""
     t.integer "lock_version"
     t.datetime "created_at", null: false
@@ -124,6 +126,7 @@ ActiveRecord::Schema.define(version: 2019_09_25_164513) do
     t.datetime "archived_at"
     t.index ["archived_at"], name: "index_curator_institutions_on_archived_at", where: "(archived_at IS NULL)"
     t.index ["ark_id"], name: "index_curator_institutions_on_ark_id", unique: true
+    t.index ["location_id"], name: "index_inst_on_geo_location_nom"
   end
 
   create_table "curator_mapping_desc_name_roles", force: :cascade do |t|
@@ -262,6 +265,7 @@ ActiveRecord::Schema.define(version: 2019_09_25_164513) do
   add_foreign_key "curator_collections", "curator_institutions", column: "institution_id"
   add_foreign_key "curator_controlled_terms_nomenclatures", "curator_controlled_terms_authorities", column: "authority_id", on_delete: :cascade
   add_foreign_key "curator_digital_objects", "curator_collections", column: "admin_set_id"
+  add_foreign_key "curator_institutions", "curator_controlled_terms_nomenclatures", column: "location_id"
   add_foreign_key "curator_mapping_desc_name_roles", "curator_controlled_terms_nomenclatures", column: "name_id", on_delete: :cascade
   add_foreign_key "curator_mapping_desc_name_roles", "curator_controlled_terms_nomenclatures", column: "role_id", on_delete: :cascade
   add_foreign_key "curator_mapping_desc_name_roles", "curator_metastreams_descriptives", column: "descriptive_id", on_delete: :cascade

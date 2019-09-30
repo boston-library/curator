@@ -4,7 +4,7 @@ module Curator
     module AuthorityDelegation
       extend ActiveSupport::Concern
       included do
-        default_scope { includes(:authority) }
+        scope :with_authority, -> { includes(:authority) }
         # accepts_nested_attributes_for :authority, reject_if: proc {|attributes| attributes['id'].blank? attributes['base_url'].blank? && attributes['name'].blank? }, allow_destroy: false
 
         delegate :name, :code, :base_url, to: :authority, prefix: true, allow_nil: true #authority_#attr
