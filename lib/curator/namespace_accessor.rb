@@ -3,17 +3,12 @@ module Curator
   module NamespaceAccessor
     def self.included(base)
       base.extend(ClassMethods)
-      #NOTE THE ORDER HERE MATTERS!
+      #NOTE THE ORDER HERE MATTERS
       base.module_eval do
         def self.init_namespace_accessors
-          namespace_accessor :controlled_terms
-          namespace_accessor :metastreams
-          namespace_accessor :filestreams
-          namespace_accessor :mappings
-
-          namespace_klass_accessor :digital_object
-          namespace_klass_accessor :institution
-          namespace_klass_accessor :collection
+          puts "Initializing namespace accessors"
+          namespace_accessors :controlled_terms, :filestreams, :mappings, :metastreams
+          namespace_klass_accessors :institution, :collection, :digital_object
         end
       end
     end
@@ -23,9 +18,9 @@ module Curator
     end
 
     module ClassMethods
-      VALID_NAMESPACES = %i(ControlledTerms Filestreams Mappings Metastreams).freeze
+      VALID_NAMESPACES = %w(ControlledTerms Filestreams Mappings Metastreams).freeze
 
-      VALID_NAMESPACE_CLASSES=%i(Institution
+      VALID_NAMESPACE_CLASSES=%w(Institution
         Collection
         DigitalObject
         Authority
@@ -58,24 +53,35 @@ module Curator
       private_constant :VALID_NAMESPACES
       private_constant :VALID_NAMESPACE_CLASSES
 
-      def namespace_accessor(name, &block)
-        name = name.to_s.camelize  if name.to_s != name.to_s.camelize
-        raise Curator::CuratorError, "Invaild namespace #{name.to_s}" unless VALID_NAMESPACES.include?(name.to_sym)
-        module_eval <<-RUBY, __FILE__, __LINE__
-          def self.#{name.to_s.underscore}
-            #{name.to_s}
-          end
-        RUBY
+      def namespace_accessors(*namespaces)
+
+        namespaces.each do |namespace|
+          const_name = namespace.to_s.camelize
+          awesome_print "Creating Namespace acessor for #{const_name}"
+          raise Curator::CuratorError, "Invaild namespace #{const_name.to_s}" unless VALID_NAMESPACES.include?(const_name)
+          module_eval <<-RUBY, __FILE__, __LINE__
+            def self.#{namespace}
+              const_get('#{const_name}')
+            end
+          RUBY
+        end
       end
 
-      def namespace_klass_accessor(klass_name)
-        klass_name = klass_name.to_s.camelize  if klass_name.to_s != klass_name.to_s.camelize
-        raise Curator::CuratorError, "Invaild namespace class #{klass_name.to_s}" unless VALID_NAMESPACE_CLASSES.include?(klass_name.to_sym)
-        module_eval <<-RUBY, __FILE__, __LINE__
-          def self.#{klass_name.to_s.underscore}_class
-            #{klass_name.to_s}
-          end
-        RUBY
+      def namespace_klass_accessors(*klass_names)
+        klass_names.each do |klass_name|
+          klass_const_name = klass_name.to_s.camelize
+          awesome_print "Creating Class Namespace acessor for #{klass_const_name}"
+          raise Curator::CuratorError, "Invaild namespace class #{klass_const_name}" unless VALID_NAMESPACE_CLASSES.include?(klass_const_name)
+          module_eval <<-RUBY, __FILE__, __LINE__
+            def self.#{klass_name}_class_name
+              to_s + '::' + '#{klass_const_name}'
+            end
+
+            def self.#{klass_name}_class
+              const_get(#{klass_name}_class_name)
+            end
+          RUBY
+        end
       end
     end
   end

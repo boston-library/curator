@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 module Curator
   class Mappings::DescNameRole < ApplicationRecord
-    belongs_to :descriptive, inverse_of: :name_roles, class_name: Curator.metastreams.descriptive_class.to_s
-    belongs_to :name, inverse_of: :desc_name_roles, class_name: Curator.controlled_terms.name_class.to_s
-    belongs_to :role, inverse_of: :desc_name_roles, class_name: Curator.controlled_terms.role_class.to_s
+    belongs_to :descriptive, inverse_of: :name_roles, class_name: Curator.metastreams.descriptive_class_name
+    belongs_to :name, inverse_of: :desc_name_roles, class_name: Curator.controlled_terms.name_class_name
+    belongs_to :role, inverse_of: :desc_name_roles, class_name: Curator.controlled_terms.role_class_name
 
     validate :name_role_class_validator, on: :create
 

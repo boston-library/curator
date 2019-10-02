@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 module Curator
-  module Filestreams
-    class Text < FileSet
-    end
+  class Filestreams::Audio < Filestreams::FileSet
   end
 end

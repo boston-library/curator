@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 module Curator
-  module Filestreams
-    class Image < FileSet
-    end
+  class Filestreams::Video < Filestreams::FileSet
   end
 end

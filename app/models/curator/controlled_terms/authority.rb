@@ -11,14 +11,14 @@ module Curator
     validates :base_url, uniqueness: {scope: [:code],  allow_nil: true }, format: { with: URI::regexp(%w(http https)), allow_nil: true }
 
     with_options inverse_of: :authority, dependent: :destroy, foreign_key: :authority_id do
-      has_many :genres, class_name: ControlledTerms.genre_class.to_s
-      has_many :geographics, class_name: ControlledTerms.geographic_class.to_s
-      has_many :languages, class_name: ControlledTerms.language_class.to_s
-      has_many :licenses, class_name: ControlledTerms.license_class.to_s
-      has_many :names, class_name: ControlledTerms.name_class.to_s
-      has_many :resource_types, class_name: ControlledTerms.resource_type_class.to_s
-      has_many :roles, class_name: ControlledTerms.role_class.to_s
-      has_many :subjects, class_name: ControlledTerms.subject_class.to_s
+      has_many :genres, class_name: ControlledTerms.genre_class_name
+      has_many :geographics, class_name: ControlledTerms.geographic_class_name
+      has_many :languages, class_name: ControlledTerms.language_class_name
+      has_many :licenses, class_name: ControlledTerms.license_class_name
+      has_many :names, class_name: ControlledTerms.name_class_name
+      has_many :resource_types, class_name: ControlledTerms.resource_type_class_name
+      has_many :roles, class_name: ControlledTerms.role_class_name
+      has_many :subjects, class_name: ControlledTerms.subject_class_name
     end
 
 
