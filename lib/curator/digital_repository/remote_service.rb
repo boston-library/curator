@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 module Curator
   module DigitalRepository
-    extend ActiveSupport::Autoload
+    module RemoteService
 
-    eager_autoload do
-      autoload :FactoryService
     end
   end
 end

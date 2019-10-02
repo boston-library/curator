@@ -95,22 +95,20 @@ ActiveRecord::Schema.define(version: 2019_09_25_164513) do
 
   create_table "curator_filestreams_file_sets", force: :cascade do |t|
     t.string "ark_id", null: false
-    t.string "fileset_of_type", null: false
-    t.bigint "fileset_of_id", null: false
-    t.integer "file_set_type", default: 0, null: false
+    t.string "file_set_type", null: false
     t.string "file_name_base", null: false
-    t.string "page_label"
-    t.string "page_type"
     t.integer "position", null: false
-    t.jsonb "checksum_data", default: "{}", null: false
+    t.jsonb "pagination", default: "{}", null: false
     t.integer "lock_version"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "archived_at"
+    t.bigint "file_set_of_id", null: false
     t.index ["archived_at"], name: "index_curator_filestreams_file_sets_on_archived_at", where: "(archived_at IS NULL)"
     t.index ["ark_id"], name: "index_curator_filestreams_file_sets_on_ark_id", unique: true
+    t.index ["file_set_of_id"], name: "index_fstream_file_set_on_file_set_of_id"
     t.index ["file_set_type"], name: "index_curator_filestreams_file_sets_on_file_set_type"
-    t.index ["fileset_of_type", "fileset_of_id"], name: "unique_idx_on_fstream_fset__fset_of_type_and_id", unique: true
+    t.index ["pagination"], name: "index_curator_filestreams_file_sets_on_pagination", opclass: :jsonb_path_ops, using: :gin
     t.index ["position"], name: "index_curator_filestreams_file_sets_on_position"
   end
 
@@ -129,25 +127,6 @@ ActiveRecord::Schema.define(version: 2019_09_25_164513) do
     t.index ["location_id"], name: "index_inst_on_geo_location_nom"
   end
 
-  create_table "curator_mapping_desc_name_roles", force: :cascade do |t|
-    t.bigint "descriptive_id", null: false
-    t.bigint "name_id", null: false
-    t.bigint "role_id", null: false
-    t.index ["descriptive_id", "name_id", "role_id"], name: "unique_idx_on_meta_desc_name_role_on_desc_name_role", unique: true
-    t.index ["descriptive_id"], name: "index_curator_mapping_desc_name_roles_on_descriptive_id"
-    t.index ["name_id"], name: "index_curator_mapping_desc_name_roles_on_name_id"
-    t.index ["role_id"], name: "index_curator_mapping_desc_name_roles_on_role_id"
-  end
-
-  create_table "curator_mapping_desc_terms", force: :cascade do |t|
-    t.bigint "descriptive_id", null: false
-    t.string "mappable_type", null: false
-    t.bigint "mappable_id", null: false
-    t.index ["descriptive_id"], name: "index_curator_mapping_desc_terms_on_descriptive_id"
-    t.index ["mappable_id", "mappable_type", "descriptive_id"], name: "unique_idx_desc_map_on_mappable_poly_and_descriptive", unique: true
-    t.index ["mappable_type", "mappable_id"], name: "index_meta_desc_map_on_mappable_poly"
-  end
-
   create_table "curator_mappings_collection_members", force: :cascade do |t|
     t.bigint "digital_object_id", null: false
     t.bigint "collection_id", null: false
@@ -162,6 +141,25 @@ ActiveRecord::Schema.define(version: 2019_09_25_164513) do
     t.index ["descriptive_id", "host_collection_id"], name: "unique_idx_desc_mappping_of_col_on_desc_and_host_col", unique: true
     t.index ["descriptive_id"], name: "index_desc_mapping_host_col_on_desc"
     t.index ["host_collection_id"], name: "index_desc_mapping_host_col_on_host_col"
+  end
+
+  create_table "curator_mappings_desc_name_roles", force: :cascade do |t|
+    t.bigint "descriptive_id", null: false
+    t.bigint "name_id", null: false
+    t.bigint "role_id", null: false
+    t.index ["descriptive_id", "name_id", "role_id"], name: "unique_idx_on_meta_desc_name_role_on_desc_name_role", unique: true
+    t.index ["descriptive_id"], name: "index_curator_mappings_desc_name_roles_on_descriptive_id"
+    t.index ["name_id"], name: "index_curator_mappings_desc_name_roles_on_name_id"
+    t.index ["role_id"], name: "index_curator_mappings_desc_name_roles_on_role_id"
+  end
+
+  create_table "curator_mappings_desc_terms", force: :cascade do |t|
+    t.bigint "descriptive_id", null: false
+    t.string "mappable_type", null: false
+    t.bigint "mappable_id", null: false
+    t.index ["descriptive_id"], name: "index_curator_mappings_desc_terms_on_descriptive_id"
+    t.index ["mappable_id", "mappable_type", "descriptive_id"], name: "unique_idx_desc_map_on_mappable_poly_and_descriptive", unique: true
+    t.index ["mappable_type", "mappable_id"], name: "index_meta_desc_map_on_mappable_poly"
   end
 
   create_table "curator_mappings_exemplary_images", force: :cascade do |t|
@@ -251,6 +249,7 @@ ActiveRecord::Schema.define(version: 2019_09_25_164513) do
     t.string "ingest_filepath", null: false
     t.string "ingest_filename", null: false
     t.string "ingest_datastream", null: false
+    t.jsonb "ingest_datastream_checksums", default: "{}", null: false
     t.integer "lock_version"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -264,16 +263,17 @@ ActiveRecord::Schema.define(version: 2019_09_25_164513) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "curator_collections", "curator_institutions", column: "institution_id"
   add_foreign_key "curator_controlled_terms_nomenclatures", "curator_controlled_terms_authorities", column: "authority_id", on_delete: :cascade
-  add_foreign_key "curator_digital_objects", "curator_collections", column: "admin_set_id"
-  add_foreign_key "curator_institutions", "curator_controlled_terms_nomenclatures", column: "location_id"
-  add_foreign_key "curator_mapping_desc_name_roles", "curator_controlled_terms_nomenclatures", column: "name_id", on_delete: :cascade
-  add_foreign_key "curator_mapping_desc_name_roles", "curator_controlled_terms_nomenclatures", column: "role_id", on_delete: :cascade
-  add_foreign_key "curator_mapping_desc_name_roles", "curator_metastreams_descriptives", column: "descriptive_id", on_delete: :cascade
-  add_foreign_key "curator_mapping_desc_terms", "curator_metastreams_descriptives", column: "descriptive_id", on_delete: :cascade
+  add_foreign_key "curator_digital_objects", "curator_collections", column: "admin_set_id", on_delete: :cascade
+  add_foreign_key "curator_filestreams_file_sets", "curator_digital_objects", column: "file_set_of_id", on_delete: :cascade
+  add_foreign_key "curator_institutions", "curator_controlled_terms_nomenclatures", column: "location_id", on_delete: :nullify
   add_foreign_key "curator_mappings_collection_members", "curator_collections", column: "collection_id", on_delete: :cascade
   add_foreign_key "curator_mappings_collection_members", "curator_digital_objects", column: "digital_object_id", on_delete: :cascade
   add_foreign_key "curator_mappings_desc_host_collections", "curator_mappings_host_collections", column: "host_collection_id", on_delete: :cascade
   add_foreign_key "curator_mappings_desc_host_collections", "curator_metastreams_descriptives", column: "descriptive_id", on_delete: :cascade
+  add_foreign_key "curator_mappings_desc_name_roles", "curator_controlled_terms_nomenclatures", column: "name_id", on_delete: :cascade
+  add_foreign_key "curator_mappings_desc_name_roles", "curator_controlled_terms_nomenclatures", column: "role_id", on_delete: :cascade
+  add_foreign_key "curator_mappings_desc_name_roles", "curator_metastreams_descriptives", column: "descriptive_id", on_delete: :cascade
+  add_foreign_key "curator_mappings_desc_terms", "curator_metastreams_descriptives", column: "descriptive_id", on_delete: :cascade
   add_foreign_key "curator_mappings_exemplary_images", "curator_filestreams_file_sets", column: "file_set_id", on_delete: :cascade
   add_foreign_key "curator_mappings_host_collections", "curator_institutions", column: "institution_id", on_delete: :cascade
   add_foreign_key "curator_metastreams_descriptives", "curator_controlled_terms_nomenclatures", column: "physical_location_id"

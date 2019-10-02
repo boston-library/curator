@@ -21,8 +21,8 @@ AUTHORITY_INPUTS.each do |auth_input|
       puts "Seeding authority with attributes #{auth_input.inspect}"
       Curator.controlled_terms.authority_class.where(auth_input).first_or_create!
     rescue => e
-      Rails.logger.error "Failed to seed Authority Record with the following input #{auth_input.inspect}"
-      Rails.logger.error e.inspect
+      puts "Failed to seed Authority Record with the following input #{auth_input.inspect}"
+      puts e.inspect
     end
   end
 end

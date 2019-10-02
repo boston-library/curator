@@ -15,13 +15,5 @@ module Curator
       attr_json :part_number, :string
       attr_json :part_name, :string
     end
-
-
-    class TitleSet < FieldSet
-      attr_json :title_primary, Title.to_type
-      attr_json :title_other, Title.to_type, array: true, default: []
-
-      validates :title_primary, presence: true
-    end
   end
 end

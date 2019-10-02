@@ -6,3 +6,4 @@ Gemfile.lock
 storage/
 log/
 tmp/
+schema.rb

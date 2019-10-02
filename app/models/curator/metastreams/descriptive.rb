@@ -36,11 +36,11 @@ module Curator
     #RELS
     #PARENTS
     belongs_to :descriptable, polymorphic: true, inverse_of: :descriptive
-    belongs_to :physical_location, inverse_of: :is_physical_location_of, class_name: Curator.controlled_terms.name_class.to_s
+    belongs_to :physical_location, inverse_of: :physical_locations_of, class_name: Curator.controlled_terms.name_class.to_s
 
     #MAPPING OBJECTS
     has_many :desc_terms, -> { joins(:mappable).preload(:mappable) }, inverse_of: :descriptive, class_name: Curator.mappings.desc_term_class.to_s
-    has_many :name_roles,  -> { includes(:name, :role) } ,inverse_of: :descriptive, class_name: Curator.mappings.desc_name_role_class.to_s
+    has_many :name_roles,  -> { includes(:name, :role) }, inverse_of: :descriptive, class_name: Curator.mappings.desc_name_role_class.to_s
     has_many :desc_host_collections, -> { includes(:host_collection) }, inverse_of: :descriptive, class_name: Curator.mappings.desc_host_collection_class.to_s
     has_many :host_collections, through: :desc_host_collections, source: :host_collection
 

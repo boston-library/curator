@@ -7,7 +7,7 @@ module Curator
 
     belongs_to :institution, inverse_of: :collections, class_name: Curator.institution_class.to_s
 
-    has_many :admin_set_digital_objects, inverse_of: :admin_set, class_name: Curator.digital_object_class.to_s, foreign_key: :admin_set_id
+    has_many :admin_set_objects, inverse_of: :admin_set, class_name: Curator.digital_object_class.to_s, foreign_key: :admin_set_id
 
     has_many :collection_members, inverse_of: :collection, class_name: Curator.mappings.collection_member_class.to_s
 

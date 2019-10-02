@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module Curator
   class CollectionFactoryService < ServiceClass
-
+    include DigitalRepository::FactoryService
     def initialize(file_path: "#{ENV['HOME']}/BPL-MODS-TO-RDMS/JSON/collection.json")
       @file_path = Pathname.new(file_path)
       @json_attrs = JSON.parse(@file_path.read).fetch('collection', {}).with_indifferent_access
@@ -24,7 +24,7 @@ module Curator
           @collection.institution = @institution if @institution.present?
           @collection.save!
 
-          build_workflow do |workflow|
+          build_workflow(@collection) do |workflow|
             [:ingest_origin, :ingest_filepath, :ingest_filename, :ingest_datastream ].each do |attr|
               workflow.send("#{attr}=", workflow_json_attrs.fetch(attr, "#{ENV['HOME']}"))
             end
@@ -33,7 +33,7 @@ module Curator
             end
           end
 
-          build_administrative do |administrative|
+          build_administrative(@collection) do |administrative|
             [:description_standard, :flagged, :destination_site, :harvestable].each do |attr|
               administrative.send("#{attr}=", admin_json_attrs.fetch(attr)) if admin_json_attrs.fetch(attr, nil).present?
             end
@@ -42,20 +42,6 @@ module Curator
       rescue => e
         puts "#{e.to_s}"
       end
-    end
-
-    protected
-
-    def build_workflow(&block)
-      workflow = Curator.metastreams.workflow_class.new(workflowable: @collection )
-      yield(workflow)
-      workflow.save!
-    end
-
-    def build_administrative(&block)
-      administrative = Curator.metastreams.administrative_class.new(administratable: @collection )
-      yield(administrative)
-      administrative.save!
     end
   end
 end

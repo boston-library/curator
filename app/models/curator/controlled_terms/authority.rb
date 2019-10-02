@@ -24,7 +24,7 @@ module Curator
 
     def cannonical_json_format
       case self.code
-      when 'gmgpc', 'lctgm', 'naf', 'lcsh', 'lcgft', 'iso639-2', 'marcrelators', 'resourceTypes'
+      when 'gmgpc', 'lctgm', 'naf', 'lcsh', 'lcgft', 'iso639-2', 'marcrelator', 'resourceTypes'
         '.skos.json'
       when 'aat', 'tgn', 'ulan'
         '.jsonld'

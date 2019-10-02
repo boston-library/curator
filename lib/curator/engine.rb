@@ -10,7 +10,6 @@ module Curator
     isolate_namespace Curator
     engine_name 'curator'
 
-
     config.to_prepare do
       Curator.init_namespace_accessors
     end
@@ -19,6 +18,7 @@ module Curator
       require 'acts_as_list'
       require 'attr_json'
       require 'active_model_serializers'
+      require 'oj'
     end
 
     initializer 'curator.append_migrations' do |app|
@@ -28,7 +28,6 @@ module Curator
     end
 
     config.after_initialize do
-      require 'oj'
       Oj.optimize_rails
     end
 

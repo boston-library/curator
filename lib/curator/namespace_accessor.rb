@@ -3,43 +3,17 @@ module Curator
   module NamespaceAccessor
     def self.included(base)
       base.extend(ClassMethods)
+      #NOTE THE ORDER HERE MATTERS!
       base.module_eval do
         def self.init_namespace_accessors
+          namespace_accessor :controlled_terms
+          namespace_accessor :metastreams
+          namespace_accessor :filestreams
+          namespace_accessor :mappings
+
           namespace_klass_accessor :digital_object
           namespace_klass_accessor :institution
           namespace_klass_accessor :collection
-
-          namespace_accessor :controlled_terms do
-            extend NamespaceAccessor
-            namespace_klass_accessor :authority
-            namespace_klass_accessor :genre
-            namespace_klass_accessor :geographic
-            namespace_klass_accessor :language
-            namespace_klass_accessor :license
-            namespace_klass_accessor :name
-            namespace_klass_accessor :resource_type
-            namespace_klass_accessor :role
-            namespace_klass_accessor :subject
-          end
-          namespace_accessor :metastreams do
-            extend NamespaceAccessor
-            namespace_klass_accessor :administrative
-            namespace_klass_accessor :descriptive
-            namespace_klass_accessor :workflow
-          end
-          namespace_accessor :filestreams do
-            extend NamespaceAccessor
-            namespace_klass_accessor :file_set
-          end
-          namespace_accessor :mappings do
-            extend NamespaceAccessor
-            namespace_klass_accessor :collection_member
-            namespace_klass_accessor :desc_host_collection
-            namespace_klass_accessor :desc_name_role
-            namespace_klass_accessor :desc_term
-            namespace_klass_accessor :exemplary_image
-            namespace_klass_accessor :host_collection
-          end
         end
       end
     end
@@ -63,7 +37,13 @@ module Curator
         ResourceType
         Role
         Subject
-        FileSet
+        Audio
+        Document
+        Ereader
+        Image
+        Metadata
+        Text
+        Video
         CollectionMember
         DescHostCollection
         DescNameRole
@@ -86,10 +66,6 @@ module Curator
             #{name.to_s}
           end
         RUBY
-        if block_given?
-          const_name = const_get(name.to_sym)
-          const_name.module_eval &block if block_given?
-        end
       end
 
       def namespace_klass_accessor(klass_name)

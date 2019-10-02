@@ -36,13 +36,11 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'paper_trail', '~> 10.3'
   spec.add_dependency 'acts_as_list', '~> 0.9'
 
-  spec.add_development_dependency 'redis', '~> 4.1'
-  spec.add_development_dependency 'net-http-persistent', '~> 3.1'
   spec.add_development_dependency 'pg', '~> 1.1'
+  spec.add_development_dependency 'net-http-persistent', '~> 3.1'
+  spec.add_development_dependency 'addressable', '2.7'
   spec.add_development_dependency 'faraday', '~> 0.15'
   spec.add_development_dependency 'faraday_middleware', '~> 0.13'
-  spec.add_development_dependency 'addressable', '2.7'
-  spec.add_development_dependency 'rspec-rails', '~> 3.8.0'
-  spec.add_development_dependency 'factory_bot_rails', '~> 5.0'
-  spec.add_development_dependency 'dotenv-rails', '~> 2.7'
+  spec.add_development_dependency 'faraday-http-cache', '~> 2.0'
+
 end

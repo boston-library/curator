@@ -2,9 +2,9 @@
 module Curator
   class Mappings::DescTerm < ApplicationRecord
 
-    belongs_to :descriptive, inverse_of: :term_mappings, class_name: Curator.metastreams.descriptive_class.to_s, foreign_key: :descriptive_id
+    belongs_to :descriptive, inverse_of: :desc_terms, class_name: Curator.metastreams.descriptive_class.to_s, foreign_key: :descriptive_id
 
-    belongs_to :mappable, inverse_of: :descriptive_term_mappings, polymorphic: true
+    belongs_to :mappable, inverse_of: :desc_terms, polymorphic: true
 
     validates :descriptive_id, uniqueness: { scope: [:mappable_id, :mappable_type], allow_nil: true }
 

@@ -9,6 +9,7 @@ class CreateCuratorMetastreamsWorkflows < ActiveRecord::Migration[5.2]
       t.string :ingest_filepath, null: false
       t.string :ingest_filename, null: false
       t.string :ingest_datastream, null: false
+      t.jsonb :ingest_datastream_checksums, default: '{}', null: false
       t.integer :lock_version
       t.timestamps null: false
       t.datetime :archived_at, index: { using: :btree, where: 'archived_at is null' }

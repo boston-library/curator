@@ -10,7 +10,7 @@ module Curator
     #Todo put a before validate callback here to the ark manager
     private
     def generate_ark_id
-      self.ark_id = "bpl-#{SecureRandom.hex(6)}" #Temporary workaround until ark manager is finsished
+      self.ark_id = Curator::MinterService.call
     end
   end
 end
