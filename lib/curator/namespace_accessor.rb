@@ -54,10 +54,8 @@ module Curator
       private_constant :VALID_NAMESPACE_CLASSES
 
       def namespace_accessors(*namespaces)
-
         namespaces.each do |namespace|
           const_name = namespace.to_s.camelize
-          awesome_print "Creating Namespace acessor for #{const_name}"
           raise Curator::CuratorError, "Invaild namespace #{const_name.to_s}" unless VALID_NAMESPACES.include?(const_name)
           module_eval <<-RUBY, __FILE__, __LINE__
             def self.#{namespace}
@@ -70,7 +68,6 @@ module Curator
       def namespace_klass_accessors(*klass_names)
         klass_names.each do |klass_name|
           klass_const_name = klass_name.to_s.camelize
-          awesome_print "Creating Class Namespace acessor for #{klass_const_name}"
           raise Curator::CuratorError, "Invaild namespace class #{klass_const_name}" unless VALID_NAMESPACE_CLASSES.include?(klass_const_name)
           module_eval <<-RUBY, __FILE__, __LINE__
             def self.#{klass_name}_class_name
