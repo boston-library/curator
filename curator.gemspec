@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
   spec.description = 'Description of Curator.'
   spec.license     = 'MIT'
 
-  spec.required_ruby_version = '>= 2.5.5'
+  spec.required_ruby_version = '>= 2.5.7'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
@@ -42,5 +42,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'faraday', '~> 0.15'
   spec.add_development_dependency 'faraday_middleware', '~> 0.13'
   spec.add_development_dependency 'faraday-http-cache', '~> 2.0'
+  spec.add_development_dependency 'mini_magick', '~> 4.9.5'
 
 end
