@@ -16,16 +16,20 @@ gemspec
 # gem 'byebug', group: [:development, :test]
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'rubocop', '~> 0.75.0', require: false
   gem 'awesome_print'
   gem 'dotenv-rails', '~> 2.7'
-  gem 'pry'
-  gem 'pry-rails'
-  gem 'pry-rescue'
-  gem 'pry-byebug'
+  gem 'solr_wrapper', '~> 2.1.0'
+  gem 'pry', '~> 0.12.2'
+  gem 'pry-rails', '~> 0.3.9'
+  gem 'pry-byebug', '~> 3.7.0'
 end
 
 group :test do
+  gem 'coveralls', require: false
+  gem 'rubocop-rspec', require: false
   gem 'rspec-rails', '~> 3.8.0'
   gem 'factory_bot_rails', '~> 5.0'
+  gem 'database_cleaner',  '~> 1.7'
+  gem 'vcr', '~> 5.0.0'
 end
