@@ -22,7 +22,6 @@ group :development, :test do
   gem 'pry'
   gem 'pry-rails'
   gem 'pry-rescue'
-  gem 'pry-stack_explorer'
   gem 'pry-byebug'
 end
 
