@@ -23,6 +23,7 @@ group :development, :test do
   gem 'pry', '~> 0.12.2'
   gem 'pry-rails', '~> 0.3.9'
   gem 'pry-byebug', '~> 3.7.0'
+  gem 'faker', '~> 2.6.0'
 end
 
 group :test do
