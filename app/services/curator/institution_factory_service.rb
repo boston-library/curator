@@ -3,9 +3,8 @@ module Curator
   class InstitutionFactoryService < ServiceClass
     include DigitalRepository::FactoryService
 
-    def initialize(file_path: "#{ENV['HOME']}/BPL-MODS-TO-RDMS/JSON/institution.json")
-      @file_path = Pathname.new(file_path)
-      @json_attrs = JSON.parse(@file_path.read).fetch('institution', {}).with_indifferent_access
+    def initialize(json_attrs: {})
+      @json_attrs = json_attrs.with_indifferent_access
       awesome_print @json_attrs
     end
 
@@ -28,8 +27,9 @@ module Curator
           build_workflow(institution) do |workflow|
             workflow.send("#{:ingest_origin}=", workflow_json_attrs.fetch(:ingest_origin, "#{ENV['HOME']}"))
             publishing_state = workflow_json_attrs.fetch(:publishing_state, nil)
+            processing_state = workflow_json_attrs.fetch(:processing_state, nil)
             workflow.send("#{:publishing_state}=", publishing_state) if publishing_state
-            workflow.send("#{:processing_state}=", nil) #
+            workflow.send("#{:processing_state}=", processing_state) if processing_state #
           end
 
           build_administrative(institution) do |administrative|

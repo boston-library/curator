@@ -3,9 +3,9 @@ module Curator
   class ObjectFactoryService < ServiceClass
   include DigitalRepository::FactoryService
 
-  def initialize(file_path: "#{ENV['HOME']}/BPL-MODS-TO-RDMS/JSON/digital-object.json")
-    @file_path = Pathname.new(file_path)
-    @json_attrs = JSON.parse(@file_path.read).fetch('digital_object', {}).with_indifferent_access
+  def initialize(json_attrs: {})
+    @json_attrs = json_attrs.with_indifferent_access
+    awesome_print @json_attrs
   end
 
   def call
@@ -21,7 +21,7 @@ module Curator
         @digital_object.save!
 
         build_workflow(@digital_object) do |workflow|
-          [:ingest_origin, :ingest_filepath, :ingest_filename, :ingest_datastream, :processing_state, :publishing_state].each do |attr|
+          [:ingest_origin, :processing_state, :publishing_state].each do |attr|
             workflow.send("#{attr}=", workflow_json_attrs.fetch(attr, nil))
           end
         end

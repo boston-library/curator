@@ -7,6 +7,6 @@ storage/
 log/
 tmp/
 schema.rb
-
+scratch.rb
 # Ignore all RubyMine temp files
 .idea/

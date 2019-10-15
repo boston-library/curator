@@ -2,15 +2,13 @@
 module Curator
   class CollectionFactoryService < ServiceClass
     include DigitalRepository::FactoryService
-    def initialize(file_path: "#{ENV['HOME']}/BPL-MODS-TO-RDMS/JSON/collection.json")
-      @file_path = Pathname.new(file_path)
-      @json_attrs = JSON.parse(@file_path.read).fetch('collection', {}).with_indifferent_access
+    def initialize(json_attrs: {})
+      @json_attrs = json_attrs.with_indifferent_access
       awesome_print @json_attrs
     end
 
     def call
       metastream_json_attrs = @json_attrs.fetch('metastreams', {}).with_indifferent_access
-      collection_json_attrs = metastream_json_attrs.fetch('descriptive', {}).with_indifferent_access
       workflow_json_attrs = metastream_json_attrs.fetch('workflow', {}).with_indifferent_access
       admin_json_attrs = metastream_json_attrs.fetch('administrative', {}).with_indifferent_access
       institution_ark_id = @json_attrs.fetch('institution').fetch('ark_id')
@@ -18,14 +16,14 @@ module Curator
         Curator.collection_class.transaction do
           @institution = Curator.institution_class.find_by(ark_id: institution_ark_id)
           @collection = Curator.collection_class.find_or_initialize_by(
-            name: collection_json_attrs.fetch(:name),
-            abstract: collection_json_attrs.fetch(:abstract, '')
+            name: @json_attrs.fetch(:name),
+            abstract: @json_attrs.fetch(:abstract, '')
           ) #Change to find_or_initialize_by ark_id
           @collection.institution = @institution if @institution.present?
           @collection.save!
 
           build_workflow(@collection) do |workflow|
-            [:ingest_origin, :ingest_filepath, :ingest_filename, :ingest_datastream ].each do |attr|
+            [:ingest_origin].each do |attr|
               workflow.send("#{attr}=", workflow_json_attrs.fetch(attr, "#{ENV['HOME']}"))
             end
             [:processing_state, :publishing_state].each do |attr|
