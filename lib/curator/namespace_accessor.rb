@@ -48,6 +48,7 @@ module Curator
         Administrative
         Descriptive
         Workflow
+        Issue
         ).freeze
 
       private_constant :VALID_NAMESPACES

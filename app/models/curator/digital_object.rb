@@ -21,6 +21,17 @@ module Curator
     has_many :collection_members, inverse_of: :digital_object, class_name: Curator.mappings.collection_member_class_name
     has_many :is_member_of_collection, through: :collection_members, source: :collection
 
+    with_options class_name: Curator.mappings.issue_class_name do
+      has_one :issue_mapping, -> {includes(:issue_of)}, inverse_of: :digital_object
+      has_one :issue_mapping_for, -> {includes(:digital_object)}, inverse_of: :issue_of, foreign_key: :issue_of_id
+    end
+
+    with_options class_name: Curator.digital_object_class_name do
+      has_one :issue_of, through: :issue_mapping, source: :issue_of
+      has_one :issue_for, through: :issue_mapping_for, source: :digital_object
+    end
+
+
     private
     def add_admin_set_to_members
       self.collection_members.build(collection: admin_set)
