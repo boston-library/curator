@@ -8,6 +8,7 @@ module Curator
 
     enum digital_origin: ['born digital', 'reformatted digital', 'digitized microfilm', 'digitized other analog'].freeze
     enum origin_event: %w(production publication distribution manufacture).freeze
+    enum text_direction: %w(ltr rtl).freeze
     #JSON ATTRS
 
     scope :with_mappings, -> { includes(:term_mappings, :name_roles, :desc_host_collections) }
@@ -23,6 +24,9 @@ module Curator
 
     #Date
     attr_json :date, Curator::Descriptives::Date.to_type, container_attribute: :date_json
+
+    #Publication
+    attr_json :publication, Curator::Descriptives::Publication.to_type, container_attribute: :publication_json
 
     #Related
     attr_json :related, Curator::Descriptives::Related.to_type, container_attribute: :related_json

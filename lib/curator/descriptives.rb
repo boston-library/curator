@@ -11,6 +11,7 @@ module Curator
       autoload :Date
       autoload :Identifier
       autoload :Note
+      autoload :Publication
       autoload :Related
       autoload :Subject
       autoload :Title

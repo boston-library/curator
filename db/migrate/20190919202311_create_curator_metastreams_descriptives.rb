@@ -11,15 +11,16 @@ class CreateCuratorMetastreamsDescriptives < ActiveRecord::Migration[5.2]
       t.jsonb :subject_json, index: { using: :gin, opclass: :jsonb_path_ops }, default: '{}', null: false#/uniform_title/temporal/date
       t.jsonb :related_json, index: {using: :gin,  opclass: :jsonb_path_ops }, default: '{}', null: false
       t.jsonb :cartographics_json, index: { using: :gin, opclass: :jsonb_path_ops }, default: '{}', null: false
+      t.jsonb :publication_json, index: { using: :gin, opclass: :jsonb_path_ops }, default: '{}', null: false
       t.integer :digital_origin, default: 1, null: false
       t.integer :origin_event, default: 0, null: false
+      t.integer :text_direction
       t.boolean :resource_type_manuscript, default: false, null: false
       t.string :place_of_publication
       t.string :publisher
-      t.string :edition
       t.string :issuance
       t.string :frequency
-      t.string :physical_description_extent
+      t.string :extent
       t.string :physical_location_department
       t.string :physical_location_shelf_locator
       t.string :series
