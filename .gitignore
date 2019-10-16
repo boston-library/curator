@@ -8,5 +8,6 @@ log/
 tmp/
 schema.rb
 scratch.rb
+.env
 # Ignore all RubyMine temp files
 .idea/

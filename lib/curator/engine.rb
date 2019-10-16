@@ -19,8 +19,6 @@ module Curator
       require 'attr_json'
       require 'active_model_serializers'
       require 'oj'
-      ActiveModel::Serializer.config.adapter = :json
-      Oj.optimize_rails
     end
 
     initializer 'curator.append_migrations' do |app|
@@ -31,7 +29,7 @@ module Curator
 
     config.after_initialize do
       Oj.optimize_rails
+      ActiveModel::Serializer.config.adapter = :json
     end
-
   end
 end

@@ -14,6 +14,9 @@ require "action_view/railtie"
 # require "rails/test_unit/railtie"
 
 Bundler.require(*Rails.groups)
+
+Dotenv::Railtie.load
+
 require "curator"
 
 module Internal
