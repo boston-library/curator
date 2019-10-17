@@ -51,21 +51,21 @@ module Curator
             descriptive.subject_other = subject_other(desc_json_attrs)
             descriptive.cartographic = cartographics(desc_json_attrs)
             descriptive.related = related(desc_json_attrs)
-            %i[genre resource_type language].each do |map_type|
+            %i(genres resource_types language).each do |map_type|
               desc_json_attrs.fetch(map_type, []).each do |map_attrs|
                 mappable = get_mappable(map_attrs,
-                  nomenclature_class: Curator.controlled_terms.public_send("#{map_type.to_s}_class")
+                  nomenclature_class: Curator.controlled_terms.public_send("#{map_type.to_s.singularize}_class")
                 )
                 descriptive.desc_terms << Curator.mappings.desc_term_class.new(mappable: mappable)
               end
             end
-            license_attrs = desc_json_attrs.fetch(:licenses, {})
-            if license_attrs.present?
-              descriptive.desc_terms << Curator.mappings.desc_term_class.new(mappable:
-                get_mappable(license_attrs,
-                  nomenclature_class: Curator.controlled_terms.license_class
-                )
-            )
+            licenses = desc_json_attrs.fetch(:licenses, [])
+            licenses.each do |license_attrs|
+                descriptive.desc_terms << Curator.mappings.desc_term_class.new(mappable:
+                  get_mappable(license_attrs,
+                    nomenclature_class: Curator.controlled_terms.license_class
+                  )
+              )
             end
             desc_json_attrs.fetch(:subject, {}).each do |k, v|
               map_type = case k.to_s
