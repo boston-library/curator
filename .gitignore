@@ -11,3 +11,5 @@ scratch.rb
 .env
 # Ignore all RubyMine temp files
 .idea/
+# Ignore coverage reports
+coverage/*
