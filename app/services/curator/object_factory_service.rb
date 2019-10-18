@@ -18,7 +18,8 @@ module Curator
       begin
         Curator.digital_object_class.transaction do
           @digital_object = Curator.digital_object_class.new
-          @digital_object.admin_set = Curator.collection_class.find_by(ark_id: admin_set_ark_id)
+          @admin_set = Curator.collection_class.find_by(ark_id: admin_set_ark_id)
+          @digital_object.admin_set = @admin_set
           @digital_object.save!
 
           build_workflow(@digital_object) do |workflow|
@@ -51,7 +52,7 @@ module Curator
             descriptive.subject_other = subject_other(desc_json_attrs)
             descriptive.cartographic = cartographics(desc_json_attrs)
             descriptive.related = related(desc_json_attrs)
-            %i(genres resource_types language).each do |map_type|
+            %i(genres resource_types languages).each do |map_type|
               desc_json_attrs.fetch(map_type, []).each do |map_attrs|
                 mappable = get_mappable(map_attrs,
                   nomenclature_class: Curator.controlled_terms.public_send("#{map_type.to_s.singularize}_class")
@@ -59,12 +60,18 @@ module Curator
                 descriptive.desc_terms << Curator.mappings.desc_term_class.new(mappable: mappable)
               end
             end
+            desc_json_attrs.fetch(:host_collections, []).each do |host_col|
+              host = find_or_create_host_collection(host_col,
+                                                    @admin_set.institution.id)
+              descriptive.desc_host_collections.build(host_collection: host)
+            end
             licenses = desc_json_attrs.fetch(:licenses, [])
             licenses.each do |license_attrs|
-                descriptive.desc_terms << Curator.mappings.desc_term_class.new(mappable:
-                  get_mappable(license_attrs,
-                    nomenclature_class: Curator.controlled_terms.license_class
-                  )
+              descriptive.desc_terms << Curator.mappings.desc_term_class.new(
+                mappable: get_mappable(
+                  license_attrs,
+                  nomenclature_class: Curator.controlled_terms.license_class
+                )
               )
             end
             desc_json_attrs.fetch(:subject, {}).each do |k, v|
@@ -128,16 +135,16 @@ module Curator
 
     def title(json_attrs={})
       primary = json_attrs.fetch(:title_primary, {})
-      other = json_attrs.fetch(:title_other, {}).map {|t_attrs| title_attr(t_attrs) }
+      other = json_attrs.fetch(:title_other, {}).map { |t_attrs| title_attr(t_attrs) }
       Descriptives::TitleSet.new(primary: primary, other: other)
     end
 
-    def subject_other(json_attrs={})
+    def subject_other(json_attrs = {})
       subject_json = json_attrs.fetch(:subject, {})
-      uniform_title = subject_json.fetch(:title, []).map{|ut_attrs| title_attr(ut_attrs)}
-      temporal = subject_json.fetch(:temporal, [])
-      date = subject_json.fetch(:date, [])
-      Descriptives::Subject.new(title: uniform_title, temporal: temporal, date: date)
+      uniform_title = subject_json.fetch(:titles, []).map { |ut_attrs| title_attr(ut_attrs)}
+      temporal = subject_json.fetch(:temporals, [])
+      date = subject_json.fetch(:dates, [])
+      Descriptives::Subject.new(titles: uniform_title, temporals: temporal, dates: date)
     end
 
     def related(json_attrs={})
@@ -198,6 +205,19 @@ module Curator
           authority_code: role_attrs.fetch(:authority_code, nil)
         )
       }
+    end
+
+    def find_or_create_host_collection(host_col_name = nil, institution_id = nil)
+      return nil unless host_col_name && institution_id
+      begin
+        inst = Curator::Institution.find(institution_id)
+        raise "Bad institution_id #{institution_id} for host_collection!" if inst.blank?
+        return Curator::Mappings.host_collection_class.where(name: host_col_name,
+                                                             institution_id: institution_id).first_or_create!
+      rescue => e
+        puts e.message
+      end
+      nil
     end
   end
 end
