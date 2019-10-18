@@ -16,9 +16,9 @@ module Curator
   eager_autoload do
     autoload :ServiceClass
     autoload :Descriptives
-    autoload :DigitalRepository
+    autoload :Services
   end
-  
+
   def self.eager_load!
     super
     Curator::Descriptives.eager_load!

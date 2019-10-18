@@ -39,13 +39,13 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rsolr', '~> 2.0.2'
   spec.add_dependency 'aasm', '~> 5.0.5' #Acts as a state machine. Useful for tracking states of objects and triggering call backs between state trasnistions
   spec.add_dependency 'faraday', '~> 0.17'
+  spec.add_dependency 'faraday_middleware', '~> 0.13'
+  spec.add_dependency 'faraday-http-cache', '~> 2.0'
   spec.add_dependency 'net-http-persistent', '~> 3.1'
   spec.add_dependency 'addressable', '2.7'
 
   spec.add_development_dependency 'pg', '~> 1.1'
   spec.add_development_dependency 'redis', '~> 4.1.3'
-  spec.add_development_dependency 'faraday_middleware', '~> 0.13'
-  spec.add_development_dependency 'faraday-http-cache', '~> 2.0'
   spec.add_development_dependency 'mini_magick', '~> 4.9.5'
 
 end

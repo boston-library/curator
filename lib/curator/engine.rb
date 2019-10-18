@@ -4,7 +4,9 @@ module Curator
     config.generators do |g|
       g.orm :active_record
       g.api_only = true
-      g.test_framework :rspec, :fixture => false
+      g.test_framework :rspec, fixture: true
+      g.fixture_replacement :factory_bot
+      g.factory_bot dir: 'spec/factories'
     end
 
     isolate_namespace Curator

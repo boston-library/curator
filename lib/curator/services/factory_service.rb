@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module Curator
-  module DigitalRepository
+  module Services
     module FactoryService
       extend ActiveSupport::Concern
 

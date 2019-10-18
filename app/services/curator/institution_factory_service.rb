@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module Curator
-  class InstitutionFactoryService < ServiceClass
-    include DigitalRepository::FactoryService
+  class InstitutionFactoryService < Services::Base
+    include Services::FactoryService
 
     def initialize(json_attrs: {})
       @json_attrs = json_attrs.with_indifferent_access

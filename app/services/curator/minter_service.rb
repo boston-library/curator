@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module Curator
-  class MinterService < ServiceClass
-    def initialize
+  class MinterService < Services::Base
+    def initialize()
       @namespace = "commonwealth"
     end
 
