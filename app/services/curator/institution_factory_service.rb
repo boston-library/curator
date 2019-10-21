@@ -14,12 +14,12 @@ module Curator
       workflow_json_attrs = metastream_json_attrs.fetch('workflow', {}).with_indifferent_access
       admin_json_attrs = metastream_json_attrs.fetch('administrative', {}).with_indifferent_access
       location_json_attrs = @json_attrs.fetch('location', {}).with_indifferent_access
+      ark_id = @json_attrs.fetch('ark_id')
       begin
         Curator.institution_class.transaction do
-          institution = Curator.institution_class.find_or_initialize_by(
-            name: institution_json_attrs.fetch(:name),
-            abstract: institution_json_attrs.fetch(:abstract)
-          ) # TODO: Change to find_or_initialize_by ark_id
+          institution = Curator.institution_class.find_or_initialize_by(ark_id: ark_id)
+          institution.name = institution_json_attrs.fetch(:name)
+          institution.abstract = institution_json_attrs.fetch(:abstract)
           institution.url = institution_json_attrs.fetch(:url)
           institution.location = location(location_json_attrs) unless location_json_attrs.blank?
           institution.save!

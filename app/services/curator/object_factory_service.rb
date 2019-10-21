@@ -10,6 +10,7 @@ module Curator
     end
 
     def call
+      ark_id = @json_attrs.fetch('ark_id')
       admin_set_ark_id = @json_attrs.dig('admin_set', 'ark_id')
       metastream_json_attrs = @json_attrs.fetch('metastreams', {}).with_indifferent_access
       desc_json_attrs = metastream_json_attrs.fetch('descriptive', {}).with_indifferent_access
@@ -17,7 +18,7 @@ module Curator
       admin_json_attrs = metastream_json_attrs.fetch('administrative', {}).with_indifferent_access
       begin
         Curator.digital_object_class.transaction do
-          @digital_object = Curator.digital_object_class.new
+          @digital_object = Curator.digital_object_class.new(ark_id: ark_id)
           @admin_set = Curator.collection_class.find_by(ark_id: admin_set_ark_id)
           @digital_object.admin_set = @admin_set
           @digital_object.save!

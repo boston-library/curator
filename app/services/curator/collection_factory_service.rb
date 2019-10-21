@@ -11,14 +11,14 @@ module Curator
       metastream_json_attrs = @json_attrs.fetch('metastreams', {}).with_indifferent_access
       workflow_json_attrs = metastream_json_attrs.fetch('workflow', {}).with_indifferent_access
       admin_json_attrs = metastream_json_attrs.fetch('administrative', {}).with_indifferent_access
+      ark_id = @json_attrs.fetch('ark_id')
       institution_ark_id = @json_attrs.fetch('institution').fetch('ark_id')
       begin
         Curator.collection_class.transaction do
           @institution = Curator.institution_class.find_by(ark_id: institution_ark_id)
-          @collection = Curator.collection_class.find_or_initialize_by(
-            name: @json_attrs.fetch(:name),
-            abstract: @json_attrs.fetch(:abstract, '')
-          ) #Change to find_or_initialize_by ark_id
+          @collection = Curator.collection_class.find_or_initialize_by(ark_id: ark_id)
+          @collection.name = @json_attrs.fetch(:name)
+          @collection.abstract = @json_attrs.fetch(:abstract)
           @collection.institution = @institution if @institution.present?
           @collection.save!
 
