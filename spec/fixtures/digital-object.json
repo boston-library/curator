@@ -1,0 +1,266 @@
+{
+  "digital_object": {
+    "ark_id": "abcd12345",
+    "created_at": "2019-05-20T14:46:08.240Z",
+    "updated_at": "2019-05-20T14:51:03.796Z",
+    "admin_set": {
+      "ark_id": "efgh56789"
+    },
+    "is_member_of_collection": [
+      {
+        "ark_id": "efgh56789"
+      },
+      {
+        "ark_id": "efgh56789"
+      }
+    ],
+    "is_issue_of": {
+      "ark_id": "ijkl13579"
+    },
+    "metastreams": {
+      "descriptive": {
+        "identifier": [
+          {
+            "label": "08_06_037108",
+            "type": "local-accession"
+          },
+          {
+            "label": "Cab 2020",
+            "type": "local-other",
+            "invalid": true
+          }
+        ],
+        "title_primary": {
+          "label": "The wintermind",
+          "subtitle": "William Bonk and American letters",
+          "display": "primary",
+          "usage": "primary",
+          "supplied": true,
+          "language": "eng",
+          "authority_code": "naf",
+          "id_from_auth": "n00020514",
+          "part_number": "Vol. 1",
+          "part_name": "Being the third book"
+        },
+        "title_other": [
+          {
+            "label": "The man who would be king",
+            "type": "alternative",
+            "display": "Below map:"
+          },
+          {
+            "label": "Bible",
+            "type": "uniform",
+            "authority_code": "naf",
+            "id_from_auth": "n00020514"
+          }
+        ],
+        "name_roles": [
+          {
+            "name": {
+                "label": "Catholic Church",
+                "name_type": "corporate",
+                "authority_code": "naf",
+                "id_from_auth": "n79041716",
+                "affiliation": "Holy Roman Church"
+            },
+            "role": {
+                "label": "Creator",
+                "authority_code": "marcrelator",
+                "id_from_auth": "cre"
+            }
+          },
+          {
+            "name": {
+                "label": "Matteo, da Milano, active 1492-1523",
+                "name_type": "personal",
+                "authority_code": "naf",
+                "id_from_auth": "no2003006654"
+            },
+            "role": {
+                "label": "Illuminator",
+                "authority_code": "marcrelator",
+                "id_from_auth": "ilu"
+            }
+          }
+        ],
+        "resource_types": [
+          {
+            "label": "Still Image",
+            "authority_code": "resourceTypes",
+            "id_from_auth": "img"
+          },
+          {
+            "label": "Text",
+            "authority_code": "resourceTypes",
+            "id_from_auth": "txt"
+          }
+        ],
+        "resource_type_manuscript": true,
+        "genres": [
+          {
+            "label": "Manuscripts",
+            "authority_code": "lctgm",
+            "id_from_auth": "tgm012286",
+            "basic": true
+          },
+          {
+            "label": "Manuscripts, Medieval",
+            "authority_code": "lcsh",
+            "id_from_auth": "sh85080735"
+          }
+        ],
+        "digital_origin": "born digital",
+        "origin_event": "production",
+        "place_of_publication": "[Piacenza]",
+        "publisher": "J. Hondius",
+        "date": {
+          "created": "1495~"
+        },
+        "edition_name": "First edition",
+        "edition_number": "1",
+        "volume": "Vol. III",
+        "issue_number": "20",
+        "issuance": "monographic",
+        "frequency": "annual",
+        "language": [
+          {
+            "label": "Latin",
+            "authority_code": "iso639-2",
+            "id_from_auth": "lat"
+          },
+          {
+            "label": "Italian",
+            "authority_code": "iso639-2",
+            "id_from_auth": "ita"
+          }
+        ],
+        "note": [
+          {
+            "label": "Date from accompanying item.",
+            "type": "date"
+          },
+          {
+            "label": "Secundo folio: ... sponse decus ...",
+            "type": "physical-description"
+          }
+        ],
+        "extent": "190 leaves : parchment, ill. ; 600 x 425 (425 x 300) mm.",
+        "text_direction": "ltr",
+        "abstract": "The first volume of a two-volume ferial psalter produced ca. 1495.",
+        "toc": "1. fol. 1: blank. -- 2. fol. 1v-2: Slightly later additions: In fe[st]o s[ancto] p[ro] n[octurno]. Benedicti ad nocturno/ Quicquid antique caecinere.. ...",
+        "toc_url": "http://www.ojp.usdoj.gov/bjs/toc/cchrie98.htm",
+        "subject": {
+          "topics": [
+            {
+                "label": "Hurricanes",
+                "authority_code": "lctgm",
+                "id_from_auth": "tgm005229"
+            },
+            {
+                "label": "Hurricane Maria, 2017",
+                "authority_code": "lcsh",
+                "id_from_auth": "sh2018001243"
+            },
+            {
+                "label": "Babies"
+            }
+          ],
+          "names": [
+            {
+                "label": "Zorn, Anders, 1860-1920",
+                "name_type": "personal",
+                "authority_code": "naf",
+                "id_from_auth": "n80063107"
+            },
+            {
+                "label": "Zorn, Emma, 1860-1942",
+                "name_type": "personal",
+                "authority_code": "naf",
+                "id_from_auth": "n2014048299"
+            }
+          ],
+          "geos": [
+            {
+                "label": "Piacenza",
+                "authority_code": "tgn",
+                "id_from_auth": "7004939",
+                "coordinates": "45.0167,9.6667"
+            },
+            {
+                "label": "Lucy Vincent Beach",
+                "authority_code": "geonames",
+                "id_from_auth": "4942742",
+                "coordinates": "41.33845,-70.72669"
+            }
+          ],
+          "titles": [
+            {
+                "label": "Qur'an",
+                "type": "uniform",
+                "authority_code": "naf",
+                "id_from_auth": "n79046204"
+            }
+          ],
+          "temporals": [
+            "Anthropocene"
+          ],
+          "dates": [
+            "1900/"
+          ]
+        },
+        "scale": [
+          "Scale [ca. 1:18,000]",
+          "Scale [ca. 1:1,200,000]"
+        ],
+        "projection": "azimuthal equal-area proj.",
+        "host_collections": [
+          "Medieval and Early Renaissance Manuscripts (Collection of Distinction)",
+          "Colonial and Revolutionary Boston"
+        ],
+        "series": "Series value the first",
+        "subseries": "Subseries value",
+        "physical_location": {
+          "label": "Boston Public Library",
+          "type": "corporate",
+          "authority_code": "naf",
+          "id_from_auth": "n79117036"
+        },
+        "physical_location_department": "Rare Books Department",
+        "physical_location_shelf_locator": "Box 27, Folder 3",
+        "related_referenced_by_url": [
+          "http://nrs.harvard.edu/urn-3:HLS.Libr:law00030",
+          "http://abcd.efg"
+        ],
+        "related_constituent": "Constituency",
+        "rights": "Copyright (c) Leslie Jones.",
+        "licenses": [
+          {
+            "label": "This work is licensed for use under a Creative Commons Attribution Non-Commercial No Derivatives License (CC BY-NC-ND).",
+            "uri": "https://creativecommons.org/licenses/by-nc-nd/2.0/"
+          }
+        ],
+        "access_restrictions": "Access to physical copy/copies by appointment only."
+      }
+,
+      "administrative": {
+        "description_standard": "amremm",
+        "flagged": false,
+        "destination_site": [
+          "commonwealth",
+          "bpl"
+        ],
+        "harvestable": true,
+        "access_edit_group": [
+          "superuser",
+          "admin[commonwealth:ijkl54321]"
+        ]
+      },
+      "workflow": {
+        "ingest_origin": "AllSupportedMODS-TestForDev.xls",
+        "processing_state": "complete",
+        "publishing_state": "published"
+      }
+    }
+  }
+}
