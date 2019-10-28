@@ -22,10 +22,18 @@ VCR.configure do |c|
   c.hook_into :webmock
 end
 
-
 require 'rspec/rails'
 require 'database_cleaner'
 require 'factory_bot_rails'
+
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
+end
+
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -43,6 +51,7 @@ require 'factory_bot_rails'
 #
 Dir[Curator::Engine.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 
+
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
 begin
@@ -51,6 +60,7 @@ rescue ActiveRecord::PendingMigrationError => e
   puts e.to_s.strip
   exit 1
 end
+
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
@@ -63,13 +73,8 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = false
 
-
   config.before :suite do
     DatabaseCleaner.clean_with(:truncation)
-  end
-
-  config.before :all do
-    FactoryBot.reload
   end
 
   config.before :all do

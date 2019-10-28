@@ -12,6 +12,17 @@ module Curator
     isolate_namespace Curator
     engine_name 'curator'
 
+    if %w(development test).freeze.include?(ENV.fetch('RAILS_ENV', 'development'))
+      begin
+        require 'factory_bot_rails'
+      rescue LoadError
+        puts "Factory Bot Rails Not installed!"
+      end
+      if defined?(FactoryBotRails)
+        config.factory_bot.definition_file_paths << File.expand_path('../../spec/factories/curator', __dir__)
+      end
+    end
+
     config.to_prepare do
       Curator.init_namespace_accessors
     end
