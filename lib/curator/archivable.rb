@@ -3,11 +3,9 @@ module Curator
   module Archivable
     extend ActiveSupport::Concern
     included do
-      scope :live, -> { where(archived: false }
+      scope :live, -> { where(archived: false) }
       scope :archived, -> { unscope(where: :archived).where(archived: true) }
-
       default_scope { live }
-
     end
 
     def delete(mode=:soft)
