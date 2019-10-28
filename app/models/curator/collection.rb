@@ -2,7 +2,8 @@
 module Curator
   class Collection < ApplicationRecord
     include Curator::Mintable
-    include Curator::Metastreamable
+    include Curator::Metastreams::Administratable
+    include Curator::Metastreams::Workflowable
     include Curator::Mappings::ExemplaryImagable
 
     belongs_to :institution, inverse_of: :collections, class_name: Curator.institution_class_name

@@ -35,4 +35,5 @@ group :test do
   gem 'database_cleaner',  '~> 1.7'
   gem 'webmock', '~> 3.7.6'
   gem 'vcr', '~> 5.0.0'
+  gem 'shoulda-matchers', '~> 4.1'
 end

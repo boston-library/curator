@@ -1,16 +1,15 @@
 FactoryBot.define do
   factory :curator_metastreams_descriptive, class: 'Curator::Metastreams::Descriptive' do
-    descriptable_type { "MyString" }
-    descriptable_id { 1 }
-    physical_location_id { 1 }
-    identifier_json { "" }
-    title_json { "" }
-    date_json { "" }
-    note_json { "" }
-    subject_json { "" }
-    related_json { "" }
-    cartographics_json { "" }
-    publication_json { "" }
+    association :descriptable, factory: :curator_digital_object
+    association :physical_location, factory: :curator_controlled_terms_name
+    identifier_json { {} }
+    title_json { {} }
+    date_json { {} }
+    note_json { {} }
+    subject_json { {} }
+    related_json { {} }
+    cartographics_json { {} }
+    publication_json { {} }
     digital_origin { 1 }
     origin_event { 1 }
     text_direction { 1 }
@@ -28,7 +27,7 @@ FactoryBot.define do
     access_restrictions { "MyString" }
     toc_url { "MyString" }
     toc { "MyText" }
-    abstract { "MyText" }
+    abstract { Faker::Lorem.paragraph }
     archived_at { nil }
   end
 end
