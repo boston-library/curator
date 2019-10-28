@@ -1,10 +1,9 @@
 FactoryBot.define do
   factory :curator_metastreams_workflow, class: 'Curator::Metastreams::Workflow' do
-    workflowable_type { "MyString" }
-    workflowable_id { 1 }
+    association :workflowable, factory: :curator_digital_object
     publishing_state { 1 }
     processing_state { 1 }
-    ingest_origin { "MyString" }
+    ingest_origin { "MY_FILE.txt" }
     archived_at { nil }
   end
 end
