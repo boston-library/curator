@@ -7,9 +7,9 @@ module Curator
 
     acts_as_list scope: [:file_set_of, :file_set_type], top_of_list: 0
 
-    has_many :exemplary_image_mappings, -> { joins(:exemplary).preload(:exemplary) }, inverse_of: :file_set, class_name: Curator.mappings.exemplary_image_class_name
+    has_many :exemplary_image_of_mappings, -> { includes(:exemplary) }, inverse_of: :file_set, class_name: Curator.mappings.exemplary_image_class_name, foreign_key: :file_set_id
 
-    with_options through: :exemplary_image_mappings, source: :exemplary do
+    with_options through: :exemplary_image_of_mappings, source: :exemplary do
       has_many :exemplary_image_collections, source_type: Curator.collection_class_name
       has_many :exemplary_image_objects, source_type: Curator.digital_object_class_name
     end

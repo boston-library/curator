@@ -6,7 +6,7 @@ module Curator
 
     belongs_to :exemplary, inverse_of: :exemplary_image_mappings, polymorphic: true
 
-    belongs_to :file_set, inverse_of: :exemplary_image_mappings, class_name: Curator.filestreams.image_class_name
+    belongs_to :file_set, inverse_of: :exemplary_image_of_mappings, class_name: Curator.filestreams.image_class_name
 
     validates :exemplary_type, inclusion: {in: VALID_EXEMPLARY_IMAGE_TYPES.collect{|type| "Curator::#{type}"}, allow_nil: true }
 
