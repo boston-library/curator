@@ -1,7 +1,12 @@
 require 'rails_helper'
-
+require_relative './shared/mintable.rb'
 module Curator
   RSpec.describe Collection, type: :model do
-    pending "add some examples to (or delete) #{__FILE__}"
+    before(:all) do
+      @collection = create(:curator_collection)
+    end
+    subject{ @collection }
+
+    it_behaves_like 'mintable'
   end
 end

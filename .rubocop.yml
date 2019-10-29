@@ -1,7 +1,6 @@
+require: rubocop-rails
+inherit_from: .rubocop_todo.yml
+
 AllCops:
   TargetRubyVersion: 2.5
-  DisabledByDefault: true
   DisplayCopNames: true
-inherit_from:
-  - .rubocop_todo.yml
-  - .rubocop_rspec.yml

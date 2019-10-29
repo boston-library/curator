@@ -9,7 +9,7 @@ module Curator
       private
       def client
         return @client if defined?(@client)
-        @client = Faraday.new(@base_url.to_s) do |f|
+        @client = Faraday.new(url: @base_url.to_s) do |f|
           f.use Faraday::Response::Logger, Rails.logger
           f.use :http_cache, store: Rails.cache #make this configurable
           f.adapter :net_http_persistent, pool_size: ENV.fetch('RAILS_MAX_THREADS', 5) do |http|
@@ -17,6 +17,7 @@ module Curator
             http.read_timeout = 120
             http.open_timeout = 60
             http.retry_change_requests = true
+            end
           end
         end
       end

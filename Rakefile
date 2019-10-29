@@ -5,8 +5,8 @@ rescue LoadError
   puts 'You must `gem install bundler` and `bundle install` to run rake tasks'
 end
 
-require 'rdoc/task'
 
+require 'rdoc/task'
 RDoc::Task.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title    = 'Curator'
@@ -15,18 +15,18 @@ RDoc::Task.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
+APP_RAKEFILE = File.expand_path("spec/internal/Rakefile", __dir__)
+load 'rails/tasks/engine.rake'
 load 'rails/tasks/statistics.rake'
+
 
 require 'bundler/gem_tasks'
 
-
-require 'rubocop/rake_task'
-
-RuboCop::RakeTask.new
-
-
 require 'rspec/core/rake_task'
-
 RSpec::Core::RakeTask.new(:spec)
 
-task :default => :spec
+
+require 'rubocop/rake_task'
+RuboCop::RakeTask.new(:rubocop)
+
+task default: [:spec, :rubocop]
