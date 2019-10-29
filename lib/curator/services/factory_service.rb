@@ -24,6 +24,12 @@ module Curator
         administrative.save!
       end
 
+      def build_exemplary(exemplary_imagable, &block)
+        exemplary = Curator.mappings.exemplary_image_class.new(exemplary: exemplary_imagable)
+        yield(exemplary)
+        exemplary.save!
+      end
+
 
       private
       def find_or_create_nomenclature(nomenclature_class:, term_data: {}, authority_code: nil )

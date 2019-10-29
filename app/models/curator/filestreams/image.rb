@@ -5,7 +5,7 @@ module Curator
 
     belongs_to :file_set_of, inverse_of: :image_file_sets, class_name: Curator.digital_object_class_name
 
-    acts_as_list scope: [:file_set_of, :file_set_type]
+    acts_as_list scope: [:file_set_of, :file_set_type], top_of_list: 0
 
     has_many :exemplary_image_mappings, -> { joins(:exemplary).preload(:exemplary) }, inverse_of: :file_set, class_name: Curator.mappings.exemplary_image_class_name
 

@@ -3,7 +3,7 @@ module Curator
   class Filestreams::Metadata < Filestreams::FileSet
     belongs_to :file_set_of, inverse_of: :metadata_file_sets, class_name: Curator.digital_object_class_name
 
-    acts_as_list scope: [:file_set_of, :file_set_type]
+    acts_as_list scope: [:file_set_of, :file_set_type], top_of_list: 0
 
     has_one_attached :metadata_ia
     has_one_attached :metadata_ia_scan

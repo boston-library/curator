@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 module Curator
   class Mappings::ExemplaryImage < ApplicationRecord
-    VALID_EXEMPLARY_IMAGE_TYPES=%w(Collection DigitalObject)
+    VALID_EXEMPLARY_IMAGE_TYPES = %w(Collection DigitalObject)
+    VALID_FILE_SET_TYPES = %w(Image Document Video)
 
     belongs_to :exemplary, inverse_of: :exemplary_image_mappings, polymorphic: true
 
@@ -15,7 +16,7 @@ module Curator
 
     private
     def validate_file_set_type
-      self.errors.add(:file_set, "file_set_type is not a image, document, video!") unless %w(image document video).include?(self.file_set_type)
+      self.errors.add(:file_set, "file_set_type is not Image, Document, or Video!") unless VALID_FILE_SET_TYPES.include?(self.file_set.class.name.demodulize)
     end
   end
 end
