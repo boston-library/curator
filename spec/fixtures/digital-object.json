@@ -1,21 +1,18 @@
 {
   "digital_object": {
-    "ark_id": "abcd12345",
+    "ark_id": "commonwealth:abcdefghi",
     "created_at": "2019-05-20T14:46:08.240Z",
     "updated_at": "2019-05-20T14:51:03.796Z",
     "admin_set": {
-      "ark_id": "efgh56789"
+      "ark_id": "commonwealth:987654321"
     },
     "is_member_of_collection": [
       {
-        "ark_id": "efgh56789"
-      },
-      {
-        "ark_id": "efgh56789"
+        "ark_id": "commonwealth:987654321"
       }
     ],
     "is_issue_of": {
-      "ark_id": "ijkl13579"
+      "ark_id": "commonwealth:zyxwvutsr"
     },
     "metastreams": {
       "descriptive": {
@@ -123,7 +120,7 @@
         "issue_number": "20",
         "issuance": "monographic",
         "frequency": "annual",
-        "language": [
+        "languages": [
           {
             "label": "Latin",
             "authority_code": "iso639-2",

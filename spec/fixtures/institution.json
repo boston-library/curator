@@ -1,0 +1,32 @@
+{
+  "institution": {
+    "ark_id": "commonwealth:123456789",
+    "created_at": "2019-05-20T14:46:08.240Z",
+    "updated_at": "2019-05-20T14:51:03.796Z",
+    "name": "Boston Public Library",
+    "abstract": "Lorem ipsum whatever.",
+    "url": "https://bpl.org",
+    "location": {
+      "label": "Boston",
+      "authority_code": "tgn",
+      "id_from_auth": "7013445",
+      "coordinates": "42.3500,-71.0500"
+    },
+    "metastreams": {
+      "administrative": {
+        "destination_site": [
+          "commonwealth",
+          "bpl"
+        ],
+        "access_edit_group": [
+          "superuser",
+          "admin[commonwealth:abcd12345]"
+        ]
+      },
+      "workflow": {
+        "ingest_origin": "AllSupportedMODS-TestForDev.xls",
+        "publishing_state": "published"
+          }
+    }
+  }
+}
