@@ -24,8 +24,8 @@ module Curator
         administrative.save!
       end
 
-      def build_exemplary(exemplary_imagable, &block)
-        exemplary = Curator.mappings.exemplary_image_class.new(exemplary: exemplary_imagable)
+      def build_exemplary(exemplary_object, &block)
+        exemplary = Curator.mappings.exemplary_image_class.new(exemplary_object: exemplary_object)
         yield(exemplary)
         exemplary.save!
       end

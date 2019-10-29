@@ -34,7 +34,7 @@ module Curator
                      Curator.collection_class.find_by(ark_id: ex_ark_id)
             raise "Bad exemplary id! #{ex_ark_id} is either not in the repo or is not a DigitalObject or Collection" unless ex_obj
             build_exemplary(ex_obj) do |exemplary|
-              exemplary.file_set = fileset
+              exemplary.exemplary_file_set = fileset
             end
           end
 
