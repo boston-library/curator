@@ -57,7 +57,7 @@ module Curator
             %i(genres resource_types languages).each do |map_type|
               @desc_json_attrs.fetch(map_type, []).each do |map_attrs|
                 mappable = get_mappable(map_attrs,
-                  nomenclature_class: Curator.controlled_terms.public_send("#{map_type.to_s.singularize}_class")
+                                        nomenclature_class: Curator.controlled_terms.public_send("#{map_type.to_s.singularize}_class")
                 )
                 descriptive.desc_terms << Curator.mappings.desc_term_class.new(mappable: mappable)
               end
@@ -89,7 +89,7 @@ module Curator
                 v.each do |map_attrs|
                   descriptive.desc_terms << Curator.mappings.desc_term_class.new(mappable:
                     get_mappable(map_attrs,
-                      nomenclature_class: Curator.controlled_terms.public_send("#{map_type.to_s}_class")
+                                 nomenclature_class: Curator.controlled_terms.public_send("#{map_type.to_s}_class")
                     )
                   )
                 end
