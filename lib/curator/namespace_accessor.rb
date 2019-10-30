@@ -21,34 +21,34 @@ module Curator
       VALID_NAMESPACES = %w(ControlledTerms Filestreams Mappings Metastreams).freeze
 
       VALID_NAMESPACE_CLASSES=%w(Institution
-        Collection
-        DigitalObject
-        Authority
-        Genre
-        Geographic
-        Language
-        License
-        Name
-        ResourceType
-        Role
-        Subject
-        Audio
-        Document
-        Ereader
-        Image
-        Metadata
-        Text
-        Video
-        CollectionMember
-        DescHostCollection
-        DescNameRole
-        DescTerm
-        ExemplaryImage
-        HostCollection
-        Administrative
-        Descriptive
-        Workflow
-        Issue
+                                 Collection
+                                 DigitalObject
+                                 Authority
+                                 Genre
+                                 Geographic
+                                 Language
+                                 License
+                                 Name
+                                 ResourceType
+                                 Role
+                                 Subject
+                                 Audio
+                                 Document
+                                 Ereader
+                                 Image
+                                 Metadata
+                                 Text
+                                 Video
+                                 CollectionMember
+                                 DescHostCollection
+                                 DescNameRole
+                                 DescTerm
+                                 ExemplaryImage
+                                 HostCollection
+                                 Administrative
+                                 Descriptive
+                                 Workflow
+                                 Issue
         ).freeze
 
       private_constant :VALID_NAMESPACES
