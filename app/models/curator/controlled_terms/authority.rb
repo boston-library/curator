@@ -42,15 +42,15 @@ module Curator
     private
     def get_canonical_name
       name_json_block = case self.cannonical_json_format
-      when '.jsonld'
-        ->(json_body){ json_body[AUTH_NAME_KEY] if json_body[AUTH_NAME_KEY].present? }
-      when '.skos.json'
-        ->(json_body){
-          label_el = json_body.collect{|aj| aj[AUTH_NAME_KEY] if aj.key?(AUTH_NAME_KEY)}.compact.flatten.shift
-          label_el['@value'] if label_el.present?
-        }
-      else
-        nil
+                        when '.jsonld'
+                          ->(json_body){ json_body[AUTH_NAME_KEY] if json_body[AUTH_NAME_KEY].present? }
+                        when '.skos.json'
+                          ->(json_body){
+                            label_el = json_body.collect{|aj| aj[AUTH_NAME_KEY] if aj.key?(AUTH_NAME_KEY)}.compact.flatten.shift
+                            label_el['@value'] if label_el.present?
+                          }
+                        else
+                          nil
       end
 
       unless name_json_block.blank?
