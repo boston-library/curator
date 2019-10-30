@@ -3,6 +3,7 @@ module Curator
   class DigitalObject < ApplicationRecord
     include Curator::Mintable
     include Curator::Metastreamable
+    include Curator::Mappings::Exemplary::ObjectImagable
 
     before_create :add_admin_set_to_members, if: proc {|d| d.admin_set.present? } #Should Fail if admin set is not present
 

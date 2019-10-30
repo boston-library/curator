@@ -3,6 +3,7 @@ module Curator
   class Filestreams::FileSet < ApplicationRecord
     self.inheritance_column = :file_set_type
 
+    include Curator::Mintable
     include Curator::Metastreams::Workflowable
     include Curator::Metastreams::Administratable
 

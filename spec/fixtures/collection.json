@@ -1,0 +1,29 @@
+{
+  "collection": {
+    "ark_id": "commonwealth:987654321",
+    "created_at": "2019-05-20T14:46:08.240Z",
+    "updated_at": "2019-05-20T14:51:03.796Z",
+    "institution": {
+      "ark_id": "commonwealth:123456789"
+    },
+    "name": "Test Collection for Development ONE",
+    "abstract": "A test collection for development purposes.",
+    "metastreams": {
+      "administrative": {
+        "destination_site": [
+          "commonwealth",
+          "bpl"
+        ],
+        "harvestable": true,
+        "access_edit_group": [
+          "superuser",
+          "admin[commonwealth:ijkl54321]"
+        ]
+      },
+      "workflow": {
+        "ingest_origin": "AllSupportedMODS-TestForDev.xls",
+        "publishing_state": "published"
+      }
+    }
+  }
+}

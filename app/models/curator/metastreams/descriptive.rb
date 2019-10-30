@@ -43,7 +43,7 @@ module Curator
     belongs_to :physical_location, inverse_of: :physical_locations_of, class_name: Curator.controlled_terms.name_class_name
 
     #MAPPING OBJECTS
-    has_many :desc_terms, -> { joins(:mappable).preload(:mappable) }, inverse_of: :descriptive, class_name: Curator.mappings.desc_term_class_name
+    has_many :desc_terms, -> { includes(:mappable) }, inverse_of: :descriptive, class_name: Curator.mappings.desc_term_class_name
     has_many :name_roles,  -> { includes(:name, :role) }, inverse_of: :descriptive, class_name: Curator.mappings.desc_name_role_class_name
     has_many :desc_host_collections, -> { includes(:host_collection) }, inverse_of: :descriptive, class_name: Curator.mappings.desc_host_collection_class_name
     has_many :host_collections, through: :desc_host_collections, source: :host_collection
