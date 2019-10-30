@@ -38,16 +38,16 @@ module Curator
 
     private
 
-      # Use callbacks to share common setup or constraints between actions.
-      def set_controlled_terms_authority
-        @controlled_terms_authority = ControlledTerms::Authority.find(params[:id])
-      end
+    # Use callbacks to share common setup or constraints between actions.
+    def set_controlled_terms_authority
+      @controlled_terms_authority = ControlledTerms::Authority.find(params[:id])
+    end
 
-      # Only allow a trusted parameter "white list" through.
-      def controlled_terms_authority_params
-        def authority_params
-          params.require(:authority).permit(:code, :base_url, :label)
-        end
+    # Only allow a trusted parameter "white list" through.
+    def controlled_terms_authority_params
+      def authority_params
+        params.require(:authority).permit(:code, :base_url, :label)
       end
+    end
   end
 end

@@ -43,14 +43,14 @@ module Curator
 
     private
 
-      # Use callbacks to share common setup or constraints between actions.
-      def set_digital_object
-        @digital_object = DigitalObject.find(params[:id])
-      end
+    # Use callbacks to share common setup or constraints between actions.
+    def set_digital_object
+      @digital_object = DigitalObject.find(params[:id])
+    end
 
-      # Only allow a trusted parameter "white list" through.
-      def digital_object_params
-        params.fetch(:digital_object, {})
-      end
+    # Only allow a trusted parameter "white list" through.
+    def digital_object_params
+      params.fetch(:digital_object, {})
+    end
   end
 end

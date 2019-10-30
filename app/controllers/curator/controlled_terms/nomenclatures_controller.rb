@@ -43,18 +43,18 @@ module Curator
 
     private
 
-      # Use callbacks to share common setup or constraints between actions.
-      def set_controlled_terms_nomenclature
-        @controlled_terms_nomenclature = @controlled_terms_nomenclature_type.find(params[:id])
-      end
+    # Use callbacks to share common setup or constraints between actions.
+    def set_controlled_terms_nomenclature
+      @controlled_terms_nomenclature = @controlled_terms_nomenclature_type.find(params[:id])
+    end
 
-      def set_controlled_terms_nomenclature_type
-        @controlled_terms_nomenclature_type = "Curator::ControlledTerms::#{params[:type]}".constantize
-      end
+    def set_controlled_terms_nomenclature_type
+      @controlled_terms_nomenclature_type = "Curator::ControlledTerms::#{params[:type]}".constantize
+    end
 
-      # Only allow a trusted parameter "white list" through.
-      def controlled_terms_nomenclature_params
-        params.fetch(:controlled_terms_nomenclature, {})
-      end
+    # Only allow a trusted parameter "white list" through.
+    def controlled_terms_nomenclature_params
+      params.fetch(:controlled_terms_nomenclature, {})
+    end
   end
 end
