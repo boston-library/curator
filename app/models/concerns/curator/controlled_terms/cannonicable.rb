@@ -11,6 +11,7 @@ module Curator
         before_validation :get_canonical_label, if: :should_get_cannonical_label?
 
         protected
+
         def should_get_cannonical_label?
           self.label.blank? && self.label_required? && self.value_uri.present?
         end
@@ -20,6 +21,7 @@ module Curator
         end
 
         private
+
         def get_canonical_label
           label_json_block = case cannonical_json_format
                              when '.jsonld'

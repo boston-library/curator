@@ -37,6 +37,7 @@ module Curator
     end
 
     private
+
       # Use callbacks to share common setup or constraints between actions.
       def set_controlled_terms_authority
         @controlled_terms_authority = ControlledTerms::Authority.find(params[:id])

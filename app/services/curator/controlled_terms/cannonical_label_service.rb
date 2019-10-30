@@ -29,6 +29,7 @@ module Curator
 
     #10.20.72.63
     protected
+
     def set_connection
       Faraday.new do |f|
         f.use Faraday::Response::Logger, Rails.logger

@@ -9,6 +9,7 @@ module Curator
     validate :name_role_class_validator, on: :create
 
     private
+
     def name_role_class_validator
       %i(name role).each do |attr|
         class_name = "Curator::ControlledTerms::#{attr.to_s.camelize}"

@@ -9,7 +9,9 @@ module Curator
       validates :ark_id, presence: true, uniqueness: { allow_nil: true }
     end
     #Todo put a before validate callback here to the ark manager
+
     private
+
     def generate_ark_id
       self.ark_id = Curator::MinterService.call
     end

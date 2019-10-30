@@ -18,6 +18,7 @@ module Curator
       end
 
       protected
+
       def build_descriptive(descriptable, &block)
         descriptive = Metastreams::Descriptive.new(descriptable: descriptable)
         yield descriptive
@@ -43,6 +44,7 @@ module Curator
       end
 
       private
+
       def find_or_create_nomenclature(nomenclature_class:, term_data: {}, authority_code: nil )
         begin
           if authority_code.present?

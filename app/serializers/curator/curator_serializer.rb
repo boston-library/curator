@@ -10,6 +10,7 @@ module Curator
     end
 
     private
+
     def deep_reject_nil_vals(hash={})
       hash.each do |key, value|
         if value.blank?

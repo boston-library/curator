@@ -34,11 +34,13 @@ module Curator
     end
 
     protected
+
     def should_get_cannonical_name?
       self.name.blank? && self.base_url.present?
     end
 
     private
+
     def get_canonical_name
       name_json_block = case self.cannonical_json_format
                         when '.jsonld'
