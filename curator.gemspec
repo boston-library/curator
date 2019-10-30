@@ -29,8 +29,8 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
-  spec.add_dependency 'aasm', '~> 5.0.5' #Acts as a state machine. Useful for tracking states of objects and triggering call backs between state trasnistions
-  spec.add_dependency 'active_model_serializers', '~> 0.10.0' #May want to change to fast jsonapi
+  spec.add_dependency 'aasm', '~> 5.0.5' # Acts as a state machine. Useful for tracking states of objects and triggering call backs between state trasnistions
+  spec.add_dependency 'active_model_serializers', '~> 0.10.0' # May want to change to fast jsonapi
   spec.add_dependency 'acts_as_list', '~> 0.9'
   spec.add_dependency 'addressable', '2.7'
   spec.add_dependency 'attr_json', '~> 0.7.0'
@@ -40,7 +40,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'net-http-persistent', '~> 3.1'
   spec.add_dependency 'oj', '~> 3.9.1'
   spec.add_dependency 'ox', '~> 2.11'
-  spec.add_dependency 'paper_trail', '~> 10.3' #have not implemented this yet but does version control
+  spec.add_dependency 'paper_trail', '~> 10.3' # have not implemented this yet but does version control
   spec.add_dependency 'rails', '~> 5.2.3'
   spec.add_dependency 'rsolr', '~> 2.0.2'
   spec.add_dependency 'traject', '~> 3.2.0'

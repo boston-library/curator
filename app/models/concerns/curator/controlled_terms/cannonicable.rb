@@ -4,7 +4,7 @@ module Curator
   module ControlledTerms
     module Cannonicable
       extend ActiveSupport::Concern
-      #Key of the JSON Element where the cannonical label resides in the remote service
+      # Key of the JSON Element where the cannonical label resides in the remote service
       NOM_LABEL_KEY='http://www.w3.org/2004/02/skos/core#prefLabel'.freeze
       private_constant :NOM_LABEL_KEY
       included do

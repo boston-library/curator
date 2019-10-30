@@ -24,7 +24,7 @@ module Curator
           expect(:patch => "/controlled_terms/#{nom_type}/1").to route_to('curator/controlled_terms/nomenclatures#update', :id => '1', :type => nom_type.singularize.camelize)
         end
 
-        #TODO implement this using soft delete
+        # TODO implement this using soft delete
         # it "routes to #destroy" do
         #   expect(:delete => "/controlled_terms/nomenclatures/1").to route_to("controlled_terms/nomenclatures#destroy", :id => "1")
         # end

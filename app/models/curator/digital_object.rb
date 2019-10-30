@@ -6,7 +6,7 @@ module Curator
     include Curator::Metastreamable
     include Curator::Mappings::Exemplary::ObjectImagable
 
-    before_create :add_admin_set_to_members, if: proc {|d| d.admin_set.present? } #Should Fail if admin set is not present
+    before_create :add_admin_set_to_members, if: proc {|d| d.admin_set.present? } # Should Fail if admin set is not present
 
     belongs_to :admin_set, inverse_of: :admin_set_objects, class_name: Curator.collection_class_name
 

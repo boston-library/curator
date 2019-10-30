@@ -9,7 +9,7 @@ module Curator
     belongs_to :location, -> {includes(:authority) }, inverse_of: :institution_locations, class_name: Curator.controlled_terms.geographic_class_name, optional: true
 
     has_many :host_collections, inverse_of: :institution, class_name: Curator.mappings.host_collection_class_name
-    #host_collections is a mapping object not to be consfused with collections
+    # host_collections is a mapping object not to be consfused with collections
     has_many :collections, inverse_of: :institution, class_name: Curator.collection_class_name, dependent: :destroy
 
     has_many :collection_admin_set_objects, through: :collections, source: :admin_set_objects
