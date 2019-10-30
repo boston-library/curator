@@ -38,7 +38,7 @@ module Curator
 
     protected
 
-    def location(json_attrs={})
+    def location(json_attrs = {})
       find_or_create_nomenclature(
         nomenclature_class: Curator.controlled_terms.geographic_class,
         term_data: json_attrs.except(:authority_code),

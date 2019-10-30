@@ -59,8 +59,7 @@ module Curator
             %i(genres resource_types languages).each do |map_type|
               @desc_json_attrs.fetch(map_type, []).each do |map_attrs|
                 mappable = get_mappable(map_attrs,
-                                        nomenclature_class: Curator.controlled_terms.public_send("#{map_type.to_s.singularize}_class")
-                                       )
+                                        nomenclature_class: Curator.controlled_terms.public_send("#{map_type.to_s.singularize}_class"))
                 descriptive.desc_terms << Curator.mappings.desc_term_class.new(mappable: mappable)
               end
             end
@@ -91,9 +90,7 @@ module Curator
                 v.each do |map_attrs|
                   descriptive.desc_terms << Curator.mappings.desc_term_class.new(mappable:
                     get_mappable(map_attrs,
-                                 nomenclature_class: Curator.controlled_terms.public_send("#{map_type.to_s}_class")
-                                )
-                                                                                )
+                                 nomenclature_class: Curator.controlled_terms.public_send("#{map_type.to_s}_class")))
                 end
               end
             end
@@ -110,19 +107,19 @@ module Curator
       end
     end
 
-    def identifier(json_attrs={})
+    def identifier(json_attrs = {})
       json_attrs.fetch(:identifier, []).map do |ident_attrs|
         Descriptives::Identifier.new(ident_attrs)
       end
     end
 
-    def note(json_attrs={})
+    def note(json_attrs = {})
       json_attrs.fetch(:note, []).map do |note_attrs|
         Descriptives::Note.new(note_attrs)
       end
     end
 
-    def date(json_attrs={})
+    def date(json_attrs = {})
       date_attrs = json_attrs.fetch(:date, {})
       created = date_attrs.fetch(:created, nil)
       issued = date_attrs.fetch(:issued, nil)
@@ -138,7 +135,7 @@ module Curator
       Descriptives::Publication.new(pub_hash.compact)
     end
 
-    def title(json_attrs={})
+    def title(json_attrs = {})
       primary = json_attrs.fetch(:title_primary, {})
       other = json_attrs.fetch(:title_other, {}).map { |t_attrs| title_attr(t_attrs) }
       Descriptives::TitleSet.new(primary: primary, other: other)
@@ -152,7 +149,7 @@ module Curator
       Descriptives::Subject.new(titles: uniform_title, temporals: temporal, dates: date)
     end
 
-    def related(json_attrs={})
+    def related(json_attrs = {})
       constituent = json_attrs.fetch(:related_constituent, nil)
       referenced_by_url = json_attrs.fetch(:related_referenced_by_url, [])
       references_url = json_attrs.fetch(:related_references_url, [])
@@ -163,7 +160,7 @@ module Curator
                                 review_url: review_url)
     end
 
-    def physical_location(json_attrs={})
+    def physical_location(json_attrs = {})
       physical_location_attrs = json_attrs.fetch(:physical_location)
       authority_code = physical_location_attrs.fetch(:authority_code, nil)
       term_data = physical_location_attrs.except(:authority_code)
@@ -174,11 +171,11 @@ module Curator
       )
     end
 
-    def title_attr(json_attrs={})
+    def title_attr(json_attrs = {})
       Descriptives::Title.new(json_attrs)
     end
 
-    def cartographics(json_attrs={})
+    def cartographics(json_attrs = {})
       Descriptives::Cartographic.new(
         scale: json_attrs.fetch(:scale, []),
         projection: json_attrs.fetch(:projection, nil)
