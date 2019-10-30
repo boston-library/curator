@@ -1,6 +1,10 @@
-require: rubocop-rails
 inherit_from: .rubocop_todo.yml
 
 AllCops:
+  Exclude:
+    - 'scratch.rb'
+    - 'spec/internal/**/*'
+    - 'lib/curator/archivable.rb'
+    - 'lib/curator/services/remote_service.rb'
   TargetRubyVersion: 2.5
   DisplayCopNames: true

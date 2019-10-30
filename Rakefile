@@ -27,6 +27,9 @@ RSpec::Core::RakeTask.new(:spec)
 
 
 require 'rubocop/rake_task'
-RuboCop::RakeTask.new(:rubocop)
-
+RuboCop::RakeTask.new(:rubocop) do |task|
+  task.requires << 'rubocop-rails'
+  task.requires << 'rubocop-rspec'
+end
+#rubocop --auto-gen-config --require rubocop-rails rubocop-rspec
 task default: [:spec, :rubocop]
