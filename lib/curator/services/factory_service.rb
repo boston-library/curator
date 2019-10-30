@@ -4,6 +4,18 @@ module Curator
     module FactoryService
       extend ActiveSupport::Concern
 
+      def initialize(json_data: {})
+        @json_attrs = json_data.with_indifferent_access
+        @ark_id = @json_attrs.fetch('ark_id')
+        metastream_json_attrs = @json_attrs.fetch('metastreams', {}).with_indifferent_access
+        @workflow_json_attrs = metastream_json_attrs.fetch('workflow', {}).with_indifferent_access
+        @admin_json_attrs = metastream_json_attrs.fetch('administrative', {}).with_indifferent_access
+        @desc_json_attrs = metastream_json_attrs.fetch('descriptive', {}).with_indifferent_access
+        @created = Time.zone.parse(@json_attrs.fetch('created_at'))
+        @updated = Time.zone.parse(@json_attrs.fetch('updated_at'))
+        awesome_print @json_attrs
+      end
+
       protected
       def build_descriptive(descriptable, &block)
         descriptive = Metastreams::Descriptive.new(descriptable: descriptable)

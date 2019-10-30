@@ -4,69 +4,70 @@ module Curator
   class ObjectFactoryService < Services::Base
     include Services::FactoryService
 
-    def initialize(json_attrs: {})
-      @json_attrs = json_attrs.with_indifferent_access
-      awesome_print @json_attrs
-    end
-
+    # TODO set relationships for is_issue_of values
     def call
-      ark_id = @json_attrs.fetch('ark_id')
       admin_set_ark_id = @json_attrs.dig('admin_set', 'ark_id')
-      metastream_json_attrs = @json_attrs.fetch('metastreams', {}).with_indifferent_access
-      desc_json_attrs = metastream_json_attrs.fetch('descriptive', {}).with_indifferent_access
-      workflow_json_attrs = metastream_json_attrs.fetch('workflow', {}).with_indifferent_access
-      admin_json_attrs = metastream_json_attrs.fetch('administrative', {}).with_indifferent_access
       begin
         Curator.digital_object_class.transaction do
-          @digital_object = Curator.digital_object_class.new(ark_id: ark_id)
-          @admin_set = Curator.collection_class.find_by(ark_id: admin_set_ark_id)
-          @digital_object.admin_set = @admin_set
-          @digital_object.save!
+          admin_set = Curator.collection_class.find_by(ark_id: admin_set_ark_id)
+          raise "AdminSet #{admin_set_ark_id} not found!" unless admin_set
+          digital_object = Curator.digital_object_class.new(ark_id: @ark_id)
+          digital_object.admin_set = admin_set
+          collections = @json_attrs.fetch('exemplary_image_of', [])
+          collections.each do |collection|
+            col_ark_id = collection['ark_id']
+            col = Curator.collection_class.find_by(ark_id: col_ark_id)
+            raise "Collection #{col_ark_id} not found!" unless col
+            digital_object.is_member_of_collection << col
+          end
+          digital_object.created_at = @created if @created
+          digital_object.updated_at = @updated if @updated
+          digital_object.save!
 
-          build_workflow(@digital_object) do |workflow|
+          build_workflow(digital_object) do |workflow|
             [:ingest_origin, :processing_state, :publishing_state].each do |attr|
-              workflow.send("#{attr}=", workflow_json_attrs.fetch(attr, nil))
+              workflow.send("#{attr}=", @workflow_json_attrs.fetch(attr, nil))
             end
           end
 
-          build_administrative(@digital_object) do |admin|
+          build_administrative(digital_object) do |admin|
             [:description_standard, :flagged, :destination_site, :harvestable].each do |attr|
-              admin.send("#{attr}=", admin_json_attrs.fetch(attr, nil))
+              admin.send("#{attr}=", @admin_json_attrs.fetch(attr, nil))
             end
           end
 
-          build_descriptive(@digital_object) do |descriptive|
+          build_descriptive(digital_object) do |descriptive|
             simple_fields = %i[abstract access_restrictions digital_origin frequency
                                issuance origin_event extent physical_location_department
                                physical_location_shelf_locator place_of_publication
                                publisher rights series subseries toc toc_url
                                resource_type_manuscript text_direction]
             simple_fields.each do |attr|
-              descriptive.send("#{attr}=", desc_json_attrs.fetch(attr, nil))
+              descriptive.send("#{attr}=", @desc_json_attrs.fetch(attr, nil))
             end
-            descriptive.identifier = identifier(desc_json_attrs)
-            descriptive.physical_location = physical_location(desc_json_attrs)
-            descriptive.date = date(desc_json_attrs)
-            descriptive.publication = publication(desc_json_attrs)
-            descriptive.title = title(desc_json_attrs)
-            descriptive.note = note(desc_json_attrs)
-            descriptive.subject_other = subject_other(desc_json_attrs)
-            descriptive.cartographic = cartographics(desc_json_attrs)
-            descriptive.related = related(desc_json_attrs)
+            descriptive.identifier = identifier(@desc_json_attrs)
+            descriptive.physical_location = physical_location(@desc_json_attrs)
+            descriptive.date = date(@desc_json_attrs)
+            descriptive.publication = publication(@desc_json_attrs)
+            descriptive.title = title(@desc_json_attrs)
+            descriptive.note = note(@desc_json_attrs)
+            descriptive.subject_other = subject_other(@desc_json_attrs)
+            descriptive.cartographic = cartographics(@desc_json_attrs)
+            descriptive.related = related(@desc_json_attrs)
             %i(genres resource_types languages).each do |map_type|
-              desc_json_attrs.fetch(map_type, []).each do |map_attrs|
+              @desc_json_attrs.fetch(map_type, []).each do |map_attrs|
                 mappable = get_mappable(map_attrs,
                   nomenclature_class: Curator.controlled_terms.public_send("#{map_type.to_s.singularize}_class")
                 )
                 descriptive.desc_terms << Curator.mappings.desc_term_class.new(mappable: mappable)
               end
             end
-            desc_json_attrs.fetch(:host_collections, []).each do |host_col|
+            @desc_json_attrs.fetch(:host_collections, []).each do |host_col|
               host = find_or_create_host_collection(host_col,
-                                                    @admin_set.institution.id)
+                                                    admin_set.institution.id)
               descriptive.desc_host_collections.build(host_collection: host)
             end
-            licenses = desc_json_attrs.fetch(:licenses, [])
+            licenses = @desc_json_attrs.fetch(:licenses, [])
             licenses.each do |license_attrs|
               descriptive.desc_terms << Curator.mappings.desc_term_class.new(
                 mappable: get_mappable(
@@ -75,7 +76,7 @@ module Curator
                 )
               )
             end
-            desc_json_attrs.fetch(:subject, {}).each do |k, v|
+            @desc_json_attrs.fetch(:subject, {}).each do |k, v|
               map_type = case k.to_s
                          when 'topics'
                            :subject
@@ -95,11 +96,12 @@ module Curator
               end
             end
 
-            desc_json_attrs.fetch(:name_roles, []).each do |name_role_attrs|
+            @desc_json_attrs.fetch(:name_roles, []).each do |name_role_attrs|
               name_role_attrs = name_role(name_role_attrs.fetch(:name), name_role_attrs.fetch(:role))
               descriptive.name_roles.build(name_role_attrs)
             end
           end
+          return digital_object
         end
       rescue => e
         puts "#{e.to_s}"
@@ -120,9 +122,9 @@ module Curator
 
     def date(json_attrs={})
       date_attrs = json_attrs.fetch(:date, {})
-      created = date_attrs.fetch(:date_created, nil)
-      issued = date_attrs.fetch(:date_issued, nil)
-      copyright = date_attrs.fetch(:date_copyright, nil)
+      created = date_attrs.fetch(:created, nil)
+      issued = date_attrs.fetch(:issued, nil)
+      copyright = date_attrs.fetch(:copyright, nil)
       Descriptives::Date.new(created: created, issued: issued, copyright: copyright)
     end
 
