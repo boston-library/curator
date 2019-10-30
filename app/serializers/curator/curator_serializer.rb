@@ -17,7 +17,7 @@ module Curator
           hash.delete(key)
         elsif value.is_a?(Hash)
           deep_reject_nil_vals(value)
-        elsif value.is_a?(Array) && value.all?{|el| el.is_a?(Hash)}
+        elsif value.is_a?(Array) && value.all? {|el| el.is_a?(Hash)}
           value.each {|el| deep_reject_nil_vals(el)}
         end
       end

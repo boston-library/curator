@@ -5,7 +5,7 @@ module Curator
     before(:all) do
       @institution = create(:curator_institution)
     end
-    subject{ @institution }
+    subject { @institution }
 
     it_behaves_like 'mintable'
   end

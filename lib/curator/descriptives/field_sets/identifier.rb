@@ -3,7 +3,7 @@
 module Curator
   module Descriptives
     class Identifier < FieldSet
-      IDENTIFIER_TYPES=['local-accession', 'local-other', 'local-call', 'local-barcode', 'isbn', 'ismn', 'isrc', 'issn', 'issue-number', 'lccn', 'matrix-number', 'music-plate', 'music-publisher', 'sici', 'videorecording', 'internet-archive'].freeze
+      IDENTIFIER_TYPES = ['local-accession', 'local-other', 'local-call', 'local-barcode', 'isbn', 'ismn', 'isrc', 'issn', 'issue-number', 'lccn', 'matrix-number', 'music-plate', 'music-publisher', 'sici', 'videorecording', 'internet-archive'].freeze
 
       attr_json :label, :string
       attr_json :type, :string

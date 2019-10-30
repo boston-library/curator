@@ -5,7 +5,7 @@ module Curator
     module Cannonicable
       extend ActiveSupport::Concern
       # Key of the JSON Element where the cannonical label resides in the remote service
-      NOM_LABEL_KEY='http://www.w3.org/2004/02/skos/core#prefLabel'.freeze
+      NOM_LABEL_KEY = 'http://www.w3.org/2004/02/skos/core#prefLabel'.freeze
       private_constant :NOM_LABEL_KEY
       included do
         before_validation :get_canonical_label, if: :should_get_cannonical_label?
@@ -17,7 +17,7 @@ module Curator
         end
 
         def label_required?
-          self.class.validators.flat_map{|c| c.attributes if c.kind == :presence}.compact.include?(:label)
+          self.class.validators.flat_map {|c| c.attributes if c.kind == :presence}.compact.include?(:label)
         end
 
         private
@@ -25,10 +25,10 @@ module Curator
         def get_canonical_label
           label_json_block = case cannonical_json_format
                              when '.jsonld'
-                               ->(json_body){ json_body[NOM_LABEL_KEY] if json_body[NOM_LABEL_KEY].present? }
+                               ->(json_body) { json_body[NOM_LABEL_KEY] if json_body[NOM_LABEL_KEY].present? }
                              when '.skos.json'
-                               ->(json_body){
-                                 label_el = json_body.collect{|aj| aj[NOM_LABEL_KEY] if aj.key?(NOM_LABEL_KEY)}.compact.flatten.shift
+                               ->(json_body) {
+                                 label_el = json_body.collect {|aj| aj[NOM_LABEL_KEY] if aj.key?(NOM_LABEL_KEY)}.compact.flatten.shift
                                  label_el['@value'] if label_el.present?
                                }
                              else

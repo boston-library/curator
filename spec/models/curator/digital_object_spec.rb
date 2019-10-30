@@ -5,7 +5,7 @@ module Curator
     before(:all) do
       @digital_object = create(:curator_digital_object)
     end
-    subject{ @digital_object }
+    subject { @digital_object }
 
     it_behaves_like 'mintable'
   end

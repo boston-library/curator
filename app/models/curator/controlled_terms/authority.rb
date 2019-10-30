@@ -2,7 +2,7 @@
 
 module Curator
   class ControlledTerms::Authority < ApplicationRecord
-    AUTH_NAME_KEY='http://www.w3.org/2000/01/rdf-schema#label'.freeze
+    AUTH_NAME_KEY = 'http://www.w3.org/2000/01/rdf-schema#label'.freeze
     private_constant :AUTH_NAME_KEY
 
     before_validation :get_canonical_name, if: :should_get_cannonical_name?
@@ -44,10 +44,10 @@ module Curator
     def get_canonical_name
       name_json_block = case self.cannonical_json_format
                         when '.jsonld'
-                          ->(json_body){ json_body[AUTH_NAME_KEY] if json_body[AUTH_NAME_KEY].present? }
+                          ->(json_body) { json_body[AUTH_NAME_KEY] if json_body[AUTH_NAME_KEY].present? }
                         when '.skos.json'
-                          ->(json_body){
-                            label_el = json_body.collect{|aj| aj[AUTH_NAME_KEY] if aj.key?(AUTH_NAME_KEY)}.compact.flatten.shift
+                          ->(json_body) {
+                            label_el = json_body.collect {|aj| aj[AUTH_NAME_KEY] if aj.key?(AUTH_NAME_KEY)}.compact.flatten.shift
                             label_el['@value'] if label_el.present?
                           }
                         else

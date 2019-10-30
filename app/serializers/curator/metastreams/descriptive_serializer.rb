@@ -2,7 +2,7 @@
 
 module Curator
   class Metastreams::DescriptiveSerializer < CuratorSerializer
-    CONTROLLED_TERMS_FIELDS=%i(label id_from_auth authority_code).freeze
+    CONTROLLED_TERMS_FIELDS = %i(label id_from_auth authority_code).freeze
 
     class DescriptiveNameRoleSerializer < ActiveModel::Serializer
       attribute :name do |serializer|
@@ -76,7 +76,7 @@ module Curator
     end
 
     def resource_type
-      object.resource_types.map{|resource_type| Curator::ControlledTerms::ResourceTypeSerializer.new(resource_type).attributes(CONTROLLED_TERMS_FIELDS) }
+      object.resource_types.map {|resource_type| Curator::ControlledTerms::ResourceTypeSerializer.new(resource_type).attributes(CONTROLLED_TERMS_FIELDS) }
     end
 
     def license
