@@ -47,7 +47,6 @@ namespace :curator do
     puts 'Curator Setup Task Complete!'
   end
 
-
   desc 'Load and run seed task for default authorities and nomenclatures'
   task load_seed: :environment do
     puts 'Loading Seed For ControlledTerms Authorities and Nomenclatures'

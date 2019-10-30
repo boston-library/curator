@@ -22,7 +22,6 @@ module Curator
       has_many :subjects, class_name: ControlledTerms.subject_class_name
     end
 
-
     def cannonical_json_format
       case self.code
       when 'gmgpc', 'lctgm', 'naf', 'lcsh', 'lcgft', 'iso639-2', 'marcrelator', 'resourceTypes'
@@ -38,7 +37,6 @@ module Curator
     def should_get_cannonical_name?
       self.name.blank? && self.base_url.present?
     end
-
 
     private
     def get_canonical_name

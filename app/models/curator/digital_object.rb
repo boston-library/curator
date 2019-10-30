@@ -33,7 +33,6 @@ module Curator
       has_one :issue_for, through: :issue_mapping_for, source: :digital_object
     end
 
-
     private
     def add_admin_set_to_members
       self.collection_members.build(collection: admin_set)

@@ -11,7 +11,6 @@ module Curator
         expect(:get => '/collections/1').to route_to('curator/collections#show', :id => '1')
       end
 
-
       it 'routes to #create' do
         expect(:post => '/collections').to route_to('curator/collections#create')
       end

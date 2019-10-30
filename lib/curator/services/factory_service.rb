@@ -24,7 +24,6 @@ module Curator
         descriptive.save!
       end
 
-
       def build_workflow(workflowable, &block)
         workflow = Curator.metastreams.workflow_class.new(workflowable: workflowable )
         yield(workflow)
@@ -42,7 +41,6 @@ module Curator
         yield(exemplary)
         exemplary.save!
       end
-
 
       private
       def find_or_create_nomenclature(nomenclature_class:, term_data: {}, authority_code: nil )

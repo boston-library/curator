@@ -12,7 +12,6 @@ module Curator
           expect(:get => "/controlled_terms/#{nom_type}/1").to route_to('curator/controlled_terms/nomenclatures#show', :id => '1', :type => nom_type.singularize.camelize)
         end
 
-
         it 'routes to #create' do
           expect(:post => "/controlled_terms/#{nom_type}").to route_to('curator/controlled_terms/nomenclatures#create', :type => nom_type.singularize.camelize)
         end

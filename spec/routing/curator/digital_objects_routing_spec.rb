@@ -11,7 +11,6 @@ module Curator
         expect(:get => '/digital_objects/1').to route_to('curator/digital_objects#show', :id => '1')
       end
 
-
       it 'routes to #create' do
         expect(:post => '/digital_objects').to route_to('curator/digital_objects#create')
       end

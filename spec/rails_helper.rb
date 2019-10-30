@@ -28,7 +28,6 @@ require 'rspec/rails'
 require 'database_cleaner'
 require 'factory_bot_rails'
 
-
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
     with.test_framework :rspec
@@ -52,7 +51,6 @@ end
 # require only the support files necessary.
 #
 Dir[Curator::Engine.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
-
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.

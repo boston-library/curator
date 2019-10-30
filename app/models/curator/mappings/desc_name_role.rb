@@ -8,7 +8,6 @@ module Curator
 
     validate :name_role_class_validator, on: :create
 
-
     private
     def name_role_class_validator
       %i(name role).each do |attr|
