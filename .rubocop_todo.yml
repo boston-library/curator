@@ -6,178 +6,26 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-
-
-# Offense count: 23
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: empty_lines, no_empty_lines
-# Layout/EmptyLinesAroundBlockBody:
-#   Exclude:
-#     - 'curator.gemspec'
-#     - 'spec/controllers/curator/collections_controller_spec.rb'
-#     - 'spec/controllers/curator/controlled_terms/authorities_controller_spec.rb'
-#     - 'spec/controllers/curator/controlled_terms/nomenclatures_controller_spec.rb'
-#     - 'spec/controllers/curator/digital_objects_controller_spec.rb'
-#     - 'spec/controllers/curator/institutions_controller_spec.rb'
-#     - 'spec/factories/curator/filestreams/audios.rb'
-#     - 'spec/internal/db/schema.rb'
-
-# Offense count: 5
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: empty_lines, empty_lines_except_namespace, empty_lines_special, no_empty_lines, beginning_only, ending_only
-Layout/EmptyLinesAroundClassBody:
-  Exclude:
-    - 'app/models/curator/collection.rb'
-    - 'app/models/curator/filestreams/document.rb'
-    - 'app/models/curator/institution.rb'
-    - 'app/models/curator/mappings/desc_term.rb'
-    - 'app/services/curator/controlled_terms/cannonical_label_service.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: empty_lines, empty_lines_except_namespace, empty_lines_special, no_empty_lines
-Layout/EmptyLinesAroundModuleBody:
-  Exclude:
-    - 'app/models/curator/controlled_terms/nomenclature.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleAlignWith, AutoCorrect, Severity.
-# SupportedStylesAlignWith: keyword, variable, start_of_line
-Layout/EndAlignment:
-  Exclude:
-    - 'app/models/concerns/curator/controlled_terms/cannonicable.rb'
-    - 'app/models/curator/controlled_terms/authority.rb'
-
-# Offense count: 6
-# Cop supports --auto-correct.
-# Configuration parameters: AllowForAlignment, AllowBeforeTrailingComments, ForceEqualSignAlignment.
-Layout/ExtraSpacing:
-  Exclude:
-    - 'Gemfile'
-    - 'app/controllers/curator/controlled_terms/nomenclatures_controller.rb'
-    - 'app/models/curator/controlled_terms/authority.rb'
-    - 'app/models/curator/metastreams/descriptive.rb'
-    - 'lib/curator/descriptives/field_sets/note.rb'
-    - 'scratch.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: IndentationWidth.
-# SupportedStyles: special_inside_parentheses, consistent, align_braces
-Layout/IndentFirstHashElement:
-  EnforcedStyle: consistent
-
-# Offense count: 12
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: normal, indented_internal_methods
-Layout/IndentationConsistency:
-  Exclude:
-    - 'app/controllers/curator/collections_controller.rb'
-    - 'app/controllers/curator/controlled_terms/authorities_controller.rb'
-    - 'app/controllers/curator/controlled_terms/nomenclatures_controller.rb'
-    - 'app/controllers/curator/digital_objects_controller.rb'
-    - 'app/controllers/curator/institutions_controller.rb'
-    - 'spec/factories/curator/controlled_terms/roles.rb'
-
-# Offense count: 13
-# Cop supports --auto-correct.
-# Configuration parameters: Width, IgnoredPatterns.
-Layout/IndentationWidth:
-  Exclude:
-    - 'app/controllers/curator/collections_controller.rb'
-    - 'app/controllers/curator/controlled_terms/authorities_controller.rb'
-    - 'app/controllers/curator/controlled_terms/nomenclatures_controller.rb'
-    - 'app/controllers/curator/digital_objects_controller.rb'
-    - 'app/controllers/curator/institutions_controller.rb'
-    - 'scratch.rb'
-    - 'spec/internal/config/environments/development.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Layout/LeadingBlankLines:
-  Exclude:
-    - 'scratch.rb'
-
-# Offense count: 39
-# Cop supports --auto-correct.
-# Configuration parameters: AllowDoxygenCommentStyle.
-Layout/LeadingCommentSpace:
-  Enabled: false
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: symmetrical, new_line, same_line
-Layout/MultilineArrayBraceLayout:
-  Exclude:
-    - 'lib/curator/namespace_accessor.rb'
-
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: symmetrical, new_line, same_line
-Layout/MultilineMethodCallBraceLayout:
-  Exclude:
-    - 'app/services/curator/object_factory_service.rb'
-
-# Offense count: 13
-# Cop supports --auto-correct.
-Layout/SpaceAfterComma:
-  Exclude:
-    - 'db/migrate/20190919202344_create_curator_filestreams_file_sets.rb'
-    - 'db/migrate/20190923160316_create_curator_mappings_desc_host_collections.rb'
-    - 'scratch.rb'
-
-# Offense count: 10
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: space, no_space
-Layout/SpaceAroundEqualsInParameterDefault:
-  Exclude:
-    - 'app/serializers/curator/curator_serializer.rb'
-    - 'app/services/curator/institution_factory_service.rb'
-    - 'app/services/curator/object_factory_service.rb'
-
-# Offense count: 12
-# Cop supports --auto-correct.
-# Configuration parameters: AllowForAlignment.
-Layout/SpaceAroundOperators:
-  Exclude:
-    - 'app/controllers/curator/controlled_terms/nomenclatures_controller.rb'
-    - 'app/models/concerns/curator/controlled_terms/cannonicable.rb'
-    - 'app/models/curator/controlled_terms/authority.rb'
-    - 'app/models/curator/mappings/exemplary_image.rb'
-    - 'app/serializers/curator/metastreams/descriptive_serializer.rb'
-    - 'db/seeds.rb'
-    - 'lib/curator/descriptives/field_sets/identifier.rb'
-    - 'lib/curator/descriptives/field_sets/note.rb'
-    - 'lib/curator/namespace_accessor.rb'
-
 # Offense count: 18
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces.
 # SupportedStyles: space, no_space
 # SupportedStylesForEmptyBraces: space, no_space
-Layout/SpaceBeforeBlockBraces:
-  Exclude:
-    - 'app/models/concerns/curator/controlled_terms/cannonicable.rb'
-    - 'app/models/curator/controlled_terms/authority.rb'
-    - 'app/models/curator/controlled_terms/nomenclature.rb'
-    - 'app/models/curator/filestreams/file_set.rb'
-    - 'app/models/curator/mappings/desc_term.rb'
-    - 'app/models/curator/mappings/exemplary_image.rb'
-    - 'app/serializers/curator/curator_serializer.rb'
-    - 'app/serializers/curator/metastreams/descriptive_serializer.rb'
-    - 'spec/factories/curator/controlled_terms/authorities.rb'
-    - 'spec/models/curator/collection_spec.rb'
-    - 'spec/models/curator/digital_object_spec.rb'
-    - 'spec/models/curator/institution_spec.rb'
-    - 'spec/routing/curator/controlled_terms/nomenclatures_routing_spec.rb'
+# Layout/SpaceBeforeBlockBraces:
+#   Exclude:
+#     - 'app/models/concerns/curator/controlled_terms/cannonicable.rb'
+#     - 'app/models/curator/controlled_terms/authority.rb'
+#     - 'app/models/curator/controlled_terms/nomenclature.rb'
+#     - 'app/models/curator/filestreams/file_set.rb'
+#     - 'app/models/curator/mappings/desc_term.rb'
+#     - 'app/models/curator/mappings/exemplary_image.rb'
+#     - 'app/serializers/curator/curator_serializer.rb'
+#     - 'app/serializers/curator/metastreams/descriptive_serializer.rb'
+#     - 'spec/factories/curator/controlled_terms/authorities.rb'
+#     - 'spec/models/curator/collection_spec.rb'
+#     - 'spec/models/curator/digital_object_spec.rb'
+#     - 'spec/models/curator/institution_spec.rb'
+#     - 'spec/routing/curator/controlled_terms/nomenclatures_routing_spec.rb'
 
 # Offense count: 4
 # Cop supports --auto-correct.
@@ -200,10 +48,10 @@ Layout/SpaceBeforeComment:
 # Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBrackets.
 # SupportedStyles: space, no_space, compact
 # SupportedStylesForEmptyBrackets: space, no_space
-Layout/SpaceInsideArrayLiteralBrackets:
-  Exclude:
-    - 'spec/internal/config/environments/production.rb'
-    - 'spec/internal/db/migrate/20190925164513_create_active_storage_tables.active_storage.rb'
+# Layout/SpaceInsideArrayLiteralBrackets:
+#   Exclude:
+#     - 'spec/internal/config/environments/production.rb'
+#     - 'spec/internal/db/migrate/20190925164513_create_active_storage_tables.active_storage.rb'
 
 # Offense count: 43
 # Cop supports --auto-correct.
