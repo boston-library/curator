@@ -13,6 +13,5 @@ module Curator
     has_many :collections, inverse_of: :institution, class_name: Curator.collection_class_name, dependent: :destroy
 
     has_many :collection_admin_set_objects, through: :collections, source: :admin_set_objects
-
   end
 end

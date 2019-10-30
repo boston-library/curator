@@ -41,6 +41,5 @@ module Curator
         end
       end
     end
-
   end
 end
