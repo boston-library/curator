@@ -2,7 +2,7 @@
 
 module Curator
   module Descriptives
-    class Note  < FieldSet
+    class Note < FieldSet
       NOTE_TYPES=["date", "language", "acquisition", "ownership", "funding", "biographical/historical", "citation/reference", "preferred citation", "bibliography", "exhibitions", "publication", "creation/production credits", "performers", "physical-description", "venue", "arrangement", "statement of responsibility"].freeze
 
       attr_json :label, :string

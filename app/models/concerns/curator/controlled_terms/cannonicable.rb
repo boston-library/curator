@@ -33,7 +33,8 @@ module Curator
                                }
                              else
                                nil
-          end
+                             end
+
           unless label_json_block.blank?
             self.label = ControlledTerms::CannonicalLabelService.call(url: value_uri, json_path: cannonical_json_format, &label_json_block)
           end

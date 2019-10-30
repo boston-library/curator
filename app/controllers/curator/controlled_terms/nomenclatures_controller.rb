@@ -49,7 +49,7 @@ module Curator
       end
 
       def set_controlled_terms_nomenclature_type
-        @controlled_terms_nomenclature_type =  "Curator::ControlledTerms::#{params[:type]}".constantize
+        @controlled_terms_nomenclature_type = "Curator::ControlledTerms::#{params[:type]}".constantize
       end
 
       # Only allow a trusted parameter "white list" through.

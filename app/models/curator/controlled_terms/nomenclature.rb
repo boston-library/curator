@@ -13,5 +13,4 @@ module Curator
 
     validates :type, presence: true, inclusion: { in: ControlledTerms.nomenclature_types.collect{|type| "Curator::ControlledTerms::#{type}"} }
   end
-
 end

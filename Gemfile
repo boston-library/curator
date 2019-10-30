@@ -31,7 +31,7 @@ end
 
 group :test do
   gem 'coveralls', require: false
-  gem 'database_cleaner',  '~> 1.7'
+  gem 'database_cleaner', '~> 1.7'
   gem 'rspec-activemodel-mocks', '~> 1.1.0'
   gem 'rspec-rails', '~> 3.8.0'
   gem 'shoulda-matchers', '~> 4.1'

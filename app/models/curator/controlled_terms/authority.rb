@@ -9,7 +9,7 @@ module Curator
 
     validates :name, presence: true
     validates :code, uniqueness: { allow_nil: true }
-    validates :base_url, uniqueness: {scope: [:code],  allow_nil: true }, format: { with: URI::regexp(%w(http https)), allow_nil: true }
+    validates :base_url, uniqueness: {scope: [:code], allow_nil: true }, format: { with: URI::regexp(%w(http https)), allow_nil: true }
 
     with_options inverse_of: :authority, dependent: :destroy, foreign_key: :authority_id do
       has_many :genres, class_name: ControlledTerms.genre_class_name
@@ -52,7 +52,7 @@ module Curator
                           }
                         else
                           nil
-      end
+                        end
 
       unless name_json_block.blank?
         self.name = ControlledTerms::CannonicalLabelService.call(url: base_url, json_path: self.cannonical_json_format, &name_json_block)
