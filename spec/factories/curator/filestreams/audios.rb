@@ -7,6 +7,5 @@ FactoryBot.define do
     position { 1 }
     pagination { {} }
     archived_at { nil }
-
   end
 end

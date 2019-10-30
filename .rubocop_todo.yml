@@ -6,58 +6,22 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 117
-# Cop supports --auto-correct.
-# Layout/EmptyLineAfterMagicComment:
-#   Enabled: false
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: AllowAdjacentOneLineDefs, NumberOfEmptyLines.
-Layout/EmptyLineBetweenDefs:
-  Exclude:
-    - 'lib/curator/services/factory_service.rb'
-
-# Offense count: 34
-# Cop supports --auto-correct.
-Layout/EmptyLines:
-  Enabled: false
-
-# Offense count: 17
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: around, only_before
-Layout/EmptyLinesAroundAccessModifier:
-  Exclude:
-    - 'app/controllers/curator/collections_controller.rb'
-    - 'app/controllers/curator/controlled_terms/authorities_controller.rb'
-    - 'app/controllers/curator/controlled_terms/nomenclatures_controller.rb'
-    - 'app/controllers/curator/digital_objects_controller.rb'
-    - 'app/controllers/curator/institutions_controller.rb'
-    - 'app/models/concerns/curator/controlled_terms/cannonicable.rb'
-    - 'app/models/concerns/curator/mintable.rb'
-    - 'app/models/curator/controlled_terms/authority.rb'
-    - 'app/models/curator/digital_object.rb'
-    - 'app/models/curator/mappings/desc_name_role.rb'
-    - 'app/models/curator/mappings/exemplary_image.rb'
-    - 'app/serializers/curator/curator_serializer.rb'
-    - 'app/services/curator/controlled_terms/cannonical_label_service.rb'
-    - 'lib/curator/services/factory_service.rb'
 
 # Offense count: 23
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: empty_lines, no_empty_lines
-Layout/EmptyLinesAroundBlockBody:
-  Exclude:
-    - 'curator.gemspec'
-    - 'spec/controllers/curator/collections_controller_spec.rb'
-    - 'spec/controllers/curator/controlled_terms/authorities_controller_spec.rb'
-    - 'spec/controllers/curator/controlled_terms/nomenclatures_controller_spec.rb'
-    - 'spec/controllers/curator/digital_objects_controller_spec.rb'
-    - 'spec/controllers/curator/institutions_controller_spec.rb'
-    - 'spec/factories/curator/filestreams/audios.rb'
-    - 'spec/internal/db/schema.rb'
+# Layout/EmptyLinesAroundBlockBody:
+#   Exclude:
+#     - 'curator.gemspec'
+#     - 'spec/controllers/curator/collections_controller_spec.rb'
+#     - 'spec/controllers/curator/controlled_terms/authorities_controller_spec.rb'
+#     - 'spec/controllers/curator/controlled_terms/nomenclatures_controller_spec.rb'
+#     - 'spec/controllers/curator/digital_objects_controller_spec.rb'
+#     - 'spec/controllers/curator/institutions_controller_spec.rb'
+#     - 'spec/factories/curator/filestreams/audios.rb'
+#     - 'spec/internal/db/schema.rb'
 
 # Offense count: 5
 # Cop supports --auto-correct.

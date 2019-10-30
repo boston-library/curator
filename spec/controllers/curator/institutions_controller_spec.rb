@@ -25,7 +25,6 @@ require 'rails_helper'
 
 module Curator
   RSpec.describe InstitutionsController, type: :controller do
-
     # This should return the minimal set of attributes required to create a valid
     # Institution. As you add validations to Institution, be sure to
     # adjust the attributes here as well.
@@ -67,7 +66,6 @@ module Curator
         end
 
         it "renders a JSON response with the new institution" do
-
           post :create, params: {institution: valid_attributes}, session: valid_session
           expect(response).to have_http_status(:created)
           expect(response.content_type).to eq('application/json')
@@ -77,7 +75,6 @@ module Curator
 
       context "with invalid params" do
         it "renders a JSON response with errors for the new institution" do
-
           post :create, params: {institution: invalid_attributes}, session: valid_session
           expect(response).to have_http_status(:unprocessable_entity)
           expect(response.content_type).to eq('application/json')
@@ -126,6 +123,5 @@ module Curator
         }.to change(Institution, :count).by(-1)
       end
     end
-
   end
 end
