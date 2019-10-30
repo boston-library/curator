@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 begin
   require 'bundler/setup'
 rescue LoadError
@@ -30,6 +31,9 @@ require 'rubocop/rake_task'
 RuboCop::RakeTask.new(:rubocop) do |task|
   task.requires << 'rubocop-rails'
   task.requires << 'rubocop-rspec'
+  # task.options << '--safe-auto-correct'
+  # task.options << '--disable-uncorrectable'
+  # task.options << '-d'
 end
 #rubocop --auto-gen-config --require rubocop-rails rubocop-rspec
 task default: [:spec, :rubocop]

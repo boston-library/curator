@@ -11,6 +11,7 @@ module Curator
         Curator.digital_object_class.transaction do
           admin_set = Curator.collection_class.find_by(ark_id: admin_set_ark_id)
           raise "AdminSet #{admin_set_ark_id} not found!" unless admin_set
+
           digital_object = Curator.digital_object_class.new(ark_id: @ark_id)
           digital_object.admin_set = admin_set
           collections = @json_attrs.fetch('exemplary_image_of', [])
@@ -18,6 +19,7 @@ module Curator
             col_ark_id = collection['ark_id']
             col = Curator.collection_class.find_by(ark_id: col_ark_id)
             raise "Collection #{col_ark_id} not found!" unless col
+
             digital_object.is_member_of_collection << col
           end
           digital_object.created_at = @created if @created
@@ -212,9 +214,11 @@ module Curator
 
     def find_or_create_host_collection(host_col_name = nil, institution_id = nil)
       return nil unless host_col_name && institution_id
+
       begin
         inst = Curator::Institution.find(institution_id)
         raise "Bad institution_id #{institution_id} for host_collection!" if inst.blank?
+
         return Curator::Mappings.host_collection_class.where(name: host_col_name,
                                                              institution_id: institution_id).first_or_create!
       rescue => e

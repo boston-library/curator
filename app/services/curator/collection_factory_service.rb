@@ -9,6 +9,7 @@ module Curator
         Curator.collection_class.transaction do
           institution = Curator.institution_class.find_by(ark_id: institution_ark_id)
           raise 'Institution not found!' unless institution
+
           collection = Curator.collection_class.find_or_initialize_by(ark_id: @ark_id)
           collection.name = @json_attrs.fetch(:name)
           collection.abstract = @json_attrs.fetch(:abstract)

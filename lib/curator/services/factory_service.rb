@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   module Services
     module FactoryService
@@ -49,6 +50,7 @@ module Curator
           if authority_code.present?
             authority = Curator.controlled_terms.authority_class.find_by(code: authority_code)
             raise "No authority found with the code #{authority_code}!" if authority.blank?
+
             return nomenclature_class.where(authority: authority, term_data: term_data).first_or_create!
           else
             return nomenclature_class.where(term_data: term_data).first_or_create!

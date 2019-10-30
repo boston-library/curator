@@ -6,5 +6,42 @@ AllCops:
     - 'spec/internal/**/*'
     - 'lib/curator/archivable.rb'
     - 'lib/curator/services/remote_service.rb'
-  TargetRubyVersion: 2.5
+    - 'db/**/*'
+    - app/services/curator/filestreams/file_set_factory_service.rb
   DisplayCopNames: true
+  DisabledByDefault: true
+  TargetRubyVersion: 2.5
+
+Bundler/OrderedGems:
+  Enabled: true
+
+Gemspec/OrderedDependencies:
+  Enabled: true
+
+####################### LAYOUT ###############################
+Layout/AlignArray:
+  Enabled: true
+
+Layout/BlockAlignment:
+  Enabled: true
+
+Layout/CaseIndentation:
+  Enabled: true
+
+Layout/CommentIndentation:
+  Enabled: true
+
+Layout/AlignArguments:
+  Enabled: true
+
+Layout/ClosingParenthesisIndentation:
+  Enabled: true
+
+Layout/EmptyComment:
+  Enabled: true
+
+Layout/EmptyLineAfterGuardClause:
+  Enabled: true
+
+Layout/EmptyLineAfterMagicComment:
+  Enabled: true  
