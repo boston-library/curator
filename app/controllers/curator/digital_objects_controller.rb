@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class DigitalObjectsController < ApplicationController
     before_action :set_digital_object, only: [:show, :update, :destroy]

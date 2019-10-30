@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class ControlledTerms::Authority < ApplicationRecord
     AUTH_NAME_KEY='http://www.w3.org/2000/01/rdf-schema#label'.freeze

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 namespace :curator do
   desc 'Setup and install database migrations/ run seeds'
   task setup: :environment do

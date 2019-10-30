@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class Mappings::ExemplaryImage < ApplicationRecord
     VALID_EXEMPLARY_OBJECT_TYPES = %w(Collection DigitalObject).freeze

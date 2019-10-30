@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class Metastreams::Workflow < ApplicationRecord
     belongs_to :workflowable, polymorphic: true, inverse_of: :workflow

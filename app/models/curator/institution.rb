@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class Institution < ApplicationRecord
     include Curator::Mintable

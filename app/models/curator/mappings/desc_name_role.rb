@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class Mappings::DescNameRole < ApplicationRecord
     belongs_to :descriptive, inverse_of: :name_roles, class_name: Curator.metastreams.descriptive_class_name

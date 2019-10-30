@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class ControlledTerms::AuthoritiesController < ApplicationController
     before_action :set_controlled_terms_authority, only: [:show, :update]

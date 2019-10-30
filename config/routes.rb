@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 Curator::Engine.routes.draw do
   resources :digital_objects
   resources :collections

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class Metastreams::Administrative < ApplicationRecord
     belongs_to :administratable, polymorphic: true, inverse_of: :administrative

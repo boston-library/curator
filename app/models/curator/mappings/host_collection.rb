@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class Mappings::HostCollection < ApplicationRecord
     belongs_to :institution, inverse_of: :host_collections, class_name: Curator.institution_class_name

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class InstitutionsController < ApplicationController
     before_action :set_institution, only: [:show, :update, :destroy]

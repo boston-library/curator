@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class DigitalObjectSerializer < CuratorSerializer
     attributes :id, :ark_id, :created_at, :updated_at, :metastreams

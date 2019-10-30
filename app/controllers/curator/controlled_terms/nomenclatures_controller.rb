@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class ControlledTerms::NomenclaturesController < ApplicationController
     before_action :set_controlled_terms_nomenclature_type

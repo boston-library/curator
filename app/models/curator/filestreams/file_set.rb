@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class Filestreams::FileSet < ApplicationRecord
     self.inheritance_column = :file_set_type

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class ControlledTerms::ResourceType < ControlledTerms::Nomenclature
     include ControlledTerms::AuthorityDelegation

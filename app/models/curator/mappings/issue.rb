@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class Mappings::Issue < ApplicationRecord
     with_options class_name: Curator.digital_object_class_name do

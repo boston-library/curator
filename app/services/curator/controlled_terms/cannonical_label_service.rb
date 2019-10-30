@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class ControlledTerms::CannonicalLabelService < Services::Base
     #TODO Build microservice api to use QA and Geomesh

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class CollectionsController < ApplicationController
     before_action :set_collection, only: [:show, :update, :destroy]

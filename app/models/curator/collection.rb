@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class Collection < ApplicationRecord
     include Curator::Mintable

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Requests
   module JsonHelpers
     def json_response

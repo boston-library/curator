@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   #includes all metastream concerns in one
   module Metastreamable
