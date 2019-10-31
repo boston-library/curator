@@ -18,7 +18,7 @@ module Curator
 
     # POST /controlled_terms/authorities
     def create
-      @controlled_terms_authority = ControlledTerms::Authority.new(controlled_terms_authority_params)
+      @controlled_terms_authority = ControlledTerms::Authority.new(authority_params)
 
       if @controlled_terms_authority.save
         render json: @controlled_terms_authority, status: :created, location: @controlled_terms_authority
@@ -29,7 +29,7 @@ module Curator
 
     # PATCH/PUT /controlled_terms/authorities/1
     def update
-      if @controlled_terms_authority.update(controlled_terms_authority_params)
+      if @controlled_terms_authority.update(authority_params)
         render json: @controlled_terms_authority
       else
         render json: @controlled_terms_authority.errors, status: :unprocessable_entity
@@ -44,10 +44,9 @@ module Curator
     end
 
     # Only allow a trusted parameter "white list" through.
-    def controlled_terms_authority_params
-      def authority_params
-        params.require(:authority).permit(:code, :base_url, :label)
-      end
+
+    def authority_params
+      params.require(:authority).permit(:code, :base_url, :label)
     end
   end
 end

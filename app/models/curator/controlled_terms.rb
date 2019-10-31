@@ -11,6 +11,6 @@ module Curator
       %w(Genre Geographic Language License Name ResourceType Role Subject).freeze
     end
 
-    namespace_klass_accessors *nomenclature_types.map(&:underscore) + [:authority]
+    namespace_klass_accessors(*nomenclature_types.map(&:underscore).map(&:to_sym).push(:authority))
   end
 end

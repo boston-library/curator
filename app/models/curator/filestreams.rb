@@ -12,6 +12,6 @@ module Curator
       %w(Image Ereader Document Text Metadata Audio Video).freeze
     end
 
-    namespace_klass_accessors *file_set_types.map(&:underscore)
+    namespace_klass_accessors(*file_set_types.map(&:underscore).map(&:to_sym))
   end
 end
