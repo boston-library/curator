@@ -39,11 +39,11 @@ module Curator
           end
 
           build_descriptive(digital_object) do |descriptive|
-            simple_fields = %i[abstract access_restrictions digital_origin frequency
+            simple_fields = %i(abstract access_restrictions digital_origin frequency
                                issuance origin_event extent physical_location_department
                                physical_location_shelf_locator place_of_publication
                                publisher rights series subseries toc toc_url
-                               resource_type_manuscript text_direction]
+                               resource_type_manuscript text_direction)
             simple_fields.each do |attr|
               descriptive.send("#{attr}=", @desc_json_attrs.fetch(attr, nil))
             end
@@ -129,7 +129,7 @@ module Curator
 
     def publication(json_attrs = {})
       pub_hash = {}
-      %i[edition_name edition_number volume issue_number].each do |k|
+      %i(edition_name edition_number volume issue_number).each do |k|
         pub_hash[k] = json_attrs.fetch(k, nil)
       end
       Descriptives::Publication.new(pub_hash.compact)

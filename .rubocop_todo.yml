@@ -156,15 +156,15 @@ Rails/ReflectionClassName:
 # Offense count: 1
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: inline, group
-Style/AccessModifierDeclarations:
-  Exclude:
-    - 'lib/curator/descriptives/field_set.rb'
+# Style/AccessModifierDeclarations:
+#   Exclude:
+#     - 'lib/curator/descriptives/field_set.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
-Style/BlockComments:
-  Exclude:
-    - 'spec/spec_helper.rb'
+# Style/BlockComments:
+#   Exclude:
+#     - 'spec/spec_helper.rb'
 
 # Offense count: 25
 # Cop supports --auto-correct.
@@ -173,45 +173,45 @@ Style/BlockComments:
 # ProceduralMethods: benchmark, bm, bmbm, create, each_with_object, measure, new, realtime, tap, with_object
 # FunctionalMethods: let, let!, subject, watch
 # IgnoredMethods: lambda, proc, it
-Style/BlockDelimiters:
-  Exclude:
-    - 'spec/controllers/curator/collections_controller_spec.rb'
-    - 'spec/controllers/curator/controlled_terms/authorities_controller_spec.rb'
-    - 'spec/controllers/curator/controlled_terms/nomenclatures_controller_spec.rb'
-    - 'spec/controllers/curator/digital_objects_controller_spec.rb'
-    - 'spec/controllers/curator/institutions_controller_spec.rb'
+# Style/BlockDelimiters:
+#   Exclude:
+#     - 'spec/controllers/curator/collections_controller_spec.rb'
+#     - 'spec/controllers/curator/controlled_terms/authorities_controller_spec.rb'
+#     - 'spec/controllers/curator/controlled_terms/nomenclatures_controller_spec.rb'
+#     - 'spec/controllers/curator/digital_objects_controller_spec.rb'
+#     - 'spec/controllers/curator/institutions_controller_spec.rb'
 
 # Offense count: 45
 # Cop supports --auto-correct.
 # Configuration parameters: AutoCorrect, EnforcedStyle.
 # SupportedStyles: nested, compact
-Style/ClassAndModuleChildren:
-  Enabled: false
+# Style/ClassAndModuleChildren:
+#   Enabled: false
 
 # Offense count: 2
 # Cop supports --auto-correct.
-Style/ColonMethodCall:
-  Exclude:
-    - 'app/models/curator/controlled_terms/authority.rb'
-    - 'app/models/curator/controlled_terms/license.rb'
+# Style/ColonMethodCall:
+#   Exclude:
+#     - 'app/models/curator/controlled_terms/authority.rb'
+#     - 'app/models/curator/controlled_terms/license.rb'
 
 # Offense count: 4
 # Cop supports --auto-correct.
 # Configuration parameters: Keywords.
 # Keywords: TODO, FIXME, OPTIMIZE, HACK, REVIEW
-Style/CommentAnnotation:
-  Exclude:
-    - 'app/serializers/curator/metastreams/descriptive_serializer.rb'
-    - 'app/services/curator/controlled_terms/cannonical_label_service.rb'
-    - 'app/services/curator/object_factory_service.rb'
-    - 'config/routes.rb'
-    - 'spec/routing/curator/controlled_terms/nomenclatures_routing_spec.rb'
+# Style/CommentAnnotation:
+#   Exclude:
+#     - 'app/serializers/curator/metastreams/descriptive_serializer.rb'
+#     - 'app/services/curator/controlled_terms/cannonical_label_service.rb'
+#     - 'app/services/curator/object_factory_service.rb'
+#     - 'config/routes.rb'
+#     - 'spec/routing/curator/controlled_terms/nomenclatures_routing_spec.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
-Style/DefWithParentheses:
-  Exclude:
-    - 'app/services/curator/minter_service.rb'
+# Style/DefWithParentheses:
+#   Exclude:
+#     - 'app/services/curator/minter_service.rb'
 
 # Offense count: 108
 Style/Documentation:
@@ -221,129 +221,127 @@ Style/Documentation:
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: empty, nil, both
-Style/EmptyElse:
-  Exclude:
-    - 'app/models/concerns/curator/controlled_terms/cannonicable.rb'
-    - 'app/models/curator/controlled_terms/authority.rb'
+# Style/EmptyElse:
+#   Exclude:
+#     - 'app/models/concerns/curator/controlled_terms/cannonicable.rb'
+#     - 'app/models/curator/controlled_terms/authority.rb'
 
 # Offense count: 2
-Style/EvalWithLocation:
-  Exclude:
-    - 'lib/curator/namespace_accessor.rb'
+# Style/EvalWithLocation:
+#   Exclude:
+#     - 'lib/curator/namespace_accessor.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
-Style/ExpandPathArguments:
-  Exclude:
-    - 'spec/rails_helper.rb'
+
 
 # Offense count: 89
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: always, never
-Style/FrozenStringLiteralComment:
-  Enabled: false
+# Style/FrozenStringLiteralComment:
+#   Enabled: false
 
 # Offense count: 4
 # Configuration parameters: MinBodyLength.
-Style/GuardClause:
-  Exclude:
-    - 'app/models/concerns/curator/controlled_terms/cannonicable.rb'
-    - 'app/models/curator/controlled_terms/authority.rb'
-    - 'lib/curator/services/factory_service.rb'
-    - 'lib/tasks/curator_tasks.rake'
+# Style/GuardClause:
+#   Exclude:
+#     - 'app/models/concerns/curator/controlled_terms/cannonicable.rb'
+#     - 'app/models/curator/controlled_terms/authority.rb'
+#     - 'lib/curator/services/factory_service.rb'
+#     - 'lib/tasks/curator_tasks.rake'
 
 # Offense count: 53
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, UseHashRocketsWithSymbolValues, PreferHashRocketsForNonAlnumEndingSymbols.
 # SupportedStyles: ruby19, hash_rockets, no_mixed_keys, ruby19_no_mixed_keys
-Style/HashSyntax:
-  Exclude:
-    - 'spec/routing/curator/collections_routing_spec.rb'
-    - 'spec/routing/curator/controlled_terms/authorities_routing_spec.rb'
-    - 'spec/routing/curator/controlled_terms/nomenclatures_routing_spec.rb'
-    - 'spec/routing/curator/digital_objects_routing_spec.rb'
-    - 'spec/routing/curator/institutions_routing_spec.rb'
+# Style/HashSyntax:
+#   Exclude:
+#     - 'spec/routing/curator/collections_routing_spec.rb'
+#     - 'spec/routing/curator/controlled_terms/authorities_routing_spec.rb'
+#     - 'spec/routing/curator/controlled_terms/nomenclatures_routing_spec.rb'
+#     - 'spec/routing/curator/digital_objects_routing_spec.rb'
+#     - 'spec/routing/curator/institutions_routing_spec.rb'
 
 # Offense count: 3
 # Cop supports --auto-correct.
-Style/IfUnlessModifier:
-  Exclude:
-    - 'app/models/concerns/curator/controlled_terms/cannonicable.rb'
-    - 'app/models/curator/controlled_terms/authority.rb'
-    - 'lib/curator/engine.rb'
+# Style/IfUnlessModifier:
+#   Exclude:
+#     - 'app/models/concerns/curator/controlled_terms/cannonicable.rb'
+#     - 'app/models/curator/controlled_terms/authority.rb'
+#     - 'lib/curator/engine.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: line_count_dependent, lambda, literal
-Style/Lambda:
-  Exclude:
-    - 'app/models/concerns/curator/controlled_terms/cannonicable.rb'
-    - 'app/models/curator/controlled_terms/authority.rb'
+# Style/Lambda:
+#   Exclude:
+#     - 'app/models/concerns/curator/controlled_terms/cannonicable.rb'
+#     - 'app/models/curator/controlled_terms/authority.rb'
 
 # Offense count: 2
-Style/MixinUsage:
-  Exclude:
-    - 'spec/internal/bin/setup'
-    - 'spec/internal/bin/update'
+# Style/MixinUsage:
+#   Exclude:
+#     - 'spec/internal/bin/setup'
+#     - 'spec/internal/bin/update'
 
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: literals, strict
-Style/MutableConstant:
-  Exclude:
-    - 'app/models/curator/mappings/exemplary_image.rb'
-    - 'db/seeds.rb'
+# Style/MutableConstant:
+#   Exclude:
+#     - 'app/models/curator/mappings/exemplary_image.rb'
+#     - 'db/seeds.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, MinBodyLength.
 # SupportedStyles: skip_modifier_ifs, always
-Style/Next:
-  Exclude:
-    - 'app/services/curator/object_factory_service.rb'
+# Style/Next:
+#   Exclude:
+#     - 'app/services/curator/object_factory_service.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: MinDigits, Strict.
-Style/NumericLiterals:
-  Exclude:
-    - 'spec/internal/db/schema.rb'
+# Style/NumericLiterals:
+#   Exclude:
+#     - 'spec/internal/db/schema.rb'
 
 # Offense count: 23
 # Cop supports --auto-correct.
 # Configuration parameters: PreferredDelimiters.
-Style/PercentLiteralDelimiters:
-  Exclude:
-    - 'app/models/curator/controlled_terms.rb'
-    - 'app/models/curator/controlled_terms/authority.rb'
-    - 'app/models/curator/controlled_terms/license.rb'
-    - 'app/models/curator/filestreams.rb'
-    - 'app/models/curator/mappings/desc_name_role.rb'
-    - 'app/models/curator/mappings/exemplary_image.rb'
-    - 'app/models/curator/metastreams/administrative.rb'
-    - 'app/models/curator/metastreams/descriptive.rb'
-    - 'app/serializers/curator/metastreams/descriptive_serializer.rb'
-    - 'app/services/curator/object_factory_service.rb'
-    - 'db/seeds.rb'
-    - 'lib/curator/engine.rb'
-    - 'lib/curator/namespace_accessor.rb'
+# Style/PercentLiteralDelimiters:
+#   Exclude:
+#     - 'app/models/curator/controlled_terms.rb'
+#     - 'app/models/curator/controlled_terms/authority.rb'
+#     - 'app/models/curator/controlled_terms/license.rb'
+#     - 'app/models/curator/filestreams.rb'
+#     - 'app/models/curator/mappings/desc_name_role.rb'
+#     - 'app/models/curator/mappings/exemplary_image.rb'
+#     - 'app/models/curator/metastreams/administrative.rb'
+#     - 'app/models/curator/metastreams/descriptive.rb'
+#     - 'app/serializers/curator/metastreams/descriptive_serializer.rb'
+#     - 'app/services/curator/object_factory_service.rb'
+#     - 'db/seeds.rb'
+#     - 'lib/curator/engine.rb'
+#     - 'lib/curator/namespace_accessor.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
-Style/Proc:
-  Exclude:
-    - 'app/models/concerns/curator/controlled_terms/authority_delegation.rb'
-    - 'app/models/concerns/curator/mintable.rb'
+# Style/Proc:
+#   Exclude:
+#     - 'app/models/concerns/curator/controlled_terms/authority_delegation.rb'
+#     - 'app/models/concerns/curator/mintable.rb'
 
 # Offense count: 4
 # Cop supports --auto-correct.
-Style/RedundantBegin:
-  Exclude:
-    - 'db/seeds.rb'
-    - 'spec/internal/bin/yarn'
+# Style/RedundantBegin:
+#   Exclude:
+#     - 'db/seeds.rb'
+#     - 'spec/internal/bin/yarn'
 
 # Offense count: 2
 # Cop supports --auto-correct.
