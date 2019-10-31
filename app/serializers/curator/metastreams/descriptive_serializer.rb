@@ -64,23 +64,23 @@ module Curator
     end
 
     def name_role
-      object.name_roles.map {|name_role| DescriptiveNameRoleSerializer.new(name_role).attributes }
+      object.name_roles.map { |name_role| DescriptiveNameRoleSerializer.new(name_role).attributes }
     end
 
     def genre
-      object.genres.map {|genre| Curator::ControlledTerms::GenreSerializer.new(genre).attributes(CONTROLLED_TERMS_FIELDS + %i(basic)) }
+      object.genres.map { |genre| Curator::ControlledTerms::GenreSerializer.new(genre).attributes(CONTROLLED_TERMS_FIELDS + %i(basic)) }
     end
 
     def language
-      object.languages.map {|language| Curator::ControlledTerms::LanguageSerializer.new(language).attributes(CONTROLLED_TERMS_FIELDS) }
+      object.languages.map { |language| Curator::ControlledTerms::LanguageSerializer.new(language).attributes(CONTROLLED_TERMS_FIELDS) }
     end
 
     def resource_type
-      object.resource_types.map {|resource_type| Curator::ControlledTerms::ResourceTypeSerializer.new(resource_type).attributes(CONTROLLED_TERMS_FIELDS) }
+      object.resource_types.map { |resource_type| Curator::ControlledTerms::ResourceTypeSerializer.new(resource_type).attributes(CONTROLLED_TERMS_FIELDS) }
     end
 
     def license
-      object.licenses.map {|license| Curator::ControlledTerms::LicenseSerializer.new(license).attributes(%i(label uri)) }
+      object.licenses.map { |license| Curator::ControlledTerms::LicenseSerializer.new(license).attributes(%i(label uri)) }
     end
 
     def physical_location

@@ -143,7 +143,7 @@ module Curator
 
     def subject_other(json_attrs = {})
       subject_json = json_attrs.fetch(:subject, {})
-      uniform_title = subject_json.fetch(:titles, []).map { |ut_attrs| title_attr(ut_attrs)}
+      uniform_title = subject_json.fetch(:titles, []).map { |ut_attrs| title_attr(ut_attrs) }
       temporal = subject_json.fetch(:temporals, [])
       date = subject_json.fetch(:dates, [])
       Descriptives::Subject.new(titles: uniform_title, temporals: temporal, dates: date)

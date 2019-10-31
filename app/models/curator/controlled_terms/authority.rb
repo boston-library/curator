@@ -47,7 +47,7 @@ module Curator
                           ->(json_body) { json_body[AUTH_NAME_KEY] if json_body[AUTH_NAME_KEY].present? }
                         when '.skos.json'
                           ->(json_body) {
-                            label_el = json_body.collect {|aj| aj[AUTH_NAME_KEY] if aj.key?(AUTH_NAME_KEY)}.compact.flatten.shift
+                            label_el = json_body.collect { |aj| aj[AUTH_NAME_KEY] if aj.key?(AUTH_NAME_KEY) }.compact.flatten.shift
                             label_el['@value'] if label_el.present?
                           }
                         else

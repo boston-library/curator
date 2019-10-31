@@ -17,7 +17,7 @@ module Curator
         end
 
         def label_required?
-          self.class.validators.flat_map {|c| c.attributes if c.kind == :presence}.compact.include?(:label)
+          self.class.validators.flat_map { |c| c.attributes if c.kind == :presence }.compact.include?(:label)
         end
 
         private
@@ -28,7 +28,7 @@ module Curator
                                ->(json_body) { json_body[NOM_LABEL_KEY] if json_body[NOM_LABEL_KEY].present? }
                              when '.skos.json'
                                ->(json_body) {
-                                 label_el = json_body.collect {|aj| aj[NOM_LABEL_KEY] if aj.key?(NOM_LABEL_KEY)}.compact.flatten.shift
+                                 label_el = json_body.collect { |aj| aj[NOM_LABEL_KEY] if aj.key?(NOM_LABEL_KEY) }.compact.flatten.shift
                                  label_el['@value'] if label_el.present?
                                }
                              else

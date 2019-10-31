@@ -3,7 +3,7 @@ require 'rails_helper'
 module Curator
   RSpec.describe ControlledTerms::NomenclaturesController, type: :routing do
     describe 'routing' do
-      Curator::ControlledTerms.nomenclature_types.map {|nom_type| nom_type.underscore.pluralize}.each do |nom_type|
+      Curator::ControlledTerms.nomenclature_types.map { |nom_type| nom_type.underscore.pluralize }.each do |nom_type|
         it 'routes to #index' do
           expect(:get => "/controlled_terms/#{nom_type}").to route_to('curator/controlled_terms/nomenclatures#index', :type => nom_type.singularize.camelize)
         end

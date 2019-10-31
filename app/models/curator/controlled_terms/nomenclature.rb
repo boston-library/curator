@@ -11,6 +11,6 @@ module Curator
     attr_json :label, :string
     attr_json :id_from_auth, :string
 
-    validates :type, presence: true, inclusion: { in: ControlledTerms.nomenclature_types.collect {|type| "Curator::ControlledTerms::#{type}"} }
+    validates :type, presence: true, inclusion: { in: ControlledTerms.nomenclature_types.collect { |type| "Curator::ControlledTerms::#{type}" } }
   end
 end
