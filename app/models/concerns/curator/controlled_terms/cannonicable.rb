@@ -8,11 +8,11 @@ module Curator
       NOM_LABEL_KEY = 'http://www.w3.org/2004/02/skos/core#prefLabel'.freeze
       private_constant :NOM_LABEL_KEY
       included do
-        before_validation :get_canonical_label, if: :should_get_cannonical_label?
+        before_validation :fetch_canonical_label, if: :should_fetch_cannonical_label?
 
         protected
 
-        def should_get_cannonical_label?
+        def should_fetch_cannonical_label?
           self.label.blank? && self.label_required? && self.value_uri.present?
         end
 
@@ -22,7 +22,7 @@ module Curator
 
         private
 
-        def get_canonical_label
+        def fetch_canonical_label
           label_json_block = case cannonical_json_format
                              when '.jsonld'
                                ->(json_body) { json_body[NOM_LABEL_KEY] if json_body[NOM_LABEL_KEY].present? }

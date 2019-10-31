@@ -5,7 +5,7 @@ module Curator
     AUTH_NAME_KEY = 'http://www.w3.org/2000/01/rdf-schema#label'.freeze
     private_constant :AUTH_NAME_KEY
 
-    before_validation :get_canonical_name, if: :should_get_cannonical_name?
+    before_validation :fetch_canonical_name, if: :should_fetch_cannonical_name?
 
     validates :name, presence: true
     validates :code, uniqueness: { allow_nil: true }
@@ -35,13 +35,13 @@ module Curator
 
     protected
 
-    def should_get_cannonical_name?
+    def should_fetch_cannonical_name?
       self.name.blank? && self.base_url.present?
     end
 
     private
 
-    def get_canonical_name
+    def fetch_canonical_name
       name_json_block = case self.cannonical_json_format
                         when '.jsonld'
                           ->(json_body) { json_body[AUTH_NAME_KEY] if json_body[AUTH_NAME_KEY].present? }
