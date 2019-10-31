@@ -4,12 +4,12 @@ module Curator
   module Services
     class Base
       class << self
-        def call(*args, &block)
-          new(*args).call(&block)
+        def call(*args, &_block)
+          new(*args).call(&_block)
         end
       end
 
-      def call(&block)
+      def call(&_block)
         fail NotImplementedError, "#{self.class}#call is unimplemented."
       end
     end

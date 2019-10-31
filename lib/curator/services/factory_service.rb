@@ -19,25 +19,25 @@ module Curator
 
       protected
 
-      def build_descriptive(descriptable, &block)
+      def build_descriptive(descriptable, &_block)
         descriptive = Metastreams::Descriptive.new(descriptable: descriptable)
         yield descriptive
         descriptive.save!
       end
 
-      def build_workflow(workflowable, &block)
+      def build_workflow(workflowable, &_block)
         workflow = Curator.metastreams.workflow_class.new(workflowable: workflowable)
         yield(workflow)
         workflow.save!
       end
 
-      def build_administrative(administratable, &block)
+      def build_administrative(administratable, &_block)
         administrative = Curator.metastreams.administrative_class.new(administratable: administratable)
         yield(administrative)
         administrative.save!
       end
 
-      def build_exemplary(exemplary_object, &block)
+      def build_exemplary(exemplary_object, &_block)
         exemplary = Curator.mappings.exemplary_image_class.new(exemplary_object: exemplary_object)
         yield(exemplary)
         exemplary.save!
