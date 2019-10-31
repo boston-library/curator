@@ -72,12 +72,12 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = false
 
-  config.before(:suite) do
-    FactoryBot.lint
-  end
-
   config.before :suite do
+    FactoryBot.lint
     DatabaseCleaner.clean_with(:truncation)
+    VCR.use_cassette('load_seeds') do
+      Curator::Engine.load_seed
+    end
   end
 
   config.before :all do
@@ -92,13 +92,13 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
   end
 
-  config.before :each do
-    DatabaseCleaner.start
-  end
+  #config.before :each do
+  #  DatabaseCleaner.start
+  #end
 
-  config.after :each do
-    DatabaseCleaner.clean
-  end
+  #config.after :each do
+  #  DatabaseCleaner.clean
+  #end
 
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
