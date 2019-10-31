@@ -56,10 +56,10 @@ module Curator
             descriptive.subject_other = subject_other(@desc_json_attrs)
             descriptive.cartographic = cartographics(@desc_json_attrs)
             descriptive.related = related(@desc_json_attrs)
-            %i(genres resource_types languages).each do |map_type|
+            %w(genres resource_types languages).each do |map_type|
               @desc_json_attrs.fetch(map_type, []).each do |map_attrs|
                 mappable = get_mappable(map_attrs,
-                                        nomenclature_class: Curator.controlled_terms.public_send("#{map_type.to_s.singularize}_class"))
+                                        nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
                 descriptive.desc_terms << Curator.mappings.desc_term_class.new(mappable: mappable)
               end
             end
@@ -90,7 +90,7 @@ module Curator
                 v.each do |map_attrs|
                   descriptive.desc_terms << Curator.mappings.desc_term_class.new(mappable:
                     get_mappable(map_attrs,
-                                 nomenclature_class: Curator.controlled_terms.public_send("#{map_type.to_s}_class")))
+                                 nomenclature_class: Curator.controlled_terms.public_send("#{map_type}_class")))
                 end
               end
             end
@@ -103,7 +103,7 @@ module Curator
           return digital_object
         end
       rescue => e
-        puts "#{e.to_s}"
+        puts e.to_s
       end
     end
 

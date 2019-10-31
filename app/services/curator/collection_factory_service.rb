@@ -36,7 +36,7 @@ module Curator
           return collection
         end
       rescue => e
-        puts "#{e.to_s}"
+        puts e.to_s
       end
     end
   end

@@ -11,16 +11,17 @@ module Curator
     def call
       conn = set_connection
       @url.path = "#{@url.path}#{@json_path}"
+      @url = @url.to_s
       begin
-        response = conn.get(@url.to_s)
+        response = conn.get(@url)
         json_response = JSON.parse(response.body)
         return block_given? ? yield(json_response) : json_response
       rescue Faraday::Error => e
-        Rails.logger.error "Error Retreiving Json For Authority at #{@url.to_s}"
+        Rails.logger.error "Error Retreiving Json For Authority at #{@url}"
         Rails.logger.error "Reason #{e.message}"
         nil
       rescue JSON::ParserError => e
-        Rails.logger.error "Error Parsing Json For Authority at #{@url.to_s}"
+        Rails.logger.error "Error Parsing Json For Authority at #{@url}"
         Rails.logger.error "Reason #{e.message}"
         nil
       end

@@ -32,7 +32,7 @@ module Curator
           return institution
         end
       rescue => e
-        puts "#{e.to_s}"
+        puts e.to_s
       end
     end
 
