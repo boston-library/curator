@@ -9,6 +9,6 @@ module Curator
 
     validates :digital_object_id, uniqueness: true
 
-    validates :issue_of_id, uniqueness: { scope: :digital_object_id, allow_nil: true} 
+    validates :issue_of_id, uniqueness: { scope: :digital_object_id, allow_nil: true }
   end
 end

@@ -8,7 +8,7 @@ module Curator
       attr_json :label, :string
       attr_json :type, :string
 
-      validates :type, presence: true, inclusion: {in: NOTE_TYPES, allow_blank: true }
+      validates :type, presence: true, inclusion: { in: NOTE_TYPES, allow_blank: true }
     end
   end
 end

@@ -52,7 +52,7 @@ module Curator
     describe "GET #show" do
       it "returns a success response" do
         institution = Institution.create! valid_attributes
-        get :show, params: {id: institution.to_param}, session: valid_session
+        get :show, params: { id: institution.to_param }, session: valid_session
         expect(response).to be_successful
       end
     end
@@ -61,12 +61,12 @@ module Curator
       context "with valid params" do
         it "creates a new Institution" do
           expect {
-            post :create, params: {institution: valid_attributes}, session: valid_session
+            post :create, params: { institution: valid_attributes }, session: valid_session
           }.to change(Institution, :count).by(1)
         end
 
         it "renders a JSON response with the new institution" do
-          post :create, params: {institution: valid_attributes}, session: valid_session
+          post :create, params: { institution: valid_attributes }, session: valid_session
           expect(response).to have_http_status(:created)
           expect(response.content_type).to eq('application/json')
           expect(response.location).to eq(institution_url(Institution.last))
@@ -75,7 +75,7 @@ module Curator
 
       context "with invalid params" do
         it "renders a JSON response with errors for the new institution" do
-          post :create, params: {institution: invalid_attributes}, session: valid_session
+          post :create, params: { institution: invalid_attributes }, session: valid_session
           expect(response).to have_http_status(:unprocessable_entity)
           expect(response.content_type).to eq('application/json')
         end
@@ -90,7 +90,7 @@ module Curator
 
         it "updates the requested institution" do
           institution = Institution.create! valid_attributes
-          put :update, params: {id: institution.to_param, institution: new_attributes}, session: valid_session
+          put :update, params: { id: institution.to_param, institution: new_attributes }, session: valid_session
           institution.reload
           skip("Add assertions for updated state")
         end
@@ -98,7 +98,7 @@ module Curator
         it "renders a JSON response with the institution" do
           institution = Institution.create! valid_attributes
 
-          put :update, params: {id: institution.to_param, institution: valid_attributes}, session: valid_session
+          put :update, params: { id: institution.to_param, institution: valid_attributes }, session: valid_session
           expect(response).to have_http_status(:ok)
           expect(response.content_type).to eq('application/json')
         end
@@ -108,7 +108,7 @@ module Curator
         it "renders a JSON response with errors for the institution" do
           institution = Institution.create! valid_attributes
 
-          put :update, params: {id: institution.to_param, institution: invalid_attributes}, session: valid_session
+          put :update, params: { id: institution.to_param, institution: invalid_attributes }, session: valid_session
           expect(response).to have_http_status(:unprocessable_entity)
           expect(response.content_type).to eq('application/json')
         end
@@ -119,7 +119,7 @@ module Curator
       it "destroys the requested institution" do
         institution = Institution.create! valid_attributes
         expect {
-          delete :destroy, params: {id: institution.to_param}, session: valid_session
+          delete :destroy, params: { id: institution.to_param }, session: valid_session
         }.to change(Institution, :count).by(-1)
       end
     end

@@ -6,6 +6,6 @@ module Curator
 
     enum description_standard: %w(aacr cco dacs gihc local rda dcrmg amremm dcrmb dcrmc dcrmmss)
 
-    validates :administratable_id, uniqueness: {scope: :administratable_type, allow_nil: true}
+    validates :administratable_id, uniqueness: { scope: :administratable_type, allow_nil: true }
   end
 end

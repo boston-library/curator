@@ -52,7 +52,7 @@ module Curator
     describe "GET #show" do
       it "returns a success response" do
         digital_object = DigitalObject.create! valid_attributes
-        get :show, params: {id: digital_object.to_param}, session: valid_session
+        get :show, params: { id: digital_object.to_param }, session: valid_session
         expect(response).to be_successful
       end
     end
@@ -61,12 +61,12 @@ module Curator
       context "with valid params" do
         it "creates a new DigitalObject" do
           expect {
-            post :create, params: {digital_object: valid_attributes}, session: valid_session
+            post :create, params: { digital_object: valid_attributes }, session: valid_session
           }.to change(DigitalObject, :count).by(1)
         end
 
         it "renders a JSON response with the new digital_object" do
-          post :create, params: {digital_object: valid_attributes}, session: valid_session
+          post :create, params: { digital_object: valid_attributes }, session: valid_session
           expect(response).to have_http_status(:created)
           expect(response.content_type).to eq('application/json')
           expect(response.location).to eq(digital_object_url(DigitalObject.last))
@@ -75,7 +75,7 @@ module Curator
 
       context "with invalid params" do
         it "renders a JSON response with errors for the new digital_object" do
-          post :create, params: {digital_object: invalid_attributes}, session: valid_session
+          post :create, params: { digital_object: invalid_attributes }, session: valid_session
           expect(response).to have_http_status(:unprocessable_entity)
           expect(response.content_type).to eq('application/json')
         end
@@ -90,7 +90,7 @@ module Curator
 
         it "updates the requested digital_object" do
           digital_object = DigitalObject.create! valid_attributes
-          put :update, params: {id: digital_object.to_param, digital_object: new_attributes}, session: valid_session
+          put :update, params: { id: digital_object.to_param, digital_object: new_attributes }, session: valid_session
           digital_object.reload
           skip("Add assertions for updated state")
         end
@@ -98,7 +98,7 @@ module Curator
         it "renders a JSON response with the digital_object" do
           digital_object = DigitalObject.create! valid_attributes
 
-          put :update, params: {id: digital_object.to_param, digital_object: valid_attributes}, session: valid_session
+          put :update, params: { id: digital_object.to_param, digital_object: valid_attributes }, session: valid_session
           expect(response).to have_http_status(:ok)
           expect(response.content_type).to eq('application/json')
         end
@@ -108,7 +108,7 @@ module Curator
         it "renders a JSON response with errors for the digital_object" do
           digital_object = DigitalObject.create! valid_attributes
 
-          put :update, params: {id: digital_object.to_param, digital_object: invalid_attributes}, session: valid_session
+          put :update, params: { id: digital_object.to_param, digital_object: invalid_attributes }, session: valid_session
           expect(response).to have_http_status(:unprocessable_entity)
           expect(response.content_type).to eq('application/json')
         end
@@ -119,7 +119,7 @@ module Curator
       it "destroys the requested digital_object" do
         digital_object = DigitalObject.create! valid_attributes
         expect {
-          delete :destroy, params: {id: digital_object.to_param}, session: valid_session
+          delete :destroy, params: { id: digital_object.to_param }, session: valid_session
         }.to change(DigitalObject, :count).by(-1)
       end
     end

@@ -52,7 +52,7 @@ module Curator
     describe "GET #show" do
       it "returns a success response" do
         authority = ControlledTerms::Authority.create! valid_attributes
-        get :show, params: {id: authority.to_param}, session: valid_session
+        get :show, params: { id: authority.to_param }, session: valid_session
         expect(response).to be_successful
       end
     end
@@ -61,12 +61,12 @@ module Curator
       context "with valid params" do
         it "creates a new ControlledTerms::Authority" do
           expect {
-            post :create, params: {controlled_terms_authority: valid_attributes}, session: valid_session
+            post :create, params: { controlled_terms_authority: valid_attributes }, session: valid_session
           }.to change(ControlledTerms::Authority, :count).by(1)
         end
 
         it "renders a JSON response with the new controlled_terms_authority" do
-          post :create, params: {controlled_terms_authority: valid_attributes}, session: valid_session
+          post :create, params: { controlled_terms_authority: valid_attributes }, session: valid_session
           expect(response).to have_http_status(:created)
           expect(response.content_type).to eq('application/json')
           expect(response.location).to eq(controlled_terms_authority_url(ControlledTerms::Authority.last))
@@ -75,7 +75,7 @@ module Curator
 
       context "with invalid params" do
         it "renders a JSON response with errors for the new controlled_terms_authority" do
-          post :create, params: {controlled_terms_authority: invalid_attributes}, session: valid_session
+          post :create, params: { controlled_terms_authority: invalid_attributes }, session: valid_session
           expect(response).to have_http_status(:unprocessable_entity)
           expect(response.content_type).to eq('application/json')
         end
@@ -90,7 +90,7 @@ module Curator
 
         it "updates the requested controlled_terms_authority" do
           authority = ControlledTerms::Authority.create! valid_attributes
-          put :update, params: {id: authority.to_param, controlled_terms_authority: new_attributes}, session: valid_session
+          put :update, params: { id: authority.to_param, controlled_terms_authority: new_attributes }, session: valid_session
           authority.reload
           skip("Add assertions for updated state")
         end
@@ -98,7 +98,7 @@ module Curator
         it "renders a JSON response with the controlled_terms_authority" do
           authority = ControlledTerms::Authority.create! valid_attributes
 
-          put :update, params: {id: authority.to_param, controlled_terms_authority: valid_attributes}, session: valid_session
+          put :update, params: { id: authority.to_param, controlled_terms_authority: valid_attributes }, session: valid_session
           expect(response).to have_http_status(:ok)
           expect(response.content_type).to eq('application/json')
         end
@@ -108,7 +108,7 @@ module Curator
         it "renders a JSON response with errors for the controlled_terms_authority" do
           authority = ControlledTerms::Authority.create! valid_attributes
 
-          put :update, params: {id: authority.to_param, controlled_terms_authority: invalid_attributes}, session: valid_session
+          put :update, params: { id: authority.to_param, controlled_terms_authority: invalid_attributes }, session: valid_session
           expect(response).to have_http_status(:unprocessable_entity)
           expect(response.content_type).to eq('application/json')
         end
@@ -119,7 +119,7 @@ module Curator
       it "destroys the requested controlled_terms_authority" do
         authority = ControlledTerms::Authority.create! valid_attributes
         expect {
-          delete :destroy, params: {id: authority.to_param}, session: valid_session
+          delete :destroy, params: { id: authority.to_param }, session: valid_session
         }.to change(ControlledTerms::Authority, :count).by(-1)
       end
     end

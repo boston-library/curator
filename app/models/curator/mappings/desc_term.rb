@@ -8,7 +8,7 @@ module Curator
 
     validates :descriptive_id, uniqueness: { scope: [:mappable_id, :mappable_type], allow_nil: true }
 
-    validates :mappable_type, inclusion: { in: Curator.controlled_terms.nomenclature_types.collect { |type| "Curator::ControlledTerms::#{type}" }, allow_nil: true}
+    validates :mappable_type, inclusion: { in: Curator.controlled_terms.nomenclature_types.collect { |type| "Curator::ControlledTerms::#{type}" }, allow_nil: true }
 
     def mappable=(mappable)
       super
