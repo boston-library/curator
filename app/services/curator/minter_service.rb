@@ -2,7 +2,7 @@
 
 module Curator
   class MinterService < Services::Base
-    def initialize()
+    def initialize
       @namespace = "commonwealth"
     end
 

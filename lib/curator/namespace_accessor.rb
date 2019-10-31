@@ -59,7 +59,7 @@ module Curator
           const_name = namespace.to_s.camelize
           raise Curator::CuratorError, "Invaild namespace #{const_name}" unless VALID_NAMESPACES.include?(const_name)
 
-          module_eval <<-RUBY, __FILE__, __LINE__
+          module_eval <<-RUBY, __FILE__, __LINE__ + 1
             def self.#{namespace}
               const_get('#{const_name}')
             end
@@ -72,7 +72,7 @@ module Curator
           klass_const_name = klass_name.to_s.camelize
           raise Curator::CuratorError, "Invaild namespace class #{klass_const_name}" unless VALID_NAMESPACE_CLASSES.include?(klass_const_name)
 
-          module_eval <<-RUBY, __FILE__, __LINE__
+          module_eval <<-RUBY, __FILE__, __LINE__ + 1
             def self.#{klass_name}_class_name
               to_s + '::' + '#{klass_const_name}'
             end

@@ -9,7 +9,7 @@ module Curator
 
     validates :name, presence: true
     validates :code, uniqueness: { allow_nil: true }
-    validates :base_url, uniqueness: { scope: [:code], allow_nil: true }, format: { with: URI::regexp(%w(http https)), allow_nil: true }
+    validates :base_url, uniqueness: { scope: [:code], allow_nil: true }, format: { with: URI.regexp(%w(http https)), allow_nil: true }
 
     with_options inverse_of: :authority, dependent: :destroy, foreign_key: :authority_id do
       has_many :genres, class_name: ControlledTerms.genre_class_name
@@ -28,8 +28,6 @@ module Curator
         '.skos.json'
       when 'aat', 'tgn', 'ulan'
         '.jsonld'
-      else
-        nil
       end
     end
 
@@ -46,17 +44,13 @@ module Curator
                         when '.jsonld'
                           ->(json_body) { json_body[AUTH_NAME_KEY] if json_body[AUTH_NAME_KEY].present? }
                         when '.skos.json'
-                          ->(json_body) {
+                          lambda { |json_body|
                             label_el = json_body.collect { |aj| aj[AUTH_NAME_KEY] if aj.key?(AUTH_NAME_KEY) }.compact.flatten.shift
                             label_el['@value'] if label_el.present?
                           }
-                        else
-                          nil
                         end
 
-      unless name_json_block.blank?
-        self.name = ControlledTerms::CannonicalLabelService.call(url: base_url, json_path: self.cannonical_json_format, &name_json_block)
-      end
+      self.name = ControlledTerms::CannonicalLabelService.call(url: base_url, json_path: self.cannonical_json_format, &name_json_block) unless name_json_block.blank?
     end
   end
 end

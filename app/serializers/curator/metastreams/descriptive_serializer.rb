@@ -52,7 +52,7 @@ module Curator
       serializer.subject.as_json
     end
 
-    # TODO Cache these methods #see https://github.com/rails-api/active_model_serializers/blob/0-10-stable/docs/general/serializers.md#associations
+    # TODO: Cache these methods #see https://github.com/rails-api/active_model_serializers/blob/0-10-stable/docs/general/serializers.md#associations
     def subject
       {}.merge(
         ActiveModelSerializers::SerializableResource.new(object.subject_topics, each_serializer: Curator::ControlledTerms::SubjectSerializer, root: 'topic', fields: CONTROLLED_TERMS_FIELDS).as_json

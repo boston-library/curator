@@ -4,7 +4,7 @@ module Curator
   class ObjectFactoryService < Services::Base
     include Services::FactoryService
 
-    # TODO set relationships for is_issue_of values
+    # TODO: set relationships for is_issue_of values
     def call
       admin_set_ark_id = @json_attrs.dig('admin_set', 'ark_id')
       begin
@@ -86,12 +86,12 @@ module Curator
                          when 'geos'
                            :geographic
                          end
-              unless map_type.blank?
-                v.each do |map_attrs|
-                  descriptive.desc_terms << Curator.mappings.desc_term_class.new(mappable:
-                    get_mappable(map_attrs,
-                                 nomenclature_class: Curator.controlled_terms.public_send("#{map_type}_class")))
-                end
+              next if map_type.blank?
+
+              v.each do |map_attrs|
+                descriptive.desc_terms << Curator.mappings.desc_term_class.new(mappable:
+                  get_mappable(map_attrs,
+                               nomenclature_class: Curator.controlled_terms.public_send("#{map_type}_class")))
               end
             end
 

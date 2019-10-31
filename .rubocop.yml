@@ -153,3 +153,73 @@ Naming/AccessorMethodName:
   Enabled: true
 
 ####################### STYLE ###############################
+
+Style/AccessModifierDeclarations:
+  Enabled: true
+
+Style/BlockComments:
+  Enabled: true
+  Exclude:
+    - 'spec/spec_helper.rb'
+
+Style/BlockDelimiters:
+  Enabled: true
+  Exclude:
+    - 'spec/**/*'
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/ColonMethodCall:
+  Enabled: true
+
+Style/CommentAnnotation:
+  Enabled: true
+  Exclude:
+    - 'spec/**/*'
+
+Style/DefWithParentheses:
+  Enabled: true
+
+Style/EmptyElse:
+  Enabled: true
+
+Style/EvalWithLocation:
+  Enabled: true
+
+Style/ExpandPathArguments:
+  Exclude:
+    - 'spec/rails_helper.rb'
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  Exclude:
+    - 'spec/**/*'
+
+Style/GuardClause:
+  Enabled: true
+
+Style/HashSyntax:
+  Exclude:
+    - 'spec/**/*'
+
+Style/IfUnlessModifier:
+  Enabled: true
+
+Style/Lambda:
+  Enabled: true
+
+Style/MixinUsage:
+  Enabled: true
+
+Style/MutableConstant:
+  Enabled: true
+
+Style/Next:
+  Enabled: true
+
+Style/NumericLiterals:
+  Enabled: true
+
+Style/Proc:
+  Enabled: true

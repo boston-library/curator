@@ -2,7 +2,7 @@
 
 module Curator
   class ControlledTerms::CannonicalLabelService < Services::Base
-    # TODO Build microservice api to use QA and Geomesh
+    # TODO: Build microservice api to use QA and Geomesh
     def initialize(url:, json_path:)
       @url = Addressable::URI.parse(url)
       @json_path = json_path
