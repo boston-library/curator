@@ -9,7 +9,7 @@ module Curator
       attr_json :type, :string
       attr_json :invalid, :boolean, default: false
 
-      validates :type, presence: true , inclusion: {in: IDENTIFIER_TYPES, allow_blank: true }
+      validates :type, presence: true, inclusion: {in: IDENTIFIER_TYPES, allow_blank: true }
       validates :label, presence: true
     end
   end
