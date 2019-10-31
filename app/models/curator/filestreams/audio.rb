@@ -12,6 +12,5 @@ module Curator
     has_one_attached :document_access
     has_one_attached :document_master
     has_one_attached :text_plain
-    
   end
 end

@@ -26,13 +26,13 @@ module Curator
       end
 
       def build_workflow(workflowable, &block)
-        workflow = Curator.metastreams.workflow_class.new(workflowable: workflowable )
+        workflow = Curator.metastreams.workflow_class.new(workflowable: workflowable)
         yield(workflow)
         workflow.save!
       end
 
       def build_administrative(administratable, &block)
-        administrative = Curator.metastreams.administrative_class.new(administratable: administratable )
+        administrative = Curator.metastreams.administrative_class.new(administratable: administratable)
         yield(administrative)
         administrative.save!
       end
@@ -45,7 +45,7 @@ module Curator
 
       private
 
-      def find_or_create_nomenclature(nomenclature_class:, term_data: {}, authority_code: nil )
+      def find_or_create_nomenclature(nomenclature_class:, term_data: {}, authority_code: nil)
         begin
           if authority_code.present?
             authority = Curator.controlled_terms.authority_class.find_by(code: authority_code)
