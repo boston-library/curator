@@ -7,7 +7,7 @@ AllCops:
     - 'lib/curator/archivable.rb'
     - 'lib/curator/services/remote_service.rb'
     - 'db/**/*'
-    - app/services/curator/filestreams/file_set_factory_service.rb
+    - 'app/services/curator/filestreams/file_set_factory_service.rb'
   DisplayCopNames: true
   DisabledByDefault: true
   TargetRubyVersion: 2.5
@@ -104,5 +104,52 @@ Layout/SpaceAroundOperators:
 Layout/SpaceBeforeBlockBraces:
   Enabled: true
 
+Layout/SpaceBeforeComma:
+  Enabled: true
+
+Layout/SpaceBeforeComment:
+  Enabled: true
+
 Layout/SpaceInsideArrayLiteralBrackets:
   Enabled: true
+
+Layout/SpaceInsideBlockBraces:
+  Enabled: true
+
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: true
+
+Layout/SpaceInsideParens:
+  Enabled: true
+
+Layout/TrailingWhitespace:
+  Enabled: true
+
+####################### LINTING ###############################
+
+Lint/AmbiguousOperator:
+  Enabled: true
+
+Lint/LiteralInInterpolation:
+  Enabled: true
+
+Lint/NestedMethodDefinition:
+  Enabled: true
+
+Lint/StringConversionInInterpolation:
+  Enabled: true
+
+Lint/UnusedMethodArgument:
+  Enabled: true
+
+Lint/UselessAssignment:
+  Enabled: true
+  Exclude:
+    - 'spec/**/*'
+
+####################### NAMING ###############################
+
+Naming/AccessorMethodName:
+  Enabled: true
+
+####################### STYLE ###############################
