@@ -18,7 +18,7 @@ module Curator
           institution.save!
 
           build_workflow(institution) do |workflow|
-            workflow.ingest_origin = @workflow_json_attrs.fetch(:ingest_origin, "#{ENV['HOME']}")
+            workflow.ingest_origin = @workflow_json_attrs.fetch(:ingest_origin, ENV['HOME'].to_s)
             publishing_state = @workflow_json_attrs.fetch(:publishing_state, nil)
             processing_state = @workflow_json_attrs.fetch(:processing_state, nil)
             workflow.publishing_state = publishing_state if publishing_state

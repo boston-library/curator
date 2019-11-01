@@ -4,8 +4,8 @@ module Curator
   module Services
     class Base
       class << self
-        def call(*args, &_block)
-          new(*args).call(&_block)
+        def call(*args, &block)
+          new(*args).call(&block)
         end
       end
 

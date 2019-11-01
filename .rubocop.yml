@@ -13,7 +13,11 @@ AllCops:
   DisabledByDefault: true
   TargetRubyVersion: 2.5
 
+####################### BUNDLER/GEMSPEC ###############################
 Bundler/OrderedGems:
+  Enabled: true
+
+Bundler/DuplicatedGem:
   Enabled: true
 
 Gemspec/OrderedDependencies:
@@ -131,16 +135,146 @@ Layout/TrailingWhitespace:
 Lint/AmbiguousOperator:
   Enabled: true
 
+Lint/AmbiguousRegexpLiteral:
+  Enabled: true
+
+Lint/AssignmentInCondition:
+  Enabled: true
+
+Lint/CircularArgumentReference:
+  Enabled: true
+
+Lint/Debugger:
+  Enabled: true
+
+Lint/DeprecatedClassMethods:
+  Enabled: true
+
+Lint/DuplicateCaseCondition:
+  Enabled: true
+
+Lint/DuplicateMethods:
+  Enabled: true
+
+Lint/DuplicatedKey:
+  Enabled: true
+
+Lint/EachWithObjectArgument:
+  Enabled: true
+
+Lint/ElseLayout:
+  Enabled: true
+
+Lint/EmptyEnsure:
+  Enabled: true
+  AutoCorrect: false
+
+Lint/EmptyExpression:
+  Enabled: true
+
+Lint/EmptyInterpolation:
+  Enabled: true
+
+Lint/EmptyWhen:
+  Enabled: true
+
+Lint/EndInMethod:
+  Enabled: true
+
+Lint/EnsureReturn:
+  Enabled: true
+
+Lint/FlipFlop:
+  Enabled: true
+
+Lint/FloatOutOfRange:
+  Enabled: true
+
+Lint/FormatParameterMismatch:
+  Enabled: true
+
+Lint/HandleExceptions:
+  Enabled: true
+
+Lint/ImplicitStringConcatenation:
+  Enabled: true
+
+Lint/IneffectiveAccessModifier:
+  Enabled: true
+
+Lint/InheritException:
+  Enabled: true
+
+Lint/LiteralAsCondition:
+  Enabled: true
+
 Lint/LiteralInInterpolation:
+  Enabled: true
+
+Lint/Loop:
+  Enabled: true
+
+Lint/MultipleCompare:
   Enabled: true
 
 Lint/NestedMethodDefinition:
   Enabled: true
 
+Lint/NextWithoutAccumulator:
+  Enabled: true
+
+Lint/NonLocalExitFromIterator:
+  Enabled: true
+
+Lint/ParenthesesAsGroupedExpression:
+  Enabled: true
+
+Lint/PercentStringArray:
+  Enabled: true
+
+Lint/PercentSymbolArray:
+  Enabled: true
+
+Lint/RandOne:
+  Enabled: true
+
+Lint/RequireParentheses:
+  Enabled: true
+
+Lint/RescueException:
+  Enabled: true
+
+Lint/SafeNavigationChain:
+  Enabled: true
+
+Lint/ShadowedException:
+  Enabled: true
+
+Lint/ShadowingOuterLocalVariable:
+  Enabled: true
+
 Lint/StringConversionInInterpolation:
   Enabled: true
 
+Lint/UnderscorePrefixedVariableName:
+  Enabled: true
+
+Lint/UnifiedInteger:
+  Enabled: true
+
+Lint/UnneededSplatExpansion:
+  Enabled: true
+
 Lint/UnusedMethodArgument:
+  Enabled: true
+
+Lint/UnusedBlockArgument:
+  Enabled: true
+
+Lint/UnreachableCode:
+  Enabled: true
+
+Lint/UselessAccessModifier:
   Enabled: true
 
 Lint/UselessAssignment:
@@ -148,12 +282,28 @@ Lint/UselessAssignment:
   Exclude:
     - 'spec/**/*'
 
+Lint/UselessComparison:
+  Enabled: true
+
+Lint/UselessElseWithoutRescue:
+  Enabled: true
+
+Lint/UselessSetterCall:
+  Enabled: true
+
+Lint/Void:
+  Enabled: true
 ####################### NAMING ###############################
 
 Naming/AccessorMethodName:
   Enabled: true
 
 ####################### STYLE ###############################
+# TODO: Will Come back to setting up documentation
+Style/Documentation:
+  Enabled: false
+  Exclude:
+    - 'spec/**/*'
 
 Style/AccessModifierDeclarations:
   Enabled: true
@@ -270,4 +420,52 @@ Style/WordArray:
   Enabled: false
 
 Style/UnneededInterpolation:
+  Enabled: true
+
+####################### METRICS ###############################
+
+# REVIEW: Tweak these values at some point low priority
+Metrics/AbcSize:
+  Enabled: true
+  Max: 100
+
+Metrics/BlockLength:
+  Enabled: true
+  Max: 90
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/ClassLength:
+  Enabled: true
+  Max: 200
+
+Metrics/CyclomaticComplexity:
+  Enabled: true
+  Max: 10
+
+Metrics/MethodLength:
+  Enabled: true
+  Max: 100
+
+Metrics/LineLength:
+  Enabled: true
+  Max: 400
+  Exclude:
+    - 'spec/**/*'
+
+####################### SECURITY ###############################
+# Taken From bixby config
+Security/Eval:
+  Enabled: true
+
+Security/JSONLoad:
+  Enabled: true
+  # Autocorrect here will change to a method that may cause crashes depending
+  # on the value of the argument.
+  AutoCorrect: false
+
+Security/MarshalLoad:
+  Enabled: true
+
+Security/YAMLLoad:
   Enabled: true
