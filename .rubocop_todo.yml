@@ -49,26 +49,26 @@
 
 # Offense count: 3
 # Cop supports --auto-correct.
-RSpec/EmptyLineAfterHook:
-  Exclude:
-    - 'spec/models/curator/collection_spec.rb'
-    - 'spec/models/curator/digital_object_spec.rb'
-    - 'spec/models/curator/institution_spec.rb'
+# RSpec/EmptyLineAfterHook:
+#   Exclude:
+#     - 'spec/models/curator/collection_spec.rb'
+#     - 'spec/models/curator/digital_object_spec.rb'
+#     - 'spec/models/curator/institution_spec.rb'
 
 # Offense count: 3
 # Cop supports --auto-correct.
 # Configuration parameters: .
 # SupportedStyles: implicit, each, example
-RSpec/HookArgument:
-  EnforcedStyle: each
+# RSpec/HookArgument:
+#   EnforcedStyle: each
 
 # Offense count: 3
 # Configuration parameters: AssignmentOnly.
-RSpec/InstanceVariable:
-  Exclude:
-    - 'spec/models/curator/collection_spec.rb'
-    - 'spec/models/curator/digital_object_spec.rb'
-    - 'spec/models/curator/institution_spec.rb'
+# RSpec/InstanceVariable:
+#   Exclude:
+#     - 'spec/models/curator/collection_spec.rb'
+#     - 'spec/models/curator/digital_object_spec.rb'
+#     - 'spec/models/curator/institution_spec.rb'
 
 # Offense count: 3
 # Cop supports --auto-correct.
