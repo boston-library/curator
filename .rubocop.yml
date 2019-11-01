@@ -470,6 +470,9 @@ Security/YAMLLoad:
   Enabled: true
 
 ####################### RAILS ###############################
+Rails/ActionFilter:
+  Enabled: true
+
 Rails/CreateTableWithTimestamps:
   Enabled: true
   Exclude:
@@ -480,5 +483,89 @@ Rails/CreateTableWithTimestamps:
     - 'db/migrate/20190923160316_create_curator_mappings_desc_host_collections.rb'
     - 'db/migrate/20190923164102_create_curator_mappings_collection_members.rb'
     - 'db/migrate/20191016182158_create_curator_mappings_issues.rb'
+
+Rails/ActiveSupportAliases:
+  Enabled: true
+
+Rails/BelongsTo:
+  Enabled: true
+
+Rails/Blank:
+  Enabled: true
+
+Rails/Date:
+  Enabled: true
+
+Rails/Delegate:
+  Enabled: true
+
+Rails/DelegateAllowBlank:
+  Enabled: true
+
+Rails/DynamicFindBy:
+  Enabled: true
+
 Rails/EnumHash:
+  Enabled: true
+
+Rails/EnumUniqueness:
+  Enabled: true
+
+Rails/EnvironmentComparison:
+  Enabled: true
+
+Rails/Exit:
+  Enabled: true
+
+Rails/InverseOf:
+  Enabled: true
+
+# TODO: These files need to be set to dependent :archive once the archivable concern is done
+Rails/HasManyOrHasOneDependent:
+  Enabled: true
+  Exclude:
+    - 'app/models/concerns/curator/mappings/exemplary_imagable.rb'
+    - 'app/models/concerns/curator/mappings/mappable.rb'
+    - 'app/models/curator/collection.rb'
+    - 'app/models/curator/controlled_terms/name.rb'
+    - 'app/models/curator/controlled_terms/role.rb'
+    - 'app/models/curator/digital_object.rb'
+    - 'app/models/curator/institution.rb'
+    - 'app/models/curator/mappings/host_collection.rb'
+
+Rails/Presence:
+  Enabled: true
+
+Rails/Present:
+  Enabled: true
+
+# TODO: Output Errors to rails logger in the following classes
+Rails/Output:
+  Enabled: true
+  Exclude:
+    - 'app/services/curator/collection_factory_service.rb'
+    - 'app/services/curator/institution_factory_service.rb'
+    - 'app/services/curator/object_factory_service.rb'
+    - 'db/seeds.rb'
+    - 'lib/curator/engine.rb'
+    - 'lib/curator/namespace_accessor.rb'
+    - 'lib/curator/services/factory_service.rb'
+
+# TODO Investigate if string class names are better than using the namespace accessors.
+Rails/ReflectionClassName:
+  Enabled: false
+
+Rails/SafeNavigation:
+  Enabled: true
+
+Rails/ScopeArgs:
+  Enabled: true
+
+Rails/TimeZone:
+  Enabled: true
+
+Rails/UnknownEnv:
+  Enabled: true
+
+Rails/Validation:
   Enabled: true

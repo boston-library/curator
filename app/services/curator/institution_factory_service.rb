@@ -12,7 +12,7 @@ module Curator
           institution.name = @json_attrs.fetch(:name)
           institution.abstract = @json_attrs.fetch(:abstract)
           institution.url = @json_attrs.fetch(:url)
-          institution.location = location(location_json_attrs) unless location_json_attrs.blank?
+          institution.location = location(location_json_attrs) if location_json_attrs.present?
           institution.created_at = @created if @created
           institution.updated_at = @updated if @updated
           institution.save!

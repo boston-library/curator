@@ -25,15 +25,15 @@ module Curator
         def fetch_canonical_label
           label_json_block = case cannonical_json_format
                              when '.jsonld'
-                               ->(json_body) { json_body[NOM_LABEL_KEY] if json_body[NOM_LABEL_KEY].present? }
+                               ->(json_body) { json_body[NOM_LABEL_KEY].presence }
                              when '.skos.json'
                                lambda { |json_body|
-                                 label_el = json_body.collect { |aj| aj[NOM_LABEL_KEY] if aj.key?(NOM_LABEL_KEY) }.compact.flatten.shift
+                                 label_el = json_body.collect { |aj| aj[NOM_LABEL_KEY].presence }.compact.flatten.shift
                                  label_el['@value'] if label_el.present?
                                }
                              end
 
-          self.label = ControlledTerms::CannonicalLabelService.call(url: value_uri, json_path: cannonical_json_format, &label_json_block) unless label_json_block.blank?
+          self.label = ControlledTerms::CannonicalLabelService.call(url: value_uri, json_path: cannonical_json_format, &label_json_block) if label_json_block.present?
         end
       end
     end
