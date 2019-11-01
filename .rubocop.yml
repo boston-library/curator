@@ -5,6 +5,9 @@ AllCops:
     - 'scratch.rb'
     - 'bin/*'
     - 'spec/internal/**/*'
+    - 'spec/routing/**/*'
+    - 'spec/controllers/**/*'
+    - 'spec/fixtures/**/'
     - 'lib/curator/archivable.rb'
     - 'lib/curator/services/remote_service.rb'
   DisplayCopNames: true
@@ -277,8 +280,6 @@ Lint/UselessAccessModifier:
 
 Lint/UselessAssignment:
   Enabled: true
-  Exclude:
-    - 'spec/**/*'
 
 Lint/UselessComparison:
   Enabled: true
@@ -309,8 +310,6 @@ Style/AccessModifierDeclarations:
 
 Style/BlockComments:
   Enabled: true
-  Exclude:
-    - 'spec/spec_helper.rb'
 
 Style/BlockDelimiters:
   Enabled: true
@@ -338,13 +337,10 @@ Style/EvalWithLocation:
   Enabled: true
 
 Style/ExpandPathArguments:
-  Exclude:
-    - 'spec/rails_helper.rb'
+  Enabled: true
 
 Style/FrozenStringLiteralComment:
   Enabled: true
-  Exclude:
-    - 'spec/**/*'
 
 Style/GuardClause:
   Enabled: true
@@ -659,4 +655,9 @@ Performance/TimesMap:
   Enabled: true
 
 Performance/UnfreezeString:
+  Enabled: true
+
+####################### RSPEC ###############################
+
+RSpec/BeforeAfterAll:
   Enabled: true
