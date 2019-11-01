@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :curator_controlled_terms_license, class: 'Curator::ControlledTerms::License' do
     term_data { { label: Faker::Lorem.sentence, uri: Faker::Internet.url } }

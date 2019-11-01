@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :curator_controlled_terms_name, class: 'Curator::ControlledTerms::Name' do
     association :authority, factory: :curator_controlled_terms_authority
