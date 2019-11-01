@@ -8,6 +8,7 @@ RSpec.shared_examples 'factory_service_metastreams' do |object_json|
     end
 
     it 'sets the correct workflow metadata' do
+      expect(workflow.processing_state).to eq workflow_json['processing_state']
       expect(workflow.publishing_state).to eq workflow_json['publishing_state']
       expect(workflow.ingest_origin).to eq workflow_json['ingest_origin']
     end

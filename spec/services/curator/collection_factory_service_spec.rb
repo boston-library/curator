@@ -16,13 +16,12 @@ RSpec.describe Curator::CollectionFactoryService do
   describe '#call' do
     subject { @collection }
 
-    it 'has the correct metadata' do
+    it 'has the correct properties' do
       expect(subject.name).to eq object_json['name']
-      expect(subject.abstract).not_to be_blank
       expect(subject.updated_at).to eq Time.zone.parse(object_json['updated_at'])
     end
 
-    describe 'set institution' do
+    describe 'setting institution' do
       let(:institution) { subject.institution }
 
       it 'creates the institution relationship' do

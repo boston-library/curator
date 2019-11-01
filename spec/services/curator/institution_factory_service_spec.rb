@@ -13,21 +13,21 @@ RSpec.describe Curator::InstitutionFactoryService do
   describe '#call' do
     subject { @institution }
 
-    it 'has the correct metadata' do
+    it 'has the correct properties' do
       expect(subject.name).to eq object_json['name']
       expect(subject.abstract).not_to be_blank
       expect(subject.url).to eq object_json['url']
       expect(subject.created_at).to eq Time.zone.parse(object_json['created_at'])
     end
 
-    describe 'set location data' do
+    describe 'setting location data' do
       let(:location) { subject.location }
 
       it 'creates the associated location' do
         expect(location).to be_an_instance_of(Curator::ControlledTerms::Geographic)
       end
 
-      it 'sets the correct location metadata' do
+      it 'sets the correct location properties' do
         expect(location.label).to eq object_json['location']['label']
         expect(location.id_from_auth).to eq object_json['location']['id_from_auth']
       end

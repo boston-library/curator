@@ -219,7 +219,7 @@
         "subseries": "Subseries value",
         "physical_location": {
           "label": "Boston Public Library",
-          "type": "corporate",
+          "name_type": "corporate",
           "authority_code": "naf",
           "id_from_auth": "n79117036"
         },
