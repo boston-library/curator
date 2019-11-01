@@ -5,7 +5,7 @@ module Curator
     module Cannonicable
       extend ActiveSupport::Concern
       # Key of the JSON Element where the cannonical label resides in the remote service
-      NOM_LABEL_KEY = 'http://www.w3.org/2004/02/skos/core#prefLabel'.freeze
+      NOM_LABEL_KEY = 'http://www.w3.org/2004/02/skos/core#prefLabel'
       private_constant :NOM_LABEL_KEY
       included do
         before_validation :fetch_canonical_label, if: :should_fetch_cannonical_label?
@@ -13,7 +13,7 @@ module Curator
         protected
 
         def should_fetch_cannonical_label?
-          self.label.blank? && self.label_required? && self.value_uri.present?
+          label.blank? && label_required? && value_uri.present?
         end
 
         def label_required?

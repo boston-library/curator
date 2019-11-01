@@ -36,7 +36,7 @@ module Curator
     private
 
     def add_admin_set_to_members
-      self.collection_members.build(collection: admin_set)
+      collection_members.build(collection: admin_set)
     end
   end
 end

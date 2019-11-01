@@ -36,7 +36,7 @@ module Curator
         f.use Faraday::Response::Logger, Rails.logger
         # f.use :http_cache, store: Rails.cache #make this configurable
         f.response :follow_redirects
-        f.adapter :net_http_persistent, pool_size: ENV.fetch("RAILS_MAX_THREADS") { 5 } do |http|
+        f.adapter :net_http_persistent, pool_size: ENV.fetch('RAILS_MAX_THREADS') { 5 } do |http|
           http.idle_timeout = 100
           http.retry_change_requests = true
         end

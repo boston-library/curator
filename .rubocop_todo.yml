@@ -345,86 +345,86 @@ Style/Documentation:
 
 # Offense count: 2
 # Cop supports --auto-correct.
-Style/RedundantFreeze:
-  Exclude:
-    - 'app/models/concerns/curator/controlled_terms/cannonicable.rb'
-    - 'app/models/curator/controlled_terms/authority.rb'
+# Style/RedundantFreeze:
+#   Exclude:
+#     - 'app/models/concerns/curator/controlled_terms/cannonicable.rb'
+#     - 'app/models/curator/controlled_terms/authority.rb'
 
 # Offense count: 12
 # Cop supports --auto-correct.
-Style/RedundantSelf:
-  Exclude:
-    - 'app/models/concerns/curator/controlled_terms/cannonicable.rb'
-    - 'app/models/curator/controlled_terms/authority.rb'
-    - 'app/models/curator/digital_object.rb'
-    - 'app/models/curator/mappings/desc_name_role.rb'
-    - 'app/models/curator/mappings/exemplary_image.rb'
+# Style/RedundantSelf:
+#   Exclude:
+#     - 'app/models/concerns/curator/controlled_terms/cannonicable.rb'
+#     - 'app/models/curator/controlled_terms/authority.rb'
+#     - 'app/models/curator/digital_object.rb'
+#     - 'app/models/curator/mappings/desc_name_role.rb'
+#     - 'app/models/curator/mappings/exemplary_image.rb'
 
 # Offense count: 11
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: implicit, explicit
-Style/RescueStandardError:
-  Exclude:
-    - 'app/services/curator/collection_factory_service.rb'
-    - 'app/services/curator/institution_factory_service.rb'
-    - 'app/services/curator/object_factory_service.rb'
-    - 'db/seeds.rb'
-    - 'lib/curator/services/factory_service.rb'
-    - 'scratch.rb'
+# Style/RescueStandardError:
+#   Exclude:
+#     - 'app/services/curator/collection_factory_service.rb'
+#     - 'app/services/curator/institution_factory_service.rb'
+#     - 'app/services/curator/object_factory_service.rb'
+#     - 'db/seeds.rb'
+#     - 'lib/curator/services/factory_service.rb'
+#     - 'scratch.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: only_raise, only_fail, semantic
-Style/SignalException:
-  Exclude:
-    - 'lib/curator/services/base.rb'
-    - 'lib/tasks/curator_tasks.rake'
+# Style/SignalException:
+#   Exclude:
+#     - 'lib/curator/services/base.rb'
+#     - 'lib/tasks/curator_tasks.rake'
 
 # Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: use_perl_names, use_english_names
-Style/SpecialGlobalVars:
-  Exclude:
-    - 'curator.gemspec'
+# Style/SpecialGlobalVars:
+#   Exclude:
+#     - 'curator.gemspec'
 
 # Offense count: 2
 # Cop supports --auto-correct.
-Style/StderrPuts:
-  Exclude:
-    - 'spec/internal/bin/yarn'
+# Style/StderrPuts:
+#   Exclude:
+#     - 'spec/internal/bin/yarn'
 
 # Offense count: 585
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, ConsistentQuotesInMultiline.
 # SupportedStyles: single_quotes, double_quotes
-Style/StringLiterals:
-  Enabled: false
+# Style/StringLiterals:
+#   Enabled: false
 
 # Offense count: 31
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, MinSize.
 # SupportedStyles: percent, brackets
-Style/SymbolArray:
-  Enabled: false
+# Style/SymbolArray:
+#   Enabled: false
 
 # Offense count: 5
 # Cop supports --auto-correct.
-Style/UnneededInterpolation:
-  Exclude:
-    - 'app/services/curator/collection_factory_service.rb'
-    - 'app/services/curator/institution_factory_service.rb'
-    - 'app/services/curator/object_factory_service.rb'
+# Style/UnneededInterpolation:
+#   Exclude:
+#     - 'app/services/curator/collection_factory_service.rb'
+#     - 'app/services/curator/institution_factory_service.rb'
+#     - 'app/services/curator/object_factory_service.rb'
 
 # Offense count: 16
 # Cop supports --auto-correct.
 # Configuration parameters: WordRegex.
 # SupportedStyles: percent, brackets
-Style/WordArray:
-  EnforcedStyle: percent
-  MinSize: 17
+# Style/WordArray:
+#   EnforcedStyle: percent
+#   MinSize: 17
 
 # Offense count: 526
 # Cop supports --auto-correct.

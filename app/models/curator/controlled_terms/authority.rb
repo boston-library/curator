@@ -2,7 +2,7 @@
 
 module Curator
   class ControlledTerms::Authority < ApplicationRecord
-    AUTH_NAME_KEY = 'http://www.w3.org/2000/01/rdf-schema#label'.freeze
+    AUTH_NAME_KEY = 'http://www.w3.org/2000/01/rdf-schema#label'
     private_constant :AUTH_NAME_KEY
 
     before_validation :fetch_canonical_name, if: :should_fetch_cannonical_name?
@@ -23,7 +23,7 @@ module Curator
     end
 
     def cannonical_json_format
-      case self.code
+      case code
       when 'gmgpc', 'lctgm', 'naf', 'lcsh', 'lcgft', 'iso639-2', 'marcrelator', 'resourceTypes'
         '.skos.json'
       when 'aat', 'tgn', 'ulan'
@@ -34,13 +34,13 @@ module Curator
     protected
 
     def should_fetch_cannonical_name?
-      self.name.blank? && self.base_url.present?
+      name.blank? && base_url.present?
     end
 
     private
 
     def fetch_canonical_name
-      name_json_block = case self.cannonical_json_format
+      name_json_block = case cannonical_json_format
                         when '.jsonld'
                           ->(json_body) { json_body[AUTH_NAME_KEY] if json_body[AUTH_NAME_KEY].present? }
                         when '.skos.json'
@@ -50,7 +50,7 @@ module Curator
                           }
                         end
 
-      self.name = ControlledTerms::CannonicalLabelService.call(url: base_url, json_path: self.cannonical_json_format, &name_json_block) unless name_json_block.blank?
+      self.name = ControlledTerms::CannonicalLabelService.call(url: base_url, json_path: cannonical_json_format, &name_json_block) unless name_json_block.blank?
     end
   end
 end

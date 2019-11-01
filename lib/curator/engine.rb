@@ -17,7 +17,7 @@ module Curator
       begin
         require 'factory_bot_rails'
       rescue LoadError
-        puts "Factory Bot Rails Not installed!"
+        puts 'Factory Bot Rails Not installed!'
       end
       config.factory_bot.definition_file_paths << File.expand_path('../../spec/factories/curator', __dir__) if defined?(FactoryBotRails)
     end

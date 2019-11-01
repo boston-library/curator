@@ -7,7 +7,7 @@ module Curator
       # NOTE THE ORDER HERE MATTERS
       base.module_eval do
         def self.init_namespace_accessors
-          puts "Initializing namespace accessors"
+          puts 'Initializing namespace accessors'
           namespace_accessors :controlled_terms, :filestreams, :mappings, :metastreams
           namespace_klass_accessors :institution, :collection, :digital_object
         end

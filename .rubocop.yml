@@ -3,6 +3,7 @@ inherit_from: .rubocop_todo.yml
 AllCops:
   Exclude:
     - 'scratch.rb'
+    - 'bin/*'
     - 'spec/internal/**/*'
     - 'lib/curator/archivable.rb'
     - 'lib/curator/services/remote_service.rb'
@@ -231,4 +232,42 @@ Style/PercentLiteralDelimiters:
     '%W': ()
 
 Style/Proc:
+  Enabled: true
+
+Style/RedundantFreeze:
+  Enabled: true
+
+Style/RedundantSelf:
+  Enabled: true
+
+# TODO: Make Curator Specific Error Classes
+Style/RescueStandardError:
+  Enabled: true
+  Exclude:
+    - 'app/services/curator/collection_factory_service.rb'
+    - 'app/services/curator/institution_factory_service.rb'
+    - 'app/services/curator/object_factory_service.rb'
+    - 'lib/curator/services/factory_service.rb'
+
+Style/SignalException:
+  Enabled: true
+
+Style/SpecialGlobalVars:
+  Enabled: true
+
+Style/StderrPuts:
+  Enabled: true
+
+Style/StringLiterals:
+  Enabled: true
+  Exclude:
+    - 'spec/**/*'
+
+Style/SymbolArray:
+  Enabled: false
+
+Style/WordArray:
+  Enabled: false
+
+Style/UnneededInterpolation:
   Enabled: true

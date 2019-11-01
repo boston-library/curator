@@ -13,7 +13,7 @@ module Curator
     def name_role_class_validator
       %i(name role).each do |attr|
         class_name = "Curator::ControlledTerms::#{attr.to_s.camelize}"
-        errors.add(attr, "#{class_name} is not valid!") if self.send(attr).class.to_s != class_name
+        errors.add(attr, "#{class_name} is not valid!") if send(attr).class.to_s != class_name
       end
     end
   end

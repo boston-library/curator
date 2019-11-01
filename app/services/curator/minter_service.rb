@@ -3,7 +3,7 @@
 module Curator
   class MinterService < Services::Base
     def initialize
-      @namespace = "commonwealth"
+      @namespace = 'commonwealth'
     end
 
     def call
