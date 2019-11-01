@@ -341,8 +341,7 @@ Style/FrozenStringLiteralComment:
 Style/GuardClause:
   Enabled: true
 
-Style/HashSyntax:
-  Exclude:
+# Style/HashSyntax:
 
 Style/IfUnlessModifier:
   Enabled: true
