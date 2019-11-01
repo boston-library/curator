@@ -11,7 +11,6 @@ module Curator
         expect(:get => '/controlled_terms/authorities/1').to route_to('curator/controlled_terms/authorities#show', :id => '1')
       end
 
-
       it 'routes to #create' do
         expect(:post => '/controlled_terms/authorities').to route_to('curator/controlled_terms/authorities#create')
       end

@@ -1,6 +1,662 @@
-require: rubocop-rails
 inherit_from: .rubocop_todo.yml
 
 AllCops:
-  TargetRubyVersion: 2.5
+  Exclude:
+    - 'scratch.rb'
+    - 'bin/*'
+    - 'spec/internal/**/*'
+    - 'lib/curator/archivable.rb'
+    - 'lib/curator/services/remote_service.rb'
+    - 'app/services/curator/filestreams/file_set_factory_service.rb'
   DisplayCopNames: true
+  DisabledByDefault: true
+  TargetRubyVersion: 2.5
+
+####################### BUNDLER/GEMSPEC ###############################
+Bundler/OrderedGems:
+  Enabled: true
+
+Bundler/DuplicatedGem:
+  Enabled: true
+
+Gemspec/OrderedDependencies:
+  Enabled: true
+
+####################### LAYOUT ###############################
+Layout/AlignArray:
+  Enabled: true
+
+Layout/BlockAlignment:
+  Enabled: true
+
+Layout/CaseIndentation:
+  Enabled: true
+
+Layout/CommentIndentation:
+  Enabled: true
+
+Layout/AlignArguments:
+  Enabled: true
+
+Layout/ClosingParenthesisIndentation:
+  Enabled: true
+
+Layout/EmptyComment:
+  Enabled: true
+
+Layout/EmptyLineAfterGuardClause:
+  Enabled: true
+
+Layout/EmptyLineAfterMagicComment:
+  Enabled: true
+
+Layout/EmptyLineBetweenDefs:
+  Enabled: true
+
+Layout/EmptyLines:
+  Enabled: true
+
+Layout/EmptyLinesAroundAccessModifier:
+  Enabled: true
+
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: true
+
+Layout/EmptyLinesAroundClassBody:
+  Enabled: true
+
+Layout/EmptyLinesAroundModuleBody:
+  Enabled: true
+
+Layout/EndAlignment:
+  Enabled: true
+
+Layout/ExtraSpacing:
+  Enabled: true
+
+Layout/IndentFirstHashElement:
+  Enabled: true
+  EnforcedStyle: consistent
+
+Layout/IndentationConsistency:
+  Enabled: true
+
+Layout/IndentationWidth:
+  Enabled: true
+
+Layout/LeadingBlankLines:
+  Enabled: true
+
+Layout/LeadingCommentSpace:
+  Enabled: true
+
+Layout/MultilineArrayBraceLayout:
+  Enabled: true
+
+Layout/MultilineMethodCallBraceLayout:
+  Enabled: true
+
+Layout/SpaceAfterComma:
+  Enabled: true
+
+Layout/SpaceAroundEqualsInParameterDefault:
+  Enabled: true
+
+Layout/SpaceAroundOperators:
+  Enabled: true
+
+Layout/SpaceBeforeBlockBraces:
+  Enabled: true
+
+Layout/SpaceBeforeComma:
+  Enabled: true
+
+Layout/SpaceBeforeComment:
+  Enabled: true
+
+Layout/SpaceInsideArrayLiteralBrackets:
+  Enabled: true
+
+Layout/SpaceInsideBlockBraces:
+  Enabled: true
+
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: true
+
+Layout/SpaceInsideParens:
+  Enabled: true
+
+Layout/TrailingWhitespace:
+  Enabled: true
+
+####################### LINTING ###############################
+
+Lint/AmbiguousOperator:
+  Enabled: true
+
+Lint/AmbiguousRegexpLiteral:
+  Enabled: true
+
+Lint/AssignmentInCondition:
+  Enabled: true
+
+Lint/CircularArgumentReference:
+  Enabled: true
+
+Lint/Debugger:
+  Enabled: true
+
+Lint/DeprecatedClassMethods:
+  Enabled: true
+
+Lint/DuplicateCaseCondition:
+  Enabled: true
+
+Lint/DuplicateMethods:
+  Enabled: true
+
+Lint/DuplicatedKey:
+  Enabled: true
+
+Lint/EachWithObjectArgument:
+  Enabled: true
+
+Lint/ElseLayout:
+  Enabled: true
+
+Lint/EmptyEnsure:
+  Enabled: true
+  AutoCorrect: false
+
+Lint/EmptyExpression:
+  Enabled: true
+
+Lint/EmptyInterpolation:
+  Enabled: true
+
+Lint/EmptyWhen:
+  Enabled: true
+
+Lint/EndInMethod:
+  Enabled: true
+
+Lint/EnsureReturn:
+  Enabled: true
+
+Lint/FlipFlop:
+  Enabled: true
+
+Lint/FloatOutOfRange:
+  Enabled: true
+
+Lint/FormatParameterMismatch:
+  Enabled: true
+
+Lint/HandleExceptions:
+  Enabled: true
+
+Lint/ImplicitStringConcatenation:
+  Enabled: true
+
+Lint/IneffectiveAccessModifier:
+  Enabled: true
+
+Lint/InheritException:
+  Enabled: true
+
+Lint/LiteralAsCondition:
+  Enabled: true
+
+Lint/LiteralInInterpolation:
+  Enabled: true
+
+Lint/Loop:
+  Enabled: true
+
+Lint/MultipleCompare:
+  Enabled: true
+
+Lint/NestedMethodDefinition:
+  Enabled: true
+
+Lint/NextWithoutAccumulator:
+  Enabled: true
+
+Lint/NonLocalExitFromIterator:
+  Enabled: true
+
+Lint/ParenthesesAsGroupedExpression:
+  Enabled: true
+
+Lint/PercentStringArray:
+  Enabled: true
+
+Lint/PercentSymbolArray:
+  Enabled: true
+
+Lint/RandOne:
+  Enabled: true
+
+Lint/RequireParentheses:
+  Enabled: true
+
+Lint/RescueException:
+  Enabled: true
+
+Lint/SafeNavigationChain:
+  Enabled: true
+
+Lint/ShadowedException:
+  Enabled: true
+
+Lint/ShadowingOuterLocalVariable:
+  Enabled: true
+
+Lint/StringConversionInInterpolation:
+  Enabled: true
+
+Lint/UnderscorePrefixedVariableName:
+  Enabled: true
+
+Lint/UnifiedInteger:
+  Enabled: true
+
+Lint/UnneededSplatExpansion:
+  Enabled: true
+
+Lint/UnusedMethodArgument:
+  Enabled: true
+
+Lint/UnusedBlockArgument:
+  Enabled: true
+
+Lint/UnreachableCode:
+  Enabled: true
+
+Lint/UselessAccessModifier:
+  Enabled: true
+
+Lint/UselessAssignment:
+  Enabled: true
+  Exclude:
+    - 'spec/**/*'
+
+Lint/UselessComparison:
+  Enabled: true
+
+Lint/UselessElseWithoutRescue:
+  Enabled: true
+
+Lint/UselessSetterCall:
+  Enabled: true
+
+Lint/Void:
+  Enabled: true
+####################### NAMING ###############################
+
+Naming/AccessorMethodName:
+  Enabled: true
+
+####################### STYLE ###############################
+
+# TODO: Will Come back to setting up documentation
+Style/Documentation:
+  Enabled: false
+  Exclude:
+    - 'spec/**/*'
+
+Style/AccessModifierDeclarations:
+  Enabled: true
+
+Style/BlockComments:
+  Enabled: true
+  Exclude:
+    - 'spec/spec_helper.rb'
+
+Style/BlockDelimiters:
+  Enabled: true
+  Exclude:
+    - 'spec/**/*'
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/ColonMethodCall:
+  Enabled: true
+
+Style/CommentAnnotation:
+  Enabled: true
+  Exclude:
+    - 'spec/**/*'
+
+Style/DefWithParentheses:
+  Enabled: true
+
+Style/EmptyElse:
+  Enabled: true
+
+Style/EvalWithLocation:
+  Enabled: true
+
+Style/ExpandPathArguments:
+  Exclude:
+    - 'spec/rails_helper.rb'
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  Exclude:
+    - 'spec/**/*'
+
+Style/GuardClause:
+  Enabled: true
+
+Style/HashSyntax:
+  Exclude:
+    - 'spec/**/*'
+
+Style/IfUnlessModifier:
+  Enabled: true
+
+Style/Lambda:
+  Enabled: true
+
+Style/MixinUsage:
+  Enabled: true
+
+Style/MutableConstant:
+  Enabled: true
+
+Style/Next:
+  Enabled: true
+
+Style/NumericLiterals:
+  Enabled: true
+
+Style/PercentLiteralDelimiters:
+  Enabled: true
+  PreferredDelimiters:
+    default: ()
+    '%i': ()
+    '%I': ()
+    '%w': ()
+    '%W': ()
+
+Style/Proc:
+  Enabled: true
+
+Style/RedundantFreeze:
+  Enabled: true
+
+Style/RedundantSelf:
+  Enabled: true
+
+# TODO: Make Curator Specific Error Classes
+
+Style/RescueStandardError:
+  Enabled: true
+  Exclude:
+    - 'app/services/curator/collection_factory_service.rb'
+    - 'app/services/curator/institution_factory_service.rb'
+    - 'app/services/curator/object_factory_service.rb'
+    - 'lib/curator/services/factory_service.rb'
+
+Style/SignalException:
+  Enabled: true
+
+Style/SpecialGlobalVars:
+  Enabled: true
+
+Style/StderrPuts:
+  Enabled: true
+
+Style/StringLiterals:
+  Enabled: true
+  Exclude:
+    - 'spec/**/*'
+
+Style/SymbolArray:
+  Enabled: false
+
+Style/WordArray:
+  Enabled: false
+
+Style/UnneededInterpolation:
+  Enabled: true
+
+####################### METRICS ###############################
+
+# REVIEW: Tweak these values at some point low priority
+
+Metrics/AbcSize:
+  Enabled: true
+  Max: 100
+
+Metrics/BlockLength:
+  Enabled: true
+  Max: 90
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/ClassLength:
+  Enabled: true
+  Max: 200
+
+Metrics/CyclomaticComplexity:
+  Enabled: true
+  Max: 10
+
+Metrics/MethodLength:
+  Enabled: true
+  Max: 100
+
+Metrics/LineLength:
+  Enabled: true
+  Max: 400
+  Exclude:
+    - 'spec/**/*'
+
+####################### SECURITY ###############################
+
+# Taken From bixby config
+Security/Eval:
+  Enabled: true
+
+Security/JSONLoad:
+  Enabled: true
+  # Autocorrect here will change to a method that may cause crashes depending
+  # on the value of the argument.
+  AutoCorrect: false
+
+Security/MarshalLoad:
+  Enabled: true
+
+Security/YAMLLoad:
+  Enabled: true
+
+####################### RAILS ###############################
+
+Rails/ActionFilter:
+  Enabled: true
+
+Rails/CreateTableWithTimestamps:
+  Enabled: true
+  Exclude:
+    - 'db/migrate/20190920170759_create_curator_mapping_desc_terms.rb'
+    - 'db/migrate/20190920170814_create_curator_mapping_desc_name_roles.rb'
+    - 'db/migrate/20190923145916_create_curator_mappings_host_collections.rb'
+    - 'db/migrate/20190923155026_create_curator_mappings_exemplary_images.rb'
+    - 'db/migrate/20190923160316_create_curator_mappings_desc_host_collections.rb'
+    - 'db/migrate/20190923164102_create_curator_mappings_collection_members.rb'
+    - 'db/migrate/20191016182158_create_curator_mappings_issues.rb'
+
+Rails/ActiveSupportAliases:
+  Enabled: true
+
+Rails/BelongsTo:
+  Enabled: true
+
+Rails/Blank:
+  Enabled: true
+
+Rails/Date:
+  Enabled: true
+
+Rails/Delegate:
+  Enabled: true
+
+Rails/DelegateAllowBlank:
+  Enabled: true
+
+Rails/DynamicFindBy:
+  Enabled: true
+
+Rails/EnumHash:
+  Enabled: true
+
+Rails/EnumUniqueness:
+  Enabled: true
+
+Rails/EnvironmentComparison:
+  Enabled: true
+
+Rails/Exit:
+  Enabled: true
+
+Rails/InverseOf:
+  Enabled: true
+
+# TODO: These files need to be set to dependent :archive once the archivable concern is done
+
+Rails/HasManyOrHasOneDependent:
+  Enabled: true
+  Exclude:
+    - 'app/models/concerns/curator/mappings/exemplary_imagable.rb'
+    - 'app/models/concerns/curator/mappings/mappable.rb'
+    - 'app/models/curator/collection.rb'
+    - 'app/models/curator/controlled_terms/name.rb'
+    - 'app/models/curator/controlled_terms/role.rb'
+    - 'app/models/curator/digital_object.rb'
+    - 'app/models/curator/institution.rb'
+    - 'app/models/curator/mappings/host_collection.rb'
+
+Rails/Presence:
+  Enabled: true
+
+Rails/Present:
+  Enabled: true
+
+# TODO: Output Errors to rails logger in the following classes
+
+Rails/Output:
+  Enabled: true
+  Exclude:
+    - 'app/services/curator/collection_factory_service.rb'
+    - 'app/services/curator/institution_factory_service.rb'
+    - 'app/services/curator/object_factory_service.rb'
+    - 'db/seeds.rb'
+    - 'lib/curator/engine.rb'
+    - 'lib/curator/namespace_accessor.rb'
+    - 'lib/curator/services/factory_service.rb'
+
+# TODO Investigate if string class names are better than using the namespace accessors.
+
+Rails/ReflectionClassName:
+  Enabled: false
+
+Rails/SafeNavigation:
+  Enabled: true
+
+Rails/ScopeArgs:
+  Enabled: true
+
+Rails/TimeZone:
+  Enabled: true
+
+Rails/UnknownEnv:
+  Enabled: true
+
+Rails/Validation:
+  Enabled: true
+
+####################### PERFORMANCE ###############################
+
+# Taken From Bixby
+
+Performance/Casecmp:
+  Enabled: true
+
+Performance/CaseWhenSplat:
+  Enabled: true
+
+Performance/Count:
+  # This cop has known compatibility issues with `ActiveRecord` and other
+  # frameworks. ActiveRecord's `count` ignores the block that is passed to it.
+  # For more information, see the documentation in the cop itself.
+  # If you understand the known risk, you can disable `SafeMode`.
+  SafeAutoCorrect: true
+  Enabled: true
+
+Performance/Detect:
+  # This cop has known compatibility issues with `ActiveRecord` and other
+  # frameworks. `ActiveRecord` does not implement a `detect` method and `find`
+  # has its own meaning. Correcting `ActiveRecord` methods with this cop
+  # should be considered unsafe.
+  SafeAutoCorrect: true
+  Enabled: true
+
+Performance/DoubleStartEndWith:
+  Enabled: true
+
+Performance/EndWith:
+  # This will change to a new method call which isn't guaranteed to be on the
+  # object. Switching these methods has to be done with knowledge of the types
+  # of the variables which rubocop doesn't have.
+  AutoCorrect: false
+  Enabled: true
+
+Performance/FixedSize:
+  Enabled: true
+
+Performance/FlatMap:
+  Enabled: true
+  EnabledForFlattenWithoutParams: false
+  # If enabled, this cop will warn about usages of
+  # `flatten` being called without any parameters.
+  # This can be dangerous since `flat_map` will only flatten 1 level, and
+  # `flatten` without any parameters can flatten multiple levels.
+
+Performance/InefficientHashSearch:
+  Enabled: true
+
+Performance/RangeInclude:
+  Enabled: true
+
+Performance/RedundantBlockCall:
+  Enabled: true
+
+Performance/RedundantMatch:
+  Enabled: true
+
+Performance/RedundantMerge:
+  Enabled: true
+
+Performance/RegexpMatch:
+  Enabled: true
+
+Performance/ReverseEach:
+  Enabled: true
+
+Performance/Size:
+  Enabled: true
+
+Performance/StartWith:
+  Enabled: true
+
+Performance/StringReplacement:
+  Enabled: true
+
+Performance/TimesMap:
+  Enabled: true
+
+Performance/UnfreezeString:
+  Enabled: true

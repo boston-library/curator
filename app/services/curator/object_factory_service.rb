@@ -4,13 +4,14 @@ module Curator
   class ObjectFactoryService < Services::Base
     include Services::FactoryService
 
-    # TODO set relationships for is_issue_of values
+    # TODO: set relationships for is_issue_of values
     def call
       admin_set_ark_id = @json_attrs.dig('admin_set', 'ark_id')
       begin
         Curator.digital_object_class.transaction do
           admin_set = Curator.collection_class.find_by(ark_id: admin_set_ark_id)
           raise "AdminSet #{admin_set_ark_id} not found!" unless admin_set
+
           digital_object = Curator.digital_object_class.new(ark_id: @ark_id)
           digital_object.admin_set = admin_set
           collections = @json_attrs.fetch('exemplary_image_of', [])
@@ -18,6 +19,7 @@ module Curator
             col_ark_id = collection['ark_id']
             col = Curator.collection_class.find_by(ark_id: col_ark_id)
             raise "Collection #{col_ark_id} not found!" unless col
+
             digital_object.is_member_of_collection << col
           end
           digital_object.created_at = @created if @created
@@ -37,11 +39,11 @@ module Curator
           end
 
           build_descriptive(digital_object) do |descriptive|
-            simple_fields = %i[abstract access_restrictions digital_origin frequency
+            simple_fields = %i(abstract access_restrictions digital_origin frequency
                                issuance origin_event extent physical_location_department
                                physical_location_shelf_locator place_of_publication
                                publisher rights series subseries toc toc_url
-                               resource_type_manuscript text_direction]
+                               resource_type_manuscript text_direction)
             simple_fields.each do |attr|
               descriptive.send("#{attr}=", @desc_json_attrs.fetch(attr, nil))
             end
@@ -54,11 +56,10 @@ module Curator
             descriptive.subject_other = subject_other(@desc_json_attrs)
             descriptive.cartographic = cartographics(@desc_json_attrs)
             descriptive.related = related(@desc_json_attrs)
-            %i(genres resource_types languages).each do |map_type|
+            %w(genres resource_types languages).each do |map_type|
               @desc_json_attrs.fetch(map_type, []).each do |map_attrs|
                 mappable = get_mappable(map_attrs,
-                  nomenclature_class: Curator.controlled_terms.public_send("#{map_type.to_s.singularize}_class")
-                )
+                                        nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
                 descriptive.desc_terms << Curator.mappings.desc_term_class.new(mappable: mappable)
               end
             end
@@ -85,14 +86,12 @@ module Curator
                          when 'geos'
                            :geographic
                          end
-              unless map_type.blank?
-                v.each do |map_attrs|
-                  descriptive.desc_terms << Curator.mappings.desc_term_class.new(mappable:
-                    get_mappable(map_attrs,
-                      nomenclature_class: Curator.controlled_terms.public_send("#{map_type.to_s}_class")
-                    )
-                  )
-                end
+              next if map_type.blank?
+
+              v.each do |map_attrs|
+                descriptive.desc_terms << Curator.mappings.desc_term_class.new(mappable:
+                  get_mappable(map_attrs,
+                               nomenclature_class: Curator.controlled_terms.public_send("#{map_type}_class")))
               end
             end
 
@@ -104,23 +103,23 @@ module Curator
           return digital_object
         end
       rescue => e
-        puts "#{e.to_s}"
+        puts e.to_s
       end
     end
 
-    def identifier(json_attrs={})
+    def identifier(json_attrs = {})
       json_attrs.fetch(:identifier, []).map do |ident_attrs|
         Descriptives::Identifier.new(ident_attrs)
       end
     end
 
-    def note(json_attrs={})
+    def note(json_attrs = {})
       json_attrs.fetch(:note, []).map do |note_attrs|
         Descriptives::Note.new(note_attrs)
       end
     end
 
-    def date(json_attrs={})
+    def date(json_attrs = {})
       date_attrs = json_attrs.fetch(:date, {})
       created = date_attrs.fetch(:created, nil)
       issued = date_attrs.fetch(:issued, nil)
@@ -130,13 +129,13 @@ module Curator
 
     def publication(json_attrs = {})
       pub_hash = {}
-      %i[edition_name edition_number volume issue_number].each do |k|
+      %i(edition_name edition_number volume issue_number).each do |k|
         pub_hash[k] = json_attrs.fetch(k, nil)
       end
       Descriptives::Publication.new(pub_hash.compact)
     end
 
-    def title(json_attrs={})
+    def title(json_attrs = {})
       primary = json_attrs.fetch(:title_primary, {})
       other = json_attrs.fetch(:title_other, {}).map { |t_attrs| title_attr(t_attrs) }
       Descriptives::TitleSet.new(primary: primary, other: other)
@@ -144,13 +143,13 @@ module Curator
 
     def subject_other(json_attrs = {})
       subject_json = json_attrs.fetch(:subject, {})
-      uniform_title = subject_json.fetch(:titles, []).map { |ut_attrs| title_attr(ut_attrs)}
+      uniform_title = subject_json.fetch(:titles, []).map { |ut_attrs| title_attr(ut_attrs) }
       temporal = subject_json.fetch(:temporals, [])
       date = subject_json.fetch(:dates, [])
       Descriptives::Subject.new(titles: uniform_title, temporals: temporal, dates: date)
     end
 
-    def related(json_attrs={})
+    def related(json_attrs = {})
       constituent = json_attrs.fetch(:related_constituent, nil)
       referenced_by_url = json_attrs.fetch(:related_referenced_by_url, [])
       references_url = json_attrs.fetch(:related_references_url, [])
@@ -161,7 +160,7 @@ module Curator
                                 review_url: review_url)
     end
 
-    def physical_location(json_attrs={})
+    def physical_location(json_attrs = {})
       physical_location_attrs = json_attrs.fetch(:physical_location)
       authority_code = physical_location_attrs.fetch(:authority_code, nil)
       term_data = physical_location_attrs.except(:authority_code)
@@ -172,11 +171,11 @@ module Curator
       )
     end
 
-    def title_attr(json_attrs={})
+    def title_attr(json_attrs = {})
       Descriptives::Title.new(json_attrs)
     end
 
-    def cartographics(json_attrs={})
+    def cartographics(json_attrs = {})
       Descriptives::Cartographic.new(
         scale: json_attrs.fetch(:scale, []),
         projection: json_attrs.fetch(:projection, nil)
@@ -212,9 +211,11 @@ module Curator
 
     def find_or_create_host_collection(host_col_name = nil, institution_id = nil)
       return nil unless host_col_name && institution_id
+
       begin
         inst = Curator::Institution.find(institution_id)
         raise "Bad institution_id #{institution_id} for host_collection!" if inst.blank?
+
         return Curator::Mappings.host_collection_class.where(name: host_col_name,
                                                              institution_id: institution_id).first_or_create!
       rescue => e

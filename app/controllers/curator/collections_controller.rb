@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class CollectionsController < ApplicationController
     before_action :set_collection, only: [:show, :update, :destroy]
@@ -41,14 +42,15 @@ module Curator
     end
 
     private
-      # Use callbacks to share common setup or constraints between actions.
-      def set_collection
-        @collection = Collection.find(params[:id])
-      end
 
-      # Only allow a trusted parameter "white list" through.
-      def collection_params
-        params.fetch(:collection, {})
-      end
+    # Use callbacks to share common setup or constraints between actions.
+    def set_collection
+      @collection = Collection.find(params[:id])
+    end
+
+    # Only allow a trusted parameter "white list" through.
+    def collection_params
+      params.fetch(:collection, {})
+    end
   end
 end

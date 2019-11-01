@@ -5,7 +5,7 @@ module Curator
     before(:all) do
       @collection = create(:curator_collection)
     end
-    subject{ @collection }
+    subject { @collection }
 
     it_behaves_like 'mintable'
   end

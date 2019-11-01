@@ -3,6 +3,6 @@ FactoryBot.define do
     association :authority, factory: :curator_controlled_terms_authority
     term_data { {} }
     type { "Curator::ControlledTerms::Geographic" }
-    archived_at { nil}
+    archived_at { nil }
   end
 end

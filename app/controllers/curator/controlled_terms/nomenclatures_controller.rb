@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class ControlledTerms::NomenclaturesController < ApplicationController
     before_action :set_controlled_terms_nomenclature_type
@@ -41,18 +42,19 @@ module Curator
     # end
 
     private
-      # Use callbacks to share common setup or constraints between actions.
-      def set_controlled_terms_nomenclature
-        @controlled_terms_nomenclature = @controlled_terms_nomenclature_type.find(params[:id])
-      end
 
-      def set_controlled_terms_nomenclature_type
-        @controlled_terms_nomenclature_type =  "Curator::ControlledTerms::#{params[:type]}".constantize
-      end
+    # Use callbacks to share common setup or constraints between actions.
+    def set_controlled_terms_nomenclature
+      @controlled_terms_nomenclature = @controlled_terms_nomenclature_type.find(params[:id])
+    end
 
-      # Only allow a trusted parameter "white list" through.
-      def controlled_terms_nomenclature_params
-        params.fetch(:controlled_terms_nomenclature, {})
-      end
+    def set_controlled_terms_nomenclature_type
+      @controlled_terms_nomenclature_type = "Curator::ControlledTerms::#{params[:type]}".constantize
+    end
+
+    # Only allow a trusted parameter "white list" through.
+    def controlled_terms_nomenclature_params
+      params.fetch(:controlled_terms_nomenclature, {})
+    end
   end
 end

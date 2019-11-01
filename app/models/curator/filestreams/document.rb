@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class Filestreams::Document < Filestreams::FileSet
     include Filestreams::Characterizable
@@ -11,6 +12,5 @@ module Curator
     has_one_attached :document_master
     has_one_attached :document_access
     has_one_attached :image_thumbnail_300
-
   end
 end

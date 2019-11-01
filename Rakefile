@@ -1,10 +1,10 @@
 # frozen_string_literal: true
+
 begin
   require 'bundler/setup'
 rescue LoadError
   puts 'You must `gem install bundler` and `bundle install` to run rake tasks'
 end
-
 
 require 'rdoc/task'
 RDoc::Task.new(:rdoc) do |rdoc|
@@ -15,18 +15,23 @@ RDoc::Task.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
-APP_RAKEFILE = File.expand_path("spec/internal/Rakefile", __dir__)
+APP_RAKEFILE = File.expand_path('spec/internal/Rakefile', __dir__)
 load 'rails/tasks/engine.rake'
 load 'rails/tasks/statistics.rake'
-
 
 require 'bundler/gem_tasks'
 
 require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new(:spec)
 
-
 require 'rubocop/rake_task'
-RuboCop::RakeTask.new(:rubocop)
+RuboCop::RakeTask.new(:rubocop) do |task|
+  task.requires << 'rubocop-rails'
+  task.requires << 'rubocop-rspec'
+  task.requires << 'rubocop-performance'
+  # task.options << '--safe-auto-correct'
+  # task.options << '--disable-uncorrectable'
+  # task.options << '-d'
+end
 
 task default: [:spec, :rubocop]

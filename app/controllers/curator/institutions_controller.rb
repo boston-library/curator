@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class InstitutionsController < ApplicationController
     before_action :set_institution, only: [:show, :update, :destroy]
@@ -41,14 +42,15 @@ module Curator
     end
 
     private
-      # Use callbacks to share common setup or constraints between actions.
-      def set_institution
-        @institution = Institution.find(params[:id])
-      end
 
-      # Only allow a trusted parameter "white list" through.
-      def institution_params
-        params.fetch(:institution, {})
-      end
+    # Use callbacks to share common setup or constraints between actions.
+    def set_institution
+      @institution = Institution.find(params[:id])
+    end
+
+    # Only allow a trusted parameter "white list" through.
+    def institution_params
+      params.fetch(:institution, {})
+    end
   end
 end

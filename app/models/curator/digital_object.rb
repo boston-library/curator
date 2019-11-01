@@ -1,11 +1,12 @@
 # frozen_string_literal: true
+
 module Curator
   class DigitalObject < ApplicationRecord
     include Curator::Mintable
     include Curator::Metastreamable
     include Curator::Mappings::Exemplary::ObjectImagable
 
-    before_create :add_admin_set_to_members, if: proc {|d| d.admin_set.present? } #Should Fail if admin set is not present
+    before_create :add_admin_set_to_members, if: proc { |d| d.admin_set.present? } # Should Fail if admin set is not present
 
     belongs_to :admin_set, inverse_of: :admin_set_objects, class_name: Curator.collection_class_name
 
@@ -23,8 +24,8 @@ module Curator
     has_many :is_member_of_collection, through: :collection_members, source: :collection
 
     with_options class_name: Curator.mappings.issue_class_name do
-      has_one :issue_mapping, -> {includes(:issue_of)}, inverse_of: :digital_object
-      has_one :issue_mapping_for, -> {includes(:digital_object)}, inverse_of: :issue_of, foreign_key: :issue_of_id
+      has_one :issue_mapping, -> { includes(:issue_of) }, inverse_of: :digital_object
+      has_one :issue_mapping_for, -> { includes(:digital_object) }, inverse_of: :issue_of, foreign_key: :issue_of_id
     end
 
     with_options class_name: Curator.digital_object_class_name do
@@ -32,10 +33,10 @@ module Curator
       has_one :issue_for, through: :issue_mapping_for, source: :digital_object
     end
 
-
     private
+
     def add_admin_set_to_members
-      self.collection_members.build(collection: admin_set)
+      collection_members.build(collection: admin_set)
     end
   end
 end

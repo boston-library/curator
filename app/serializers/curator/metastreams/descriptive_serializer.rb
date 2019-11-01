@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+
 module Curator
   class Metastreams::DescriptiveSerializer < CuratorSerializer
-    CONTROLLED_TERMS_FIELDS=%i(label id_from_auth authority_code).freeze
+    CONTROLLED_TERMS_FIELDS = %i(label id_from_auth authority_code).freeze
 
     class DescriptiveNameRoleSerializer < ActiveModel::Serializer
       attribute :name do |serializer|
@@ -51,7 +52,7 @@ module Curator
       serializer.subject.as_json
     end
 
-    #TODO Cache these methods #see https://github.com/rails-api/active_model_serializers/blob/0-10-stable/docs/general/serializers.md#associations
+    # TODO: Cache these methods #see https://github.com/rails-api/active_model_serializers/blob/0-10-stable/docs/general/serializers.md#associations
     def subject
       {}.merge(
         ActiveModelSerializers::SerializableResource.new(object.subject_topics, each_serializer: Curator::ControlledTerms::SubjectSerializer, root: 'topic', fields: CONTROLLED_TERMS_FIELDS).as_json
@@ -63,23 +64,23 @@ module Curator
     end
 
     def name_role
-      object.name_roles.map {|name_role| DescriptiveNameRoleSerializer.new(name_role).attributes }
+      object.name_roles.map { |name_role| DescriptiveNameRoleSerializer.new(name_role).attributes }
     end
 
     def genre
-      object.genres.map {|genre| Curator::ControlledTerms::GenreSerializer.new(genre).attributes(CONTROLLED_TERMS_FIELDS + %i(basic)) }
+      object.genres.map { |genre| Curator::ControlledTerms::GenreSerializer.new(genre).attributes(CONTROLLED_TERMS_FIELDS + %i(basic)) }
     end
 
     def language
-      object.languages.map {|language| Curator::ControlledTerms::LanguageSerializer.new(language).attributes(CONTROLLED_TERMS_FIELDS) }
+      object.languages.map { |language| Curator::ControlledTerms::LanguageSerializer.new(language).attributes(CONTROLLED_TERMS_FIELDS) }
     end
 
     def resource_type
-      object.resource_types.map{|resource_type| Curator::ControlledTerms::ResourceTypeSerializer.new(resource_type).attributes(CONTROLLED_TERMS_FIELDS) }
+      object.resource_types.map { |resource_type| Curator::ControlledTerms::ResourceTypeSerializer.new(resource_type).attributes(CONTROLLED_TERMS_FIELDS) }
     end
 
     def license
-      object.licenses.map {|license| Curator::ControlledTerms::LicenseSerializer.new(license).attributes(%i(label uri)) }
+      object.licenses.map { |license| Curator::ControlledTerms::LicenseSerializer.new(license).attributes(%i(label uri)) }
     end
 
     def physical_location

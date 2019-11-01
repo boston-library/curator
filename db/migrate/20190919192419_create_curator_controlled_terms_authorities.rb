@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CreateCuratorControlledTermsAuthorities < ActiveRecord::Migration[5.2]
   def change
     enable_extension 'pg_trgm'

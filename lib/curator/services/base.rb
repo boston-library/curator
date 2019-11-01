@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   module Services
     class Base
@@ -8,8 +9,8 @@ module Curator
         end
       end
 
-      def call(&block)
-        fail NotImplementedError, "#{self.class}#call is unimplemented."
+      def call(&_block)
+        raise NotImplementedError, "#{self.class}#call is unimplemented."
       end
     end
   end

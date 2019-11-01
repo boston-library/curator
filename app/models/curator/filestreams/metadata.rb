@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class Filestreams::Metadata < Filestreams::FileSet
     belongs_to :file_set_of, inverse_of: :metadata_file_sets, class_name: Curator.digital_object_class_name

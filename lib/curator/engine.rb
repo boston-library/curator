@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class Engine < ::Rails::Engine
     config.generators do |g|
@@ -16,11 +17,9 @@ module Curator
       begin
         require 'factory_bot_rails'
       rescue LoadError
-        puts "Factory Bot Rails Not installed!"
+        puts 'Factory Bot Rails Not installed!'
       end
-      if defined?(FactoryBotRails)
-        config.factory_bot.definition_file_paths << File.expand_path('../../spec/factories/curator', __dir__)
-      end
+      config.factory_bot.definition_file_paths << File.expand_path('../../spec/factories/curator', __dir__) if defined?(FactoryBotRails)
     end
 
     config.to_prepare do

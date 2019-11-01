@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class InstitutionFactoryService < Services::Base
     include Services::FactoryService
@@ -11,33 +12,33 @@ module Curator
           institution.name = @json_attrs.fetch(:name)
           institution.abstract = @json_attrs.fetch(:abstract)
           institution.url = @json_attrs.fetch(:url)
-          institution.location = location(location_json_attrs) unless location_json_attrs.blank?
+          institution.location = location(location_json_attrs) if location_json_attrs.present?
           institution.created_at = @created if @created
           institution.updated_at = @updated if @updated
           institution.save!
 
           build_workflow(institution) do |workflow|
-            workflow.send("#{:ingest_origin}=", @workflow_json_attrs.fetch(:ingest_origin, "#{ENV['HOME']}"))
+            workflow.ingest_origin = @workflow_json_attrs.fetch(:ingest_origin, ENV['HOME'].to_s)
             publishing_state = @workflow_json_attrs.fetch(:publishing_state, nil)
             processing_state = @workflow_json_attrs.fetch(:processing_state, nil)
-            workflow.send("#{:publishing_state}=", publishing_state) if publishing_state
-            workflow.send("#{:processing_state}=", processing_state) if processing_state #
+            workflow.publishing_state = publishing_state if publishing_state
+            workflow.processing_state = processing_state if processing_state
           end
 
           build_administrative(institution) do |administrative|
             destination_site = @admin_json_attrs.fetch(:destination_site, nil)
-            administrative.send("#{:destination_site}=", destination_site) if destination_site
+            administrative.destination_site = destination_site if destination_site
           end
           return institution
         end
       rescue => e
-        puts "#{e.to_s}"
+        puts e.to_s
       end
     end
 
     protected
 
-    def location(json_attrs={})
+    def location(json_attrs = {})
       find_or_create_nomenclature(
         nomenclature_class: Curator.controlled_terms.geographic_class,
         term_data: json_attrs.except(:authority_code),

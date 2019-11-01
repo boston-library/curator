@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 namespace :curator do
   desc 'Setup and install database migrations/ run seeds'
   task setup: :environment do
@@ -11,7 +12,7 @@ namespace :curator do
       puts 'Invoking db:create...'
       Rake::Task['db:create'].invoke
     else
-      fail 'app:db:create and db:create rake tasks are not available!'
+      raise 'app:db:create and db:create rake tasks are not available!'
     end
     puts '............'
     if Rake::Task.task_defined?('app:active_storage:install')
@@ -21,7 +22,7 @@ namespace :curator do
       puts 'Invoking app:active_storage:install...'
       Rake::Task['active_storage:install'].invoke
     else
-      fail 'app:active_storage:install and active_storage:install rake tasks are not available!'
+      raise 'app:active_storage:install and active_storage:install rake tasks are not available!'
     end
     puts '............'
     if Rake::Task.task_defined?('app:db:migrate')
@@ -31,7 +32,7 @@ namespace :curator do
       puts 'Invoking db:migrate...'
       Rake::Task['db:migrate'].invoke
     else
-      fail 'app:db:migrate and db:migrate rake tasks are not available!'
+      raise 'app:db:migrate and db:migrate rake tasks are not available!'
     end
     puts '............'
     if Rake::Task.task_defined?('app:curator:load_seed')
@@ -41,11 +42,10 @@ namespace :curator do
       puts 'Invoking curator:load_seed...'
       Rake::Task['curator:load_seed'].invoke
     else
-      fail 'app:curator:load_seed and curator:load_seed rake tasks are not available!'
+      raise 'app:curator:load_seed and curator:load_seed rake tasks are not available!'
     end
     puts 'Curator Setup Task Complete!'
   end
-
 
   desc 'Load and run seed task for default authorities and nomenclatures'
   task load_seed: :environment do

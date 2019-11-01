@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class DigitalObjectsController < ApplicationController
     before_action :set_digital_object, only: [:show, :update, :destroy]
@@ -41,14 +42,15 @@ module Curator
     end
 
     private
-      # Use callbacks to share common setup or constraints between actions.
-      def set_digital_object
-        @digital_object = DigitalObject.find(params[:id])
-      end
 
-      # Only allow a trusted parameter "white list" through.
-      def digital_object_params
-        params.fetch(:digital_object, {})
-      end
+    # Use callbacks to share common setup or constraints between actions.
+    def set_digital_object
+      @digital_object = DigitalObject.find(params[:id])
+    end
+
+    # Only allow a trusted parameter "white list" through.
+    def digital_object_params
+      params.fetch(:digital_object, {})
+    end
   end
 end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class Mappings::DescHostCollection < ApplicationRecord
     belongs_to :host_collection, inverse_of: :desc_host_collections, class_name: Mappings.host_collection_class_name
