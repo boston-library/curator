@@ -10,7 +10,7 @@ RSpec.describe Curator::CollectionFactoryService do
     object_json['institution']['ark_id'] = parent.ark_id
     expect do
       @collection = described_class.call(json_data: object_json)
-    end.to change{Curator::Collection.count}.by(1)
+    end.to change { Curator::Collection.count }.by(1)
   end
 
   describe '#call' do
@@ -29,6 +29,7 @@ RSpec.describe Curator::CollectionFactoryService do
       end
     end
 
-    it_behaves_like 'factory_service_metastreams', object_json
+    it_behaves_like 'workflowable', object_json
+    it_behaves_like 'administratable', object_json
   end
 end

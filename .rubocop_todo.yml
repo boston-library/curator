@@ -126,7 +126,7 @@ RSpec/MultipleExpectations:
 #   Exclude:
 #     - 'app/services/curator/collection_factory_service.rb'
 #     - 'app/services/curator/institution_factory_service.rb'
-#     - 'app/services/curator/object_factory_service.rb'
+#     - 'app/services/curator/digital_object_factory_service.rb'
 #     - 'db/seeds.rb'
 #     - 'lib/curator/engine.rb'
 #     - 'lib/curator/namespace_accessor.rb'
@@ -147,7 +147,7 @@ RSpec/MultipleExpectations:
 #     - 'app/models/concerns/curator/controlled_terms/cannonicable.rb'
 #     - 'app/models/curator/controlled_terms/authority.rb'
 #     - 'app/services/curator/institution_factory_service.rb'
-#     - 'app/services/curator/object_factory_service.rb'
+#     - 'app/services/curator/digital_object_factory_service.rb'
 
 # Offense count: 58
 # Rails/ReflectionClassName:
@@ -203,7 +203,7 @@ RSpec/MultipleExpectations:
 #   Exclude:
 #     - 'app/serializers/curator/metastreams/descriptive_serializer.rb'
 #     - 'app/services/curator/controlled_terms/cannonical_label_service.rb'
-#     - 'app/services/curator/object_factory_service.rb'
+#     - 'app/services/curator/digital_object_factory_service.rb'
 #     - 'config/routes.rb'
 #     - 'spec/routing/curator/controlled_terms/nomenclatures_routing_spec.rb'
 
@@ -301,7 +301,7 @@ RSpec/MultipleExpectations:
 # SupportedStyles: skip_modifier_ifs, always
 # Style/Next:
 #   Exclude:
-#     - 'app/services/curator/object_factory_service.rb'
+#     - 'app/services/curator/digital_object_factory_service.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -324,7 +324,7 @@ RSpec/MultipleExpectations:
 #     - 'app/models/curator/metastreams/administrative.rb'
 #     - 'app/models/curator/metastreams/descriptive.rb'
 #     - 'app/serializers/curator/metastreams/descriptive_serializer.rb'
-#     - 'app/services/curator/object_factory_service.rb'
+#     - 'app/services/curator/digital_object_factory_service.rb'
 #     - 'db/seeds.rb'
 #     - 'lib/curator/engine.rb'
 #     - 'lib/curator/namespace_accessor.rb'
@@ -368,7 +368,7 @@ RSpec/MultipleExpectations:
 #   Exclude:
 #     - 'app/services/curator/collection_factory_service.rb'
 #     - 'app/services/curator/institution_factory_service.rb'
-#     - 'app/services/curator/object_factory_service.rb'
+#     - 'app/services/curator/digital_object_factory_service.rb'
 #     - 'db/seeds.rb'
 #     - 'lib/curator/services/factory_service.rb'
 #     - 'scratch.rb'
@@ -416,7 +416,7 @@ RSpec/MultipleExpectations:
 #   Exclude:
 #     - 'app/services/curator/collection_factory_service.rb'
 #     - 'app/services/curator/institution_factory_service.rb'
-#     - 'app/services/curator/object_factory_service.rb'
+#     - 'app/services/curator/digital_object_factory_service.rb'
 
 # Offense count: 16
 # Cop supports --auto-correct.

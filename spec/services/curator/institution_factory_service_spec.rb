@@ -7,7 +7,7 @@ RSpec.describe Curator::InstitutionFactoryService do
   before(:all) do
     expect do
       @institution = described_class.call(json_data: object_json)
-    end.to change{Curator::Institution.count}.by(1)
+    end.to change { Curator::Institution.count }.by(1)
   end
 
   describe '#call' do
@@ -33,6 +33,7 @@ RSpec.describe Curator::InstitutionFactoryService do
       end
     end
 
-    it_behaves_like 'factory_service_metastreams', object_json
+    it_behaves_like 'workflowable', object_json
+    it_behaves_like 'administratable', object_json
   end
 end

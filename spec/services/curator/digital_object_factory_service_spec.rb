@@ -1,7 +1,7 @@
 require 'rails_helper'
 require_relative './factory_service_metastreams_shared'
-RSpec.describe Curator::ObjectFactoryService do
-  json_fixture = File.join(Curator::Engine.root.join('spec', 'fixtures', 'files', 'digital-object.json'))
+RSpec.describe Curator::DigitalObjectFactoryService do
+  json_fixture = File.join(Curator::Engine.root.join('spec', 'fixtures', 'files', 'digital_object.json'))
   object_json = JSON.parse(File.read(json_fixture)).fetch('digital_object', {})
 
   before(:all) do
@@ -11,7 +11,7 @@ RSpec.describe Curator::ObjectFactoryService do
     object_json['is_member_of_collection'][0]['ark_id'] = parent.ark_id
     expect do
       @object = described_class.call(json_data: object_json)
-    end.to change{Curator::DigitalObject.count}.by(1)
+    end.to change { Curator::DigitalObject.count }.by(1)
   end
 
   describe '#call' do
@@ -264,7 +264,8 @@ RSpec.describe Curator::ObjectFactoryService do
       end
     end
 
-    it_behaves_like 'factory_service_metastreams', object_json
+    it_behaves_like 'workflowable', object_json
+    it_behaves_like 'administratable', object_json
 
     describe 'administrative metastream' do
       let(:administrative) { subject.administrative }

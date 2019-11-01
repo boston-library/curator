@@ -396,7 +396,7 @@ Style/RescueStandardError:
   Exclude:
     - 'app/services/curator/collection_factory_service.rb'
     - 'app/services/curator/institution_factory_service.rb'
-    - 'app/services/curator/object_factory_service.rb'
+    - 'app/services/curator/digital_object_factory_service.rb'
     - 'lib/curator/services/factory_service.rb'
 
 Style/SignalException:
@@ -551,7 +551,7 @@ Rails/Output:
   Exclude:
     - 'app/services/curator/collection_factory_service.rb'
     - 'app/services/curator/institution_factory_service.rb'
-    - 'app/services/curator/object_factory_service.rb'
+    - 'app/services/curator/digital_object_factory_service.rb'
     - 'app/services/curator/filestreams/file_set_factory_service.rb'
     - 'db/seeds.rb'
     - 'lib/curator/engine.rb'

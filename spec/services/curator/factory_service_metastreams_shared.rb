@@ -1,4 +1,4 @@
-RSpec.shared_examples 'factory_service_metastreams' do |object_json|
+RSpec.shared_examples 'workflowable' do |object_json|
   describe 'workflow metastream' do
     let(:workflow) { subject.workflow }
     let(:workflow_json) { object_json['metastreams']['workflow'] }
@@ -13,7 +13,9 @@ RSpec.shared_examples 'factory_service_metastreams' do |object_json|
       expect(workflow.ingest_origin).to eq workflow_json['ingest_origin']
     end
   end
+end
 
+RSpec.shared_examples 'administratable' do |object_json|
   describe 'administrative metastream' do
     let(:administrative) { subject.administrative }
     let(:administrative_json) { object_json['metastreams']['administrative'] }
