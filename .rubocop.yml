@@ -313,8 +313,6 @@ Style/BlockComments:
 
 Style/BlockDelimiters:
   Enabled: true
-  Exclude:
-    - 'spec/**/*'
 
 Style/ClassAndModuleChildren:
   Enabled: false
@@ -324,8 +322,6 @@ Style/ColonMethodCall:
 
 Style/CommentAnnotation:
   Enabled: true
-  Exclude:
-    - 'spec/**/*'
 
 Style/DefWithParentheses:
   Enabled: true
@@ -347,7 +343,6 @@ Style/GuardClause:
 
 Style/HashSyntax:
   Exclude:
-    - 'spec/**/*'
 
 Style/IfUnlessModifier:
   Enabled: true
@@ -406,8 +401,6 @@ Style/StderrPuts:
 
 Style/StringLiterals:
   Enabled: true
-  Exclude:
-    - 'spec/**/*'
 
 Style/SymbolArray:
   Enabled: false
@@ -429,8 +422,6 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Enabled: true
   Max: 90
-  Exclude:
-    - 'spec/**/*'
 
 Metrics/ClassLength:
   Enabled: true
@@ -447,8 +438,6 @@ Metrics/MethodLength:
 Metrics/LineLength:
   Enabled: true
   Max: 400
-  Exclude:
-    - 'spec/**/*'
 
 ####################### SECURITY ###############################
 
@@ -661,3 +650,13 @@ Performance/UnfreezeString:
 
 RSpec/BeforeAfterAll:
   Enabled: true
+
+RSpec/EmptyLineAfterHook:
+  Enabled: true
+
+RSpec/HookArgument:
+  Enabled: true
+  EnforcedStyle: each
+
+RSpec/InstanceVariable:
+  Enabled: true  
