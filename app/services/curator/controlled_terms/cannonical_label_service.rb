@@ -28,7 +28,6 @@ module Curator
       nil
     end
 
-    # 10.20.72.63
     protected
 
     def set_connection
