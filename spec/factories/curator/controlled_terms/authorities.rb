@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :curator_controlled_terms_authority, class: 'Curator::ControlledTerms::Authority' do
     sequence(:code) { |n| "#{Faker::IndustrySegments.sector}-#{n}" }
