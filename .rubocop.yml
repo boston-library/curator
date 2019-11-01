@@ -298,6 +298,7 @@ Naming/AccessorMethodName:
   Enabled: true
 
 ####################### STYLE ###############################
+
 # TODO: Will Come back to setting up documentation
 Style/Documentation:
   Enabled: false
@@ -390,6 +391,7 @@ Style/RedundantSelf:
   Enabled: true
 
 # TODO: Make Curator Specific Error Classes
+
 Style/RescueStandardError:
   Enabled: true
   Exclude:
@@ -424,6 +426,7 @@ Style/UnneededInterpolation:
 ####################### METRICS ###############################
 
 # REVIEW: Tweak these values at some point low priority
+
 Metrics/AbcSize:
   Enabled: true
   Max: 100
@@ -453,6 +456,7 @@ Metrics/LineLength:
     - 'spec/**/*'
 
 ####################### SECURITY ###############################
+
 # Taken From bixby config
 Security/Eval:
   Enabled: true
@@ -470,6 +474,7 @@ Security/YAMLLoad:
   Enabled: true
 
 ####################### RAILS ###############################
+
 Rails/ActionFilter:
   Enabled: true
 
@@ -521,6 +526,7 @@ Rails/InverseOf:
   Enabled: true
 
 # TODO: These files need to be set to dependent :archive once the archivable concern is done
+
 Rails/HasManyOrHasOneDependent:
   Enabled: true
   Exclude:
@@ -540,6 +546,7 @@ Rails/Present:
   Enabled: true
 
 # TODO: Output Errors to rails logger in the following classes
+
 Rails/Output:
   Enabled: true
   Exclude:
@@ -552,6 +559,7 @@ Rails/Output:
     - 'lib/curator/services/factory_service.rb'
 
 # TODO Investigate if string class names are better than using the namespace accessors.
+
 Rails/ReflectionClassName:
   Enabled: false
 
@@ -568,4 +576,87 @@ Rails/UnknownEnv:
   Enabled: true
 
 Rails/Validation:
+  Enabled: true
+
+####################### PERFORMANCE ###############################
+
+# Taken From Bixby
+
+Performance/Casecmp:
+  Enabled: true
+
+Performance/CaseWhenSplat:
+  Enabled: true
+
+Performance/Count:
+  # This cop has known compatibility issues with `ActiveRecord` and other
+  # frameworks. ActiveRecord's `count` ignores the block that is passed to it.
+  # For more information, see the documentation in the cop itself.
+  # If you understand the known risk, you can disable `SafeMode`.
+  SafeAutoCorrect: true
+  Enabled: true
+
+Performance/Detect:
+  # This cop has known compatibility issues with `ActiveRecord` and other
+  # frameworks. `ActiveRecord` does not implement a `detect` method and `find`
+  # has its own meaning. Correcting `ActiveRecord` methods with this cop
+  # should be considered unsafe.
+  SafeAutoCorrect: true
+  Enabled: true
+
+Performance/DoubleStartEndWith:
+  Enabled: true
+
+Performance/EndWith:
+  # This will change to a new method call which isn't guaranteed to be on the
+  # object. Switching these methods has to be done with knowledge of the types
+  # of the variables which rubocop doesn't have.
+  AutoCorrect: false
+  Enabled: true
+
+Performance/FixedSize:
+  Enabled: true
+
+Performance/FlatMap:
+  Enabled: true
+  EnabledForFlattenWithoutParams: false
+  # If enabled, this cop will warn about usages of
+  # `flatten` being called without any parameters.
+  # This can be dangerous since `flat_map` will only flatten 1 level, and
+  # `flatten` without any parameters can flatten multiple levels.
+
+Performance/InefficientHashSearch:
+  Enabled: true
+
+Performance/RangeInclude:
+  Enabled: true
+
+Performance/RedundantBlockCall:
+  Enabled: true
+
+Performance/RedundantMatch:
+  Enabled: true
+
+Performance/RedundantMerge:
+  Enabled: true
+
+Performance/RegexpMatch:
+  Enabled: true
+
+Performance/ReverseEach:
+  Enabled: true
+
+Performance/Size:
+  Enabled: true
+
+Performance/StartWith:
+  Enabled: true
+
+Performance/StringReplacement:
+  Enabled: true
+
+Performance/TimesMap:
+  Enabled: true
+
+Performance/UnfreezeString:
   Enabled: true

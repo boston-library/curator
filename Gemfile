@@ -24,6 +24,7 @@ group :development, :test do
   gem 'pry-byebug', '~> 3.7.0'
   gem 'pry-rails', '~> 0.3.9'
   gem 'rubocop', '~> 0.75.0', require: false
+  gem 'rubocop-performance', '~> 1.5.0', require: false
   gem 'rubocop-rails', '~> 2.3.2', require: false
   gem 'rubocop-rspec', require: false
   gem 'solr_wrapper', '~> 2.1.0'

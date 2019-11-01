@@ -28,6 +28,7 @@ require 'rubocop/rake_task'
 RuboCop::RakeTask.new(:rubocop) do |task|
   task.requires << 'rubocop-rails'
   task.requires << 'rubocop-rspec'
+  task.requires << 'rubocop-performance'
   # task.options << '--safe-auto-correct'
   # task.options << '--disable-uncorrectable'
   # task.options << '-d'
