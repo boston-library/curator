@@ -646,10 +646,11 @@ Performance/UnfreezeString:
   Enabled: true
 
 ####################### RSPEC ###############################
-RSpec/AlignLeftLetBrace:
+
+RSpec/BeforeAfterAll:
   Enabled: true
 
-RSpec/AlignRightLetBrace:
+RSpec/EmptyLineAfterHook:
   Enabled: true
 
 RSpec/AnyInstance:
