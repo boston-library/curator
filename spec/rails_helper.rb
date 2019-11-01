@@ -3,7 +3,7 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path('../internal/config/environment', __dir__)
+require File.expand_path('./internal/config/environment', __dir__)
 # Prevent database truncation if the environment is production
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 
@@ -13,7 +13,7 @@ Coveralls.wear!('rails')
 
 SimpleCov.formatter = Coveralls::SimpleCov::Formatter
 SimpleCov.start do
-  add_filter "/spec/"
+  add_filter '/spec/'
 end
 
 require 'vcr'
