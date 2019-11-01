@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CreateCuratorMappingsCollectionMembers < ActiveRecord::Migration[5.2]
   def change
     create_table :curator_mappings_collection_members do |t|

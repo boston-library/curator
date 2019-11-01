@@ -100,10 +100,10 @@ Rails/CreateTableWithTimestamps:
 # Cop supports --auto-correct.
 # Configuration parameters: Include.
 # Include: app/models/**/*.rb
-Rails/EnumHash:
-  Exclude:
-    - 'app/models/curator/metastreams/administrative.rb'
-    - 'app/models/curator/metastreams/workflow.rb'
+# Rails/EnumHash:
+#   Exclude:
+#     - 'app/models/curator/metastreams/administrative.rb'
+#     - 'app/models/curator/metastreams/workflow.rb'
 
 # Offense count: 17
 # Configuration parameters: Include.

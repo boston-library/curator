@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CreateCuratorMappingDescNameRoles < ActiveRecord::Migration[5.2]
   def change
     create_table :curator_mappings_desc_name_roles do |t|

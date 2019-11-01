@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CreateCuratorMappingDescTerms < ActiveRecord::Migration[5.2]
   def change
     create_table :curator_mappings_desc_terms do |t|

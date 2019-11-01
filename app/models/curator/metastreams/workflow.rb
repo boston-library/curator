@@ -4,8 +4,8 @@ module Curator
   class Metastreams::Workflow < ApplicationRecord
     belongs_to :workflowable, polymorphic: true, inverse_of: :workflow
 
-    enum publishing_state: [:draft, :review, :published]
-    enum processing_state: [:dervivatives, :complete]
+    enum publishing_state: { draft: 0, review: 1, published: 2 }.freeze
+    enum processing_state: { dervivatives: 0, complete: 1 }.freeze
 
     validates :ingest_origin, presence: true
   end
