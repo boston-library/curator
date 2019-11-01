@@ -7,7 +7,6 @@ AllCops:
     - 'spec/internal/**/*'
     - 'lib/curator/archivable.rb'
     - 'lib/curator/services/remote_service.rb'
-    - 'app/services/curator/filestreams/file_set_factory_service.rb'
   DisplayCopNames: true
   DisabledByDefault: true
   TargetRubyVersion: 2.5
@@ -553,6 +552,7 @@ Rails/Output:
     - 'app/services/curator/collection_factory_service.rb'
     - 'app/services/curator/institution_factory_service.rb'
     - 'app/services/curator/object_factory_service.rb'
+    - 'app/services/curator/filestreams/file_set_factory_service.rb'
     - 'db/seeds.rb'
     - 'lib/curator/engine.rb'
     - 'lib/curator/namespace_accessor.rb'

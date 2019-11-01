@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Curator
   class Filestreams::FileSetFactoryService < Services::Base
     include Services::FactoryService
@@ -10,7 +11,8 @@ module Curator
         Curator.filestreams.send("#{fileset_type}_class").transaction do
           object = Curator.digital_object_class.find_by(ark_id: object_ark_id)
           raise "DigitalObject #{object_ark_id} not found!" unless object
-          fileset = Curator::Filestreams::const_get(fileset_type.capitalize).new(ark_id: @ark_id)
+
+          fileset = Curator.filestreams.send("#{fileset_type}_class").new(ark_id: @ark_id)
           fileset.file_name_base = @json_attrs.fetch('filename_base')
           fileset.position = @json_attrs.fetch('position') || 0
           fileset.pagination = @json_attrs.fetch('pagination', {})
@@ -27,26 +29,29 @@ module Curator
             ex_obj = Curator.digital_object_class.find_by(ark_id: ex_ark_id) ||
                      Curator.collection_class.find_by(ark_id: ex_ark_id)
             raise "Bad exemplary id! #{ex_ark_id} is either not in the repo or is not a DigitalObject or Collection" unless ex_obj
-            build_exemplary(ex_obj) do |exemplary|
-              exemplary.exemplary_file_set = fileset
+
+            build_exemplary(ex_obj) do |exemplary_img|
+              exemplary_img.exemplary_file_set = fileset
             end
           end
 
           build_workflow(fileset) do |workflow|
-            workflow.send("#{:ingest_origin}=", @workflow_json_attrs.fetch(:ingest_origin, "#{ENV['HOME']}"))
+            workflow.send('ingest_origin=', @workflow_json_attrs.fetch(:ingest_origin, ENV['HOME'].to_s))
             processing_state = @workflow_json_attrs.fetch(:processing_state, nil)
-            workflow.send("#{:processing_state}=", processing_state) if processing_state
+            workflow.send('processing_state=', processing_state) if processing_state
           end
 
+          # rubocop:disable Layout/CommentIndentation
           # TODO: set access_edit_group permissions
           # build_administrative(fileset) do |administrative|
             # access_edit_group = @admin_json_attrs.fetch(:access_edit_group, nil)
-            # administrative.send("#{:access_edit_group}=", access_edit_group) if access_edit_group
+            # administrative.send('access_edit_group=', access_edit_group) if access_edit_group
           # end
+          # rubocop:enable Layout/CommentIndentation
           return fileset
         end
-      rescue => e
-        puts "#{e.to_s}"
+      rescue StandardError => e
+        puts e.to_s
       end
     end
   end
