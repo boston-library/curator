@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples 'workflowable' do |object_json|
+RSpec.shared_examples 'workflowable' do
   describe 'workflow metastream' do
     let(:workflow) { subject.workflow }
-    let(:workflow_json) { object_json['metastreams']['workflow'] }
+    let(:workflow_json) { @object_json['metastreams']['workflow'] }
 
     it 'creates the workflow object' do
       expect(workflow).to be_an_instance_of(Curator::Metastreams::Workflow)
@@ -17,10 +17,10 @@ RSpec.shared_examples 'workflowable' do |object_json|
   end
 end
 
-RSpec.shared_examples 'administratable' do |object_json|
+RSpec.shared_examples 'administratable' do
   describe 'administrative metastream' do
     let(:administrative) { subject.administrative }
-    let(:administrative_json) { object_json['metastreams']['administrative'] }
+    let(:administrative_json) { @object_json['metastreams']['administrative'] }
 
     it 'creates the administrative object' do
       expect(administrative).to be_an_instance_of(Curator::Metastreams::Administrative)
