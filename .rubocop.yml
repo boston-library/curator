@@ -646,18 +646,17 @@ Performance/UnfreezeString:
   Enabled: true
 
 ####################### RSPEC ###############################
+RSpec/AlignLeftLetBrace:
+  Enabled: false
 
-RSpec/BeforeAfterAll:
-  Enabled: true
-
-RSpec/EmptyLineAfterHook:
-  Enabled: true
+RSpec/AlignRightLetBrace:
+  Enabled: false
 
 RSpec/AnyInstance:
   Enabled: true
 
 RSpec/BeforeAfterAll:
-  Enabled: true
+  Enabled: false
 
 RSpec/Be:
   Enabled: true
@@ -678,7 +677,7 @@ RSpec/EmptyLineAfterExampleGroup:
   Enabled: true
 
 RSpec/EmptyLineAfterFinalLet:
-  Enabled: true
+  Enabled: false
 
 RSpec/EmptyLineAfterHook:
   Enabled: true
@@ -690,7 +689,7 @@ RSpec/ExpectChange:
   Enabled: true
 
 RSpec/ExpectInHook:
-  Enabled: true
+  Enabled: false
 
 RSpec/ExpectOutput:
   Enabled: true
@@ -703,7 +702,7 @@ RSpec/HooksBeforeExamples:
   Enabled: true
 
 RSpec/InstanceVariable:
-  Enabled: true
+  Enabled: false
 
 RSpec/InvalidPredicateMatcher:
   Enabled: true
@@ -721,7 +720,7 @@ RSpec/LeakyConstantDeclaration:
   Enabled: true
 
 RSpec/LetBeforeExamples:
-  Enabled: true
+  Enabled: false
 
 RSpec/LetSetup:
   Enabled: true
@@ -755,7 +754,7 @@ RSpec/ReturnFromStub:
   Enabled: true
 
 RSpec/ScatteredLet:
-  Enabled: true
+  Enabled: false
 
 RSpec/ScatteredSetup:
   Enabled: true

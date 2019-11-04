@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require_relative './../factory_service_metastreams_shared'
+
 RSpec.describe Curator::Filestreams::FileSetFactoryService do
   json_fixture = File.join(Curator::Engine.root.join('spec', 'fixtures', 'files', 'file_set.json'))
   object_json = JSON.parse(File.read(json_fixture)).fetch('file_set', {})
@@ -20,6 +23,7 @@ RSpec.describe Curator::Filestreams::FileSetFactoryService do
 
   describe '#call' do
     subject { @file_set }
+
     let(:file_set_type) { object_json['file_set_type'] }
 
     it 'has the correct properties' do
