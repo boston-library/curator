@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.shared_examples 'workflowable' do |object_json|
   describe 'workflow metastream' do
     let(:workflow) { subject.workflow }

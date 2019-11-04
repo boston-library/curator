@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require_relative './factory_service_metastreams_shared'
+
 RSpec.describe Curator::InstitutionFactoryService do
   json_fixture = File.join(Curator::Engine.root.join('spec', 'fixtures', 'files', 'institution.json'))
   object_json = JSON.parse(File.read(json_fixture)).fetch('institution', {})
