@@ -6,5 +6,7 @@ RSpec.shared_examples_for 'mintable', type: :model do
     it { is_expected.to have_db_index(:ark_id).unique(true) }
     it { is_expected.to validate_presence_of(:ark_id) }
     it { is_expected.to validate_uniqueness_of(:ark_id) }
+
+    # TODO: Setup callback tests
   end
 end
