@@ -33,7 +33,7 @@ RSpec.describe Curator::Filestreams::FileSetFactoryService do
     describe 'object relationships' do
       describe 'file_set_of' do
         let(:digital_object) { @file_set.file_set_of }
-        it 'should set the file_set_of relationship' do
+        it 'sets the file_set_of relationship' do
           expect(digital_object).to be_an_instance_of(Curator::DigitalObject)
           expect(digital_object.ark_id).to eq object_json['file_set_of']['ark_id']
         end
@@ -41,13 +41,13 @@ RSpec.describe Curator::Filestreams::FileSetFactoryService do
 
       describe 'exemplary_image_of' do
         let(:exemplary_image_object) { @file_set.exemplary_image_objects.first }
-        it 'should set the exemplary_image_object relationship' do
+        it 'sets the exemplary_image_object relationship' do
           expect(exemplary_image_object).to be_an_instance_of(Curator::DigitalObject)
           expect(exemplary_image_object.ark_id).to eq object_json['exemplary_image_of'][0]['ark_id']
         end
 
         let(:exemplary_image_collection) { @file_set.exemplary_image_collections.first }
-        it 'should set the exemplary_image_collection relationship' do
+        it 'sets the exemplary_image_collection relationship' do
           expect(exemplary_image_collection).to be_an_instance_of(Curator::Collection)
           expect(exemplary_image_collection.ark_id).to eq object_json['exemplary_image_of'][1]['ark_id']
         end
