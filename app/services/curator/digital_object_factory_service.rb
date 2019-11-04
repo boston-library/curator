@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Curator
-  class ObjectFactoryService < Services::Base
+  class DigitalObjectFactoryService < Services::Base
     include Services::FactoryService
 
     # TODO: set relationships for is_issue_of values
@@ -12,7 +12,7 @@ module Curator
           admin_set = Curator.collection_class.find_by(ark_id: admin_set_ark_id)
           raise "AdminSet #{admin_set_ark_id} not found!" unless admin_set
 
-          digital_object = Curator.digital_object_class.new(ark_id: @ark_id)
+          digital_object = Curator.digital_object_class.find_or_initialize_by(ark_id: @ark_id)
           digital_object.admin_set = admin_set
           collections = @json_attrs.fetch('exemplary_image_of', [])
           collections.each do |collection|

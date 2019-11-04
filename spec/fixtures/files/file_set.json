@@ -3,7 +3,7 @@
     "ark_id": "commonwealth:000000000",
     "created_at": "2019-05-20T14:46:08.240Z",
     "updated_at": "2019-05-20T14:51:03.796Z",
-    "fileset_of": {
+    "file_set_of": {
       "ark_id": "commonwealth:abcdefghi"
     },
     "exemplary_image_of": [
@@ -15,8 +15,8 @@
       }
     ],
     "position": 0,
-    "fileset_type": "image",
-    "filename_base": "06_01_016691",
+    "file_set_type": "image",
+    "file_name_base": "06_01_016691",
     "pagination": {
       "page_label": "3",
       "page_type": "TOC",
