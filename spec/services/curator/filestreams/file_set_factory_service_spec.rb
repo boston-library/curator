@@ -8,9 +8,11 @@ RSpec.describe Curator::Filestreams::FileSetFactoryService do
     # create parent DigitalObject and Collection
     parent_col = create(:curator_collection)
     parent_obj = create(:curator_digital_object)
+    parent_obj.workflow = create(:curator_metastreams_workflow)
     object_json['file_set_of']['ark_id'] = parent_obj.ark_id
     object_json['exemplary_image_of'][0]['ark_id'] = parent_obj.ark_id
     object_json['exemplary_image_of'][1]['ark_id'] = parent_col.ark_id
+    object_json['metastreams']['workflow']['publishing_state'] = parent_obj.workflow.publishing_state
     expect do
       @file_set = described_class.call(json_data: object_json)
     end.to change { Curator::Filestreams::FileSet.count }.by(1)
@@ -24,7 +26,7 @@ RSpec.describe Curator::Filestreams::FileSetFactoryService do
       %w(ark_id position file_name_base pagination).each do |attr|
         expect(@file_set.send(attr)).to eq object_json[attr]
       end
-      expect(subject.file_set_type).to eq Curator.filestreams.send("#{file_set_type}_class")
+      expect(subject.file_set_type).to eq Curator.filestreams.send("#{file_set_type}_class_name")
       expect(subject.updated_at).to eq Time.zone.parse(object_json['updated_at'])
     end
 
@@ -46,15 +48,11 @@ RSpec.describe Curator::Filestreams::FileSetFactoryService do
 
         let(:exemplary_image_collection) { @file_set.exemplary_image_collections.first }
         it 'should set the exemplary_image_collection relationship' do
-          expect(exemplary_image_collection).to be_an_instance_of(Curator::DigitalObject)
+          expect(exemplary_image_collection).to be_an_instance_of(Curator::Collection)
           expect(exemplary_image_collection.ark_id).to eq object_json['exemplary_image_of'][1]['ark_id']
         end
       end
     end
-
-    # file_set.exemplary_image_objects => Curator::DigitalObject
-    # file_set.exemplary_image_collections => Curator::Collection
-    # file_set.exemplary_image_of_mappings => Curator::Mappings::ExemplaryImage
 
     it_behaves_like 'workflowable', object_json
   end

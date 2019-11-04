@@ -39,15 +39,17 @@ module Curator
             workflow.send('ingest_origin=', @workflow_json_attrs.fetch(:ingest_origin, ENV['HOME'].to_s))
             processing_state = @workflow_json_attrs.fetch(:processing_state, nil)
             workflow.send('processing_state=', processing_state) if processing_state
+            # set publishing state to same value as parent DigitalObject
+            publishing_state = object.workflow.publishing_state
+            workflow.send('publishing_state=', publishing_state) if publishing_state
           end
 
-          # rubocop:disable Layout/CommentIndentation
           # TODO: set access_edit_group permissions
           # build_administrative(file_set) do |administrative|
-            # access_edit_group = @admin_json_attrs.fetch(:access_edit_group, nil)
-            # administrative.send('access_edit_group=', access_edit_group) if access_edit_group
+          #  access_edit_group = @admin_json_attrs.fetch(:access_edit_group, nil)
+          #  administrative.send('access_edit_group=', access_edit_group) if access_edit_group
           # end
-          # rubocop:enable Layout/CommentIndentation
+
           return file_set
         end
       rescue StandardError => e
