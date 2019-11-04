@@ -4,16 +4,14 @@ require 'rails_helper'
 require_relative './factory_service_metastreams_shared'
 
 RSpec.describe Curator::DigitalObjectFactoryService do
-  json_fixture = File.join(Curator::Engine.root.join('spec', 'fixtures', 'files', 'digital_object.json'))
-  object_json = JSON.parse(File.read(json_fixture)).fetch('digital_object', {})
-
   before(:all) do
+    @object_json = load_json_fixture('digital_object.json', 'digital_object')
     # create parent Collection
     parent = create(:curator_collection)
-    object_json['admin_set']['ark_id'] = parent.ark_id
-    object_json['is_member_of_collection'][0]['ark_id'] = parent.ark_id
+    @object_json['admin_set']['ark_id'] = parent.ark_id
+    @object_json['is_member_of_collection'][0]['ark_id'] = parent.ark_id
     expect do
-      @object = described_class.call(json_data: object_json)
+      @object = described_class.call(json_data: @object_json)
     end.to change { Curator::DigitalObject.count }.by(1)
   end
 
@@ -21,8 +19,8 @@ RSpec.describe Curator::DigitalObjectFactoryService do
     subject { @object }
 
     it 'has the correct properties' do
-      expect(subject.ark_id).to eq object_json['ark_id']
-      expect(subject.created_at).to eq Time.zone.parse(object_json['created_at'])
+      expect(subject.ark_id).to eq @object_json['ark_id']
+      expect(subject.created_at).to eq Time.zone.parse(@object_json['created_at'])
     end
 
     describe 'setting admin set' do
@@ -43,7 +41,7 @@ RSpec.describe Curator::DigitalObjectFactoryService do
 
     describe 'descriptive metastream' do
       let(:descriptive) { subject.descriptive }
-      let(:desc_json)   { object_json['metastreams']['descriptive'] }
+      let(:desc_json)   { @object_json['metastreams']['descriptive'] }
       let(:simple_fields) do
         %w(abstract access_restrictions digital_origin frequency issuance origin_event extent
            physical_location_department physical_location_shelf_locator place_of_publication
@@ -269,12 +267,12 @@ RSpec.describe Curator::DigitalObjectFactoryService do
       end
     end
 
-    it_behaves_like 'workflowable', object_json
-    it_behaves_like 'administratable', object_json
+    it_behaves_like 'workflowable', @object_json
+    it_behaves_like 'administratable', @object_json
 
     describe 'administrative metastream' do
       let(:administrative) { subject.administrative }
-      let(:administrative_json) { object_json['metastreams']['administrative'] }
+      let(:administrative_json) { @object_json['metastreams']['administrative'] }
       it 'sets the correct administrative metadata' do
         expect(administrative.description_standard).to eq administrative_json['description_standard']
         expect(administrative.flagged).to eq administrative_json['flagged']
