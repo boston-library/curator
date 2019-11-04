@@ -2,8 +2,6 @@
 
 require 'rails_helper'
 
-module Curator
-  RSpec.describe Metastreams::Descriptive, type: :model do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
+RSpec.describe Curator::Metastreams::Descriptive, type: :model do
+  pending "add some examples to (or delete) #{__FILE__}"
 end

@@ -2,12 +2,9 @@
 
 require 'rails_helper'
 require_relative './shared/mintable.rb'
-module Curator
-  RSpec.describe Institution, type: :model do
-    let!(:institution) { create(:curator_institution) }
 
-    subject { institution }
+RSpec.describe Curator::Institution, type: :model do
+  subject { create(:curator_institution) }
 
-    it_behaves_like 'mintable'
-  end
+  it_behaves_like 'mintable'
 end
