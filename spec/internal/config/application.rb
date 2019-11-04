@@ -38,5 +38,7 @@ module Internal
         config.console = Pry
       end
     end
+    config.active_storage.analyzers = []
+    config.active_storage.previewers = []
   end
 end
