@@ -6,6 +6,9 @@ module Curator
     include Curator::Metastreams::Administratable
     include Curator::Metastreams::Workflowable
 
+    validates :url, format: { with: URI.regexp(%w(http https)), allow_blank: true }
+    validates :abstract, presence: { allow_blank: true }
+
     belongs_to :location, -> { includes(:authority) }, inverse_of: :institution_locations, class_name: Curator.controlled_terms.geographic_class_name, optional: true
 
     has_many :host_collections, inverse_of: :institution, class_name: Curator.mappings.host_collection_class_name, dependent: :destroy
