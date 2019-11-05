@@ -2,13 +2,13 @@
   "file": {
     "created_at": "2019-05-20T14:46:08.240Z",
     "updated_at": "2019-05-20T14:51:03.796Z",
-    "file_name": "06_01_016691.tif",
-    "file_type": "ImageMaster",
-    "content_type": "image/tiff",
-    "byte_size": 7911620,
-    "checksum": "9c5498c54a10d85ad305c05406dd1d1e",
+    "file_name": "sample-thumbnail.jpg",
+    "file_type": "ImageThumbnail300",
+    "content_type": "image/jpeg",
+    "byte_size": 8977,
+    "checksum": "466561a5c5080652b707bc44b4ea598c",
     "metadata": {
-      "ingest_filepath": "/home/hydra/mapped/scan_images/BPLDC/_06_01/06_01_016691.tif"
+      "ingest_filepath": "sample-thumbnail.jpg"
     },
     "filestream_of": {
       "ark_id": "commonwealth:000000000"
