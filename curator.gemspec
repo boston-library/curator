@@ -34,7 +34,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'active_model_serializers', '~> 0.10.0' # May want to change to fast jsonapi
   spec.add_dependency 'acts_as_list', '~> 0.9'
   spec.add_dependency 'addressable', '2.7'
-  spec.add_dependency 'attr_json', '~> 0.7.0'
+  spec.add_dependency 'attr_json', '~> 1.0.0'
   spec.add_dependency 'faraday', '~> 0.17'
   spec.add_dependency 'faraday-http-cache', '~> 2.0'
   spec.add_dependency 'faraday_middleware', '~> 0.13'
