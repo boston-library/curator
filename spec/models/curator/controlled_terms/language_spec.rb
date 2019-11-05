@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../shared/controlled_terms/nomenclature'
 
-module Curator
-  RSpec.describe ControlledTerms::Language, type: :model do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
+RSpec.describe Curator::ControlledTerms::Language, type: :model do
+  it_behaves_like 'nomenclature'
 end

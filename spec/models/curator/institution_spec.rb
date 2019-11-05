@@ -17,6 +17,9 @@ RSpec.describe Curator::Institution, type: :model do
   it { is_expected.to have_db_column(:url).of_type(:string) }
   it { is_expected.to have_db_column(:abstract).of_type(:text).with_options(default: '') }
 
+  it { is_expected.to allow_values('', nil, 'http://myinstitution.org').for(:url) }
+  it { is_expected.not_to allow_value('not a website string').for(:url) }
+
   describe 'Associations' do
     it_behaves_like 'administratable'
     it_behaves_like 'workflowable'
