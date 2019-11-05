@@ -25,9 +25,8 @@ RSpec.describe Curator::ControlledTerms::Authority, type: :model do
   it { is_expected.not_to allow_value('not a website string').for(:base_url) }
 
   describe '.cannonical_json_format' do
-
-    let(:skos_auth) { Curator::ControlledTerms::Authority.find_by(code: 'lcsh') }
-    let(:jsonld_auth) { Curator::ControlledTerms::Authority.find_by(code: 'aat') }
+    let(:skos_auth) { described_class.find_by(code: 'lcsh') }
+    let(:jsonld_auth) { described_class.find_by(code: 'aat') }
 
     it 'expects the correct response from authority instance' do
       expect(subject.cannonical_json_format).to be_nil

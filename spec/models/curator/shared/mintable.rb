@@ -8,12 +8,12 @@ RSpec.shared_examples_for 'mintable', type: :model do
     it { is_expected.to validate_uniqueness_of(:ark_id) }
   end
 
-  describe "#generate_ark_id on create" do
+  describe '#generate_ark_id on create' do
     subject { build(factory_key_for(described_class), ark_id: nil) }
 
     it 'generates an #ark_id #before_validation on create if there is none' do
       # valid? invokes the before_validation callback without saving
-      expect { subject.valid? }.to change { subject.ark_id }.
+      expect { subject.valid? }.to change(subject, :ark_id).
       from(nil).
       to(a_string_starting_with('commonwealth'))
     end
