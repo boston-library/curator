@@ -10,6 +10,7 @@ AllCops:
     - 'spec/fixtures/**/'
     - 'lib/curator/archivable.rb'
     - 'lib/curator/services/remote_service.rb'
+    - 'app/services/curator/filestreams/file_factory_service.rb'
   DisplayCopNames: true
   DisabledByDefault: true
   TargetRubyVersion: 2.5
@@ -421,6 +422,8 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Enabled: true
   Max: 90
+  Exclude:
+    - 'spec/**/*'
 
 Metrics/ClassLength:
   Enabled: true
@@ -536,6 +539,7 @@ Rails/Output:
     - 'app/services/curator/collection_factory_service.rb'
     - 'app/services/curator/institution_factory_service.rb'
     - 'app/services/curator/digital_object_factory_service.rb'
+    - 'app/services/curator/filestreams/file_factory_service.rb'
     - 'app/services/curator/filestreams/file_set_factory_service.rb'
     - 'db/seeds.rb'
     - 'lib/curator/engine.rb'
