@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../shared/optimistic_lockable'
+require_relative '../shared/timestampable'
 
 RSpec.describe Curator::Metastreams::Descriptive, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it_behaves_like 'optimistic_lockable'
+  it_behaves_like 'timestampable'
 end
