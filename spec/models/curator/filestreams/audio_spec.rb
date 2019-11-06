@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../shared/filestreams/file_set'
 
 RSpec.describe Curator::Filestreams::Audio, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  subject { create(:curator_filestreams_audio) }
+  it_behaves_like 'file_set'
 end
