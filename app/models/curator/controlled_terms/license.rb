@@ -10,6 +10,6 @@ module Curator
     attr_json :uri, :string
 
     validates :label, presence: true
-    validates :uri, format: { with: URI.regexp(%w(http https)), allow_nil: true }
+    validates :uri, format: { with: URI.regexp(%w(http https)), allow_blank: true }
   end
 end

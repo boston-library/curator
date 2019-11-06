@@ -17,4 +17,26 @@ RSpec.shared_examples 'nomenclature', type: :model do
   it { is_expected.to have_db_index(:type) }
   it { is_expected.to have_db_index(:term_data) }
   it { is_expected.to have_db_index("(((term_data ->> 'id_from_auth'::text))::character varying)") }
+
+  it { is_expected.to validate_presence_of(:type) }
+  it { is_expected.to validate_inclusion_of(:type).
+    in_array(Curator::ControlledTerms.nomenclature_types.collect { |type| "Curator::ControlledTerms::#{type}" }) }
+
+  describe 'attr_json configuration' do
+    it 'expects attr_json to be configured correctly' do
+      expect(described_class).to respond_to(:attr_json_config, :attr_json, :attr_json_registry, :jsonb_contains)
+      expect(described_class.attr_json_config.default_container_attribute).to be(:term_data)
+      expect(subject).to respond_to(:attr_json_changes)
+    end
+    describe 'base nomenclature json attributes' do
+      it { is_expected.to respond_to(:label) }
+      it { is_expected.to respond_to(:id_from_auth) }
+
+      it 'expects the attributes to have specific types' do
+        expect(described_class.attr_json_registry.fetch(:label, nil)&.type).to be_a_kind_of(ActiveModel::Type::String)
+        expect(described_class.attr_json_registry.fetch(:id_from_auth, nil)&.type).to be_a_kind_of(ActiveModel::Type::String)
+      end
+    end
+  end
+
 end

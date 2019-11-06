@@ -2,8 +2,6 @@
 
 require 'rails_helper'
 
-module Curator
-  RSpec.describe Mappings::ExemplaryImage, type: :model do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
+RSpec.describe Curator::Mappings::ExemplaryImage, type: :model do
+  pending "add some examples to (or delete) #{__FILE__}"
 end
