@@ -39,7 +39,7 @@ RSpec.describe Curator::ControlledTerms::Genre, type: :model do
     end
   end
 
-  describe "Associations" do
+  describe 'Associations' do
     it_behaves_like 'mappable'
 
     it { is_expected.to belong_to(:authority).

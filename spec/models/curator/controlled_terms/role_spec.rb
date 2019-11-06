@@ -22,6 +22,7 @@ RSpec.describe Curator::ControlledTerms::Role, type: :model do
                         inverse_of(:roles).
                         class_name('Curator::ControlledTerms::Authority').
                         required }
+
     it { is_expected.to have_many(:desc_name_roles).
                         inverse_of(:role).
                         class_name('Curator::Mappings::DescNameRole').

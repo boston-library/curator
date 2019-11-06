@@ -19,6 +19,7 @@ RSpec.shared_examples 'nomenclature', type: :model do
   it { is_expected.to have_db_index("(((term_data ->> 'id_from_auth'::text))::character varying)") }
 
   it { is_expected.to validate_presence_of(:type) }
+
   it { is_expected.to validate_inclusion_of(:type).
     in_array(Curator::ControlledTerms.nomenclature_types.collect { |type| "Curator::ControlledTerms::#{type}" }) }
 
@@ -28,6 +29,7 @@ RSpec.shared_examples 'nomenclature', type: :model do
       expect(described_class.attr_json_config.default_container_attribute).to be(:term_data)
       expect(subject).to respond_to(:attr_json_changes)
     end
+
     describe 'base nomenclature json attributes' do
       it { is_expected.to respond_to(:label) }
       it { is_expected.to respond_to(:id_from_auth) }
@@ -38,5 +40,4 @@ RSpec.shared_examples 'nomenclature', type: :model do
       end
     end
   end
-
 end

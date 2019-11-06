@@ -11,7 +11,7 @@ RSpec.describe Curator::ControlledTerms::License, type: :model do
   describe 'attr_json attributes' do
     it { is_expected.to validate_presence_of(:label) }
     it { is_expected.to respond_to(:uri) }
-    it { is_expected.to allow_values(nil, '', 'http://something.org', 'https://somethingelse.org' ).for(:uri) }
+    it { is_expected.to allow_values(nil, '', 'http://something.org', 'https://somethingelse.org').for(:uri) }
     it { is_expected.not_to allow_values('not', 'a', 'blank', 'string', 'or', 'url').for(:uri) }
 
     it 'expects the attributes to have specific types' do

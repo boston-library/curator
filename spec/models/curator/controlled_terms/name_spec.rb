@@ -28,11 +28,13 @@ RSpec.describe Curator::ControlledTerms::Name, type: :model do
                         inverse_of(:names).
                         class_name('Curator::ControlledTerms::Authority').
                         optional }
+
     it { is_expected.to have_many(:desc_name_roles).
                         inverse_of(:name).
                         class_name('Curator::Mappings::DescNameRole').
                         with_foreign_key(:name_id).
                         dependent(:destroy) }
+
     it { is_expected.to have_many(:physical_locations_of).
                         inverse_of(:physical_location).
                         class_name('Curator::Metastreams::Descriptive').
