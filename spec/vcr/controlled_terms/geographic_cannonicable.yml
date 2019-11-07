@@ -1,0 +1,588 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://vocab.getty.edu/tgn/7004939.jsonld
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - '30'
+  response:
+    status:
+      code: 303
+      message: See Other
+    headers:
+      Server:
+      - Apache-Coyote/1.1
+      Location:
+      - http://vocab.getty.edu/download/jsonld?uri=http://vocab.getty.edu/tgn/7004939.jsonld
+      Content-Length:
+      - '0'
+      Date:
+      - Thu, 07 Nov 2019 20:22:57 GMT
+      Set-Cookie:
+      - BIGipServerForest=!vlye7LhMcYpb4YqfO3RLu5BwPxouOS8xbZeoEdhVikP71iDuxZKK4O6ydXPeegPrkrJlP+ywRaRO4A==;
+        path=/; Httponly
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Thu, 07 Nov 2019 20:22:57 GMT
+- request:
+    method: get
+    uri: http://vocab.getty.edu/download/jsonld?uri=http://vocab.getty.edu/tgn/7004939.jsonld
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - '30'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - Apache-Coyote/1.1
+      Content-Disposition:
+      - attachment; filename="tgn_7004939.jsonld"
+      Content-Type:
+      - application/ld+json;charset=UTF-8
+      Content-Length:
+      - '18421'
+      Date:
+      - Thu, 07 Nov 2019 20:22:57 GMT
+      Set-Cookie:
+      - BIGipServerForest=!SOo5cKICIJd2hz6fO3RLu5BwPxouOd40rBJ97lpCSpnJDEusT1eGtLqF5ocegnICYka7vu4mDjb8MQ==;
+        path=/; Httponly
+    body:
+      encoding: UTF-8
+      string: |
+        [ {
+          "@id" : "http://vocab.getty.edu/tgn/7004939",
+          "@type" : [ "http://vocab.getty.edu/ontology#Subject", "http://www.w3.org/2004/02/skos/core#Concept", "http://vocab.getty.edu/ontology#AdminPlaceConcept" ],
+          "http://creativecommons.org/ns#license" : [ {
+            "@id" : "http://opendatacommons.org/licenses/by/1.0/"
+          } ],
+          "http://purl.org/dc/elements/1.1/identifier" : [ {
+            "@value" : "7004939"
+          } ],
+          "http://purl.org/dc/terms/contributor" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/contrib/10000000"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/contrib/10000002"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/contrib/10000001"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/contrib/10000003"
+          } ],
+          "http://purl.org/dc/terms/created" : [ {
+            "@type" : "http://www.w3.org/2001/XMLSchema#dateTime",
+            "@value" : "1991-09-13T03:13:00"
+          } ],
+          "http://purl.org/dc/terms/license" : [ {
+            "@id" : "http://opendatacommons.org/licenses/by/1.0/"
+          } ],
+          "http://purl.org/dc/terms/modified" : [ {
+            "@type" : "http://www.w3.org/2001/XMLSchema#dateTime",
+            "@value" : "2010-06-03T23:13:28"
+          }, {
+            "@type" : "http://www.w3.org/2001/XMLSchema#dateTime",
+            "@value" : "2009-01-09T15:39:43"
+          } ],
+          "http://purl.org/dc/terms/source" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/source/9005498"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/source/9006449"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/source/2009007639"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/source/9006339-subject-7004939"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/source/9006548-subject-7004939"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/source/9006567-subject-7004939"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/source/2009007144-subject-7004939"
+          } ],
+          "http://purl.org/iso25964/skos-thes#broaderPartitive" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/7003132"
+          } ],
+          "http://rdfs.org/ns/void#inDataset" : [ {
+            "@id" : "http://vocab.getty.edu/dataset/tgn"
+          } ],
+          "http://vocab.getty.edu/ontology#broader" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/7003132"
+          } ],
+          "http://vocab.getty.edu/ontology#broaderExtended" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/7003132"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/1000003"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/7008516"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/1000080"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/7029392"
+          } ],
+          "http://vocab.getty.edu/ontology#broaderPartitive" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/7003132"
+          } ],
+          "http://vocab.getty.edu/ontology#broaderPartitiveExtended" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/7003132"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/1000003"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/7008516"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/1000080"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/7029392"
+          } ],
+          "http://vocab.getty.edu/ontology#broaderPreferred" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/7003132"
+          } ],
+          "http://vocab.getty.edu/ontology#broaderPreferredExtended" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/7003132"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/1000003"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/7008516"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/1000080"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/7029392"
+          } ],
+          "http://vocab.getty.edu/ontology#displayOrder" : [ {
+            "@type" : "http://www.w3.org/2001/XMLSchema#positiveInteger",
+            "@value" : "159"
+          } ],
+          "http://vocab.getty.edu/ontology#parentString" : [ {
+            "@value" : "Piacenza, Emilia-Romagna, Italy, Europe, World"
+          } ],
+          "http://vocab.getty.edu/ontology#parentStringAbbrev" : [ {
+            "@value" : "Piacenza, Emilia-Romagna, ... World"
+          } ],
+          "http://vocab.getty.edu/ontology#placeType" : [ {
+            "@id" : "http://vocab.getty.edu/aat/300008347"
+          }, {
+            "@id" : "http://vocab.getty.edu/aat/300387223"
+          }, {
+            "@id" : "http://vocab.getty.edu/aat/300008375"
+          } ],
+          "http://vocab.getty.edu/ontology#placeTypeNonPreferred" : [ {
+            "@id" : "http://vocab.getty.edu/aat/300387223"
+          }, {
+            "@id" : "http://vocab.getty.edu/aat/300008375"
+          } ],
+          "http://vocab.getty.edu/ontology#placeTypePreferred" : [ {
+            "@id" : "http://vocab.getty.edu/aat/300008347"
+          } ],
+          "http://vocab.getty.edu/ontology#prefLabelGVP" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/term/46436"
+          } ],
+          "http://www.w3.org/2000/01/rdf-schema#label" : [ {
+            "@value" : "Placentia"
+          }, {
+            "@value" : "Piacenza"
+          } ],
+          "http://www.w3.org/2000/01/rdf-schema#seeAlso" : [ {
+            "@id" : "http://www.getty.edu/vow/TGNFullDisplay?find=&place=&nation=&subjectid=7004939"
+          } ],
+          "http://www.w3.org/2004/02/skos/core#altLabel" : [ {
+            "@value" : "Placentia"
+          } ],
+          "http://www.w3.org/2004/02/skos/core#broader" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/7003132"
+          } ],
+          "http://www.w3.org/2004/02/skos/core#broaderTransitive" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/7003132"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/1000003"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/7008516"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/1000080"
+          } ],
+          "http://www.w3.org/2004/02/skos/core#changeNote" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/rev/5000761504"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/rev/5009361003"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/rev/5009361004"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/rev/5011268981"
+          } ],
+          "http://www.w3.org/2004/02/skos/core#inScheme" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/"
+          } ],
+          "http://www.w3.org/2004/02/skos/core#note" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/scopeNote/41558"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/rev/5000761504"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/rev/5009361003"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/rev/5009361004"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/rev/5011268981"
+          } ],
+          "http://www.w3.org/2004/02/skos/core#prefLabel" : [ {
+            "@value" : "Piacenza"
+          } ],
+          "http://www.w3.org/2004/02/skos/core#scopeNote" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/scopeNote/41558"
+          } ],
+          "http://www.w3.org/2008/05/skos-xl#altLabel" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/term/170045"
+          } ],
+          "http://www.w3.org/2008/05/skos-xl#prefLabel" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/term/46436"
+          } ],
+          "http://www.w3.org/ns/prov#wasGeneratedBy" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/rev/5000761504"
+          } ],
+          "http://xmlns.com/foaf/0.1/focus" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/7004939-place"
+          } ]
+        }, {
+          "@id" : "http://vocab.getty.edu/tgn/7004939-geometry",
+          "@type" : [ "http://schema.org/GeoCoordinates" ],
+          "http://schema.org/latitude" : [ {
+            "@type" : "http://www.w3.org/2001/XMLSchema#decimal",
+            "@value" : "45.016667"
+          } ],
+          "http://schema.org/longitude" : [ {
+            "@type" : "http://www.w3.org/2001/XMLSchema#decimal",
+            "@value" : "9.666667"
+          } ]
+        }, {
+          "@id" : "http://vocab.getty.edu/tgn/7004939-place",
+          "@type" : [ "http://schema.org/Place", "http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing" ],
+          "http://creativecommons.org/ns#license" : [ {
+            "@id" : "http://opendatacommons.org/licenses/by/1.0/"
+          } ],
+          "http://purl.org/dc/terms/license" : [ {
+            "@id" : "http://opendatacommons.org/licenses/by/1.0/"
+          } ],
+          "http://rdfs.org/ns/void#inDataset" : [ {
+            "@id" : "http://vocab.getty.edu/dataset/tgn"
+          } ],
+          "http://schema.org/geo" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/7004939-geometry"
+          } ],
+          "http://www.w3.org/2003/01/geo/wgs84_pos#lat" : [ {
+            "@type" : "http://www.w3.org/2001/XMLSchema#decimal",
+            "@value" : "45.016667"
+          } ],
+          "http://www.w3.org/2003/01/geo/wgs84_pos#long" : [ {
+            "@type" : "http://www.w3.org/2001/XMLSchema#decimal",
+            "@value" : "9.666667"
+          } ]
+        }, {
+          "@id" : "http://vocab.getty.edu/tgn/rel/7004939-placeType-300008347",
+          "@type" : [ "http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement" ],
+          "http://vocab.getty.edu/ontology#displayOrder" : [ {
+            "@type" : "http://www.w3.org/2001/XMLSchema#positiveInteger",
+            "@value" : "1"
+          } ],
+          "http://vocab.getty.edu/ontology#estStart" : [ {
+            "@type" : "http://www.w3.org/2001/XMLSchema#gYear",
+            "@value" : "-0300"
+          } ],
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#object" : [ {
+            "@id" : "http://vocab.getty.edu/aat/300008347"
+          } ],
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate" : [ {
+            "@id" : "http://vocab.getty.edu/ontology#placeTypePreferred"
+          } ],
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#subject" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/7004939"
+          } ],
+          "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+            "@value" : "founded by Romans, 218 BC"
+          } ]
+        }, {
+          "@id" : "http://vocab.getty.edu/tgn/rel/7004939-placeType-300008375",
+          "@type" : [ "http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement" ],
+          "http://vocab.getty.edu/ontology#displayOrder" : [ {
+            "@type" : "http://www.w3.org/2001/XMLSchema#positiveInteger",
+            "@value" : "2"
+          } ],
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#object" : [ {
+            "@id" : "http://vocab.getty.edu/aat/300008375"
+          } ],
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate" : [ {
+            "@id" : "http://vocab.getty.edu/ontology#placeTypeNonPreferred"
+          } ],
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#subject" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/7004939"
+          } ]
+        }, {
+          "@id" : "http://vocab.getty.edu/tgn/rel/7004939-placeType-300387223",
+          "@type" : [ "http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement" ],
+          "http://vocab.getty.edu/ontology#displayOrder" : [ {
+            "@type" : "http://www.w3.org/2001/XMLSchema#positiveInteger",
+            "@value" : "3"
+          } ],
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#object" : [ {
+            "@id" : "http://vocab.getty.edu/aat/300387223"
+          } ],
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate" : [ {
+            "@id" : "http://vocab.getty.edu/ontology#placeTypeNonPreferred"
+          } ],
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#subject" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/7004939"
+          } ]
+        }, {
+          "@id" : "http://vocab.getty.edu/tgn/rev/5000761504",
+          "@type" : [ "http://www.w3.org/ns/prov#Activity", "http://www.w3.org/ns/prov#Create" ],
+          "http://purl.org/dc/elements/1.1/type" : [ {
+            "@value" : "created"
+          } ],
+          "http://www.w3.org/ns/prov#startedAtTime" : [ {
+            "@type" : "http://www.w3.org/2001/XMLSchema#dateTime",
+            "@value" : "1991-09-13T03:13:00"
+          } ]
+        }, {
+          "@id" : "http://vocab.getty.edu/tgn/rev/5009361003",
+          "@type" : [ "http://www.w3.org/ns/prov#Activity", "http://www.w3.org/ns/prov#Modify" ],
+          "http://purl.org/dc/elements/1.1/description" : [ {
+            "@value" : "Language: "
+          } ],
+          "http://purl.org/dc/elements/1.1/type" : [ {
+            "@value" : "note updated"
+          } ],
+          "http://www.w3.org/ns/prov#startedAtTime" : [ {
+            "@type" : "http://www.w3.org/2001/XMLSchema#dateTime",
+            "@value" : "2009-01-09T15:39:43"
+          } ],
+          "http://www.w3.org/ns/prov#used" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/7004939"
+          } ]
+        }, {
+          "@id" : "http://vocab.getty.edu/tgn/rev/5009361004",
+          "@type" : [ "http://www.w3.org/ns/prov#Activity", "http://www.w3.org/ns/prov#Modify" ],
+          "http://purl.org/dc/elements/1.1/type" : [ {
+            "@value" : "updated"
+          } ],
+          "http://www.w3.org/ns/prov#startedAtTime" : [ {
+            "@type" : "http://www.w3.org/2001/XMLSchema#dateTime",
+            "@value" : "2009-01-09T15:39:43"
+          } ],
+          "http://www.w3.org/ns/prov#used" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/7004939"
+          } ]
+        }, {
+          "@id" : "http://vocab.getty.edu/tgn/scopeNote/41558",
+          "@type" : [ "http://vocab.getty.edu/ontology#ScopeNote" ],
+          "http://purl.org/dc/elements/1.1/identifier" : [ {
+            "@value" : "41558"
+          } ],
+          "http://purl.org/dc/terms/contributor" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/contrib/10000000"
+          } ],
+          "http://purl.org/dc/terms/language" : [ {
+            "@id" : "http://vocab.getty.edu/aat/300388277"
+          } ],
+          "http://purl.org/dc/terms/source" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/source/9006267"
+          } ],
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#value" : [ {
+            "@language" : "en",
+            "@value" : "Founded by the Romans in 218 BCE, it was destroyed by the Gauls 200 BC & later rebuilt; became part of the Lombard League in the 12th cen.; under the control of the Visconti & Sforza families from 1337 to 1512."
+          } ]
+        }, {
+          "@id" : "http://vocab.getty.edu/tgn/source/2009007144-subject-7004939",
+          "@type" : [ "http://purl.org/ontology/bibo/DocumentPart" ],
+          "http://purl.org/dc/terms/isPartOf" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/source/2009007144"
+          } ],
+          "http://purl.org/ontology/bibo/locator" : [ {
+            "@value" : "-124464"
+          } ]
+        }, {
+          "@id" : "http://vocab.getty.edu/tgn/source/9006339-subject-7004939",
+          "@type" : [ "http://purl.org/ontology/bibo/DocumentPart" ],
+          "http://purl.org/dc/terms/isPartOf" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/source/9006339"
+          } ],
+          "http://purl.org/ontology/bibo/locator" : [ {
+            "@value" : "716"
+          } ]
+        }, {
+          "@id" : "http://vocab.getty.edu/tgn/source/9006339-term-170045",
+          "@type" : [ "http://purl.org/ontology/bibo/DocumentPart" ],
+          "http://purl.org/dc/terms/isPartOf" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/source/9006339"
+          } ],
+          "http://purl.org/ontology/bibo/locator" : [ {
+            "@value" : "716"
+          } ]
+        }, {
+          "@id" : "http://vocab.getty.edu/tgn/source/9006548-subject-7004939",
+          "@type" : [ "http://purl.org/ontology/bibo/DocumentPart" ],
+          "http://purl.org/dc/terms/isPartOf" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/source/9006548"
+          } ],
+          "http://purl.org/ontology/bibo/locator" : [ {
+            "@value" : "353"
+          } ]
+        }, {
+          "@id" : "http://vocab.getty.edu/tgn/source/9006548-term-170045",
+          "@type" : [ "http://purl.org/ontology/bibo/DocumentPart" ],
+          "http://purl.org/dc/terms/isPartOf" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/source/9006548"
+          } ],
+          "http://purl.org/ontology/bibo/locator" : [ {
+            "@value" : "353"
+          } ]
+        }, {
+          "@id" : "http://vocab.getty.edu/tgn/source/9006567-subject-7004939",
+          "@type" : [ "http://purl.org/ontology/bibo/DocumentPart" ],
+          "http://purl.org/dc/terms/isPartOf" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/source/9006567"
+          } ],
+          "http://purl.org/ontology/bibo/locator" : [ {
+            "@value" : "150"
+          } ]
+        }, {
+          "@id" : "http://vocab.getty.edu/tgn/source/9006567-term-46436",
+          "@type" : [ "http://purl.org/ontology/bibo/DocumentPart" ],
+          "http://purl.org/dc/terms/isPartOf" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/source/9006567"
+          } ],
+          "http://purl.org/ontology/bibo/locator" : [ {
+            "@value" : "150"
+          } ]
+        }, {
+          "@id" : "http://vocab.getty.edu/tgn/term/170045",
+          "@type" : [ "http://www.w3.org/2008/05/skos-xl#Label" ],
+          "http://purl.org/dc/elements/1.1/identifier" : [ {
+            "@value" : "170045"
+          } ],
+          "http://purl.org/dc/terms/contributor" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/contrib/10000000"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/contrib/10000003"
+          } ],
+          "http://purl.org/dc/terms/source" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/source/9006548-term-170045"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/source/9006339-term-170045"
+          } ],
+          "http://vocab.getty.edu/ontology#contributorNonPreferred" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/contrib/10000000"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/contrib/10000003"
+          } ],
+          "http://vocab.getty.edu/ontology#displayOrder" : [ {
+            "@type" : "http://www.w3.org/2001/XMLSchema#positiveInteger",
+            "@value" : "2"
+          } ],
+          "http://vocab.getty.edu/ontology#estEnd" : [ {
+            "@type" : "http://www.w3.org/2001/XMLSchema#gYear",
+            "@value" : "1500"
+          } ],
+          "http://vocab.getty.edu/ontology#estStart" : [ {
+            "@type" : "http://www.w3.org/2001/XMLSchema#gYear",
+            "@value" : "-0300"
+          } ],
+          "http://vocab.getty.edu/ontology#historicFlag" : [ {
+            "@id" : "http://vocab.getty.edu/historic/historic"
+          } ],
+          "http://vocab.getty.edu/ontology#term" : [ {
+            "@value" : "Placentia"
+          } ],
+          "http://vocab.getty.edu/ontology#termFlag" : [ {
+            "@id" : "http://vocab.getty.edu/term/flag/Vernacular"
+          } ],
+          "http://vocab.getty.edu/ontology#termPOS" : [ {
+            "@id" : "http://vocab.getty.edu/term/POS/Noun"
+          } ],
+          "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+            "@value" : "ancient"
+          } ],
+          "http://www.w3.org/2008/05/skos-xl#literalForm" : [ {
+            "@value" : "Placentia"
+          } ]
+        }, {
+          "@id" : "http://vocab.getty.edu/tgn/term/46436",
+          "@type" : [ "http://www.w3.org/2008/05/skos-xl#Label" ],
+          "http://purl.org/dc/elements/1.1/identifier" : [ {
+            "@value" : "46436"
+          } ],
+          "http://purl.org/dc/terms/contributor" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/contrib/10000000"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/contrib/10000002"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/contrib/10000001"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/contrib/10000003"
+          } ],
+          "http://purl.org/dc/terms/source" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/source/9005498"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/source/9006449"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/source/2009007144"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/source/2009007639"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/source/9006567-term-46436"
+          } ],
+          "http://vocab.getty.edu/ontology#contributorNonPreferred" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/contrib/10000002"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/contrib/10000001"
+          }, {
+            "@id" : "http://vocab.getty.edu/tgn/contrib/10000003"
+          } ],
+          "http://vocab.getty.edu/ontology#contributorPreferred" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/contrib/10000000"
+          } ],
+          "http://vocab.getty.edu/ontology#displayOrder" : [ {
+            "@type" : "http://www.w3.org/2001/XMLSchema#positiveInteger",
+            "@value" : "1"
+          } ],
+          "http://vocab.getty.edu/ontology#sourceNonPreferred" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/source/2009007639"
+          } ],
+          "http://vocab.getty.edu/ontology#sourcePreferred" : [ {
+            "@id" : "http://vocab.getty.edu/tgn/source/2009007144"
+          } ],
+          "http://vocab.getty.edu/ontology#term" : [ {
+            "@value" : "Piacenza"
+          } ],
+          "http://vocab.getty.edu/ontology#termFlag" : [ {
+            "@id" : "http://vocab.getty.edu/term/flag/Vernacular"
+          } ],
+          "http://vocab.getty.edu/ontology#termPOS" : [ {
+            "@id" : "http://vocab.getty.edu/term/POS/Noun"
+          } ],
+          "http://www.w3.org/2008/05/skos-xl#literalForm" : [ {
+            "@value" : "Piacenza"
+          } ]
+        } ]
+    http_version: 
+  recorded_at: Thu, 07 Nov 2019 20:22:58 GMT
+recorded_with: VCR 5.0.0

@@ -1,0 +1,151 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://id.loc.gov/vocabulary/iso639-2/ita.skos.json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - '30'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 07 Nov 2019 20:00:24 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=d2940221f3dfa4418362d4fba4454c4c81573156824; expires=Fri, 06-Nov-20
+        20:00:24 GMT; path=/; domain=.loc.gov; HttpOnly
+      X-Uri:
+      - http://id.loc.gov/vocabulary/iso639-2/ita
+      Cache-Control:
+      - public, max-age=2419200
+      X-Varnish:
+      - 25325358 11962156
+      Age:
+      - '1330512'
+      Via:
+      - 1.1 varnish-v4
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - HEAD, POST, GET, OPTIONS
+      Access-Control-Allow-Headers:
+      - Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With
+      Cf-Cache-Status:
+      - DYNAMIC
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 5321e4ab899e213c-EWR
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        [  { "@id": "_:b18idlocgovvocabularyiso639-2ita", "@type": [ "http://www.w3.org/2008/05/skos-xl#Label" ], "http://www.w3.org/2008/05/skos-xl#literalForm": [ { "@language": "fr",
+        "@value": "italien" } ] },  { "@id": "_:b45idlocgovvocabularyiso639-2ita", "@type": [ "http://purl.org/vocab/changeset/schema#ChangeSet" ], "http://purl.org/vocab/changeset/schema#subjectOfChange": [ { "@id": "http://id.loc.gov/vocabulary/iso639-2/ita" } ], "http://purl.org/vocab/changeset/schema#creatorName": [ { "@id": "http://id.loc.gov/vocabulary/organizations/dlc" } ], "http://purl.org/vocab/changeset/schema#createdDate": [ { "@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+        "@value": "1970-01-01T00:00:00" } ], "http://purl.org/vocab/changeset/schema#changeReason": [ { "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "new" } ] },  { "@id": "_:b25idlocgovvocabularyiso639-2ita", "@type": [ "http://www.w3.org/2008/05/skos-xl#Label" ], "http://www.w3.org/2008/05/skos-xl#literalForm": [ { "@language": "de",
+        "@value": "Italienisch" } ] },  { "@id": "http://id.loc.gov/vocabulary/iso639-2/ita", "@type": [ "http://www.w3.org/2004/02/skos/core#Concept" ], "http://www.w3.org/2004/02/skos/core#prefLabel": [ { "@language": "en",
+        "@value": "Italian" }, { "@language": "fr",
+        "@value": "italien" }, { "@language": "de",
+        "@value": "Italienisch" } ], "http://www.w3.org/2008/05/skos-xl#altLabel": [ { "@id": "_:b11idlocgovvocabularyiso639-2ita" }, { "@id": "_:b18idlocgovvocabularyiso639-2ita" }, { "@id": "_:b25idlocgovvocabularyiso639-2ita" }, { "@language": "en",
+        "@value": "Italian" }, { "@language": "fr",
+        "@value": "italien" }, { "@language": "de",
+        "@value": "Italienisch" } ], "http://www.w3.org/2004/02/skos/core#altLabel": [ { "@value": "Italian" }, { "@value": "italien" }, { "@value": "Italienisch" } ], "http://www.w3.org/2004/02/skos/core#exactMatch": [ { "@id": "http://id.loc.gov/vocabulary/languages/ita" }, { "@id": "http://id.loc.gov/vocabulary/iso639-1/it" } ], "http://www.w3.org/2004/02/skos/core#note": [ { "@language": "en",
+        "@value": "Bibliographic Code" } ], "http://www.w3.org/2004/02/skos/core#notation": [ { "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "ita" } ], "http://www.w3.org/2004/02/skos/core#inScheme": [ { "@id": "http://id.loc.gov/vocabulary/iso639-2" } ], "http://www.w3.org/2004/02/skos/core#changeNote": [ { "@id": "_:b45idlocgovvocabularyiso639-2ita" } ] },  { "@id": "_:b11idlocgovvocabularyiso639-2ita", "@type": [ "http://www.w3.org/2008/05/skos-xl#Label" ], "http://www.w3.org/2008/05/skos-xl#literalForm": [ { "@language": "en",
+        "@value": "Italian" } ] } ]
+    http_version: 
+  recorded_at: Thu, 07 Nov 2019 20:00:25 GMT
+- request:
+    method: get
+    uri: http://id.loc.gov/vocabulary/iso639-2/ita.skos.json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - '30'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 07 Nov 2019 20:00:25 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=d2cfd159c779ac20460728ac0d5c16b3c1573156825; expires=Fri, 06-Nov-20
+        20:00:25 GMT; path=/; domain=.loc.gov; HttpOnly
+      X-Uri:
+      - http://id.loc.gov/vocabulary/iso639-2/ita
+      Cache-Control:
+      - public, max-age=2419200
+      X-Varnish:
+      - 25699243 11962156
+      Age:
+      - '1330513'
+      Via:
+      - 1.1 varnish-v4
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - HEAD, POST, GET, OPTIONS
+      Access-Control-Allow-Headers:
+      - Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With
+      Cf-Cache-Status:
+      - DYNAMIC
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 5321e4ad5b6fe6d8-EWR
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        [  { "@id": "_:b18idlocgovvocabularyiso639-2ita", "@type": [ "http://www.w3.org/2008/05/skos-xl#Label" ], "http://www.w3.org/2008/05/skos-xl#literalForm": [ { "@language": "fr",
+        "@value": "italien" } ] },  { "@id": "_:b45idlocgovvocabularyiso639-2ita", "@type": [ "http://purl.org/vocab/changeset/schema#ChangeSet" ], "http://purl.org/vocab/changeset/schema#subjectOfChange": [ { "@id": "http://id.loc.gov/vocabulary/iso639-2/ita" } ], "http://purl.org/vocab/changeset/schema#creatorName": [ { "@id": "http://id.loc.gov/vocabulary/organizations/dlc" } ], "http://purl.org/vocab/changeset/schema#createdDate": [ { "@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+        "@value": "1970-01-01T00:00:00" } ], "http://purl.org/vocab/changeset/schema#changeReason": [ { "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "new" } ] },  { "@id": "_:b25idlocgovvocabularyiso639-2ita", "@type": [ "http://www.w3.org/2008/05/skos-xl#Label" ], "http://www.w3.org/2008/05/skos-xl#literalForm": [ { "@language": "de",
+        "@value": "Italienisch" } ] },  { "@id": "http://id.loc.gov/vocabulary/iso639-2/ita", "@type": [ "http://www.w3.org/2004/02/skos/core#Concept" ], "http://www.w3.org/2004/02/skos/core#prefLabel": [ { "@language": "en",
+        "@value": "Italian" }, { "@language": "fr",
+        "@value": "italien" }, { "@language": "de",
+        "@value": "Italienisch" } ], "http://www.w3.org/2008/05/skos-xl#altLabel": [ { "@id": "_:b11idlocgovvocabularyiso639-2ita" }, { "@id": "_:b18idlocgovvocabularyiso639-2ita" }, { "@id": "_:b25idlocgovvocabularyiso639-2ita" }, { "@language": "en",
+        "@value": "Italian" }, { "@language": "fr",
+        "@value": "italien" }, { "@language": "de",
+        "@value": "Italienisch" } ], "http://www.w3.org/2004/02/skos/core#altLabel": [ { "@value": "Italian" }, { "@value": "italien" }, { "@value": "Italienisch" } ], "http://www.w3.org/2004/02/skos/core#exactMatch": [ { "@id": "http://id.loc.gov/vocabulary/languages/ita" }, { "@id": "http://id.loc.gov/vocabulary/iso639-1/it" } ], "http://www.w3.org/2004/02/skos/core#note": [ { "@language": "en",
+        "@value": "Bibliographic Code" } ], "http://www.w3.org/2004/02/skos/core#notation": [ { "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "ita" } ], "http://www.w3.org/2004/02/skos/core#inScheme": [ { "@id": "http://id.loc.gov/vocabulary/iso639-2" } ], "http://www.w3.org/2004/02/skos/core#changeNote": [ { "@id": "_:b45idlocgovvocabularyiso639-2ita" } ] },  { "@id": "_:b11idlocgovvocabularyiso639-2ita", "@type": [ "http://www.w3.org/2008/05/skos-xl#Label" ], "http://www.w3.org/2008/05/skos-xl#literalForm": [ { "@language": "en",
+        "@value": "Italian" } ] } ]
+    http_version: 
+  recorded_at: Thu, 07 Nov 2019 20:00:25 GMT
+recorded_with: VCR 5.0.0

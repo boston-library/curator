@@ -9,11 +9,22 @@ require_relative '../shared/mappings/mappable'
 RSpec.describe Curator::ControlledTerms::Genre, type: :model do
   it_behaves_like 'nomenclature'
   it_behaves_like 'authority_delegation'
-  it_behaves_like 'cannonicable'
+
+  it_behaves_like 'cannonicable' do
+    let!(:authority) { find_authority_by_code('gmgpc') }
+    let!(:term_data) { { id_from_auth: 'tgm008084' } }
+
+    before(:each) do
+      VCR.insert_cassette('controlled_terms/genre_cannonicable',
+        allow_playback_repeats: true)
+    end
+
+    after(:each) do
+      VCR.eject_cassette
+    end
+  end
 
   describe 'attr_json attributes' do
-    let(:default_genre_obj) { build(:curator_controlled_terms_genre) }
-
     it { is_expected.to validate_presence_of(:label) }
     it { is_expected.to have_db_index("(((term_data ->> 'basic'::text))::boolean)") }
     it { is_expected.to respond_to(:basic) }
@@ -23,7 +34,7 @@ RSpec.describe Curator::ControlledTerms::Genre, type: :model do
     end
 
     it 'expects the genre attribute to default to false' do
-      expect(default_genre_obj.basic).to be_falsey
+      expect(subject.basic).to be_falsey
     end
   end
 

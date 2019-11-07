@@ -13,22 +13,16 @@ module Curator
         protected
 
         def should_fetch_cannonical_label?
-          label.blank? && label_required? && value_uri.present?
-        end
-
-        def label_required?
-          self.class.validators.flat_map { |c| c.attributes if c.kind == :presence }.compact.include?(:label)
+          label.blank? && value_uri.present?
         end
 
         private
 
         def fetch_canonical_label
           label_json_block = case cannonical_json_format
-                             when '.jsonld'
-                               ->(json_body) { json_body[NOM_LABEL_KEY].presence }
-                             when '.skos.json'
+                             when '.skos.json', '.jsonld'
                                lambda { |json_body|
-                                 label_el = json_body.collect { |aj| aj[NOM_LABEL_KEY].presence }.compact.flatten.shift
+                                 label_el = json_body.flat_map { |aj| aj[NOM_LABEL_KEY].presence }.compact.shift
                                  label_el['@value'] if label_el.present?
                                }
                              end
