@@ -8,9 +8,7 @@ RSpec.shared_examples 'cannonicable', type: :model do
   end
 
   describe '#fetch_canonical_label' do
-    let!(:nomenclature) { build(factory_key_for(described_class),
-                                  term_data: term_data,
-                                  authority: authority) }
+    let!(:nomenclature) { build(factory_key_for(described_class), term_data: term_data, authority: authority) }
 
     it 'expects #fetch_canonical_name to be called on :before_validate' do
       nomenclature.label = nil

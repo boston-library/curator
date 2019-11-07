@@ -10,17 +10,14 @@ RSpec.describe Curator::ControlledTerms::ResourceType, type: :model do
   it_behaves_like 'nomenclature'
   it_behaves_like 'authority_delegation'
   it_behaves_like 'cannonicable' do
+    # rubocop:disable RSpec/LetSetup
     let!(:authority) { find_authority_by_code('resourceTypes') }
     let!(:term_data) { { id_from_auth: 'img' } }
 
-    before(:each) do
-      VCR.insert_cassette('controlled_terms/resource_type_cannonicable',
-        allow_playback_repeats: true)
-    end
+    before(:each) { VCR.insert_cassette('controlled_terms/resource_type_cannonicable', allow_playback_repeats: true) }
 
-    after(:each) do
-      VCR.eject_cassette
-    end
+    after(:each) { VCR.eject_cassette }
+    # rubocop:enable RSpec/LetSetup
   end
 
   describe 'attr_json attributes' do

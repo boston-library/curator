@@ -11,17 +11,14 @@ RSpec.describe Curator::ControlledTerms::Name, type: :model do
   it_behaves_like 'authority_delegation'
 
   it_behaves_like 'cannonicable' do
+    # rubocop:disable RSpec/LetSetup
     let!(:authority) { find_authority_by_code('naf') }
     let!(:term_data) { { id_from_auth: 'n97003077' } }
 
-    before(:each) do
-      VCR.insert_cassette('controlled_terms/name_cannonicable',
-        allow_playback_repeats: true)
-    end
+    before(:each) { VCR.insert_cassette('controlled_terms/name_cannonicable', allow_playback_repeats: true) }
 
-    after(:each) do
-      VCR.eject_cassette
-    end
+    after(:each) { VCR.eject_cassette }
+    # rubocop:enable RSpec/LetSetup
   end
 
   describe 'attr_json attributes' do
