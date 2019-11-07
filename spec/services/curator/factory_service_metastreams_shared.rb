@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples 'workflowable' do
+RSpec.shared_examples 'factory_workflowable' do
   describe 'workflow metastream' do
     let(:workflow) { subject.workflow }
     let(:workflow_json) { @object_json['metastreams']['workflow'] }
@@ -17,7 +17,7 @@ RSpec.shared_examples 'workflowable' do
   end
 end
 
-RSpec.shared_examples 'administratable' do
+RSpec.shared_examples 'factory_administratable' do
   describe 'administrative metastream' do
     let(:administrative) { subject.administrative }
     let(:administrative_json) { @object_json['metastreams']['administrative'] }

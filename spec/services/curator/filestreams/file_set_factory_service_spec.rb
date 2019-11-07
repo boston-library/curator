@@ -56,6 +56,6 @@ RSpec.describe Curator::Filestreams::FileSetFactoryService do
       end
     end
 
-    it_behaves_like 'workflowable'
+    it_behaves_like 'factory_workflowable'
   end
 end

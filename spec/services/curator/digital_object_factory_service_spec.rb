@@ -267,8 +267,8 @@ RSpec.describe Curator::DigitalObjectFactoryService do
       end
     end
 
-    it_behaves_like 'workflowable', @object_json
-    it_behaves_like 'administratable', @object_json
+    it_behaves_like 'factory_workflowable', @object_json
+    it_behaves_like 'factory_administratable', @object_json
 
     describe 'administrative metastream' do
       let(:administrative) { subject.administrative }

@@ -34,7 +34,7 @@ RSpec.describe Curator::InstitutionFactoryService do
       end
     end
 
-    it_behaves_like 'workflowable'
-    it_behaves_like 'administratable'
+    it_behaves_like 'factory_workflowable'
+    it_behaves_like 'factory_administratable'
   end
 end

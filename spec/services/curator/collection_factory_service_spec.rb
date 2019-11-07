@@ -30,7 +30,7 @@ RSpec.describe Curator::CollectionFactoryService do
       end
     end
 
-    it_behaves_like 'workflowable', @object_json
-    it_behaves_like 'administratable', @object_json
+    it_behaves_like 'factory_workflowable', @object_json
+    it_behaves_like 'factory_administratable', @object_json
   end
 end
