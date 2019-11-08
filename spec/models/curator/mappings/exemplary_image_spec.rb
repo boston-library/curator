@@ -38,7 +38,6 @@ RSpec.describe Curator::Mappings::ExemplaryImage, type: :model do
                       for(:exemplary_file_set_type).
                       on(:create) }
 
-
   describe 'Associations' do
     it { is_expected.to belong_to(:exemplary_object).
                         inverse_of(:exemplary_image_mappings).
