@@ -23,13 +23,13 @@ Currently all data models have been created with basic routes and json serialize
   * Spec Functionality
   * Spec Integration
 2. Development
-  * Create Indexing Functionality(Solr)
-  * Create Additional Seralizer Functionality
+  * Create Indexing Functionality (Solr)
+  * Create Additional Serializer Functionality
     - Mods XML
     - Marc XML
     - RDF
 
-## Installation(For development only)
+## Installation (For development only)
 
 Ensure you have the following installed on your development machine
 
@@ -50,10 +50,17 @@ Check `spec/internal/config/database.yml` and make sure your `postgres` credenti
 `cd` into the `spec/internal` directory and run `rails curator:setup` this will run the databse setup scripts for you and install active storage.
 
 
-
 ## Contributing
 Any Input/ Suggestions are appreciated as we develop this. Please contact [Ben](mailto:bbarber@bpl.org) or [Eben](mailto:eenglish@bpl.org).
 
+### Running specs
+
+
+Solr needs to be running before specs can be run. To start Solr in Test mode (use a separate console session):
+```
+$ cd spec/internal
+$ solr_wrapper --config .solr_wrapper_test
+```
 
 ## Acknowledgments
 
