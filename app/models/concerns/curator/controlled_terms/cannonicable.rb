@@ -8,12 +8,12 @@ module Curator
       NOM_LABEL_KEY = 'http://www.w3.org/2004/02/skos/core#prefLabel'
       private_constant :NOM_LABEL_KEY
       included do
-        before_validation :fetch_canonical_label, if: :should_fetch_cannonical_label?
+        before_validation :fetch_canonical_label, if: :should_fetch_cannonical_label?, on: :create
 
         protected
 
         def should_fetch_cannonical_label?
-          label.blank? && value_uri.present?
+          new_record? && label.blank? && value_uri.present?
         end
 
         private
