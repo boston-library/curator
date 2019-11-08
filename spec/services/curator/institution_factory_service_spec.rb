@@ -5,7 +5,7 @@ require_relative './factory_service_metastreams_shared'
 
 RSpec.describe Curator::InstitutionFactoryService do
   before(:all) do
-    @object_json = load_json_fixture('institution.json', 'institution')
+    @object_json = load_json_fixture('institution')
     expect do
       @institution = described_class.call(json_data: @object_json)
     end.to change { Curator::Institution.count }.by(1)

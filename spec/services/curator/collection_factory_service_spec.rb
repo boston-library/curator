@@ -6,7 +6,7 @@ require_relative './factory_service_metastreams_shared'
 RSpec.describe Curator::CollectionFactoryService do
   before(:all) do
     # create parent Institution
-    @object_json = load_json_fixture('collection.json', 'collection')
+    @object_json = load_json_fixture('collection')
     parent = create(:curator_institution)
     @object_json['institution']['ark_id'] = parent.ark_id
     expect do

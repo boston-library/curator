@@ -5,7 +5,7 @@ require_relative './factory_service_metastreams_shared'
 
 RSpec.describe Curator::DigitalObjectFactoryService do
   before(:all) do
-    @object_json = load_json_fixture('digital_object.json', 'digital_object')
+    @object_json = load_json_fixture('digital_object')
     # create parent Collection
     parent = create(:curator_collection)
     @object_json['admin_set']['ark_id'] = parent.ark_id

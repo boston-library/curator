@@ -5,7 +5,7 @@ require_relative './../factory_service_metastreams_shared'
 
 RSpec.describe Curator::Filestreams::FileSetFactoryService do
   before(:all) do
-    @object_json = load_json_fixture('file_set.json', 'file_set')
+    @object_json = load_json_fixture('file_set')
     # create parent DigitalObject and Collection
     parent_col = create(:curator_collection)
     parent_obj = create(:curator_digital_object)
