@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# based on https://github.com/sciencehistory/kithe/blob/master/app/indexing/kithe/indexer.rb
+# based on https://github.com/sciencehistory/kithe/blob/ae4f1780451b4f15577b298f57503880cc2c4681/app/indexing/kithe/indexer.rb
 require 'traject'
 
 module Curator
