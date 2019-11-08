@@ -14,6 +14,7 @@ module Curator
     autoload :ServiceClass
     autoload :Descriptives
     autoload :Services
+    autoload :Parsers
   end
 
   def self.eager_load!
@@ -22,8 +23,8 @@ module Curator
     Curator::Services.eager_load!
   end
 
-  # based on https://github.com/sciencehistory/kithe/blob/master/lib/kithe.rb
-  # settings need to live here not in Curator::Indexable, to avoid
+  # based on https://github.com/sciencehistory/kithe/blob/ae4f1780451b4f15577b298f57503880cc2c4681/lib/kithe.rb
+  # settings need to live here, not in Curator::Indexable, to avoid
   # Rails dev-mode class-reloading weirdness. This module is not reloaded.
   mattr_accessor :indexable_settings do
     # set up default settings
