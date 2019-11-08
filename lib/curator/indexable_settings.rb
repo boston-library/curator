@@ -3,7 +3,7 @@
 # based on https://github.com/sciencehistory/kithe/blob/ae4f1780451b4f15577b298f57503880cc2c4681/lib/kithe/indexable_settings.rb
 module Curator
   class IndexableSettings
-    attr_accessor :solr_url, :writer_class_name, #:writer_settings,
+    attr_accessor :solr_url, :writer_class_name, :writer_settings,
                   :model_name_solr_field, :solr_id_value_attribute, :disable_callbacks
     def initialize(solr_url:, writer_class_name:, writer_settings:,
                    model_name_solr_field:, solr_id_value_attribute:, disable_callbacks: false)

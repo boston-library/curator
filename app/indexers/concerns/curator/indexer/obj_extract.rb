@@ -39,7 +39,7 @@ module Curator
     # FUTURE: may eventually be added to traject itself?
     module ObjExtract
       def obj_extract(*path)
-        proc do |record, accumulator, context|
+        proc do |record, accumulator, _context|
           accumulator.concat Array.wrap(Curator::Indexer::ObjExtract.obj_extractor(record, path))
         end
       end
@@ -48,7 +48,7 @@ module Curator
         first, *rest = *path
 
         result = if obj.kind_of?(Array)
-                   obj.flat_map {|item| obj_extractor(item, path)}
+                   obj.flat_map { |item| obj_extractor(item, path) }
                  elsif obj.kind_of?(Hash)
                    obj[first]
                  else
