@@ -6,9 +6,9 @@ module Curator
 
     belongs_to :mappable, inverse_of: :desc_terms, polymorphic: true
 
-    validates :descriptive_id, uniqueness: { scope: [:mappable_id, :mappable_type], allow_nil: true }
+    validates :descriptive_id, uniqueness: { scope: [:mappable_id, :mappable_type] }, on: :create
 
-    validates :mappable_type, inclusion: { in: Curator.controlled_terms.nomenclature_types.collect { |type| "Curator::ControlledTerms::#{type}" }, allow_nil: true }
+    validates :mappable_type, inclusion: { in: Curator.controlled_terms.nomenclature_types.collect { |type| "Curator::ControlledTerms::#{type}" } }, on: :create
 
     def mappable=(mappable)
       super
