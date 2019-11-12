@@ -9,11 +9,9 @@ RSpec.describe Curator::Filestreams::Document, type: :model do
   it_behaves_like 'file_set'
 
   describe 'Associations' do
-
     it { is_expected.to belong_to(:file_set_of).
                         inverse_of(:document_file_sets).
                         class_name('Curator::DigitalObject').
                         required }
-
   end
 end
