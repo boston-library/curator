@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require_relative './shared/mintable.rb'
-require_relative './shared/metastreamable.rb'
-require_relative './shared/optimistic_lockable.rb'
-require_relative './shared/timestampable.rb'
+require_relative './shared/mintable'
+require_relative './shared/metastreamable'
+require_relative './shared/optimistic_lockable'
+require_relative './shared/timestampable'
+require_relative './shared/archivable'
 
 RSpec.describe Curator::Collection, type: :model do
   subject { create(:curator_collection) }
@@ -12,6 +13,7 @@ RSpec.describe Curator::Collection, type: :model do
   it_behaves_like 'mintable'
   it_behaves_like 'optimistic_lockable'
   it_behaves_like 'timestampable'
+  it_behaves_like 'archivable'
 
   it { is_expected.to have_db_column(:name).of_type(:string).with_options(null: false) }
   it { is_expected.to have_db_column(:abstract).of_type(:text).with_options(default: '') }

@@ -8,6 +8,15 @@ module Curator
       'curator_metastreams_'
     end
 
+    def self.valid_base_types
+      %w(Institution Collection DigitalObject).collect { |base_type| "Curator::#{base_type}" }.freeze
+    end
+
+    def self.valid_filestream_types
+      Curator.filestreams.file_set_types.collect {|fstream_type| "Curator::Filestreams::#{fstream_type}" }.freeze
+    end
+
     namespace_klass_accessors :administrative, :descriptive, :workflow
+
   end
 end

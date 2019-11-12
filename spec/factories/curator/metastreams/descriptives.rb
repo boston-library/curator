@@ -27,7 +27,7 @@ FactoryBot.define do
     subseries { Faker::Lorem.sentence }
     rights { Faker::Lorem.sentence }
     access_restrictions { Faker::Lorem.sentence }
-    toc_url { Faker::Lorem.sentence }
+    toc_url { Faker::Internet.url }
     toc { Faker::Lorem.paragraph }
     abstract { Faker::Lorem.paragraph }
     archived_at { nil }

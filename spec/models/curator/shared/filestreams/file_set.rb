@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
-require_relative '../optimistic_lockable.rb'
-require_relative '../timestampable.rb'
-require_relative '../mintable.rb'
+require_relative '../optimistic_lockable'
+require_relative '../timestampable'
+require_relative '../mintable'
+require_relative '../archivable'
 
 RSpec.shared_examples 'file_set', type: :model do
   it { is_expected.to be_a_kind_of(Curator::Filestreams::FileSet) }
@@ -10,6 +11,7 @@ RSpec.shared_examples 'file_set', type: :model do
   it_behaves_like 'optimistic_lockable'
   it_behaves_like 'timestampable'
   it_behaves_like 'mintable'
+  it_behaves_like 'archivable'
 
   it { is_expected.to have_db_column(:file_set_type).
                       of_type(:string).

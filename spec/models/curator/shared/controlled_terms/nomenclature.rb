@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
-require_relative '../optimistic_lockable.rb'
-require_relative '../timestampable.rb'
+require_relative '../optimistic_lockable'
+require_relative '../timestampable'
+require_relative '../archivable'
 
 RSpec.shared_examples 'nomenclature', type: :model do
   it { is_expected.to be_a_kind_of(Curator::ControlledTerms::Nomenclature) }
 
   it_behaves_like 'optimistic_lockable'
   it_behaves_like 'timestampable'
+  it_behaves_like 'archivable'
 
   it { is_expected.to have_db_column(:type).of_type(:string).with_options(null: false) }
   it { is_expected.to have_db_column(:term_data).of_type(:jsonb).with_options(null: false) }

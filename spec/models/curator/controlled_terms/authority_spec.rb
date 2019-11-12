@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require_relative '../shared/optimistic_lockable.rb'
-require_relative '../shared/timestampable.rb'
+require_relative '../shared/optimistic_lockable'
+require_relative '../shared/timestampable'
 
 RSpec.describe Curator::ControlledTerms::Authority, type: :model do
   subject { create(:curator_controlled_terms_authority) }

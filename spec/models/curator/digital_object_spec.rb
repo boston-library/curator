@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require_relative './shared/mintable.rb'
-require_relative './shared/metastreamable.rb'
-require_relative './shared/optimistic_lockable.rb'
-require_relative './shared/timestampable.rb'
+require_relative './shared/mintable'
+require_relative './shared/metastreamable'
+require_relative './shared/optimistic_lockable'
+require_relative './shared/timestampable'
+require_relative './shared/archivable'
 
 RSpec.describe Curator::DigitalObject, type: :model do
   subject { create(:curator_digital_object) }
