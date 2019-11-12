@@ -36,6 +36,7 @@ RSpec.describe Curator::Metastreams::Workflow, type: :model do
   it { is_expected.to have_db_index([:workflowable_type, :workflowable_id]).unique(true) }
 
   it { is_expected.to validate_presence_of(:ingest_origin) }
+
   it { is_expected.to validate_uniqueness_of(:workflowable_id).
                       scoped_to(:workflowable_type) }
 
@@ -49,7 +50,7 @@ RSpec.describe Curator::Metastreams::Workflow, type: :model do
                       with_values(dervivatives: 0, complete: 1).
                       backed_by_column_of_type(:integer) }
 
-  describe "Associations" do
+  describe 'Associations' do
     it { is_expected.to belong_to(:workflowable).
                         inverse_of(:workflow).
                         required }

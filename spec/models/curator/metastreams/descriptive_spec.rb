@@ -12,7 +12,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
   it_behaves_like 'timestampable'
   it_behaves_like 'archivable'
 
-  describe "Database columns and indexes" do
+  describe 'Database columns and indexes' do
     it { is_expected.to have_db_column(:descriptable_type).
                         of_type(:string).
                         with_options(null: false) }
@@ -27,7 +27,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
 
     it { is_expected.to have_db_column(:identifier_json).
                         of_type(:jsonb).
-                        with_options(default: {"identifier"=> []}, null: false) }
+                        with_options(default: { 'identifier' => [] }, null: false) }
 
     it { is_expected.to have_db_column(:title_json).
                         of_type(:jsonb).
@@ -39,7 +39,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
 
     it { is_expected.to have_db_column(:note_json).
                         of_type(:jsonb).
-                        with_options(default: {"note"=> []}, null: false) }
+                        with_options(default: { 'note' => [] }, null: false) }
 
     it { is_expected.to have_db_column(:subject_json).
                         of_type(:jsonb).
@@ -70,7 +70,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
 
     it { is_expected.to have_db_column(:resource_type_manuscript).
                         of_type(:boolean).
-                        with_options(default: false, null: false ) }
+                        with_options(default: false, null: false) }
 
     it { is_expected.to have_db_column(:place_of_publication).
                        of_type(:string) }
@@ -126,8 +126,8 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     it { is_expected.to have_db_index(:related_json) }
     it { is_expected.to have_db_index(:cartographics_json) }
     it { is_expected.to have_db_index(:publication_json) }
-
   end
+
   describe 'Enum attributes' do
     it { is_expected.to define_enum_for(:digital_origin).
                      with_values(['born digital', 'reformatted digital', 'digitized microfilm', 'digitized other analog']).
@@ -151,7 +151,6 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
 
     it { is_expected.to allow_values('http://test.test.com', '', nil).for(:toc_url) }
   end
-
 
   describe 'Associations' do
     it { is_expected.to belong_to(:descriptable).

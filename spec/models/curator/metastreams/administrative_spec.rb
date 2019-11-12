@@ -35,7 +35,6 @@ RSpec.describe Curator::Metastreams::Administrative, type: :model do
                       of_type(:string).
                       with_options(default: ['commonwealth'], null: false, array: true) }
 
-
   it { is_expected.to have_db_index([:administratable_type, :administratable_id]).unique(true) }
   it { is_expected.to have_db_index(:destination_site) }
   it { is_expected.to have_db_index(:harvestable) }
@@ -64,5 +63,4 @@ RSpec.describe Curator::Metastreams::Administrative, type: :model do
                         inverse_of(:administrative).
                         required }
   end
-
 end
