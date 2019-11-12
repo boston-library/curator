@@ -28,7 +28,8 @@ RSpec.describe Curator::DigitalObject, type: :model do
 
     it { is_expected.to belong_to(:admin_set).
         inverse_of(:admin_set_objects).
-        class_name('Curator::Collection') }
+        class_name('Curator::Collection').
+        required }
 
     ########### FILE SETS ##################
     it { is_expected.to have_many(:audio_file_sets).
