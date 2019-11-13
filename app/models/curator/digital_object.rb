@@ -10,7 +10,7 @@ module Curator
 
     belongs_to :admin_set, inverse_of: :admin_set_objects, class_name: Curator.collection_class_name
 
-    with_options inverse_of: :file_set_of, foreign_key: :file_set_of_id do
+    with_options inverse_of: :file_set_of, foreign_key: :file_set_of_id, dependent: :destroy do
       has_many :audio_file_sets, class_name: Curator.filestreams.audio_class_name
       has_many :image_file_sets, class_name: Curator.filestreams.image_class_name
       has_many :document_file_sets, class_name: Curator.filestreams.document_class_name
@@ -20,10 +20,10 @@ module Curator
       has_many :video_file_sets, class_name: Curator.filestreams.video_class_name
     end
 
-    has_many :collection_members, inverse_of: :digital_object, class_name: Curator.mappings.collection_member_class_name
+    has_many :collection_members, inverse_of: :digital_object, class_name: Curator.mappings.collection_member_class_name, dependent: :destroy
     has_many :is_member_of_collection, through: :collection_members, source: :collection
 
-    with_options class_name: Curator.mappings.issue_class_name do
+    with_options class_name: Curator.mappings.issue_class_name, dependent: :destroy do
       has_one :issue_mapping, -> { includes(:issue_of) }, inverse_of: :digital_object
       has_one :issue_mapping_for, -> { includes(:digital_object) }, inverse_of: :issue_of, foreign_key: :issue_of_id
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :curator_digital_object, class: 'Curator::DigitalObject' do
     ark_id { "commonwealth:#{SecureRandom.hex(5)}" }

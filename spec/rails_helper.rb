@@ -3,9 +3,9 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path('../internal/config/environment', __FILE__)
+require File.expand_path('./internal/config/environment', __dir__)
 # Prevent database truncation if the environment is production
-abort("The Rails environment is running in production mode!") if Rails.env.production?
+abort('The Rails environment is running in production mode!') if Rails.env.production?
 
 require 'simplecov'
 require 'coveralls'
@@ -13,13 +13,13 @@ Coveralls.wear!('rails')
 
 SimpleCov.formatter = Coveralls::SimpleCov::Formatter
 SimpleCov.start do
-  add_filter "/spec/"
+  add_filter '/spec/'
 end
 
-require "vcr"
+require 'vcr'
 
 VCR.configure do |c|
-  c.cassette_library_dir = "spec/vcr"
+  c.cassette_library_dir = 'spec/vcr'
   c.configure_rspec_metadata!
   c.hook_into :webmock
 end
@@ -72,7 +72,7 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = false
 
-  config.before :suite do
+  config.before(:suite) do
     FactoryBot.lint
     DatabaseCleaner.clean_with(:truncation)
     VCR.use_cassette('load_seeds') do
@@ -93,11 +93,11 @@ RSpec.configure do |config|
   end
 
   # config.before :each do
-  #   DatabaseCleaner.start
+  #  DatabaseCleaner.start
   # end
 
   # config.after :each do
-  #   DatabaseCleaner.clean
+  #  DatabaseCleaner.clean
   # end
 
   # RSpec Rails can automatically mix in different behaviours to your tests

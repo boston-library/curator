@@ -1,7 +1,48 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
-module Curator
-  RSpec.describe ControlledTerms::Geographic, type: :model do
-    pending "add some examples to (or delete) #{__FILE__}"
+require 'rails_helper'
+require_relative '../shared/controlled_terms/nomenclature'
+require_relative '../shared/controlled_terms/authority_delegation'
+require_relative '../shared/controlled_terms/cannonicable'
+require_relative '../shared/mappings/mappable'
+
+RSpec.describe Curator::ControlledTerms::Geographic, type: :model do
+  it_behaves_like 'nomenclature'
+  it_behaves_like 'authority_delegation'
+  it_behaves_like 'cannonicable' do
+    # rubocop:disable RSpec/LetSetup
+    let!(:authority) { find_authority_by_code('tgn') }
+    let!(:term_data) { { id_from_auth: '7004939' } }
+
+    before(:each) { VCR.insert_cassette('controlled_terms/geographic_cannonicable', allow_playback_repeats: true) }
+
+    after(:each) { VCR.eject_cassette }
+    # rubocop:enable RSpec/LetSetup
+  end
+  describe 'attr_json attributes' do
+    it { is_expected.to respond_to(:area_type) }
+    it { is_expected.to respond_to(:coordinates) }
+    it { is_expected.to respond_to(:bounding_box) }
+
+    it 'expects the attributes to have specific types' do
+      expect(described_class.attr_json_registry.fetch(:area_type, nil)&.type).to be_a_kind_of(ActiveModel::Type::String)
+      expect(described_class.attr_json_registry.fetch(:coordinates, nil)&.type).to be_a_kind_of(ActiveModel::Type::String)
+      expect(described_class.attr_json_registry.fetch(:bounding_box, nil)&.type).to be_a_kind_of(ActiveModel::Type::String)
+    end
+  end
+
+  describe 'Associations' do
+    it_behaves_like 'mappable'
+
+    it { is_expected.to belong_to(:authority).
+                        inverse_of(:geographics).
+                        class_name('Curator::ControlledTerms::Authority').
+                        optional }
+
+    it { is_expected.to have_many(:institution_locations).
+                        inverse_of(:location).
+                        class_name('Curator::Institution').
+                        with_foreign_key(:location_id).
+                        dependent(:nullify) }
   end
 end

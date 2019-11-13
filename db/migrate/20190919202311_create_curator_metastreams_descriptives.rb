@@ -4,7 +4,7 @@ class CreateCuratorMetastreamsDescriptives < ActiveRecord::Migration[5.2]
   def change
     create_table :curator_metastreams_descriptives do |t|
       t.belongs_to :descriptable, polymorphic: true, index: { unique: true, using: :btree, name: 'unique_idx_meta_desc_on_metastreamable_poly' }, null: false
-      t.belongs_to :physical_location, index: { using: :btree }, foreign_key: { to_table: :curator_controlled_terms_nomenclatures }, null: false
+      t.belongs_to :physical_location, index: { using: :btree }, foreign_key: { to_table: :curator_controlled_terms_nomenclatures, on_delete: :cascade }, null: false
       t.jsonb :identifier_json, index: { using: :gin, opclass: :jsonb_path_ops }, default: '{}', null: false
       t.jsonb :title_json, index: { using: :gin, opclass: :jsonb_path_ops }, default: '{}', null: false
       t.jsonb :date_json, index: { using: :gin, opclass: :jsonb_path_ops }, default: '{}', null: false # created/issued/copyright

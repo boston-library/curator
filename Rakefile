@@ -29,9 +29,10 @@ RuboCop::RakeTask.new(:rubocop) do |task|
   task.requires << 'rubocop-rails'
   task.requires << 'rubocop-rspec'
   task.requires << 'rubocop-performance'
+  # WARNING: Make sure the bottom 3 lines are always commented out before committing
   # task.options << '--safe-auto-correct'
   # task.options << '--disable-uncorrectable'
   # task.options << '-d'
 end
 
-task default: [:spec, :rubocop]
+task default: [:rubocop, :spec]

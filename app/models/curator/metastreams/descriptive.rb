@@ -44,9 +44,12 @@ module Curator
     belongs_to :physical_location, inverse_of: :physical_locations_of, class_name: Curator.controlled_terms.name_class_name
 
     # MAPPING OBJECTS
-    has_many :desc_terms, -> { includes(:mappable) }, inverse_of: :descriptive, class_name: Curator.mappings.desc_term_class_name
-    has_many :name_roles, -> { includes(:name, :role) }, inverse_of: :descriptive, class_name: Curator.mappings.desc_name_role_class_name
-    has_many :desc_host_collections, -> { includes(:host_collection) }, inverse_of: :descriptive, class_name: Curator.mappings.desc_host_collection_class_name
+    with_options inverse_of: :descriptive, dependent: :destroy do
+      has_many :desc_terms, -> { includes(:mappable) }, class_name: Curator.mappings.desc_term_class_name
+      has_many :name_roles, -> { includes(:name, :role) }, class_name: Curator.mappings.desc_name_role_class_name
+      has_many :desc_host_collections, -> { includes(:host_collection) }, class_name: Curator.mappings.desc_host_collection_class_name
+    end
+
     has_many :host_collections, through: :desc_host_collections, source: :host_collection
 
     # TERMS
@@ -59,5 +62,10 @@ module Curator
       has_many :subject_names, -> { merge(with_authority) }, source_type: Curator.controlled_terms.name_class_name
       has_many :subject_geos, -> { merge(with_authority) }, source_type: Curator.controlled_terms.geographic_class_name
     end
+
+    # VALIDATIONS
+    validates :descriptable_id, uniqueness: { scope: :descriptable_type }
+    validates :descriptable_type, inclusion: { in: %w(Curator::DigitalObject) }
+    validates :toc_url, format: { with: URI.regexp(%w(http https)), allow_blank: true }
   end
 end

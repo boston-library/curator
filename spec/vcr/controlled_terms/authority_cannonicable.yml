@@ -1,0 +1,67 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://id.loc.gov/authorities/subjects.skos.json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - '30'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Tue, 05 Nov 2019 19:34:29 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=db65cfa14de141a9d9b4ebcf2f5b7cd571572982469; expires=Wed, 04-Nov-20
+        19:34:29 GMT; path=/; domain=.loc.gov; HttpOnly
+      X-Uri:
+      - http://id.loc.gov/authorities/subjects
+      Cache-Control:
+      - public, max-age=2419200
+      X-Varnish:
+      - 24724030 1349347
+      Age:
+      - '1253189'
+      Via:
+      - 1.1 varnish-v4
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - HEAD, POST, GET, OPTIONS
+      Access-Control-Allow-Headers:
+      - Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With
+      Cf-Cache-Status:
+      - DYNAMIC
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 531143f1e9c0919e-EWR
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        [  { "@id": "_:b7idlocgovauthoritiessubjects", "@type": [ "http://purl.org/vocab/changeset/schema#ChangeSet" ], "http://purl.org/vocab/changeset/schema#subjectOfChange": [ { "@id": "http://id.loc.gov/authorities/subjects" } ], "http://purl.org/vocab/changeset/schema#creatorName": [ { "@id": "http://id.loc.gov/vocabulary/organizations/dlc" } ], "http://purl.org/vocab/changeset/schema#createdDate": [ { "@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+        "@value": "2011-04-26T00:00:00" } ], "http://purl.org/vocab/changeset/schema#changeReason": [ { "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "modified" } ] },  { "@id": "http://id.loc.gov/authorities/subjects", "@type": [ "http://www.w3.org/2004/02/skos/core#ConceptScheme" ], "http://www.w3.org/2000/01/rdf-schema#label": [ { "@language": "en",
+        "@value": "Library of Congress Subject Headings" } ], "http://www.w3.org/2004/02/skos/core#changeNote": [ { "@id": "_:b7idlocgovauthoritiessubjects" } ] } ]
+    http_version: 
+  recorded_at: Tue, 05 Nov 2019 19:34:29 GMT
+recorded_with: VCR 5.0.0

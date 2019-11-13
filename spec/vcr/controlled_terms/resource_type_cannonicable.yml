@@ -1,0 +1,66 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://id.loc.gov/vocabulary/resourceTypes/img.skos.json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - '30'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 07 Nov 2019 20:55:05 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=dc2ed77cd85ac5e56143bbb34fc63757a1573160105; expires=Fri, 06-Nov-20
+        20:55:05 GMT; path=/; domain=.loc.gov; HttpOnly
+      X-Uri:
+      - http://id.loc.gov/vocabulary/resourceTypes/img
+      Cache-Control:
+      - public, max-age=2419200
+      X-Varnish:
+      - 21300175 10404282
+      Age:
+      - '1235038'
+      Via:
+      - 1.1 varnish-v4
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - HEAD, POST, GET, OPTIONS
+      Access-Control-Allow-Headers:
+      - Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With
+      Cf-Cache-Status:
+      - DYNAMIC
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 532234c58daa99f6-EWR
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        [  { "@id": "_:b7idlocgovvocabularyresourceTypesimg", "@type": [ "http://www.w3.org/2008/05/skos-xl#Label" ], "http://www.w3.org/2008/05/skos-xl#literalForm": [ { "@value": "Image" } ] },  { "@id": "http://id.loc.gov/vocabulary/resourceTypes/img", "@type": [ "http://www.w3.org/2004/02/skos/core#Concept" ], "http://www.w3.org/2004/02/skos/core#prefLabel": [ { "@value": "Still Image" } ], "http://www.w3.org/2008/05/skos-xl#altLabel": [ { "@id": "_:b7idlocgovvocabularyresourceTypesimg" }, { "@id": "_:b14idlocgovvocabularyresourceTypesimg" }, { "@id": "_:b21idlocgovvocabularyresourceTypesimg" }, { "@value": "Image" }, { "@value": "2-dimensional nonprojected graphic" }, { "@value": "Nonprojected graphic" } ], "http://www.w3.org/2004/02/skos/core#altLabel": [ { "@value": "Image" }, { "@value": "2-dimensional nonprojected graphic" }, { "@value": "Nonprojected graphic" } ], "http://www.w3.org/2004/02/skos/core#broader": [ { "@id": "http://id.loc.gov/vocabulary/resourceTypes/Res" } ], "http://www.w3.org/2004/02/skos/core#narrower": [ { "@id": "http://id.loc.gov/vocabulary/resourceTypes/pho" }, { "@id": "http://id.loc.gov/vocabulary/resourceTypes/pri" }, { "@id": "http://id.loc.gov/vocabulary/resourceTypes/dwg" } ], "http://www.w3.org/2004/02/skos/core#notation": [ { "@value": "img" } ], "http://www.w3.org/2004/02/skos/core#inScheme": [ { "@id": "http://id.loc.gov/vocabulary/resourceTypes" } ], "http://www.w3.org/2004/02/skos/core#changeNote": [ { "@id": "_:b41idlocgovvocabularyresourceTypesimg" } ] },  { "@id": "_:b14idlocgovvocabularyresourceTypesimg", "@type": [ "http://www.w3.org/2008/05/skos-xl#Label" ], "http://www.w3.org/2008/05/skos-xl#literalForm": [ { "@value": "2-dimensional nonprojected graphic" } ] },  { "@id": "_:b21idlocgovvocabularyresourceTypesimg", "@type": [ "http://www.w3.org/2008/05/skos-xl#Label" ], "http://www.w3.org/2008/05/skos-xl#literalForm": [ { "@value": "Nonprojected graphic" } ] },  { "@id": "_:b41idlocgovvocabularyresourceTypesimg", "@type": [ "http://purl.org/vocab/changeset/schema#ChangeSet" ], "http://purl.org/vocab/changeset/schema#subjectOfChange": [ { "@id": "http://id.loc.gov/vocabulary/resourceTypes/img" } ], "http://purl.org/vocab/changeset/schema#creatorName": [ { "@id": "http://id.loc.gov/vocabulary/organizations/dlcmrc" } ], "http://purl.org/vocab/changeset/schema#createdDate": [ { "@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+        "@value": "2012-05-05T00:00:00" } ], "http://purl.org/vocab/changeset/schema#changeReason": [ { "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "new" } ] } ]
+    http_version: 
+  recorded_at: Thu, 07 Nov 2019 20:55:05 GMT
+recorded_with: VCR 5.0.0

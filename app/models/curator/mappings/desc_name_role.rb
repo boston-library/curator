@@ -6,6 +6,7 @@ module Curator
     belongs_to :name, inverse_of: :desc_name_roles, class_name: Curator.controlled_terms.name_class_name
     belongs_to :role, inverse_of: :desc_name_roles, class_name: Curator.controlled_terms.role_class_name
 
+    validates :descriptive_id, uniqueness: { scope: [:name_id, :role_id] }
     validate :name_role_class_validator, on: :create
 
     private

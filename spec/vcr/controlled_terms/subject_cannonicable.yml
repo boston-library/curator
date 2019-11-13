@@ -1,0 +1,71 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://id.loc.gov/authorities/subjects/sh2018001243.skos.json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - '30'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 07 Nov 2019 20:58:35 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=d538c53cebca6af715e01d7eb5e0620011573160314; expires=Fri, 06-Nov-20
+        20:58:34 GMT; path=/; domain=.loc.gov; HttpOnly
+      X-Uri:
+      - http://id.loc.gov/authorities/subjects/sh2018001243
+      Cache-Control:
+      - public, max-age=2419200
+      X-Varnish:
+      - '25165201'
+      Age:
+      - '0'
+      Via:
+      - 1.1 varnish-v4
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - HEAD, POST, GET, OPTIONS
+      Access-Control-Allow-Headers:
+      - Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With
+      Cf-Cache-Status:
+      - DYNAMIC
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 532239ddba29923a-EWR
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        [  { "@id": "http://id.loc.gov/authorities/subjects/sh2018001243", "@type": [ "http://www.w3.org/2004/02/skos/core#Concept" ], "http://www.w3.org/2004/02/skos/core#prefLabel": [ { "@language": "en",
+        "@value": "Hurricane Maria, 2017" } ], "http://www.w3.org/2008/05/skos-xl#altLabel": [ { "@id": "_:b7idlocgovauthoritiessubjectssh2018001243" } ], "http://www.w3.org/2004/02/skos/core#broader": [ { "@id": "http://id.loc.gov/authorities/subjects/sh85063195" } ], "http://www.w3.org/2004/02/skos/core#closeMatch": [ { "@id": "http://www.wikidata.org/entity/Q40178187" }, { "@id": "http://id.worldcat.org/fast/2002745" } ], "http://www.w3.org/2004/02/skos/core#inScheme": [ { "@id": "http://id.loc.gov/authorities/subjects" } ], "http://www.w3.org/2004/02/skos/core#altLabel": [ { "@language": "en",
+        "@value": "Maria, Hurricane, 2017" } ], "http://www.w3.org/2004/02/skos/core#changeNote": [ { "@id": "_:b18idlocgovauthoritiessubjectssh2018001243" }, { "@id": "_:b26idlocgovauthoritiessubjectssh2018001243" } ] },  { "@id": "_:b7idlocgovauthoritiessubjectssh2018001243", "@type": [ "http://www.w3.org/2008/05/skos-xl#Label" ], "http://www.w3.org/2008/05/skos-xl#literalForm": [ { "@language": "en",
+        "@value": "Maria, Hurricane, 2017" } ] },  { "@id": "_:b18idlocgovauthoritiessubjectssh2018001243", "@type": [ "http://purl.org/vocab/changeset/schema#ChangeSet" ], "http://purl.org/vocab/changeset/schema#subjectOfChange": [ { "@id": "http://id.loc.gov/authorities/subjects/sh2018001243" } ], "http://purl.org/vocab/changeset/schema#creatorName": [ { "@id": "http://id.loc.gov/vocabulary/organizations/ncu" } ], "http://purl.org/vocab/changeset/schema#createdDate": [ { "@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+        "@value": "2018-05-16T00:00:00" } ], "http://purl.org/vocab/changeset/schema#changeReason": [ { "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "new" } ] },  { "@id": "_:b26idlocgovauthoritiessubjectssh2018001243", "@type": [ "http://purl.org/vocab/changeset/schema#ChangeSet" ], "http://purl.org/vocab/changeset/schema#subjectOfChange": [ { "@id": "http://id.loc.gov/authorities/subjects/sh2018001243" } ], "http://purl.org/vocab/changeset/schema#creatorName": [ { "@id": "http://id.loc.gov/vocabulary/organizations/dlc" } ], "http://purl.org/vocab/changeset/schema#createdDate": [ { "@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+        "@value": "2018-08-03T13:39:28" } ], "http://purl.org/vocab/changeset/schema#changeReason": [ { "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "revised" } ] } ]
+    http_version: 
+  recorded_at: Thu, 07 Nov 2019 20:58:35 GMT
+recorded_with: VCR 5.0.0

@@ -1,12 +1,14 @@
-inherit_from: .rubocop_todo.yml
-
 AllCops:
   Exclude:
     - 'scratch.rb'
     - 'bin/*'
     - 'spec/internal/**/*'
+    - 'spec/routing/**/*'
+    - 'spec/controllers/**/*'
+    - 'spec/fixtures/**/'
     - 'lib/curator/archivable.rb'
     - 'lib/curator/services/remote_service.rb'
+    - 'app/services/curator/filestreams/file_factory_service.rb'
   DisplayCopNames: true
   DisabledByDefault: true
   TargetRubyVersion: 2.5
@@ -277,8 +279,6 @@ Lint/UselessAccessModifier:
 
 Lint/UselessAssignment:
   Enabled: true
-  Exclude:
-    - 'spec/**/*'
 
 Lint/UselessComparison:
   Enabled: true
@@ -309,13 +309,9 @@ Style/AccessModifierDeclarations:
 
 Style/BlockComments:
   Enabled: true
-  Exclude:
-    - 'spec/spec_helper.rb'
 
 Style/BlockDelimiters:
   Enabled: true
-  Exclude:
-    - 'spec/**/*'
 
 Style/ClassAndModuleChildren:
   Enabled: false
@@ -325,8 +321,6 @@ Style/ColonMethodCall:
 
 Style/CommentAnnotation:
   Enabled: true
-  Exclude:
-    - 'spec/**/*'
 
 Style/DefWithParentheses:
   Enabled: true
@@ -338,20 +332,15 @@ Style/EvalWithLocation:
   Enabled: true
 
 Style/ExpandPathArguments:
-  Exclude:
-    - 'spec/rails_helper.rb'
+  Enabled: true
 
 Style/FrozenStringLiteralComment:
   Enabled: true
-  Exclude:
-    - 'spec/**/*'
 
 Style/GuardClause:
   Enabled: true
 
-Style/HashSyntax:
-  Exclude:
-    - 'spec/**/*'
+# Style/HashSyntax:
 
 Style/IfUnlessModifier:
   Enabled: true
@@ -410,8 +399,6 @@ Style/StderrPuts:
 
 Style/StringLiterals:
   Enabled: true
-  Exclude:
-    - 'spec/**/*'
 
 Style/SymbolArray:
   Enabled: false
@@ -451,8 +438,6 @@ Metrics/MethodLength:
 Metrics/LineLength:
   Enabled: true
   Max: 400
-  Exclude:
-    - 'spec/**/*'
 
 ####################### SECURITY ###############################
 
@@ -552,6 +537,7 @@ Rails/Output:
     - 'app/services/curator/collection_factory_service.rb'
     - 'app/services/curator/institution_factory_service.rb'
     - 'app/services/curator/digital_object_factory_service.rb'
+    - 'app/services/curator/filestreams/file_factory_service.rb'
     - 'app/services/curator/filestreams/file_set_factory_service.rb'
     - 'db/seeds.rb'
     - 'lib/curator/engine.rb'
@@ -659,4 +645,134 @@ Performance/TimesMap:
   Enabled: true
 
 Performance/UnfreezeString:
+  Enabled: true
+
+####################### RSPEC ###############################
+RSpec/AlignLeftLetBrace:
+  Enabled: false
+
+RSpec/AlignRightLetBrace:
+  Enabled: false
+
+RSpec/AnyInstance:
+  Enabled: true
+
+RSpec/BeforeAfterAll:
+  Enabled: false
+
+RSpec/Be:
+  Enabled: true
+
+RSpec/BeEql:
+  Enabled: true
+
+RSpec/ContextMethod:
+  Enabled: true
+
+RSpec/DescribedClass:
+  Enabled: true
+
+RSpec/EmptyLineAfterExample:
+  Enabled: true
+
+RSpec/EmptyLineAfterExampleGroup:
+  Enabled: true
+
+RSpec/EmptyLineAfterFinalLet:
+  Enabled: false
+
+RSpec/EmptyLineAfterHook:
+  Enabled: true
+
+RSpec/EmptyLineAfterSubject:
+  Enabled: true
+
+RSpec/ExpectChange:
+  Enabled: true
+
+RSpec/ExpectInHook:
+  Enabled: false
+
+RSpec/ExpectOutput:
+  Enabled: true
+
+RSpec/HookArgument:
+  Enabled: true
+  EnforcedStyle: each
+
+RSpec/HooksBeforeExamples:
+  Enabled: true
+
+RSpec/InstanceVariable:
+  Enabled: false
+
+RSpec/InvalidPredicateMatcher:
+  Enabled: true
+
+RSpec/ItBehavesLike:
+  Enabled: true
+
+RSpec/IteratedExpectation:
+  Enabled: true
+
+RSpec/LeadingSubject:
+  Enabled: true
+
+RSpec/LeakyConstantDeclaration:
+  Enabled: true
+
+RSpec/LetBeforeExamples:
+  Enabled: false
+
+RSpec/LetSetup:
+  Enabled: true
+
+RSpec/MessageExpectation:
+    Enabled: true
+
+RSpec/MissingExampleGroupArgument:
+  Enabled: true
+
+RSpec/MultipleDescribes:
+  Enabled: true
+
+RSpec/MultipleExpectations:
+  Enabled: true
+  Max: 5
+
+RSpec/OverwritingSetup:
+  Enabled: true
+
+RSpec/PredicateMatcher:
+  Enabled: true
+
+RSpec/RepeatedDescription:
+  Enabled: true
+
+RSpec/RepeatedExample:
+  Enabled: true
+
+RSpec/ReturnFromStub:
+  Enabled: true
+
+RSpec/ScatteredLet:
+  Enabled: false
+
+RSpec/ScatteredSetup:
+  Enabled: true
+
+RSpec/SharedContext:
+  Enabled: true
+
+RSpec/SharedExamples:
+  Enabled: true
+
+RSpec/VoidExpect:
+  Enabled: true
+####################### FACTORY BOT ###############################
+
+FactoryBot/AttributeDefinedStatically:
+  Enabled: true
+
+FactoryBot/CreateList:
   Enabled: true

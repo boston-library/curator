@@ -1,15 +1,16 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require_relative './factory_service_metastreams_shared'
-RSpec.describe Curator::CollectionFactoryService do
-  json_fixture = File.join(Curator::Engine.root.join('spec', 'fixtures', 'files', 'collection.json'))
-  object_json = JSON.parse(File.read(json_fixture)).fetch('collection', {})
 
+RSpec.describe Curator::CollectionFactoryService do
   before(:all) do
     # create parent Institution
+    @object_json = load_json_fixture('collection')
     parent = create(:curator_institution)
-    object_json['institution']['ark_id'] = parent.ark_id
+    @object_json['institution']['ark_id'] = parent.ark_id
     expect do
-      @collection = described_class.call(json_data: object_json)
+      @collection = described_class.call(json_data: @object_json)
     end.to change { Curator::Collection.count }.by(1)
   end
 
@@ -17,8 +18,8 @@ RSpec.describe Curator::CollectionFactoryService do
     subject { @collection }
 
     it 'has the correct properties' do
-      expect(subject.name).to eq object_json['name']
-      expect(subject.updated_at).to eq Time.zone.parse(object_json['updated_at'])
+      expect(subject.name).to eq @object_json['name']
+      expect(subject.updated_at).to eq Time.zone.parse(@object_json['updated_at'])
     end
 
     describe 'setting institution' do
@@ -29,7 +30,7 @@ RSpec.describe Curator::CollectionFactoryService do
       end
     end
 
-    it_behaves_like 'workflowable', object_json
-    it_behaves_like 'administratable', object_json
+    it_behaves_like 'factory_workflowable', @object_json
+    it_behaves_like 'factory_administratable', @object_json
   end
 end
