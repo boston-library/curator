@@ -5,7 +5,7 @@ FactoryBot.define do
     association :file_set_of, factory: :curator_digital_object
     ark_id { "commonwealth:#{SecureRandom.hex(5)}" }
     file_set_type { 'Curator::Filestreams::Metadata' }
-    file_name_base { Faker::File.file_name(ext: 'xml') }
+    file_name_base { Faker::Internet.uuid }
     position { 1 }
     pagination { {} }
     archived_at { nil }

@@ -5,7 +5,7 @@ FactoryBot.define do
     association :file_set_of, factory: :curator_digital_object
     ark_id { "commonwealth:#{SecureRandom.hex(5)}" }
     file_set_type { 'Curator::Filestreams::Text' }
-    file_name_base { Faker::File.file_name(ext: 'txt') }
+    file_name_base { Faker::Books::Lovecraft.tome }
     position { 1 }
     pagination { {} }
     archived_at { nil }
