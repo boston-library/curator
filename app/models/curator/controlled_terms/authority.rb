@@ -12,14 +12,14 @@ module Curator
     validates :base_url, uniqueness: { scope: [:code], allow_nil: true }, format: { with: URI.regexp(%w(http https)), allow_nil: true }
 
     with_options inverse_of: :authority, dependent: :destroy, foreign_key: :authority_id do
-      has_many :genres, class_name: ControlledTerms.genre_class_name
-      has_many :geographics, class_name: ControlledTerms.geographic_class_name
-      has_many :languages, class_name: ControlledTerms.language_class_name
-      has_many :licenses, class_name: ControlledTerms.license_class_name
-      has_many :names, class_name: ControlledTerms.name_class_name
-      has_many :resource_types, class_name: ControlledTerms.resource_type_class_name
-      has_many :roles, class_name: ControlledTerms.role_class_name
-      has_many :subjects, class_name: ControlledTerms.subject_class_name
+      has_many :genres, class_name: 'Curator::ControlledTerms::Genre'
+      has_many :geographics, class_name: 'Curator::ControlledTerms::Geographic'
+      has_many :languages, class_name: 'Curator::ControlledTerms::Language'
+      has_many :licenses, class_name: 'Curator::ControlledTerms::License'
+      has_many :names, class_name: 'Curator::ControlledTerms::Name'
+      has_many :resource_types, class_name: 'Curator::ControlledTerms::ResourceType'
+      has_many :roles, class_name: 'Curator::ControlledTerms::Role'
+      has_many :subjects, class_name: 'Curator::ControlledTerms::Subject'
     end
 
     def cannonical_json_format

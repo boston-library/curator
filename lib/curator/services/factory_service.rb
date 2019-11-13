@@ -14,7 +14,7 @@ module Curator
         @desc_json_attrs = metastream_json_attrs.fetch('descriptive', {}).with_indifferent_access
         @created = Time.zone.parse(@json_attrs.fetch('created_at', ''))
         @updated = Time.zone.parse(@json_attrs.fetch('updated_at', ''))
-        awesome_print @json_attrs
+        # awesome_print @json_attrs
       end
 
       protected

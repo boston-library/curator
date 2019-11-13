@@ -6,7 +6,7 @@ module Curator
       extend ActiveSupport::Concern
       included do
         scope :with_administrative, -> { includes(:administrative) }
-        has_one :administrative, as: :administratable, inverse_of: :administratable, class_name: Curator.metastreams.administrative_class_name, dependent: :destroy
+        has_one :administrative, as: :administratable, inverse_of: :administratable, class_name: 'Curator::Metastreams::Administrative', dependent: :destroy
       end
     end
   end

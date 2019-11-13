@@ -8,7 +8,7 @@ module Curator
       base.module_eval do
         def self.init_namespace_accessors
           puts 'Initializing namespace accessors'
-          namespace_accessors :controlled_terms, :filestreams, :mappings, :metastreams
+          namespace_accessors :controlled_terms, :descriptives ,:filestreams, :mappings, :metastreams
           namespace_klass_accessors :institution, :collection, :digital_object
         end
       end
@@ -19,41 +19,6 @@ module Curator
     end
 
     module ClassMethods
-      VALID_NAMESPACES = %w(ControlledTerms Filestreams Mappings Metastreams).freeze
-
-      VALID_NAMESPACE_CLASSES = %w(Institution
-                                   Collection
-                                   DigitalObject
-                                   Authority
-                                   Genre
-                                   Geographic
-                                   Language
-                                   License
-                                   Name
-                                   ResourceType
-                                   Role
-                                   Subject
-                                   Audio
-                                   Document
-                                   Ereader
-                                   Image
-                                   Metadata
-                                   Text
-                                   Video
-                                   CollectionMember
-                                   DescHostCollection
-                                   DescNameRole
-                                   DescTerm
-                                   ExemplaryImage
-                                   HostCollection
-                                   Administrative
-                                   Descriptive
-                                   Workflow
-                                   Issue).freeze
-
-      private_constant :VALID_NAMESPACES
-      private_constant :VALID_NAMESPACE_CLASSES
-
       def namespace_accessors(*namespaces)
         namespaces.each do |namespace|
           const_name = namespace.to_s.camelize
@@ -83,6 +48,48 @@ module Curator
           RUBY
         end
       end
+
+      private
+      VALID_NAMESPACES = %w(ControlledTerms Filestreams Mappings Metastreams Descriptives).freeze
+
+      VALID_NAMESPACE_CLASSES = %w(Institution
+                                   Collection
+                                   DigitalObject
+                                   Authority
+                                   Genre
+                                   Geographic
+                                   Language
+                                   License
+                                   Name
+                                   ResourceType
+                                   Role
+                                   Subject
+                                   Audio
+                                   Document
+                                   Ereader
+                                   Image
+                                   Metadata
+                                   Text
+                                   Video
+                                   CollectionMember
+                                   DescHostCollection
+                                   DescNameRole
+                                   DescTerm
+                                   ExemplaryImage
+                                   HostCollection
+                                   Administrative
+                                   Descriptive
+                                   Workflow
+                                   Issue
+                                   Cartographic
+                                   Date
+                                   Identifier
+                                   Note
+                                   Publication
+                                   Related
+                                   Subject
+                                   TitleSet
+                                   Title).freeze
     end
   end
 end

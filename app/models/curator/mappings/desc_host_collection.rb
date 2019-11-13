@@ -2,8 +2,8 @@
 
 module Curator
   class Mappings::DescHostCollection < ApplicationRecord
-    belongs_to :host_collection, inverse_of: :desc_host_collections, class_name: Mappings.host_collection_class_name
-    belongs_to :descriptive, inverse_of: :desc_host_collections, class_name: Curator.metastreams.descriptive_class_name
+    belongs_to :host_collection, inverse_of: :desc_host_collections, class_name: 'Curator::Mappings::HostCollection'
+    belongs_to :descriptive, inverse_of: :desc_host_collections, class_name: 'Curator::Metastreams::Descriptive'
 
     validates :host_collection_id, uniqueness: { scope: :descriptive_id }
   end

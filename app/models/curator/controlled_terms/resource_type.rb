@@ -5,7 +5,7 @@ module Curator
     include ControlledTerms::AuthorityDelegation
     include ControlledTerms::Cannonicable
     include Mappings::Mappable
-    belongs_to :authority, inverse_of: :resource_types, class_name: ControlledTerms.authority_class_name
+    belongs_to :authority, inverse_of: :resource_types, class_name: 'Curator::ControlledTerms::Authority'
 
     validates :label, :id_from_auth, presence: true
   end

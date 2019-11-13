@@ -30,7 +30,6 @@ module Internal
     # the framework and any gems in your application.
     config.api_only = true
     if Rails.env.development?
-      ENV['DISABLE_SPRING'] = "true"
       console do
         require 'pry' unless defined? Pry
         require 'awesome_print'
