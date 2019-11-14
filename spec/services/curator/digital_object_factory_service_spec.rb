@@ -75,8 +75,11 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
         end
 
         let(:primary_title) { titles.primary }
-        let(:title_attributes) { %w(label usage display language subtitle supplied part_name part_number
-           id_from_auth authority_code type) }
+        let(:title_attributes) do
+          %w(label usage display language subtitle supplied part_name part_number
+             id_from_auth authority_code type)
+        end
+
         it 'sets primary title values' do
           expect(primary_title).to be_an_instance_of(Curator::Descriptives::Title)
           title_attributes.each do |attr|
@@ -106,7 +109,6 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
           desc_json['note'].each do |note_json|
             expect(collection_as_json(notes, { only: %i(label type) })).to include(note_json)
           end
-
         end
 
         let(:publication) { descriptive.publication }
@@ -176,7 +178,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
           it 'sets the genre data' do
             expect(genres.count).to eq 2
             expect(genres).to all(be_an_instance_of(Curator::ControlledTerms::Genre))
-            expect(genres.any?(&:basic?)).to be_truthy
+            expect(genres).to satisfy { |g| g.any?(&:basic) }
             desc_json['genres'].each do |genre_json|
               expect(collection_as_json(genres, { methods: controlled_term_attrs, only: controlled_term_attrs })).to include(genre_json.except('basic'))
             end
@@ -231,9 +233,9 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
           it 'sets the subject_topic data' do
             expect(subject_topics.count).to eq 3
             expect(subject_topics).to all(be_an_instance_of(Curator::ControlledTerms::Subject))
-             desc_json['subject']['topics'].each do |subject_topic_json|
-               expect(collection_as_json(subject_topics, { methods: controlled_term_attrs, only: controlled_term_attrs })).to include(subject_topic_json)
-             end
+            desc_json['subject']['topics'].each do |subject_topic_json|
+              expect(collection_as_json(subject_topics, { methods: controlled_term_attrs, only: controlled_term_attrs })).to include(subject_topic_json)
+            end
           end
 
           let(:subject_names) { descriptive.subject_names }

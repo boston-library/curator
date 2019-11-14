@@ -9,7 +9,7 @@ module FactoryHelpers
     end
   end
   module CollectionAsJson
-    def collection_as_json(collection, opts={})
+    def collection_as_json(collection, opts = {})
       collection.as_json(opts).each(&:compact!)
     end
   end

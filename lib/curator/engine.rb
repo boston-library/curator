@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module Curator
   class Engine < ::Rails::Engine
     require 'faraday'
@@ -21,7 +20,6 @@ module Curator
       end
     end
 
-
     isolate_namespace Curator
     engine_name 'curator'
     config.generators do |g|
@@ -34,7 +32,7 @@ module Curator
     config.factory_bot.definition_file_paths << File.expand_path('../../spec/factories/curator', __dir__) if defined?(FactoryBotRails)
 
     config.to_prepare do
-      Dir.glob("#{Curator::Engine.root.join('app', 'models', 'curator', 'descriptives', 'field_sets')}/*.rb").each { |c|  require_dependency(c) }
+      Dir.glob("#{Curator::Engine.root.join('app', 'models', 'curator', 'descriptives', 'field_sets')}/*.rb").each { |c| require_dependency(c) }
     end
 
     initializer 'curator.append_migrations' do |app|

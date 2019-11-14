@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_dependency 'curator/descriptives/field_sets/title'
 module Curator
   class Descriptives::TitleSet < Descriptives::FieldSet

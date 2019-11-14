@@ -8,7 +8,7 @@ module Curator
       base.module_eval do
         def self.init_namespace_accessors
           puts 'Initializing namespace accessors'
-          namespace_accessors :controlled_terms, :descriptives ,:filestreams, :mappings, :metastreams
+          namespace_accessors :controlled_terms, :descriptives, :filestreams, :mappings, :metastreams
           namespace_klass_accessors :institution, :collection, :digital_object
         end
       end
@@ -49,9 +49,8 @@ module Curator
         end
       end
 
-      private
       VALID_NAMESPACES = %w(ControlledTerms Filestreams Mappings Metastreams Descriptives).freeze
-
+      private_constant :VALID_NAMESPACES
       VALID_NAMESPACE_CLASSES = %w(Institution
                                    Collection
                                    DigitalObject
@@ -90,6 +89,7 @@ module Curator
                                    Subject
                                    TitleSet
                                    Title).freeze
+      private_constant :VALID_NAMESPACE_CLASSES
     end
   end
 end
