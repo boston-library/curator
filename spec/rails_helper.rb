@@ -98,8 +98,12 @@ RSpec.configure do |config|
   #       # ...
   #     end
   #
-  # The different available types are documented in the features, such as in
-  # https://relishapp.com/rspec/rspec-rails/docs
+  config.define_derived_metadata(file_path: Regexp.new('/spec/services/')) do |metadata|
+    metadata[:type] = :service
+  end
+
+  # TODO: Create derived metadata for serializers once we switch to blueprinter
+
   config.infer_spec_type_from_file_location!
 
   # Filter lines from Rails gems in backtraces.
