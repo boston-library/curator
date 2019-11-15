@@ -8,10 +8,16 @@ RSpec.describe Curator::Descriptives::Identifier, type: :model do
 
   describe 'attributes' do
     it { is_expected.to respond_to(:label, :type, :invalid) }
-    it { is_expected.to validate_presence_of(:type) }
-    it { is_expected.to validate_presence_of(:label) }
 
-    it { is_expected.to validate_inclusion_of(:type).
-                        in_array(Curator::Descriptives::IDENTIFIER_TYPES) }
+    describe 'validations' do
+      it { is_expected.to validate_presence_of(:type) }
+      it { is_expected.to validate_presence_of(:label) }
+      it { is_expected.to validate_inclusion_of(:type).
+                          in_array(Curator::Descriptives::IDENTIFIER_TYPES) }
+    end
+
+    describe 'attr_json settings' do
+      pending
+    end
   end
 end

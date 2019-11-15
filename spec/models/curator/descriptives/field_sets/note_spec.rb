@@ -9,6 +9,14 @@ RSpec.describe Curator::Descriptives::Note, type: :model do
   describe 'attributes' do
     it { is_expected.to respond_to(:label, :type) }
 
-    it { is_expected.to validate_presence_of(:type) }
+    describe 'validations' do
+      it { is_expected.to validate_presence_of(:type) }
+      it { is_expected.to validate_inclusion_of(:type).
+                          in_array(Curator::Descriptives::NOTE_TYPES) }
+    end
+
+    describe 'attr_json settings' do
+      pending
+    end
   end
 end

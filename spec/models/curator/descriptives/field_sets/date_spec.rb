@@ -8,5 +8,9 @@ RSpec.describe Curator::Descriptives::Date, type: :model do
 
   describe 'attributes' do
     it { is_expected.to respond_to(:created, :issued, :copyright) }
+
+    describe 'attr_json settings' do
+      pending
+    end
   end
 end

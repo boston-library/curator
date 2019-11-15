@@ -8,5 +8,9 @@ RSpec.describe Curator::Descriptives::Cartographic, type: :model do
 
   describe 'attributes' do
     it { is_expected.to respond_to(:scale, :projection) }
+
+    describe 'attr_json settings' do
+      pending
+    end
   end
 end
