@@ -16,7 +16,15 @@ RSpec.describe Curator::Descriptives::Note, type: :model do
     end
 
     describe 'attr_json settings' do
-      pending
+      let(:field_types) { %i(label type).map{ |field| described_class.attr_json_registry.fetch(field, nil)&.type } }
+      it 'expects the attributes to have the following types' do
+        expect(field_types).to all(be_a_kind_of(ActiveModel::Type::String))
+      end
+
+      it 'expects the attributes to have types that match values' do
+        expect(subject.label).to be_an_instance_of(String)
+        expect(subject.type).to be_an_instance_of(String).and satisfy { |type| Curator::Descriptives::NOTE_TYPES.include?(type) }
+      end
     end
   end
 end

@@ -10,7 +10,16 @@ RSpec.describe Curator::Descriptives::Date, type: :model do
     it { is_expected.to respond_to(:created, :issued, :copyright) }
 
     describe 'attr_json settings' do
-      pending
+      let(:field_types) { %i(created issued copyright).map{ |field| described_class.attr_json_registry.fetch(field, nil)&.type } }
+      it 'expects the attributes to have the following types' do
+        expect(field_types).to all(be_a_kind_of(ActiveModel::Type::String))
+      end
+
+      it 'expects the attributes to have types that match values' do
+        expect(subject.created).to be_an_instance_of(String)
+        expect(subject.issued).to be_an_instance_of(String)
+        expect(subject.copyright).to be_an_instance_of(String)
+      end
     end
   end
 end

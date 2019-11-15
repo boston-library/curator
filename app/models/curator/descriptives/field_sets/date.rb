@@ -2,8 +2,8 @@
 
 module Curator
   class Descriptives::Date < Descriptives::FieldSet
-    attr_json :created, :string, store_key: 'created'
-    attr_json :issued, :string, store_key: 'issued'
-    attr_json :copyright, :string, store_key: 'copyright'
+    attr_json :created, :string
+    attr_json :issued, :string
+    attr_json :copyright, :string
   end
 end
