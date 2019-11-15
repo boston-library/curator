@@ -4,6 +4,7 @@ require 'rails_helper'
 require_relative '../../shared/descriptives/field_set'
 RSpec.describe Curator::Descriptives::Identifier, type: :model do
   subject { create(:curator_descriptives_identifier) }
+
   it_behaves_like 'field_set'
 
   describe 'attributes' do
@@ -12,12 +13,13 @@ RSpec.describe Curator::Descriptives::Identifier, type: :model do
     describe 'validations' do
       it { is_expected.to validate_presence_of(:type) }
       it { is_expected.to validate_presence_of(:label) }
+
       it { is_expected.to validate_inclusion_of(:type).
                           in_array(Curator::Descriptives::IDENTIFIER_TYPES) }
     end
 
     describe 'attr_json settings' do
-      let(:string_field_types) { %i(type label).map{ |field| described_class.attr_json_registry.fetch(field, nil)&.type  } }
+      let(:string_field_types) { %i(type label).map { |field| described_class.attr_json_registry.fetch(field, nil)&.type } }
       let(:bool_field_type) { described_class.attr_json_registry.fetch(:invalid, nil)&.type }
       it 'expects the attributes to have the following types' do
         expect(string_field_types).to all(be_a_kind_of(ActiveModel::Type::String))

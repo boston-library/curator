@@ -4,6 +4,7 @@ require 'rails_helper'
 require_relative '../../shared/descriptives/field_set'
 RSpec.describe Curator::Descriptives::Subject, type: :model do
   subject { create(:curator_descriptives_subject) }
+
   it_behaves_like 'field_set'
 
   describe 'attributes' do
@@ -15,7 +16,7 @@ RSpec.describe Curator::Descriptives::Subject, type: :model do
       let(:temporals_attr_type) { described_class.attr_json_registry.fetch(:temporals, nil)&.type }
       let(:dates_attr_type) { described_class.attr_json_registry.fetch(:dates, nil)&.type }
 
-      it 'expects the attributes to have the following types' do
+      it 'expects the attributes to have the following types' do # rubocop:todo RSpec/MultipleExpectations
         expect(titles_attr_type).to be_a_kind_of(AttrJson::Type::Array)
         expect(titles_attr_model).to be(Curator::Descriptives::Title)
         expect(temporals_attr_type).to be_a_kind_of(AttrJson::Type::Array)

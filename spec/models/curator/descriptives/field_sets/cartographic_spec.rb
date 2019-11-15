@@ -4,13 +4,14 @@ require 'rails_helper'
 require_relative '../../shared/descriptives/field_set'
 RSpec.describe Curator::Descriptives::Cartographic, type: :model do
   subject { create(:curator_descriptives_cartographic) }
+
   it_behaves_like 'field_set'
 
   describe 'attributes' do
     it { is_expected.to respond_to(:scale, :projection) }
 
     describe 'attr_json settings' do
-      let(:scale_type) {  described_class.attr_json_registry.fetch(:scale, nil)&.type }
+      let(:scale_type) { described_class.attr_json_registry.fetch(:scale, nil)&.type }
       let(:projection_type) { described_class.attr_json_registry.fetch(:projection, nil)&.type }
       it 'expects the attributes to have the following types' do
         expect(scale_type).to be_a_kind_of(AttrJson::Type::Array)
