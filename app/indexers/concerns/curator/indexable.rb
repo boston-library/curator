@@ -22,8 +22,8 @@ module Curator
           batching: batching,
           disable_callbacks: disable_callbacks,
           writer: writer,
-          on_finish: on_finish)
-
+          on_finish: on_finish
+      )
       yield settings
     ensure
       settings.pop if settings
