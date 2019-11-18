@@ -31,14 +31,14 @@ module Curator
       #
       # * Add object to index. Run it through the current #mapper, then send it to the
       #   current #writer with `writer.put`
-      # * Remove object from index. Call `#delete(id)` on the current #writer.
+      # * Remove object from index. Call `#delete(ark_id)` on the current #writer.
       def update_index
         if should_be_in_index?
           mapper.process_with([record]) do |context|
             writer.put(context)
           end
         else
-          writer.delete(record.id)
+          writer.delete(record.ark_id)
         end
       end
 
