@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative './indexable_shared'
 RSpec.describe Curator::Indexable do
+  include_context 'indexable_shared'
   before(:all) { @institution = create(:curator_institution) }
 
   describe 'class methods' do
@@ -34,9 +36,6 @@ RSpec.describe Curator::Indexable do
   end
 
   describe '#update_index' do
-    let(:institution) { create(:curator_institution) }
-    let(:solr_update_url) { "#{ENV['SOLR_URL']}/update/json?softCommit=true" }
-
     describe 'called on save' do
       before do
         institution.curator_indexable_mapper = Curator::Indexer.new
@@ -45,11 +44,7 @@ RSpec.describe Curator::Indexable do
       it 'makes a request to the solr_url' do
         institution.update_index
         assert_requested :post, solr_update_url,
-                         body: [{ 'id' => [institution.ark_id],
-                                  'system_create_dtsi' => [institution.created_at.as_json],
-                                  'system_modified_dtsi' => [institution.updated_at.as_json],
-                                  'curator_model_ssi' => [institution.class.name],
-                                  'curator_model_suffix_ssi' => [institution.class.name.demodulize] }].to_json
+                         body: institution_update_request_body
       end
     end
 
