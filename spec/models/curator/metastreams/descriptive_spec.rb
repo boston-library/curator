@@ -154,9 +154,9 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
 
   describe 'attr_json Attributes' do
     let(:json_attributes) { %i(title date publication related cartographic subject_other) }
-    let(:array_json_attributes) {%i(identifier note)}
+    let(:array_json_attributes) { %i(identifier note) }
     let(:registry) { described_class.attr_json_registry }
-    let(:container_attribute){ ->(json_attribute) { json_attribute == :cartographic ? 'cartographics_json' : (json_attribute == :subject_other ? 'subject_json' : "#{json_attribute}_json") } }
+    let(:container_attribute) { ->(json_attribute) { json_attribute == :cartographic ? 'cartographics_json' : (json_attribute == :subject_other ? 'subject_json' : "#{json_attribute}_json") } }
     let(:attr_type) do
       lambda do |type|
         case type
@@ -188,15 +188,15 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
 
       describe 'types' do
         it 'expects all the #json_attributes to match the correct types' do
-          expect(json_attributes.map{ |json_attr| registry.fetch(json_attr).type }).to all(be_a_kind_of(AttrJson::Type::Model))
+          expect(json_attributes.map { |json_attr| registry.fetch(json_attr).type }).to all(be_a_kind_of(AttrJson::Type::Model))
           json_attributes.each do |json_attribute|
             expect(registry.fetch(json_attribute).type.model).to be(attr_type.call(json_attribute))
           end
         end
 
         it 'expects all the #array_json_attributes to match the correct_types' do
-          expect(array_json_attributes.map{ |json_attr| registry.fetch(json_attr).type }).to all(be_a_kind_of(AttrJson::Type::Array))
-          expect(array_json_attributes.map{ |json_attr| registry.fetch(json_attr).type.base_type }).to all(be_a_kind_of(AttrJson::Type::Model))
+          expect(array_json_attributes.map { |json_attr| registry.fetch(json_attr).type }).to all(be_a_kind_of(AttrJson::Type::Array))
+          expect(array_json_attributes.map { |json_attr| registry.fetch(json_attr).type.base_type }).to all(be_a_kind_of(AttrJson::Type::Model))
           array_json_attributes.each do |json_attribute|
             expect(registry.fetch(json_attribute).type.base_type.model).to be(attr_type.call(json_attribute))
           end
