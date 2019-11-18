@@ -14,18 +14,21 @@ Currently all data models have been created with basic routes and json serialize
 ## Todo
 
 1. Specs
-  * Setup Rubocop
-  * Setup Database Cleaner
+  * ~~Setup Rubocop~~
+  * ~~Setup Database Cleaner~~
   * Setup Solr Wrapper
-  * Setup Fixtures
-  * Setup VCR
-  * Spec Unit
+  * ~~Setup Fixtures~~
+  * ~~Setup FactoryBot~~
+  * ~~Setup VCR~~
+  * ~~Spec Unit~~
   * Spec Functionality
   * Spec Integration
 2. Development
   * Create Indexing Functionality(Solr)
-  * Create Additional Seralizer Functionality
+  * Create Additional Seralizer Functionality(In priority)
+    - Switch to Blueprinter(JSON)/ Modularize serializers
     - Mods XML
+    - Dublic Core
     - Marc XML
     - RDF
 
