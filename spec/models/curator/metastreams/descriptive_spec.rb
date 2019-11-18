@@ -152,6 +152,69 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     it { is_expected.to allow_values('http://test.test.com', '', nil).for(:toc_url) }
   end
 
+  describe 'attr_json Attributes' do
+    let(:json_attributes) { %i(title date publication related cartographic subject_other) }
+    let(:array_json_attributes) {%i(identifier note)}
+    let(:registry) { described_class.attr_json_registry }
+    let(:container_attribute){ ->(json_attribute) { json_attribute == :cartographic ? 'cartographics_json' : (json_attribute == :subject_other ? 'subject_json' : "#{json_attribute}_json") } }
+    let(:attr_type) do
+      lambda do |type|
+        case type
+        when :identifier, :note, :date, :publication, :related, :cartographic
+          "Curator::Descriptives::#{type.capitalize}".safe_constantize
+        when :title
+          Curator::Descriptives::TitleSet
+        when :subject_other
+          Curator::Descriptives::Subject
+        else
+          NilClass
+        end
+      end
+    end
+
+    it { is_expected.to respond_to(*(json_attributes + array_json_attributes)) }
+
+    describe 'registry settings' do
+      it 'expects the the settings for #json_attributes to be set correctly' do
+        expect(json_attributes).to all(satisfy { |json_attribute| registry.has_attribute?(json_attribute) })
+        expect(json_attributes).to all(satisfy { |json_attribute| registry.fetch(json_attribute).container_attribute == container_attribute.call(json_attribute) })
+      end
+
+      it 'expects the settings for #array_json_attributes to be set correctly' do
+        expect(array_json_attributes).to all(satisfy { |json_attribute| registry.has_attribute?(json_attribute) })
+        expect(array_json_attributes).to all(satisfy { |json_attribute| registry.fetch(json_attribute).container_attribute == container_attribute.call(json_attribute) })
+        expect(array_json_attributes).to all(satisfy { |json_attribute| registry.fetch(json_attribute).array_type? })
+      end
+
+      describe 'types' do
+        it 'expects all the #json_attributes to match the correct types' do
+          expect(json_attributes.map{ |json_attr| registry.fetch(json_attr).type }).to all(be_a_kind_of(AttrJson::Type::Model))
+          json_attributes.each do |json_attribute|
+            expect(registry.fetch(json_attribute).type.model).to be(attr_type.call(json_attribute))
+          end
+        end
+
+        it 'expects all the #array_json_attributes to match the correct_types' do
+          expect(array_json_attributes.map{ |json_attr| registry.fetch(json_attr).type }).to all(be_a_kind_of(AttrJson::Type::Array))
+          expect(array_json_attributes.map{ |json_attr| registry.fetch(json_attr).type.base_type }).to all(be_a_kind_of(AttrJson::Type::Model))
+          array_json_attributes.each do |json_attribute|
+            expect(registry.fetch(json_attribute).type.base_type.model).to be(attr_type.call(json_attribute))
+          end
+        end
+
+        it "expects the an instance's values to have the correct types" do
+          json_attributes.each do |json_attribute|
+            expect(subject.send(json_attribute)).to be_an_instance_of(attr_type.call(json_attribute))
+          end
+
+          array_json_attributes.each do |json_attribute|
+            expect(subject.send(json_attribute)).to be_a_kind_of(Array).and all(be_an_instance_of(attr_type.call(json_attribute)))
+          end
+        end
+      end
+    end
+  end
+
   describe 'Associations' do
     it { is_expected.to belong_to(:descriptable).
                         inverse_of(:descriptive).
