@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require_relative './factory_service_metastreams_shared'
+require_relative './shared/factory_service_metastreams_shared'
 
-RSpec.describe Curator::DigitalObjectFactoryService do
+RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
   before(:all) do
     @object_json = load_json_fixture('digital_object')
     # create parent Collection
@@ -61,11 +61,12 @@ RSpec.describe Curator::DigitalObjectFactoryService do
       describe 'json fields' do
         let(:identifiers) { descriptive.identifier }
         it 'sets identifiers' do
-          expect(identifiers.length).to eq 2
-          expect(identifiers[0]).to be_an_instance_of(Curator::Descriptives::Identifier)
-          expect(identifiers[0].label).to eq desc_json['identifier'][0]['label']
-          expect(identifiers[1].type).to eq desc_json['identifier'][1]['type']
-          expect(identifiers[1].invalid).to be_truthy
+          expect(identifiers.count).to eq 2
+          expect(identifiers).to all(be_an_instance_of(Curator::Descriptives::Identifier))
+          desc_json['identifier'].each do |identifier_json|
+            expect(collection_as_json(identifiers, { only: %i(label type) })).to include(identifier_json.except('invalid'))
+          end
+          expect(identifiers).to include(an_object_having_attributes(invalid: true))
         end
 
         let(:titles) { descriptive.title }
@@ -74,20 +75,26 @@ RSpec.describe Curator::DigitalObjectFactoryService do
         end
 
         let(:primary_title) { titles.primary }
+        let(:title_attributes) do
+          %w(label usage display language subtitle supplied part_name part_number
+             id_from_auth authority_code type)
+        end
+
         it 'sets primary title values' do
           expect(primary_title).to be_an_instance_of(Curator::Descriptives::Title)
-          %w(label usage display language subtitle supplied part_name part_number
-             id_from_auth authority_code).each do |attr|
-            expect(primary_title.send(attr)).to eq desc_json['title_primary'][attr]
+          title_attributes.each do |attr|
+            expect(primary_title.public_send(attr)).to eq desc_json['title_primary'][attr]
           end
         end
 
         let(:other_titles) { titles.other }
         it 'sets the other title values' do
-          expect(other_titles.length).to eq 2
-          expect(other_titles[0]).to be_an_instance_of(Curator::Descriptives::Title)
-          expect(other_titles[0].label).to eq desc_json['title_other'][0]['label']
-          expect(other_titles[1].type).to eq desc_json['title_other'][1]['type']
+          expect(other_titles.count).to eq 2
+          expect(other_titles).to all(be_an_instance_of(Curator::Descriptives::Title))
+
+          desc_json['title_other'].each do |title_other_json|
+            expect(collection_as_json(other_titles, { only: title_attributes })).to include(title_other_json)
+          end
         end
 
         it 'sets date values' do
@@ -97,10 +104,11 @@ RSpec.describe Curator::DigitalObjectFactoryService do
 
         let(:notes) { descriptive.note }
         it 'sets notes' do
-          expect(notes.length).to eq 2
-          expect(notes[0]).to be_an_instance_of(Curator::Descriptives::Note)
-          expect(notes[0].label).to eq desc_json['note'][0]['label']
-          expect(notes[1].type).to eq desc_json['note'][1]['type']
+          expect(notes.count).to eq 2
+          expect(notes).to all(be_an_instance_of(Curator::Descriptives::Note))
+          desc_json['note'].each do |note_json|
+            expect(collection_as_json(notes, { only: %i(label type) })).to include(note_json)
+          end
         end
 
         let(:publication) { descriptive.publication }
@@ -132,10 +140,10 @@ RSpec.describe Curator::DigitalObjectFactoryService do
 
         describe 'name_roles' do
           let(:name_roles) { descriptive.name_roles }
-          let(:name) { name_roles[0].name }
-          let(:role) { name_roles[0].role }
+          let(:name) { name_roles.first.name }
+          let(:role) { name_roles.first.role }
           it 'sets the correct number of names and roles' do
-            expect(name_roles.length).to eq 2
+            expect(name_roles.count).to eq 2
           end
 
           it 'sets the name data' do
@@ -155,12 +163,12 @@ RSpec.describe Curator::DigitalObjectFactoryService do
 
         describe 'resource_types' do
           # NOTE: for some reason object order in db is reverse of source JSON
-          let(:resource_types) { descriptive.resource_types.reverse }
+          let(:resource_types) { descriptive.resource_types }
           it 'sets the resource_type data' do
-            expect(resource_types.length).to eq 2
-            expect(resource_types[0]).to be_an_instance_of(Curator::ControlledTerms::ResourceType)
-            controlled_term_attrs.each do |attr|
-              expect(resource_types[0].send(attr)).to eq desc_json['resource_types'][0][attr]
+            expect(resource_types.count).to eq 2
+            expect(resource_types).to all(be_an_instance_of(Curator::ControlledTerms::ResourceType))
+            desc_json['resource_types'].each do |resource_type_json|
+              expect(collection_as_json(resource_types, { methods: controlled_term_attrs, only: controlled_term_attrs })).to include(resource_type_json)
             end
           end
         end
@@ -168,32 +176,35 @@ RSpec.describe Curator::DigitalObjectFactoryService do
         describe 'genres' do
           let(:genres) { descriptive.genres }
           it 'sets the genre data' do
-            expect(genres.length).to eq 2
-            expect(genres[0]).to be_an_instance_of(Curator::ControlledTerms::Genre)
-            (controlled_term_attrs + %w(basic)).each do |attr|
-              expect(genres[0].send(attr)).to eq desc_json['genres'][0][attr]
+            expect(genres.count).to eq 2
+            expect(genres).to all(be_an_instance_of(Curator::ControlledTerms::Genre))
+            expect(genres).to satisfy { |g| g.any?(&:basic) }
+            desc_json['genres'].each do |genre_json|
+              expect(collection_as_json(genres, { methods: controlled_term_attrs, only: controlled_term_attrs })).to include(genre_json.except('basic'))
             end
           end
         end
 
         describe 'languages' do
           # NOTE: for some reason object order in db is reverse of source JSON
-          let(:languages) { descriptive.languages.reverse }
+          let(:languages) { descriptive.languages }
           it 'sets the languages data' do
-            expect(languages.length).to eq 2
-            expect(languages[0]).to be_an_instance_of(Curator::ControlledTerms::Language)
-            controlled_term_attrs.each do |attr|
-              expect(languages[0].send(attr)).to eq desc_json['languages'][0][attr]
+            expect(languages.count).to eq 2
+            expect(languages).to all(be_an_instance_of(Curator::ControlledTerms::Language))
+            desc_json['languages'].each do |language_json|
+              expect(collection_as_json(languages, { methods: controlled_term_attrs, only: controlled_term_attrs })).to include(language_json)
             end
           end
         end
 
         describe 'licenses' do
           let(:licenses) { descriptive.licenses }
+          let(:license_attrs) { %i(label uri) }
           it 'sets the licenses data' do
-            expect(licenses[0]).to be_an_instance_of(Curator::ControlledTerms::License)
-            expect(licenses[0].label).to eq desc_json['licenses'][0]['label']
-            expect(licenses[0].uri).to eq desc_json['licenses'][0]['uri']
+            expect(licenses).to all(be_an_instance_of(Curator::ControlledTerms::License))
+            desc_json['licenses'].each do |license_json|
+              expect(collection_as_json(licenses, { methods: license_attrs, only: license_attrs })).to include(license_json.slice(*license_attrs))
+            end
           end
         end
 
@@ -210,38 +221,40 @@ RSpec.describe Curator::DigitalObjectFactoryService do
         describe 'host_collections' do
           let(:host_collections) { descriptive.host_collections }
           it 'sets the host_collection data' do
-            expect(host_collections.length).to eq 2
-            expect(host_collections[0]).to be_an_instance_of(Curator::Mappings::HostCollection)
-            expect(host_collections[0].name).to eq desc_json['host_collections'][0]
+            expect(host_collections.count).to eq 2
+            expect(host_collections).to all(be_an_instance_of(Curator::Mappings::HostCollection))
+            expect(host_collections.pluck(:name)).to contain_exactly(*desc_json['host_collections'])
           end
         end
 
         describe 'subject' do
           # NOTE: for some reason object order in db is reverse of source JSON
-          let(:subject_topics) { descriptive.subject_topics.reverse }
+          let(:subject_topics) { descriptive.subject_topics }
           it 'sets the subject_topic data' do
-            expect(subject_topics.length).to eq 3
-            expect(subject_topics[0]).to be_an_instance_of(Curator::ControlledTerms::Subject)
-            controlled_term_attrs.each do |attr|
-              expect(subject_topics[0].send(attr)).to eq desc_json['subject']['topics'][0][attr]
+            expect(subject_topics.count).to eq 3
+            expect(subject_topics).to all(be_an_instance_of(Curator::ControlledTerms::Subject))
+            desc_json['subject']['topics'].each do |subject_topic_json|
+              expect(collection_as_json(subject_topics, { methods: controlled_term_attrs, only: controlled_term_attrs })).to include(subject_topic_json)
             end
           end
 
-          let(:subject_names) { descriptive.subject_names.reverse }
+          let(:subject_names) { descriptive.subject_names }
           it 'sets the subject_names data' do
-            expect(subject_names.length).to eq 2
-            expect(subject_names[0]).to be_an_instance_of(Curator::ControlledTerms::Name)
-            controlled_term_name_attrs.each do |attr|
-              expect(subject_names[0].send(attr)).to eq desc_json['subject']['names'][0][attr]
+            expect(subject_names.count).to eq 2
+            expect(subject_names).to all(be_an_instance_of(Curator::ControlledTerms::Name))
+            desc_json['subject']['names'].each do |subject_name_json|
+              expect(collection_as_json(subject_names, { methods: controlled_term_name_attrs, only: controlled_term_name_attrs })).to include(subject_name_json)
             end
           end
 
-          let(:subject_geos) { descriptive.subject_geos.reverse }
+          let(:subject_geos) { descriptive.subject_geos }
+          let(:geo_attrs) { controlled_term_attrs + %w(coordinates) }
           it 'sets the subject_geos data' do
-            expect(subject_geos.length).to eq 2
-            expect(subject_geos[0]).to be_an_instance_of(Curator::ControlledTerms::Geographic)
-            (controlled_term_attrs + %w(coordinates)).each do |attr|
-              expect(subject_geos[0].send(attr)).to eq desc_json['subject']['geos'][0][attr]
+            expect(subject_geos.count).to eq 2
+            expect(subject_geos).to all(be_an_instance_of(Curator::ControlledTerms::Geographic))
+
+            desc_json['subject']['geos'].each do |subject_geo_json|
+              expect(collection_as_json(subject_geos, { methods: geo_attrs, only: geo_attrs })).to include(subject_geo_json)
             end
           end
 
@@ -249,16 +262,17 @@ RSpec.describe Curator::DigitalObjectFactoryService do
             let(:subject_other) { descriptive.subject_other }
             it 'sets the subject_other data' do
               expect(subject_other).to be_an_instance_of(Curator::Descriptives::Subject)
-              expect(subject_other.dates[0]).to eq desc_json['subject']['dates'][0]
-              expect(subject_other.temporals[0]).to eq desc_json['subject']['temporals'][0]
+              expect(subject_other.dates).to contain_exactly(*desc_json['subject']['dates'])
+              expect(subject_other.temporals).to contain_exactly(*desc_json['subject']['temporals'])
             end
 
             describe 'subject_other > title' do
-              let(:subject_other_title) { subject_other.titles.first }
+              let(:subject_other_titles) { subject_other.titles }
+              let(:subject_other_title_attrs) { controlled_term_attrs + %i(type) }
               it 'sets the subject_other > title data' do
-                expect(subject_other_title).to be_an_instance_of(Curator::Descriptives::Title)
-                controlled_term_attrs.each do |attr|
-                  expect(subject_other_title.send(attr)).to eq desc_json['subject']['titles'][0][attr]
+                expect(subject_other_titles).to all(be_an_instance_of(Curator::Descriptives::Title))
+                desc_json['subject']['titles'].each do |subject_other_title_json|
+                  expect(collection_as_json(subject_other_titles, { methods: subject_other_title_attrs, only: subject_other_title_attrs })).to include(subject_other_title_json)
                 end
               end
             end

@@ -41,26 +41,26 @@ module Curator
     # RELS
     # PARENTS
     belongs_to :descriptable, polymorphic: true, inverse_of: :descriptive
-    belongs_to :physical_location, inverse_of: :physical_locations_of, class_name: Curator.controlled_terms.name_class_name
+    belongs_to :physical_location, inverse_of: :physical_locations_of, class_name: 'Curator::ControlledTerms::Name'
 
     # MAPPING OBJECTS
     with_options inverse_of: :descriptive, dependent: :destroy do
-      has_many :desc_terms, -> { includes(:mappable) }, class_name: Curator.mappings.desc_term_class_name
-      has_many :name_roles, -> { includes(:name, :role) }, class_name: Curator.mappings.desc_name_role_class_name
-      has_many :desc_host_collections, -> { includes(:host_collection) }, class_name: Curator.mappings.desc_host_collection_class_name
+      has_many :desc_terms, -> { includes(:mappable) }, class_name: 'Curator::Mappings::DescTerm'
+      has_many :name_roles, -> { includes(:name, :role) }, class_name: 'Curator::Mappings::DescNameRole'
+      has_many :desc_host_collections, -> { includes(:host_collection) }, class_name: 'Curator::Mappings::DescHostCollection'
     end
 
     has_many :host_collections, through: :desc_host_collections, source: :host_collection
 
     # TERMS
     with_options through: :desc_terms, source: :mappable do
-      has_many :genres, -> { merge(with_authority) }, source_type: Curator.controlled_terms.genre_class_name
-      has_many :resource_types, -> { merge(with_authority) }, source_type: Curator.controlled_terms.resource_type_class_name
-      has_many :licenses, source_type: Curator.controlled_terms.license_class_name
-      has_many :languages, -> { merge(with_authority) }, source_type: Curator.controlled_terms.language_class_name
-      has_many :subject_topics, -> { merge(with_authority) }, source_type: Curator.controlled_terms.subject_class_name
-      has_many :subject_names, -> { merge(with_authority) }, source_type: Curator.controlled_terms.name_class_name
-      has_many :subject_geos, -> { merge(with_authority) }, source_type: Curator.controlled_terms.geographic_class_name
+      has_many :genres, -> { merge(with_authority) }, source_type: 'Curator::ControlledTerms::Genre'
+      has_many :resource_types, -> { merge(with_authority) }, source_type: 'Curator::ControlledTerms::ResourceType'
+      has_many :licenses, source_type: 'Curator::ControlledTerms::License'
+      has_many :languages, -> { merge(with_authority) }, source_type: 'Curator::ControlledTerms::Language'
+      has_many :subject_topics, -> { merge(with_authority) }, source_type: 'Curator::ControlledTerms::Subject'
+      has_many :subject_names, -> { merge(with_authority) }, source_type: 'Curator::ControlledTerms::Name'
+      has_many :subject_geos, -> { merge(with_authority) }, source_type: 'Curator::ControlledTerms::Geographic'
     end
 
     # VALIDATIONS

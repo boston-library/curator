@@ -74,31 +74,18 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     FactoryBot.lint
+    DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
     VCR.use_cassette('load_seeds') do
       Curator::Engine.load_seed
     end
   end
 
-  config.before :all do
-    DatabaseCleaner.start
+  config.around(:each) do |spec|
+    DatabaseCleaner.cleaning do
+      spec.run
+    end
   end
-
-  config.after :all do
-    DatabaseCleaner.clean
-  end
-
-  config.before :each do
-    DatabaseCleaner.strategy = :transaction
-  end
-
-  # config.before :each do
-  #  DatabaseCleaner.start
-  # end
-
-  # config.after :each do
-  #  DatabaseCleaner.clean
-  # end
 
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
@@ -111,8 +98,12 @@ RSpec.configure do |config|
   #       # ...
   #     end
   #
-  # The different available types are documented in the features, such as in
-  # https://relishapp.com/rspec/rspec-rails/docs
+  config.define_derived_metadata(file_path: Regexp.new('/spec/services/')) do |metadata|
+    metadata[:type] = :service
+  end
+
+  # TODO: Create derived metadata for serializers once we switch to blueprinter
+
   config.infer_spec_type_from_file_location!
 
   # Filter lines from Rails gems in backtraces.

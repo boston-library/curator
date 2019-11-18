@@ -2,7 +2,7 @@
 
 module Curator
   class Mappings::Issue < ApplicationRecord
-    with_options class_name: Curator.digital_object_class_name do
+    with_options class_name: 'Curator::DigitalObject' do
       belongs_to :digital_object, inverse_of: :issue_mapping
       belongs_to :issue_of, inverse_of: :issue_mapping_for
     end

@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-require 'faraday'
-require 'faraday_middleware'
-require 'faraday-http-cache'
-require 'addressable'
-
 require 'curator/engine'
 require 'curator/namespace_accessor'
 
@@ -23,6 +18,6 @@ module Curator
   def self.eager_load!
     super
     Curator::Descriptives.eager_load!
-    Curator::DigitalRepository.eager_load!
+    Curator::Services.eager_load!
   end
 end

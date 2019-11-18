@@ -8,8 +8,14 @@ module FactoryHelpers
       desc_class.to_s.underscore.tr!('/', '_').to_sym
     end
   end
+  module CollectionAsJson
+    def collection_as_json(collection, opts = {})
+      collection.as_json(opts).each(&:compact!)
+    end
+  end
 end
 
 RSpec.configure do |config|
   config.include FactoryHelpers::FactoryFor, type: :model
+  config.include FactoryHelpers::CollectionAsJson, type: :service
 end

@@ -31,5 +31,16 @@ FactoryBot.define do
     toc { Faker::Lorem.paragraph }
     abstract { Faker::Lorem.paragraph }
     archived_at { nil }
+
+    after :create do |descriptive|
+      descriptive.identifier = create_list(:curator_descriptives_identifier, 3)
+      descriptive.date = create(:curator_descriptives_date)
+      descriptive.note = create_list(:curator_descriptives_note, 3)
+      descriptive.cartographic = create(:curator_descriptives_cartographic)
+      descriptive.publication = create(:curator_descriptives_publication)
+      descriptive.related = create(:curator_descriptives_related)
+      descriptive.title = create(:curator_descriptives_title_set)
+      descriptive.subject_other = create(:curator_descriptives_subject)
+    end
   end
 end

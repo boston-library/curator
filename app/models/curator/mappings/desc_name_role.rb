@@ -2,9 +2,9 @@
 
 module Curator
   class Mappings::DescNameRole < ApplicationRecord
-    belongs_to :descriptive, inverse_of: :name_roles, class_name: Curator.metastreams.descriptive_class_name
-    belongs_to :name, inverse_of: :desc_name_roles, class_name: Curator.controlled_terms.name_class_name
-    belongs_to :role, inverse_of: :desc_name_roles, class_name: Curator.controlled_terms.role_class_name
+    belongs_to :descriptive, inverse_of: :name_roles, class_name: 'Curator::Metastreams::Descriptive'
+    belongs_to :name, inverse_of: :desc_name_roles, class_name: 'Curator::ControlledTerms::Name'
+    belongs_to :role, inverse_of: :desc_name_roles, class_name: 'Curator::ControlledTerms::Role'
 
     validates :descriptive_id, uniqueness: { scope: [:name_id, :role_id] }
     validate :name_role_class_validator, on: :create

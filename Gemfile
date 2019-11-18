@@ -15,6 +15,11 @@ gemspec
 
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
+
+group :development do
+  gem 'listen', '>= 3.0.5', '< 3.2'
+end
+
 group :development, :test do
   gem 'awesome_print', '~> 1.8.0'
   gem 'dotenv-rails', '~> 2.7'

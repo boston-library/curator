@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require_relative './factory_service_metastreams_shared'
+require_relative './shared/factory_service_metastreams_shared'
 
-RSpec.describe Curator::CollectionFactoryService do
+RSpec.describe Curator::CollectionFactoryService, type: :service do
   before(:all) do
     # create parent Institution
     @object_json = load_json_fixture('collection')

@@ -7,10 +7,10 @@ module Curator
     include Curator::Metastreams::Workflowable
     include Curator::Mappings::Exemplary::ObjectImagable
 
-    belongs_to :institution, inverse_of: :collections, class_name: Curator.institution_class_name
+    belongs_to :institution, inverse_of: :collections, class_name: 'Curator::Institution'
 
-    has_many :admin_set_objects, inverse_of: :admin_set, class_name: Curator.digital_object_class_name, foreign_key: :admin_set_id, dependent: :destroy
+    has_many :admin_set_objects, inverse_of: :admin_set, class_name: 'Curator::DigitalObject', foreign_key: :admin_set_id, dependent: :destroy
 
-    has_many :collection_members, inverse_of: :collection, class_name: Curator.mappings.collection_member_class_name, dependent: :destroy
+    has_many :collection_members, inverse_of: :collection, class_name: 'Curator::Mappings::CollectionMember', dependent: :destroy
   end
 end
