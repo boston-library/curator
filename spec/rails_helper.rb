@@ -3,7 +3,14 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
+
+# have to set here, ENV['SOLR_URL'] not set by Dotenv before Rspec loads Curator::Engine
+ENV['SOLR_URL'] ||= File.read(
+  File.expand_path('internal/.env.test', __dir__)
+).match(/SOLR_URL=[\w:\/\.]*/).to_s.split('SOLR_URL=').last
+
 require File.expand_path('./internal/config/environment', __dir__)
+
 # Prevent database truncation if the environment is production
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 
@@ -22,6 +29,7 @@ VCR.configure do |c|
   c.cassette_library_dir = 'spec/vcr'
   c.configure_rspec_metadata!
   c.hook_into :webmock
+  c.allow_http_connections_when_no_cassette = true
 end
 
 require 'rspec/rails'

@@ -18,6 +18,10 @@ module Curator
       rescue LoadError
         puts 'Factory Bot Rails Not installed!'
       end
+
+      # load this here so we can access Dotenv-loaded properties in lib/curator.rb
+      require 'dotenv'
+      Dotenv.load(".env.#{ENV.fetch('RAILS_ENV', 'development')}", '.env')
     end
 
     isolate_namespace Curator

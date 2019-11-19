@@ -5,6 +5,7 @@ FactoryBot.define do
     ark_id { "commonwealth:#{SecureRandom.hex(5)}" }
     name { Faker::University.name }
     abstract { Faker::Lorem.paragraph }
+    url { Faker::Internet.unique.url(host: 'example.org') }
     archived_at { nil }
   end
 end

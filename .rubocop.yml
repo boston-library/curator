@@ -267,6 +267,8 @@ Lint/UnneededSplatExpansion:
 
 Lint/UnusedMethodArgument:
   Enabled: true
+  Exclude:
+    - 'lib/curator/indexable_settings.rb'
 
 Lint/UnusedBlockArgument:
   Enabled: true
