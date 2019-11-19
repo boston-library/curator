@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require_relative './indexable_shared'
+require_relative './shared/indexable_shared'
 RSpec.describe Curator::Indexable do
   include_context 'indexable_shared'
   before(:all) { @institution = create(:curator_institution) }

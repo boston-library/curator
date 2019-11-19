@@ -66,14 +66,13 @@ module Curator
 
         @writer = writer
 
-        if @batching && @writer
-          raise ArgumentError.new("either `batching:true` convenience, or `writer:` specified, you can't do both")
-        end
+        raise ArgumentError.new(
+          "either `batching:true` convenience, or `writer:` specified, you can't do both"
+        ) if @batching && @writer
 
         @local_writer = false
       end
       private_class_method :new # should use class.push and instance.pop instead.
-
 
       # Is there a writer configured for current settings? If so, return it. May
       # return nil.
@@ -84,7 +83,7 @@ module Curator
         @writer ||= begin
           if @batching
             @local_writer = true
-            Curator.indexable_settings.writer_instance!("solr_writer.batch_size" => 100)
+            Curator.indexable_settings.writer_instance!('solr_writer.batch_size' => 100)
           end
         end
       end
@@ -101,17 +100,15 @@ module Curator
         # created and maybe we never created one
         if @writer
           on_finish = if @local_writer && @on_finish.nil?
-                        proc {|writer| writer.close }
+                        proc { |writer| writer.close }
                       else
                         @on_finish
                       end
-          on_finish.call(@writer) if on_finish
+          on_finish&.call(@writer)
         end
 
         Thread.current[THREAD_CURRENT_KEY] = @original_thread_current_settings
       end
-
-      private
 
       # "Null object" representing no current settings set.
       class NullSettings
@@ -128,6 +125,8 @@ module Curator
           false
         end
       end
+
+      private_constant :NullSettings
     end
   end
 end

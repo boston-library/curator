@@ -2,6 +2,9 @@
 
 module Curator
   class InstitutionIndexer < Curator::Indexer
+    # NOTE: fields below were previously set in Bplmodels::Institution#to_solr, but no longer needed(?):
+    #   ingest_origin_ssim ingest_path_ssim exemplary_image_ssi physical_location_tsim
+
     # TODO: add indexing for:
     #         publishing_state_ssi destination_site_ssim
     #         subject_geo_country_ssim subject_geo_state_ssim subject_geo_county_ssim
@@ -18,8 +21,5 @@ module Curator
       to_field 'institution_url_ss', obj_extract('url')
       to_field %w(genre_basic_ssim genre_basic_tsim), obj_extract('class', 'name', 'demodulize')
     end
-
-    # NOTE: fields below were set in Bplmodels::Institution#to_solr, but no longer needed(?):
-    #         ingest_origin_ssim ingest_path_ssim exemplary_image_ssi physical_location_tsim
   end
 end

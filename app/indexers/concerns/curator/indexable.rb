@@ -19,14 +19,14 @@ module Curator
     # not outside.
     def self.index_with(batching: false, disable_callbacks: false, writer: nil, on_finish: nil)
       settings = ThreadSettings.push(
-          batching: batching,
-          disable_callbacks: disable_callbacks,
-          writer: writer,
-          on_finish: on_finish
+        batching: batching,
+        disable_callbacks: disable_callbacks,
+        writer: writer,
+        on_finish: on_finish
       )
       yield settings
     ensure
-      settings.pop if settings
+      settings&.pop
     end
 
     # Are automatic after_commit callbacks currently enabled? Will check a number
