@@ -16,7 +16,7 @@ Currently all data models have been created with basic routes and json serialize
 1. Specs
   * ~~Setup Rubocop~~
   * ~~Setup Database Cleaner~~
-  * Setup Solr Wrapper
+  * ~~Setup Solr Wrapper~~
   * ~~Setup Fixtures~~
   * ~~Setup FactoryBot~~
   * ~~Setup VCR~~
@@ -58,11 +58,24 @@ Any Input/ Suggestions are appreciated as we develop this. Please contact [Ben](
 
 ### Running specs
 
+Solr needs to be running before specs can be run.
 
-Solr needs to be running before specs can be run. To start Solr in Test mode (use a separate console session):
+Prior to starting Solr, create config directory (only needs to be run once):
+```
+# populates spec/internal/solr/conf
+$ git submodule init
+$ git submodule update
+```
+
+To start Solr in Test mode (use a separate console session):
 ```
 $ cd spec/internal
 $ solr_wrapper --config .solr_wrapper_test
+```
+
+Run the specs:
+```
+$ bundle exec rake spec
 ```
 
 ## Acknowledgments
