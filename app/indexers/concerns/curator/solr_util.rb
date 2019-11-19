@@ -36,13 +36,13 @@ module Curator
 
       while (solr_page = solr_page.next)
         response = rsolr.get 'select', params: {
-            rows: batch_size,
-            start: (batch_size * solr_page),
-            fl: 'id',
-            q: "#{model_name_solr_field}:[* TO *]"
+          rows: batch_size,
+          start: (batch_size * solr_page),
+          fl: 'id',
+          q: "#{model_name_solr_field}:[* TO *]"
         }
 
-        solr_ids = response["response"]["docs"].collect { |h| h['id'] }
+        solr_ids = response['response']['docs'].collect { |h| h['id'] }
 
         break if solr_ids.empty?
 

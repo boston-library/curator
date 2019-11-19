@@ -49,9 +49,9 @@ module Curator
       # on the record's class_attribute `curator_indexable_mapper` will be used.
       def mapper
         @mapper ||= begin
-          if record.curator_indexable_mapper.nil?
-            raise TypeError.new("Can't call update_index without `curator_indexable_mapper` given for #{record.inspect}")
-          end
+          raise TypeError.new(
+            "Can't call update_index without `curator_indexable_mapper` given for #{record.inspect}"
+          ) if record.curator_indexable_mapper.nil?
           record.curator_indexable_mapper
         end
       end
