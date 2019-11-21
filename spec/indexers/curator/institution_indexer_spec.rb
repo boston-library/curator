@@ -9,7 +9,9 @@ RSpec.describe Curator::InstitutionIndexer do
 
     it 'sets the title fields correctly' do
       expect(indexed['title_info_primary_tsi']).to eq [institution.name]
-      expect(indexed['title_info_primary_ssort']).to eq [institution.name]
+      expect(
+        indexed['title_info_primary_ssort']
+      ).to eq [Curator::Parsers::InputParser.get_proper_title(institution.name).last]
     end
 
     it 'sets the physical location field correctly' do

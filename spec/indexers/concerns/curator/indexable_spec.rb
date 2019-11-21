@@ -37,11 +37,9 @@ RSpec.describe Curator::Indexable do
 
   describe '#update_index' do
     describe 'called on save' do
-      before do
+      it 'makes a request to the solr_url' do
         institution.curator_indexable_mapper = Curator::Indexer.new
         stub_request(:post, solr_update_url)
-      end
-      it 'makes a request to the solr_url' do
         institution.update_index
         assert_requested :post, solr_update_url,
                          body: institution_update_request_body
@@ -50,9 +48,12 @@ RSpec.describe Curator::Indexable do
 
     describe 'called on delete' do
       it 'makes a delete request to the solr_url' do
-        institution.destroy!
+        inst_to_delete = create(:curator_institution)
+        inst_to_delete.curator_indexable_mapper = Curator::Indexer.new
+        stub_request(:post, solr_update_url)
+        inst_to_delete.destroy!
         assert_requested :post, solr_update_url,
-                         body: { 'delete' => institution.ark_id }.to_json
+                         body: { 'delete' => inst_to_delete.ark_id }.to_json
       end
     end
   end

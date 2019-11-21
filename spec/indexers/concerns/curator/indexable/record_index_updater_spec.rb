@@ -30,11 +30,9 @@ RSpec.describe Curator::Indexable::RecordIndexUpdater do
   end
 
   describe '#update_index' do
-    before do
+    it 'makes an update request to the solr_url' do
       institution.curator_indexable_mapper = Curator::Indexer.new
       stub_request(:post, solr_update_url)
-    end
-    it 'makes an update request to the solr_url' do
       record_index_updater.update_index
       assert_requested :post, solr_update_url,
                        body: institution_update_request_body
