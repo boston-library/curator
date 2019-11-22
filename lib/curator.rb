@@ -11,16 +11,17 @@ module Curator
   class CuratorError < StandardError; end
 
   eager_autoload do
-    autoload :ServiceClass
     autoload :Descriptives
     autoload :Services
     autoload :Parsers
+    autoload :Serializers
   end
 
   def self.eager_load!
     super
     Curator::Descriptives.eager_load!
     Curator::Services.eager_load!
+    Curator::Serializers.eager_load!
   end
 
   # based on https://github.com/sciencehistory/kithe/blob/ae4f1780451b4f15577b298f57503880cc2c4681/lib/kithe.rb
