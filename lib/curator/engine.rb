@@ -2,14 +2,14 @@
 
 module Curator
   class Engine < ::Rails::Engine
+    require 'concurrent'
     require 'faraday'
     require 'faraday_middleware'
     require 'faraday-http-cache'
     require 'addressable'
-
     require 'acts_as_list'
     require 'attr_json'
-    require 'active_model_serializers'
+    # require 'active_model_serializers'
     require 'oj'
 
     if Rails.env.development? || Rails.env.test?
@@ -49,8 +49,7 @@ module Curator
 
     config.after_initialize do
       Curator.init_namespace_accessors
-      Oj.optimize_rails
-      ActiveModel::Serializer.config.adapter = :json
+      # ActiveModel::Serializer.config.adapter = :json
     end
   end
 end
