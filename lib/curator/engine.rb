@@ -11,6 +11,8 @@ module Curator
     require 'attr_json'
     require 'active_model_serializers'
     require 'oj'
+    require 'rsolr'
+    require 'traject'
 
     if Rails.env.development? || Rails.env.test?
       begin

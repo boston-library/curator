@@ -4,6 +4,7 @@ require 'rails_helper'
 require_relative './../shared/indexable_shared'
 RSpec.describe Curator::Indexable::RecordIndexUpdater do
   include_context 'indexable_shared'
+  let(:institution) { create(:curator_institution) }
   let(:record_index_updater) { Curator::Indexable::RecordIndexUpdater.new(institution) }
   let(:non_persisted) { build(:curator_institution) }
 
@@ -35,7 +36,11 @@ RSpec.describe Curator::Indexable::RecordIndexUpdater do
       stub_request(:post, solr_update_url)
       record_index_updater.update_index
       assert_requested :post, solr_update_url,
-                       body: institution_update_request_body
+                       body: [{ 'id' => [institution.ark_id],
+                                'system_create_dtsi' => [institution.created_at.as_json],
+                                'system_modified_dtsi' => [institution.updated_at.as_json],
+                                'curator_model_ssi' => [institution.class.name],
+                                'curator_model_suffix_ssi' => [institution.class.name.demodulize] }].to_json
     end
   end
 end
