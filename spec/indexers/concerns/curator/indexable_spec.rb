@@ -4,7 +4,7 @@ require 'rails_helper'
 require_relative './shared/indexable_shared'
 RSpec.describe Curator::Indexable do
   include_context 'indexable_shared'
-  before(:all) { @institution = create(:curator_institution) }
+  before(:all) { @indexable_object = create(:curator_institution) }
 
   describe 'class methods' do
     describe '#index_with' do
@@ -15,8 +15,8 @@ RSpec.describe Curator::Indexable do
     end
 
     describe 'auto_callbacks?' do
-      it 'returns true if indexing auto callbacks are enabled' do
-        expect(described_class.auto_callbacks?(@institution)).to eq true
+      it 'returns the auto_callbacks value' do
+        expect(described_class.auto_callbacks?(@indexable_object)).to be_truthy
       end
     end
   end
@@ -24,31 +24,27 @@ RSpec.describe Curator::Indexable do
   describe 'included class attributes' do
     describe 'curator_indexable_mapper' do
       it 'returns as expected' do
-        expect(@institution.curator_indexable_mapper.class.superclass).to eq Curator::Indexer
+        expect(@indexable_object.curator_indexable_mapper.class.superclass).to eq Curator::Indexer
       end
     end
 
     describe 'curator_indexable_mapper' do
       it 'returns as expected' do
-        expect(@institution.curator_indexable_auto_callbacks).to be_truthy
+        expect(@indexable_object.curator_indexable_auto_callbacks).to be_truthy
       end
     end
   end
 
   describe '#update_index' do
-    before { stub_request(:post, solr_update_url) }
+    before { WebMock.reset! }
+    after { WebMock.reset! }
     describe 'called on save' do
-      it 'makes a request to the solr_url' do
-        institution = create(:curator_institution)
-        institution.curator_indexable_mapper = Curator::Indexer.new
-        stub_request(:post, solr_update_url)
-        institution.update_index
-        assert_requested :post, solr_update_url,
-                         body: [{ 'id' => [institution.ark_id],
-                                  'system_create_dtsi' => [institution.created_at.as_json],
-                                  'system_modified_dtsi' => [institution.updated_at.as_json],
-                                  'curator_model_ssi' => [institution.class.name],
-                                  'curator_model_suffix_ssi' => [institution.class.name.demodulize] }].to_json
+      it 'makes an update request to the solr_url' do
+        inst_to_update = @indexable_object.clone
+        inst_to_update.curator_indexable_mapper = Curator::Indexer.new
+        inst_to_update.save!
+        expect(a_request(:post, solr_update_url).
+            with(body: body_for_update_request(inst_to_update))).to have_been_made
       end
     end
 
@@ -56,8 +52,8 @@ RSpec.describe Curator::Indexable do
       it 'makes a delete request to the solr_url' do
         inst_to_delete = create(:curator_institution)
         inst_to_delete.destroy!
-        assert_requested :post, solr_update_url,
-                         body: { 'delete' => inst_to_delete.ark_id }.to_json
+        expect(a_request(:post, solr_update_url).
+          with(body: { 'delete' => inst_to_delete.ark_id }.to_json)).to have_been_made
       end
     end
   end

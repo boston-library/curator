@@ -4,43 +4,41 @@ require 'rails_helper'
 require_relative './../shared/indexable_shared'
 RSpec.describe Curator::Indexable::RecordIndexUpdater do
   include_context 'indexable_shared'
-  let(:institution) { create(:curator_institution) }
-  let(:record_index_updater) { Curator::Indexable::RecordIndexUpdater.new(institution) }
-  let(:non_persisted) { build(:curator_institution) }
+  let(:indexable_record) { create(:curator_institution) }
+  subject { described_class.new(indexable_record) }
 
   describe '#mapper' do
     it 'returns the curator_indexable_mapper' do
-      expect(record_index_updater.mapper.class.superclass).to eq Curator::Indexer
+      expect(subject.mapper.class.superclass).to eq Curator::Indexer
     end
   end
 
   describe '#writer' do
     it 'returns the Traject::Writer' do
-      expect(record_index_updater.writer).to be_an_instance_of Traject::SolrJsonWriter
+      expect(subject.writer).to be_an_instance_of Traject::SolrJsonWriter
     end
   end
 
   describe '#should_be_in_index?' do
     it 'returns true for persisted objects' do
-      expect(record_index_updater.should_be_in_index?).to be_truthy
+      expect(subject.should_be_in_index?).to be_truthy
     end
 
+    let(:non_persisted) { build(:curator_institution) }
     it 'returns false for non-persisted objects' do
-      expect(Curator::Indexable::RecordIndexUpdater.new(non_persisted).should_be_in_index?).to be_falsey
+      expect(described_class.new(non_persisted).should_be_in_index?).to be_falsey
     end
   end
 
   describe '#update_index' do
+    before { WebMock.reset! }
+    after { WebMock.reset! }
     it 'makes an update request to the solr_url' do
-      institution.curator_indexable_mapper = Curator::Indexer.new
-      stub_request(:post, solr_update_url)
-      record_index_updater.update_index
-      assert_requested :post, solr_update_url,
-                       body: [{ 'id' => [institution.ark_id],
-                                'system_create_dtsi' => [institution.created_at.as_json],
-                                'system_modified_dtsi' => [institution.updated_at.as_json],
-                                'curator_model_ssi' => [institution.class.name],
-                                'curator_model_suffix_ssi' => [institution.class.name.demodulize] }].to_json
+      inst_for_update = indexable_record.clone
+      inst_for_update.curator_indexable_mapper = Curator::Indexer.new
+      described_class.new(inst_for_update).update_index
+      expect(a_request(:post, solr_update_url).
+        with(body: body_for_update_request(inst_for_update))).to have_been_made
     end
   end
 end

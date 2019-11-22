@@ -3,7 +3,8 @@
 require 'rails_helper'
 RSpec.describe Curator::Indexable::ThreadSettings do
   let(:thread_settings) do
-    described_class.push(batching: true, disable_callbacks: true, original_settings: { disable_callbacks: false }, writer: nil, on_finish: nil)
+    described_class.push(batching: true, disable_callbacks: false,
+                         original_settings: { disable_callbacks: false }, writer: nil, on_finish: nil)
   end
 
   describe '#writer' do
@@ -16,7 +17,7 @@ RSpec.describe Curator::Indexable::ThreadSettings do
 
   describe '#disabled_callbacks?' do
     it 'returns the passed argument' do
-      expect(thread_settings.disabled_callbacks?).to be_truthy
+      expect(thread_settings.disabled_callbacks?).to be_falsey
     end
   end
 
