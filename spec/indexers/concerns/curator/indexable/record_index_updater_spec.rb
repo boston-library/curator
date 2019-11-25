@@ -31,14 +31,13 @@ RSpec.describe Curator::Indexable::RecordIndexUpdater do
   end
 
   describe '#update_index' do
-    before { WebMock.reset! }
-    after { WebMock.reset! }
+    before { stub_request(:post, solr_update_url) }
     it 'makes an update request to the solr_url' do
-      inst_for_update = indexable_record.clone
-      inst_for_update.curator_indexable_mapper = Curator::Indexer.new
-      described_class.new(inst_for_update).update_index
-      expect(a_request(:post, solr_update_url).
-        with(body: body_for_update_request(inst_for_update))).to have_been_made
+      record_to_update = indexable_record.clone
+      record_to_update.curator_indexable_mapper = Curator::Indexer.new
+      described_class.new(record_to_update).update_index
+      assert_requested :post, solr_update_url,
+                       body: body_for_update_request(record_to_update)
     end
   end
 end

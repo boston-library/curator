@@ -36,15 +36,14 @@ RSpec.describe Curator::Indexable do
   end
 
   describe '#update_index' do
-    before { WebMock.reset! }
-    after { WebMock.reset! }
+    before { stub_request(:post, solr_update_url) }
     describe 'called on save' do
       it 'makes an update request to the solr_url' do
         inst_to_update = @indexable_object.clone
         inst_to_update.curator_indexable_mapper = Curator::Indexer.new
         inst_to_update.save!
-        expect(a_request(:post, solr_update_url).
-            with(body: body_for_update_request(inst_to_update))).to have_been_made
+        assert_requested :post, solr_update_url,
+                         body: body_for_update_request(inst_to_update)
       end
     end
 
@@ -52,8 +51,8 @@ RSpec.describe Curator::Indexable do
       it 'makes a delete request to the solr_url' do
         inst_to_delete = create(:curator_institution)
         inst_to_delete.destroy!
-        expect(a_request(:post, solr_update_url).
-          with(body: { 'delete' => inst_to_delete.ark_id }.to_json)).to have_been_made
+        assert_requested :post, solr_update_url,
+                         body: { 'delete' => inst_to_delete.ark_id }.to_json
       end
     end
   end
