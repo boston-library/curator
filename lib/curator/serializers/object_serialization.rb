@@ -18,7 +18,7 @@ module Curator
          end
 
          def json_build(name:, options: {}, &block)
-           
+
          end
 
          def xml_build(name:, options: {}, &block)
