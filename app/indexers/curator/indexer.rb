@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 # based on https://github.com/sciencehistory/kithe/blob/ae4f1780451b4f15577b298f57503880cc2c4681/app/indexing/kithe/indexer.rb
-require 'traject'
-
 module Curator
   class Indexer < Traject::Indexer
     include Curator::Indexer::ObjExtract
