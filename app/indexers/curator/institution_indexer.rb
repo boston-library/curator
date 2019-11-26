@@ -15,7 +15,7 @@ module Curator
     configure do
       to_field %w(title_info_primary_tsi physical_location_ssim), obj_extract('name')
       to_field 'title_info_primary_ssort' do |record, accumulator, _context|
-        accumulator << Curator::Parsers::InputParser.get_proper_title(record.send(:name)).last
+        accumulator << Curator::Parsers::InputParser.get_proper_title(record.name).last
       end
       to_field 'abstract_tsi', obj_extract('abstract')
       to_field 'institution_url_ss', obj_extract('url')
