@@ -2,7 +2,10 @@
 
 module Curator
   class CollectionIndexer < Curator::Indexer
-    # NOTE: fields below were previously set in Bplmodels::ObjectBase#to_solr, but have been updated:
+    # NOTE: fields below were previously set in Bplmodels::Collection#to_solr, but no longer needed(?):
+    #   label_ssim
+
+    # NOTE: fields below were previously set in Bplmodels::Collection#to_solr, but have been updated:
     #   institution_pid_ssi->institution_ark_id_ssi institution_name_ssim->institution_name_ssi
     #   institution_name_tsim->institution_name_tsi
 

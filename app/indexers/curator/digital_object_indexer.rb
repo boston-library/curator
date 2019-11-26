@@ -3,7 +3,7 @@
 module Curator
   class DigitalObjectIndexer < Curator::Indexer
     # NOTE: fields below were previously set in Bplmodels::ObjectBase#to_solr, but no longer needed(?):
-    #   internet_media_type_ssim title_info_uniform_ssim classification_tsim
+    #   internet_media_type_ssim title_info_uniform_ssim classification_tsim label_ssim
     #
     # NOTE: fields below were previously set in Bplmodels::ObjectBase#to_solr, but have been updated:
     #   institution_pid_si->institution_ark_id_ssi institution_name_ssim->institution_name_ssi
@@ -22,7 +22,7 @@ module Curator
 
     # TODO: add indexing for:
     #         publishing_state_ssi processing_state_ssi destination_site_ssim harvesting_status_bsi flagged_content_ssi
-    #         ocr_tiv has_searchable_text_bsi filenames_ssim
+    #         ocr_tiv has_searchable_text_bsi filenames_ssim is_issue_of_ssim georeferenced_bsi
     #
     #         DESCRIPTIVE:
     #         title_info_primary_tsi title_info_primary_ssort title_info_partnum_tsi title_info_partname_tsi
