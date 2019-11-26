@@ -5,6 +5,7 @@ module Curator
     include Curator::Mintable
     include Curator::Metastreamable
     include Curator::Mappings::Exemplary::ObjectImagable
+    include Curator::Indexable
 
     before_create :add_admin_set_to_members, if: proc { |d| d.admin_set.present? } # Should Fail if admin set is not present
 
@@ -31,6 +32,17 @@ module Curator
     with_options class_name: 'Curator::DigitalObject' do
       has_one :issue_of, through: :issue_mapping, source: :issue_of
       has_one :issue_for, through: :issue_mapping_for, source: :digital_object
+    end
+
+    self.curator_indexable_mapper = Curator::DigitalObjectIndexer.new
+
+    def institution
+      admin_set.institution
+    end
+
+    def exemplary_file_set
+      exemplary_image_mapping = exemplary_image_mappings.first
+      exemplary_image_mapping ? exemplary_image_mapping.exemplary_file_set : nil
     end
 
     private

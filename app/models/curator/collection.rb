@@ -15,5 +15,10 @@ module Curator
     has_many :collection_members, inverse_of: :collection, class_name: 'Curator::Mappings::CollectionMember', dependent: :destroy
 
     self.curator_indexable_mapper = Curator::CollectionIndexer.new
+
+    def exemplary_file_set
+      exemplary_image_mapping = exemplary_image_mappings.first
+      exemplary_image_mapping ? exemplary_image_mapping.exemplary_file_set : nil
+    end
   end
 end
