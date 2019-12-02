@@ -4,8 +4,15 @@ module Curator
   module Serializers
     extend ActiveSupport::Autoload
 
-    CACHE_KEY_PREFIX = 'curator-serializers'.freeze
-    VALID_FORMAT_KEYS=%i(json xml all).freeze
-
+    eager_autoload do
+      autoload :AbstractSerializer
+      autoload :AdapterMap
+      autoload :Adapter
+      autoload_under 'adapters' do
+        autoload :NullAdapter
+        autoload :JSON
+        autoload :XML
+      end
+    end
   end
 end

@@ -2,23 +2,27 @@
 
 module Curator
   module Serializers
-
     class Adapter
-      def initialize(record_view_hash, serializer_options = {})
-        @record_view_hash = record_hash
-        @serializer_options = {}
+      attr_reader :record, :serializer_options
+      def initialize(record, serializer_options = {})
+        @record = record_hash
+        @serializer_options = serializer_options
       end
 
-      def serializable_hash(record_view_hash, options={})
-        raise
+      def serializable_hash
+        raise 'Not Implmented'
       end
 
-      # def as_json(options = {})
-      #   serializable_hash(options)
+      def render()
+        raise 'Not Implmented'
+      end
+
+      # def as_json
+      #   serializable_hash
       # end
       #
-      # def to_json(options = {})
-      #   Oj.dump(serializable_hash(options))
+      # def to_json
+      #   Oj.dump(serializable_hash)
       # end
     end
   end
