@@ -55,8 +55,14 @@ module Curator
                    obj.send(first)
                  end
 
-        if result.nil? || rest.empty?
-          result
+        if result.nil?
+          nil
+        elsif rest.empty?
+          if result.kind_of?(Array)
+            result.collect { |v| v == '' ? nil : v }.compact # remove empty string and nil
+          else
+            result == '' ? nil : result # turn empty strings to nil
+          end
         else
           # recurse
           obj_extractor(result, rest)
