@@ -6,10 +6,13 @@ module Curator
 
       def serializable_hash
       end
+      alias_method :as_json, :serializable_hash
 
-      # def render
-      #   Oj.dump(serializable_hash(serializer_options))
-      # end
+      def render
+        Oj.dump(serializable_hash(serializer_options))
+      end
+      alias_method :to_json, :render
+
     end
   end
 end
