@@ -6,7 +6,7 @@ module Curator
       end
 
       def render
-        serializable_hash
+        nil
       end
     end
   end
