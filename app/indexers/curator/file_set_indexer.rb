@@ -2,15 +2,16 @@
 
 module Curator
   class FileSetIndexer < Curator::Indexer
+    include Curator::Indexer::WorkflowIndexer
+
     # NOTE: fields below were previously set in Bplmodels::File#to_solr, but no longer needed(?):
-    #   label_ssim filename_ssi
+    #   label_ssi filename_ssi page_num_label_type_ssi
 
     # NOTE: fields below were previously set in Bplmodels::File#to_solr, but have been updated:
-    #
+    #   derivative_processsed_ssi->processing_state_ssi
 
     # TODO: add indexing for:
-    #         derivative_processsed_ssi ocr_tsiv has_ocr_text_bsi
-    #         page_num_label_type_ssi
+    #         ocr_tsiv has_ocr_text_bsi edit_access_group_ssim
     #         has_djvu_json_ssi georeferenced_bsi
     configure do
       to_field 'filename_base_ssi', obj_extract('file_name_base')

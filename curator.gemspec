@@ -44,7 +44,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'paper_trail', '~> 10.3' # have not implemented this yet but does version control
   spec.add_dependency 'rails', '~> 5.2.3'
   spec.add_dependency 'rsolr', '~> 2.0.2'
-  spec.add_dependency 'traject', '~> 3.2.0'
+  spec.add_dependency 'traject', '~> 3.3.0'
 
   spec.add_development_dependency 'mini_magick', '~> 4.9.5'
   spec.add_development_dependency 'pg', '~> 1.1'

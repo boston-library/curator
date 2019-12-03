@@ -2,12 +2,15 @@
 
 module Curator
   class InstitutionIndexer < Curator::Indexer
+    include Curator::Indexer::WorkflowIndexer
+    include Curator::Indexer::AdministrativeIndexer
+
     # NOTE: fields below were previously set in Bplmodels::Institution#to_solr, but no longer needed(?):
     #   ingest_origin_ssim ingest_path_ssim exemplary_image_ssi physical_location_tsim
     #   institution_pid_si institution_pid_ssi label_ssim
 
     # TODO: add indexing for:
-    #         publishing_state_ssi destination_site_ssim
+    #         edit_access_group_ssim
     #         subject_geo_country_ssim subject_geo_state_ssim subject_geo_county_ssim
     #         subject_geo_city_ssim subject_geo_citysection_ssim
     #         subject_geographic_tsim subject_geographic_ssim

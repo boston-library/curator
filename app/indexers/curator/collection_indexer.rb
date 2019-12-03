@@ -2,6 +2,9 @@
 
 module Curator
   class CollectionIndexer < Curator::Indexer
+    include Curator::Indexer::WorkflowIndexer
+    include Curator::Indexer::AdministrativeIndexer
+
     # NOTE: fields below were previously set in Bplmodels::Collection#to_solr, but no longer needed(?):
     #   label_ssim
 
@@ -10,8 +13,7 @@ module Curator
     #   institution_name_tsim->institution_name_tsi
 
     # TODO: add indexing for:
-    #         publishing_state_ssi destination_site_ssim harvesting_status_bsi
-    #         genre_basic_ssim genre_basic_tsim
+    #         genre_basic_ssim genre_basic_tsim edit_access_group_ssim
     configure do
       to_field 'title_info_primary_tsi', obj_extract('name')
       to_field 'title_info_primary_ssort' do |record, accumulator, _context|
