@@ -5,14 +5,26 @@ module Curator
     extend ActiveSupport::Autoload
 
     eager_autoload do
-      autoload :AbstractSerializer
-      autoload :AdapterMap
       autoload :Adapter
+      autoload :SerializedAttr
+      autoload :AdapterSchema
+      autoload :AbstractSerializer
       autoload_under 'adapters' do
         autoload :NullAdapter
-        autoload :JSON
-        autoload :XML
+        autoload :JSONAdapter
+        autoload :XMLAdapter
+      end
+      autoload_under 'serialized_attrs' do
+        autoload :Attribute
+        autoload :Resource
+        autoload :NullResource
+        autoload :Link
+        autoload :Meta
+        autoload :Node
+        autoload :Relation
+        autoload :Collection
       end
     end
+
   end
 end

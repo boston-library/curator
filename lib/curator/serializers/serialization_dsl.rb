@@ -3,20 +3,6 @@
 module Curator
   module Serializers
     module SerializationDSL
-      module AdapterDSL
-        ADAPTER_THREAD_KEY = 'current_curator_serializer_adapter'
-        DEFAULT_ADAPTER_KEY = :json
-
-
-        private
-        def _adapter_for(key = DEFAULT_ADAPTER_KEY)
-          _adapters[key]
-        end
-
-        def _adapters
-          Thread.current[ADAPTER_THREAD_KEY] ||= Curator::Serializer::AdapterMap.new
-        end
-      end
       #Taken from https://github.com/wmakley/tiny_serializer/blob/master/lib/tiny_serializer/dsl.rb but using thread safe collections
 
       # private
