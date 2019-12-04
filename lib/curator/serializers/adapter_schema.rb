@@ -16,16 +16,15 @@ module Curator
         @_adapter_cache = Concurrent::Map.new
       end
 
-      def add_schema_for(adapter_key: :null, resource_object = NullResource.new)
+      def add_schema_for(adapter_key: :null, resource_object: NullResource.new, &block)
         @_adapter_cache.fetch_or_store(adapter_key, resource_object)
+        yield self[adapter_key] if block_given?
       end
 
       def [](key)
         raise "Unknown adapter_key #{key}" unless @adapter_cache.key?(key)
         @_adapter_cache.fetch(key)
       end
-      alias_method :resource_object, :[]
-
     end
   end
 end

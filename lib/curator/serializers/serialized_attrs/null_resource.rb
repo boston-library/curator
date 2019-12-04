@@ -2,16 +2,16 @@
 
 module Curator
   module Serializers
-    class NullResource < Resource
+    class NullResource < Node
       def serialize
         nil
       end
 
-      def include_attribute?(record, serialization_params = {})
+      def include_attribute?(_record, _serializer_params = {})
         false
       end
 
-      def read_attribute_for_serialization(record, serialization_params = {})
+      def read_for_serialization(_record, _serializer_params = {})
         nil
       end
     end
