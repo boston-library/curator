@@ -25,8 +25,6 @@ module Curator
         raise "Unknown adapter_key #{key}" unless @adapter_cache.key?(key)
         @_adapter_cache.fetch(key)
       end
-      alias_method :resource_object, :[]
-
     end
   end
 end

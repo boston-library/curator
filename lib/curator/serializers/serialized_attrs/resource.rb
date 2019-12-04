@@ -18,8 +18,10 @@ module Curator
       def add_serializable_attr(attribute)
         attr_type = attribute.class.to_s.demodulize
         case attr_type
-        when 'Attribute', 'Link', 'Relation'
+        when 'Attribute', 'Link'
           super(attribute)
+        when 'Relation'
+          relations[attribute.key] = attribute
         when 'Meta'
           meta[attribute.key] = attribute
         when 'Node'
@@ -27,21 +29,14 @@ module Curator
         end
       end
 
-      def serialize(record, serializer_params = {})
-        return if record.blank?
-        serialized_object = Concurrent::Hash.new
-        attribute_sets.each do |attr_set_key|
-          serialized_object.merge!(attr_set_key => serialize_attr_set(record, serializable_attributes_for(attr_set_key), serialization_params))
-        end
-        serialized_object
-      end
-
       def serializable_attributes_for(attr_set_key)
         case attr_set_key
-        when :attributes, :links, :relations
+        when :attributes, :links
           super(attr_set_key)
         when :nodes
           nodes.values
+        when :relations
+          relations.values
         when :meta
           meta.values
         else
@@ -49,12 +44,14 @@ module Curator
         end
       end
 
-      def serialize_attr_set(record, serializable_attributes = [], serialization_params = {})
+      def read_for_serialization(record, serializer_params = {}, serializable_attributes = [])
         serializable_attributes.reduce(Concurrent::Hash.new) do |res, attribute|
-          val = attribute.serialize(resource, serialization_params)
+          val = attribute.serialize(record, serializer_params)
           next res if val.blank?
 
-          res.merge!(attribute.key => val)
+          next res.merge(val) if val.kind_of?(Hash) && attribute.key.blank?
+
+          res.merge(attribute.key => val)
         end
       end
 
