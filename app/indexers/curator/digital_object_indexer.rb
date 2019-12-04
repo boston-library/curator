@@ -71,13 +71,13 @@ module Curator
       to_field 'admin_set_name_ssi', obj_extract('admin_set', 'name')
       to_field 'admin_set_ark_id_ssi', obj_extract('admin_set', 'ark_id')
       to_field %w(institution_name_ssi institution_name_tsi), obj_extract('institution', 'name')
+      to_field 'institution_ark_id_ssi', obj_extract('institution', 'ark_id')
       to_field %w(collection_name_ssim collection_name_tsim) do |record, accumulator|
         record.is_member_of_collection.each { |col| accumulator << col.name }
       end
       to_field 'collection_ark_id_ssim' do |record, accumulator|
         record.is_member_of_collection.each { |col| accumulator << col.ark_id }
       end
-      to_field 'institution_ark_id_ssi', obj_extract('institution', 'ark_id')
       to_field 'exemplary_image_ssi', obj_extract('exemplary_file_set', 'ark_id')
     end
   end

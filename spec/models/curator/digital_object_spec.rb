@@ -6,6 +6,7 @@ require_relative './shared/metastreamable'
 require_relative './shared/optimistic_lockable'
 require_relative './shared/timestampable'
 require_relative './shared/archivable'
+require_relative './shared/mappings/has_exemplary_file_set'
 
 RSpec.describe Curator::DigitalObject, type: :model do
   subject { create(:curator_digital_object) }
@@ -95,4 +96,12 @@ RSpec.describe Curator::DigitalObject, type: :model do
         source(:digital_object).
         class_name('Curator::DigitalObject') }
   end
+
+  describe '#institution' do
+    it 'returns the parent Institution' do
+      expect(subject.institution).to be_an_instance_of Curator::Institution
+    end
+  end
+
+  it_behaves_like 'has_exemplary_file_set'
 end
