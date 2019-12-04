@@ -39,7 +39,7 @@ module Curator
     config.factory_bot.definition_file_paths << File.expand_path('../../spec/factories/curator', __dir__) if defined?(FactoryBotRails)
 
     config.to_prepare do
-      Dir.glob("#{Curator::Engine.root.join('app', 'models', 'curator', 'descriptives', 'field_sets')}/*.rb").each { |c| require_dependency(c) }
+      Curator.init_namespace_accessors
     end
 
     initializer 'curator.append_migrations' do |app|
@@ -50,9 +50,9 @@ module Curator
       end
     end
 
-    config.after_initialize do
-      Curator.init_namespace_accessors
-      # ActiveModel::Serializer.config.adapter = :json
-    end
+    # config.after_initialize do
+    #
+    #   # ActiveModel::Serializer.config.adapter = :json
+    # end
   end
 end

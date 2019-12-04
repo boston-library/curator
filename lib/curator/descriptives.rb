@@ -10,6 +10,17 @@ module Curator
 
     eager_autoload do
       autoload :FieldSet
+      autoload_under 'field_sets' do
+        autoload :Cartographic
+        autoload :Date
+        autoload :Identifier
+        autoload :Note
+        autoload :Publication
+        autoload :Related
+        autoload :Subject
+        autoload :TitleSet
+        autoload :Title
+      end
     end
     namespace_klass_accessors :cartographic, :date, :identifier, :note, :publication, :related, :subject, :title_set, :title
   end
