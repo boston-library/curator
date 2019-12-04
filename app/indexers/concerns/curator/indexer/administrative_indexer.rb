@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Curator
-  class Indexer
+  class Indexer < Traject::Indexer
     module AdministrativeIndexer
       extend ActiveSupport::Concern
       included do
