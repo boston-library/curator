@@ -27,7 +27,7 @@ RSpec.describe Curator::Indexable::RecordIndexUpdater do
 
     let(:non_persisted) { build(:curator_institution) }
     it 'returns false for non-persisted objects' do
-      expect(described_class.new(non_persisted)).not_to be_should_be_in_index
+      expect(described_class.new(non_persisted).should_be_in_index?).to be_falsey
     end
   end
 

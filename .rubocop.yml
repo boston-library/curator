@@ -6,6 +6,7 @@ AllCops:
     - 'spec/routing/**/*'
     - 'spec/controllers/**/*'
     - 'spec/fixtures/**/'
+    - 'vendor/**/*'
     - 'lib/curator/archivable.rb'
     - 'lib/curator/services/remote_service.rb'
     - 'app/services/curator/filestreams/file_factory_service.rb'
@@ -730,7 +731,7 @@ RSpec/LetSetup:
   Enabled: true
 
 RSpec/MessageExpectation:
-    Enabled: true
+  Enabled: true
 
 RSpec/MissingExampleGroupArgument:
   Enabled: true
