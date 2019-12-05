@@ -747,12 +747,17 @@ RSpec/OverwritingSetup:
 
 RSpec/PredicateMatcher:
   Enabled: true
+  Exclude:
+    - 'spec/indexers/concerns/curator/indexable_spec.rb'
+    - 'spec/indexers/concerns/curator/indexable/record_index_updater_spec.rb'
 
 RSpec/RepeatedDescription:
   Enabled: true
 
 RSpec/RepeatedExample:
   Enabled: true
+  Exclude:
+    - 'spec/indexers/concerns/curator/indexable/thread_settings_spec.rb'
 
 RSpec/ReturnFromStub:
   Enabled: true

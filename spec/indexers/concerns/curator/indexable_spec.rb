@@ -36,7 +36,8 @@ RSpec.describe Curator::Indexable do
   end
 
   describe '#update_index' do
-    before { stub_request(:post, solr_update_url) }
+    before(:each) { stub_request(:post, solr_update_url) }
+
     describe 'called on save' do
       it 'makes an update request to the solr_url' do
         inst_to_update = @indexable_object.clone

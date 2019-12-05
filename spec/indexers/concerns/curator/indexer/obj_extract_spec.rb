@@ -13,7 +13,7 @@ RSpec.describe Curator::Indexer::ObjExtract do
   let(:indexer) { indexer_class.new("log.level": 'gt.fatal') }
 
   describe 'simple string attribute' do
-    before do
+    before(:each) do
       indexer.configure do
         to_field 'result', obj_extract('title')
       end
@@ -26,7 +26,7 @@ RSpec.describe Curator::Indexer::ObjExtract do
   end
 
   describe 'primitive array attribute' do
-    before do
+    before(:each) do
       indexer.configure do
         to_field 'result', obj_extract('title')
       end
@@ -49,7 +49,7 @@ RSpec.describe Curator::Indexer::ObjExtract do
   end
 
   describe 'model attribute' do
-    before do
+    before(:each) do
       indexer.configure do
         to_field 'result', obj_extract(:creator, :name)
       end
@@ -99,7 +99,7 @@ RSpec.describe Curator::Indexer::ObjExtract do
   end
 
   describe 'hash' do
-    before do
+    before(:each) do
       indexer.configure do
         to_field 'result', obj_extract(:creator, :name)
       end
