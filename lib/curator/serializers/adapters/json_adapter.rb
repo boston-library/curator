@@ -7,9 +7,9 @@ module Curator
       def serializable_hash
       end
 
-      def render
-        Oj.dump(serializable_hash(serializer_options))
-      end
+      # def render
+      #   Oj.dump(serializable_hash(serializer_options))
+      # end
     end
   end
 end

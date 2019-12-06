@@ -11,8 +11,6 @@ module Curator
       def render
         Ox.dump(serializable_hash)
       end
-      alias_method :to_xml, :render
-
     end
   end
 end
