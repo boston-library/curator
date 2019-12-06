@@ -33,6 +33,9 @@ RSpec.describe Curator::DigitalObject, type: :model do
         class_name('Curator::Collection').
         required }
 
+    it { is_expected.to have_one(:institution).
+        through(:admin_set).class_name('Curator::Institution') }
+
     ########### FILE SETS ##################
     it { is_expected.to have_many(:audio_file_sets).
         inverse_of(file_set_options[:inverse_of]).
@@ -95,12 +98,6 @@ RSpec.describe Curator::DigitalObject, type: :model do
         through(:issue_mapping_for).
         source(:digital_object).
         class_name('Curator::DigitalObject') }
-  end
-
-  describe '#institution' do
-    it 'returns the parent Institution' do
-      expect(subject.institution).to be_an_instance_of Curator::Institution
-    end
   end
 
   it_behaves_like 'has_exemplary_file_set'

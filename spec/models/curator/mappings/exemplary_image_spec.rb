@@ -26,6 +26,8 @@ RSpec.describe Curator::Mappings::ExemplaryImage, type: :model do
 
   it { is_expected.to have_db_index([:exemplary_file_set_id, :exemplary_file_set_type, :exemplary_object_id, :exemplary_object_type]).unique(true) }
 
+  it { is_expected.to validate_uniqueness_of(:exemplary_object_id).on(:create) }
+
   it { is_expected.to validate_uniqueness_of(:exemplary_file_set_id).
                       scoped_to([:exemplary_file_set_type, :exemplary_object_type, :exemplary_object_id]).
                       on(:create) }

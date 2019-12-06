@@ -10,6 +10,7 @@ module Curator
     before_create :add_admin_set_to_members, if: proc { |d| d.admin_set.present? } # Should Fail if admin set is not present
 
     belongs_to :admin_set, inverse_of: :admin_set_objects, class_name: 'Curator::Collection'
+    has_one :institution, through: :admin_set, class_name: 'Curator::Institution'
 
     with_options inverse_of: :file_set_of, foreign_key: :file_set_of_id, dependent: :destroy do
       has_many :audio_file_sets, class_name: 'Curator::Filestreams::Audio'
@@ -35,15 +36,6 @@ module Curator
     end
 
     self.curator_indexable_mapper = Curator::DigitalObjectIndexer.new
-
-    def institution
-      admin_set.institution
-    end
-
-    def exemplary_file_set
-      exemplary_image_mapping = exemplary_image_mappings.first
-      exemplary_image_mapping ? exemplary_image_mapping.exemplary_file_set : nil
-    end
 
     private
 

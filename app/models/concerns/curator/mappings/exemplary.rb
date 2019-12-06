@@ -6,7 +6,11 @@ module Curator
       module ObjectImagable
         extend ActiveSupport::Concern
         included do
-          has_many :exemplary_image_mappings, as: :exemplary_object, inverse_of: :exemplary_object, class_name: 'Curator::Mappings::ExemplaryImage', dependent: :destroy
+          has_one :exemplary_image_mappings, as: :exemplary_object, inverse_of: :exemplary_object, class_name: 'Curator::Mappings::ExemplaryImage', dependent: :destroy
+        end
+
+        def exemplary_file_set
+          exemplary_image_mappings.presence&.exemplary_file_set
         end
       end
       module FileSetImagable
