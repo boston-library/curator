@@ -3,9 +3,13 @@
 require 'rails_helper'
 RSpec.describe Curator::FileSetIndexer do
   describe 'indexing' do
-    # use :curator_mappings_exemplary_image factory to create FileSet,
-    # slightly indirect, but easier than creating exemplary mapping objects in before(:all) block
-    let(:exemplary_image_mapping) { create(:curator_mappings_exemplary_image) }
+    # use FileSet from :curator_mappings_exemplary_image factory
+    # otherwise exemplary_image indexing doesn't work
+    let(:exemplary_image_mapping) do
+      create(:curator_mappings_exemplary_image,
+             exemplary_object: create(:curator_digital_object),
+             exemplary_file_set: create(:curator_filestreams_image))
+    end
     let(:file_set) { exemplary_image_mapping.exemplary_file_set }
     let(:indexer) { described_class.new }
     let(:indexed) { indexer.map_record(file_set) }
