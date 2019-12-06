@@ -2,10 +2,13 @@
 
 module Curator
   module Serializers
-    class Attribute < SerializedAttr
+    class Attribute
       def serialize(record, serialization_params = {})
-        return nil unless include_attribute?(record, serialization_params)
         read_for_serialization(record, serialization_params)
+      end
+
+      def include_attribute?(record, serializer_params)
+        return true if @options
       end
 
       #Attributes cna be read as blocks and public mehods but also read with read attribute for serialization method

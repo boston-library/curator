@@ -6,7 +6,7 @@ Gemfile.lock
 storage/
 log/
 tmp/
-schema.rb
+**/db/schema.rb
 scratch.rb
 .env
 # Ignore all RubyMine temp files

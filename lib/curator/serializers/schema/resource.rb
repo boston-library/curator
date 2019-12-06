@@ -3,15 +3,11 @@
 module Curator
   module Serializers
     class Resource < Node
-      attr_reader :meta, :nodes, :relations
+      attr_reader
 
       def initialize(*args)
         super
-        @attributes = Concurrent::Hash.new
-        @meta = Concurrent::Hash.new
-        @links = Concurrent::Hash.new
-        @nodes = Concurrent::Hash.new
-        @relations = Concurrent::Hash.new
+
       end
 
 
@@ -41,17 +37,6 @@ module Curator
           meta.values
         else
           raise "Unknown Attribute Set Key #{attr_set_key}"
-        end
-      end
-
-      def read_for_serialization(record, serializer_params = {}, serializable_attributes = [])
-        serializable_attributes.reduce(Concurrent::Hash.new) do |res, attribute|
-          val = attribute.serialize(record, serializer_params)
-          next res if val.blank?
-
-          next res.merge(val) if val.kind_of?(Hash) && attribute.key.blank?
-
-          res.merge(attribute.key => val)
         end
       end
 

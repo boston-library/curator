@@ -21,7 +21,7 @@ module Curator
     super
     Curator::Descriptives.eager_load!
     Curator::Services.eager_load!
-    Curator::Serializers.eager_load!
+    # Curator::Serializers.eager_load!
   end
 
   # based on https://github.com/sciencehistory/kithe/blob/ae4f1780451b4f15577b298f57503880cc2c4681/lib/kithe.rb
