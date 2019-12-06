@@ -7,7 +7,7 @@ FactoryBot.define do
     file_set_type { 'Curator::Filestreams::Image' }
     file_name_base { Faker::Artist.name }
     position { 1 }
-    pagination { {} }
+    pagination { { 'hand_side' => 'left', 'page_type' => 'TOC', 'page_label' => '3' } }
     archived_at { nil }
   end
 end

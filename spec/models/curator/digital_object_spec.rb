@@ -6,6 +6,7 @@ require_relative './shared/metastreamable'
 require_relative './shared/optimistic_lockable'
 require_relative './shared/timestampable'
 require_relative './shared/archivable'
+require_relative './shared/mappings/has_exemplary_file_set'
 
 RSpec.describe Curator::DigitalObject, type: :model do
   subject { create(:curator_digital_object) }
@@ -31,6 +32,9 @@ RSpec.describe Curator::DigitalObject, type: :model do
         inverse_of(:admin_set_objects).
         class_name('Curator::Collection').
         required }
+
+    it { is_expected.to have_one(:institution).
+        through(:admin_set).class_name('Curator::Institution') }
 
     ########### FILE SETS ##################
     it { is_expected.to have_many(:audio_file_sets).
@@ -95,4 +99,6 @@ RSpec.describe Curator::DigitalObject, type: :model do
         source(:digital_object).
         class_name('Curator::DigitalObject') }
   end
+
+  it_behaves_like 'has_exemplary_file_set'
 end

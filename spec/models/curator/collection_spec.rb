@@ -6,6 +6,7 @@ require_relative './shared/metastreamable'
 require_relative './shared/optimistic_lockable'
 require_relative './shared/timestampable'
 require_relative './shared/archivable'
+require_relative './shared/mappings/has_exemplary_file_set'
 
 RSpec.describe Curator::Collection, type: :model do
   subject { create(:curator_collection) }
@@ -37,4 +38,6 @@ RSpec.describe Curator::Collection, type: :model do
         inverse_of(:collection).
         class_name('Curator::Mappings::CollectionMember').dependent(:destroy) }
   end
+
+  it_behaves_like 'has_exemplary_file_set'
 end
