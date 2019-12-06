@@ -5,11 +5,7 @@ RSpec.describe Curator::DigitalObjectIndexer do
   describe 'indexing' do
     # use DigitalObject from :curator_mappings_exemplary_image factory
     # otherwise exemplary_image indexing doesn't work
-    let(:exemplary_image_mapping) do
-      create(:curator_mappings_exemplary_image,
-             exemplary_object: create(:curator_digital_object),
-             exemplary_file_set: create(:curator_filestreams_image))
-    end
+    let(:exemplary_image_mapping) { create(:curator_mappings_exemplary_image) }
     let(:digital_object) { exemplary_image_mapping.exemplary_object }
     let(:indexer) { described_class.new }
     let(:indexed) { indexer.map_record(digital_object) }
