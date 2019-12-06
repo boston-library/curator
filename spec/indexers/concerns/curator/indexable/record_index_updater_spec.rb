@@ -4,8 +4,9 @@ require 'rails_helper'
 require_relative './../shared/indexable_shared'
 RSpec.describe Curator::Indexable::RecordIndexUpdater do
   include_context 'indexable_shared'
-  let(:indexable_record) { create(:curator_institution) }
   subject { described_class.new(indexable_record) }
+
+  let(:indexable_record) { create(:curator_institution) }
 
   describe '#mapper' do
     it 'returns the curator_indexable_mapper' do
@@ -31,7 +32,8 @@ RSpec.describe Curator::Indexable::RecordIndexUpdater do
   end
 
   describe '#update_index' do
-    before { stub_request(:post, solr_update_url) }
+    before(:each) { stub_request(:post, solr_update_url) }
+
     it 'makes an update request to the solr_url' do
       record_to_update = indexable_record.clone
       record_to_update.curator_indexable_mapper = Curator::Indexer.new

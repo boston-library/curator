@@ -29,10 +29,27 @@ RuboCop::RakeTask.new(:rubocop) do |task|
   task.requires << 'rubocop-rails'
   task.requires << 'rubocop-rspec'
   task.requires << 'rubocop-performance'
+  task.fail_on_error = true
   # WARNING: Make sure the bottom 3 lines are always commented out before committing
   # task.options << '--safe-auto-correct'
   # task.options << '--disable-uncorrectable'
   # task.options << '-d'
 end
 
-task default: [:rubocop, :spec]
+Dir.glob('lib/tasks/*.rake').each { |r| import r }
+
+require 'solr_wrapper/rake_task'
+
+desc 'Lint, set up test app, spin up Solr, and run specs'
+task ci: [:rubocop] do
+  puts 'running continuous integration'
+  Rails.env = 'test'
+  Rake::Task['curator:setup'].invoke
+  SolrWrapper.wrap do |solr|
+    solr.with_collection do
+      Rake::Task['spec'].invoke
+    end
+  end
+end
+
+task default: :ci

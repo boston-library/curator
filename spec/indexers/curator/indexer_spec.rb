@@ -4,6 +4,7 @@ require 'rails_helper'
 RSpec.describe Curator::Indexer do
   describe '#default_settings' do
     subject { described_class.default_settings }
+
     it 'sets default settings' do
       expect(subject).not_to be_falsey
       expect(subject['processing_thread_pool']).to eq 0

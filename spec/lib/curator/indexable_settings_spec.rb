@@ -41,7 +41,7 @@ RSpec.describe Curator::IndexableSettings do
     let(:curator_indexable_settings) { Curator.indexable_settings }
 
     it 'returns an instance of Curator::IndexableSettings' do
-      expect(curator_indexable_settings).to be_an_instance_of(Curator::IndexableSettings)
+      expect(curator_indexable_settings).to be_an_instance_of(described_class)
     end
 
     it 'has the correct attributes' do
