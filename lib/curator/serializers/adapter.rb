@@ -2,21 +2,16 @@
 
 module Curator
   module Serializers
-    class SerializationAdapter
-      attr_reader :resource, :options
-      def initialize(resource = nil, options: {})
-        @resource = resource
-        @options = options
+    class Adapter
+      attr_reader :schema, :options
+      def initialize(schema:)
+        @schema = schema
       end
 
-      def serializable_hash
+      def serializable_hash(record, serializer_options = {})
         raise 'Not Implmented'
       end
-      alias_method :to_hash, :serializable_hash
 
-      def render
-        raise 'Not Implmented'
-      end
     end
   end
 end

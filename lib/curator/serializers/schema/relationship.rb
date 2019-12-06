@@ -2,7 +2,7 @@
 
 module Curator
   module Serializers
-    class Relation < Node
+    class Relationship < Node
       attr_reader :serializer
 
       #Method should be has_one or has_many
