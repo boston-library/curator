@@ -5,10 +5,12 @@ module Curator
     include Curator::Mintable
     include Curator::Metastreamable
     include Curator::Mappings::Exemplary::ObjectImagable
+    include Curator::Indexable
 
     before_create :add_admin_set_to_members, if: proc { |d| d.admin_set.present? } # Should Fail if admin set is not present
 
     belongs_to :admin_set, inverse_of: :admin_set_objects, class_name: 'Curator::Collection'
+    has_one :institution, through: :admin_set, class_name: 'Curator::Institution'
 
     with_options inverse_of: :file_set_of, foreign_key: :file_set_of_id, dependent: :destroy do
       has_many :audio_file_sets, class_name: 'Curator::Filestreams::Audio'
@@ -32,6 +34,8 @@ module Curator
       has_one :issue_of, through: :issue_mapping, source: :issue_of
       has_one :issue_for, through: :issue_mapping_for, source: :digital_object
     end
+
+    self.curator_indexable_mapper = Curator::DigitalObjectIndexer.new
 
     private
 

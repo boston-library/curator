@@ -47,7 +47,7 @@ RSpec.describe Curator::Metastreams::Workflow, type: :model do
                       backed_by_column_of_type(:integer) }
 
   it { is_expected.to define_enum_for(:processing_state).
-                      with_values(dervivatives: 0, complete: 1).
+                      with_values(derivatives: 0, complete: 1).
                       backed_by_column_of_type(:integer) }
 
   describe 'Associations' do

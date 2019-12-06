@@ -11,6 +11,8 @@ module Curator
 
     validates :exemplary_file_set_id, uniqueness: { scope: [:exemplary_file_set_type, :exemplary_object_type, :exemplary_object_id] }, on: :create
 
+    validates :exemplary_object_id, uniqueness: true, on: :create
+
     validates :exemplary_object_type, inclusion: { in: VALID_EXEMPLARY_OBJECT_TYPES.collect { |obj_type| "Curator::#{obj_type}" } }, on: :create
 
     validates :exemplary_file_set_type, inclusion: { in: VALID_EXEMPLARY_FILE_SET_TYPES.collect { |fset_type| "Curator::Filestreams::#{fset_type}" } }, on: :create

@@ -23,6 +23,17 @@ RSpec.describe Curator::Indexer::ObjExtract do
       result = indexer.map_record(OpenStruct.new(title: 'title value'))
       expect(result['result']).to eq(['title value'])
     end
+
+    it 'ignores empty string' do
+      result = indexer.map_record(OpenStruct.new(title: ''))
+      expect(result['result']).to be_nil
+      expect(result.keys).not_to include('result')
+    end
+
+    it 'indexes false' do
+      result = indexer.map_record(OpenStruct.new(title: false))
+      expect(result['result']).to eq([false])
+    end
   end
 
   describe 'primitive array attribute' do
@@ -46,6 +57,22 @@ RSpec.describe Curator::Indexer::ObjExtract do
       result = indexer.map_record(OpenStruct.new(title: ['title value1', 'title value2']))
       expect(result['result']).to eq(['title value1', 'title value2'])
     end
+
+    it 'filters out empty strings' do
+      result = indexer.map_record(OpenStruct.new(title: ['value1', 'value2', '', '']))
+      expect(result['result']).to eq(['value1', 'value2'])
+    end
+
+    it 'ignores all empty string value' do
+      result = indexer.map_record(OpenStruct.new(title: ['', '']))
+      expect(result['result']).to be_nil
+      expect(result.keys).not_to include('result')
+    end
+
+    it 'allows false values' do
+      result = indexer.map_record(OpenStruct.new(title: [false]))
+      expect(result['result']).to eq([false])
+    end
   end
 
   describe 'model attribute' do
@@ -63,6 +90,12 @@ RSpec.describe Curator::Indexer::ObjExtract do
     it 'indexes nil without raising' do
       result = indexer.map_record(OpenStruct.new(creator: nil))
       expect(result).to eq({})
+    end
+
+    it 'ignores empty string' do
+      result = indexer.map_record(OpenStruct.new(creator: OpenStruct.new(type: 'engraver', name: '')))
+      expect(result['result']).to be_nil
+      expect(result.keys).not_to include('result')
     end
 
     describe 'as array' do
@@ -86,6 +119,12 @@ RSpec.describe Curator::Indexer::ObjExtract do
           )
         )
         expect(result).to eq({ 'result' => ['Doe, Jane', 'Tame, Puddin'] })
+      end
+
+      it 'ignores empty string' do
+        result = indexer.map_record(OpenStruct.new(creator: [OpenStruct.new(type: 'engraver', name: '')]))
+        expect(result['result']).to be_nil
+        expect(result.keys).not_to include('result')
       end
     end
 
@@ -125,6 +164,12 @@ RSpec.describe Curator::Indexer::ObjExtract do
     it 'indexes empty array' do
       result = indexer.map_record(OpenStruct.new(creator: []))
       expect(result).to eq({})
+    end
+
+    it 'ignores empty string' do
+      result = indexer.map_record(OpenStruct.new(creator: { type: 'engraver', name: '' }))
+      expect(result['result']).to be_nil
+      expect(result.keys).not_to include('result')
     end
   end
 end
