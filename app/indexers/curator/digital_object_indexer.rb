@@ -28,6 +28,7 @@ module Curator
     #   related_item_host_tsim->related_item_host_tim related_item_series_tsim->related_item_series_tim
     #   related_item_subseries_tsim->related_item_subseries_tim related_item_subsubseries_tsim->related_item_subsubseries_tim
     #   institution_name_tsi->institution_name_ti collection_name_tsim->collection_name_tim
+    #   physical_location_tsim->physical_location_tim sub_location_tsim->sub_location_tsi shelf_locator_tsim->shelf_locator_tsi
 
     # TODO: add indexing for:
     #         ocr_tiv has_searchable_text_bsi filenames_ssim is_issue_of_ssim georeferenced_bsi edit_access_group_ssim
@@ -37,15 +38,9 @@ module Curator
     #         title_info_primary_trans_tsim title_info_translated_tsim
     #         title_info_alternative_tsim title_info_uniform_tsim
     #         supplied_title_bs supplied_alternative_title_bs title_info_alternative_label_ssm subtitle_tsim
-    #         physical_location_ssim physical_location_tsim sub_location_tsim shelf_locator_tsim
     #         date_start_dtsi date_start_tsim date_end_dtsi date_end_tsim date_facet_ssim
     #         date_type_ssm date_start_qualifier_ssm
-    #         edition_name_tsi edition_number_tsi volume_tsi issue_number_tsi
-    #         lang_term_ssim
-
-    #         name_tsim name_role_tsim name_facet_ssim
-    #         note_tsim note_resp_tsim note_performers_tsim note_acquisition_tsim note_ownership_tsim
-    #         note_citation_tsim note_reference_tsim note_venue_tsim note_physical_tsim note_date_tsim
+    #
     #         subject_facet_ssim
     #         subject_topic_tsim
     #         subject_date_start_tsim subject_date_start_dtsim subject_date_end_tsim subject_date_end_dtsim
@@ -57,8 +52,6 @@ module Curator
     #         subject_geographic_tsim subject_geographic_ssim
     #         subject_coordinates_geospatial subject_point_geospatial subject_bbox_geospatial
     #         subject_geojson_facet_ssim subject_hiergeo_geojson_ssm subject_geo_nonhier_ssim
-    #         scale_tsim projection_tsi
-    #         rights_ss license_ssm reuse_allowed_ssi restrictions_on_access_ss
     configure do
       to_field 'admin_set_name_ssi', obj_extract('admin_set', 'name')
       to_field 'admin_set_ark_id_ssi', obj_extract('admin_set', 'ark_id')

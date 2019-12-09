@@ -5,9 +5,14 @@ module Curator
     module DescriptiveIndexer
       extend ActiveSupport::Concern
       include Curator::Indexer::GenreIndexer
+      include Curator::Indexer::NameRoleIndexer
       include Curator::Indexer::RelatedItemIndexer
+      include Curator::Indexer::PhysicalLocationIndexer
       include Curator::Indexer::IdentifierIndexer
       include Curator::Indexer::NoteIndexer
+      include Curator::Indexer::PublicationIndexer
+      include Curator::Indexer::CartographicIndexer
+      include Curator::Indexer::RightsLicenseIndexer
       included do
         configure do
           to_field 'digital_origin_ssi', obj_extract('descriptive', 'digital_origin')
@@ -23,6 +28,9 @@ module Curator
           to_field 'resource_type_manuscript_bsi', obj_extract('descriptive', 'resource_type_manuscript')
           to_field 'type_of_resource_ssim' do |record, accumulator|
             record.descriptive.resource_types.each { |type| accumulator << type.label }
+          end
+          to_field 'lang_term_ssim' do |record, accumulator|
+            record.descriptive.languages.each { |lang| accumulator << lang.label }
           end
         end
       end
