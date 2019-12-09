@@ -99,6 +99,9 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     it { is_expected.to have_db_column(:subseries).
                         of_type(:string) }
 
+    it { is_expected.to have_db_column(:subsubseries).
+                        of_type(:string) }
+
     it { is_expected.to have_db_column(:rights).
                         of_type(:string) }
 

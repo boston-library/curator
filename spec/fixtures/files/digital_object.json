@@ -217,6 +217,7 @@
         ],
         "series": "Series value the first",
         "subseries": "Subseries value",
+        "subsubseries": "Subsubseries value",
         "physical_location": {
           "label": "Boston Public Library",
           "name_type": "corporate",
