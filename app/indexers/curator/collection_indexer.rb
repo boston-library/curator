@@ -10,10 +10,10 @@ module Curator
 
     # NOTE: fields below were previously set in Bplmodels::Collection#to_solr, but have been updated:
     #   institution_pid_ssi->institution_ark_id_ssi institution_name_ssim->institution_name_ssi
-    #   institution_name_tsim->institution_name_tsi
+    #   institution_name_tsim->institution_name_tsi genre_basic_tsim->genre_basic_tim
 
     # TODO: add indexing for:
-    #         genre_basic_ssim genre_basic_tsim edit_access_group_ssim
+    #         genre_basic_ssim genre_basic_tim edit_access_group_ssim
     configure do
       to_field 'title_info_primary_tsi', obj_extract('name')
       to_field 'title_info_primary_ssort' do |record, accumulator, _context|

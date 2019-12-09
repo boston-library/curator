@@ -134,6 +134,9 @@
         ],
         "note": [
           {
+            "label": "Generic typeless note"
+          },
+          {
             "label": "Date from accompanying item.",
             "type": "date"
           },
