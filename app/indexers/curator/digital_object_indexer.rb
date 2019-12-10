@@ -7,7 +7,7 @@ module Curator
     include Curator::Indexer::AdministrativeIndexer
 
     # NOTE: fields below were previously set in Bplmodels::ObjectBase#to_solr, but no longer needed(?):
-    #   internet_media_type_ssim title_info_uniform_ssim classification_tsim label_ssim
+    #   internet_media_type_ssim title_info_uniform_ssim classification_tsim label_ssim date_facet_ssim
     #
     # NOTE: fields below were previously set in Bplmodels::ObjectBase#to_solr, but have been updated:
     #   institution_pid_si->institution_ark_id_ssi institution_name_ssim->institution_name_ssi
@@ -38,8 +38,6 @@ module Curator
     #         title_info_primary_trans_tsim title_info_translated_tsim
     #         title_info_alternative_tsim title_info_uniform_tsim
     #         supplied_title_bs supplied_alternative_title_bs title_info_alternative_label_ssm subtitle_tsim
-    #         date_start_dtsi date_start_tsim date_end_dtsi date_end_tsim date_facet_ssim
-    #         date_type_ssm date_start_qualifier_ssm
     #
     #         subject_facet_ssim
     #         subject_topic_tsim

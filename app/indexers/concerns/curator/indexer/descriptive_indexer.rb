@@ -5,6 +5,7 @@ module Curator
     module DescriptiveIndexer
       extend ActiveSupport::Concern
       include Curator::Indexer::GenreIndexer
+      include Curator::Indexer::DateIndexer
       include Curator::Indexer::NameRoleIndexer
       include Curator::Indexer::RelatedItemIndexer
       include Curator::Indexer::PhysicalLocationIndexer
