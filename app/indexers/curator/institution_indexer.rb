@@ -18,7 +18,7 @@ module Curator
     #         subject_geojson_facet_ssim subject_hiergeo_geojson_ssm
     configure do
       to_field %w(title_info_primary_tsi physical_location_ssim), obj_extract('name')
-      to_field 'title_info_primary_ssort' do |record, accumulator, _context|
+      to_field 'title_info_primary_ssort' do |record, accumulator|
         accumulator << Curator::Parsers::InputParser.get_proper_title(record.name).last
       end
       to_field 'abstract_tsi', obj_extract('abstract')

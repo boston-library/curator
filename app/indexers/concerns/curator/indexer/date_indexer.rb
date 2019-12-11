@@ -7,8 +7,8 @@ module Curator
       included do
         configure do
           each_record do |record, context|
-            date_fields = %w(date_start_tsim date_end_tsim date_facet_yearly_ssim date_type_ssm
-                             date_start_qualifier_ssm date_edtf_ssim)
+            date_fields = %w(date_start_tsim date_end_tsim date_facet_yearly_itim date_type_ssm
+                             date_start_qualifier_ssm date_edtf_ssm)
             date_fields.each do |field|
               context.output_hash[field] ||= []
             end
@@ -23,7 +23,7 @@ module Curator
               next unless record.descriptive.date.send(k)
               context.output_hash['date_type_ssm'] << v
               edtf_date = record.descriptive.date.send(k)
-              context.output_hash['date_edtf_ssim'] << edtf_date
+              context.output_hash['date_edtf_ssm'] << edtf_date
               parsed_date = edtf_date_parser(edtf_date)
               dates_static << parsed_date[:static] if parsed_date[:static]
               if parsed_date[:start] || parsed_date[:end]
@@ -99,7 +99,7 @@ module Curator
             (0..(Time.now.year + 2)).step(1) do |index|
               if (date_facet_start >= index && date_facet_start < index + 1) ||
                  (date_facet_end != -1 && index > date_facet_start && date_facet_end >= index)
-                context.output_hash['date_facet_yearly_ssim'] << index.to_s
+                context.output_hash['date_facet_yearly_itim'] << index.to_s
               end
             end
           end

@@ -7,7 +7,8 @@ module Curator
     include Curator::Indexer::AdministrativeIndexer
 
     # NOTE: fields below were previously set in Bplmodels::ObjectBase#to_solr, but no longer needed(?):
-    #   internet_media_type_ssim title_info_uniform_ssim classification_tsim label_ssim date_facet_ssim
+    #   internet_media_type_ssim classification_tsim label_ssim date_facet_ssim supplied_alternative_title_bs
+    #   supplied_title_bs
     #
     # NOTE: fields below were previously set in Bplmodels::ObjectBase#to_solr, but have been updated:
     #   institution_pid_si->institution_ark_id_ssi institution_name_ssim->institution_name_ssi
@@ -29,15 +30,16 @@ module Curator
     #   related_item_subseries_tsim->related_item_subseries_tim related_item_subsubseries_tsim->related_item_subsubseries_tim
     #   institution_name_tsi->institution_name_ti collection_name_tsim->collection_name_tim
     #   physical_location_tsim->physical_location_tim sub_location_tsim->sub_location_tsi shelf_locator_tsim->shelf_locator_tsi
+    #   date_facet_yearly_ssim->date_facet_yearly_itim subtitle_tsim->title_info_other_subtitle_tsim
+    #
+    # NOTE: fields below are new:
+    #   title_info_primary_subtitle_tsi date_edtf_ssm
 
     # TODO: add indexing for:
     #         ocr_tiv has_searchable_text_bsi filenames_ssim is_issue_of_ssim georeferenced_bsi edit_access_group_ssim
     #
     #         DESCRIPTIVE:
-    #         title_info_primary_tsi title_info_primary_ssort title_info_partnum_tsi title_info_partname_tsi
-    #         title_info_primary_trans_tsim title_info_translated_tsim
-    #         title_info_alternative_tsim title_info_uniform_tsim
-    #         supplied_title_bs supplied_alternative_title_bs title_info_alternative_label_ssm subtitle_tsim
+
     #
     #         subject_facet_ssim
     #         subject_topic_tsim

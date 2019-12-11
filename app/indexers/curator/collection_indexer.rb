@@ -16,8 +16,8 @@ module Curator
     #         genre_basic_ssim genre_basic_tim edit_access_group_ssim
     configure do
       to_field 'title_info_primary_tsi', obj_extract('name')
-      to_field 'title_info_primary_ssort' do |record, accumulator, _context|
-        accumulator << Curator::Parsers::InputParser.get_proper_title(record.send(:name)).last
+      to_field 'title_info_primary_ssort' do |record, accumulator|
+        accumulator << Curator::Parsers::InputParser.get_proper_title(record.name).last
       end
       to_field 'abstract_tsi', obj_extract('abstract')
       to_field %w(physical_location_ssim physical_location_tsim institution_name_ssi institution_name_tsi),
@@ -25,7 +25,7 @@ module Curator
       to_field 'institution_ark_id_ssi', obj_extract('institution', 'ark_id')
 
       to_field 'exemplary_image_ssi', obj_extract('exemplary_file_set', 'ark_id')
-      to_field 'exemplary_image_iiif_bsi' do |record, accumulator, _context|
+      to_field 'exemplary_image_iiif_bsi' do |record, accumulator|
         exemplary_file_set_type = record.exemplary_file_set&.file_set_type
         accumulator << false unless exemplary_file_set_type == 'Curator::Filestreams::Image'
       end

@@ -4,6 +4,7 @@ module Curator
   class Indexer < Traject::Indexer
     module DescriptiveIndexer
       extend ActiveSupport::Concern
+      include Curator::Indexer::TitleIndexer
       include Curator::Indexer::GenreIndexer
       include Curator::Indexer::DateIndexer
       include Curator::Indexer::NameRoleIndexer
