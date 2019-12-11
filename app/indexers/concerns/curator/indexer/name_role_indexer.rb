@@ -7,6 +7,8 @@ module Curator
       included do
         configure do
           each_record do |record, context|
+            next unless record.descriptive&.name_roles
+
             name_fields = %w(name_tsim name_role_tsim name_facet_ssim)
             name_fields.each { |field| context.output_hash[field] ||= [] }
             record.descriptive.name_roles.each do |name_role|

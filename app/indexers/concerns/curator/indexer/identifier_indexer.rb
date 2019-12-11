@@ -7,6 +7,8 @@ module Curator
       included do
         configure do
           each_record do |record, context|
+            next unless record.descriptive&.identifier
+
             id_fields = %w(identifier_local_other_tsim identifier_local_other_invalid_tsim
                            identifier_local_call_tsim identifier_local_call_invalid_tsim
                            identifier_local_barcode_tsim identifier_local_barcode_invalid_tsim

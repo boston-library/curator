@@ -9,6 +9,8 @@ module Curator
           to_field 'rights_ss', obj_extract('descriptive', 'rights')
           to_field 'restrictions_on_access_ss', obj_extract('descriptive', 'access_restrictions')
           each_record do |record, context|
+            next unless record.descriptive&.licenses
+
             license_fields = %w(license_ssm reuse_allowed_ssi)
             license_fields.each { |field| context.output_hash[field] ||= [] }
             record.descriptive.licenses.each do |license|

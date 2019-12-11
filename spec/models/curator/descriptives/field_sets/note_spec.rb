@@ -11,8 +11,6 @@ RSpec.describe Curator::Descriptives::Note, type: :model do
     it { is_expected.to respond_to(:label, :type) }
 
     describe 'validations' do
-      it { is_expected.to validate_presence_of(:type) }
-
       it { is_expected.to validate_inclusion_of(:type).
                           in_array(Curator::Descriptives::NOTE_TYPES) }
     end

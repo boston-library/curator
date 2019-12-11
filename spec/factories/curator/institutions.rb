@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :curator_institution, class: 'Curator::Institution' do
-    ark_id { "commonwealth:#{SecureRandom.hex(5)}" }
+    sequence(:ark_id) { |_n| "commonwealth:#{SecureRandom.hex(5)}" }
     name { Faker::University.name }
     abstract { Faker::Lorem.paragraph }
     url { Faker::Internet.unique.url(host: 'example.org') }

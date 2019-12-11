@@ -104,7 +104,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
 
         let(:notes) { descriptive.note }
         it 'sets notes' do
-          expect(notes.count).to eq 2
+          expect(notes.count).to eq 3
           expect(notes).to all(be_an_instance_of(Curator::Descriptives::Note))
           desc_json['note'].each do |note_json|
             expect(collection_as_json(notes, { only: %i(label type) })).to include(note_json)

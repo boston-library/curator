@@ -7,6 +7,8 @@ module Curator
       included do
         configure do
           each_record do |record, context|
+            next unless record.descriptive&.date
+
             date_fields = %w(date_start_tsim date_end_tsim date_facet_yearly_itim date_type_ssm
                              date_start_qualifier_ssm date_edtf_ssm)
             date_fields.each do |field|
@@ -21,6 +23,7 @@ module Curator
             mods_date_accessors = { created: 'dateCreated', issued: 'dateIssued', copyright: 'copyrightDate' }
             mods_date_accessors.each do |k, v|
               next unless record.descriptive.date.send(k)
+
               context.output_hash['date_type_ssm'] << v
               edtf_date = record.descriptive.date.send(k)
               context.output_hash['date_edtf_ssm'] << edtf_date
@@ -96,7 +99,7 @@ module Curator
             end
 
             # yearly faceting, starting with year 0 AD
-            (0..(Time.now.year + 2)).step(1) do |index|
+            (0..(Time.current.year + 2)).step(1) do |index|
               if (date_facet_start >= index && date_facet_start < index + 1) ||
                  (date_facet_end != -1 && index > date_facet_start && date_facet_end >= index)
                 context.output_hash['date_facet_yearly_itim'] << index.to_s
@@ -104,44 +107,44 @@ module Curator
             end
           end
         end
+      end
 
-        ##
-        # TODO: deal with inferred dates
-        # takes an EDTF-formatted date string and returns a hash of MODS-y date values
-        # we support "/1945" (unknown start) and "1945/.." (open end)
-        # @param edtf_date_string [String]
-        # @return [Hash] { static: '', start: '', end: '', qualifier: '' }
-        def edtf_date_parser(edtf_date_string)
-          date_hash = { static: nil, start: nil, end: nil, qualifier: nil }
-          range = edtf_date_string.match?(/\//) ? true : false
-          split_range = edtf_date_string.split('/')
-          date_hash[:qualifier] = 'questionable' if split_range[0].match?(/\?/)
-          date_hash[:qualifier] = 'approximate' if split_range[0].match?(/~/)
-          if range
-            date_hash[:start] = remove_edtf_qualifier(split_range[0]).presence
-            date_hash[:end] = remove_edtf_qualifier(split_range[1]).presence
-          else
-            date_hash[:static] = remove_edtf_qualifier(split_range[0])
-          end
-          date_hash
+      ##
+      # TODO: deal with inferred dates
+      # takes an EDTF-formatted date string and returns a hash of MODS-y date values
+      # we support "/1945" (unknown start) and "1945/.." (open end)
+      # @param edtf_date_string [String]
+      # @return [Hash] { static: '', start: '', end: '', qualifier: '' }
+      def edtf_date_parser(edtf_date_string)
+        date_hash = { static: nil, start: nil, end: nil, qualifier: nil }
+        range = edtf_date_string.match?(/\//) ? true : false
+        split_range = edtf_date_string.split('/')
+        date_hash[:qualifier] = 'questionable' if split_range[0].match?(/\?/)
+        date_hash[:qualifier] = 'approximate' if split_range[0].match?(/~/)
+        if range
+          date_hash[:start] = remove_edtf_qualifier(split_range[0]).presence
+          date_hash[:end] = remove_edtf_qualifier(split_range[1]).presence
+        else
+          date_hash[:static] = remove_edtf_qualifier(split_range[0])
         end
+        date_hash
+      end
 
-        ##
-        # remove EDTF qualifiers from date values: %w(? ~ ..)
-        # @param edtf_date_string [String]
-        # @return [String]
-        def remove_edtf_qualifier(edtf_date_string)
-          edtf_date_string.gsub(/(\?|~|\.\.)/, '')
-        end
+      ##
+      # remove EDTF qualifiers from date values: %w(? ~ ..)
+      # @param edtf_date_string [String]
+      # @return [String]
+      def remove_edtf_qualifier(edtf_date_string)
+        edtf_date_string.gsub(/(\?|~|\.\.)/, '')
+      end
 
-        ##
-        # return the last day for the given year and month
-        # @param year_plus_month [String] YYYY-MM
-        # @return [String] last day as two digits
-        def last_day_of_month(year_plus_month)
-          split_date = year_plus_month.split('-')
-          Date.new(split_date[0].to_i, split_date[1].to_i).end_of_month.day.to_s
-        end
+      ##
+      # return the last day for the given year and month
+      # @param year_plus_month [String] YYYY-MM
+      # @return [String] last day as two digits
+      def last_day_of_month(year_plus_month)
+        split_date = year_plus_month.split('-')
+        Date.new(split_date[0].to_i, split_date[1].to_i).end_of_month.day.to_s
       end
     end
   end

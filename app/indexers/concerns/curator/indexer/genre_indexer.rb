@@ -7,6 +7,8 @@ module Curator
       included do
         configure do
           each_record do |record, context|
+            next unless record.descriptive&.genres
+
             %w(genre_basic_tim genre_basic_ssim genre_specific_tim genre_specific_ssim).each do |field|
               context.output_hash[field] ||= []
             end

@@ -7,7 +7,9 @@ module Curator
       included do
         configure do
           to_field %w(related_item_host_tim related_item_host_ssim) do |record, accumulator|
-            record.descriptive.host_collections.each { |hcol| accumulator << hcol.name }
+            record.descriptive.host_collections.each do
+              |hcol| accumulator << hcol.name
+            end if record.descriptive&.host_collections
           end
           to_field %w(related_item_series_tim related_item_series_ssim), obj_extract('descriptive', 'series')
           to_field %w(related_item_subseries_tim related_item_subseries_ssim), obj_extract('descriptive', 'subseries')

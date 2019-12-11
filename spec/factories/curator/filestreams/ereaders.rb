@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :curator_filestreams_ereader, class: 'Curator::Filestreams::Ereader' do
     association :file_set_of, factory: :curator_digital_object
-    ark_id { "commonwealth:#{SecureRandom.hex(5)}" }
+    sequence(:ark_id) { |_n| "commonwealth:#{SecureRandom.hex(5)}" }
     file_set_type { 'Curator::Filestreams::Ereader' }
     file_name_base { Faker::Book.publisher }
     position { 1 }
