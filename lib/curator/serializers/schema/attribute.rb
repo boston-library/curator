@@ -6,7 +6,7 @@ module Curator
       attr_reader :key, :method
       def initialize(key: nil, method: nil, options: Concurrent::Hash.new)
         @key = key
-        @method = method
+        @method = method || key
         @options = options
       end
 
@@ -32,7 +32,7 @@ module Curator
       end
 
       def conditions_passed?(record, serializer_params = Concurrent::Hash.new)
-        return true !@options.key?(:if) && !@options.key?(:unless)
+        return true if !@options.key?(:if) && !@options.key?(:unless)
 
         if_cond, unless_cond = @options[:if], @options[:unless]
         if if_cond.present?

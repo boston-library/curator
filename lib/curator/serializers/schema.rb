@@ -16,8 +16,10 @@ module Curator
         attributes.fetch(attr_type) { |key| attributes[key].merge!(attribute.key => attribute) }
       end
 
-      def add_nesting(node)
-        attr_type.fetch(:node) { |key| attributes[key].merge!(node.root_key => node) }
+      def add_nesting(node, &block)
+        raise "Nested Node requires block!" unless block_given?
+        node.instance_eval(&block)
+        attributes.fetch(:node) { |key| attributes[key].merge!(node.root_key => node) }
       end
 
       #TODO - FIgure out a way to add links and meta passed in from ther serializer params too

@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :curator_controlled_terms_authority, class: 'Curator::ControlledTerms::Authority' do
-    sequence(:code) { |n| "#{Faker::IndustrySegments.sector}-#{n}-#{n << 1}-#{n << 2}" }
+    sequence(:code) { |n| "#{Faker::IndustrySegments.sector}-#{SecureRandom.hex(12)}" }
     name { Faker::Book.genre }
     base_url { Faker::Internet.unique.url(host: 'loc.gov') }
     archived_at { nil }

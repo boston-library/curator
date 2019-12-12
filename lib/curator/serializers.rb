@@ -14,15 +14,15 @@ module Curator
         autoload :JSONAdapter
         autoload :XMLAdapter
       end
-      autoload_under 'serialized_attrs' do
+      autoload_under 'schema' do
         autoload :Attribute
-        autoload :Resource
-        autoload :NullResource
+        # autoload :Resource
+        # autoload :NullResource
         autoload :Link
         autoload :Meta
         autoload :Node
         autoload :Relation
-        autoload :Collection
+        # autoload :Collection
       end
     end
 
