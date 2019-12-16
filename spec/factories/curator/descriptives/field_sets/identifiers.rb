@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :curator_descriptives_identifier, class: 'Curator::Descriptives::Identifier' do
     label { Faker::Lorem.sentence(word_count: 3) }
-    type { Curator::Descriptives::IDENTIFIER_TYPES.sample }
+    type { %w(local-other local-call local-barcode).sample }
     invalid { [true, false].sample }
     skip_create
     initialize_with { new(attributes) }

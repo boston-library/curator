@@ -45,7 +45,8 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
       let(:simple_fields) do
         %w(abstract access_restrictions digital_origin frequency issuance origin_event extent
            physical_location_department physical_location_shelf_locator place_of_publication
-           publisher rights series subseries toc toc_url resource_type_manuscript text_direction)
+           publisher rights series subseries subsubseries toc toc_url resource_type_manuscript
+           text_direction)
       end
 
       it 'creates the descriptive object' do

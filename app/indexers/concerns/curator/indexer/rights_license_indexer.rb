@@ -11,7 +11,7 @@ module Curator
           each_record do |record, context|
             next unless record.descriptive&.licenses
 
-            license_fields = %w(license_ssm reuse_allowed_ssi)
+            license_fields = %w(license_ssm license_uri_ssm reuse_allowed_ssi)
             license_fields.each { |field| context.output_hash[field] ||= [] }
             record.descriptive.licenses.each do |license|
               license_text = license.label
@@ -27,6 +27,7 @@ module Curator
                       end
               context.output_hash['license_ssm'] << license_text
               context.output_hash['reuse_allowed_ssi'] << reuse
+              context.output_hash['license_uri_ssm'] << license.uri
             end
           end
         end

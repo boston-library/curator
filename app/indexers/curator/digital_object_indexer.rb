@@ -26,14 +26,16 @@ module Curator
     #   rights_ssm->rights_ss restrictions_on_access_ssm->restrictions_on_access_ss
     #   publisher_tsim->publisher_tsi pubplace_tsim->pubplace_tsi abstract_tsim->abstract_tsi
     #   genre_basic_tsim->genre_basic_tim genre_specific_tsim->genre_specific_tim
-    #   related_item_host_tsim->related_item_host_tim related_item_series_tsim->related_item_series_tim
-    #   related_item_subseries_tsim->related_item_subseries_tim related_item_subsubseries_tsim->related_item_subsubseries_tim
+    #   related_item_host_tsim->related_item_host_tim related_item_series_tsim->related_item_series_ti
+    #   related_item_series_ssim->related_item_series_ssi related_item_subseries_ssim->related_item_subseries_ssi
+    #   related_item_subseries_tsim->related_item_subseries_ti related_item_subsubseries_tsim->related_item_subsubseries_ti
+    #   related_item_subsubseries_ssim->related_item_subsubseries_ssi
     #   institution_name_tsi->institution_name_ti collection_name_tsim->collection_name_tim
     #   physical_location_tsim->physical_location_tim sub_location_tsim->sub_location_tsi shelf_locator_tsim->shelf_locator_tsi
     #   date_facet_yearly_ssim->date_facet_yearly_itim subtitle_tsim->title_info_other_subtitle_tsim
     #
     # NOTE: fields below are new:
-    #   title_info_primary_subtitle_tsi date_edtf_ssm
+    #   title_info_primary_subtitle_tsi date_edtf_ssm license_uri_ssm
 
     # TODO: add indexing for:
     #         ocr_tiv has_searchable_text_bsi filenames_ssim is_issue_of_ssim georeferenced_bsi edit_access_group_ssim

@@ -20,6 +20,7 @@ module Curator
             dates_end = []
 
             # iterate over date values, send them to #edtf_date_parser
+            # we use "nil" as String to represent empty values (can't assign nil/null in Solr)
             mods_date_accessors = { created: 'dateCreated', issued: 'dateIssued', copyright: 'copyrightDate' }
             mods_date_accessors.each do |k, v|
               next unless record.descriptive.date.send(k)
@@ -33,13 +34,13 @@ module Curator
                 dates_start << parsed_date[:start]
                 dates_end << parsed_date[:end]
               end
-              context.output_hash['date_start_qualifier_ssm'] << parsed_date[:qualifier]
+              context.output_hash['date_start_qualifier_ssm'] << (parsed_date[:qualifier] || 'nil')
             end
 
             # push the parsed date values as-is into text fields for display
             dates_static.each do |static_date|
               context.output_hash['date_start_tsim'] << static_date
-              context.output_hash['date_end_tsim'] << 'nil' # hacky, but can't assign null in Solr
+              context.output_hash['date_end_tsim'] << 'nil'
             end
             dates_start.each_with_index do |start_date, index|
               context.output_hash['date_start_tsim'] << (start_date || 'unknown')
@@ -69,7 +70,7 @@ module Curator
 
             # set latest date (date_end_dtsi)
             end_date_suffix = 'T23:59:59.999Z'
-            if latest_date && latest_date.match?(/[0-9]{4}[0-9-]*\z/)
+            if latest_date&.match?(/[0-9]{4}[0-9-]*\z/)
               date_facet_end = latest_date[0..3].to_i
               end_date_for_index = if latest_date.length == 4
                                      "#{latest_date}-12-31#{end_date_suffix}"
@@ -102,12 +103,14 @@ module Curator
             (0..(Time.current.year + 2)).step(1) do |index|
               if (date_facet_start >= index && date_facet_start < index + 1) ||
                  (date_facet_end != -1 && index > date_facet_start && date_facet_end >= index)
-                context.output_hash['date_facet_yearly_itim'] << index.to_s
+                context.output_hash['date_facet_yearly_itim'] << index
               end
             end
           end
         end
       end
+
+      private
 
       ##
       # TODO: deal with inferred dates

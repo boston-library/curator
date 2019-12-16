@@ -29,13 +29,13 @@ module Curator
           to_field 'text_direction_ssi', obj_extract('descriptive', 'text_direction')
           to_field 'resource_type_manuscript_bsi', obj_extract('descriptive', 'resource_type_manuscript')
           to_field 'type_of_resource_ssim' do |record, accumulator|
-            record.descriptive.resource_types.each do
-              |type| accumulator << type.label
+            record.descriptive.resource_types.each do |type|
+              accumulator << type.label
             end if record.descriptive&.resource_types
           end
           to_field 'lang_term_ssim' do |record, accumulator|
-            record.descriptive.languages.each do
-              |lang| accumulator << lang.label
+            record.descriptive.languages.each do |lang|
+              accumulator << lang.label
             end if record.descriptive&.languages
           end
         end
