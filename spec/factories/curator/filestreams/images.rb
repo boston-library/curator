@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :curator_filestreams_image, class: 'Curator::Filestreams::Image' do
     association :file_set_of, factory: :curator_digital_object
-    sequence(:ark_id) { |_n| "commonwealth:#{SecureRandom.hex(5)}" }
+    sequence(:ark_id) { |n| "commonwealth:#{SecureRandom.hex(n)}" }
     file_set_type { 'Curator::Filestreams::Image' }
     file_name_base { Faker::Artist.name }
     position { 1 }
