@@ -17,14 +17,14 @@ RSpec.describe Curator::DigitalObjectIndexer do
     end
 
     it 'sets the institution fields' do
-      %w(institution_name_ssi institution_name_tsi).each do |field|
+      %w(institution_name_ssi institution_name_ti).each do |field|
         expect(indexed[field]).to eq [digital_object.institution.name]
       end
       expect(indexed['institution_ark_id_ssi']).to eq [digital_object.institution.ark_id]
     end
 
     it 'sets the collection fields' do
-      %w(collection_name_ssim collection_name_tsim).each do |field|
+      %w(collection_name_ssim collection_name_tim).each do |field|
         expect(indexed[field]).to eq collections.map { |c| c.name }
       end
       expect(indexed['collection_ark_id_ssim']).to eq collections.map { |c| c.ark_id }

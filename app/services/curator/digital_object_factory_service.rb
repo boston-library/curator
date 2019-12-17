@@ -42,7 +42,7 @@ module Curator
             simple_fields = %i(abstract access_restrictions digital_origin frequency
                                issuance origin_event extent physical_location_department
                                physical_location_shelf_locator place_of_publication
-                               publisher rights series subseries toc toc_url
+                               publisher rights series subseries subsubseries toc toc_url
                                resource_type_manuscript text_direction)
             simple_fields.each do |attr|
               descriptive.send("#{attr}=", @desc_json_attrs.fetch(attr, nil))

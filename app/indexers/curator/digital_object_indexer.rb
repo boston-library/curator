@@ -2,11 +2,13 @@
 
 module Curator
   class DigitalObjectIndexer < Curator::Indexer
+    include Curator::Indexer::DescriptiveIndexer
     include Curator::Indexer::WorkflowIndexer
     include Curator::Indexer::AdministrativeIndexer
 
     # NOTE: fields below were previously set in Bplmodels::ObjectBase#to_solr, but no longer needed(?):
-    #   internet_media_type_ssim title_info_uniform_ssim classification_tsim label_ssim
+    #   internet_media_type_ssim classification_tsim label_ssim date_facet_ssim supplied_alternative_title_bs
+    #   supplied_title_bs
     #
     # NOTE: fields below were previously set in Bplmodels::ObjectBase#to_solr, but have been updated:
     #   institution_pid_si->institution_ark_id_ssi institution_name_ssim->institution_name_ssi
@@ -22,38 +24,25 @@ module Curator
     #   subject_scale_tsim->scale_tsim subject_projection_tsim->projection_tsi
     #   edition_tsim->edition_name_tsim issuance_tsim->issuance_tsi
     #   rights_ssm->rights_ss restrictions_on_access_ssm->restrictions_on_access_ss
+    #   publisher_tsim->publisher_tsi pubplace_tsim->pubplace_tsi abstract_tsim->abstract_tsi
+    #   genre_basic_tsim->genre_basic_tim genre_specific_tsim->genre_specific_tim
+    #   related_item_host_tsim->related_item_host_tim related_item_series_tsim->related_item_series_ti
+    #   related_item_series_ssim->related_item_series_ssi related_item_subseries_ssim->related_item_subseries_ssi
+    #   related_item_subseries_tsim->related_item_subseries_ti related_item_subsubseries_tsim->related_item_subsubseries_ti
+    #   related_item_subsubseries_ssim->related_item_subsubseries_ssi
+    #   institution_name_tsi->institution_name_ti collection_name_tsim->collection_name_tim
+    #   physical_location_tsim->physical_location_tim sub_location_tsim->sub_location_tsi shelf_locator_tsim->shelf_locator_tsi
+    #   date_facet_yearly_ssim->date_facet_yearly_itim subtitle_tsim->title_info_other_subtitle_tsim
+    #
+    # NOTE: fields below are new:
+    #   title_info_primary_subtitle_tsi date_edtf_ssm license_uri_ssm
 
     # TODO: add indexing for:
     #         ocr_tiv has_searchable_text_bsi filenames_ssim is_issue_of_ssim georeferenced_bsi edit_access_group_ssim
     #
     #         DESCRIPTIVE:
-    #         title_info_primary_tsi title_info_primary_ssort title_info_partnum_tsi title_info_partname_tsi
-    #         title_info_primary_trans_tsim title_info_translated_tsim
-    #         title_info_alternative_tsim title_info_uniform_tsim
-    #         supplied_title_bs supplied_alternative_title_bs title_info_alternative_label_ssm subtitle_tsim
-    #         genre_basic_tsim genre_basic_ssim genre_specific_tsim genre_specific_ssim
-    #         type_of_resource_ssim resource_type_manuscript_bsi extent_tsi digital_origin_ssi
-    #         physical_location_ssim physical_location_tsim sub_location_tsim shelf_locator_tsim
-    #         abstract_tsim table_of_contents_tsi table_of_contents_url_ss
-    #         date_start_dtsi date_start_tsim date_end_dtsi date_end_tsim date_facet_ssim
-    #         date_type_ssm date_start_qualifier_ssm
-    #         publisher_tsim pubplace_tsim issuance_tsi frequency_tsi
-    #         edition_name_tsi edition_number_tsi volume_tsi issue_number_tsi text_direction_ssi
-    #         lang_term_ssim
-    #         related_item_constiuent_tsim related_item_constiuent_ssim
-    #         related_item_host_tsim related_item_host_ssim
-    #         related_item_series_tsim related_item_series_ssim
-    #         related_item_subseries_tsim related_item_subseries_ssim
-    #         related_item_subsubseries_tsim related_item_subsubseries_ssim
-    #         related_item_isreferencedby_ssm
-    #         identifier_local_other_tsim identifier_local_other_invalid_tsim
-    #         identifier_local_call_tsim identifier_local_call_invalid_tsim
-    #         identifier_local_barcode_tsim identifier_local_barcode_invalid_tsim
-    #         identifier_local_accession_tsim identifier_isbn_tsim identifier_lccn_tsim
-    #         identifier_ia_id_ssi identifier_uri_ss
-    #         name_tsim name_role_tsim name_facet_ssim
-    #         note_tsim note_resp_tsim note_performers_tsim note_acquisition_tsim note_ownership_tsim
-    #         note_citation_tsim note_reference_tsim note_venue_tsim note_physical_tsim note_date_tsim
+
+    #
     #         subject_facet_ssim
     #         subject_topic_tsim
     #         subject_date_start_tsim subject_date_start_dtsim subject_date_end_tsim subject_date_end_dtsim
@@ -65,14 +54,12 @@ module Curator
     #         subject_geographic_tsim subject_geographic_ssim
     #         subject_coordinates_geospatial subject_point_geospatial subject_bbox_geospatial
     #         subject_geojson_facet_ssim subject_hiergeo_geojson_ssm subject_geo_nonhier_ssim
-    #         scale_tsim projection_tsi
-    #         rights_ss license_ssm reuse_allowed_ssi restrictions_on_access_ss
     configure do
       to_field 'admin_set_name_ssi', obj_extract('admin_set', 'name')
       to_field 'admin_set_ark_id_ssi', obj_extract('admin_set', 'ark_id')
-      to_field %w(institution_name_ssi institution_name_tsi), obj_extract('institution', 'name')
+      to_field %w(institution_name_ssi institution_name_ti), obj_extract('institution', 'name')
       to_field 'institution_ark_id_ssi', obj_extract('institution', 'ark_id')
-      to_field %w(collection_name_ssim collection_name_tsim) do |record, accumulator|
+      to_field %w(collection_name_ssim collection_name_tim) do |record, accumulator|
         record.is_member_of_collection.each { |col| accumulator << col.name }
       end
       to_field 'collection_ark_id_ssim' do |record, accumulator|

@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :curator_collection, class: 'Curator::Collection' do
     association :institution, factory: :curator_institution
-    ark_id { "commonwealth:#{SecureRandom.hex(5)}" }
+    sequence(:ark_id) { |n| "commonwealth:#{SecureRandom.hex(n)}" }
     name { "#{Faker::FunnyName.four_word_name} Collection" }
     abstract { Faker::Lorem.paragraph }
     archived_at { nil }

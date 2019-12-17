@@ -10,6 +10,7 @@ RSpec.describe Curator::Filestreams::FileSetFactoryService, type: :service do
     parent_col = create(:curator_collection)
     parent_obj = create(:curator_digital_object)
     parent_obj.workflow = create(:curator_metastreams_workflow)
+    @object_json['ark_id'] = "commonwealth:#{SecureRandom.hex(5)}"
     @object_json['file_set_of']['ark_id'] = parent_obj.ark_id
     @object_json['exemplary_image_of'][0]['ark_id'] = parent_obj.ark_id
     @object_json['exemplary_image_of'][1]['ark_id'] = parent_col.ark_id

@@ -25,6 +25,7 @@ FactoryBot.define do
     physical_location_shelf_locator { Faker::Lorem.sentence }
     series { Faker::Lorem.sentence }
     subseries { Faker::Lorem.sentence }
+    subsubseries { Faker::Lorem.sentence }
     rights { Faker::Lorem.sentence }
     access_restrictions { Faker::Lorem.sentence }
     toc_url { Faker::Internet.url }

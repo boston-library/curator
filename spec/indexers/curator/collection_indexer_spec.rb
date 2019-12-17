@@ -27,7 +27,7 @@ RSpec.describe Curator::CollectionIndexer do
     end
 
     it 'sets the physical location and institution fields' do
-      pi_fields = %w(physical_location_ssim physical_location_tsim institution_name_ssi institution_name_tsi)
+      pi_fields = %w(physical_location_ssim physical_location_tim institution_name_ssi institution_name_ti)
       pi_fields.each do |field|
         expect(indexed[field]).to eq [@collection.institution.name]
       end
