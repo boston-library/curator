@@ -24,7 +24,7 @@ module Curator
 
       # load this here so we can access Dotenv-loaded properties in lib/curator.rb
       require 'dotenv'
-      Dotenv.load(".env.#{ENV.fetch('RAILS_ENV', 'development')}", '.env')
+      Dotenv.load("env.#{ENV.fetch('RAILS_ENV', 'development')}", '.env')
     end
 
     isolate_namespace Curator
@@ -50,9 +50,9 @@ module Curator
       end
     end
 
-    # config.after_initialize do
-    #
-    #   # ActiveModel::Serializer.config.adapter = :json
-    # end
+    config.after_initialize do
+      Oj.optimize_rails
+      # ActiveModel::Serializer.config.adapter = :json
+    end
   end
 end

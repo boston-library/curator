@@ -9,6 +9,8 @@ RSpec.describe Curator::Serializers::Attribute do
   it 'is expected to behave like a serializer attribute' do
     expect(subject).to be_an_instance_of(described_class)
     expect(subject.method).to eq(subject.key)
+    expect(subject.include_attribute?(digital_object)).to be_truthy
+    expect(subject.serialize(digital_object)).to eql(digital_object.id)
   end
 
   describe 'serializng attributes for objects' do
