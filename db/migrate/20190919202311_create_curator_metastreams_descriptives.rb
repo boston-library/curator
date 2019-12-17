@@ -26,6 +26,7 @@ class CreateCuratorMetastreamsDescriptives < ActiveRecord::Migration[5.2]
       t.string :physical_location_shelf_locator
       t.string :series
       t.string :subseries
+      t.string :subsubseries
       t.string :rights
       t.string :access_restrictions
       t.string :toc_url

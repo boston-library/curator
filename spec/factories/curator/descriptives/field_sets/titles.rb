@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :curator_descriptives_title, class: 'Curator::Descriptives::Title' do
-    label { Faker::Lorem.word }
+    label { "The #{Faker::Lorem.word}" }
     subtitle { Faker::Lorem.sentence }
     display { 'Below Map' }
     display_label { Faker::Lorem.sentence }
