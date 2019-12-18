@@ -29,7 +29,7 @@ RSpec.describe Curator::Filestreams::FileSetFactoryService, type: :service do
       %w(ark_id position file_name_base pagination).each do |attr|
         expect(@file_set.send(attr)).to eq @object_json[attr]
       end
-      expect(subject.file_set_type).to eq Curator.filestreams.send("#{file_set_type}_class_name")
+      expect(subject.file_set_type).to eq Curator.filestreams.send("#{file_set_type}_class").to_s
       expect(subject.updated_at).to eq Time.zone.parse(@object_json['updated_at'])
     end
 
