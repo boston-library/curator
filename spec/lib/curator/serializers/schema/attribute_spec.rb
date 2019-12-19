@@ -9,10 +9,18 @@ RSpec.describe Curator::Serializers::Attribute do
   it 'is expected to behave like a serializer attribute' do
     expect(subject).to be_an_instance_of(described_class)
     expect(subject.method).to eq(subject.key)
-    expect(subject.include_attribute?(digital_object)).to be_truthy
+    expect(subject.include_value?(digital_object)).to be_truthy
     expect(subject.serialize(digital_object)).to eql(digital_object.id)
   end
 
   describe 'serializng attributes for objects' do
+    let(:object_as_json) { digital_object.as_json(only: fields) }
+    let(:base_attributes) { fields.map { |field| described_class.new(key: field) } }
+    let(:serialized_attributes) { base_attributes.inject({}) { |ret, attr| ret.merge(attr.key => attr.serialize(digital_object)) } }
+    let(:proc_attributes) {}
+
+    it 'is expected to serialize base attributes' do
+      expect(serialized_attributes.stringify_keys).to eq(object_as_json)
+    end
   end
 end
