@@ -37,7 +37,7 @@ module Curator
     #   subject_date_start_tsim->subject_date_tsim subject_date_end_tsim->subject_date_tsim
     #
     # NOTE: fields below are new:
-    #   title_info_primary_subtitle_tsi date_edtf_ssm license_uri_ssm
+    #   title_info_primary_subtitle_tsi date_edtf_ssm license_uri_ssm subject_temporal_tsim
 
     # TODO: add indexing for:
     #         ocr_tiv has_searchable_text_bsi filenames_ssim is_issue_of_ssim georeferenced_bsi edit_access_group_ssim

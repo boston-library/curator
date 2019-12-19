@@ -742,6 +742,8 @@ RSpec/MultipleDescribes:
 RSpec/MultipleExpectations:
   Enabled: true
   Max: 5
+  Exclude:
+    - 'spec/lib/curator/parsers/edtf_date_parser_spec.rb'
 
 RSpec/OverwritingSetup:
   Enabled: true
