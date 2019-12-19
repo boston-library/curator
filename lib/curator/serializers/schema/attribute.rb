@@ -4,24 +4,24 @@ module Curator
   module Serializers
     class Attribute
       attr_reader :key, :method
-      def initialize(key: nil, method: nil, options: Concurrent::Hash.new)
+      def initialize(key: nil, method: nil, options: {})
         @key = key
         @method = method || key
         @options = options
       end
 
-      def serialize(record, serialization_params = Concurrent::Hash.new)
-        read_for_serialization(record, serialization_params) unless record.blank?
+      def serialize(record, serialization_params = {})
+        read_for_serialization(record, serialization_params)
       end
 
-      def include_attribute?(record, serializer_params = Concurrent::Hash.new)
+      def include_value?(record, serializer_params = {})
         return true if !@options.key?(:if) && !@options.key?(:unless) && !serializer_params.key?(:fields)
 
         fields_included? && conditions_passed?(record, serializer_params)
       end
 
       #Attributes cna be read as blocks and public mehods but also read with read attribute for serialization method
-      def read_for_serialization(record, serializer_params = Concurrent::Hash.new)
+      def read_for_serialization(record, serializer_params = {})
         if method.is_a?(Proc)
           method.arity.abs == 1 ? method.call(record) : method.call(record, serializer_params)
         elsif record.class.has_attribute?(key) && record.respond_to?(:read_attribute_for_serialization)
@@ -31,7 +31,7 @@ module Curator
         end
       end
 
-      def conditions_passed?(record, serializer_params = Concurrent::Hash.new)
+      def conditions_passed?(record, serializer_params = {})
         return true if !@options.key?(:if) && !@options.key?(:unless)
 
         if_cond, unless_cond = @options[:if], @options[:unless]
@@ -45,7 +45,7 @@ module Curator
         res
       end
 
-      def fields_included?(serializer_params = Concurrent::Hash.new)
+      def fields_included?(serializer_params = {})
         return true if !serializer_params.key?(:fields)
 
         serializer_params[:fields].include?(key)

@@ -2,9 +2,9 @@
 
 module Curator
   module Serializers
-    class JSONAdapter < Adapter
+    class JSONAdapter < AdapterBase
 
-      def serializable_hash
+      def serializable_hash(record, serializer_params={})
       end
 
       def render

@@ -3,26 +3,41 @@
 module Curator
   module Serializers
     #Used for attr_json models and relationships
-    class Node < Schema
-      def initialize(root_key: nil, options: Concurrent::Hash.new)
-        raise "Root Key must be defined on Nested Node" if root_key.blank? #root key is also a method
-        super
+    attr_reader :_root, :_schema
+    class Node
+      def initialize(root:, options: {}, &block)
+        raise "Root Key must be defined on Nested Node" if root.blank? #root key is also a method
+        @_root = root
+        raise "Node requires a Block!" unless block_given?
+        @_schema = Schema.new(root: @_root, &block)
       end
 
       def add_serializable_attr(attribute)
-        attr_type = attribute.class.to_s.demodulize.downcase.to_sym
-        raise "Unsupported Attribute Type For Node #{attr_type}!" unless %i(attribute link meta).include?(attr_type)
-        attributes.fetch(attr_type) { |key| attributes[key].merge!(attribute.key => attribute) }
+        super(attribute)
       end
 
-      def serialize(record, serializer_params = Concurrent::Hash.new)
-        serialized_object = Concurrent::Hash.new
-        node_val = record.public_send(root_key)
+      def serialize(record, serializer_params = {})
+        super(record.public_send(root_key), serializer_params)
       end
 
-      def include_node?(record, serializer_params = Concurrent::Hash.new)
-        record.respond_to?(root_key)
+      def include_value?(record, serializer_params = {})
+        record.respond_to?(root_key) && conditions_passed?(record.public_send(root_key), serializer_params)
       end
+
+      def conditions_passed?(record, serializer_params = Concurrent::Hash.new)
+        return true if !@options.key?(:if) && !@options.key?(:unless)
+
+        if_cond, unless_cond = @options[:if], @options[:unless]
+        if if_cond.present?
+         res = if_cond.call(record, serializer_params)
+        elsif unless_cond.present?
+         res = !unless_cond.call(record, serializer_params)
+        else
+         res = true
+        end
+        res
+      end
+
     end
   end
 end

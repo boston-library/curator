@@ -1,12 +1,12 @@
 module Curator
   module Serializers
-    class NullAdapter < Adapter
-      def initialize(_schema)
+    class NullAdapter < AdapterBase
+      def initialize(_options = {}, &_block)
         @schema = nil
       end
 
-      def serializable_hash(_record, _serializer_options = nil)
-        Concurrent::Hash.new
+      def serializable_hash(_record = nil, _serializer_params = nil)
+        {}
       end
     end
   end

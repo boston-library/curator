@@ -13,6 +13,7 @@ module Curator
     # require 'active_model_serializers'
     require 'oj'
     require 'rsolr'
+    require 'singleton'
     require 'traject'
 
     if Rails.env.development? || Rails.env.test?

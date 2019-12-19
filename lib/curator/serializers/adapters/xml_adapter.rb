@@ -2,11 +2,10 @@
 
 module Curator
   module Serializers
-    class XMLAdapter < Adapter
+    class XMLAdapter < AdapterBase
 
-      def serializable_hash
+      def serializable_hash(record, serializer_options)
       end
-      alias_method :as_xml :serializable_hash
 
       def render
         Ox.dump(serializable_hash)

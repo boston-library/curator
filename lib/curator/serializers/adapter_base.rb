@@ -2,17 +2,17 @@
 
 module Curator
   module Serializers
-    class Adapter
+    class AdapterBase
       extend Forwardable
       attr_reader :schema
-      def_delegator :@schema, :add_serializable_attr, :add_attr_to_schema
-      def_delegator :@schema, :options, :schema_options
-      def initialize(schema)
-        @schema = schema
+
+      def_delegators :@schema, :attribute, :attributes, :node, :meta, :link, :has_one, :belongs_to, :has_many
+      def initialize(options={}, &block)
+        @schema = Curator::Schema.new(root: noot)
       end
 
       #Once the relevant schema is collected you can update the hash output to any format you want
-      def serializable_hash(_record, _serializer_options = Concurrent::Hash.new)
+      def serializable_hash(_record, _serializer_params = {})
         raise 'Not Implmented'
       end
     end
