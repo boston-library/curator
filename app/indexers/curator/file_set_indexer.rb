@@ -12,30 +12,34 @@ module Curator
 
     # NOTE: fields below were previously set in Bplmodels::File#to_solr, but have been updated:
     #   derivative_processsed_ssi->processing_state_ssi is_file_of_ssim->is_file_set_of_ssim
-    #   hand_side_ssi->page_hand_side_ssi
+    #   hand_side_ssi->page_hand_side_ssi has_djvu_json_ssi->has_wordcoords_json_bsi
+    #   has_ocr_text_bsi->ocr_text_bsi
 
     # TODO: add indexing for:
-    #         ocr_tsiv has_ocr_text_bsi edit_access_group_ssim
-    #         has_djvu_json_ssi georeferenced_bsi
+    #         edit_access_group_ssim
     configure do
       to_field 'is_file_set_of_ssim', obj_extract('file_set_of', 'ark_id')
-      to_field 'is_exemplary_image_of_ssim' do |record, accumulator|
-        if record.respond_to?(:exemplary_image_objects)
-          record.exemplary_image_objects.each do |exemplary_object|
-            accumulator << exemplary_object.ark_id
-          end
-        end
-        if record.respond_to?(:exemplary_image_collections)
-          record.exemplary_image_collections.each do |exemplary_col|
-            accumulator << exemplary_col.ark_id
-          end
-        end
+      to_field 'is_exemplary_image_of_ssim' do |rec, acc|
+        acc.concat record.exemplary_image_objects.map(&:ark_id) if rec.respond_to?(:exemplary_image_objects)
+        acc.concat record.exemplary_image_collections.map(&:ark_id) if rec.respond_to?(:exemplary_image_collections)
       end
       to_field 'filename_base_ssi', obj_extract('file_name_base')
       to_field 'position_isi', obj_extract('position')
       to_field('page_type_ssi') { |rec, acc| acc << rec.pagination['page_type'] }
       to_field('page_num_label_ssi') { |rec, acc| acc << rec.pagination['page_label'] }
       to_field('page_hand_side_ssi') { |rec, acc| acc << rec.pagination['hand_side'] }
+      to_field 'georeferenced_bsi', obj_extract('image_georectified_master_attachment', 'present?')
+      to_field 'has_wordcoords_json_bsi', obj_extract('text_coordinates_access_attachment', 'present?')
+
+      to_field 'has_ocr_text_bsi', obj_extract('text_plain_attachment', 'present?')
+      each_record do |record, context|
+        next unless record.text_plain_attachment.present?
+
+        context.output_hash['has_ocr_text_bsi'] = true
+        record.text_plain_attachment.download do |file|
+          context.output_hash['ocr_tsiv'] = Curator::Parsers::InputParser.utf8_encode(file)
+        end
+      end
     end
   end
 end

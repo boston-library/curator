@@ -35,12 +35,13 @@ module Curator
     #   physical_location_tsim->physical_location_tim sub_location_tsim->sub_location_tsi shelf_locator_tsim->shelf_locator_tsi
     #   date_facet_yearly_ssim->date_facet_yearly_itim subtitle_tsim->title_info_other_subtitle_tsim
     #   subject_date_start_tsim->subject_date_tsim subject_date_end_tsim->subject_date_tsim
+    #   has_searchable_text_bsi->has_ocr_text_bsi
     #
     # NOTE: fields below are new:
     #   title_info_primary_subtitle_tsi date_edtf_ssm license_uri_ssm subject_temporal_tsim
 
     # TODO: add indexing for:
-    #         ocr_tiv has_searchable_text_bsi filenames_ssim is_issue_of_ssim georeferenced_bsi edit_access_group_ssim
+    #         ocr_tiv has_ocr_text_bsi filenames_ssim is_issue_of_ssim georeferenced_bsi edit_access_group_ssim
     #
     #         DESCRIPTIVE:
     #         subject_geo_country_ssim subject_geo_province_ssim subject_geo_region_ssim subject_geo_territory_ssim
