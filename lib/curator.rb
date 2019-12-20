@@ -20,8 +20,15 @@ module Curator
   def self.eager_load!
     super
     Curator::Descriptives.eager_load!
+    Curator::Parsers.eager_load!
     Curator::Services.eager_load!
-    # Curator::Serializers.eager_load!
+    Curator::Serializers.eager_load!
+  end
+
+
+  def self.setup!
+    init_namespace_accessors!
+    Curator::Serializers.setup!
   end
 
   # based on https://github.com/sciencehistory/kithe/blob/ae4f1780451b4f15577b298f57503880cc2c4681/lib/kithe.rb

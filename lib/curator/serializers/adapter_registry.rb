@@ -19,7 +19,7 @@ module Curator
 
         raise "#{registry_key} for #{adapter} has already been set!" if has_adapter?(key)
 
-        _adapters[key.to_sym] = adapter
+        _adapters.compute_if_absent(key.to_sym) { adapter }
       end
 
       def [](key)

@@ -6,7 +6,7 @@ module Curator
       base.extend(ClassMethods)
       # NOTE THE ORDER HERE MATTERS
       base.module_eval do
-        def self.init_namespace_accessors
+        def self.init_namespace_accessors!
           puts 'Initializing namespace accessors'
           namespace_accessors :controlled_terms, :descriptives, :filestreams, :mappings, :metastreams
           namespace_klass_accessors :institution, :collection, :digital_object

@@ -10,13 +10,26 @@ module Curator
       end
 
       def lookup_adapter(key)
-        raise "Unknown adapter #{key}" unless _adapter_registry.has_adapter?(key)
-        __adapter_registry[key]
+        return _adapter_registry[key] if _adapter_registry.has_adapter?(key)
+
+        raise "Unknown adapter #{key}"
       end
+
+      def reset_adapter_registry!
+        _adapter_registry.clear!
+      end
+
       private
       def _adapter_registry
         AdapterRegistry.instance
       end
+    end
+
+    def self.setup!
+      reset_adapter_registry!
+      register_adapter(key: :null, adapter: NullAdapter)
+      register_adapter(key: :json, adapter: JSONAdapter)
+      register_adapter(key: :xml,  adapter: XMLAdapter)
     end
 
     eager_autoload do
@@ -39,6 +52,3 @@ module Curator
     end
   end
 end
-Curator::Serializers.register_adapter(key: :json, adapter: Curator::Serializers::JSONAdapter)
-Curator::Serializers.register_adapter(key: :null, adapter: Curator::Serializers::NullAdapter)
-Curator::Serializers.register_adapter(key: :xml,  adapter: Curator::Serializers::XMLAdapter)
