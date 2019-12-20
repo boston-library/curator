@@ -4,50 +4,67 @@ module Curator
   module Serializers
     module SerializationDSL
       extend ActiveSupport::Concern
-      class << self
-        attr_reader :_schema_adapters
+      included do
+        class << self
+          protected
+          attr_reader :_adapter_schemas
+        end
+        reset_adapter_schemas!
       end
-
 
       class_methods do
-        def define_schema(adapter:, root: nil, options = {}, &block)
-          raise 'NullAdapter cant be used this way' if adapter.to_sym == :null
+        def inherited(subclass)
+          raise "#{subclass} is not inherited from Curator::Serializers::AbstractSerializer" unless _is_serializer?(subclass)
+          super(subclass)
+          subclass._reset_adapter_schemas!
+          subclass._inherit_schemas(_adapter_schemas)
+        end
 
-          schema_adapter_klass = Curator::Serializers.lookup_adapter(adapter)
+        def define_adapter_schema(adapter_key:, root: nil, options: {}, &block)
+          raise 'NullAdapter cant be used this way' if adapter_key.to_sym == :null
+
+          adapter_schema_klass = Curator::Serializers.lookup_adapter(adapter_key.to_sym)
           #TODO Think of mor options to set up at the schema level.
           schema_options = options.dup.slice(:cached, :cached_length, :race_condition_ttyl, :key_transform_method)
-          schema_options.merge!(root: root) if root
+          schema_options.merge!(adapter: adapter.to_sym)
+          schema_options.merge!(root: root.to_sym) if root
 
-          map_schema_adapter(adapter, schema_adapter_klass.new(schema_options, &block))
+          _map_schema_adapter(adapter, adapter_schema_klass.new(schema_options, &block))
         end
 
 
-        private
-        def map_schema_adapter(adapter_key, schema_adapter)
-          @_schema_adapters = Concurrent::Map.new if @_schema_adapters.nil?
-          @_schema_adapter.merge_pair(adapter_key, schema_adapter)
+        protected
+        def _schema_for_adapter(adapter_key)
+          return _adapter_schemas[adapter_key] if _adapter_schemas.key?(adapter_key)
+
+          _adapter_schemas[:null]
+        end
+
+        def _is_serializer?(klass)
+          klass <= Curator::Serializers::AbstractSerializer
+        end
+
+        def _inherit_schemas(schemas)
+          _adapter_schemas.each_pair {|k, v| subclass._adapter_schemas.compute_if_absent(k) { v } }
+        end
+
+        def _reset_adapter_schemas!
+          return @_adapter_schemas.clear if defined? @_adapter_schemas
+
+          @_adapter_schemas = Concurrent::Map.new if @_adapter_schemas.nil?
+
+          _map_null_adapter
+        end
+
+        def _map_null_adapter
+          map_schema_adapter(:null, Curator::Serializers.lookup_adapter(:null).new)
+        end
+
+        def _map_schema_adapter(adapter_key, schema_adapter)
+          @_adapter_schemas = Concurrent::Map.new unless defined?(@_adapter_schemas) && !@_adapter_schemas.nil?
+          _adapter_schemas.merge_pair(adapter_key, schema_adapter)
         end
       end
-      #Taken from https://github.com/wmakley/tiny_serializer/blob/master/lib/tiny_serializer/dsl.rb but using thread safe collections
-
-      # private
-      # def _attributes # :nodoc:
-      #    ||=
-      #     if superclass.respond_to?(:attributes)
-      #       superclass.attributes.dup
-      #     else
-      #       Conncurrent::Array.new
-      #     end
-      # end
-      #
-      #
-      # def _is_id?(attr_name)
-      #    name == :id || name.to_s.end_with?("_id")
-      # end
-      #
-      # def _is_serializer?(klass)
-      #   klass <= Curator::Serializers::AbstractSerializer
-      # end
     end
   end
 end

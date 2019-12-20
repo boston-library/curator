@@ -16,14 +16,14 @@ module Curator
         end
       end
 
-      attr_reader :_root, :_facets
+      attr_reader :root, :facets, :options
 
-      def initialize(root: nil)
-        @_root = root
-        @_facets = Concurrent::Array.new
+      def initialize(root: nil, options: {})
+        @root = root
+        @facets = Concurrent::Array.new
       end
 
-      def attribute(key: nil, **options, &block)
+      def attribute(key:, **options, &block)
         add_facet(type: :attribute, schema_attribute: Attribute.new(key: key, method: block || key, options: options) )
       end
 
@@ -39,12 +39,12 @@ module Curator
         add_facet(type: :meta, schema_attribute: Meta.new(key: key, method: block))
       end
 
-      def node(root: nil, **options, &block)
-        add_facet(type: :node, schema_attribute: Node.new(root: root, options: options, &block) )
+      def node(key: nil, **options, &block)
+        add_facet(type: :node, schema_attribute: Node.new(key: root, options: options, &block) )
       end
 
       def facet_groups
-        @_facets.group_by(&:type).reduce(Concurrent::Hash.new) { |ret, (k,v)|  ret.merge(k => v.map { |i| i.to_h.delete(k) }) }
+        @facets.group_by(&:type).reduce(Concurrent::Hash.new) { |ret, (k,v)|  ret.merge(k => v.map { |i| i.to_h.delete(k) }) }
       end
       #TODO - FIgure out a way to add links and meta passed in from ther serializer params too
 
@@ -63,6 +63,7 @@ module Curator
           arr.concat(serialize(record, serializer_params))
         end
       end
+
       def serialize_facets(facet_group, record, serializer_params = {})
         grouped_facets.dup.slice(facet_group).values.reduce(Concurrent::Hash[facet_group, Concurrent::Hash.new]) do |res, facet|
           next res unless facet.include_value?(record, serializer_params)
@@ -73,13 +74,14 @@ module Curator
           res[facet_group].merge(attribute.key => val)
         end
       end
-      protected
+
+      private
       def is_collection?(record)
         record.kind_of?(ActiveRecord::Associations::CollectionProxy) || record.kind_of?(Array)
       end
 
       def add_facet(type:, schema_attribute:)
-        @_facets.concat(Facet.new(type: type, schema_attribute: schema_attribute))
+        @facets.concat(Facet.new(type: type, schema_attribute: schema_attribute))
       end
 
     end
