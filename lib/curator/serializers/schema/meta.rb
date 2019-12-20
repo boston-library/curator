@@ -4,13 +4,13 @@ module Curator
   module Serializers
     class Meta < Attribute
       attr_reader :key, :method
-      def initialize(key: nil, method: nil)
+      def initialize(key:, method:)
         @key = key
         @method = method
         raise "Method must be a proc, lamda or block!" unless @method.is_a?(Proc)
       end
 
-      def include_value?(_record, _serializer_params = {})
+      def include_value?(_record = nil, _serializer_params = {})
         true #Always include meta tags if avialable
       end
       #Only public methods and blocks can generate meta

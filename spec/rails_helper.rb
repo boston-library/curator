@@ -113,6 +113,10 @@ RSpec.configure do |config|
     metadata[:type] = :service
   end
 
+  config.define_derived_metadata(file_path: Regexp.new('/spec/lib/')) do |metadata|
+    metadata[:type] = :lib
+  end
+
   # TODO: Create derived metadata for serializers once we switch to blueprinter
 
   config.infer_spec_type_from_file_location!

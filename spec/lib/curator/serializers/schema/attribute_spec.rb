@@ -5,22 +5,52 @@ require 'rails_helper'
 RSpec.describe Curator::Serializers::Attribute do
   let!(:fields){ %i(ark_id created_at updated_at) }
   let!(:digital_object) { create(:curator_digital_object) }
-  subject { described_class.new(key: :id) }
-  it 'is expected to behave like a serializer attribute' do
-    expect(subject).to be_an_instance_of(described_class)
+  let!(:conditional) { {if: ->(record, serializer_params) { serializer_params[:conditional] }} }
+  subject { build_facet_inst(klass: described_class, key: :id, options: conditional) }
+  it { is_expected.to be_an_instance_of(described_class) }
+
+  it 'is expected to have the method set as the key' do
     expect(subject.method).to eq(subject.key)
-    expect(subject.include_value?(digital_object)).to be_truthy
+  end
+
+  it 'is expects #include_value? to work properly' do
+    expect(subject.include_value?(digital_object, {conditional: true} )).to be_truthy
+    expect(subject.include_value?(digital_object, {conditional: false} )).to be_falsey
+    expect(subject.include_value?(digital_object, {conditional: true, fields: fields })).to be_falsey
+  end
+
+  it 'is expected to serialize the value properly' do
     expect(subject.serialize(digital_object)).to eql(digital_object.id)
   end
 
-  describe 'serializng attributes for objects' do
-    let(:object_as_json) { digital_object.as_json(only: fields) }
-    let(:base_attributes) { fields.map { |field| described_class.new(key: field) } }
-    let(:serialized_attributes) { base_attributes.inject({}) { |ret, attr| ret.merge(attr.key => attr.serialize(digital_object)) } }
-    let(:proc_attributes) {}
+  describe 'serializing attributes for objects' do
+    let(:digital_object_json) {object_as_json(digital_object, { only: fields } )}
+    let(:arbitrary_proc) { ->(key) { ->(record, serializer_options) { "#{record.public_send(key)} #{arbitrary_params[:arbitrary_value]}" } } }
+    let(:arbitrary_params) { { arbitrary_value: 'Attribute' } }
 
-    it 'is expected to serialize base attributes' do
-      expect(serialized_attributes.stringify_keys).to eq(object_as_json)
+    describe 'key based serializing' do
+      subject { build_facet_inst_list(*fields, klass: described_class ) }
+
+      let(:serialized_attributes) { serialize_facet_inst_collection(*subject, record: digital_object) }
+
+      it 'is expected to serialize base attributes' do
+        expect(serialized_attributes).to eq(digital_object_json)
+      end
+    end
+
+    describe 'method based serializing' do
+      subject { build_facet_inst_list(*fields, klass: described_class, method: arbitrary_proc) }
+
+      let(:serialized_proc_attributes) { serialize_facet_inst_collection(*subject, record: digital_object, options: arbitrary_params) }
+      let(:digital_object_json_proc) { digital_object_json.each { |k,v| digital_object_json[k] = "#{v} #{arbitrary_params[:arbitrary_value]}" } }
+
+      it 'expects #method of an attribute to be a kind of Proc' do
+        expect(subject.map(&:method)).to all(be_a_kind_of(Proc))
+      end
+
+      it 'is expected to serialize proc_attributes' do
+        expect(serialized_proc_attributes).to eq(digital_object_json_proc)
+      end
     end
   end
 end
