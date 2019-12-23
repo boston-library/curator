@@ -6,6 +6,7 @@ module Curator
     eager_autoload do
       autoload :InputParser
       autoload :Constants
+      autoload :EdtfDateParser
     end
   end
 end

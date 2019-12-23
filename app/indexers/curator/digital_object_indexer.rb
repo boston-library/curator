@@ -8,7 +8,7 @@ module Curator
 
     # NOTE: fields below were previously set in Bplmodels::ObjectBase#to_solr, but no longer needed(?):
     #   internet_media_type_ssim classification_tsim label_ssim date_facet_ssim supplied_alternative_title_bs
-    #   supplied_title_bs
+    #   supplied_title_bs subject_temporal_facet_ssim
     #
     # NOTE: fields below were previously set in Bplmodels::ObjectBase#to_solr, but have been updated:
     #   institution_pid_si->institution_ark_id_ssi institution_name_ssim->institution_name_ssi
@@ -17,10 +17,11 @@ module Curator
     #   name_personal_tsim->name_tsim name_personal_role_tsim->name_role_tsim
     #   name_corporate_tsim->name_tsim name_corporate_role_tsim->name_role_tsim
     #   name_generic_tsim->name_tsim name_generic_role_tsim->name_role_tsim
+    #   date_start_tsim->date_tsim date_end_tsim->date_tsim
     #   subject_name_personal_tsim->subject_name_tsim subject_name_corporate_tsim->subject_name_tsim
     #   subject_name_conference_tsim->subject_name_tsim
-    #   subject_temporal_start_tsim->subject_date_start_tsim subject_temporal_start_dtsim->subject_date_start_dtsim
-    #   subject_temporal_end_tsim->subject_date_end_tsim subject_temporal_end_dtsim->subject_date_end_dtsim
+    #   subject_temporal_start_tsim->subject_date_tsim subject_temporal_start_dtsim->subject_date_start_dtsi
+    #   subject_temporal_end_tsim->subject_date_tsim subject_temporal_end_dtsim->subject_date_end_dtsi
     #   subject_scale_tsim->scale_tsim subject_projection_tsim->projection_tsi
     #   edition_tsim->edition_name_tsim issuance_tsim->issuance_tsi
     #   rights_ssm->rights_ss restrictions_on_access_ssm->restrictions_on_access_ss
@@ -33,21 +34,15 @@ module Curator
     #   institution_name_tsi->institution_name_ti collection_name_tsim->collection_name_tim
     #   physical_location_tsim->physical_location_tim sub_location_tsim->sub_location_tsi shelf_locator_tsim->shelf_locator_tsi
     #   date_facet_yearly_ssim->date_facet_yearly_itim subtitle_tsim->title_info_other_subtitle_tsim
+    #   subject_date_start_tsim->subject_date_tsim subject_date_end_tsim->subject_date_tsim
     #
     # NOTE: fields below are new:
-    #   title_info_primary_subtitle_tsi date_edtf_ssm license_uri_ssm
+    #   title_info_primary_subtitle_tsi date_edtf_ssm license_uri_ssm subject_temporal_tsim
 
     # TODO: add indexing for:
     #         ocr_tiv has_searchable_text_bsi filenames_ssim is_issue_of_ssim georeferenced_bsi edit_access_group_ssim
     #
     #         DESCRIPTIVE:
-
-    #
-    #         subject_facet_ssim
-    #         subject_topic_tsim
-    #         subject_date_start_tsim subject_date_start_dtsim subject_date_end_tsim subject_date_end_dtsim
-    #         subject_temporal_tsim subject_temporal_facet_ssim
-    #         subject_title_tsim
     #         subject_geo_country_ssim subject_geo_province_ssim subject_geo_region_ssim subject_geo_territory_ssim
     #         subject_geo_state_ssim subject_geo_county_ssim subject_geo_city_ssim subject_geo_citysection_ssim
     #         subject_geo_island_ssim subject_geo_area_ssim
