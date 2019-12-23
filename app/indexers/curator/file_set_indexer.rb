@@ -19,8 +19,8 @@ module Curator
     configure do
       to_field 'is_file_set_of_ssim', obj_extract('file_set_of', 'ark_id')
       to_field 'is_exemplary_image_of_ssim' do |rec, acc|
-        acc.concat record.exemplary_image_objects.map(&:ark_id) if rec.respond_to?(:exemplary_image_objects)
-        acc.concat record.exemplary_image_collections.map(&:ark_id) if rec.respond_to?(:exemplary_image_collections)
+        acc.concat rec.exemplary_image_objects.map(&:ark_id) if rec.respond_to?(:exemplary_image_objects)
+        acc.concat rec.exemplary_image_collections.map(&:ark_id) if rec.respond_to?(:exemplary_image_collections)
       end
       to_field 'filename_base_ssi', obj_extract('file_name_base')
       to_field 'position_isi', obj_extract('position')
@@ -34,7 +34,7 @@ module Curator
         acc << true if rec.respond_to?(:text_coordinates_access_attachment) && rec.text_coordinates_access_attachment.present?
       end
       each_record do |record, context|
-        next unless record.text_plain_attachment.present?
+        next unless record.respond_to?(:text_plain_attachment) && record.text_plain_attachment.present?
 
         context.output_hash['has_ocr_text_bsi'] = true
         record.text_plain_attachment.download do |file|

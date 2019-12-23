@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe Curator::Filestreams::FileFactoryService, type: :service do
   before(:all) do
     # create parent FileSet
-    @object_json = load_json_fixture('image_file')
+    @object_json = load_json_fixture('image_file', 'file')
     @file_set = create(:curator_filestreams_image)
     @object_json['filestream_of']['ark_id'] = @file_set.ark_id
     @object_json['metadata']['ingest_filepath'] = file_fixture('image_thumbnail_300.jpg').to_s

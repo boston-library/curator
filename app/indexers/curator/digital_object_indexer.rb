@@ -73,7 +73,7 @@ module Curator
           context.output_hash['has_searchable_pages_bsi'] = has_searchable_pages.presence
           context.output_hash['georeferenced_bsi'] = georeferenced.presence
         end
-        next unless record.text_file_sets.present?
+        next if record.text_file_sets.blank?
 
         text_file_set = record.text_file_sets.first
         text_file_set.text_plain_attachment.download do |file|
