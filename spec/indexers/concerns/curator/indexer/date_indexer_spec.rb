@@ -13,14 +13,15 @@ RSpec.describe Curator::Indexer::DateIndexer do
     let(:descriptable_object) { descriptive.descriptable }
     let(:indexed) { indexer.map_record(descriptable_object) }
 
-    it 'sets the start date fields' do
-      expect(indexed['date_start_tsim']).not_to be_blank
-      expect(indexed['date_start_tsim'].first).to match(/\A\d{4}/)
+    it 'sets the date field' do
+      expect(indexed['date_tsim'].first).to match(/\A\d{4}/)
+    end
+
+    it 'sets the start date field' do
       expect(indexed['date_start_dtsi'].first).to match(/\A\d{4}-\d{2}-\d{2}T00:00:00.000Z\z/)
     end
 
-    it 'sets the end date fields' do
-      expect(indexed['date_end_tsim']).not_to be_blank
+    it 'sets the end date field' do
       expect(indexed['date_end_dtsi'].first).to match(/\A\d{4}-\d{2}-\d{2}T23:59:59.999Z\z/)
     end
 
@@ -29,19 +30,11 @@ RSpec.describe Curator::Indexer::DateIndexer do
     end
 
     it 'sets the date_facet_yearly field' do
-      expect(indexed['date_facet_yearly_itim']).not_to be_blank
       expect(indexed['date_facet_yearly_itim'].map(&:class).uniq.first).to eq Integer
     end
 
-    it 'sets the date_start_qualifier field' do
-      expect(indexed['date_start_qualifier_ssm'].first).to match(/questionable|approximate|inferred|nil/)
-    end
-
     it 'sets the date_edtf field' do
-      expect(indexed['date_edtf_ssm']).not_to be_blank
       expect(indexed['date_edtf_ssm'].first).to match(/\A\d{4}/)
     end
-
-    describe ''
   end
 end
