@@ -42,12 +42,9 @@ module Curator
 
     config.eager_load_namespaces << Curator
 
-    config.before_configuration do
-      Curator.setup!
-    end
-
-    config.to_prepare do
+    config.before_initialize do
       Oj.optimize_rails
+      Curator.setup!
     end
 
     initializer 'curator.append_migrations' do |app|
@@ -57,6 +54,5 @@ module Curator
         end
       end
     end
-
   end
 end
