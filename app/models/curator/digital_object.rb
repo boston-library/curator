@@ -13,6 +13,7 @@ module Curator
     has_one :institution, through: :admin_set, class_name: 'Curator::Institution'
 
     with_options inverse_of: :file_set_of, foreign_key: :file_set_of_id, dependent: :destroy do
+      has_many :file_sets, class_name: 'Curator::Filestreams::FileSet'
       has_many :audio_file_sets, class_name: 'Curator::Filestreams::Audio'
       has_many :image_file_sets, class_name: 'Curator::Filestreams::Image'
       has_many :document_file_sets, class_name: 'Curator::Filestreams::Document'

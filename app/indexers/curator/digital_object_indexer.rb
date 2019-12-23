@@ -35,13 +35,13 @@ module Curator
     #   physical_location_tsim->physical_location_tim sub_location_tsim->sub_location_tsi shelf_locator_tsim->shelf_locator_tsi
     #   date_facet_yearly_ssim->date_facet_yearly_itim subtitle_tsim->title_info_other_subtitle_tsim
     #   subject_date_start_tsim->subject_date_tsim subject_date_end_tsim->subject_date_tsim
-    #   has_searchable_text_bsi->has_ocr_text_bsi
+    #   has_searchable_text_bsi->has_searchable_pages_bsi
     #
     # NOTE: fields below are new:
     #   title_info_primary_subtitle_tsi date_edtf_ssm license_uri_ssm subject_temporal_tsim
 
     # TODO: add indexing for:
-    #         ocr_tiv has_ocr_text_bsi filenames_ssim is_issue_of_ssim georeferenced_bsi edit_access_group_ssim
+    #         is_issue_of_ssim edit_access_group_ssim
     #
     #         DESCRIPTIVE:
     #         subject_geo_country_ssim subject_geo_province_ssim subject_geo_region_ssim subject_geo_territory_ssim
@@ -62,6 +62,24 @@ module Curator
         record.is_member_of_collection.each { |col| accumulator << col.ark_id }
       end
       to_field 'exemplary_image_ssi', obj_extract('exemplary_file_set', 'ark_id')
+      to_field('filenames_ssim') { |rec, acc| acc.concat rec.file_sets.map(&:file_name_base) }
+      each_record do |record, context|
+        if record.image_file_sets.present?
+          has_searchable_pages, georeferenced = false, false
+          record.image_file_sets.each do |image_file_set|
+            has_searchable_pages = true if image_file_set.text_plain_attachment.present?
+            georeferenced = true if image_file_set.image_georectified_master_attachment.present?
+          end
+          context.output_hash['has_searchable_pages_bsi'] = has_searchable_pages.presence
+          context.output_hash['georeferenced_bsi'] = georeferenced.presence
+        end
+        next unless record.text_file_sets.present?
+
+        text_file_set = record.text_file_sets.first
+        text_file_set.text_plain_attachment.download do |file|
+          context.output_hash['ocr_tiv'] = Curator::Parsers::InputParser.utf8_encode(file)
+        end
+      end
     end
   end
 end
