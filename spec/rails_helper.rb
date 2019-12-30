@@ -83,13 +83,19 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = false
 
   config.before(:suite) do
-    FactoryBot.lint
-    DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.cleaning do
+      FactoryBot.lint
+    end
     VCR.use_cassette('load_seeds') do
       Curator::Engine.load_seed
     end
     WebMock.reset!
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.strategy = :transaction
   end
 
   config.around(:each) do |spec|

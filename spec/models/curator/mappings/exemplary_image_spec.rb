@@ -26,11 +26,11 @@ RSpec.describe Curator::Mappings::ExemplaryImage, type: :model do
 
   it { is_expected.to have_db_index([:exemplary_file_set_id, :exemplary_file_set_type, :exemplary_object_id, :exemplary_object_type]).unique(true) }
 
-  it { is_expected.to validate_uniqueness_of(:exemplary_object_id).on(:create) }
+  it { is_expected.to validate_uniqueness_of(:exemplary_object_type).scoped_to([:exemplary_object_id]).on(:create).ignoring_case_sensitivity }
 
-  it { is_expected.to validate_uniqueness_of(:exemplary_file_set_id).
-                      scoped_to([:exemplary_file_set_type, :exemplary_object_type, :exemplary_object_id]).
-                      on(:create) }
+  it { is_expected.to validate_uniqueness_of(:exemplary_file_set_type).
+                      scoped_to([:exemplary_file_set_id, :exemplary_object_type, :exemplary_object_id]).
+                      on(:create).ignoring_case_sensitivity }
 
   it { is_expected.to allow_values(*described_class.const_get(:VALID_EXEMPLARY_OBJECT_TYPES).collect { |type| "Curator::#{type}" }).
                       for(:exemplary_object_type).
@@ -42,7 +42,7 @@ RSpec.describe Curator::Mappings::ExemplaryImage, type: :model do
 
   describe 'Associations' do
     it { is_expected.to belong_to(:exemplary_object).
-                        inverse_of(:exemplary_image_mappings).
+                        inverse_of(:exemplary_image_mapping).
                         required }
 
     it { is_expected.to belong_to(:exemplary_file_set).
