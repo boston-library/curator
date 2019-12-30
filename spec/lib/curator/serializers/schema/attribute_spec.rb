@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe Curator::Serializers::Attribute do
   let!(:fields){ %i(ark_id created_at updated_at) }
   let!(:digital_object) { create(:curator_digital_object) }
+  #TODO move conditional specs into shared example
   let!(:conditional) { {if: ->(record, serializer_params) { serializer_params[:conditional] }} }
   subject { build_facet_inst(klass: described_class, key: :id, options: conditional) }
   it { is_expected.to be_an_instance_of(described_class) }

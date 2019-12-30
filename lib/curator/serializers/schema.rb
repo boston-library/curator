@@ -43,6 +43,13 @@ module Curator
         add_facet(type: :node, schema_attribute: Node.new(key: root, options: options, &block) )
       end
 
+      def relation(key:, **options, &block)
+      end
+
+      alias :has_one :relation
+      alias :has_many :relation
+      alias :belongs_to :relation
+
       def facet_groups
         @facets.group_by(&:type).reduce(Concurrent::Hash.new) { |ret, (k,v)|  ret.merge(k => v.map { |i| i.to_h.delete(k) }) }
       end

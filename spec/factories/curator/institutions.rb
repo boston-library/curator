@@ -7,5 +7,13 @@ FactoryBot.define do
     abstract { Faker::Lorem.paragraph }
     url { Faker::Internet.unique.url(host: 'example.org') }
     archived_at { nil }
+
+    transient do
+      collection_count { nil }
+    end
+
+    after :create do |institution, options|
+      create_list(:curator_collection, options.collection_count, institution: institution) if options.collection_count
+    end
   end
 end
