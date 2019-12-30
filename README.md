@@ -27,11 +27,12 @@ Currently all data models have been created with basic routes and json serialize
 2. Development
   * Create Indexing Functionality (Solr)
   * Create Additional Seralizer Functionality (In priority)
-    - Switch to Blueprinter (JSON)/ Modularize serializers
-    - Mods XML
-    - Dublic Core
-    - Marc XML
-    - RDF
+    - Build JSON/XML Serializer
+    - Use `AdapterBase` class to build extended functionality for the following
+    ..* Mods XML
+    ..* Dublic Core XML
+    ..* Marc XML
+    ..* RDF
 
 ## Installation (For development only)
 
