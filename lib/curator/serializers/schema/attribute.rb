@@ -40,7 +40,7 @@ module Curator
         if if_cond.present?
           res = if_cond.call(record, serializer_params.dup)
         elsif unless_cond.present?
-          res = unless_cond.call(record, serializer_params.dup)
+          res = !unless_cond.call(record, serializer_params.dup)
         else
           res = true
         end

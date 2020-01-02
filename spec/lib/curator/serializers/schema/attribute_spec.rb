@@ -1,31 +1,29 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../shared/schema/conditional'
 
-RSpec.describe Curator::Serializers::Attribute do
-  subject { build_facet_inst(klass: described_class, key: :id, options: conditional) }
+RSpec.describe Curator::Serializers::Attribute, type: :lib_serializers do
+  subject { build_facet_inst(klass: described_class, key: :id) }
 
   let!(:fields) { %i(ark_id created_at updated_at) }
   let!(:digital_object) { create(:curator_digital_object) }
-  # TODO: move conditional specs into shared example
-  let!(:conditional) { { if: ->(_record, serializer_params) { serializer_params[:conditional] } } }
 
+  # TODO: move conditional specs into shared example
   it { is_expected.to be_an_instance_of(described_class) }
 
   it 'is expected to have the method set as the key' do
     expect(subject.method).to eq(subject.key)
   end
 
-  it 'is expects #include_value? to work properly' do
-    # rubocop:disable RSpec/PredicateMatcher
-    expect(subject.include_value?(digital_object, { conditional: true })).to be_truthy
-    expect(subject.include_value?(digital_object, { conditional: false })).to be_falsey
-    expect(subject.include_value?(digital_object, { conditional: true, fields: fields })).to be_falsey
-    # rubocop:enable RSpec/PredicateMatcher
+  it 'is expected to serialize the serializable_record properly' do
+    expect(subject.serialize(digital_object)).to eql(digital_object.id)
   end
 
-  it 'is expected to serialize the value properly' do
-    expect(subject.serialize(digital_object)).to eql(digital_object.id)
+  include_examples 'conditional_attributes' do
+    let(:serializable_record) { digital_object }
+    let(:key) { :id }
+    let(:method) { :id }
   end
 
   describe 'serializing attributes for objects' do

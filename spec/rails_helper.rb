@@ -119,8 +119,8 @@ RSpec.configure do |config|
     metadata[:type] = :service
   end
 
-  config.define_derived_metadata(file_path: Regexp.new('/spec/lib/')) do |metadata|
-    metadata[:type] = :lib
+  config.define_derived_metadata(file_path: Regexp.new('/spec/lib/curator/serializers')) do |metadata|
+    metadata[:type] = :lib_serializers
   end
 
   # TODO: Create derived metadata for serializers once we switch to blueprinter

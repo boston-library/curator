@@ -15,7 +15,7 @@ module SerializerHelper
     def serialize_facet_inst(facet_inst, record, options = {})
       return { facet_inst.key => facet_inst.serialize(record, options.dup) } if facet_inst.include_value?(record, options.dup)
 
-      {}
+      nil
     end
 
     def serialize_facet_inst_collection(*facet_inst_list, record:, options: {})
@@ -31,5 +31,5 @@ module SerializerHelper
 end
 
 RSpec.configure do |config|
-  config.include SerializerHelper::FacetHelper, type: :lib
+  config.include SerializerHelper::FacetHelper, type: :lib_serializers
 end
