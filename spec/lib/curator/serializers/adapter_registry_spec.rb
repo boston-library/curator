@@ -4,6 +4,7 @@ require 'rails_helper'
 require_relative '../shared/singleton'
 RSpec.describe Curator::Serializers::AdapterRegistry, type: :lib_serializer do
   subject { described_class.instance }
+
   let!(:existing_adapters) { %i(json xml null) }
 
   after(:all) do
@@ -46,8 +47,8 @@ RSpec.describe Curator::Serializers::AdapterRegistry, type: :lib_serializer do
     end
 
     it 'is expected to fail if the adapter arg is invalid or nil' do
-      expect { subject.register(key: :bad_arg, adapter: 'MyBadArgClass') }.to raise_error(RuntimeError, 'No valid adapter class given' )
-      expect { subject.register(key: :nil_arg, adapter: nil) }.to raise_error(RuntimeError, 'No valid adapter class given' )
+      expect { subject.register(key: :bad_arg, adapter: 'MyBadArgClass') }.to raise_error(RuntimeError, 'No valid adapter class given')
+      expect { subject.register(key: :nil_arg, adapter: nil) }.to raise_error(RuntimeError, 'No valid adapter class given')
     end
 
     it 'is expected to fail if adapter is registered twice' do
@@ -56,12 +57,12 @@ RSpec.describe Curator::Serializers::AdapterRegistry, type: :lib_serializer do
 
     it 'is expected to allow me to register and lookup the new adapter, if it inherits AdapterBase properly' do
       expect(subject.register(key: :foo, adapter: foo_adapter_class)).to be_truthy
-      expect(subject.has_adapter?(:foo)).to be_truthy
+      expect(subject).to have_adapter(:foo)
       expect(subject[:foo].object_id).to eq(foo_adapter_class.object_id) # use object_id to ensure the classes are the same
     end
 
     it 'is expected to fail if the adpater class does not inherit from AdapterBase' do
-      expect { subject.register(key: :fail, adapter: fail_adapter_class) }.to raise_error(RuntimeError, "#{fail_adapter_class} is not a kind of Curator::Serializers::AdapterBase!" )
+      expect { subject.register(key: :fail, adapter: fail_adapter_class) }.to raise_error(RuntimeError, "#{fail_adapter_class} is not a kind of Curator::Serializers::AdapterBase!")
     end
   end
 end

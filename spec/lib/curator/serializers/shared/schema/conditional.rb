@@ -13,12 +13,12 @@ RSpec.shared_examples 'conditional_attributes', type: :lib_serializers do
     subject { build_facet_inst(klass: described_class, key: key, method: method, options: if_proc) }
 
     it 'expects #include_value to return true given the params passed in' do
-      expect(subject.include_value?(serializable_record, true_conditional_params)).to be_truthy
+      expect(subject).to be_include_value(serializable_record, true_conditional_params)
     end
 
     it 'expects #include_value to return false given the params passed in' do
-      expect(subject.include_value?(serializable_record, false_conditional_params)).not_to be_truthy
-      expect(subject.include_value?(serializable_record, nil_conditional_params)).not_to be_truthy
+      expect(subject).not_to be_include_value(serializable_record, false_conditional_params)
+      expect(subject).not_to be_include_value(serializable_record, nil_conditional_params)
     end
 
     it 'expects the value to be present when #serialize is called on the facet' do
@@ -35,12 +35,12 @@ RSpec.shared_examples 'conditional_attributes', type: :lib_serializers do
     subject { build_facet_inst(klass: described_class, key: key, method: method, options: unless_proc) }
 
     it 'expects #include_value to return false given the params passed in' do
-      expect(subject.include_value?(serializable_record, true_conditional_params)).to be_falsey
+      expect(subject).not_to be_include_value(serializable_record, true_conditional_params)
     end
 
     it 'expects #include_value to return true given the params passed in' do
-      expect(subject.include_value?(serializable_record, false_conditional_params)).to be_truthy
-      expect(subject.include_value?(serializable_record, nil_conditional_params)).to be_truthy
+      expect(subject).to be_include_value(serializable_record, false_conditional_params)
+      expect(subject).to be_include_value(serializable_record, nil_conditional_params)
     end
 
     it 'expects the value to be present when #serialize is called on the facet' do
@@ -53,15 +53,13 @@ RSpec.shared_examples 'conditional_attributes', type: :lib_serializers do
     end
   end
 
-
   describe 'conditional precedence' do
-    let(:combined_conditions) { if_proc.merge(unless_proc) }
     subject { build_facet_inst(klass: described_class, key: key, method: method, options: combined_conditions) }
 
+    let(:combined_conditions) { if_proc.merge(unless_proc) }
+
     it 'is expected to take precedence of the if_proc over the unless_proc' do
-      expect(subject.include_value?(serializable_record, true_conditional_params)).to be_truthy
-      expect(serialize_facet_inst(subject, serializable_record, false_conditional_params)).to be_nil
-      expect(serialize_facet_inst(subject, serializable_record, nil_conditional_params)).to be_nil
+      expect(subject).to be_include_value(serializable_record, true_conditional_params)
 
       expect(serialize_facet_inst(subject, serializable_record, true_conditional_params)).to be_truthy.and be_a_kind_of(Hash).and include(subject.key => subject.serialize(serializable_record, true_conditional_params))
       expect(serialize_facet_inst(subject, serializable_record, false_conditional_params)).to be_nil
