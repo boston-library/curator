@@ -2,8 +2,6 @@
 
 module Curator
   module Serializers
-
-    #Used for attr_json models and relationships
     class Node < Attribute
       extend Forwardable
       attr_reader :schema
@@ -12,18 +10,20 @@ module Curator
 
       def initialize(key:, options: {}, &block)
         super(key: key, options: options)
-        raise "Node requires a Block!" unless block_given?
+        raise 'Node requires a Block!' unless block_given?
+
         @schema = Schema.new(root: @key)
         instance_eval(&block)
       end
 
       def read_for_serialization(record, serializer_params = {})
-        Concurrent::Hash[@key, schema.serialize(record, serializer_params)]
+        schema.serialize(record, serializer_params.dup)
       end
 
       def include_value?(record, serializer_params = {})
         return true if !@options.key?(:if) && !@options.key?(:unless)
-        conditions_passed?(record, serializer_params)
+
+        conditions_passed?(record, serializer_params.dup)
       end
     end
   end

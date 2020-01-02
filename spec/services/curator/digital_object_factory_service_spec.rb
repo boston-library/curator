@@ -143,8 +143,8 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
           let(:name_roles) { descriptive.name_roles }
           let(:name) { name_roles.first.name }
           let(:role) { name_roles.first.role }
-          let(:json_names) { desc_json['name_roles'].map{ |nr| nr['name'] } }
-          let(:json_roles) { desc_json['name_roles'].map{ |nr| nr['role'] } }
+          let(:json_names) { desc_json['name_roles'].map { |nr| nr['name'] } }
+          let(:json_roles) { desc_json['name_roles'].map { |nr| nr['role'] } }
           it 'sets the correct number of names and roles' do
             expect(name_roles.count).to eq 2
           end
@@ -159,7 +159,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
           it 'sets the role data' do
             expect(role).to be_an_instance_of(Curator::ControlledTerms::Role)
             controlled_term_attrs.each do |attr|
-              expect(json_roles.collect {|jr| jr[attr] } ).to include(role.send(attr))
+              expect(json_roles.collect { |jr| jr[attr] }).to include(role.send(attr))
             end
           end
         end

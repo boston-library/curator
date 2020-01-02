@@ -20,6 +20,7 @@ module Curator
       end
 
       private
+
       def _adapter_registry
         AdapterRegistry.instance
       end

@@ -3,13 +3,12 @@
 module Curator
   module Serializers
     class JSONAdapter < AdapterBase
-
       def serializable_hash(record, serializer_params = {})
-        serialized_hash = schema.serialize(record, seralizer_params)
+        schema.serialize(record, serializer_params.dup.reverse_merge!(adapter_key: :json))
       end
 
       def render(record, serializer_params = {})
-        Oj.dump(serializable_hash(serializer_options))
+        Oj.dump(serializable_hash(record, serializer_params.dup))
       end
     end
   end

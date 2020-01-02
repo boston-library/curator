@@ -3,11 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe Curator::Serializers::Attribute do
-  let!(:fields){ %i(ark_id created_at updated_at) }
-  let!(:digital_object) { create(:curator_digital_object) }
-  #TODO move conditional specs into shared example
-  let!(:conditional) { {if: ->(record, serializer_params) { serializer_params[:conditional] }} }
   subject { build_facet_inst(klass: described_class, key: :id, options: conditional) }
+
+  let!(:fields) { %i(ark_id created_at updated_at) }
+  let!(:digital_object) { create(:curator_digital_object) }
+  # TODO: move conditional specs into shared example
+  let!(:conditional) { { if: ->(_record, serializer_params) { serializer_params[:conditional] } } }
+
   it { is_expected.to be_an_instance_of(described_class) }
 
   it 'is expected to have the method set as the key' do
@@ -15,9 +17,11 @@ RSpec.describe Curator::Serializers::Attribute do
   end
 
   it 'is expects #include_value? to work properly' do
-    expect(subject.include_value?(digital_object, {conditional: true} )).to be_truthy
-    expect(subject.include_value?(digital_object, {conditional: false} )).to be_falsey
-    expect(subject.include_value?(digital_object, {conditional: true, fields: fields })).to be_falsey
+    # rubocop:disable RSpec/PredicateMatcher
+    expect(subject.include_value?(digital_object, { conditional: true })).to be_truthy
+    expect(subject.include_value?(digital_object, { conditional: false })).to be_falsey
+    expect(subject.include_value?(digital_object, { conditional: true, fields: fields })).to be_falsey
+    # rubocop:enable RSpec/PredicateMatcher
   end
 
   it 'is expected to serialize the value properly' do
@@ -25,12 +29,12 @@ RSpec.describe Curator::Serializers::Attribute do
   end
 
   describe 'serializing attributes for objects' do
-    let(:digital_object_json) {object_as_json(digital_object, { only: fields } )}
-    let(:arbitrary_proc) { ->(key) { ->(record, serializer_options) { "#{record.public_send(key)} #{arbitrary_params[:arbitrary_value]}" } } }
+    let(:digital_object_json) { object_as_json(digital_object, { only: fields }) }
+    let(:arbitrary_proc) { ->(key) { ->(record, serializer_params) { "#{record.public_send(key)} #{serializer_params[:arbitrary_value]}" } } }
     let(:arbitrary_params) { { arbitrary_value: 'Attribute' } }
 
     describe 'key based serializing' do
-      subject { build_facet_inst_list(*fields, klass: described_class ) }
+      subject { build_facet_inst_list(*fields, klass: described_class) }
 
       let(:serialized_attributes) { serialize_facet_inst_collection(*subject, record: digital_object) }
 
@@ -43,7 +47,7 @@ RSpec.describe Curator::Serializers::Attribute do
       subject { build_facet_inst_list(*fields, klass: described_class, method: arbitrary_proc) }
 
       let(:serialized_proc_attributes) { serialize_facet_inst_collection(*subject, record: digital_object, options: arbitrary_params) }
-      let(:digital_object_json_proc) { digital_object_json.each { |k,v| digital_object_json[k] = "#{v} #{arbitrary_params[:arbitrary_value]}" } }
+      let(:digital_object_json_proc) { digital_object_json.each { |k, v| digital_object_json[k] = "#{v} #{arbitrary_params[:arbitrary_value]}" } }
 
       it 'expects #method of an attribute to be a kind of Proc' do
         expect(subject.map(&:method)).to all(be_a_kind_of(Proc))

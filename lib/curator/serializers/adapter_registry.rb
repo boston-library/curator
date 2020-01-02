@@ -11,13 +11,8 @@ module Curator
 
       def register(key:, adapter:)
         adapter_klass = adapter.is_a?(String) ? adapter.safe_constantize : adapter
-        raise 'No Valid adapter class given' if adapter_klass.blank?
 
-        unless _is_adapter?(adapter_klass)
-          raise "#{adapter} is not a kind of Curator::Serializers::AdapterBase!"
-        end
-
-        raise "#{registry_key} for #{adapter} has already been set!" if has_adapter?(key)
+        validate_adapter!(key, adapter, adapter_klass)
 
         _adapters.compute_if_absent(key.to_sym) { adapter }
       end
@@ -37,6 +32,14 @@ module Curator
       private
 
       attr_reader :_adapters
+
+      def validate_adapter!(key, adapter, adapter_klass)
+        raise 'No Valid adapter class given' if adapter_klass.blank?
+
+        raise "#{adapter} is not a kind of Curator::Serializers::AdapterBase!" unless _is_adapter?(adapter_klass)
+
+        raise "#{key} for #{adapter} has already been set!" if has_adapter?(key)
+      end
 
       def _is_adapter?(klass)
         klass <= Curator::Serializers::AdapterBase

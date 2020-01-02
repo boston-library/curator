@@ -25,7 +25,6 @@ module Curator
     Curator::Serializers.eager_load!
   end
 
-
   def self.setup!
     init_namespace_accessors!
     Curator::Serializers.setup!

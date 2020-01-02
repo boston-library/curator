@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Curator
   module Serializers
     class NullAdapter < AdapterBase
@@ -9,8 +11,8 @@ module Curator
         {}
       end
 
-      def render(_record, _serializer_params)
-        serializable_hash(_record, _serializer_params)
+      def render(record, serializer_params)
+        serializable_hash(record, serializer_params)
       end
     end
   end

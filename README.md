@@ -44,7 +44,7 @@ Ensure you have the following installed on your development machine
 
 `Imagemagick`
 
-`Ruby 2.5.7`
+`Ruby  >= 2.5.7`
 
 Clone Project
 

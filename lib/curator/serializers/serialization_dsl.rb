@@ -7,6 +7,7 @@ module Curator
       included do
         class << self
           protected
+
           attr_reader :_adapter_schemas
         end
         reset_adapter_schemas!
@@ -15,25 +16,26 @@ module Curator
       class_methods do
         def inherited(subclass)
           raise "#{subclass} is not inherited from Curator::Serializers::AbstractSerializer" unless _is_serializer?(subclass)
+
           super(subclass)
           subclass._reset_adapter_schemas!
-          subclass._inherit_schemas(_adapter_schemas)
+          subclass._inherit_schemas
         end
 
         def define_adapter_schema(adapter_key:, root: nil, options: {}, &block)
           raise 'NullAdapter cant be used this way' if adapter_key.to_sym == :null
 
           adapter_schema_klass = Curator::Serializers.lookup_adapter(adapter_key.to_sym)
-          #TODO Think of mor options to set up at the schema level.
           schema_options = options.dup.slice(:cached, :cached_length, :race_condition_ttyl, :key_transform_method)
-          schema_options.merge!(adapter: adapter.to_sym)
-          schema_options.merge!(root: root.to_sym) if root
+          # TODO: Think of more options to set up at the schema level.
+          schema_options[:adapter] = adapter.to_sym
+          schema_options[:root] = root.to_sym if root
 
           _map_schema_adapter(adapter, adapter_schema_klass.new(schema_options, &block))
         end
 
-
         protected
+
         def _schema_for_adapter(adapter_key)
           return _adapter_schemas[adapter_key] if _adapter_schemas.key?(adapter_key)
 
@@ -44,8 +46,8 @@ module Curator
           klass <= Curator::Serializers::AbstractSerializer
         end
 
-        def _inherit_schemas(schemas)
-          _adapter_schemas.each_pair {|k, v| subclass._adapter_schemas.compute_if_absent(k) { v } }
+        def _inherit_schemas
+          _adapter_schemas.each_pair { |k, v| subclass._adapter_schemas.compute_if_absent(k) { v } }
         end
 
         def _reset_adapter_schemas!

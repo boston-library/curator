@@ -11,7 +11,6 @@ module Curator
 
           delegate :exemplary_file_set, to: :exemplary_image_mapping, allow_nil: true
         end
-
       end
       module FileSetImagable
         extend ActiveSupport::Concern

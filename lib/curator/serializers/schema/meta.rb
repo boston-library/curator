@@ -7,15 +7,16 @@ module Curator
       def initialize(key:, method:)
         @key = key
         @method = method
-        raise "Method must be a proc, lamda or block!" unless @method.is_a?(Proc)
+        raise 'Method must be a proc, lamda or block!' unless @method.is_a?(Proc)
       end
 
       def include_value?(_record = nil, _serializer_params = {})
-        true #Always include meta tags if avialable
+        true # Always include meta tags if avialable
       end
-      #Only public methods and blocks can generate meta
+
+      # NOTE: Only public methods and blocks can generate meta
       def read_for_serialization(record, serializer_params = {})
-        method.arity.abs == 1 ? method.call(record) : method.call(record, serializer_params)
+        method.arity.abs == 1 ? method.call(record) : method.call(record, serializer_params.dup)
       end
     end
   end

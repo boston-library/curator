@@ -2,7 +2,6 @@
 
 module SerializerHelper
   module FacetHelper
-
     def build_facet_inst(klass:, key:, method: nil, options: {})
       klass.new(key: key, method: method, options: options.dup)
     end
@@ -15,6 +14,7 @@ module SerializerHelper
 
     def serialize_facet_inst(facet_inst, record, options = {})
       return { facet_inst.key => facet_inst.serialize(record, options.dup) } if facet_inst.include_value?(record, options.dup)
+
       {}
     end
 
