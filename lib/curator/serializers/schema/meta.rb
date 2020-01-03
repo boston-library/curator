@@ -4,7 +4,7 @@ module Curator
   module Serializers
     class Meta < Attribute
       attr_reader :key, :method
-      def initialize(key:, method:)
+      def initialize(key:, method:, **_kwargs)
         @key = key
         @method = method
         raise 'Method must be a proc, lamda or block!' unless @method.is_a?(Proc)

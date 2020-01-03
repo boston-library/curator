@@ -15,6 +15,7 @@ module SerializerHelper
     def serialize_facet_inst(facet_inst, record, options = {})
       return { facet_inst.key => facet_inst.serialize(record, options.dup) } if facet_inst.include_value?(record, options.dup)
 
+      # NOTE: This method simulates how the schema builds the resulting serialized hash.
       nil
     end
 
