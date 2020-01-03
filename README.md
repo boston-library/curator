@@ -8,7 +8,7 @@ This Project is currently in the early stages of **development** and not recomme
 
 
 ## Description
-Rails(~>5.2.3) engine that sets up the basic data elements and routes for a more data driven JSON API for digital repositories.
+Rails(~> 5.2) engine that sets up the basic data elements and routes for a more data driven JSON API for digital repositories.
 Implements ActiveStorage for Cloud or local stoarge for files.
 Currently all data models have been created with basic routes and json serializers
 
@@ -29,10 +29,10 @@ Currently all data models have been created with basic routes and json serialize
   * Create Additional Seralizer Functionality (In priority)
     - Build JSON/XML Serializer
     - Use `AdapterBase` class to build extended functionality for the following
-    ..* Mods XML
-    ..* Dublic Core XML
-    ..* Marc XML
-    ..* RDF
+      * Mods XML
+      * Dublic Core XML
+      * Marc XML
+      * RDF
 
 ## Installation (For development only)
 
