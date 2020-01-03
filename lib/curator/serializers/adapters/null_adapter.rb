@@ -7,11 +7,11 @@ module Curator
         @schema = nil
       end
 
-      def serializable_hash(_record, _serializer_params)
+      def serializable_hash(_record = nil, _serializer_params = {})
         {}
       end
 
-      def render(record, serializer_params)
+      def render(record = nil, serializer_params = {})
         serializable_hash(record, serializer_params)
       end
     end
