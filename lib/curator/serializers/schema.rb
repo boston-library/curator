@@ -2,17 +2,25 @@
 
 module Curator
   module Serializers
+    #Method to call on root key if present
+
     class Schema
+      ROOT_KEY_TRANSFORM_MAPPING = {
+        camel: :camelize,
+        dash: :dasherize,
+        underscore: :underscore,
+        default: :underscore
+      }.freeze
       class Facet < Struct.new(:type, :schema_attribute, keyword_init: true)
         def initialize(**kwargs)
           super(**kwargs)
-          raise "Unknown Facet Type #{type}" unless %i(attribute link meta node relation).include?(type)
+          raise "Unknown Facet Type #{type}" unless %i(attributes links meta nodes relations).include?(type)
 
           freeze
         end
 
         def to_h
-          Concurrent::Hash[type, Concurrent::Hash[schema_attribute.key, schema_attribute]]
+          Concurrent::Hash[type, schema_attribute]
         end
       end
 
@@ -24,28 +32,28 @@ module Curator
         @options = options
       end
 
-      def attribute(key:, **options, &block)
-        add_facet(type: :attribute, schema_attribute: Attribute.new(key: key, method: block || key, options: options))
+      def attribute(key:, **opts, &block)
+        add_facet(type: :attributes, schema_attribute: Attribute.new(key: key, method: block || key, options: opts))
       end
 
-      def attributes(*attribute_keys, **options)
-        attribute_keys.each { |attribute_key| attribute(attribute_key, options) }
+      def attributes(*attribute_keys, **opts)
+        attribute_keys.each { |attribute_key| attribute(key: attribute_key, **opts) }
       end
 
-      def link(key:, **options, &block)
-        add_facet(type: :link, schema_attribute: Link.new(key: key, method: block || key, options: options))
+      def link(key:, **opts, &block)
+        add_facet(type: :links, schema_attribute: Link.new(key: key, method: block || key, options: opts))
       end
 
       def meta(key:, &block)
         add_facet(type: :meta, schema_attribute: Meta.new(key: key, method: block))
       end
 
-      def node(key: nil, **options, &block)
-        add_facet(type: :node, schema_attribute: Node.new(key: key, options: options, &block))
+      def node(key: nil, **opts, &block)
+        add_facet(type: :nodes, schema_attribute: Node.new(key: key, options: opts.merge(options.dup), &block))
       end
 
-      def relation(key:, serializer:, **options, &block)
-        add_facet(type: :relation, schema_attribute: Relation.new(key: key, serializer: serializer, options: options, &block))
+      def relation(key:, serializer:, **opts, &block)
+        add_facet(type: :relations, schema_attribute: Relation.new(key: key, serializer: serializer, options: opts.merge(options.dup), &block))
       end
 
       alias_method :has_one, :relation
@@ -53,45 +61,83 @@ module Curator
       alias_method :belongs_to, :relation
 
       def facet_groups
-        @facets.group_by(&:type).reduce(Concurrent::Hash.new) { |ret, (k, v)| ret.merge(k => v.map { |i| i.to_h.delete(k) }) }
+        @facets.group_by(&:type).reduce(Concurrent::Hash.new) { |ret, (type , f)|  ret.merge(type => f.flat_map { |i| i.to_h.values }) }
       end
-      # TODO: Figure out a way to add links and meta passed in from ther serializer params too
+
+      def is_collection?(record)
+        record.kind_of?(ActiveRecord::Associations::CollectionProxy) || record.kind_of?(Array)
+      end
+
+      def key_transform_method
+        method = options.fetch(:key_transform_method, ROOT_KEY_TRANSFORM_MAPPING[:default])
+        raise "Unknown key transform method #{method}" unless ROOT_KEY_TRANSFORM_MAPPING.key?(method)
+
+        ROOT_KEY_TRANSFORM_MAPPING[method]
+      end
+
+      def cache_enabled?
+        options.fetch(:cache_enabled, false)
+      end
+
+      def cache_options
+        options.fetch(:cache_options, {})
+      end
 
       def serialize(record, serializer_params = {})
         return {} if record.blank?
 
         return serialize_each(record, serializer_params) if is_collection?(record)
 
-        grouped_facets.dup.keys.inject(Concurrent::Hash.new) do |res, facet_group|
-          res.merge(serialize_facets(facet_group, record, serializer_params))
+        if cache_enabled?
+          serialized_result = with_cache(record) do
+            facet_groups.dup.keys.inject(Concurrent::Hash.new) do |res, facet_group|
+              res.merge(serialize_facets(facet_group, record, serializer_params))
+            end
+          end
+        else
+          serialized_result = facet_groups.dup.keys.inject(Concurrent::Hash.new) do |res, facet_group|
+            res.merge(serialize_facets(facet_group, record, serializer_params))
+          end
         end
+        serialized_result
       end
 
       def serialize_each(records, serializer_params = {})
-        records.inject(Concurrent::Array.new) do |arr, record|
-          arr.concat(serialize(record, serializer_params))
+        records.inject(Concurrent::Array.new) do |ret, record|
+          ret << serialize(record, serializer_params)
         end
       end
 
+      protected
+
       def serialize_facets(facet_group, record, serializer_params = {})
-        grouped_facets.dup.slice(facet_group).values.reduce(Concurrent::Hash[facet_group, Concurrent::Hash.new]) do |res, facet|
+        serialized_facet = Concurrent::Hash.new
+        serialized_facet[facet_group] = facet_groups.dup.slice(facet_group).values.flatten.reduce(Concurrent::Hash.new) do |res, facet|
           next res unless facet.include_value?(record, serializer_params)
 
           val = facet.serialize(record, serializer_params)
           next res if val.blank?
 
-          res[facet_group].merge(attribute.key => val)
+          res.merge(facet.key => val)
         end
+        serialized_facet
+      end
+
+      def with_cache(record)
+        cache_key_method = cache_options.fetch(:cache_key_method, :cache_key)
+        cached_length = cache_options.fetch(:cached_length, 5.minutes)
+        race_condition_ttl = cache_options.fetch(:race_condition_ttl, 5.seconds)
+
+        Rails.cache.fetch(record.public_send(cache_key_method), expires_in: cached_length, race_condition_ttl: race_condition_ttl) do
+          cached = yield
+        end
+        cached
       end
 
       private
 
-      def is_collection?(record)
-        record.kind_of?(ActiveRecord::Associations::CollectionProxy) || record.kind_of?(Array)
-      end
-
       def add_facet(type:, schema_attribute:)
-        @facets.concat(Facet.new(type: type, schema_attribute: schema_attribute))
+        @facets << Facet.new(type: type, schema_attribute: schema_attribute)
       end
     end
   end

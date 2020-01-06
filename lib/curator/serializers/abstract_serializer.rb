@@ -4,12 +4,12 @@ module Curator
   module Serializers
     class AbstractSerializer
       extend Forwardable
-      include SerializationDSL
+      include Serializers::SerializationDSL
       attr_reader :record, :adapter, :serializer_params
 
-      def_delegator :@adapter, :serializable_hash, :adapter_serialized_hash
+      def_delegator :adapter, :serializable_hash, :adapter_serialized_hash
 
-      def_delegator :@adapter, :render, :adapter_render
+      def_delegator :adapter, :render, :adapter_render
 
       def initialize(record, adapter_key, serializer_params = {})
         @record = record

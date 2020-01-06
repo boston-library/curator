@@ -5,7 +5,7 @@ module Curator
     class Relation < Attribute
       attr_reader :serializer
 
-      def initialize(key:, serializer_klass:, options: {})
+      def initialize(key:, method: nil, serializer_klass:, options: {})
         @key = key
         @options = options
         @serializer = serializer_klass_for(serializer_klass)
@@ -22,7 +22,7 @@ module Curator
       end
 
       def include_value?(record, serializer_params = {})
-        super(record, serializer_params.dup.except(:fields)) && include_relation?(serializer_params)
+        super(record, serializer_params.dup.except(:fields)) && include_relation?(serializer_params.dup)
       end
 
       def include_relation?(serializer_params = {})

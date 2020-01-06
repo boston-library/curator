@@ -38,6 +38,7 @@ module Curator
       autoload :AdapterRegistry
       autoload :Schema
       autoload :AbstractSerializer
+      autoload :SerializationDSL
       autoload_under 'adapters' do
         autoload :NullAdapter
         autoload :JSONAdapter

@@ -6,13 +6,13 @@ module Curator
       extend Forwardable
       attr_reader :schema
 
-      def_delegators :@schema, :attribute, :attributes, :node, :meta, :link, :has_one, :belongs_to, :has_many
+      def_delegators :schema, :root, :attribute, :attributes, :node, :has_one, :belongs_to, :has_many
 
-      def initialize(key:, options: {}, &block)
-        super(key: key, options: options)
+      def initialize(key:, method: nil, options: {}, &block)
+        super(key: key, options: options.dup)
         raise 'Node requires a Block!' unless block_given?
 
-        @schema = Schema.new(root: @key)
+        @schema = Schema.new(root: key, options: options.dup.slice(:key_transform_method, :cache_enabled, :cache_options))
         instance_eval(&block)
       end
 

@@ -6,11 +6,19 @@ module Curator
       extend ActiveSupport::Concern
       included do
         class << self
+          attr_writer :cache_enabled
+
+          def cache_enabled?
+            return @cache_enabled if defined?(@cache_enabled)
+
+            @cache_enabled = false
+          end
+
           protected
 
           attr_reader :_adapter_schemas
         end
-        reset_adapter_schemas!
+        _reset_adapter_schemas!
       end
 
       class_methods do
@@ -20,14 +28,17 @@ module Curator
           super(subclass)
           subclass._reset_adapter_schemas!
           subclass._inherit_schemas
+          subclass.cache_enabled = cache_enabled?
         end
 
         def define_adapter_schema(adapter_key:, root: nil, options: {}, &block)
           raise 'NullAdapter cant be used this way' if adapter_key.to_sym == :null
 
           adapter_schema_klass = Curator::Serializers.lookup_adapter(adapter_key.to_sym)
-          schema_options = options.dup.slice(:cached, :cached_length, :race_condition_ttyl, :key_transform_method)
+          schema_options = options.dup.slice(:key_transform_method)
           # TODO: Think of more options to set up at the schema level.
+          schema_options[:cache_enabled] = cache_enabled?
+          schema_options[:cache_options] = options.dup.slice(:cache_key_method, :cached_length, :race_condition_ttyl) if cache_enabled?
           schema_options[:adapter] = adapter.to_sym
           schema_options[:root] = root.to_sym if root
 
@@ -59,7 +70,7 @@ module Curator
         end
 
         def _map_null_adapter
-          map_schema_adapter(:null, Curator::Serializers.lookup_adapter(:null).new)
+          _map_schema_adapter(:null, Curator::Serializers.lookup_adapter(:null).new)
         end
 
         def _map_schema_adapter(adapter_key, schema_adapter)
