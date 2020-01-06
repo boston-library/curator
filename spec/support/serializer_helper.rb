@@ -2,8 +2,8 @@
 
 module SerializerHelper
   module FacetHelper
-    def build_facet_inst(klass:, key:, method: nil, options: {}, &block)
-      klass.new(key: key, method: method, options: options.dup, &block)
+    def build_facet_inst(klass:,**kwargs, &block)
+      klass.new(**kwargs, &block)
     end
 
     def build_facet_inst_list(*facet_fields, klass:, method: nil, options: {})

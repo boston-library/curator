@@ -24,7 +24,7 @@ module Curator
       def read_for_serialization(record, serializer_params = {})
         if method.is_a?(Proc)
           method.arity.abs == 1 ? method.call(record) : method.call(record, serializer_params.dup)
-        elsif record.class.has_attribute?(key) && record.respond_to?(:read_attribute_for_serialization)
+        elsif record.class.respond_to?(:has_attribute?) && record.class.has_attribute?(key) && record.respond_to?(:read_attribute_for_serialization)
           record.read_attribute_for_serialization(method)
         else
           record.public_send(method)

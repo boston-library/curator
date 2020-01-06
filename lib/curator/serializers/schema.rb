@@ -47,7 +47,7 @@ module Curator
         add_facet(type: :meta, schema_attribute: Meta.new(key: key, method: block))
       end
 
-      def node(key: nil, **opts, &block)
+      def node(key:, **opts, &block)
         add_facet(type: :nodes, schema_attribute: Node.new(key: key, options: opts.merge(options.dup), &block))
       end
 

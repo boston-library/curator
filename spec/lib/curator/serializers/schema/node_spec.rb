@@ -19,4 +19,44 @@ RSpec.describe Curator::Serializers::Node, type: :lib_serializers do
       expect(subject).to delegate_method(schema_method).to(:schema)
     end
   end
+
+
+  describe 'complex node' do
+    subject { complex_node.serialize(descriptive) }
+
+    let!(:descriptive) { create(:curator_metastreams_descriptive) }
+    let!(:serialized_facet_keys) { %i(attributes nodes) }
+    let!(:node_attributes) { %i(abstract access_restrictions digital_origin frequency issuance origin_event extent physical_location_department physical_location_shelf_locator place_of_publication publisher rights series subseries subsubseries toc toc_url) }
+    let!(:identifer_attrs) { %i(label type) }
+    let!(:identifier_json) { descriptive.identifier.as_json.map { |a| { attributes: a.reject { |k, v| v.blank? }.symbolize_keys } } }
+
+    let!(:complex_node) do
+      build_facet_inst(klass: described_class, key: :descriptive) do
+        attributes(*%i(abstract access_restrictions digital_origin frequency issuance origin_event extent physical_location_department physical_location_shelf_locator place_of_publication publisher rights series subseries subsubseries toc toc_url))
+
+        node key: :identifier, target: :key do
+          attributes :label, :type, :invalid
+        end
+      end
+    end
+    it 'should serialize the node with the correct facet keys' do
+      serialized_facet_keys.each do |facet_key|
+        expect(subject).to have_key(facet_key)
+        expect(subject[facet_key]).to be_a_kind_of(Hash)
+      end
+    end
+
+    it 'should have the correct attributes serialized' do
+      node_attributes.each do |node_attr|
+        expect(subject[:attributes]).to have_key(node_attr)
+        expect(subject[:attributes][node_attr]).to eq(descriptive.public_send(node_attr))
+      end
+    end
+
+    it 'should have a sub node that serializes as array' do
+      expect(subject[:nodes]).to have_key(:identifier)
+      expect(subject[:nodes][:identifier]).to be_a_kind_of(Array).and all(have_key(:attributes))
+      expect(subject[:nodes][:identifier]).to match_array(identifier_json)
+    end
+  end
 end

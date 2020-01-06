@@ -50,12 +50,13 @@ RSpec.describe Curator::Serializers::Schema, type: :lib_serializers do
   end
 
   describe 'schema serialization' do
-    let!(:serialized_facet_keys) { %i(attributes links meta) }
+    let!(:serialized_facet_keys) { %i(attributes links meta nodes) }
     let!(:params) { { range: 0..20 } }
     let!(:attributes) { %i(id ark_id created_at updated_at) }
     let!(:custom_attr) { :abstract_trunc }
     let!(:custom_link_attr) { :https_url }
     let!(:meta_attr) { :collection_count }
+    let(:node_attr) { :ark_attributes }
     let!(:schema) do
       schema = described_class.new(root: :institution)
       schema.attributes(*attributes)
@@ -68,6 +69,10 @@ RSpec.describe Curator::Serializers::Schema, type: :lib_serializers do
         uri.to_s
       end
       schema.meta(key: meta_attr) { |record| record.collections.count }
+      schema.node(key: node_attr) do
+        attribute(key: :pid) { |record| record.ark_id }
+        attribute(key: :model_type) { |record| record.class.to_s }
+      end
       schema
     end
 
@@ -111,6 +116,12 @@ RSpec.describe Curator::Serializers::Schema, type: :lib_serializers do
       it 'expects the meta attributes to have the correct values' do
         expect(subject[:meta]).to have_key(meta_attr)
         expect(subject[:meta][meta_attr]).to eql(test_institution.collections.count)
+      end
+
+      it 'expects the node attributes to have the correct values' do
+        expect(subject[:nodes]).to have_key(node_attr)
+        expect(subject[:nodes][node_attr]).to be_a_kind_of(Hash).and have_key(:attributes)
+        expect(subject[:nodes][node_attr][:attributes]).to include(:pid => test_institution.ark_id, model_type: test_institution.class.to_s)
       end
     end
 
