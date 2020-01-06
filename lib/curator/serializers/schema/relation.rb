@@ -5,7 +5,7 @@ module Curator
     class Relation < Attribute
       attr_reader :serializer
 
-      def initialize(key:, method: nil, serializer_klass:, options: {})
+      def initialize(key:, _method: nil, serializer_klass:, options: {})
         @key = key
         @options = options
         @serializer = serializer_klass_for(serializer_klass)

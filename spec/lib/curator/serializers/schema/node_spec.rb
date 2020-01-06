@@ -3,7 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe Curator::Serializers::Node, type: :lib_serializers do
-
   subject { build_facet_inst(klass: described_class, key: :my_key) { 'I require a block!' } }
 
   let!(:delegated_schema_methods) { %i(root attribute attributes node has_one has_many belongs_to) }

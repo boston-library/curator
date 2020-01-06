@@ -8,7 +8,7 @@ module Curator
 
       def_delegators :schema, :root, :attribute, :attributes, :node, :has_one, :belongs_to, :has_many
 
-      def initialize(key:, method: nil, options: {}, &block)
+      def initialize(key:, _method: nil, options: {}, &block)
         super(key: key, options: options.dup)
         raise 'Node requires a Block!' unless block_given?
 

@@ -2,9 +2,8 @@
 
 module Curator
   module Serializers
-    #Method to call on root key if present
-
     class Schema
+      # Method to call map const for root key if present
       ROOT_KEY_TRANSFORM_MAPPING = {
         camel: :camelize,
         dash: :dasherize,
@@ -61,7 +60,7 @@ module Curator
       alias_method :belongs_to, :relation
 
       def facet_groups
-        @facets.group_by(&:type).reduce(Concurrent::Hash.new) { |ret, (type , f)|  ret.merge(type => f.flat_map { |i| i.to_h.values }) }
+        @facets.group_by(&:type).reduce(Concurrent::Hash.new) { |ret, (type, f)| ret.merge(type => f.flat_map { |i| i.to_h.values }) }
       end
 
       def is_collection?(record)
@@ -129,9 +128,8 @@ module Curator
         race_condition_ttl = cache_options.fetch(:race_condition_ttl, 5.seconds)
 
         Rails.cache.fetch(record.public_send(cache_key_method), expires_in: cached_length, race_condition_ttl: race_condition_ttl) do
-          cached = yield
+          yield
         end
-        cached
       end
 
       private

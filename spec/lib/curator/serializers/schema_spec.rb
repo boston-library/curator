@@ -3,7 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe Curator::Serializers::Schema, type: :lib_serializers do
-
   describe 'class functionality' do
     subject { described_class }
 
@@ -51,9 +50,9 @@ RSpec.describe Curator::Serializers::Schema, type: :lib_serializers do
   end
 
   describe 'schema serialization' do
-    let!(:serialized_facet_keys) {%i(attributes links meta)}
+    let!(:serialized_facet_keys) { %i(attributes links meta) }
     let!(:params) { { range: 0..20 } }
-    let!(:attributes) { %i(id ark_id created_at updated_at)}
+    let!(:attributes) { %i(id ark_id created_at updated_at) }
     let!(:custom_attr) { :abstract_trunc }
     let!(:custom_link_attr) { :https_url }
     let!(:meta_attr) { :collection_count }
@@ -68,12 +67,13 @@ RSpec.describe Curator::Serializers::Schema, type: :lib_serializers do
         uri.scheme = 'https'
         uri.to_s
       end
-      schema.meta(key: meta_attr) { |record|  record.collections.count }
+      schema.meta(key: meta_attr) { |record| record.collections.count }
       schema
     end
 
     describe 'schema defaults' do
       subject { schema }
+
       let!(:key_transform_methods) { described_class.const_get(:ROOT_KEY_TRANSFORM_MAPPING) }
 
       it 'expects the schema to have certain defaults' do

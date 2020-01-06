@@ -22,6 +22,7 @@ module Curator
       end
 
       protected
+
       def transformed_root_key(record)
         return if root.blank?
 
