@@ -20,19 +20,17 @@ RSpec.describe Curator::Serializers::Node, type: :lib_serializers do
     end
   end
 
-
   describe 'complex node' do
     subject { complex_node.serialize(descriptive) }
 
     let!(:descriptive) { create(:curator_metastreams_descriptive) }
     let!(:serialized_facet_keys) { %i(attributes nodes) }
     let!(:node_attributes) { %i(abstract access_restrictions digital_origin frequency issuance origin_event extent physical_location_department physical_location_shelf_locator place_of_publication publisher rights series subseries subsubseries toc toc_url) }
-    let!(:identifer_attrs) { %i(label type) }
-    let!(:identifier_json) { descriptive.identifier.as_json.map { |a| { attributes: a.reject { |k, v| v.blank? }.symbolize_keys } } }
+    let!(:identifier_json) { descriptive.identifier.as_json.map { |a| { attributes: a.reject { |_k, v| v.blank? }.symbolize_keys } } }
 
     let!(:complex_node) do
       build_facet_inst(klass: described_class, key: :descriptive) do
-        attributes(*%i(abstract access_restrictions digital_origin frequency issuance origin_event extent physical_location_department physical_location_shelf_locator place_of_publication publisher rights series subseries subsubseries toc toc_url))
+        attributes :abstract, :access_restrictions, :digital_origin, :frequency, :issuance, :origin_event, :extent, :physical_location_department, :physical_location_shelf_locator, :place_of_publication, :publisher, :rights, :series, :subseries, :subsubseries, :toc, :toc_url
 
         node key: :identifier, target: :key do
           attributes :label, :type, :invalid

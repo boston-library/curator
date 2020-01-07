@@ -2,7 +2,7 @@
 
 module SerializerHelper
   module FacetHelper
-    def build_facet_inst(klass:,**kwargs, &block)
+    def build_facet_inst(klass:, **kwargs, &block)
       klass.new(**kwargs, &block)
     end
 
