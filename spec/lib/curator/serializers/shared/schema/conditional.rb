@@ -2,15 +2,15 @@
 
 RSpec.shared_examples 'conditional_attributes', type: :lib_serializers do
   # NOTE: serializable_record should exist in the parent describe/context block
-  let(:if_proc) { { if: ->(_record, serializer_params) { serializer_params[:conditional] } } }
-  let(:unless_proc) { { unless: ->(_record, serializer_params) { serializer_params[:conditional] } } }
-
   let!(:true_conditional_params) { { conditional: true } }
   let!(:false_conditional_params) { { conditional: false } }
   let!(:nil_conditional_params) { { conditional: nil } }
 
+  let(:if_proc) { { if: ->(_record, serializer_params) { serializer_params[:conditional] } } }
+  let(:unless_proc) { { unless: ->(_record, serializer_params) { serializer_params[:conditional] } } }
+
   describe 'with if block' do
-    subject { build_facet_inst(klass: described_class, key: key, method: method, options: if_proc) }
+    subject { if_facet }
 
     it 'expects #include_value to return true given the params passed in' do
       expect(subject).to be_include_value(serializable_record, true_conditional_params)
@@ -32,7 +32,7 @@ RSpec.shared_examples 'conditional_attributes', type: :lib_serializers do
   end
 
   describe 'with unless block' do
-    subject { build_facet_inst(klass: described_class, key: key, method: method, options: unless_proc) }
+    subject { unless_facet }
 
     it 'expects #include_value to return false given the params passed in' do
       expect(subject).not_to be_include_value(serializable_record, true_conditional_params)
@@ -54,7 +54,7 @@ RSpec.shared_examples 'conditional_attributes', type: :lib_serializers do
   end
 
   describe 'conditional precedence' do
-    subject { build_facet_inst(klass: described_class, key: key, method: method, options: combined_conditions) }
+    subject { combined_facet }
 
     let(:combined_conditions) { if_proc.merge(unless_proc) }
 

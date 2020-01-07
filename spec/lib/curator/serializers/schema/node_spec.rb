@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../shared/schema/conditional'
 
 RSpec.describe Curator::Serializers::Node, type: :lib_serializers do
   subject { build_facet_inst(klass: described_class, key: :my_key) { 'I require a block!' } }
 
+  let!(:descriptive) { create(:curator_metastreams_descriptive) }
   let!(:delegated_schema_methods) { %i(root attribute attributes node has_one has_many belongs_to) }
 
   it { is_expected.to respond_to(:schema, :serialize, :include_value?, :read_for_serialization) }
@@ -20,10 +22,37 @@ RSpec.describe Curator::Serializers::Node, type: :lib_serializers do
     end
   end
 
+  include_examples 'conditional_attributes' do
+    let(:serializable_record) { descriptive }
+    let(:key) { :title }
+    let(:if_facet) do
+      build_facet_inst(klass: described_class, key: key, options: { target: :key }.merge(if_proc)) do
+        attribute key: :primary do |target, _serializer_params|
+          target.as_json
+        end
+      end
+    end
+
+    let(:unless_facet) do
+      build_facet_inst(klass: described_class, key: key, options: { target: :key }.merge(unless_proc)) do
+        attribute key: :primary do |target, _serializer_params|
+          target.as_json
+        end
+      end
+    end
+
+    let(:combined_facet) do
+      build_facet_inst(klass: described_class, key: key, options: { target: :key }.merge(if_proc).merge(unless_proc)) do
+        attribute key: :primary do |target, _serializer_params|
+          target.as_json
+        end
+      end
+    end
+  end
+
   describe 'complex node' do
     subject { complex_node.serialize(descriptive) }
 
-    let!(:descriptive) { create(:curator_metastreams_descriptive) }
     let!(:serialized_facet_keys) { %i(attributes nodes) }
     let!(:node_attributes) { %i(abstract access_restrictions digital_origin frequency issuance origin_event extent physical_location_department physical_location_shelf_locator place_of_publication publisher rights series subseries subsubseries toc toc_url) }
     let!(:identifier_json) { descriptive.identifier.as_json.map { |a| { attributes: a.reject { |_k, v| v.blank? }.symbolize_keys } } }

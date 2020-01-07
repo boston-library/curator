@@ -22,8 +22,12 @@ RSpec.describe Curator::Serializers::Attribute, type: :lib_serializers do
 
   include_examples 'conditional_attributes' do
     let(:serializable_record) { digital_object }
+
     let(:key) { :id }
-    let(:method) { :id }
+    let(:method) { key }
+    let(:if_facet) { build_facet_inst(klass: described_class, key: key, method: method, options: if_proc) }
+    let(:unless_facet) { build_facet_inst(klass: described_class, key: key, method: method, options: unless_proc) }
+    let(:combined_facet) { build_facet_inst(klass: described_class, key: key, method: method, options: if_proc.merge(unless_proc)) }
   end
 
   describe 'serializing attributes for objects' do

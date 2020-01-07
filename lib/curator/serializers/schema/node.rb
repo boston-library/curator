@@ -19,10 +19,10 @@ module Curator
       end
 
       def read_for_serialization(record, serializer_params = {})
-        value = super(record, serializer_params.dup) if method
-        value = record if value.blank?
+        target_val = super(record, serializer_params.dup) if method
+        target_val = record if target_val.blank?
 
-        schema.serialize(value, serializer_params.dup)
+        schema.serialize(target_val, serializer_params.dup)
       end
 
       def include_value?(record, serializer_params = {})

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../shared/schema/conditional'
 
 RSpec.describe Curator::Serializers::Link, type: :lib_serializers do
   let!(:collection) { create(:curator_collection) }
@@ -22,6 +23,9 @@ RSpec.describe Curator::Serializers::Link, type: :lib_serializers do
       let(:serializable_record) { double(collection) }
       let(:key) { :link }
       let(:method) { key }
+      let(:if_facet) { build_facet_inst(klass: described_class, key: key, method: method, options: if_proc) }
+      let(:unless_facet) { build_facet_inst(klass: described_class, key: key, method: method, options: unless_proc) }
+      let(:combined_facet) { build_facet_inst(klass: described_class, key: key, method: method, options: if_proc.merge(unless_proc)) }
       before(:each) do
         allow(serializable_record).to receive(key).and_return(link_string)
       end
@@ -41,6 +45,9 @@ RSpec.describe Curator::Serializers::Link, type: :lib_serializers do
       let(:serializable_record) { collection }
       let(:key) { :link }
       let(:method) { link_proc }
+      let(:if_facet) { build_facet_inst(klass: described_class, key: key, method: method, options: if_proc) }
+      let(:unless_facet) { build_facet_inst(klass: described_class, key: key, method: method, options: unless_proc) }
+      let(:combined_facet) { build_facet_inst(klass: described_class, key: key, method: method, options: if_proc.merge(unless_proc)) }
     end
 
     describe 'with additional params' do
