@@ -12,18 +12,18 @@ RSpec.describe Curator::Parsers::InputParser do
 
   describe '#utf8_encode' do
     it 'encodes the string as utf-8' do
-      ascii_string = "hello".force_encoding("ASCII")
-      expect(described_class.utf8_encode(ascii_string).encoding.to_s).to eq "UTF-8"
+      ascii_string = 'hello'.force_encoding('ASCII')
+      expect(described_class.utf8_encode(ascii_string).encoding.to_s).to eq 'UTF-8'
     end
 
     it 'removes extra whitespace and line breaks' do
       bad_string = " Lorem ipsum dolor\namet     ullamco  "
-      expect(described_class.utf8_encode(bad_string)).to eq "Lorem ipsum dolor amet ullamco"
+      expect(described_class.utf8_encode(bad_string)).to eq 'Lorem ipsum dolor amet ullamco'
     end
 
     it 'removes HTML tags' do
       bad_string = "<strong>Lorem</strong> <em>ipsum</em> <a href='foo'>dolor</a>"
-      expect(described_class.utf8_encode(bad_string)).to eq "Lorem ipsum dolor"
+      expect(described_class.utf8_encode(bad_string)).to eq 'Lorem ipsum dolor'
     end
   end
 end
