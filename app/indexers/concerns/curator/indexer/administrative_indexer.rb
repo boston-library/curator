@@ -8,9 +8,7 @@ module Curator
         configure do
           to_field 'destination_site_ssim', obj_extract('administrative', 'destination_site')
           to_field 'harvesting_status_bsi', obj_extract('administrative', 'harvestable')
-          to_field 'flagged_content_ssi' do |record, accumulator|
-            accumulator << true if record.administrative&.flagged
-          end
+          to_field('flagged_content_ssi') { |rec, acc| acc << true if rec.administrative&.flagged }
         end
       end
     end

@@ -14,7 +14,7 @@ module Curator
     #   physical_location_tsim->physical_location_tim
 
     # TODO: add indexing for:
-    #         genre_basic_ssim genre_basic_tim edit_access_group_ssim
+    #         edit_access_group_ssim
     configure do
       to_field 'title_info_primary_tsi', obj_extract('name')
       to_field 'title_info_primary_ssort' do |record, accumulator|
@@ -29,6 +29,16 @@ module Curator
       to_field 'exemplary_image_iiif_bsi' do |record, accumulator|
         exemplary_file_set_type = record.exemplary_file_set&.file_set_type
         accumulator << false unless exemplary_file_set_type == 'Curator::Filestreams::Image'
+      end
+      to_field %w(genre_basic_ssim genre_basic_tim) do |record, accumulator|
+        accumulator << 'Collections'
+        # iterate over child DigitalObject and get genre values
+        # TODO: find a better way? (query Solr?), this is probably pretty expensive
+        Curator::DigitalObject.where(admin_set_id: record.id).find_each do |obj|
+          obj.descriptive.genres.select(&:basic).each do |genre|
+            accumulator << genre.label unless accumulator.include?(genre.label)
+          end
+        end
       end
     end
   end

@@ -10,6 +10,7 @@ module Curator
     require 'acts_as_list'
     require 'attr_json'
     require 'active_model_serializers'
+    require 'htmlentities'
     require 'oj'
     require 'rsolr'
     require 'traject'

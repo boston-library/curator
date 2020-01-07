@@ -6,10 +6,8 @@ module Curator
       extend ActiveSupport::Concern
       included do
         configure do
-          to_field %w(related_item_host_tim related_item_host_ssim) do |record, accumulator|
-            record.descriptive.host_collections.each do |hcol|
-              accumulator << hcol.name
-            end if record.descriptive&.host_collections
+          to_field %w(related_item_host_tim related_item_host_ssim) do |rec, acc|
+            acc.concat rec.descriptive.host_collections.map(&:name) if rec.descriptive&.host_collections
           end
           to_field %w(related_item_series_ti related_item_series_ssi), obj_extract('descriptive', 'series')
           to_field %w(related_item_subseries_ti related_item_subseries_ssi), obj_extract('descriptive', 'subseries')

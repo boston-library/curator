@@ -37,6 +37,11 @@ RSpec.describe Curator::DigitalObject, type: :model do
         through(:admin_set).class_name('Curator::Institution') }
 
     ########### FILE SETS ##################
+    it { is_expected.to have_many(:file_sets).
+        inverse_of(file_set_options[:inverse_of]).
+        class_name('Curator::Filestreams::FileSet').
+        with_foreign_key(file_set_options[:foreign_key]).dependent(:destroy) }
+
     it { is_expected.to have_many(:audio_file_sets).
         inverse_of(file_set_options[:inverse_of]).
         class_name('Curator::Filestreams::Audio').

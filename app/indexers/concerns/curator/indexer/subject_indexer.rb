@@ -9,31 +9,23 @@ module Curator
       included do
         configure do
           # topic subjects
-          to_field %w(subject_topic_tsim subject_facet_ssim) do |record, accumulator|
-            record.descriptive.subject_topics.each do |topic|
-              accumulator << topic.label
-            end if record.descriptive&.subject_topics
+          to_field %w(subject_topic_tsim subject_facet_ssim) do |rec, acc|
+            acc.concat rec.descriptive.subject_topics.map(&:label) if rec.descriptive&.subject_topics
           end
 
           # name subjects
-          to_field %w(subject_name_tsim subject_facet_ssim) do |record, accumulator|
-            record.descriptive.subject_names.each do |name|
-              accumulator << name.label
-            end if record.descriptive&.subject_names
+          to_field %w(subject_name_tsim subject_facet_ssim) do |rec, acc|
+            acc.concat rec.descriptive.subject_names.map(&:label) if rec.descriptive&.subject_names
           end
 
           # title subjects
-          to_field %w(subject_title_tsim subject_facet_ssim) do |record, accumulator|
-            record.descriptive.subject_other.titles&.each do |title|
-              accumulator << title.label
-            end if record.descriptive&.subject_other
+          to_field %w(subject_title_tsim subject_facet_ssim) do |rec, acc|
+            acc.concat rec.descriptive.subject_other.titles.map(&:label) if rec.descriptive&.subject_other
           end
 
           # temporal subjects
-          to_field %w(subject_temporal_tsim subject_facet_ssim) do |record, accumulator|
-            record.descriptive.subject_other.temporals&.each do |temporal|
-              accumulator << temporal
-            end if record.descriptive&.subject_other
+          to_field %w(subject_temporal_tsim subject_facet_ssim) do |rec, acc|
+            acc.concat rec.descriptive.subject_other.temporals if rec.descriptive&.subject_other
           end
 
           # date subjects

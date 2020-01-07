@@ -37,5 +37,11 @@ RSpec.describe Curator::CollectionIndexer do
     it 'sets the exemplary image field' do
       expect(indexed['exemplary_image_ssi']).to eq [@collection.exemplary_file_set.ark_id]
     end
+
+    it 'sets the genre fields' do
+      %w(genre_basic_ssim genre_basic_tim).each do |field|
+        expect(indexed[field]).to eq ['Collections']
+      end
+    end
   end
 end

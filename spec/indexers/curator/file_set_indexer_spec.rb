@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-RSpec.describe Curator::FileSetIndexer do
+RSpec.describe Curator::FileSetIndexer, type: :indexer do
   describe 'indexing' do
     # use FileSet from :curator_mappings_exemplary_image factory
     # otherwise exemplary_image indexing doesn't work
@@ -32,6 +32,21 @@ RSpec.describe Curator::FileSetIndexer do
       expect(indexed['is_exemplary_image_of_ssim']).to eq(
         file_set.exemplary_image_objects.map { |obj| obj.ark_id }
       )
+    end
+
+    describe 'attachment properties' do
+      it 'sets the full text fields' do
+        attach_text_file(file_set)
+        attach_text_coordinates_file(file_set)
+        expect(indexed['has_wordcoords_json_bsi']).to be_truthy
+        expect(indexed['has_ocr_text_bsi']).to be_truthy
+        expect(indexed['ocr_tsiv']).to include 'Lorem ipsum'
+      end
+
+      it 'sets the georeferenced field' do
+        attach_georeferenced_file(file_set)
+        expect(indexed['georeferenced_bsi']).to be_truthy
+      end
     end
   end
 end
