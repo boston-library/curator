@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative './shared/schema/included'
 
 RSpec.describe Curator::Serializers::Schema, type: :lib_serializers do
   describe 'class functionality' do
@@ -74,6 +75,13 @@ RSpec.describe Curator::Serializers::Schema, type: :lib_serializers do
         attribute(key: :model_type) { |record| record.class.to_s }
       end
       schema
+    end
+
+    include_examples 'included_fields' do
+      let(:described_schema) { schema }
+      let(:field_params) { { fields: %i(ark_id) } }
+      let(:field_count) { field_params[:fields].count }
+      let(:serializable_record) { create(:curator_institution) }
     end
 
     describe 'schema defaults' do

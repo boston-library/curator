@@ -19,6 +19,10 @@ module Curator
         _adapter_registry.clear!
       end
 
+      def registered_adapter_keys(exclude_null = true)
+        _adapter_registry.keys(exclude_null)
+      end
+
       private
 
       def _adapter_registry

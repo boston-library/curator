@@ -26,6 +26,10 @@ module Curator
         _adapters.key?(key.to_sym)
       end
 
+      def keys(exclude_null = true)
+        exclude_null ? _adapters.keys - [:null] : _adapters.keys
+      end
+
       def clear!
         _adapters.clear
       end
