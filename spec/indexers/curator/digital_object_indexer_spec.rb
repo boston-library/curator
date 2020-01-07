@@ -1,12 +1,9 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-RSpec.describe Curator::DigitalObjectIndexer do
+RSpec.describe Curator::DigitalObjectIndexer, type: :indexer do
   describe 'indexing' do
-    # use DigitalObject from :curator_mappings_exemplary_image factory
-    # otherwise exemplary_image indexing doesn't work
-    let(:exemplary_image_mapping) { create(:curator_mappings_exemplary_image) }
-    let(:digital_object) { exemplary_image_mapping.exemplary_object }
+    let(:digital_object) { create(:curator_digital_object) }
     let(:indexer) { described_class.new }
     let(:indexed) { indexer.map_record(digital_object) }
     let(:collections) { digital_object.is_member_of_collection }
@@ -30,8 +27,47 @@ RSpec.describe Curator::DigitalObjectIndexer do
       expect(indexed['collection_ark_id_ssim']).to eq collections.map { |c| c.ark_id }
     end
 
-    it 'sets the exemplary image field' do
-      expect(indexed['exemplary_image_ssi']).to eq [digital_object.exemplary_file_set.ark_id]
+    describe 'exemplary image indexing' do
+      # instantiate DigitalObject from :curator_mappings_exemplary_image factory
+      # otherwise exemplary_image indexing doesn't work in test env
+      let(:exemplary_image_mapping) { create(:curator_mappings_exemplary_image) }
+      let(:file_set) { exemplary_image_mapping.exemplary_file_set }
+      let(:digital_object) { exemplary_image_mapping.exemplary_object }
+
+      it 'sets the exemplary image field' do
+        expect(indexed['exemplary_image_ssi']).to eq [file_set.ark_id]
+      end
+    end
+
+    describe 'attachment-related properties' do
+      # instantiate digital_object from file_set.file_set_of_id
+      # otherwise file_set-related indexing doesn't work in test env
+      let(:file_set) { create(:curator_filestreams_image) }
+      let(:digital_object) { Curator::DigitalObject.find(file_set.file_set_of_id) }
+
+      it 'sets the filenames field' do
+        expect(indexed['filenames_ssim']).to include file_set.file_name_base
+      end
+
+      it 'sets the has_searchable_pages and filenames fields' do
+        attach_text_file(file_set)
+        expect(indexed['has_searchable_pages_bsi']).to be_truthy
+      end
+
+      it 'sets the georeferenced field' do
+        attach_georeferenced_file(file_set)
+        expect(indexed['georeferenced_bsi']).to be_truthy
+      end
+
+      describe 'full text indexing' do
+        let(:text_file_set) { create(:curator_filestreams_text) }
+        let(:digital_object) { Curator::DigitalObject.find(text_file_set.file_set_of_id) }
+
+        it 'sets the ocr field' do
+          attach_text_file(text_file_set)
+          expect(indexed['ocr_tiv']).to include 'Lorem ipsum'
+        end
+      end
     end
   end
 end

@@ -62,7 +62,7 @@ module Curator
         record.is_member_of_collection.each { |col| accumulator << col.ark_id }
       end
       to_field 'exemplary_image_ssi', obj_extract('exemplary_file_set', 'ark_id')
-      to_field('filenames_ssim') { |rec, acc| acc.concat rec.file_sets.map(&:file_name_base) }
+      to_field('filenames_ssim') { |rec, acc| acc.concat rec.file_sets.map(&:file_name_base).uniq }
       each_record do |record, context|
         if record.image_file_sets.present?
           has_searchable_pages, georeferenced = false, false
