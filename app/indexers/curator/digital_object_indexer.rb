@@ -8,7 +8,7 @@ module Curator
 
     # NOTE: fields below were previously set in Bplmodels::ObjectBase#to_solr, but no longer needed(?):
     #   internet_media_type_ssim classification_tsim label_ssim date_facet_ssim supplied_alternative_title_bs
-    #   supplied_title_bs subject_temporal_facet_ssim
+    #   supplied_title_bs subject_temporal_facet_ssim object_profile_ssm
     #
     # NOTE: fields below were previously set in Bplmodels::ObjectBase#to_solr, but have been updated:
     #   institution_pid_si->institution_ark_id_ssi institution_name_ssim->institution_name_ssi

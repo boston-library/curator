@@ -3,6 +3,7 @@
 module Curator
   class FileSetIndexer < Curator::Indexer
     include Curator::Indexer::WorkflowIndexer
+    include Curator::Indexer::AttachmentIndexer
 
     # NOTE: fields below were previously set in Bplmodels::File#to_solr, but no longer needed(?):
     #   label_ssi filename_ssi page_num_label_type_ssi mime_type_tesim(set on Blob instead)
@@ -13,6 +14,7 @@ module Curator
     # NOTE: fields below were previously set in Bplmodels::File#to_solr, but have been updated:
     #   derivative_processsed_ssi->processing_state_ssi is_file_of_ssim->is_file_set_of_ssim
     #   hand_side_ssi->page_hand_side_ssi has_djvu_json_ssi->has_wordcoords_json_bsi
+    #   object_profile_ssm->attachments_ss
 
     # TODO: add indexing for:
     #         edit_access_group_ssim
