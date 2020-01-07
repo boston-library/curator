@@ -22,7 +22,7 @@ module Curator
       end
 
       def render
-        adapter_render(record, serializer_options)
+        adapter_render(record, serializer_params)
       end
     end
   end
