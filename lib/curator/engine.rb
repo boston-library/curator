@@ -54,11 +54,5 @@ module Curator
         end
       end
     end
-
-    config.after_initialize do
-      Curator.init_namespace_accessors
-      Oj.optimize_rails
-      ActiveModel::Serializer.config.adapter = :json
-    end
   end
 end
