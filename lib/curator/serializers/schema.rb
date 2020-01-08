@@ -31,27 +31,27 @@ module Curator
         @options = options
       end
 
-      def attribute(key:, **opts, &block)
+      def attribute(key, **opts, &block)
         add_facet(type: :attributes, schema_attribute: Attribute.new(key: key, method: block || key, options: opts))
       end
 
       def attributes(*attribute_keys, **opts)
-        attribute_keys.each { |attribute_key| attribute(key: attribute_key, **opts) }
+        attribute_keys.each { |attribute_key| attribute(attribute_key, **opts) }
       end
 
-      def link(key:, **opts, &block)
+      def link(key, **opts, &block)
         add_facet(type: :links, schema_attribute: Link.new(key: key, method: block || key, options: opts))
       end
 
-      def meta(key:, &block)
+      def meta(key, &block)
         add_facet(type: :meta, schema_attribute: Meta.new(key: key, method: block))
       end
 
-      def node(key:, **opts, &block)
+      def node(key, **opts, &block)
         add_facet(type: :nodes, schema_attribute: Node.new(key: key, options: opts.merge(options.dup), &block))
       end
 
-      def relation(key:, serializer:, **opts, &block)
+      def relation(key, serializer:, **opts, &block)
         add_facet(type: :relations, schema_attribute: Relation.new(key: key, serializer: serializer, options: opts.merge(options.dup), &block))
       end
 
@@ -65,6 +65,12 @@ module Curator
 
       def is_collection?(record)
         record.kind_of?(ActiveRecord::Associations::CollectionProxy) || record.kind_of?(Array)
+      end
+
+      def key_in_group?(facet_group, key)
+        facet_groups.reduce(Concurrent::Hash.new) do |ret, (type, facets)|
+          ret.merge(type => facets.map(&:key))
+        end.fetch(facet_group, []).include?(key)
       end
 
       def key_transform_method
@@ -135,7 +141,8 @@ module Curator
       private
 
       def add_facet(type:, schema_attribute:)
-        @facets << Facet.new(type: type, schema_attribute: schema_attribute)
+        warn("#{schema_attribute.key} is already mapped to group #{type} using falling back to previous value") if key_in_group?(type, schema_attribute.key)
+        @facets << Facet.new(type: type, schema_attribute: schema_attribute) unless key_in_group?(type, schema_attribute.key)
       end
     end
   end

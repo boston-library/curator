@@ -27,7 +27,7 @@ RSpec.describe Curator::Serializers::Node, type: :lib_serializers do
     let(:key) { :title }
     let(:if_facet) do
       build_facet_inst(klass: described_class, key: key, options: { target: :key }.merge(if_proc)) do
-        attribute key: :primary do |target, _serializer_params|
+        attribute :primary do |target, _serializer_params|
           target.as_json
         end
       end
@@ -35,7 +35,7 @@ RSpec.describe Curator::Serializers::Node, type: :lib_serializers do
 
     let(:unless_facet) do
       build_facet_inst(klass: described_class, key: key, options: { target: :key }.merge(unless_proc)) do
-        attribute key: :primary do |target, _serializer_params|
+        attribute :primary do |target, _serializer_params|
           target.as_json
         end
       end
@@ -43,7 +43,7 @@ RSpec.describe Curator::Serializers::Node, type: :lib_serializers do
 
     let(:combined_facet) do
       build_facet_inst(klass: described_class, key: key, options: { target: :key }.merge(if_proc).merge(unless_proc)) do
-        attribute key: :primary do |target, _serializer_params|
+        attribute :primary do |target, _serializer_params|
           target.as_json
         end
       end
@@ -61,7 +61,7 @@ RSpec.describe Curator::Serializers::Node, type: :lib_serializers do
       build_facet_inst(klass: described_class, key: :descriptive) do
         attributes :abstract, :access_restrictions, :digital_origin, :frequency, :issuance, :origin_event, :extent, :physical_location_department, :physical_location_shelf_locator, :place_of_publication, :publisher, :rights, :series, :subseries, :subsubseries, :toc, :toc_url
 
-        node key: :identifier, target: :key do
+        node :identifier, target: :key do
           attributes :label, :type, :invalid
         end
       end

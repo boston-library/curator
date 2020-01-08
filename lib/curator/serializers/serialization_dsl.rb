@@ -5,7 +5,7 @@ module Curator
     module SerializationDSL
       extend ActiveSupport::Concern
       included do
-        raise "#{self} is not inherited from Curator::Serializers::AbstractSerializer" unless _is_serializer?(self)
+        raise "#{self} is not Curator::Serializers::AbstractSerializer" unless Rails.env.test? || _is_serializer?(self)
 
         class << self
           attr_writer :cache_enabled
@@ -55,19 +55,27 @@ module Curator
         def _define_adapter_schema(adapter_key:, root: nil, options: {}, &block)
           raise 'NullAdapter cant be used this way' if adapter_key.to_sym == :null
 
-          adapter_schema_klass = Curator::Serializers.lookup_adapter(adapter_key.to_sym)
-          schema_options = options.dup.slice(:key_transform_method)
           # TODO: Think of more options to set up at the schema level.
+          schema_options = options.dup.slice(:key_transform_method)
           schema_options[:cache_enabled] = cache_enabled?
           schema_options[:cache_options] = options.dup.slice(:cache_key_method, :cached_length, :race_condition_ttyl) if cache_enabled?
           schema_options[:adapter] = adapter_key.to_sym
           schema_options[:root] = root.to_s.to_sym if root
 
-          _map_schema_adapter(adapter_key, adapter_schema_klass.new(schema_options, &block))
+          if _has_schema_adapter?(adapter_key.to_sym)
+            adapter_instance = _schema_for_adapter(adapter_key)
+            adapter_instance.schema.options.reverse_merge!(schema_options.dup.except(:root))
+            adapter_instance.instance_eval(&block)
+          else
+            adapter_schema_klass = Curator::Serializers.lookup_adapter(adapter_key.to_sym)
+            adapter_instance = adapter_schema_klass.new(schema_options.dup, &block)
+          end
+
+          _map_schema_adapter(adapter_key.to_sym, adapter_instance)
         end
 
         def _schema_for_adapter(adapter_key)
-          return _adapter_schemas[adapter_key] if _adapter_schemas.key?(adapter_key)
+          return _adapter_schemas[adapter_key] if _has_schema_adapter?(adapter_key)
 
           _adapter_schemas[:null]
         end
@@ -76,8 +84,15 @@ module Curator
           klass <= Curator::Serializers::AbstractSerializer
         end
 
+        def _has_schema_adapter?(adapter_key)
+          return false unless defined? @_adapter_schemas && !@_adapter_schemas.nil?
+
+          _adapter_schemas.key?(adapter_key)
+        end
+
         def _inherit_schemas!(parent_adapter_schemas)
-          parent_adapter_schemas.each_pair { |k, v| _adapter_schemas.compute_if_absent(k) { v } }
+          # NOTE: We want to make sure that the schema registered in the class is NOT the same instance of the parent class This ensures that it is a different object in memory but preserves the states of all the instance objects on the schema for the adapter
+          parent_adapter_schemas.each_pair { |k, v| _adapter_schemas.compute_if_absent(k) { v.clone } }
         end
 
         def _reset_adapter_schemas!
@@ -94,7 +109,7 @@ module Curator
 
         def _map_schema_adapter(adapter_key, schema_adapter)
           @_adapter_schemas = Concurrent::Map.new unless defined?(@_adapter_schemas) && !@_adapter_schemas.nil?
-          _adapter_schemas.merge_pair(adapter_key, schema_adapter)
+          _adapter_schemas.merge_pair(adapter_key, schema_adapter) { }
         end
       end
     end

@@ -21,6 +21,11 @@ module Curator
         raise 'Not Implemented'
       end
 
+      def initialize_copy(source)
+        @schema = source.schema.clone
+        super
+      end
+
       protected
 
       def transformed_root_key(record)

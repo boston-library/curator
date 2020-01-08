@@ -42,7 +42,7 @@ RSpec.describe Curator::Serializers::Schema, type: :lib_serializers do
     describe 'schema configuration' do
       it 'is expected to store attribute facets' do
         expect { subject.attributes(:id, :ark_id) }.to change { subject.facets.count }.by(2)
-        expect { subject.attribute(key: :custom) { |record| record.present? } }.to change { subject.facets.count }.by(1)
+        expect { subject.attribute(:custom) { |record| record.present? } }.to change { subject.facets.count }.by(1)
         expect(subject.facets).to include(an_instance_of(Curator::Serializers::Schema::Facet))
         expect(subject.facet_groups).to have_key(:attributes)
         expect(subject.facet_groups[:attributes].count).to eq(3)
@@ -61,18 +61,18 @@ RSpec.describe Curator::Serializers::Schema, type: :lib_serializers do
     let!(:schema) do
       schema = described_class.new(root: :institution)
       schema.attributes(*attributes)
-      schema.attribute(key: custom_attr) do |record, serializer_params|
+      schema.attribute(custom_attr) do |record, serializer_params|
         record.abstract[serializer_params[:range]]
       end
-      schema.link(key: custom_link_attr) do |record|
+      schema.link(custom_link_attr) do |record|
         uri = Addressable::URI.parse(record.url)
         uri.scheme = 'https'
         uri.to_s
       end
-      schema.meta(key: meta_attr) { |record| record.collections.count }
-      schema.node(key: node_attr) do
-        attribute(key: :pid) { |record| record.ark_id }
-        attribute(key: :model_type) { |record| record.class.to_s }
+      schema.meta(meta_attr) { |record| record.collections.count }
+      schema.node(node_attr) do
+        attribute(:pid) { |record| record.ark_id }
+        attribute(:model_type) { |record| record.class.to_s }
       end
       schema
     end
