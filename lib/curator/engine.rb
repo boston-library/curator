@@ -11,6 +11,7 @@ module Curator
     require 'acts_as_list'
     require 'attr_json'
     # require 'active_model_serializers'
+    require 'htmlentities'
     require 'oj'
     require 'rsolr'
     require 'singleton'
@@ -25,20 +26,19 @@ module Curator
 
       # load this here so we can access Dotenv-loaded properties in lib/curator.rb
       require 'dotenv'
-      Dotenv.load("env.#{ENV.fetch('RAILS_ENV', 'development')}", '.env')
-
-      config.generators do |g|
-        g.orm :active_record
-        g.api_only = true
-        g.test_framework :rspec, fixture: true
-        g.fixture_replacement :factory_bot
-        g.factory_bot dir: 'spec/factories'
-      end
-      config.factory_bot.definition_file_paths << File.expand_path('../../spec/factories/curator', __dir__) if defined?(FactoryBotRails)
+      Dotenv.load(".env.#{ENV.fetch('RAILS_ENV', 'development')}", '.env')
     end
 
     isolate_namespace Curator
     engine_name 'curator'
+    config.generators do |g|
+      g.orm :active_record
+      g.api_only = true
+      g.test_framework :rspec, fixture: true
+      g.fixture_replacement :factory_bot
+      g.factory_bot dir: 'spec/factories'
+    end
+    config.factory_bot.definition_file_paths << File.expand_path('../../spec/factories/curator', __dir__) if defined?(FactoryBotRails)
 
     config.eager_load_namespaces << Curator
 
@@ -53,6 +53,12 @@ module Curator
           app.config.paths['db/migrate'].push(path)
         end
       end
+    end
+
+    config.after_initialize do
+      Curator.init_namespace_accessors
+      Oj.optimize_rails
+      ActiveModel::Serializer.config.adapter = :json
     end
   end
 end

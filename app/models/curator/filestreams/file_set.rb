@@ -9,6 +9,8 @@ module Curator
     include Curator::Metastreams::Administratable
     include Curator::Indexable
 
+    belongs_to :file_set_of, inverse_of: :file_sets, class_name: 'Curator::DigitalObject'
+
     has_one_attached :metadata_foxml
 
     validates :file_name_base, presence: true

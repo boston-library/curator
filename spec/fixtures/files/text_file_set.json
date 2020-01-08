@@ -1,0 +1,25 @@
+{
+  "file_set": {
+    "ark_id": "commonwealth:111111111",
+    "created_at": "2019-05-20T14:46:08.240Z",
+    "updated_at": "2019-05-20T14:51:03.796Z",
+    "file_set_of": {
+      "ark_id": "commonwealth:abcdefghi"
+    },
+    "position": 0,
+    "file_set_type": "text",
+    "file_name_base": "06_01_016691",
+    "metastreams": {
+      "administrative": {
+        "access_edit_group": [
+          "superuser",
+          "admin[commonwealth:ijkl54321]"
+        ]
+      },
+      "workflow": {
+        "ingest_origin": "AllSupportedMODS-TestForDev.xls",
+        "processing_state": "complete"
+      }
+    }
+  }
+}

@@ -4,10 +4,10 @@ require 'rails_helper'
 RSpec.describe Curator::Filestreams::FileFactoryService, type: :service do
   before(:all) do
     # create parent FileSet
-    @object_json = load_json_fixture('file')
+    @object_json = load_json_fixture('image_file', 'file')
     @file_set = create(:curator_filestreams_image)
     @object_json['filestream_of']['ark_id'] = @file_set.ark_id
-    @object_json['metadata']['ingest_filepath'] = file_fixture('sample-thumbnail.jpg').to_s
+    @object_json['metadata']['ingest_filepath'] = file_fixture('image_thumbnail_300.jpg').to_s
     expect do
       @file = described_class.call(json_data: @object_json)
     end.to change { ActiveStorage::Blob.count }.by(1)

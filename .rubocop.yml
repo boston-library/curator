@@ -339,6 +339,8 @@ Style/ExpandPathArguments:
 
 Style/FrozenStringLiteralComment:
   Enabled: true
+  Exclude:
+    - 'spec/lib/curator/parsers/input_parser_spec.rb'
 
 Style/GuardClause:
   Enabled: true
