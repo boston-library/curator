@@ -109,7 +109,7 @@ module Curator
 
         def _map_schema_adapter(adapter_key, schema_adapter)
           @_adapter_schemas = Concurrent::Map.new unless defined?(@_adapter_schemas) && !@_adapter_schemas.nil?
-          _adapter_schemas.merge_pair(adapter_key, schema_adapter) { }
+          _adapter_schemas.merge_pair(adapter_key, schema_adapter) {}
         end
       end
     end

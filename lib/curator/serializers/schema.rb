@@ -10,10 +10,13 @@ module Curator
         underscore: :underscore,
         default: :underscore
       }.freeze
+
+      FACET_TYPES = %i(attributes links meta nodes relations).freeze
+
       class Facet < Struct.new(:type, :schema_attribute, keyword_init: true)
         def initialize(**kwargs)
           super(**kwargs)
-          raise "Unknown Facet Type #{type}" unless %i(attributes links meta nodes relations).include?(type)
+          raise "Unknown Facet Type #{type}" unless FACET_TYPES.include?(type)
 
           freeze
         end
@@ -30,6 +33,8 @@ module Curator
         @facets = Concurrent::Array.new
         @options = options
       end
+
+      # DSL METHODS
 
       def attribute(key, **opts, &block)
         add_facet(type: :attributes, schema_attribute: Attribute.new(key: key, method: block || key, options: opts))
@@ -59,6 +64,7 @@ module Curator
       alias_method :has_many, :relation
       alias_method :belongs_to, :relation
 
+      # UTIL/HELPER METHODS
       def facet_groups
         @facets.group_by(&:type).reduce(Concurrent::Hash.new) { |ret, (type, f)| ret.merge(type => f.flat_map { |i| i.to_h.values }) }
       end
@@ -123,6 +129,8 @@ module Curator
           val = facet.serialize(record, serializer_params)
           next res if val.blank?
 
+          val = val.utc.iso8601 if is_date_or_time?(val)
+
           res.merge(facet.key => val)
         end
         serialized_facet
@@ -139,6 +147,10 @@ module Curator
       end
 
       private
+
+      def is_date_or_time?(val)
+        ['Date', 'DateTime', 'Time'].include?(val.class.name)
+      end
 
       def add_facet(type:, schema_attribute:)
         warn("#{schema_attribute.key} is already mapped to group #{type} using falling back to previous value") if key_in_group?(type, schema_attribute.key)

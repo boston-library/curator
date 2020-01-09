@@ -28,12 +28,16 @@ module Curator
 
       protected
 
-      def transformed_root_key(record)
-        return if root.blank?
+      def run_key_transform(key, pluralize = false)
+        return if key.to_s.blank?
 
-        return root unless schema.is_collection(record)
+        pluralize ? key.to_s.pluralize.public_send(schema.key_transform_method) : key.to_s.public_send(schema.key_transform_method)
+      end
 
-        root.to_s.pluralize.to_sym
+      def run_root_key_transform(record)
+        return if root.to_s.blank?
+
+        run_key_transform(root.dup, schema.is_collection?(record))
       end
     end
   end
