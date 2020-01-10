@@ -34,7 +34,7 @@ RSpec.describe Curator::Serializers::NullAdapter, type: :lib_serializers do
 
   describe 'when for_relation is passed as true in serializer_params' do
     let!(:serializer_params) { { for_relation: true } }
-    
+
     describe 'when iterable' do
       let!(:inst_with_collections) { create(:curator_institution, collection_count: 2) }
       let!(:collections) { inst_with_collections.collections }

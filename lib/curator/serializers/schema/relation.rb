@@ -34,6 +34,7 @@ module Curator
       end
 
       private
+
       def build_serializer_instance(relation_record, adapter_key, serializer_params = {})
         serializer.new(relation_record, adapter_key, serializer_params.dup.merge(adapter_key: adapter_key, for_relation: true))
       end

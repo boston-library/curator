@@ -98,9 +98,11 @@ RSpec.describe Curator::Serializers::JSONAdapter, type: :lib_serializers do
           expect(subject).to match('institution' => a_hash_including(record_hash.call(institution)))
         end
       end
+
       describe 'collection' do
         subject { json_adapter_with_root.serializable_hash(institutions) }
-        let(:records_array) { institutions.map {|inst| record_hash.call(inst) } }
+
+        let(:records_array) { institutions.map { |inst| record_hash.call(inst) } }
 
         it { is_expected.to be_a_kind_of(Hash).and have_key('institutions') }
 
@@ -125,9 +127,11 @@ RSpec.describe Curator::Serializers::JSONAdapter, type: :lib_serializers do
           expect(subject).to match(a_hash_including(record_hash.call(institution)))
         end
       end
+
       describe 'collection' do
         subject { json_adapter_no_root.serializable_hash(institutions) }
-        let(:records_array) { institutions.map {|inst| record_hash.call(inst) } }
+
+        let(:records_array) { institutions.map { |inst| record_hash.call(inst) } }
 
         it { is_expected.to be_a_kind_of(Array).and all(be_a_kind_of(Hash)) }
 
@@ -150,12 +154,12 @@ RSpec.describe Curator::Serializers::JSONAdapter, type: :lib_serializers do
           expect(Oj.load(subject)).to match('institution' => a_hash_including(record_hash.call(institution).as_json.with_indifferent_access))
         end
       end
+
       describe 'collection' do
         subject { json_adapter_with_root.render(institutions) }
 
-        let(:records_array) { institutions.map {|inst| record_hash.call(inst).as_json.with_indifferent_access } }
+        let(:records_array) { institutions.map { |inst| record_hash.call(inst).as_json.with_indifferent_access } }
         it { is_expected.to be_a_kind_of(String) }
-
       end
     end
 
@@ -170,9 +174,11 @@ RSpec.describe Curator::Serializers::JSONAdapter, type: :lib_serializers do
           expect(Oj.load(subject)).to match(a_hash_including(record_hash.call(institution).as_json.with_indifferent_access))
         end
       end
+
       describe 'collection' do
         subject { json_adapter_no_root.render(institutions) }
-        let(:records_array) { institutions.map {|inst| record_hash.call(inst).as_json.with_indifferent_access } }
+
+        let(:records_array) { institutions.map { |inst| record_hash.call(inst).as_json.with_indifferent_access } }
 
         it { is_expected.to be_a_kind_of(String) }
       end

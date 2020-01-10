@@ -5,9 +5,6 @@ module Curator
     schema_as_json root: :digital_object do
       attributes :ark_id
     end
-
-
-
     # def metastreams
     #   {}.merge(
     #     ActiveModelSerializers::SerializableResource.new(object.administrative, serializer: Metastreams::AdministrativeSerializer, root: 'administrative').as_json

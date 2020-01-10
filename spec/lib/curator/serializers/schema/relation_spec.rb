@@ -33,9 +33,7 @@ RSpec.describe Curator::Serializers::Relation, type: :lib_serializers do
 
   include_examples 'conditional_attributes' do
     let(:serializable_record) { parent_record }
-
     let(:key) { :collections }
-
     let(:if_facet) { build_facet_inst(klass: described_class, key: key, serializer_klass: other_serializer_class, options: if_proc) }
     let(:unless_facet) { build_facet_inst(klass: described_class, key: key, serializer_klass: other_serializer_class, options: unless_proc) }
     let(:combined_facet) { build_facet_inst(klass: described_class, key: key, serializer_klass: other_serializer_class, options: if_proc.merge(unless_proc)) }
@@ -44,7 +42,8 @@ RSpec.describe Curator::Serializers::Relation, type: :lib_serializers do
   describe 'serialize relationships' do
     describe 'collection' do
       subject { collection_relation_facet.serialize(parent_record, serializer_options) }
-      let(:other_records) { parent_record.collections.map {|col| { attributes: col.as_json(only: [:ark_id, :name, :abstract]).symbolize_keys } } }
+
+      let(:other_records) { parent_record.collections.map { |col| { attributes: col.as_json(only: [:ark_id, :name, :abstract]).symbolize_keys } } }
 
       it { is_expected.to be_a_kind_of(Array).and all(be_a_kind_of(Hash)).and all(have_key(:attributes)) }
 

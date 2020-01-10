@@ -51,7 +51,7 @@ RSpec.describe Curator::Serializers::Node, type: :lib_serializers do
   end
 
   describe 'complex node' do
-    subject { complex_node.serialize(descriptive,{ adapter_key: :json }) }
+    subject { complex_node.serialize(descriptive, { adapter_key: :json }) }
 
     let!(:serialized_facet_keys) { %i(attributes nodes relations) }
     let!(:node_attributes) { %i(abstract access_restrictions digital_origin frequency issuance origin_event extent physical_location_department physical_location_shelf_locator place_of_publication publisher rights series subseries subsubseries toc toc_url) }
