@@ -2,6 +2,8 @@
 
 module Curator
   class ControlledTerms::AuthoritySerializer < CuratorSerializer
-    attributes :name, :code, :base_url
+    schema_as_json :authority do
+      attributes :name, :code, :base_url
+    end
   end
 end

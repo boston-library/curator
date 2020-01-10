@@ -2,7 +2,9 @@
 
 module Curator
   class ControlledTerms::NameSerializer < ControlledTerms::NomenclatureSerializer
-    attributes :affiliation, :authority_code
-    attribute :name_type, key: :type
+    schema_as_json root: :name do
+      attributes :affiliation, :authority_code
+      attribute(:type) { |record| record.name_type }
+    end
   end
 end

@@ -2,6 +2,8 @@
 
 module Curator
   class ControlledTerms::NomenclatureSerializer < CuratorSerializer
-    attributes :label, :id_from_auth
+    schema_as_json do
+      attributes :label, :id_from_auth
+    end
   end
 end

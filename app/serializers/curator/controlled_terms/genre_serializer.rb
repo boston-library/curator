@@ -2,6 +2,8 @@
 
 module Curator
   class ControlledTerms::GenreSerializer < ControlledTerms::NomenclatureSerializer
-    attributes :basic, :authority_code
+    schema_as_json root: :genre do
+      attributes :basic, :authority_code
+    end
   end
 end
