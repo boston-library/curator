@@ -7,8 +7,10 @@ module Curator
         @schema = nil
       end
 
-      def serializable_hash(_record = nil, _serializer_params = {})
-        {}
+      def serializable_hash(record = nil, serializer_params = {})
+        return Concurrent::Array.new if record.respond_to?(:each) && serializer_params.dup.fetch(:for_relation, false)
+
+        Concurrent::Hash.new
       end
 
       def render(record = nil, serializer_params = {})

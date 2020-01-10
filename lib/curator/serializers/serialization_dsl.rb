@@ -64,6 +64,7 @@ module Curator
 
           if _has_schema_adapter?(adapter_key.to_sym)
             adapter_instance = _schema_for_adapter(adapter_key)
+            adapter_instance.schema.update_root!(schema_options.dup.fetch(:root, nil))
             adapter_instance.schema.options.reverse_merge!(schema_options.dup.except(:root))
             adapter_instance.instance_eval(&block)
           else
@@ -109,7 +110,7 @@ module Curator
 
         def _map_schema_adapter(adapter_key, schema_adapter)
           @_adapter_schemas = Concurrent::Map.new unless defined?(@_adapter_schemas) && !@_adapter_schemas.nil?
-          _adapter_schemas.merge_pair(adapter_key, schema_adapter) {}
+          _adapter_schemas.merge_pair(adapter_key, schema_adapter) { |v| v }
         end
       end
     end

@@ -13,12 +13,13 @@ module Curator
 
       def initialize(record, adapter_key, serializer_params = {})
         @record = record
-        @adapter = self.class._schema_for_adapter(adapter_key)
-        @serializer_params = serializer_params.dup.slice(:if, :unless, :fields, :included).reverse_merge!(adapter_key: adapter_key)
+        @adapter = self.class.send(:_schema_for_adapter, adapter_key)
+        # NOTE: The reason we reverse_merge the adapter key into the serializer params is so any relationships serialized will know which apater they are serializing for
+        @serializer_params = serializer_params.dup.merge(adapter_key: adapter_key)
       end
 
       def serializable_hash
-        adapter_serializable_hash(record, serializer_params)
+        adapter_serialized_hash(record, serializer_params)
       end
 
       def render

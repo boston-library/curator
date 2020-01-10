@@ -50,7 +50,7 @@ module Curator
       def fields_included?(serializer_params = {})
         return true if !serializer_params.key?(:fields)
 
-        serializer_params[:fields].include?(key)
+        serializer_params.dup[:fields].include?(key)
       end
     end
   end

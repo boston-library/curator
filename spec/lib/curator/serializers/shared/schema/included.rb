@@ -2,10 +2,10 @@
 
 RSpec.shared_examples 'included_fields', type: :lib_serializers do
   # NOTE: Expects described_schema , field_params, field_count and serializable_record to be set where example is included
-  let(:serialized) { described_schema.serialize(serializable_record, field_params) }
+  let(:serialized_fields) { described_schema.serialize(serializable_record, field_params) }
 
   describe 'serialized with fields' do
-    subject { serialized.fetch(:attributes, {}) }
+    subject { serialized_fields.fetch(:attributes, {}) }
 
     it 'expects only the fields to be present' do
       expect(subject.keys.count).to eq(field_count)
@@ -16,5 +16,14 @@ RSpec.shared_examples 'included_fields', type: :lib_serializers do
 end
 
 RSpec.shared_examples 'included_relations', type: :lib_serializers do
-  pending
+  let(:serialized_included) { described_schema.serialize(serializable_record, included_params) }
+
+  describe 'serialized with only included relationships' do
+    subject { serialized_included.fetch(:relations, {}) }
+
+    it 'expects only the included relationships to be present' do
+      expect(subject.keys.count).to eq(included_count)
+      expect(subject.keys).to match_array(included_params[:included])
+    end
+  end
 end

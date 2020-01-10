@@ -18,7 +18,9 @@ module Curator
         relation_record = record.public_send(key)
         adapter_key = serializer_params.dup.fetch(:adapter_key, :null)
         adapter_key = :null if relation_record.blank?
-        serializer.new(relation_record, adapter_key, serializer_params.dup.reverse_merge!(adapter_key: adapter_key)).serializable_hash
+
+        serializer_instance = build_serializer_instance(relation_record, adapter_key, serializer_params)
+        serializer_instance.serializable_hash
       end
 
       def include_value?(record, serializer_params = {})
@@ -32,6 +34,9 @@ module Curator
       end
 
       private
+      def build_serializer_instance(relation_record, adapter_key, serializer_params = {})
+        serializer.new(relation_record, adapter_key, serializer_params.dup.merge(adapter_key: adapter_key, for_relation: true))
+      end
 
       def serializer_klass_for(serializer_klass)
         s_klass = serializer_klass.is_a?(String) ? serializer_klass.safe_constantize : serializer_klass

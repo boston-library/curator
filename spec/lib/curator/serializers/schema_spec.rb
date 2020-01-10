@@ -51,18 +51,32 @@ RSpec.describe Curator::Serializers::Schema, type: :lib_serializers do
   end
 
   describe 'schema serialization' do
-    let!(:serialized_facet_keys) { %i(attributes links meta nodes) }
+    let!(:serialized_facet_keys) { %i(attributes links meta nodes relations) }
     let!(:params) { { range: 0..20 } }
     let!(:attributes) { %i(id ark_id name) }
     let!(:custom_attr) { :abstract_trunc }
     let!(:custom_link_attr) { :https_url }
     let!(:meta_attr) { :collection_count }
     let(:node_attr) { :ark_attributes }
+    let!(:collection_serializer) do
+      Class.new(Curator::Serializers::AbstractSerializer) do
+        schema_as_json root: :collection do
+          attributes :id, :ark_id, :name, :abstract
+        end
+      end
+    end
+    let!(:location_serializer) do
+      Class.new(Curator::Serializers::AbstractSerializer) do
+        schema_as_json root: :location do
+          attributes :id_from_auth, :label
+        end
+      end
+    end
     let!(:schema) do
       schema = described_class.new(root: :institution)
       schema.attributes(*attributes)
       schema.attribute(custom_attr) do |record, serializer_params|
-        record.abstract[serializer_params[:range]]
+        record.abstract[serializer_params[:range]] if serializer_params[:range]
       end
       schema.link(custom_link_attr) do |record|
         uri = Addressable::URI.parse(record.url)
@@ -74,14 +88,23 @@ RSpec.describe Curator::Serializers::Schema, type: :lib_serializers do
         attribute(:pid) { |record| record.ark_id }
         attribute(:model_type) { |record| record.class.to_s }
       end
+      schema.has_many(:collections, serializer: collection_serializer)
+      schema.belongs_to(:location, serializer: location_serializer)
       schema
     end
 
     include_examples 'included_fields' do
       let(:described_schema) { schema }
-      let(:field_params) { { fields: %i(ark_id) } }
+      let(:field_params) { { fields: %i(ark_id), adapter_key: :json } }
       let(:field_count) { field_params[:fields].count }
       let(:serializable_record) { create(:curator_institution) }
+    end
+
+    include_examples 'included_relations' do
+      let(:described_schema) { schema }
+      let(:included_params) { { included: %i(collections), adapter_key: :json } }
+      let(:included_count) { included_params[:included].count }
+      let(:serializable_record) { create(:curator_institution, :with_location, collection_count: 3) }
     end
 
     describe 'schema defaults' do
@@ -100,7 +123,7 @@ RSpec.describe Curator::Serializers::Schema, type: :lib_serializers do
       subject { schema.serialize(test_institution, params) }
 
       let!(:collection_count) { 3 }
-      let!(:test_institution) { create(:curator_institution, collection_count: collection_count) }
+      let!(:test_institution) { create(:curator_institution, :with_location, collection_count: collection_count) }
       it 'expects the insitution to serialize as defined in the schema' do
         serialized_facet_keys.each do |serialized_key|
           expect(subject).to be_a_kind_of(Hash).and have_key(serialized_key)
@@ -138,7 +161,7 @@ RSpec.describe Curator::Serializers::Schema, type: :lib_serializers do
 
       let!(:institution_count) { 2 }
       let!(:collection_count) { 2 }
-      let!(:institution_list) { create_list(:curator_institution, institution_count, collection_count: collection_count) }
+      let!(:institution_list) { create_list(:curator_institution, institution_count, :with_location, collection_count: collection_count) }
 
       it 'expects the collection of institutions to serialize into array' do
         expect(subject).to be_a_kind_of(Array)

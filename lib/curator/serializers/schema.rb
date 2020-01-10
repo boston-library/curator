@@ -34,6 +34,9 @@ module Curator
         @options = options
       end
 
+      def update_root!(root = nil)
+        @root = root
+      end
       # DSL METHODS
 
       def attribute(key, **opts, &block)
@@ -57,7 +60,7 @@ module Curator
       end
 
       def relation(key, serializer:, **opts, &block)
-        add_facet(type: :relations, schema_attribute: Relation.new(key: key, serializer: serializer, options: opts.merge(options.dup), &block))
+        add_facet(type: :relations, schema_attribute: Relation.new(key: key, serializer_klass: serializer, options: opts.merge(options.dup), &block))
       end
 
       alias_method :has_one, :relation
@@ -95,19 +98,19 @@ module Curator
       end
 
       def serialize(record, serializer_params = {})
-        return {} if record.blank?
+        return Concurrent::Hash.new if record.blank?
 
         return serialize_each(record, serializer_params) if is_collection?(record)
 
         if cache_enabled?
           serialized_result = with_cache(record) do
             facet_groups.dup.keys.inject(Concurrent::Hash.new) do |res, facet_group|
-              res.merge(serialize_facets(facet_group, record, serializer_params))
+              res.merge(serialize_facets(facet_group, record, serializer_params.dup))
             end
           end
         else
           serialized_result = facet_groups.dup.keys.inject(Concurrent::Hash.new) do |res, facet_group|
-            res.merge(serialize_facets(facet_group, record, serializer_params))
+            res.merge(serialize_facets(facet_group, record, serializer_params.dup))
           end
         end
         serialized_result
@@ -115,7 +118,7 @@ module Curator
 
       def serialize_each(records, serializer_params = {})
         records.inject(Concurrent::Array.new) do |ret, record|
-          ret << serialize(record, serializer_params)
+          ret << serialize(record, serializer_params.dup)
         end
       end
 
@@ -124,12 +127,11 @@ module Curator
       def serialize_facets(facet_group, record, serializer_params = {})
         serialized_facet = Concurrent::Hash.new
         serialized_facet[facet_group] = facet_groups.dup.slice(facet_group).values.flatten.reduce(Concurrent::Hash.new) do |res, facet|
-          next res unless facet.include_value?(record, serializer_params)
+          next res unless facet.include_value?(record, serializer_params.dup)
 
-          val = facet.serialize(record, serializer_params)
+          val = facet.serialize(record, serializer_params.dup)
+
           next res if val.blank?
-
-          val = val.utc.iso8601 if is_date_or_time?(val)
 
           res.merge(facet.key => val)
         end
@@ -147,10 +149,6 @@ module Curator
       end
 
       private
-
-      def is_date_or_time?(val)
-        ['Date', 'DateTime', 'Time'].include?(val.class.name)
-      end
 
       def add_facet(type:, schema_attribute:)
         warn("#{schema_attribute.key} is already mapped to group #{type} using falling back to previous value") if key_in_group?(type, schema_attribute.key)
