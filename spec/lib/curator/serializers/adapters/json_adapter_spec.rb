@@ -159,7 +159,13 @@ RSpec.describe Curator::Serializers::JSONAdapter, type: :lib_serializers do
         subject { json_adapter_with_root.render(institutions) }
 
         let(:records_array) { institutions.map { |inst| record_hash.call(inst).as_json.with_indifferent_access } }
+
         it { is_expected.to be_a_kind_of(String) }
+
+        it 'is expected to be parsed as json' do
+          expect(Oj.load(subject)).to be_a_kind_of(ActiveSupport::HashWithIndifferentAccess).and have_key(:institutions)
+          expect(Oj.load(subject)).to match('institutions' => records_array)
+        end
       end
     end
 
@@ -181,6 +187,11 @@ RSpec.describe Curator::Serializers::JSONAdapter, type: :lib_serializers do
         let(:records_array) { institutions.map { |inst| record_hash.call(inst).as_json.with_indifferent_access } }
 
         it { is_expected.to be_a_kind_of(String) }
+
+        it 'is expected to be parsed as json' do
+          expect(Oj.load(subject)).to be_a_kind_of(Array)
+          expect(Oj.load(subject)).to match(records_array)
+        end
       end
     end
   end
