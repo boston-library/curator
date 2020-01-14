@@ -24,7 +24,7 @@ RSpec.describe Curator::Collection, type: :model do
     it_behaves_like 'workflowable'
 
     it { is_expected.to have_db_column(:institution_id).of_type(:integer).with_options(null: false) }
-    it { is_expected.to have_db_index(:institution_id).unique(true) }
+    it { is_expected.to have_db_index(:institution_id) }
 
     it { is_expected.to belong_to(:institution).
       inverse_of(:collections).

@@ -19,8 +19,9 @@ module Curator
 
       protected
 
+      # TODO: Need to refactor these methods to handle updates as well and use the objects relationship instead of initailizing a new instance
       def build_descriptive(descriptable, &_block)
-        descriptive = Metastreams::Descriptive.new(descriptable: descriptable)
+        descriptive = Curator.metastreams.descriptive_class.new(descriptable: descriptable)
         yield descriptive
         descriptive.save!
       end

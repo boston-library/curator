@@ -6,7 +6,7 @@ module Curator
       base.extend(ClassMethods)
       # NOTE THE ORDER HERE MATTERS
       base.module_eval do
-        def self.init_namespace_accessors
+        def self.init_namespace_accessors!
           puts 'Initializing namespace accessors'
           namespace_accessors :controlled_terms, :descriptives, :filestreams, :mappings, :metastreams
           namespace_klass_accessors :institution, :collection, :digital_object
@@ -25,8 +25,12 @@ module Curator
           raise Curator::CuratorError, "Invaild namespace #{const_name}" unless VALID_NAMESPACES.include?(const_name)
 
           module_eval <<-RUBY, __FILE__, __LINE__ + 1
-            def self.#{namespace}
-              const_get('#{const_name}')
+            class << self
+              def #{namespace}
+                const_get('#{const_name}')
+              rescue NameError
+                nil
+              end
             end
           RUBY
         end
@@ -38,12 +42,10 @@ module Curator
           raise Curator::CuratorError, "Invaild namespace class #{klass_const_name}" unless VALID_NAMESPACE_CLASSES.include?(klass_const_name)
 
           module_eval <<-RUBY, __FILE__, __LINE__ + 1
-            def self.#{klass_name}_class_name
-              to_s + '::' + '#{klass_const_name}'
-            end
-
-            def self.#{klass_name}_class
-              const_get(#{klass_name}_class_name)
+            class << self
+              def #{klass_name}_class
+                const_get('#{klass_const_name}')
+              end
             end
           RUBY
         end

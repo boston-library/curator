@@ -2,6 +2,8 @@
 
 module Curator
   class ControlledTerms::SubjectSerializer < ControlledTerms::NomenclatureSerializer
-    attributes :authority_code
+    schema_as_json root: :subject do
+      attributes :authority_code
+    end
   end
 end

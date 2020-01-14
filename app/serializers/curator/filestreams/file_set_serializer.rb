@@ -2,6 +2,8 @@
 
 module Curator
   class Filestreams::FileSetSerializer < CuratorSerializer
-    attributes :ark_id
+    schema_as_json do
+      attributes :ark_id
+    end
   end
 end

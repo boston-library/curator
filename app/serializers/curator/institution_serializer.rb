@@ -2,14 +2,16 @@
 
 module Curator
   class InstitutionSerializer < CuratorSerializer
-    attributes :ark_id, :abstract, :name, :metastreams
-
-    def metastreams
-      {}.merge(
-        ActiveModelSerializers::SerializableResource.new(object.administrative, serializer: Metastreams::AdministrativeSerializer, root: 'administrative').as_json
-      ).merge(
-        ActiveModelSerializers::SerializableResource.new(object.workflow, serializer: Metastreams::WorkflowSerializer, root: 'workflow').as_json
-      )
+    schema_as_json do
+      attributes :ark_id, :abstract, :name, :metastreams
     end
+
+    # def metastreams
+    #   {}.merge(
+    #     ActiveModelSerializers::SerializableResource.new(object.administrative, serializer: Metastreams::AdministrativeSerializer, root: 'administrative').as_json
+    #   ).merge(
+    #     ActiveModelSerializers::SerializableResource.new(object.workflow, serializer: Metastreams::WorkflowSerializer, root: 'workflow').as_json
+    #   )
+    # end
   end
 end

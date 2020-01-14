@@ -2,10 +2,8 @@
 
 module Curator
   class Metastreams::AdministrativeSerializer < CuratorSerializer
-    attributes :description_standard, :flagged, :harvestable
-
-    attribute :destination_site do
-      object.destination_site.as_json
+    schema_as_json root: :administrative do
+      attributes :description_standard, :flagged, :harvestable, :destination_site
     end
   end
 end

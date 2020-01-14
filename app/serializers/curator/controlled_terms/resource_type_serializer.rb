@@ -2,6 +2,8 @@
 
 module Curator
   class ControlledTerms::ResourceTypeSerializer < ControlledTerms::NomenclatureSerializer
-    attributes :authority_code
+    schema_as_json root: :resource_type do
+      attributes :authority_code
+    end
   end
 end

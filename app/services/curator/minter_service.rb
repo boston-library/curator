@@ -7,7 +7,7 @@ module Curator
     end
 
     def call
-      "#{@namespace}:#{SecureRandom.hex(5)}"
+      "#{@namespace}:#{SecureRandom.hex(rand(4..16))}"
     end
   end
 end

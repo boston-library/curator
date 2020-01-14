@@ -2,6 +2,8 @@
 
 module Curator
   class ControlledTerms::GeographicSerializer < ControlledTerms::NomenclatureSerializer
-    attributes :area_type, :coordinates, :bounding_box, :authority_code
+    schema_as_json root: :geographic do
+      attributes :area_type, :coordinates, :bounding_box, :authority_code
+    end
   end
 end

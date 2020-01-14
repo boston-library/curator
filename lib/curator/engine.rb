@@ -2,17 +2,19 @@
 
 module Curator
   class Engine < ::Rails::Engine
+    require 'concurrent'
+    require 'forwardable'
     require 'faraday'
     require 'faraday_middleware'
     require 'faraday-http-cache'
     require 'addressable'
-
     require 'acts_as_list'
     require 'attr_json'
-    require 'active_model_serializers'
+    # require 'active_model_serializers'
     require 'htmlentities'
     require 'oj'
     require 'rsolr'
+    require 'singleton'
     require 'traject'
 
     if Rails.env.development? || Rails.env.test?
@@ -38,8 +40,15 @@ module Curator
     end
     config.factory_bot.definition_file_paths << File.expand_path('../../spec/factories/curator', __dir__) if defined?(FactoryBotRails)
 
-    config.to_prepare do
-      Dir.glob("#{Curator::Engine.root.join('app', 'models', 'curator', 'descriptives', 'field_sets')}/*.rb").each { |c| require_dependency(c) }
+    config.eager_load_namespaces << Curator
+
+    config.before_initialize do
+      Oj.optimize_rails
+      Oj.default_options = { mode: :rails,
+                             time_format: :ruby,
+                             hash_class: ActiveSupport::HashWithIndifferentAccess
+                           }
+      Curator.setup!
     end
 
     initializer 'curator.append_migrations' do |app|
@@ -48,12 +57,6 @@ module Curator
           app.config.paths['db/migrate'].push(path)
         end
       end
-    end
-
-    config.after_initialize do
-      Curator.init_namespace_accessors
-      Oj.optimize_rails
-      ActiveModel::Serializer.config.adapter = :json
     end
   end
 end

@@ -10,7 +10,7 @@ RSpec.describe Curator::Filestreams::FileSetFactoryService, type: :service do
     parent_col = create(:curator_collection)
     parent_obj = create(:curator_digital_object)
     parent_obj.workflow = create(:curator_metastreams_workflow)
-    @object_json['ark_id'] = "commonwealth:#{SecureRandom.hex(5)}"
+    @object_json['ark_id'] = "commonwealth:#{SecureRandom.hex(rand(4..16))}"
     @object_json['file_set_of']['ark_id'] = parent_obj.ark_id
     @object_json['exemplary_image_of'][0]['ark_id'] = parent_obj.ark_id
     @object_json['exemplary_image_of'][1]['ark_id'] = parent_col.ark_id
@@ -29,7 +29,7 @@ RSpec.describe Curator::Filestreams::FileSetFactoryService, type: :service do
       %w(ark_id position file_name_base pagination).each do |attr|
         expect(@file_set.send(attr)).to eq @object_json[attr]
       end
-      expect(subject.file_set_type).to eq Curator.filestreams.send("#{file_set_type}_class_name")
+      expect(subject.file_set_type).to eq Curator.filestreams.send("#{file_set_type}_class").to_s
       expect(subject.updated_at).to eq Time.zone.parse(@object_json['updated_at'])
     end
 

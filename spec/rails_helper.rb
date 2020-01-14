@@ -83,13 +83,19 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = false
 
   config.before(:suite) do
-    FactoryBot.lint
-    DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.cleaning do
+      FactoryBot.lint
+    end
     VCR.use_cassette('load_seeds') do
       Curator::Engine.load_seed
     end
     WebMock.reset!
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.strategy = :transaction
   end
 
   config.around(:each) do |spec|
@@ -111,6 +117,10 @@ RSpec.configure do |config|
   #
   config.define_derived_metadata(file_path: Regexp.new('/spec/services/')) do |metadata|
     metadata[:type] = :service
+  end
+
+  config.define_derived_metadata(file_path: Regexp.new('/spec/lib/curator/serializers')) do |metadata|
+    metadata[:type] = :lib_serializers
   end
 
   # TODO: Create derived metadata for serializers once we switch to blueprinter
