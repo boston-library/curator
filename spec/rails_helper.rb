@@ -86,7 +86,7 @@ RSpec.configure do |config|
     DatabaseCleaner.clean_with(:truncation)
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.cleaning do
-      FactoryBot.lint
+      FactoryBot.lint(verbose: true)
     end
     VCR.use_cassette('load_seeds') do
       Curator::Engine.load_seed

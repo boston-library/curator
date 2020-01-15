@@ -15,7 +15,7 @@ module Curator
 
     def exemplary_file_set=(exemplary_file_set)
       super
-      self.exemplary_file_set_type = exemplary_file_set.class.to_s # prevents the base STI class from being added as the exemplary_file_set_type
+      self.exemplary_file_set_type = exemplary_file_set.class.name # prevents the base STI class from being added as the exemplary_file_set_type
     end
   end
 end

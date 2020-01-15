@@ -12,7 +12,7 @@ module Curator
 
     def mappable=(mappable)
       super
-      self.mappable_type = mappable.class.to_s # prevents the base class from being added as the mappable-type
+      self.mappable_type = mappable.class.name # prevents the base class from being added as the mappable-type
     end
   end
 end
