@@ -11,17 +11,20 @@ require_relative './shared/mappings/has_exemplary_file_set'
 RSpec.describe Curator::Collection, type: :model do
   subject { create(:curator_collection) }
 
-  it_behaves_like 'mintable'
-  it_behaves_like 'optimistic_lockable'
-  it_behaves_like 'timestampable'
-  it_behaves_like 'archivable'
+  describe 'Database' do
+    it_behaves_like 'mintable'
+    it_behaves_like 'optimistic_lockable'
+    it_behaves_like 'timestampable'
+    it_behaves_like 'archivable'
 
-  it { is_expected.to have_db_column(:name).of_type(:string).with_options(null: false) }
-  it { is_expected.to have_db_column(:abstract).of_type(:text).with_options(default: '') }
+    it { is_expected.to have_db_column(:name).of_type(:string).with_options(null: false) }
+    it { is_expected.to have_db_column(:abstract).of_type(:text).with_options(default: '') }
+  end
 
   describe 'Associations' do
     it_behaves_like 'administratable'
     it_behaves_like 'workflowable'
+    it_behaves_like 'has_exemplary_file_set'
 
     it { is_expected.to have_db_column(:institution_id).of_type(:integer).with_options(null: false) }
     it { is_expected.to have_db_index(:institution_id) }
@@ -38,6 +41,4 @@ RSpec.describe Curator::Collection, type: :model do
         inverse_of(:collection).
         class_name('Curator::Mappings::CollectionMember').dependent(:destroy) }
   end
-
-  it_behaves_like 'has_exemplary_file_set'
 end
