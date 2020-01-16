@@ -189,13 +189,17 @@
                 "label": "Piacenza",
                 "authority_code": "tgn",
                 "id_from_auth": "7004939",
-                "coordinates": "45.0167,9.6667"
+                "coordinates": "45.0167,9.6667",
+                "area_type": "city"
             },
             {
                 "label": "Lucy Vincent Beach",
                 "authority_code": "geonames",
                 "id_from_auth": "4942742",
                 "coordinates": "41.33845,-70.72669"
+            },
+            {
+                "bounding_box": "-87.6175 41.7725 -87.565 41.8025"
             }
           ],
           "titles": [

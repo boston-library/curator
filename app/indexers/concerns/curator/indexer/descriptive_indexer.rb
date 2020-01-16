@@ -10,6 +10,7 @@ module Curator
       include Curator::Indexer::NameRoleIndexer
       include Curator::Indexer::RelatedItemIndexer
       include Curator::Indexer::SubjectIndexer
+      include Curator::Indexer::GeographicIndexer
       include Curator::Indexer::PhysicalLocationIndexer
       include Curator::Indexer::IdentifierIndexer
       include Curator::Indexer::NoteIndexer
