@@ -8,11 +8,10 @@ require_relative '../shared/archivable'
 RSpec.describe Curator::Metastreams::Descriptive, type: :model do
   subject { create(:curator_metastreams_descriptive) }
 
-  it_behaves_like 'optimistic_lockable'
-  it_behaves_like 'timestampable'
-  it_behaves_like 'archivable'
-
-  describe 'Database columns and indexes' do
+  describe 'Database' do
+    it_behaves_like 'optimistic_lockable'
+    it_behaves_like 'timestampable'
+    it_behaves_like 'archivable'
     it { is_expected.to have_db_column(:descriptable_type).
                         of_type(:string).
                         with_options(null: false) }
@@ -219,6 +218,17 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
   end
 
   describe 'Associations' do
+    let!(:desc_term_mapped_term_class_map) do
+      {
+        genres: 'Curator::ControlledTerms::Genre',
+        resource_types: 'Curator::ControlledTerms::ResourceType',
+        licenses: 'Curator::ControlledTerms::License' ,
+        languages: 'Curator::ControlledTerms::Language',
+        subject_topics: 'Curator::ControlledTerms::Subject',
+        subject_names: 'Curator::ControlledTerms::Name',
+        subject_geos: 'Curator::ControlledTerms::Geographic'
+      }
+    end
     it { is_expected.to belong_to(:descriptable).
                         inverse_of(:descriptive).
                         required }
@@ -228,10 +238,6 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
                         class_name('Curator::ControlledTerms::Name').
                         required }
 
-    it { is_expected.to have_many(:desc_terms).
-                        inverse_of(:descriptive).
-                        class_name('Curator::Mappings::DescTerm').
-                        dependent(:destroy) }
 
     it { is_expected.to have_many(:name_roles).
                         inverse_of(:descriptive).
@@ -246,33 +252,19 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     it { is_expected.to have_many(:host_collections).
                         through(:desc_host_collections).
                         source(:host_collection) }
+    #
+    it { is_expected.to have_many(:desc_terms).
+                        inverse_of(:descriptive).
+                        class_name('Curator::Mappings::DescTerm').
+                        dependent(:destroy) }
 
-    it { is_expected.to have_many(:genres).
-                        through(:desc_terms).
-                        source(:mappable) }
-
-    it { is_expected.to have_many(:resource_types).
-                        through(:desc_terms).
-                        source(:mappable) }
-
-    it { is_expected.to have_many(:licenses).
-                        through(:desc_terms).
-                        source(:mappable) }
-
-    it { is_expected.to have_many(:languages).
-                        through(:desc_terms).
-                        source(:mappable) }
-
-    it { is_expected.to have_many(:subject_topics).
-                        through(:desc_terms).
-                        source(:mappable) }
-
-    it { is_expected.to have_many(:subject_names).
-                        through(:desc_terms).
-                        source(:mappable) }
-
-    it { is_expected.to have_many(:subject_geos).
-                        through(:desc_terms).
-                        source(:mappable) }
+    it 'is expected to have various mappings defined :through #desc_terms' do
+      desc_term_mapped_term_class_map.each do |relation_key, relation_class|
+        expect(subject).to have_many(relation_key).
+                           through(:desc_terms).
+                           source(:mapped_term).
+                           class_name(relation_class)
+      end
+    end
   end
 end

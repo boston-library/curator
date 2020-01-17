@@ -9,36 +9,29 @@ RSpec.describe Curator::Mappings::DescTerm, type: :model do
                       of_type(:integer).
                       with_options(null: false) }
 
-  it { is_expected.to have_db_column(:mappable_id).
+  it { is_expected.to have_db_column(:mapped_term_id).
                       of_type(:integer).
                       with_options(null: false) }
 
-  it { is_expected.to have_db_column(:mappable_type).
-                      of_type(:string).
-                      with_options(null: false) }
 
   it { is_expected.to have_db_index(:descriptive_id) }
-  it { is_expected.to have_db_index([:mappable_type, :mappable_id]) }
+  it { is_expected.to have_db_index(:mapped_term_id) }
 
-  it { is_expected.to have_db_index([:mappable_id, :mappable_type, :descriptive_id]).unique(true) }
+  it { is_expected.to have_db_index([:mapped_term_id, :descriptive_id]).unique(true) }
 
   it { is_expected.to validate_uniqueness_of(:descriptive_id).
-                      scoped_to([:mappable_id, :mappable_type]).
-                      on(:create) }
-
-  it { is_expected.to allow_values(*Curator::ControlledTerms.nomenclature_types.collect { |type| "Curator::ControlledTerms::#{type}" }).
-                      for(:mappable_type).
+                      scoped_to(:mapped_term_id).
                       on(:create) }
 
   describe 'Associations' do
     it { is_expected.to belong_to(:descriptive).
                         inverse_of(:desc_terms).
                         class_name('Curator::Metastreams::Descriptive').
-                        with_foreign_key(:descriptive_id).
                         required }
 
-    it { is_expected.to belong_to(:mappable).
+    it { is_expected.to belong_to(:mapped_term).
                         inverse_of(:desc_terms).
+                        class_name('Curator::ControlledTerms::Nomenclature').
                         required }
   end
 end

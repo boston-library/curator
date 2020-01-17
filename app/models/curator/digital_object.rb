@@ -7,7 +7,7 @@ module Curator
     include Curator::Mappings::Exemplary::Object
     include Curator::Indexable
 
-    validates :contained_by_id, uniqueness: { scope: :id }, unless: -> { contained_by.blank? }
+    validates :contained_by_id, exclusion: { in: ->(digital_object) { Array.wrap(digital_object.id) } }, uniqueness: { scope: :id }, unless: -> { contained_by.blank? }
 
     before_create :add_admin_set_to_members, if: -> { admin_set.present? } # Should Fail if admin set is not present
 

@@ -11,8 +11,9 @@ require_relative './shared/mappings/has_exemplary_file_set'
 RSpec.describe Curator::DigitalObject, type: :model do
   subject { create(:curator_digital_object) }
 
+  it_behaves_like 'mintable'
+
   describe 'Database' do
-    it_behaves_like 'mintable'
     it_behaves_like 'optimistic_lockable'
     it_behaves_like 'timestampable'
 
@@ -20,7 +21,7 @@ RSpec.describe Curator::DigitalObject, type: :model do
     it { is_expected.to have_db_column(:contained_by_id).of_type(:integer) }
     it { is_expected.to have_db_index(:admin_set_id) }
     it { is_expected.to have_db_index(:contained_by_id) }
-    it { is_expected.to have_db_index([:contained_by_id, :ark_id]).unique(true) }
+    it { is_expected.to have_db_index([:contained_by_id, :id]).unique(true) }
   end
 
   describe 'Associations' do
@@ -111,7 +112,7 @@ RSpec.describe Curator::DigitalObject, type: :model do
        describe 'object contained by behavior' do
          subject { object_contained_by }
          it { is_expected.to belong_to(:contained_by).
-                             inverse_of(:contained_for).
+                             inverse_of(:container_for).
                              class_name('Curator::DigitalObject').
                              optional }
 
@@ -127,7 +128,7 @@ RSpec.describe Curator::DigitalObject, type: :model do
        describe 'contained by object behavior' do
          subject { contained_by }
          it do
-           is_expected.to have_many(:contained_for).
+           is_expected.to have_many(:container_for).
                           inverse_of(:contained_by).
                           class_name('Curator::DigitalObject').
                           with_foreign_key(:contained_by_id).
@@ -135,7 +136,7 @@ RSpec.describe Curator::DigitalObject, type: :model do
          end
 
          it 'is expected to have at least one #contained_for object' do
-           expect(subject.contained_for.count).to be >= 1
+           expect(subject.container_for.count).to be >= 1
          end
        end
     end
