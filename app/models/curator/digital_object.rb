@@ -4,15 +4,15 @@ module Curator
   class DigitalObject < ApplicationRecord
     include Curator::Mintable
     include Curator::Metastreamable
-    include Curator::Mappings::Exemplary::ObjectImagable
+    include Curator::Mappings::Exemplary::Object
     include Curator::Indexable
 
-    validates :contained_by_id, uniqueness: { scope: :ark_id }, unless: -> { contained_by.blank? }
+    validates :contained_by_id, uniqueness: { scope: :id }, unless: -> { contained_by.blank? }
 
     before_create :add_admin_set_to_members, if: -> { admin_set.present? } # Should Fail if admin set is not present
 
     belongs_to :admin_set, inverse_of: :admin_set_objects, class_name: 'Curator::Collection'
-    belongs_to :contained_by, inverse_of: :contained_for, class_name: 'Curator::DigitalObject', optional: true
+    belongs_to :contained_by, inverse_of: :container_for, class_name: 'Curator::DigitalObject', optional: true
 
     has_one :institution, through: :admin_set, class_name: 'Curator::Institution'
 
@@ -27,7 +27,7 @@ module Curator
       has_many :video_file_sets, class_name: 'Curator::Filestreams::Video'
     end
 
-    has_many :contained_for, inverse_of: :contained_by, class_name: 'Curator::DigitalObject', foreign_key: :contained_by_id, dependent: :nullify
+    has_many :container_for, inverse_of: :contained_by, class_name: 'Curator::DigitalObject', foreign_key: :contained_by_id, dependent: :nullify
 
     has_many :collection_members, inverse_of: :digital_object, class_name: 'Curator::Mappings::CollectionMember', dependent: :destroy
     has_many :is_member_of_collection, through: :collection_members, source: :collection

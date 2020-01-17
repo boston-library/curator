@@ -4,7 +4,7 @@ require 'rails_helper'
 require_relative '../shared/controlled_terms/nomenclature'
 require_relative '../shared/controlled_terms/authority_delegation'
 require_relative '../shared/controlled_terms/cannonicable'
-require_relative '../shared/mappings/mappable'
+require_relative '../shared/mappings/mapped_terms'
 
 RSpec.describe Curator::ControlledTerms::Genre, type: :model do
   it_behaves_like 'nomenclature'
@@ -22,9 +22,8 @@ RSpec.describe Curator::ControlledTerms::Genre, type: :model do
   end
 
   describe 'attr_json attributes' do
-    it { is_expected.to validate_presence_of(:label) }
-    it { is_expected.to have_db_index("(((term_data ->> 'basic'::text))::boolean)") }
     it { is_expected.to respond_to(:basic) }
+    it { is_expected.to have_db_index("(((term_data ->> 'basic'::text))::boolean)") }
 
     it 'expects the attributes to have specific types' do
       expect(described_class.attr_json_registry.fetch(:basic, nil)&.type).to be_a_kind_of(ActiveModel::Type::Boolean)
@@ -32,6 +31,10 @@ RSpec.describe Curator::ControlledTerms::Genre, type: :model do
 
     it 'expects the genre attribute to default to false' do
       expect(subject.basic).to be_falsey
+    end
+
+    describe 'Validations' do
+      it { is_expected.to validate_presence_of(:label) }
     end
   end
 
@@ -48,7 +51,7 @@ RSpec.describe Curator::ControlledTerms::Genre, type: :model do
   end
 
   describe 'Associations' do
-    it_behaves_like 'mappable'
+    it_behaves_like 'mapped_term'
 
     it { is_expected.to belong_to(:authority).
                         inverse_of(:genres).

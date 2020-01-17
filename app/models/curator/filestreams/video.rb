@@ -2,7 +2,6 @@
 
 module Curator
   class Filestreams::Video < Filestreams::FileSet
-    include Curator::Mappings::Exemplary::FileSetImagable
     belongs_to :file_set_of, inverse_of: :video_file_sets, class_name: 'Curator::DigitalObject'
 
     has_one_attached :document_access

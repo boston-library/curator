@@ -3,19 +3,18 @@
 module Curator
   module Mappings
     module Exemplary
-      module ObjectImagable
+      module Object
         extend ActiveSupport::Concern
 
         included do
-          has_one :exemplary_image_mapping, as: :exemplary_object, inverse_of: :exemplary_object, class_name: 'Curator::Mappings::ExemplaryImage', dependent: :destroy
-
-          delegate :exemplary_file_set, to: :exemplary_image_mapping, allow_nil: true
+          has_one :exemplary_image_mapping, ->{ includes(:exemplary_file_set) }, as: :exemplary_object, inverse_of: :exemplary_object, class_name: 'Curator::Mappings::ExemplaryImage', dependent: :destroy
+          has_one :exemplary_file_set, through: :exemplary_image_mapping, source: :exemplary_file_set
         end
       end
-      module FileSetImagable
+      module FileSet
         extend ActiveSupport::Concern
         included do
-          has_many :exemplary_image_of_mappings, ->(s) { includes(:exemplary_object).rewhere(exemplary_file_set_type: s.class.to_s) }, as: :exemplary_file_set, inverse_of: :exemplary_file_set, class_name: 'Curator::Mappings::ExemplaryImage', dependent: :destroy
+          has_many :exemplary_image_of_mappings, -> { includes(:exemplary_object) }, inverse_of: :exemplary_file_set, class_name: 'Curator::Mappings::ExemplaryImage', foreign_key: :exemplary_file_set_id, dependent: :destroy
 
           with_options through: :exemplary_image_of_mappings, source: :exemplary_object do
             has_many :exemplary_image_collections, source_type: 'Curator::Collection'

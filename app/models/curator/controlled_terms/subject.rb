@@ -4,7 +4,7 @@ module Curator
   class ControlledTerms::Subject < ControlledTerms::Nomenclature
     include ControlledTerms::AuthorityDelegation
     include ControlledTerms::Cannonicable
-    include Mappings::Mappable
+    include Mappings::MappedTerms
     belongs_to :authority, inverse_of: :subjects, class_name: 'Curator::ControlledTerms::Authority', optional: true
 
     validates :label, presence: true

@@ -2,7 +2,6 @@
 
 module Curator
   class Filestreams::Document < Filestreams::FileSet
-    include Curator::Mappings::Exemplary::FileSetImagable
 
     belongs_to :file_set_of, inverse_of: :document_file_sets, class_name: 'Curator::DigitalObject'
 

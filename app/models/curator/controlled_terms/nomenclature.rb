@@ -5,6 +5,7 @@ module Curator
     include AttrJson::Record
     include AttrJson::Record::Dirty
     include AttrJson::Record::QueryScopes
+    include Mappings::MappedTerms
 
     attr_json_config(default_container_attribute: :term_data)
 
