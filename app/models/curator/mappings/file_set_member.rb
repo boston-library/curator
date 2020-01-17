@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Curator
   class Mappings::FileSetMember < ApplicationRecord
     belongs_to :digital_object, inverse_of: :file_set_member_mappings, class_name: 'Curator::DigitalObject'

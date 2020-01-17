@@ -35,6 +35,7 @@ RSpec.describe Curator::Metastreams::Workflow, type: :model do
     it { is_expected.to have_db_index(:publishing_state) }
     it { is_expected.to have_db_index(:processing_state) }
     it { is_expected.to have_db_index([:workflowable_type, :workflowable_id]).unique(true) }
+
     it { is_expected.to define_enum_for(:publishing_state).
                         with_values(draft: 0, review: 1, published: 2).
                         backed_by_column_of_type(:integer) }
@@ -49,6 +50,7 @@ RSpec.describe Curator::Metastreams::Workflow, type: :model do
 
     it { is_expected.to validate_uniqueness_of(:workflowable_id).
                         scoped_to(:workflowable_type) }
+
     it { is_expected.to allow_values(*(Curator::Metastreams.valid_base_types + Curator::Metastreams.valid_filestream_types)).for(:workflowable_type) }
   end
 

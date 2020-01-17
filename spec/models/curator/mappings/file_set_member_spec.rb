@@ -1,5 +1,6 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
+require 'rails_helper'
 
 RSpec.describe Curator::Mappings::FileSetMember, type: :model do
   subject { create(:curator_mappings_file_set_member) }
@@ -27,11 +28,11 @@ RSpec.describe Curator::Mappings::FileSetMember, type: :model do
   describe 'Relationships' do
     it { is_expected.to belong_to(:digital_object).
                         inverse_of(:file_set_member_mappings).
-                        class_name('Curator::DigitalObject' ).required }
+                        class_name('Curator::DigitalObject').required }
 
     it { is_expected.to belong_to(:file_set).
                         inverse_of(:file_set_member_of_mappings).
                         class_name('Curator::Filestreams::FileSet').
-                        required }                    
+                        required }
   end
 end

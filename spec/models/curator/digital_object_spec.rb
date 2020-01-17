@@ -111,6 +111,7 @@ RSpec.describe Curator::DigitalObject, type: :model do
 
        describe 'object contained by behavior' do
          subject { object_contained_by }
+
          it { is_expected.to belong_to(:contained_by).
                              inverse_of(:container_for).
                              class_name('Curator::DigitalObject').
@@ -127,6 +128,7 @@ RSpec.describe Curator::DigitalObject, type: :model do
 
        describe 'contained by object behavior' do
          subject { contained_by }
+
          it do
            is_expected.to have_many(:container_for).
                           inverse_of(:contained_by).
