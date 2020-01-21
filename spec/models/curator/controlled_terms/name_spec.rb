@@ -24,6 +24,7 @@ RSpec.describe Curator::ControlledTerms::Name, type: :model do
   describe 'attr_json attributes' do
     it { is_expected.to respond_to(:affiliation) }
     it { is_expected.to respond_to(:name_type) }
+
     describe 'Validations' do
       it { is_expected.to validate_presence_of(:label) }
     end

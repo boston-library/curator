@@ -5,7 +5,7 @@ class CreateCuratorControlledTermsAuthorities < ActiveRecord::Migration[5.2]
     enable_extension 'pg_trgm'
     enable_extension 'pgcrypto'
     enable_extension 'btree_gin'
-    
+
     create_table :curator_controlled_terms_authorities do |t|
       t.string :name, null: false
       t.string :code, index: { unique: true, using: :btree }

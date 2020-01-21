@@ -13,8 +13,6 @@ module Curator
 
           # NOTE: no idea why this doesn't work will add a delegator instead seeing how that still works
           # has_one :exemplary_file_set, through: :exemplary_image_mapping, source: :exemplary_file_set, class_name: 'Curator::Filestreams::FileSet'
-
-
         end
       end
       module FileSet

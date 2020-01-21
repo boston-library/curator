@@ -24,6 +24,7 @@ RSpec.describe Curator::Mappings::DescNameRole, type: :model do
 
     it { is_expected.to have_db_index([:descriptive_id, :name_id, :role_id]).unique(true) }
   end
+
   describe 'Validations' do
     it { is_expected.to validate_uniqueness_of(:descriptive_id).
                         scoped_to([:name_id, :role_id]) }

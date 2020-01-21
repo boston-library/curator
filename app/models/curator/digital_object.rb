@@ -44,7 +44,6 @@ module Curator
       has_many :video_file_set_members, source_type: 'Curator::Filestreams::Video'
     end
 
-
     self.curator_indexable_mapper = Curator::DigitalObjectIndexer.new
 
     private

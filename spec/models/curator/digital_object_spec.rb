@@ -32,7 +32,7 @@ RSpec.describe Curator::DigitalObject, type: :model do
       {
         file_sets: 'Curator::Filestreams::FileSet',
         audio_file_sets: 'Curator::Filestreams::Audio',
-        image_file_sets: 'Curator::Filestreams::Image' ,
+        image_file_sets: 'Curator::Filestreams::Image',
         document_file_sets: 'Curator::Filestreams::Document',
         ereader_file_sets: 'Curator::Filestreams::Ereader',
         metadata_file_sets: 'Curator::Filestreams::Metadata',
@@ -86,8 +86,7 @@ RSpec.describe Curator::DigitalObject, type: :model do
          class_name('Curator::Mappings::FileSetMember').
          dependent(:destroy) }
 
-
-    it 'is expected to have various #file_sets relationships defined' do
+    it 'is expected to have various #file_set_members relationships defined' do
       file_set_members_class_map.each do |relation_key, relation_class|
         expect(subject).to have_many(relation_key).
                            through(file_set_member_options[:through]).
@@ -106,41 +105,41 @@ RSpec.describe Curator::DigitalObject, type: :model do
         through(:collection_members).source(:collection) }
 
     describe '#contained_by' do
-       let!(:object_contained_by) { create(:curator_digital_object, :with_contained_by) }
-       let!(:contained_by) { object_contained_by.contained_by }
+      let!(:object_contained_by) { create(:curator_digital_object, :with_contained_by) }
+      let!(:contained_by) { object_contained_by.contained_by }
 
-       describe 'object contained by behavior' do
-         subject { object_contained_by }
+      describe 'object contained by behavior' do
+        subject { object_contained_by }
 
-         it { is_expected.to belong_to(:contained_by).
-                             inverse_of(:container_for).
-                             class_name('Curator::DigitalObject').
-                             optional }
+        it { is_expected.to belong_to(:contained_by).
+                            inverse_of(:container_for).
+                            class_name('Curator::DigitalObject').
+                            optional }
 
-         it 'expects the contained by to be another digital object' do
-           expect(subject.contained_by).to be_an_instance_of(described_class)
-         end
+        it 'expects the contained by to be another digital object' do
+          expect(subject.contained_by).to be_an_instance_of(described_class)
+        end
 
-         it 'expects digital_object cant be its own contained_by' do
-           expect { subject.update!(contained_by: subject) }.to raise_error(ActiveRecord::RecordInvalid)
-         end
-       end
+        it 'expects digital_object cant be its own contained_by' do
+          expect { subject.update!(contained_by: subject) }.to raise_error(ActiveRecord::RecordInvalid)
+        end
+      end
 
-       describe 'contained by object behavior' do
-         subject { contained_by }
+      describe 'contained by object behavior' do
+        subject { contained_by }
 
-         it do
-           is_expected.to have_many(:container_for).
-                          inverse_of(:contained_by).
-                          class_name('Curator::DigitalObject').
-                          with_foreign_key(:contained_by_id).
-                          dependent(:nullify)
-         end
+        it do
+          is_expected.to have_many(:container_for).
+                         inverse_of(:contained_by).
+                         class_name('Curator::DigitalObject').
+                         with_foreign_key(:contained_by_id).
+                         dependent(:nullify)
+        end
 
-         it 'is expected to have at least one #contained_for object' do
-           expect(subject.container_for.count).to be >= 1
-         end
-       end
+        it 'is expected to have at least one #contained_for object' do
+          expect(subject.container_for.count).to be >= 1
+        end
+      end
     end
   end
 end

@@ -13,7 +13,7 @@ RSpec.shared_examples_for 'mintable', type: :model do
       it { is_expected.to validate_presence_of(:ark_id) }
       it { is_expected.to validate_uniqueness_of(:ark_id) }
     end
-    
+
     describe '#generate_ark_id on create' do
       subject { build(factory_key_for(described_class), ark_id: nil) }
 

@@ -11,7 +11,6 @@ FactoryBot.define do
       association :contained_by, factory: :curator_digital_object, strategy: :create
     end
 
-
     trait :with_metastreams do
       after :create do |digital_object|
         create(:curator_metastreams_administrative, administratable: digital_object)

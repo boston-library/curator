@@ -13,7 +13,6 @@ RSpec.describe Curator::Mappings::DescTerm, type: :model do
                       of_type(:integer).
                       with_options(null: false) }
 
-
   it { is_expected.to have_db_index(:descriptive_id) }
   it { is_expected.to have_db_index(:mapped_term_id) }
 

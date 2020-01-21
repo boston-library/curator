@@ -14,7 +14,7 @@ RSpec.describe Curator::ControlledTerms::License, type: :model do
     it 'expects the attributes to have specific types' do
       expect(described_class.attr_json_registry.fetch(:uri, nil)&.type).to be_a_kind_of(ActiveModel::Type::String)
     end
-    
+
     describe 'Validations' do
       it { is_expected.to validate_presence_of(:label) }
       it { is_expected.to allow_values(nil, '', 'http://something.org', 'https://somethingelse.org').for(:uri) }

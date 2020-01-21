@@ -222,7 +222,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
       {
         genres: 'Curator::ControlledTerms::Genre',
         resource_types: 'Curator::ControlledTerms::ResourceType',
-        licenses: 'Curator::ControlledTerms::License' ,
+        licenses: 'Curator::ControlledTerms::License',
         languages: 'Curator::ControlledTerms::Language',
         subject_topics: 'Curator::ControlledTerms::Subject',
         subject_names: 'Curator::ControlledTerms::Name',
@@ -238,7 +238,6 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
                         class_name('Curator::ControlledTerms::Name').
                         required }
 
-
     it { is_expected.to have_many(:name_roles).
                         inverse_of(:descriptive).
                         class_name('Curator::Mappings::DescNameRole').
@@ -252,7 +251,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     it { is_expected.to have_many(:host_collections).
                         through(:desc_host_collections).
                         source(:host_collection) }
-    #
+
     it { is_expected.to have_many(:desc_terms).
                         inverse_of(:descriptive).
                         class_name('Curator::Mappings::DescTerm').

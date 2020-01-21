@@ -8,7 +8,7 @@ module Curator
         configure do
           each_record do |record, context|
             attachments = {}
-            # TODO need to add ebook_access back into the list because it breaks now due to it being has_many
+            # TODO: need to add ebook_access back into the list because it breaks now due to it being has_many
             attachment_types = %i(audio_access audio_master document_access document_master
                                   image_access_800 image_georectified_master image_master image_negative_master
                                   image_service image_thumbnail_300 metadata_foxml metadata_ia metadata_ia_scan

@@ -16,7 +16,7 @@ module Curator
 
     belongs_to :file_set_of, inverse_of: :file_sets, class_name: 'Curator::DigitalObject'
 
-    has_many :file_set_member_of_mappings, ->{ includes(:digital_object) }, inverse_of: :file_set, class_name: 'Curator::Mappings::FileSetMember', dependent: :destroy
+    has_many :file_set_member_of_mappings, -> { includes(:digital_object) }, inverse_of: :file_set, class_name: 'Curator::Mappings::FileSetMember', dependent: :destroy
 
     has_many :file_set_members_of, through: :file_set_member_of_mappings, source: :digital_object
 
@@ -28,6 +28,7 @@ module Curator
     self.curator_indexable_mapper = Curator::FileSetIndexer.new
 
     private
+
     def add_file_set_of_to_members
       file_set_member_of_mappings.build(digital_object: file_set_of)
     end

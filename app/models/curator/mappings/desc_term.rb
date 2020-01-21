@@ -6,7 +6,7 @@ module Curator
 
     belongs_to :mapped_term, inverse_of: :desc_terms, class_name: 'Curator::ControlledTerms::Nomenclature'
 
-    validates :descriptive_id, uniqueness: { scope: :mapped_term_id  }, on: :create
+    validates :descriptive_id, uniqueness: { scope: :mapped_term_id }, on: :create
 
     validate :mapped_term_class_name_validator, on: :create
 
