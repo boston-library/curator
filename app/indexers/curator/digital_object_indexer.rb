@@ -56,13 +56,13 @@ module Curator
       to_field %w(institution_name_ssi institution_name_ti), obj_extract('institution', 'name')
       to_field 'institution_ark_id_ssi', obj_extract('institution', 'ark_id')
       to_field %w(collection_name_ssim collection_name_tim) do |record, accumulator|
-        record.is_member_of_collection.each { |col| accumulator << col.name }
+        accumulator.concat record.is_member_of_collection.pluck(:name)
       end
       to_field 'collection_ark_id_ssim' do |record, accumulator|
-        record.is_member_of_collection.each { |col| accumulator << col.ark_id }
+        accumulator.concat record.is_member_of_collection.pluck(:ark_id)
       end
       to_field 'exemplary_image_ssi', obj_extract('exemplary_file_set', 'ark_id')
-      to_field('filenames_ssim') { |rec, acc| acc.concat rec.file_sets.map(&:file_name_base).uniq }
+      to_field('filenames_ssim') { |rec, acc| acc.concat rec.file_sets.pluck(:file_name_base).uniq }
       each_record do |record, context|
         if record.image_file_sets.present?
           has_searchable_pages, georeferenced = false, false

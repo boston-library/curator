@@ -58,9 +58,9 @@ module Curator
             descriptive.related = related(@desc_json_attrs)
             %w(genres resource_types languages).each do |map_type|
               @desc_json_attrs.fetch(map_type, []).each do |map_attrs|
-                mappable = get_mappable(map_attrs,
-                                        nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
-                descriptive.desc_terms << Curator.mappings.desc_term_class.new(mappable: mappable)
+                mapped_term = term_for_mapping(map_attrs,
+                                               nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
+                descriptive.desc_terms.build(mapped_term: mapped_term)
               end
             end
             @desc_json_attrs.fetch(:host_collections, []).each do |host_col|
@@ -70,8 +70,8 @@ module Curator
             end
             licenses = @desc_json_attrs.fetch(:licenses, [])
             licenses.each do |license_attrs|
-              descriptive.desc_terms << Curator.mappings.desc_term_class.new(
-                mappable: get_mappable(
+              descriptive.desc_terms.build(
+                mapped_term: term_for_mapping(
                   license_attrs,
                   nomenclature_class: Curator.controlled_terms.license_class
                 )
@@ -89,9 +89,8 @@ module Curator
               next if map_type.blank?
 
               v.each do |map_attrs|
-                descriptive.desc_terms << Curator.mappings.desc_term_class.new(mappable:
-                  get_mappable(map_attrs,
-                               nomenclature_class: Curator.controlled_terms.public_send("#{map_type}_class")))
+                descriptive.desc_terms.build(mapped_term: term_for_mapping(map_attrs,
+                                                                           nomenclature_class: Curator.controlled_terms.public_send("#{map_type}_class")))
               end
             end
 
@@ -184,7 +183,7 @@ module Curator
 
     private
 
-    def get_mappable(json_attrs = {}, nomenclature_class:)
+    def term_for_mapping(json_attrs = {}, nomenclature_class:)
       authority_code = json_attrs.fetch(:authority_code, nil)
       term_data = json_attrs.except(:authority_code)
       find_or_create_nomenclature(

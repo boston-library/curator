@@ -40,13 +40,13 @@ RSpec.describe Curator::ControlledTerms::Genre, type: :model do
 
   describe 'scopes' do
     it 'expects there to be a basic scope' do
-      expect(described_class).to respond_to(:basic)
-      expect(described_class.basic.to_sql).to eq(described_class.jsonb_contains(basic: true).to_sql)
+      expect(described_class).to respond_to(:basic_genres)
+      expect(described_class.basic_genres.to_sql).to eq(described_class.jsonb_contains(basic: true).to_sql)
     end
 
     it 'expects there to be a specific scope' do
-      expect(described_class).to respond_to(:specific)
-      expect(described_class.specific.to_sql).to eq(described_class.jsonb_contains(basic: false).to_sql)
+      expect(described_class).to respond_to(:specific_genres)
+      expect(described_class.specific_genres.to_sql).to eq(described_class.jsonb_contains(basic: false).to_sql)
     end
   end
 

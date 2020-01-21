@@ -12,7 +12,7 @@ module Curator
 
     attr_json :basic, :boolean, default: false
 
-    scope :basic, -> { jsonb_contains(basic: true) }
-    scope :specific, -> { jsonb_contains(basic: false) }
+    scope :basic_genres, -> { jsonb_contains(basic: true) }
+    scope :specific_genres, -> { jsonb_contains(basic: false) }
   end
 end
