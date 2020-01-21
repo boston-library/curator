@@ -13,7 +13,7 @@ class CreateCuratorControlledTermsAuthorities < ActiveRecord::Migration[5.2]
       t.integer :lock_version
       t.timestamps null: false
       t.datetime :archived_at, index: { using: :btree, where: 'archived_at is null' }
-      t.index [:code, :base_url], unique: true, where: 'base_url is not null', using: :btree
+      t.index [:code, :base_url], unique: true, where: 'base_url is not null'
     end
   end
 end
