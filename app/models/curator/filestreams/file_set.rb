@@ -5,6 +5,7 @@ module Curator
     self.inheritance_column = :file_set_type
 
     include Curator::Filestreams::Characterizable
+    include Curator::Filestreams::MetadataFoxable
     include Curator::Mappings::Exemplary::FileSet
     include Curator::Mintable
     include Curator::Metastreams::Workflowable
@@ -20,8 +21,6 @@ module Curator
     has_many :file_set_member_of_mappings, -> { includes(:digital_object) }, inverse_of: :file_set, class_name: 'Curator::Mappings::FileSetMember', dependent: :destroy
 
     has_many :file_set_members_of, through: :file_set_member_of_mappings, source: :digital_object
-
-    has_one_attached :metadata_foxml
 
     validates :file_name_base, presence: true
     validates :file_set_type, presence: true, inclusion: { in: Filestreams.file_set_types.collect { |type| "Curator::Filestreams::#{type}" } }
