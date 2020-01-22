@@ -16,7 +16,7 @@ RSpec.describe Curator::ControlledTerms::Authority, type: :model do
     it { is_expected.to have_db_column(:base_url).of_type(:string) }
 
     it { is_expected.to have_db_index(:code).unique(true) }
-    it { is_expected.to have_db_index([:code, :base_url]).unique(true) }
+    it { is_expected.to have_db_index([:base_url, :code]).unique(true) }
   end
 
   describe 'Validations' do

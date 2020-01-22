@@ -37,7 +37,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'faraday', '~> 0.17'
   spec.add_dependency 'faraday-http-cache', '~> 2.0'
   spec.add_dependency 'faraday_middleware', '~> 0.13'
-  spec.add_dependency 'htmlentities'
+  spec.add_dependency 'htmlentities', '~> 4.3.4'
   spec.add_dependency 'net-http-persistent', '~> 3.1'
   spec.add_dependency 'oj', '~> 3.10.0'
   spec.add_dependency 'ox', '~> 2.11'

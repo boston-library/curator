@@ -16,7 +16,7 @@ module Curator
         response = conn.get(@url)
         json_response = Oj.load(response.body)
         return block_given? ? yield(json_response) : json_response
-      rescue Faraday::Error => e
+      rescue Faraday::ClientError => e
         Rails.logger.error "Error Retreiving Json For Authority at #{@url}"
         Rails.logger.error "Reason #{e.message}"
         nil
