@@ -4,7 +4,7 @@ require 'rails_helper'
 require_relative '../shared/controlled_terms/nomenclature'
 require_relative '../shared/controlled_terms/authority_delegation'
 require_relative '../shared/controlled_terms/cannonicable'
-require_relative '../shared/mappings/mappable'
+require_relative '../shared/mappings/mapped_terms'
 
 RSpec.describe Curator::ControlledTerms::Name, type: :model do
   it_behaves_like 'nomenclature'
@@ -22,9 +22,12 @@ RSpec.describe Curator::ControlledTerms::Name, type: :model do
   end
 
   describe 'attr_json attributes' do
-    it { is_expected.to validate_presence_of(:label) }
     it { is_expected.to respond_to(:affiliation) }
     it { is_expected.to respond_to(:name_type) }
+
+    describe 'Validations' do
+      it { is_expected.to validate_presence_of(:label) }
+    end
 
     it 'expects the attributes to have specific types' do
       expect(described_class.attr_json_registry.fetch(:affiliation, nil)&.type).to be_a_kind_of(ActiveModel::Type::String)
@@ -33,7 +36,7 @@ RSpec.describe Curator::ControlledTerms::Name, type: :model do
   end
 
   describe 'Associations' do
-    it_behaves_like 'mappable'
+    it_behaves_like 'mapped_term'
 
     it { is_expected.to belong_to(:authority).
                         inverse_of(:names).

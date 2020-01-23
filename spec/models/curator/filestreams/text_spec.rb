@@ -2,16 +2,21 @@
 
 require 'rails_helper'
 require_relative '../shared/filestreams/file_set'
+require_relative '../shared/filestreams/file_attachments'
 
 RSpec.describe Curator::Filestreams::Text, type: :model do
   subject { create(:curator_filestreams_text) }
 
   it_behaves_like 'file_set'
 
-  describe 'Associations' do
+  describe 'Text Associations' do
     it { is_expected.to belong_to(:file_set_of).
                         inverse_of(:text_file_sets).
                         class_name('Curator::DigitalObject').
                         required }
+
+    it_behaves_like 'has_file_attachments' do
+      let(:has_one_file_attachments) { %i(text_plain text_coordinates_master) }
+    end
   end
 end

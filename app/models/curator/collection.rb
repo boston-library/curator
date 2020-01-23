@@ -5,7 +5,7 @@ module Curator
     include Curator::Mintable
     include Curator::Metastreams::Administratable
     include Curator::Metastreams::Workflowable
-    include Curator::Mappings::Exemplary::ObjectImagable
+    include Curator::Mappings::Exemplary::Object
     include Curator::Indexable
 
     belongs_to :institution, inverse_of: :collections, class_name: 'Curator::Institution'

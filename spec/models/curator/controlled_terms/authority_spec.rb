@@ -7,22 +7,26 @@ require_relative '../shared/timestampable'
 RSpec.describe Curator::ControlledTerms::Authority, type: :model do
   subject { create(:curator_controlled_terms_authority) }
 
-  it_behaves_like 'optimistic_lockable'
-  it_behaves_like 'timestampable'
+  describe 'Database' do
+    it_behaves_like 'optimistic_lockable'
+    it_behaves_like 'timestampable'
 
-  it { is_expected.to have_db_column(:name).of_type(:string).with_options(null: false) }
-  it { is_expected.to have_db_column(:code).of_type(:string) }
-  it { is_expected.to have_db_column(:base_url).of_type(:string) }
+    it { is_expected.to have_db_column(:name).of_type(:string).with_options(null: false) }
+    it { is_expected.to have_db_column(:code).of_type(:string) }
+    it { is_expected.to have_db_column(:base_url).of_type(:string) }
 
-  it { is_expected.to have_db_index(:code).unique(true) }
-  it { is_expected.to have_db_index([:code, :base_url]).unique(true) }
+    it { is_expected.to have_db_index(:code).unique(true) }
+    it { is_expected.to have_db_index([:base_url, :code]).unique(true) }
+  end
 
-  it { is_expected.to validate_presence_of(:name) }
-  it { is_expected.to validate_uniqueness_of(:code).allow_nil }
-  it { is_expected.to validate_uniqueness_of(:base_url).scoped_to(:code).allow_nil }
+  describe 'Validations' do
+    it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to validate_uniqueness_of(:code).allow_nil }
+    it { is_expected.to validate_uniqueness_of(:base_url).scoped_to(:code).allow_nil }
 
-  it { is_expected.to allow_values(nil, 'http://myinstitution.org').for(:base_url) }
-  it { is_expected.not_to allow_value('not a website string').for(:base_url) }
+    it { is_expected.to allow_values(nil, 'http://myinstitution.org').for(:base_url) }
+    it { is_expected.not_to allow_value('not a website string').for(:base_url) }
+  end
 
   describe 'cannonical authority' do
     describe 'AUTH_NAME_KEY private constant' do

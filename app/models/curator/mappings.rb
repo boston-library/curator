@@ -7,6 +7,6 @@ module Curator
       'curator_mappings_'
     end
 
-    namespace_klass_accessors :collection_member, :desc_name_role, :desc_host_collection, :desc_term, :exemplary_image, :host_collection, :issue
+    namespace_klass_accessors :collection_member, :desc_name_role, :desc_host_collection, :desc_term, :exemplary_image, :host_collection
   end
 end

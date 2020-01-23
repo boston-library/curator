@@ -3,7 +3,7 @@
 require 'rails_helper'
 RSpec.describe Curator::DigitalObjectIndexer, type: :indexer do
   describe 'indexing' do
-    let(:digital_object) { create(:curator_digital_object) }
+    let(:digital_object) { create(:curator_digital_object, :with_contained_by) }
     let(:indexer) { described_class.new }
     let(:indexed) { indexer.map_record(digital_object) }
     let(:collections) { digital_object.is_member_of_collection }
@@ -36,6 +36,14 @@ RSpec.describe Curator::DigitalObjectIndexer, type: :indexer do
 
       it 'sets the exemplary image field' do
         expect(indexed['exemplary_image_ssi']).to eq [file_set.ark_id]
+      end
+    end
+
+    describe 'contained by indexing' do
+      let(:contained_by) { digital_object.contained_by }
+
+      it 'sets the contained by field' do
+        expect(indexed['contained_by_ssi']).to eq [contained_by.ark_id]
       end
     end
 

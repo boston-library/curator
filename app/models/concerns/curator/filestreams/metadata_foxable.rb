@@ -2,10 +2,10 @@
 
 module Curator
   module Filestreams
-    module Characterizable
+    module MetadataFoxable
       extend ActiveSupport::Concern
       included do
-        has_one_attached :characterization
+        has_one_attached :metadata_foxml
       end
     end
   end

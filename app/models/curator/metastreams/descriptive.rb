@@ -45,7 +45,7 @@ module Curator
 
     # MAPPING OBJECTS
     with_options inverse_of: :descriptive, dependent: :destroy do
-      has_many :desc_terms, -> { includes(:mappable) }, class_name: 'Curator::Mappings::DescTerm'
+      has_many :desc_terms, -> { includes(:mapped_term) }, class_name: 'Curator::Mappings::DescTerm'
       has_many :name_roles, -> { includes(:name, :role) }, class_name: 'Curator::Mappings::DescNameRole'
       has_many :desc_host_collections, -> { includes(:host_collection) }, class_name: 'Curator::Mappings::DescHostCollection'
     end
@@ -53,14 +53,14 @@ module Curator
     has_many :host_collections, through: :desc_host_collections, source: :host_collection
 
     # TERMS
-    with_options through: :desc_terms, source: :mappable do
-      has_many :genres, -> { merge(with_authority) }, source_type: 'Curator::ControlledTerms::Genre'
-      has_many :resource_types, -> { merge(with_authority) }, source_type: 'Curator::ControlledTerms::ResourceType'
-      has_many :licenses, source_type: 'Curator::ControlledTerms::License'
-      has_many :languages, -> { merge(with_authority) }, source_type: 'Curator::ControlledTerms::Language'
-      has_many :subject_topics, -> { merge(with_authority) }, source_type: 'Curator::ControlledTerms::Subject'
-      has_many :subject_names, -> { merge(with_authority) }, source_type: 'Curator::ControlledTerms::Name'
-      has_many :subject_geos, -> { merge(with_authority) }, source_type: 'Curator::ControlledTerms::Geographic'
+    with_options through: :desc_terms, source: :mapped_term do
+      has_many :genres, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Genre'
+      has_many :resource_types, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::ResourceType'
+      has_many :licenses, class_name: 'Curator::ControlledTerms::License'
+      has_many :languages, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Language'
+      has_many :subject_topics, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Subject'
+      has_many :subject_names, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Name'
+      has_many :subject_geos, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Geographic'
     end
 
     # VALIDATIONS

@@ -477,7 +477,7 @@ Rails/CreateTableWithTimestamps:
     - 'db/migrate/20190923160316_create_curator_mappings_desc_host_collections.rb'
     - 'db/migrate/20190923164102_create_curator_mappings_collection_members.rb'
     - 'db/migrate/20191016182158_create_curator_mappings_issues.rb'
-
+    - 'db/migrate/20200115181909_create_curator_mappings_file_set_members.rb'
 Rails/ActiveSupportAliases:
   Enabled: true
 

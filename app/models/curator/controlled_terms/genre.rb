@@ -4,7 +4,7 @@ module Curator
   class ControlledTerms::Genre < ControlledTerms::Nomenclature
     include ControlledTerms::AuthorityDelegation
     include ControlledTerms::Cannonicable
-    include Mappings::Mappable
+    include Mappings::MappedTerms
 
     belongs_to :authority, inverse_of: :genres, class_name: 'Curator::ControlledTerms::Authority', optional: true
 
@@ -12,7 +12,7 @@ module Curator
 
     attr_json :basic, :boolean, default: false
 
-    scope :basic, -> { jsonb_contains(basic: true) }
-    scope :specific, -> { jsonb_contains(basic: false) }
+    scope :basic_genres, -> { jsonb_contains(basic: true) }
+    scope :specific_genres, -> { jsonb_contains(basic: false) }
   end
 end
