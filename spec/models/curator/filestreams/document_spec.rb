@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 require_relative '../shared/filestreams/file_set'
-
+require_relative '../shared/filestreams/file_attachments'
 RSpec.describe Curator::Filestreams::Document, type: :model do
   subject { create(:curator_filestreams_document) }
 
@@ -14,16 +14,8 @@ RSpec.describe Curator::Filestreams::Document, type: :model do
                         class_name('Curator::DigitalObject').
                         required }
 
-    describe 'File Attachments' do
-      let!(:document_attachments) { %i(document_master document_access image_thumbnail_300) }
-
-      it { is_expected.to respond_to(*document_attachments) }
-
-      it 'expects each of the attachment types to be a kind of ActiveStorage::Attachment' do
-        document_attachments.each do |attachment|
-          expect(subject.send(attachment)).to be_an_instance_of(ActiveStorage::Attached::One)
-        end
-      end
+    it_behaves_like 'has_file_attachments' do
+      let(:has_one_file_attachments) { %i(document_master document_access image_thumbnail_300) }
     end
   end
 end
