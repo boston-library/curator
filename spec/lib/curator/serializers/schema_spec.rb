@@ -57,7 +57,7 @@ RSpec.describe Curator::Serializers::Schema, type: :lib_serializers do
     let!(:custom_attr) { :abstract_trunc }
     let!(:custom_link_attr) { :https_url }
     let!(:meta_attr) { :collection_count }
-    let(:node_attr) { :ark_attributes }
+    let!(:node_attr) { :ark_attributes }
     let!(:collection_serializer) do
       Class.new(Curator::Serializers::AbstractSerializer) do
         schema_as_json root: :collection do

@@ -3,7 +3,6 @@
 module Curator
   class DigitalObjectSerializer < CuratorSerializer
     schema_as_json root: :digital_object do
-      attributes :ark_id
     end
     # def metastreams
     #   {}.merge(

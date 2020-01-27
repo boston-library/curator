@@ -11,14 +11,26 @@ FactoryBot.define do
 
     transient do
       collection_count { nil }
+      with_collection_metastreams { false }
     end
 
     trait :with_location do
       location { create(:curator_controlled_terms_geographic) }
     end
 
+    trait :with_metastreams do
+      after :create do |institution|
+        create(:curator_metastreams_administrative, administratable: institution)
+        create(:curator_metastreams_workflow, workflowable: institution)
+      end
+    end
+
     after :create do |institution, options|
-      create_list(:curator_collection, options.collection_count, institution: institution) if options.collection_count
+      if options.collection_count
+        create_list(:curator_collection, options.collection_count, :with_metastreams, institution: institution) if options.with_collection_metastreams
+
+        create_list(:curator_collection, options.collection_count, institution: institution) unless options.with_collection_metastreams
+      end
     end
   end
 end

@@ -4,9 +4,9 @@ module Curator
   module Serializers
     class Node < Attribute
       extend Forwardable
-      attr_reader :schema
+      attr_reader :node_schema
 
-      def_delegators :schema, :root, :attribute, :attributes, :node, :has_one, :belongs_to, :has_many
+      def_delegators :node_schema, :root, :attribute, :attributes, :node, :has_one, :belongs_to, :has_many
 
       def initialize(key:, options: {}, &block)
         super(key: key, options: options.dup)
@@ -14,7 +14,7 @@ module Curator
 
         aquire_target_method!(options.fetch(:target, nil), key)
 
-        @schema = Schema.new(root: key, options: options.dup.slice(:key_transform_method, :cache_enabled, :cache_options))
+        @node_schema = Schema.new(root: key, options: options.dup.slice(:key_transform_method, :cache_enabled, :cache_options))
         instance_eval(&block)
       end
 
@@ -22,7 +22,7 @@ module Curator
         target_val = super(record, serializer_params.dup) if method
         target_val = record if target_val.blank?
 
-        schema.serialize(target_val, serializer_params.dup)
+        node_schema.serialize(target_val, serializer_params.dup)
       end
 
       def include_value?(record, serializer_params = {})

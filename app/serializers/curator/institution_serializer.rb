@@ -3,15 +3,12 @@
 module Curator
   class InstitutionSerializer < CuratorSerializer
     schema_as_json do
-      attributes :ark_id, :abstract, :name, :metastreams
+      attributes :abstract, :name, :url
+      belongs_to :location, serializer: Curator::ControlledTerms::GeographicSerializer
+      node :metastreams do
+        has_one :administrative, serializer: Curator::Metastreams::AdministrativeSerializer
+        has_one :workflow, serializer: Curator::Metastreams::WorkflowSerializer
+      end
     end
-
-    # def metastreams
-    #   {}.merge(
-    #     ActiveModelSerializers::SerializableResource.new(object.administrative, serializer: Metastreams::AdministrativeSerializer, root: 'administrative').as_json
-    #   ).merge(
-    #     ActiveModelSerializers::SerializableResource.new(object.workflow, serializer: Metastreams::WorkflowSerializer, root: 'workflow').as_json
-    #   )
-    # end
   end
 end

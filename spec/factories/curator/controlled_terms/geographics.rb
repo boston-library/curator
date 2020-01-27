@@ -4,7 +4,11 @@ FactoryBot.define do
   factory :curator_controlled_terms_geographic, class: 'Curator::ControlledTerms::Geographic' do
     association :authority, factory: :curator_controlled_terms_authority
     sequence(:term_data) do |_n|
-      { label: Faker::Lorem.sentence, id_from_auth: Faker::Alphanumeric.alphanumeric(number: 10) }
+      {
+        label: Faker::Lorem.sentence,
+        id_from_auth: Faker::Alphanumeric.alphanumeric(number: 10),
+        coordinates: [Faker::Address.latitude, Faker::Address.longitude].join(',')
+      }
     end
     type { 'Curator::ControlledTerms::Geographic' }
     archived_at { nil }

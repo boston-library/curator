@@ -3,15 +3,17 @@
 module Curator
   class CollectionSerializer < CuratorSerializer
     schema_as_json root: :collection do
-      attributes :ark_id, :abstract, :name, :metastreams
-    end
+      attributes :abstract, :name
 
-    # def metastreams
-    #   {}.merge(
-    #     ActiveModelSerializers::SerializableResource.new(object.administrative, serializer: Metastreams::AdministrativeSerializer, root: 'administrative').as_json
-    #   ).merge(
-    #     ActiveModelSerializers::SerializableResource.new(object.workflow, serializer: Metastreams::WorkflowSerializer, root: 'workflow').as_json
-    #   )
-    # end
+      #TODO: Add ability to configure fields for relationships whne defining schema rathe than passing them in as #serializer_params
+      node :institution, target: :key do
+        attribute :ark_id
+      end
+
+      node :metastreams do
+        has_one :administrative, serializer: 'Curator::Metastreams::AdministrativeSerializer'
+        has_one :workflow, serializer: 'Curator::Metastreams::WorkflowSerializer'
+      end
+    end
   end
 end

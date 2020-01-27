@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Curator
-  class Metastreams::DescriptiveSerializer < CuratorSerializer
+  class Metastreams::DescriptiveSerializer < Curator::Serializers::AbstractSerializer
     # CONTROLLED_TERMS_FIELDS = %i(label id_from_auth authority_code).freeze
     #
     # class DescriptiveNameRoleSerializer < ActiveModel::Serializer

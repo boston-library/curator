@@ -54,7 +54,6 @@ module Curator
         # NOTE: redefining a schema for an adapter on an inherited class will create a new one
         def _define_adapter_schema(adapter_key:, root: nil, options: {}, &block)
           raise 'NullAdapter cant be used this way' if adapter_key.to_sym == :null
-
           # TODO: Think of more options to set up at the schema level.
           schema_options = options.dup.slice(:key_transform_method)
           schema_options[:cache_enabled] = cache_enabled?
@@ -93,7 +92,7 @@ module Curator
 
         def _inherit_schemas!(parent_adapter_schemas)
           # NOTE: We want to make sure that the schema registered in the class is NOT the same instance of the parent class This ensures that it is a different object in memory but preserves the states of all the instance objects on the schema for the adapter
-          parent_adapter_schemas.each_pair { |k, v| _adapter_schemas.compute_if_absent(k) { v.clone } }
+          parent_adapter_schemas.each_pair { |k, v| _adapter_schemas.compute_if_absent(k) { v.deep_dup } }
         end
 
         def _reset_adapter_schemas!

@@ -3,7 +3,7 @@
 module Curator
   class Filestreams::FileSetSerializer < CuratorSerializer
     schema_as_json do
-      attributes :ark_id
+      attributes :file_name_base
     end
   end
 end
