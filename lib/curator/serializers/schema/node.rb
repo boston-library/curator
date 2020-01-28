@@ -19,9 +19,8 @@ module Curator
       end
 
       def read_for_serialization(record, serializer_params = {})
-        target_val = super(record, serializer_params.dup) if method
-        target_val = record if target_val.blank?
-
+        target_val = method.present? ? super(record, serializer_params.dup) : record
+        
         node_schema.serialize(target_val, serializer_params.dup)
       end
 

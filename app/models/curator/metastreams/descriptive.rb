@@ -12,8 +12,9 @@ module Curator
     enum text_direction: %w(ltr rtl).freeze
     # JSON ATTRS
 
-    scope :with_mappings, -> { includes(:term_mappings, :name_roles, :desc_host_collections) }
-
+    scope :with_mappings, -> { includes(:desc_terms, :name_roles, :desc_host_collections) }
+    scope :with_physical_location, -> { includes(:physical_location) }
+    scope :for_serialization, -> { merge(with_mappings).merge(with_physical_location) }
     # Identifier
     attr_json :identifier, Curator::Descriptives::Identifier.to_type, container_attribute: :identifier_json, array: true, default: []
 
@@ -41,7 +42,7 @@ module Curator
     # RELS
     # PARENTS
     belongs_to :descriptable, polymorphic: true, inverse_of: :descriptive
-    belongs_to :physical_location, inverse_of: :physical_locations_of, class_name: 'Curator::ControlledTerms::Name'
+    belongs_to :physical_location, -> { merge(with_authority) }, inverse_of: :physical_locations_of, class_name: 'Curator::ControlledTerms::Name'
 
     # MAPPING OBJECTS
     with_options inverse_of: :descriptive, dependent: :destroy do
@@ -62,6 +63,9 @@ module Curator
       has_many :subject_names, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Name'
       has_many :subject_geos, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Geographic'
     end
+    alias :topics :subject_topics
+    alias :names :subject_names
+    alias :geos :subject_geos
 
     # VALIDATIONS
     validates :descriptable_id, uniqueness: { scope: :descriptable_type }

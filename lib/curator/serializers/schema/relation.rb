@@ -11,7 +11,7 @@ module Curator
         @serializer = serializer_klass_for(serializer_klass)
       end
       # You can only add links in this case. everything else is delegated to the relations serializer
-
+      # TODO: Add ability to pass custom root in options
       def read_for_serialization(record, serializer_params = {})
         return if record.blank?
 
