@@ -8,7 +8,6 @@ module Curator
     include Curator::Indexable
 
     validates :url, format: { with: URI.regexp(%w(http https)), allow_blank: true }
-    validates :abstract, presence: { allow_blank: true }
 
     belongs_to :location, -> { includes(:authority) }, inverse_of: :institution_locations, class_name: 'Curator::ControlledTerms::Geographic', optional: true
 
