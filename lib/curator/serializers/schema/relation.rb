@@ -11,6 +11,7 @@ module Curator
         @serializer = serializer_klass_for(serializer_klass)
       end
       # You can only add links in this case. everything else is delegated to the relations serializer
+
       # TODO: Add ability to pass custom root in options
       def read_for_serialization(record, serializer_params = {})
         return if record.blank?
@@ -19,12 +20,12 @@ module Curator
         adapter_key = serializer_params.dup.fetch(:adapter_key, :null)
         adapter_key = :null if relation_record.blank?
 
-        serializer_instance = build_serializer_instance(relation_record, adapter_key, serializer_params)
+        serializer_instance = build_serializer_instance(relation_record, adapter_key, serializer_params.dup)
         serializer_instance.serializable_hash
       end
 
       def include_value?(record, serializer_params = {})
-        super(record, serializer_params.dup.except(:fields)) && include_relation?(serializer_params.dup)
+        include_relation?(serializer_params.dup) && super(record, serializer_params.dup.except(:fields))
       end
 
       def include_relation?(serializer_params = {})
@@ -34,6 +35,11 @@ module Curator
       end
 
       private
+
+      def parse_fields(serializer_params = {})
+        return if serializer_params.dup.dig(:fields, key).blank?
+
+      end
 
       def build_serializer_instance(relation_record, adapter_key, serializer_params = {})
         serializer.new(relation_record, adapter_key, serializer_params.dup.merge(adapter_key: adapter_key, for_relation: true))

@@ -29,8 +29,30 @@ module SerializerHelper
       record.as_json(opts.dup.slice(:only, :include))
     end
   end
+
+  module IntegrationHelper
+    def record_as_json(record, options = {})
+      record.as_json(options.slice(:only, :include, :root, :except, :method))
+    end
+
+    def fetch_transformed_root_key(serializer_instance)
+      serializer_instance.adapter.send(:run_root_key_transform, serializer_instance.record)
+    end
+
+    def serializer_adapter_schema_attributes(serializer_class, adapter_key, facet_group_key)
+      return [] if adapter_key == :null
+
+      serializer_class.send(:_schema_for_adapter, adapter_key)&.
+                                                                schema&.
+                                                                facet_groups&.
+                                                                fetch(facet_group_key, [])&.
+                                                                map(&:key)&.
+                                                                map(&:to_s)
+    end
+  end
 end
 
 RSpec.configure do |config|
   config.include SerializerHelper::FacetHelper, type: :lib_serializers
+  config.include SerializerHelper::IntegrationHelper, type: :serializers
 end

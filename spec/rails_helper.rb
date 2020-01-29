@@ -127,6 +127,10 @@ RSpec.configure do |config|
     metadata[:type] = :lib_serializers
   end
 
+  config.define_derived_metadata(file_path: Regexp.new('/spec/serializers/curator')) do |metadata|
+    metadata[:type] = :serializers
+  end
+
   # TODO: Create derived metadata for serializers once we switch to blueprinter
 
   config.infer_spec_type_from_file_location!

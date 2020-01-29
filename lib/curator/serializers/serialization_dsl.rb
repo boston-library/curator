@@ -29,10 +29,10 @@ module Curator
           raise "#{subclass} is not inherited from Curator::Serializers::AbstractSerializer" unless _is_serializer?(subclass)
 
           super(subclass)
+          subclass.cache_enabled = cache_enabled?
           subclass._reset_adapter_schemas!
           subclass._inject_schema_adapter_methods!
           subclass._inherit_schemas!(_adapter_schemas)
-          subclass.cache_enabled = cache_enabled?
         end
 
         protected
@@ -54,6 +54,7 @@ module Curator
         # NOTE: redefining a schema for an adapter on an inherited class will create a new one
         def _define_adapter_schema(adapter_key:, root: nil, options: {}, &block)
           raise 'NullAdapter cant be used this way' if adapter_key.to_sym == :null
+
           # TODO: Think of more options to set up at the schema level.
           schema_options = options.dup.slice(:key_transform_method)
           schema_options[:cache_enabled] = cache_enabled?
@@ -64,7 +65,7 @@ module Curator
           if _has_schema_adapter?(adapter_key.to_sym)
             adapter_instance = _schema_for_adapter(adapter_key)
             adapter_instance.schema.update_root!(schema_options.dup.fetch(:root, nil))
-            adapter_instance.schema.options.reverse_merge!(schema_options.dup.except(:root))
+            adapter_instance.schema.options.merge!(schema_options.dup.except(:root))
             adapter_instance.instance_eval(&block)
           else
             adapter_schema_klass = Curator::Serializers.lookup_adapter(adapter_key.to_sym)

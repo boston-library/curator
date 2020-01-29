@@ -2,7 +2,7 @@
 
 module Curator
   class InstitutionSerializer < CuratorSerializer
-    schema_as_json do
+    schema_as_json root: :institution do
       attributes :abstract, :name, :url
 
       belongs_to :location, serializer: Curator::ControlledTerms::GeographicSerializer

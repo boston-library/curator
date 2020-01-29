@@ -4,14 +4,14 @@ FactoryBot.define do
   factory :curator_metastreams_descriptive, class: 'Curator::Metastreams::Descriptive' do
     association :descriptable, factory: :curator_digital_object
     association :physical_location, factory: :curator_controlled_terms_name
-    identifier_json { {} }
-    title_json { {} }
-    date_json { {} }
-    note_json { {} }
-    subject_json { {} }
-    related_json { {} }
-    cartographics_json { {} }
-    publication_json { {} }
+    identifier { create_list(:curator_descriptives_identifier, 3) }
+    date { create(:curator_descriptives_date) }
+    note { create_list(:curator_descriptives_note, 3) }
+    cartographic { create(:curator_descriptives_cartographic) }
+    publication { create(:curator_descriptives_publication) }
+    related { create(:curator_descriptives_related) }
+    title { create(:curator_descriptives_title_set) }
+    subject_other { create(:curator_descriptives_subject) }
     digital_origin { 1 }
     origin_event { 1 }
     text_direction { 1 }
@@ -40,17 +40,6 @@ FactoryBot.define do
       resource_type_count { nil }
       license_count { nil }
       subject_count { nil }
-    end
-
-    trait :with_descriptive_fields do
-      identifier { create_list(:curator_descriptives_identifier, 3) }
-      date { create(:curator_descriptives_date) }
-      note { create_list(:curator_descriptives_note, 3) }
-      cartographic { create(:curator_descriptives_cartographic) }
-      publication { create(:curator_descriptives_publication) }
-      related { create(:curator_descriptives_related) }
-      title { create(:curator_descriptives_title_set) }
-      subject_other { create(:curator_descriptives_subject) }
     end
 
     after :create do |descriptive, options|

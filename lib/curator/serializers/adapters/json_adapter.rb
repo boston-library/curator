@@ -4,7 +4,7 @@ module Curator
   module Serializers
     class JSONAdapter < AdapterBase
       def serializable_hash(record, serializer_params = {})
-        serialized_result = schema.serialize(record, serializer_params.dup.reverse_merge!(adapter_key: :json))
+        serialized_result = schema.serialize(record, serializer_params.dup.merge(adapter_key: :json))
 
         # NOTE: Needed a way to return the base serialize  result from the schema for the relatiosn before formatting
         # This option is passed in for the relation facet class on read_for_serialization

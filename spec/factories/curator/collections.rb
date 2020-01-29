@@ -9,7 +9,7 @@ FactoryBot.define do
     archived_at { nil }
 
     trait :with_metastreams do
-      after :create do |collection, options|
+      after :create do |collection, _options|
         create(:curator_metastreams_administrative, administratable: collection)
         create(:curator_metastreams_workflow, workflowable: collection)
       end
