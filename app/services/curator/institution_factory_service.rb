@@ -10,7 +10,7 @@ module Curator
         Curator.institution_class.transaction do
           institution = Curator.institution_class.find_or_initialize_by(ark_id: @ark_id)
           institution.name = @json_attrs.fetch(:name)
-          institution.abstract = @json_attrs.fetch(:abstract, nil)
+          institution.abstract = @json_attrs.fetch(:abstract, '')
           institution.url = @json_attrs.fetch(:url, nil)
           institution.location = location(location_json_attrs) if location_json_attrs.present?
           institution.created_at = @created if @created
