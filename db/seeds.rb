@@ -12,7 +12,8 @@ AUTHORITY_INPUTS = [
   { code: 'tgn', base_url: 'http://vocab.getty.edu/tgn', name: 'Thesaurus of Geographic Names' },
   { code: 'ulan', base_url: 'http://vocab.getty.edu/ulan', name: 'Getty Union List of Artist Names' },
   { code: 'geonames', base_url: 'http://sws.geonames.org/', name: 'GeoNames' },
-  { code: 'resourceTypes', base_url: 'http://id.loc.gov/vocabulary/resourceTypes' }
+  { code: 'resourceTypes', base_url: 'http://id.loc.gov/vocabulary/resourceTypes' },
+  { code: 'local', name: 'local' }
 ].freeze
 
 AUTHORITY_INPUTS.each do |auth_input|
