@@ -26,8 +26,7 @@ RSpec.describe Curator::Collection, type: :model do
   end
 
   describe 'Associations' do
-    it_behaves_like 'administratable'
-    it_behaves_like 'workflowable'
+    it_behaves_like 'metastreamable_basic'
     it_behaves_like 'has_exemplary_file_set'
 
     it { is_expected.to belong_to(:institution).

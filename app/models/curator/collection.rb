@@ -3,12 +3,12 @@
 module Curator
   class Collection < ApplicationRecord
     include Curator::Mintable
-    include Curator::Metastreams::Administratable
-    include Curator::Metastreams::Workflowable
+    include Curator::Metastreamable::Basic
     include Curator::Mappings::Exemplary::Object
     include Curator::Indexable
 
-    scope :with_metastreams, -> { merge(with_administrative).with(with_workflow) }
+    self.curator_indexable_mapper = Curator::CollectionIndexer.new
+
     scope :for_serialization, -> { merge(with_metastreams) }
 
     belongs_to :institution, inverse_of: :collections, class_name: 'Curator::Institution'
@@ -16,7 +16,5 @@ module Curator
     has_many :admin_set_objects, inverse_of: :admin_set, class_name: 'Curator::DigitalObject', foreign_key: :admin_set_id, dependent: :destroy
 
     has_many :collection_members, inverse_of: :collection, class_name: 'Curator::Mappings::CollectionMember', dependent: :destroy
-
-    self.curator_indexable_mapper = Curator::CollectionIndexer.new
   end
 end

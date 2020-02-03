@@ -8,9 +8,10 @@ module Curator
     include Curator::Filestreams::MetadataFoxable
     include Curator::Mappings::Exemplary::FileSet
     include Curator::Mintable
-    include Curator::Metastreams::Workflowable
-    include Curator::Metastreams::Administratable
+    include Curator::Metastreamable::Basic
     include Curator::Indexable
+
+    self.curator_indexable_mapper = Curator::FileSetIndexer.new
 
     acts_as_list scope: [:file_set_of, :file_set_type], top_of_list: 0
 
@@ -24,8 +25,6 @@ module Curator
 
     validates :file_name_base, presence: true
     validates :file_set_type, presence: true, inclusion: { in: Filestreams.file_set_types.collect { |type| "Curator::Filestreams::#{type}" } }
-
-    self.curator_indexable_mapper = Curator::FileSetIndexer.new
 
     private
 

@@ -25,7 +25,7 @@ RSpec.describe Curator::DigitalObject, type: :model do
   end
 
   describe 'Associations' do
-    it_behaves_like 'metastreamable'
+    it_behaves_like 'metastreamable_all'
     it_behaves_like 'has_exemplary_file_set'
 
     let!(:file_sets_class_map) do

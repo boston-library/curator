@@ -28,8 +28,7 @@ RSpec.describe Curator::Institution, type: :model do
   end
 
   describe 'Associations' do
-    it_behaves_like 'administratable'
-    it_behaves_like 'workflowable'
+    it_behaves_like 'metastreamable_basic'
 
     it { is_expected.to belong_to(:location).
       inverse_of(:institution_locations).

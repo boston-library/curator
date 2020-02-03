@@ -3,13 +3,32 @@
 module Curator
   # includes all metastream concerns in one
   module Metastreamable
-    extend ActiveSupport::Concern
-    included do
-      include Metastreams::Administratable
-      include Metastreams::Workflowable
-      include Metastreams::Descriptable
+    module All
+      extend ActiveSupport::Concern
+      included do
+        include Metastreams::Administratable
+        include Metastreams::Workflowable
+        include Metastreams::Descriptable
+        include Metastreamable::InstanceMethods
 
-      scope :with_metastreams, -> { merge(with_workflow).merge(with_administrative).merge(with_descriptive) }
+        scope :with_metastreams, -> { merge(with_workflow).merge(with_administrative).merge(with_descriptive) }
+      end
+    end
+
+    module Basic
+      extend ActiveSupport::Concern
+      included do
+        include Metastreams::Administratable
+        include Metastreams::Workflowable
+        include Metastreamable::InstanceMethods
+        scope :with_metastreams, -> { merge(with_workflow).merge(with_administrative)}
+      end
+    end
+
+    module InstanceMethods
+      def metastreams
+        Curator::MetastreamDecorator.new(self)
+      end
     end
   end
 end

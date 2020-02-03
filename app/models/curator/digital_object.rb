@@ -3,9 +3,11 @@
 module Curator
   class DigitalObject < ApplicationRecord
     include Curator::Mintable
-    include Curator::Metastreamable
+    include Curator::Metastreamable::All
     include Curator::Mappings::Exemplary::Object
     include Curator::Indexable
+
+    self.curator_indexable_mapper = Curator::DigitalObjectIndexer.new
 
     scope :with_mappings, -> { includes(:exemplary_image_mapping, :collection_members, :file_set_member_mappings) }
     scope :for_serialization, -> { merge(with_metastreams).merge(with_mappings) }
@@ -47,7 +49,7 @@ module Curator
       has_many :video_file_set_members, source_type: 'Curator::Filestreams::Video'
     end
 
-    self.curator_indexable_mapper = Curator::DigitalObjectIndexer.new
+
 
     private
 

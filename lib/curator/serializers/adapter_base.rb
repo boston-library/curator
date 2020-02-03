@@ -21,10 +21,6 @@ module Curator
         raise 'Not Implemented'
       end
 
-      def serializable_hash_for_reationship(_record = nil, _serializer_params = {})
-        raise 'Not Implemented'
-      end
-
       def initialize_dup(source)
         @schema = source.schema.deep_dup
         super
