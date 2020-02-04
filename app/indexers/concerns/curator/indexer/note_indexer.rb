@@ -9,8 +9,8 @@ module Curator
           each_record do |record, context|
             next unless record.descriptive&.note
 
-            note_fields = %w(arrangement resp performers acquisition ownership citation reference venue
-                             physical date language funding biographical publications credits exhibitions)
+            note_fields = %w(arrangement resp performers acquisition ownership citation reference bibliography
+                             venue physical date language funding biographical publications credits exhibitions)
             note_fields.each { |field| context.output_hash["note_#{field}_tsim"] ||= [] }
             context.output_hash['note_tsim'] ||= []
             record.descriptive.note.each do |note|
