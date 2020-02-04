@@ -13,12 +13,13 @@ RSpec.describe Curator::InstitutionSerializer, type: :serializers do
   end
 
   describe 'Serialization' do
-
     it_behaves_like 'json_serialization' do
+      let(:json_record) { record }
+      let(:json_array) { record_collection }
       let(:expected_as_json_options) do
         {
           root: true,
-          only: [:ark_id, :created_at, :updated_at, :abstract, :url],
+          only: [:ark_id, :created_at, :updated_at, :name, :abstract, :url],
           include: {
             location: {
               methods: [:area_type, :coordinates, :bounding_box, :authority_code, :label, :id_from_auth],
@@ -35,9 +36,6 @@ RSpec.describe Curator::InstitutionSerializer, type: :serializers do
           }
         }
       end
-      let(:json_record) { record }
-      let(:json_array) { record_collection }
     end
   end
-
 end

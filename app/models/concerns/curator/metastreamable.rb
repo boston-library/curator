@@ -21,7 +21,7 @@ module Curator
         include Metastreams::Administratable
         include Metastreams::Workflowable
         include Metastreamable::InstanceMethods
-        scope :with_metastreams, -> { merge(with_workflow).merge(with_administrative)}
+        scope :with_metastreams, -> { merge(with_workflow).merge(with_administrative) }
       end
     end
 

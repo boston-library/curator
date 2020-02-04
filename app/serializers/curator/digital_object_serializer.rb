@@ -3,7 +3,6 @@
 module Curator
   class DigitalObjectSerializer < CuratorSerializer
     schema_as_json root: :digital_object do
-
       node :admin_set, target: :key do
         attribute :ark_id
       end

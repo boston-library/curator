@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples 'for_serialization', type: :model do
-  #Requires query stub in block when including
+  # Requires query stub in block when including
   describe '#for_serialization scope' do
     subject { described_class }
 

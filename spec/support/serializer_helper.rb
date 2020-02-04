@@ -53,10 +53,10 @@ module SerializerHelper
       record.model_name.element
     end
 
-     #use record.metastreams for decorator object
+    # NOTE: Use record.metastreams for decorator object
     def metastreams_json(record_metastreams, meta_json_opts = {})
       metastreams = %i(administrative descriptive workflow).inject({}) do |ret, metastream|
-        next ret unless record_metastreams.respond_to?(metastream) &&   record_metastreams.public_send(metastream).present?
+        next ret unless record_metastreams.respond_to?(metastream) && record_metastreams.public_send(metastream).present?
 
         as_json_opts = meta_json_opts.fetch(metastream.to_sym, {}).slice(:root, :only, :include, :methods)
         ret.merge(record_metastreams.public_send(metastream).as_json(as_json_opts))
@@ -79,11 +79,13 @@ module SerializerHelper
                                                                 map(&:key)&.
                                                                 map(&:to_s)
     end
+
     protected
-    #Removes nils from hash
+
+    # NOTE: Helper method that recursivley removes blank, nil, and false values hash
     def crush_as_json(json_data)
       json_data.each_with_object({}) do |(k, v), new_hash|
-        unless v.blank?
+        if v.present?
           v.is_a?(Hash) ? new_hash[k] = crush_as_json(v) : new_hash[k] = v
         end
       end

@@ -12,7 +12,7 @@ module Curator
     scope :with_mappings, -> { includes(:exemplary_image_mapping, :collection_members, :file_set_member_mappings) }
     scope :for_serialization, -> { merge(with_metastreams).merge(with_mappings) }
 
-    validates :contained_by_id, exclusion: { in: ->(digital_object) { Array.wrap(digital_object.id) } }, uniqueness: { scope: :id }, unless: -> { contained_by.blank? }
+    validates :contained_by_id, exclusion: { in: -> (digital_object) { Array.wrap(digital_object.id) } }, uniqueness: { scope: :id }, unless: -> { contained_by.blank? }
 
     before_create :add_admin_set_to_members, if: -> { admin_set.present? } # Should Fail if admin set is not present
 
@@ -34,7 +34,7 @@ module Curator
 
     has_many :container_for, inverse_of: :contained_by, class_name: 'Curator::DigitalObject', foreign_key: :contained_by_id, dependent: :nullify
 
-    has_many :collection_members, ->{ includes(:collection) }, inverse_of: :digital_object, class_name: 'Curator::Mappings::CollectionMember', dependent: :destroy
+    has_many :collection_members, -> { includes(:collection) }, inverse_of: :digital_object, class_name: 'Curator::Mappings::CollectionMember', dependent: :destroy
     has_many :is_member_of_collection, through: :collection_members, source: :collection
 
     has_many :file_set_member_mappings, -> { includes(:file_set) }, inverse_of: :digital_object, class_name: 'Curator::Mappings::FileSetMember', dependent: :destroy
@@ -48,8 +48,6 @@ module Curator
       has_many :text_file_set_members, source_type: 'Curator::Filestreams::Text'
       has_many :video_file_set_members, source_type: 'Curator::Filestreams::Video'
     end
-
-
 
     private
 

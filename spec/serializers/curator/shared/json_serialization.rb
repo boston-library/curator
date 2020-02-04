@@ -1,8 +1,31 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples 'json_serialization', type: :serializers do
-  let(:adapter_key) { :json }
-  let(:json_regex) { /\{.*\:\{.*\:.*\}\}/ }
+  let!(:adapter_key) { :json }
+  let!(:json_regex) { /\{.*\:\{.*\:.*\}\}/ }
+  let!(:recurse_keys_to_json_map) do
+    proc do |val|
+      case val
+      when Hash
+        val.keys.map(&:to_json).concat(recurse_keys_to_json_map.call(val.values.select { |v| Hash === v }))
+      when Array
+        val.flat_map { |v| recurse_keys_to_json_map.call(v) }
+      end
+    end
+  end
+
+  let!(:recurse_vals_to_json_map) do
+    proc do |val|
+      case val
+      when Hash
+        val.inject([]) do |ret, (_k, v)|
+          ret << recurse_vals_to_json_map.call(v)
+        end.flatten
+      else
+        val.to_json
+      end
+    end
+  end
 
   describe 'JSON serialization behavior' do
     describe 'For single record' do
@@ -23,35 +46,29 @@ RSpec.shared_examples 'json_serialization', type: :serializers do
       describe '#render' do
         subject { serializer_for_one.render }
 
-        let(:expected_json_matchers) do
-          recurse_to_json_map = proc do |val|
-            case val
-            when Hash
-              val.keys.map(&:to_json) + recurse_to_json_map.call(val.values)
-            when Array
-              awesome_print val
-            else
-              val.to_json
-            end
-          end
-          recurse_to_json_map.call(expected_json_hash[json_root_key])
-        end
+        let(:expected_json) { Oj.dump(expected_json_hash) }
+        let(:expected_json_key_matchers) { recurse_keys_to_json_map.call(expected_json_hash[json_root_key]) }
+        let(:expected_json_val_matchers) { recurse_vals_to_json_map.call(expected_json_hash[json_root_key]) }
 
         it { is_expected.to be_a_kind_of(String).and match(json_regex).and match(json_root_key) }
 
-        it 'expects subject to match all of the expected_json_matchers' do
-          expected_json_matchers.each do |json_matcher|
-            awesome_print json_matcher
-            awesome_print subject.match(json_matcher)
-            expect(subject).to match(json_matcher)
-          end
+        it 'expects the length of the subject to match the :expected_json' do
+          expect(subject.length).to eq(expected_json.length)
+        end
+
+        it 'expects subject to include all of the :expected_json_key_matchers' do
+          expect(subject).to include(*expected_json_key_matchers)
+        end
+
+        it 'expects subject to match all of the :expected_json_val_matchers' do
+          expect(subject).to include(*expected_json_val_matchers)
         end
       end
     end
 
     describe 'For collection of records' do
       let(:serializer_for_many) { described_class.new(json_array, adapter_key) }
-      let(:expected_json_array) { json_array.map { |json_record| record_as_json(json_record, expected_as_json_options.merge(root: false)) }}
+      let(:expected_json_array) { json_array.map { |json_record| record_as_json(json_record, expected_as_json_options.merge(root: false)) } }
 
       describe '#serializable_hash' do
         subject { serializer_for_many.serializable_hash }
@@ -66,9 +83,7 @@ RSpec.shared_examples 'json_serialization', type: :serializers do
 
         it 'expects each element of the hash to match the :expected_json_array' do
           expect(subject[json_root_key].count).to eql(expected_json_array.count)
-          expected_json_array.each do |json_record|
-            expect(subject).to match(json_root_key => array_including(a_hash_including(json_record)))
-          end
+          expect(subject).to include(json_root_key => array_including(expected_json_array.map { |json_record| a_hash_including(json_record) }))
         end
       end
 
@@ -76,8 +91,42 @@ RSpec.shared_examples 'json_serialization', type: :serializers do
         subject { serializer_for_many.render }
 
         let(:json_root_key) { record_root_key(json_array) }
+        let(:expected_json) { Oj.dump(Hash[json_root_key, expected_json_array]) }
+        let(:expected_json_key_matchers) { expected_json_array.map { |json_record| recurse_keys_to_json_map.call(json_record) } }
+        let(:expected_json_val_matchers) { expected_json_array.map { |json_record| recurse_vals_to_json_map.call(json_record) } }
+        let(:json_key_tally) do
+          expected_json_key_matchers.flatten.inject(Hash.new(0)) do |ret, json_matcher|
+            ret[json_matcher] += 1
+            ret
+          end
+        end
 
-        it { is_expected.to be_a_kind_of(String).and match(json_root_key) }
+        let(:json_val_tally) do
+          expected_json_val_matchers.flatten.inject(Hash.new(0)) do |ret, json_matcher|
+            ret[json_matcher] += 1
+            ret
+          end
+        end
+
+        it { is_expected.to be_a_kind_of(String).and match(json_regex).and match(json_root_key) }
+
+        it 'expects the length of the subject to match the :expected_json' do
+          expect(subject.length).to eq(expected_json.length)
+        end
+
+        it 'expects the subject to match the key, val times in the :json_key_tally' do
+          json_key_tally.each do |key, val|
+            expect(subject).to match(key)
+            expect(subject.scan(key).count).to eq(val)
+          end
+        end
+
+        it 'expects the subject to match the key, val times in the :json_val_tally' do
+          json_val_tally.each do |key, val|
+            expect(subject).to match(key)
+            expect(subject.scan(key).count).to eq(val)
+          end
+        end
       end
     end
   end
