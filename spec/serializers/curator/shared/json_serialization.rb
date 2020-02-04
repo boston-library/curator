@@ -2,7 +2,7 @@
 
 RSpec.shared_examples 'json_serialization', type: :serializers do
   let!(:adapter_key) { :json }
-  let!(:json_regex) { /\{.*\:\{.*\:.*\}\}/ }
+  let!(:json_regex) { /[{\[]{1}([,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]|".*?")+[}\]]{1}/ }
   let!(:recurse_keys_to_json_map) do
     proc do |val|
       case val
