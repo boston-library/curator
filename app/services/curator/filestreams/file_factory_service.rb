@@ -13,7 +13,7 @@ module Curator
       file_set_ark_id = @json_attrs.dig('filestream_of', 'ark_id')
       begin
         ActiveStorage::Attachment.transaction do
-          file_set = Curator::Filestreams::FileSet.find_by_ark_id(file_set_ark_id)
+          file_set = Curator::Filestreams::FileSet.find_by(ark_id: file_set_ark_id)
           raise "FileSet #{file_set_ark_id} not found!" unless file_set
           attachment_type = attachment_for_ds(@json_attrs.fetch('file_type', ''))
           filename = @json_attrs.fetch('file_name', nil)

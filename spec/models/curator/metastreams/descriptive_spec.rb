@@ -58,11 +58,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
 
     it { is_expected.to have_db_column(:digital_origin).
                         of_type(:integer).
-                        with_options(default: 'reformatted digital', null: false) }
-
-    it { is_expected.to have_db_column(:origin_event).
-                        of_type(:integer).
-                        with_options(default: 'production', null: false) }
+                        with_options(default: 'reformatted digital') }
 
     it { is_expected.to have_db_column(:text_direction).
                         of_type(:integer) }
@@ -70,6 +66,9 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     it { is_expected.to have_db_column(:resource_type_manuscript).
                         of_type(:boolean).
                         with_options(default: false, null: false) }
+
+    it { is_expected.to have_db_column(:origin_event).
+                       of_type(:string) }
 
     it { is_expected.to have_db_column(:place_of_publication).
                        of_type(:string) }
@@ -134,10 +133,6 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     it { is_expected.to define_enum_for(:digital_origin).
                      with_values(['born digital', 'reformatted digital', 'digitized microfilm', 'digitized other analog']).
                      backed_by_column_of_type(:integer) }
-
-    it { is_expected.to define_enum_for(:origin_event).
-                        with_values(%w(production publication distribution manufacture)).
-                        backed_by_column_of_type(:integer) }
 
     it { is_expected.to define_enum_for(:text_direction).
                         with_values(%w(ltr rtl)).

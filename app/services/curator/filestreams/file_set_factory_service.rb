@@ -9,7 +9,7 @@ module Curator
       file_set_type = @json_attrs.fetch('file_set_type', {})
       begin
         Curator.filestreams.send("#{file_set_type}_class").transaction do
-          object = Curator.digital_object_class.find_by_ark_id(object_ark_id)
+          object = Curator.digital_object_class.find_by(ark_id: object_ark_id)
           raise "DigitalObject #{object_ark_id} not found!" unless object
 
           file_set = Curator.filestreams.send("#{file_set_type}_class").find_or_initialize_by(ark_id: @ark_id)
