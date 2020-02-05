@@ -9,7 +9,7 @@ module Curator
       admin_set_ark_id = @json_attrs.dig('admin_set', 'ark_id')
       begin
         Curator.digital_object_class.transaction do
-          admin_set = Curator.collection_class.find_by(ark_id: admin_set_ark_id)
+          admin_set = Curator.collection_class.find_by_ark_id(admin_set_ark_id)
           raise "AdminSet #{admin_set_ark_id} not found!" unless admin_set
 
           digital_object = Curator.digital_object_class.find_or_initialize_by(ark_id: @ark_id)

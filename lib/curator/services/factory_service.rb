@@ -21,19 +21,19 @@ module Curator
 
       # TODO: Need to refactor these methods to handle updates as well and use the objects relationship instead of initailizing a new instance
       def build_descriptive(descriptable, &_block)
-        descriptive = Curator.metastreams.descriptive_class.find_or_initialize_by(descriptable: descriptable)
+        descriptive = Curator.metastreams.descriptive_class.new(descriptable: descriptable)
         yield descriptive
         descriptive.save!
       end
 
       def build_workflow(workflowable, &_block)
-        workflow = Curator.metastreams.workflow_class.find_or_initialize_by(workflowable: workflowable)
+        workflow = Curator.metastreams.workflow_class.new(workflowable: workflowable)
         yield(workflow)
         workflow.save!
       end
 
       def build_administrative(administratable, &_block)
-        administrative = Curator.metastreams.administrative_class.find_or_initialize_by(administratable: administratable)
+        administrative = Curator.metastreams.administrative_class.new(administratable: administratable)
         yield(administrative)
         administrative.save!
       end
