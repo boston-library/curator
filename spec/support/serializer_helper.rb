@@ -1,7 +1,24 @@
 # frozen_string_literal: true
 
 module SerializerHelper
+  module SchemaHelper
+    def schema_attribute_keys(schema = nil)
+      return [] if schema.blank?
+
+      schema.facets.map { |f| f.schema_attribute.key.to_s }
+    end
+
+    def schema_attribute_group_keys(schema = nil, facet_group_key = nil)
+      return {} if schema.blank?
+
+      return [] if facet_group.blank?
+
+      schema.facet_groups.fetch(facet_group_key, []).map { |f| f.key.to_s }
+    end
+  end
+
   module FacetHelper
+    include SchemaHelper
     def build_facet_inst(klass:, **kwargs, &block)
       klass.new(**kwargs, &block)
     end
@@ -31,6 +48,7 @@ module SerializerHelper
   end
 
   module IntegrationHelper
+    include SchemaHelper
     def record_as_json(record, options = {})
       return crush_as_json(record.as_json(options.slice(:root, :include, :only, :methods))) unless record.respond_to?(:metastreams)
 
@@ -72,12 +90,9 @@ module SerializerHelper
     def serializer_adapter_schema_attributes(serializer_class, adapter_key, facet_group_key)
       return [] if adapter_key == :null
 
-      serializer_class.send(:_schema_for_adapter, adapter_key)&.
-                                                                schema&.
-                                                                facet_groups&.
-                                                                fetch(facet_group_key, [])&.
-                                                                map(&:key)&.
-                                                                map(&:to_s)
+      schema = serializer_class.send(:_schema_for_adapter, adapter_key)&.schema
+
+      schema_attribute_group_keys(schema, facet_group)
     end
 
     protected

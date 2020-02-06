@@ -5,7 +5,7 @@ require_relative './shared/shared_dsl'
 RSpec.describe Curator::Serializers::SerializationDSL, type: :lib_serializer do
   let!(:test_class) { Class.new { include Curator::Serializers::SerializationDSL } }
 
-  describe 'included' do
+  describe '.included' do
     subject { test_class }
 
     it { is_expected.to respond_to(:cache_enabled=, :schema_as_json, :schema_as_xml) }
@@ -73,9 +73,55 @@ RSpec.describe Curator::Serializers::SerializationDSL, type: :lib_serializer do
     end
   end
 
-  describe 'inherited' do
-    it 'expects to raise error if inherited from anything other than the Abstract Serializer Class' do
-      expect { Class.new(test_class) }.to raise_error(RuntimeError, /is not inherited from Curator::Serializers::AbstractSerializer/)
+  describe '.inherited' do
+    let!(:inheritable_class) do
+      Class.new(Curator::Serializers::AbstractSerializer) do
+        schema_as_json root: :parent_root do
+          attributes :id, :created_at, :updated_at
+        end
+      end
+    end
+
+    let!(:child_class) do
+      Class.new(inheritable_class) do
+        schema_as_json root: :child_root do
+          attributes :foo, :bar
+        end
+      end
+    end
+
+    let!(:inheritable_class_adapter_schemas) { inheritable_class.send(:_adapter_schemas) }
+    let!(:child_class_adapter_schemas) { child_class.send(:_adapter_schemas) }
+    let!(:schema_object_ids_proc) { ->(val) { val.schema.object_id if val.schema } }
+    let!(:schema_facets_object_ids_proc) { ->(val) { val.schema.facets.map(&:object_id) if val.schema } }
+    let!(:schema_facets_frozen_proc) { -> (val) { val.schema.facets.map(&:frozen?) if val.schema } }
+    describe 'Class initialization' do
+      describe 'failure' do
+        it 'will raise error if not inherited from the AbstractSerializer Class' do
+          expect { Class.new(test_class) }.to raise_error(RuntimeError, /is not inherited from Curator::Serializers::AbstractSerializer/)
+        end
+      end
+
+      describe 'inherited schema behavior' do
+        subject { inheritable_class_adapter_schemas }
+
+        it 'expects the parent/child class to have the same adapters mapped to @_adapter_schemas' do
+          expect(subject.keys).to match_array(child_class_adapter_schemas.keys)
+          expect(subject.values).to all(be_a_kind_of(Curator::Serializers::AdapterBase))
+          expect(child_class_adapter_schemas.values).to all(be_a_kind_of(Curator::Serializers::AdapterBase))
+        end
+
+        it 'expects duplicates of @_adapter_schemas values of parent to be mapped to the child serializer' do
+          expect(subject.values.map(&:object_id).compact).not_to match_array(child_class_adapter_schemas.values.map(&:object_id).compact) #Adapter Object ids
+          expect(subject.values.flat_map(&schema_object_ids_proc).compact).not_to match_array(child_class_adapter_schemas.values.flat_map(&schema_object_ids_proc).compact)
+          expect(subject.values.flat_map(&schema_facets_object_ids_proc).compact).not_to match_array(child_class_adapter_schemas.values.flat_map(&schema_facets_object_ids_proc).compact)
+        end
+
+        it "expects the each facet in the parent/child class @_adpater_schema to be frozen?" do
+          expect(subject.values.flat_map(&schema_facets_frozen_proc).compact).to all(be_truthy)
+          expect(child_class_adapter_schemas.values.flat_map(&schema_facets_frozen_proc).compact).to all(be_truthy)
+        end
+      end
     end
   end
 end
