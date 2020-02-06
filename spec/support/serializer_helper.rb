@@ -11,7 +11,7 @@ module SerializerHelper
     def schema_attribute_group_keys(schema = nil, facet_group_key = nil)
       return {} if schema.blank?
 
-      return [] if facet_group.blank?
+      return [] if facet_group_key.blank?
 
       schema.facet_groups.fetch(facet_group_key, []).map { |f| f.key.to_s }
     end
@@ -92,7 +92,7 @@ module SerializerHelper
 
       schema = serializer_class.send(:_schema_for_adapter, adapter_key)&.schema
 
-      schema_attribute_group_keys(schema, facet_group)
+      schema_attribute_group_keys(schema, facet_group_key)
     end
 
     protected
