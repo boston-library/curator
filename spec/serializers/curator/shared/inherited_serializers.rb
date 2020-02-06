@@ -55,3 +55,7 @@ RSpec.shared_examples_for 'nomenclature_serializer', type: :serializers do
     end
   end
 end
+
+RSpec.shared_examples_for 'file_set_serializer', type: :serializers do
+  pending "File Set serializer shared group not active yet.."
+end

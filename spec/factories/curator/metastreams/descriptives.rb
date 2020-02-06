@@ -33,6 +33,10 @@ FactoryBot.define do
     abstract { Faker::Lorem.paragraph }
     archived_at { nil }
 
+    trait :manuscript? do
+      resource_type_manuscript { true }
+    end
+
     transient do
       genre_count { nil }
       name_role_count { nil }
