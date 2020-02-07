@@ -10,7 +10,7 @@ module Curator
         attribute :ark_id
       end
 
-      node :metastreams do
+      node :metastreams, target: :key do
         has_one :administrative, serializer: 'Curator::Metastreams::AdministrativeSerializer'
         has_one :workflow, serializer: 'Curator::Metastreams::WorkflowSerializer'
       end

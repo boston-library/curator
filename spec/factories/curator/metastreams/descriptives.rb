@@ -37,6 +37,24 @@ FactoryBot.define do
       resource_type_manuscript { true }
     end
 
+    trait :with_all_desc_terms do
+      transient do
+        desc_term_count { nil }
+      end
+
+      after :create do |descriptive, options|
+        create_list(:curator_mappings_desc_term, options.desc_term_count, :specific_genre, descriptive: descriptive) if options.desc_term_count
+        create_list(:curator_mappings_desc_term, options.desc_term_count, :language, descriptive: descriptive) if options.desc_term_count
+        create_list(:curator_mappings_desc_term, options.desc_term_count, :resource_type, descriptive: descriptive) if options.desc_term_count
+        create_list(:curator_mappings_desc_term, options.desc_term_count, :license, descriptive: descriptive) if options.desc_term_count
+        create_list(:curator_mappings_desc_term, options.desc_term_count, :subject_topic, descriptive: descriptive) if options.desc_term_count
+        create_list(:curator_mappings_desc_term, options.desc_term_count, :subject_name, descriptive: descriptive) if options.desc_term_count
+        create_list(:curator_mappings_desc_term, options.desc_term_count, :subject_geo, descriptive: descriptive) if options.desc_term_count
+        create_list(:curator_mappings_desc_name_role, options.desc_term_count, descriptive: descriptive) if options.desc_term_count
+      end
+    end
+
+
     transient do
       genre_count { nil }
       name_role_count { nil }
@@ -44,6 +62,7 @@ FactoryBot.define do
       resource_type_count { nil }
       license_count { nil }
       subject_count { nil }
+      host_collection_count { 1 }
     end
 
     after :create do |descriptive, options|
@@ -55,6 +74,7 @@ FactoryBot.define do
       create_list(:curator_mappings_desc_term, options.subject_count, :subject_name, descriptive: descriptive) if options.subject_count
       create_list(:curator_mappings_desc_term, options.subject_count, :subject_geo, descriptive: descriptive) if options.subject_count
       create_list(:curator_mappings_desc_name_role, options.name_role_count, descriptive: descriptive) if options.name_role_count
+      create_list(:curator_mappings_desc_host_collection, options.host_collection_count, descriptive: descriptive) if options.host_collection_count
     end
   end
 end

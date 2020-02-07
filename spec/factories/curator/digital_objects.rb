@@ -13,12 +13,12 @@ FactoryBot.define do
 
     trait :with_metastreams do
       transient do
-        desc_term_count { nil }
+        desc_term_count { 1 }
       end
 
       after :create do |digital_object, options|
         create(:curator_metastreams_administrative, administratable: digital_object)
-        create(:curator_metastreams_descriptive, descriptable: digital_object, genre_count: options.desc_term_count, name_role_count: options.desc_term_count, resource_type_count: options.desc_term_count, language_count: options.desc_term_count, license_count: options.desc_term_count, subject_count: options.desc_term_count)
+        create(:curator_metastreams_descriptive, :with_all_desc_terms, descriptable: digital_object, desc_term_count: options.desc_term_count)
         create(:curator_metastreams_workflow, workflowable: digital_object)
       end
     end

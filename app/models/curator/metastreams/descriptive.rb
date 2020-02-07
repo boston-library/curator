@@ -51,7 +51,16 @@ module Curator
       has_many :desc_host_collections, -> { includes(:host_collection) }, class_name: 'Curator::Mappings::DescHostCollection'
     end
 
-    has_many :host_collections, through: :desc_host_collections, source: :host_collection
+    has_many :host_collections, through: :desc_host_collections, source: :host_collection do
+      def names
+        pluck(:name)
+      end
+
+      # NOTE: the as json is needed for specs
+      def as_json(*)
+        names.as_json
+      end
+    end
 
     # TERMS
     with_options through: :desc_terms, source: :mapped_term do
@@ -63,13 +72,17 @@ module Curator
       has_many :subject_names, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Name'
       has_many :subject_geos, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Geographic'
     end
-    alias :topics :subject_topics
-    alias :names :subject_names
-    alias :geos :subject_geos
 
     # VALIDATIONS
     validates :descriptable_id, uniqueness: { scope: :descriptable_type }
     validates :descriptable_type, inclusion: { in: %w(Curator::DigitalObject) }
     validates :toc_url, format: { with: URI.regexp(%w(http https)), allow_blank: true }
+
+    # DECORATOR METHODS
+    # Subject Node in Serialzer using decorator
+
+    def subject
+      Metastreams::SubjectDecorator.new(self)
+    end
   end
 end

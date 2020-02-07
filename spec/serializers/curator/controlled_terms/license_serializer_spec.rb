@@ -9,9 +9,8 @@ RSpec.describe Curator::ControlledTerms::LicenseSerializer, type: :serializers d
   let!(:record) { create(:curator_controlled_terms_license) }
   let!(:record_collection) { create_list(:curator_controlled_terms_license, license_count) }
 
-  skip 'Base Behavior' do
-    # NOTE: Since Licenses don't have an id_from_auth this will fail need to figure out a way to skip that final check in shared example
-    it_behaves_like 'nomenclature_serializer'
+  describe 'Base Behavior' do
+    it_behaves_like 'nomenclature_serializer', has_id_from_auth: false
   end
 
   describe 'Serialization' do

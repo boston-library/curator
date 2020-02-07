@@ -37,13 +37,7 @@ RSpec.describe Curator::DigitalObjectSerializer, type: :serializers do
             root: true,
             only: [:description_standard, :harvestable, :flagged, :destination_site]
           },
-          descriptive: {
-            root: true
-            # only: [:],
-            # included: {
-            #
-            # }
-          },
+          descriptive: descriptive_as_json_options,
           workflow: {
             root: true,
             only: [:publishing_state, :processing_state, :ingest_origin]

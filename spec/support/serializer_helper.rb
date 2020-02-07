@@ -1,6 +1,103 @@
 # frozen_string_literal: true
 
 module SerializerHelper
+  module AsJsonHelper
+    # NOTE: This method return the long list of options userf for when #as_json on a descriptive is called of the descriptive as json
+    # This is only required when stubbing out an expected value for as json in the descriptive class
+    def descriptive_as_json_options
+      {
+        after_as_json: -> (json_record) { json_record['host_collections'] = json_record['host_collections'].flat_map(&:values) if json_record.key?('host_collections') },
+        root: true,
+        only: [:abstract, :digital_origin, :origin_event, :text_direction, :resource_type_manuscript, :place_of_publication, :publisher, :issuance, :frequency, :extent, :physical_location_department, :physical_location_shelf_locator, :series, :subseries, :subsubseries, :rights, :access_restrictions, :toc, :toc_url],
+        include: {
+          host_collections: { only: [:name]},
+          physical_location: {
+            only: [:label, :id_from_auth, :authority_code, :affiliation, :name_type],
+            methods: [:label, :id_from_auth, :authority_code, :affiliation, :name_type]
+          },
+          identifier: {
+            only: [:label, :type, :invalid],
+            methods: [:label, :type, :invalid]
+          },
+          title: {
+            only: [:primary, :other],
+            methods: [:primary, :other]
+          },
+          note: {
+            only: [:label, :type],
+            methods: [:label, :type]
+          },
+          cartographic: {
+            only: [:scale, :projection],
+            methods: [:scale, :projection]
+          },
+          date: {
+            only: [:created, :issued, :copyright],
+            methods: [:created, :issued, :copyright]
+          },
+          related: {
+            only: [:constituent, :other_format, :referenced_by_url, :references_url, :review_url],
+            methods: [:constituent, :other_format, :referenced_by_url, :references_url, :review_url]
+          },
+          publication: {
+            only: [:edition_name, :edition_number, :volume, :issue_number],
+            methods: [:edition_name, :edition_number, :volume, :issue_number]
+          },
+          resource_types: {
+            only: [:label, :id_from_auth, :authority_code],
+            methods: [:label, :id_from_auth, :authority_code]
+          },
+          genres: {
+            only: [:label, :id_from_auth, :basic, :authority_code],
+            methods: [:label, :id_from_auth, :basic, :authority_code]
+          },
+          languages: {
+            only: [:label, :id_from_auth, :authority_code],
+            methods: [:label, :id_from_auth, :authority_code]
+          },
+          licenses: {
+            only: [:label, :uri],
+            methods: [:label, :uri]
+          },
+          subject: {
+            methods: [:dates, :temporals],
+            include: {
+              titles: {
+                only: [:label, :subtitle, :display, :display_label, :usage, :supplied, :language, :type, :authority_code, :id_from_auth, :part_name, :part_number],
+                methods: [:label, :subtitle, :display, :display_label, :usage, :supplied, :language, :type, :authority_code, :id_from_auth, :part_name, :part_number]
+              },
+              topics: {
+                only: [:label, :id_from_auth, :authority_code],
+                methods: [:label, :id_from_auth, :authority_code]
+              },
+              names: {
+                only: [:label, :id_from_auth, :authority_code, :affiliation, :name_type],
+                methods: [:label, :id_from_auth, :authority_code, :affiliation, :name_type]
+              },
+              geos: {
+                only: [:label, :id_from_auth, :authority_code, :bounding_box, :area_type, :coordinates],
+                methods: [:label, :id_from_auth, :authority_code, :bounding_box, :area_type, :coordinates]
+              }
+            }
+          },
+          name_roles: {
+            except: [:id, :descriptive_id, :name_id, :role_id],
+            include: {
+              name: {
+                only: [:label, :id_from_auth, :authority_code, :affiliation, :name_type],
+                methods: [:label, :id_from_auth, :authority_code, :affiliation, :name_type]
+              },
+              role: {
+                only: [:label, :id_from_auth, :authority_code],
+                methods: [:label, :id_from_auth, :authority_code]
+              }
+            }
+          }
+        }
+      }
+    end
+  end
+
   module SchemaHelper
     def schema_attribute_keys(schema = nil)
       return [] if schema.blank?
@@ -49,20 +146,22 @@ module SerializerHelper
 
   module IntegrationHelper
     include SchemaHelper
+    include AsJsonHelper
     def record_as_json(record, options = {})
-      return crush_as_json(record.as_json(options.slice(:root, :include, :only, :methods))) unless record.respond_to?(:metastreams)
+      record_root_key = record_root_key(record)
+      return post_process_as_json(record.as_json(options.dup.slice(:root, :include, :only, :methods)), record_root_key, options) unless record.respond_to?(:metastreams)
 
       rec_as_json = record.as_json(options.slice(:root, :include, :only, :methods))
+
       meta_as_json = metastreams_json(record.metastreams, options)
 
-      record_root_key = record_root_key(record)
       if rec_as_json.key?(record_root_key)
         rec_as_json[record_root_key] = rec_as_json[record_root_key].dup.merge(meta_as_json)
-        return crush_as_json(rec_as_json)
+        return post_process_as_json(rec_as_json, record_root_key, options)
       end
 
       rec_as_json = rec_as_json.merge(meta_as_json)
-      crush_as_json(rec_as_json)
+      post_process_as_json(rec_as_json, record_root_key, options)
     end
 
     def record_root_key(record)
@@ -76,8 +175,11 @@ module SerializerHelper
       metastreams = %i(administrative descriptive workflow).inject({}) do |ret, metastream|
         next ret unless record_metastreams.respond_to?(metastream) && record_metastreams.public_send(metastream).present?
 
-        as_json_opts = meta_json_opts.fetch(metastream.to_sym, {}).slice(:root, :only, :include, :methods)
-        ret.merge(record_metastreams.public_send(metastream).as_json(as_json_opts))
+        meta_opts = meta_json_opts.fetch(metastream.to_sym, {})
+        as_json_opts = meta_opts.dup.slice(:root, :only, :include, :methods)
+        record_as_json = record_metastreams.public_send(metastream).as_json(as_json_opts)
+        record_as_json = post_process_as_json(record_as_json, metastream.to_s, meta_opts)
+        ret.merge(record_as_json)
       end
 
       Hash['metastreams', metastreams]
@@ -96,12 +198,30 @@ module SerializerHelper
     end
 
     protected
+    def post_process_as_json(as_json_record, root_key, options = {})
+      if options.key?(:after_as_json) && options[:after_as_json].respond_to?(:call)
+        if root_key && as_json_record.key(root_key)
+          as_json_record[root_key] = options[:after_as_json].call(as_json_record[root_key].dup)
+        else
+          as_json_record = options[:after_as_json].call(as_json_record.dup)
+        end
+      end
+
+      return crush_as_json(as_json_record)
+    end
+
 
     # NOTE: Helper method that recursivley removes blank, nil, and false values hash
-    def crush_as_json(json_data)
-      json_data.each_with_object({}) do |(k, v), new_hash|
+    def crush_as_json(hash)
+      hash.each_with_object({}) do |(k, v), new_hash|
         if v.present?
-          v.is_a?(Hash) ? new_hash[k] = crush_as_json(v) : new_hash[k] = v
+          if v.is_a?(Hash)
+            new_hash[k] = crush_as_json(v)
+          elsif v.is_a?(Array)
+             new_hash[k] = v.map { |ve|  ve.is_a?(Hash) ? crush_as_json(ve) : ve }
+          else
+            new_hash[k] = v
+          end
         end
       end
     end
