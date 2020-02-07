@@ -6,7 +6,7 @@ module SerializerHelper
     # This is only required when stubbing out an expected value for as json in the descriptive class
     def descriptive_as_json_options
       {
-        after_as_json: -> (json_record) { json_record['host_collections'] = json_record['host_collections'].flat_map(&:values) if json_record.key?('host_collections') },
+        after_as_json: -> (json_record) { json_record['host_collections'] = json_record['host_collections'].flat_map(&:values) if json_record.key?('host_collections'); json_record },
         root: true,
         only: [:abstract, :digital_origin, :origin_event, :text_direction, :resource_type_manuscript, :place_of_publication, :publisher, :issuance, :frequency, :extent, :physical_location_department, :physical_location_shelf_locator, :series, :subseries, :subsubseries, :rights, :access_restrictions, :toc, :toc_url],
         include: {
@@ -198,9 +198,12 @@ module SerializerHelper
     end
 
     protected
+
+    # helper method for running after_as_json procs to clean up otherwise difficult as json
+    # See host_collection proc in descriptive_as_json_options to see what I mean
     def post_process_as_json(as_json_record, root_key, options = {})
       if options.key?(:after_as_json) && options[:after_as_json].respond_to?(:call)
-        if root_key && as_json_record.key(root_key)
+        if root_key && as_json_record.key?(root_key)
           as_json_record[root_key] = options[:after_as_json].call(as_json_record[root_key].dup)
         else
           as_json_record = options[:after_as_json].call(as_json_record.dup)

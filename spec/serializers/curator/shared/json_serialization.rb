@@ -7,9 +7,9 @@ RSpec.shared_examples 'json_serialization', type: :serializers do
     proc do |val|
       case val
       when Hash
-        val.keys.map(&:to_json).concat(recurse_keys_to_json_map.call(val.values.select { |v| Hash === v }))
+        val.keys.map(&:to_json).concat(recurse_keys_to_json_map.call(val.values.select { |v| v.is_a?(Hash) }))
       when Array
-        val.flat_map { |v| recurse_keys_to_json_map.call(v) }
+        val.flat_map { |v| recurse_keys_to_json_map.call(v) if v.is_a?(Hash) }.compact
       end
     end
   end
@@ -21,6 +21,8 @@ RSpec.shared_examples 'json_serialization', type: :serializers do
         val.inject([]) do |ret, (_k, v)|
           ret << recurse_vals_to_json_map.call(v)
         end.flatten
+      when Array
+        val.flat_map { |v| recurse_vals_to_json_map.call(v) }
       else
         val.to_json
       end
@@ -117,14 +119,14 @@ RSpec.shared_examples 'json_serialization', type: :serializers do
         it 'expects the subject to match the key, val times in the :json_key_tally' do
           json_key_tally.each do |key, val|
             expect(subject).to match(key)
-            expect(subject.scan(key).count).to eq(val)
+            expect(subject.scan(key).count).to eq(val), "failed on #{key}"
           end
         end
 
         it 'expects the subject to match the key, val times in the :json_val_tally' do
           json_val_tally.each do |key, val|
             expect(subject).to match(key)
-            expect(subject.scan(key).count).to eq(val)
+            expect(subject.scan(key).count).to eq(val), "failed on #{key}"
           end
         end
       end
