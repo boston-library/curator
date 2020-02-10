@@ -13,7 +13,7 @@ module Curator
 
           collection = Curator.collection_class.find_or_initialize_by(ark_id: @ark_id)
           collection.name = @json_attrs.fetch(:name)
-          collection.abstract = @json_attrs.fetch(:abstract)
+          collection.abstract = @json_attrs.fetch(:abstract, '')
           collection.institution = institution
           collection.created_at = @created if @created
           collection.updated_at = @updated if @updated

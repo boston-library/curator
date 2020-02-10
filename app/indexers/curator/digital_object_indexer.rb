@@ -39,9 +39,11 @@ module Curator
     #
     # NOTE: fields below are new:
     #   title_info_primary_subtitle_tsi date_edtf_ssm license_uri_ssm subject_temporal_tsim
+    #   note_exhibitions_tsim note_arrangement_tsim note_language_tsim note_funding_tsim
+    #   note_biographical_tsim note_publications_tsim note_credits_tsim
 
     # TODO: add indexing for:
-    #         is_issue_of_ssim edit_access_group_ssim
+    #         contained_by_ark_id_ssi edit_access_group_ssim
     #
     #         DESCRIPTIVE:
     #         subject_geo_country_ssim subject_geo_province_ssim subject_geo_region_ssim subject_geo_territory_ssim

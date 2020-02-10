@@ -47,6 +47,7 @@ module Curator
             simple_fields.each do |attr|
               descriptive.send("#{attr}=", @desc_json_attrs.fetch(attr, nil))
             end
+            descriptive.resource_type_manuscript ||= false # nil not allowed for this attribute
             descriptive.identifier = identifier(@desc_json_attrs)
             descriptive.physical_location = physical_location(@desc_json_attrs)
             descriptive.date = date(@desc_json_attrs)

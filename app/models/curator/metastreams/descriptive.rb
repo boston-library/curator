@@ -8,7 +8,6 @@ module Curator
     include AttrJson::NestedAttributes
 
     enum digital_origin: ['born digital', 'reformatted digital', 'digitized microfilm', 'digitized other analog'].freeze
-    enum origin_event: %w(production publication distribution manufacture).freeze
     enum text_direction: %w(ltr rtl).freeze
     # JSON ATTRS
 
