@@ -12,7 +12,12 @@ AUTHORITY_INPUTS = [
   { code: 'tgn', base_url: 'http://vocab.getty.edu/tgn', name: 'Thesaurus of Geographic Names' },
   { code: 'ulan', base_url: 'http://vocab.getty.edu/ulan', name: 'Getty Union List of Artist Names' },
   { code: 'geonames', base_url: 'http://sws.geonames.org/', name: 'GeoNames' },
-  { code: 'resourceTypes', base_url: 'http://id.loc.gov/vocabulary/resourceTypes' }
+  { code: 'resourceTypes', base_url: 'http://id.loc.gov/vocabulary/resourceTypes' },
+  { code: 'marcgt', base_url: 'http://id.loc.gov/vocabulary/genreFormSchemes/marcgt', name: 'MARC genre terms' },
+  { code: 'rbgenr', base_url: 'https://rbms.info/vocabularies/genre', name: 'RBMS Controlled Vocabularies: Genre Terms' },
+  { code: 'rbpri', base_url: 'https://rbms.info/vocabularies/printing-publishing', name: 'RBMS Controlled Vocabularies: Printing & Publishing Evidence' },
+  { code: 'rbprov', base_url: 'https://rbms.info/vocabularies/provenance', name: 'RBMS Controlled Vocabularies: Provenance Evidence' },
+  { code: 'local', name: 'local' }
 ].freeze
 
 AUTHORITY_INPUTS.each do |auth_input|

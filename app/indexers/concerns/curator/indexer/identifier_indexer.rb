@@ -22,7 +22,7 @@ module Curator
                 context.output_hash["identifier_#{id_type}_invalid_tsim"] << label
               else
                 id_field = case id_type
-                           when 'internet-archive'
+                           when 'internet_archive'
                              'identifier_ia_id_ssi'
                            when 'uri'
                              'identifier_uri_ss'

@@ -46,7 +46,7 @@ module Curator
               end
               attachments[attachment_type] = blobs_arr
             end
-            context.output_hash['attachments_ss'] = attachments.to_json
+            context.output_hash['attachments_ss'] = attachments.present? ? attachments.to_json : nil
           end
         end
       end
