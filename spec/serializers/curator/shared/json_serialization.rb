@@ -7,9 +7,9 @@ RSpec.shared_examples 'json_serialization', type: :serializers do
     proc do |val|
       case val
       when Hash
-        val.keys.map(&:to_json).concat(recurse_keys_to_json_map.call(val.values.select { |v| v.is_a?(Hash) }))
+        val.keys.map(&:to_json).concat(recurse_keys_to_json_map.call(val.values.select { |v| v.is_a?(Hash) || v.is_a?(Array) }))
       when Array
-        val.flat_map { |v| recurse_keys_to_json_map.call(v) if v.is_a?(Hash) }.compact
+        val.flat_map { |v| recurse_keys_to_json_map.call(v) if v.is_a?(Hash) || v.is_a?(Array) }.compact
       end
     end
   end
@@ -18,8 +18,13 @@ RSpec.shared_examples 'json_serialization', type: :serializers do
     proc do |val|
       case val
       when Hash
-        val.inject([]) do |ret, (_k, v)|
-          ret << recurse_vals_to_json_map.call(v)
+        val.values.inject([]) do |ret, v|
+          case v
+          when Array, Hash
+            ret << recurse_vals_to_json_map.call(v)
+          else
+            ret << v.to_json
+          end
         end.flatten
       when Array
         val.flat_map { |v| recurse_vals_to_json_map.call(v) }
@@ -100,14 +105,14 @@ RSpec.shared_examples 'json_serialization', type: :serializers do
           expected_json_key_matchers.flatten.inject(Hash.new(0)) do |ret, json_matcher|
             ret[json_matcher] += 1
             ret
-          end
+          end.reject { |key, _v| expected_json_val_matchers.flatten.uniq.include?(key) }
         end
 
         let(:json_val_tally) do
           expected_json_val_matchers.flatten.inject(Hash.new(0)) do |ret, json_matcher|
             ret[json_matcher] += 1
             ret
-          end
+          end.reject { |key, _v| expected_json_key_matchers.flatten.uniq.include?(key) || key.to_i != 0 }
         end
 
         it { is_expected.to be_a_kind_of(String).and match(json_regex).and match(json_root_key) }
@@ -118,15 +123,15 @@ RSpec.shared_examples 'json_serialization', type: :serializers do
 
         it 'expects the subject to match the key, val times in the :json_key_tally' do
           json_key_tally.each do |key, val|
-            expect(subject).to match(key)
-            expect(subject.scan(key).count).to eq(val), "failed on #{key}"
+            expect(subject).to match(key), "Failed on #{key}"
+            expect(subject.scan(/(?=#{key})/).count).to eq(val), "failed on #{key}\nexpected: #{val}\nactual: #{subject.scan(key).count}"
           end
         end
 
         it 'expects the subject to match the key, val times in the :json_val_tally' do
           json_val_tally.each do |key, val|
-            expect(subject).to match(key)
-            expect(subject.scan(key).count).to eq(val), "failed on #{key}"
+            expect(subject).to include(key), "Failed on #{key}"
+            expect(subject.scan(key).count).to eq(val), "failed on #{key}\nexpected: #{val}\nactual: #{subject.scan(key).count}"
           end
         end
       end

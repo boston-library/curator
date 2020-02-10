@@ -4,8 +4,6 @@ require 'rails_helper'
 require_relative '../shared/inherited_serializers'
 require_relative '../shared/json_serialization'
 
-
-
 RSpec.describe Curator::ControlledTerms::NameSerializer, type: :serializers do
   let!(:name_count) { 3 }
   let!(:record) { create(:curator_controlled_terms_name) }

@@ -10,7 +10,7 @@ module SerializerHelper
         root: true,
         only: [:abstract, :digital_origin, :origin_event, :text_direction, :resource_type_manuscript, :place_of_publication, :publisher, :issuance, :frequency, :extent, :physical_location_department, :physical_location_shelf_locator, :series, :subseries, :subsubseries, :rights, :access_restrictions, :toc, :toc_url],
         include: {
-          host_collections: { only: [:name]},
+          host_collections: { only: [:name] },
           physical_location: {
             only: [:label, :id_from_auth, :authority_code, :affiliation, :name_type],
             methods: [:label, :id_from_auth, :authority_code, :affiliation, :name_type]
@@ -213,7 +213,6 @@ module SerializerHelper
       return crush_as_json(as_json_record)
     end
 
-
     # NOTE: Helper method that recursivley removes blank, nil, and false values hash
     def crush_as_json(hash)
       hash.each_with_object({}) do |(k, v), new_hash|
@@ -221,7 +220,7 @@ module SerializerHelper
           if v.is_a?(Hash)
             new_hash[k] = crush_as_json(v)
           elsif v.is_a?(Array)
-             new_hash[k] = v.map { |ve|  ve.is_a?(Hash) ? crush_as_json(ve) : ve }
+            new_hash[k] = v.map { |ve| ve.is_a?(Hash) ? crush_as_json(ve) : ve }
           else
             new_hash[k] = v
           end

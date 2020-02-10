@@ -14,7 +14,7 @@ RSpec.describe Curator::DigitalObjectSerializer, type: :serializers do
     it_behaves_like 'curator_serializer'
   end
 
-  skip 'Serialization(Pending)' do
+  describe 'Serialization' do
     it_behaves_like 'json_serialization' do
       let(:json_record) { record }
       let(:json_array) { record_collection }

@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :curator_digital_object, class: 'Curator::DigitalObject' do
-    sequence(:ark_id) { |n| "commonwealth:#{SecureRandom.hex(rand([n, 8].max..[n, 32].max))}" }
+    ark_id
     association :admin_set, factory: :curator_collection
     contained_by_id { nil }
     archived_at { nil }

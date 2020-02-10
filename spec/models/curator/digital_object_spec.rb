@@ -142,4 +142,22 @@ RSpec.describe Curator::DigitalObject, type: :model do
       end
     end
   end
+
+  describe 'Scopes' do
+    describe '.with_mappings' do
+      subject { described_class }
+
+      let(:expected_scope_sql) { described_class.includes(:exemplary_image_mapping, :collection_members, :file_set_member_mappings).to_sql }
+
+      it { is_expected.to respond_to(:with_mappings) }
+
+      it 'expects the scope sql to match the expected_scope_sql' do
+        expect(subject.with_mappings.to_sql).to eq(expected_scope_sql)
+      end
+    end
+
+    it_behaves_like 'for_serialization' do
+      let(:expected_scope_sql) { described_class.merge(described_class.with_metastreams).merge(described_class.with_mappings).to_sql }
+    end
+  end
 end

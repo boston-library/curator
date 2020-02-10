@@ -54,7 +54,6 @@ FactoryBot.define do
       end
     end
 
-
     transient do
       genre_count { nil }
       name_role_count { nil }

@@ -6,6 +6,7 @@ require_relative './shared/metastreamable'
 require_relative './shared/optimistic_lockable'
 require_relative './shared/timestampable'
 require_relative './shared/archivable'
+require_relative './shared/for_serialization'
 
 RSpec.describe Curator::Institution, type: :model do
   subject { create(:curator_institution) }
@@ -42,5 +43,23 @@ RSpec.describe Curator::Institution, type: :model do
 
     it { is_expected.to have_many(:collection_admin_set_objects).
       through(:collections).source(:admin_set_objects) }
+  end
+
+  describe 'Scopes' do
+    describe '.with_location' do
+      subject { described_class }
+
+      let(:expected_scope_sql) { described_class.includes(:location).to_sql }
+
+      it { is_expected.to respond_to(:with_location) }
+
+      it 'expects the scope sql to match the :expected_scope_sql' do
+        expect(subject.with_location.to_sql).to eq(expected_scope_sql)
+      end
+    end
+
+    it_behaves_like 'for_serialization' do
+      let(:expected_scope_sql) { described_class.merge(described_class.with_metastreams).merge(described_class.with_location).to_sql }
+    end
   end
 end

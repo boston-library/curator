@@ -112,12 +112,13 @@ RSpec.describe Curator::Serializers::SerializationDSL, type: :lib_serializer do
         end
 
         it 'expects duplicates of @_adapter_schemas values of parent to be mapped to the child serializer' do
-          expect(subject.values.map(&:object_id).compact).not_to match_array(child_class_adapter_schemas.values.map(&:object_id).compact) #Adapter Object ids
-          expect(subject.values.flat_map(&schema_object_ids_proc).compact).not_to match_array(child_class_adapter_schemas.values.flat_map(&schema_object_ids_proc).compact)
-          expect(subject.values.flat_map(&schema_facets_object_ids_proc).compact).not_to match_array(child_class_adapter_schemas.values.flat_map(&schema_facets_object_ids_proc).compact)
+          expect(subject.values.map(&:object_id).compact).not_to match_array(child_class_adapter_schemas.values.map(&:object_id).compact) # Adapter Object ids
+          expect(subject.values.flat_map(&schema_object_ids_proc).compact).not_to match_array(child_class_adapter_schemas.values.flat_map(&schema_object_ids_proc).compact) # Adapter Schema Object ids
+          expect(subject.values.flat_map(&schema_facets_object_ids_proc).compact).not_to match_array(child_class_adapter_schemas.values.flat_map(&schema_facets_object_ids_proc).compact) # Adapter Schema Facet Object Ids
         end
 
-        it "expects the each facet in the parent/child class @_adpater_schema to be frozen?" do
+        it 'expects the each facet in the parent/child class @_adpater_schema to be frozen?' do
+          # Note: Facets in Schema should ALWAYS be frozen
           expect(subject.values.flat_map(&schema_facets_frozen_proc).compact).to all(be_truthy)
           expect(child_class_adapter_schemas.values.flat_map(&schema_facets_frozen_proc).compact).to all(be_truthy)
         end

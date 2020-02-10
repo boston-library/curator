@@ -7,6 +7,7 @@ require_relative './shared/optimistic_lockable'
 require_relative './shared/timestampable'
 require_relative './shared/archivable'
 require_relative './shared/mappings/has_exemplary_file_set'
+require_relative './shared/for_serialization'
 
 RSpec.describe Curator::Collection, type: :model do
   subject { create(:curator_collection) }
@@ -40,5 +41,11 @@ RSpec.describe Curator::Collection, type: :model do
     it { is_expected.to have_many(:collection_members).
         inverse_of(:collection).
         class_name('Curator::Mappings::CollectionMember').dependent(:destroy) }
+  end
+
+  describe 'Scopes' do
+    it_behaves_like 'for_serialization' do
+      let(:expected_scope_sql) { described_class.merge(described_class.with_metastreams).to_sql }
+    end
   end
 end
