@@ -21,8 +21,8 @@ module Curator
         raise 'Not Implemented'
       end
 
-      def initialize_copy(source)
-        @schema = source.schema.clone
+      def initialize_dup(source)
+        @schema = source.schema.deep_dup
         super
       end
 

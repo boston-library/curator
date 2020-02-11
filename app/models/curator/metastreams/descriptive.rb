@@ -11,8 +11,9 @@ module Curator
     enum text_direction: %w(ltr rtl).freeze
     # JSON ATTRS
 
-    scope :with_mappings, -> { includes(:term_mappings, :name_roles, :desc_host_collections) }
-
+    scope :with_mappings, -> { includes(:desc_terms, :name_roles, :desc_host_collections) }
+    scope :with_physical_location, -> { includes(:physical_location) }
+    scope :for_serialization, -> { merge(with_mappings).merge(with_physical_location) }
     # Identifier
     attr_json :identifier, Curator::Descriptives::Identifier.to_type, container_attribute: :identifier_json, array: true, default: []
 
@@ -40,7 +41,7 @@ module Curator
     # RELS
     # PARENTS
     belongs_to :descriptable, polymorphic: true, inverse_of: :descriptive
-    belongs_to :physical_location, inverse_of: :physical_locations_of, class_name: 'Curator::ControlledTerms::Name'
+    belongs_to :physical_location, -> { merge(with_authority) }, inverse_of: :physical_locations_of, class_name: 'Curator::ControlledTerms::Name'
 
     # MAPPING OBJECTS
     with_options inverse_of: :descriptive, dependent: :destroy do
@@ -49,7 +50,16 @@ module Curator
       has_many :desc_host_collections, -> { includes(:host_collection) }, class_name: 'Curator::Mappings::DescHostCollection'
     end
 
-    has_many :host_collections, through: :desc_host_collections, source: :host_collection
+    has_many :host_collections, through: :desc_host_collections, source: :host_collection do
+      def names
+        pluck(:name)
+      end
+
+      # NOTE: the as json is needed for specs
+      def as_json(*)
+        names.as_json
+      end
+    end
 
     # TERMS
     with_options through: :desc_terms, source: :mapped_term do
@@ -68,5 +78,12 @@ module Curator
     validates :descriptable_id, uniqueness: { scope: :descriptable_type }
     validates :descriptable_type, inclusion: { in: %w(Curator::DigitalObject) }
     validates :toc_url, format: { with: URI.regexp(%w(http https)), allow_blank: true }
+
+    # DECORATOR METHODS
+    # Subject Node in Serialzer using decorator
+
+    def subject
+      Metastreams::SubjectDecorator.new(self)
+    end
   end
 end

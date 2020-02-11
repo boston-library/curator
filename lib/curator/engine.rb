@@ -3,6 +3,7 @@
 module Curator
   class Engine < ::Rails::Engine
     require 'concurrent'
+    require 'delegate'
     require 'forwardable'
     require 'faraday'
     require 'faraday_middleware'

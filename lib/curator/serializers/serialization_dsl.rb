@@ -29,10 +29,10 @@ module Curator
           raise "#{subclass} is not inherited from Curator::Serializers::AbstractSerializer" unless _is_serializer?(subclass)
 
           super(subclass)
+          subclass.cache_enabled = cache_enabled?
           subclass._reset_adapter_schemas!
           subclass._inject_schema_adapter_methods!
           subclass._inherit_schemas!(_adapter_schemas)
-          subclass.cache_enabled = cache_enabled?
         end
 
         protected
@@ -64,8 +64,8 @@ module Curator
 
           if _has_schema_adapter?(adapter_key.to_sym)
             adapter_instance = _schema_for_adapter(adapter_key)
-            adapter_instance.schema.update_root!(schema_options.dup.fetch(:root, nil))
-            adapter_instance.schema.options.reverse_merge!(schema_options.dup.except(:root))
+            adapter_instance.schema.update_root!(schema_options.dup.fetch(:root)) if schema_options.dup.fetch(:root, nil)
+            adapter_instance.schema.options.merge!(schema_options.dup.except(:root))
             adapter_instance.instance_eval(&block)
           else
             adapter_schema_klass = Curator::Serializers.lookup_adapter(adapter_key.to_sym)
@@ -93,7 +93,7 @@ module Curator
 
         def _inherit_schemas!(parent_adapter_schemas)
           # NOTE: We want to make sure that the schema registered in the class is NOT the same instance of the parent class This ensures that it is a different object in memory but preserves the states of all the instance objects on the schema for the adapter
-          parent_adapter_schemas.each_pair { |k, v| _adapter_schemas.compute_if_absent(k) { v.clone } }
+          parent_adapter_schemas.each_pair { |k, v| _adapter_schemas.compute_if_absent(k) { v.deep_dup } }
         end
 
         def _reset_adapter_schemas!

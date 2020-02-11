@@ -9,7 +9,7 @@ RSpec.describe Curator::Serializers::Node, type: :lib_serializers do
   let!(:descriptive) { create(:curator_metastreams_descriptive, genre_count: 5) }
   let!(:delegated_schema_methods) { %i(root attribute attributes node has_one has_many belongs_to) }
 
-  it { is_expected.to respond_to(:schema, :serialize, :include_value?, :read_for_serialization) }
+  it { is_expected.to respond_to(:node_schema, :serialize, :include_value?, :read_for_serialization) }
   it { is_expected.to respond_to(*delegated_schema_methods) }
 
   it 'is expected to raise error without a block' do
@@ -18,7 +18,7 @@ RSpec.describe Curator::Serializers::Node, type: :lib_serializers do
 
   it 'expects certain methods to be delegated to schema' do
     delegated_schema_methods.each do |schema_method|
-      expect(subject).to delegate_method(schema_method).to(:schema)
+      expect(subject).to delegate_method(schema_method).to(:node_schema)
     end
   end
 

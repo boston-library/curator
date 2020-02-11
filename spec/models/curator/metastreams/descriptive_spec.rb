@@ -4,6 +4,7 @@ require 'rails_helper'
 require_relative '../shared/optimistic_lockable'
 require_relative '../shared/timestampable'
 require_relative '../shared/archivable'
+require_relative '../shared/for_serialization'
 
 RSpec.describe Curator::Metastreams::Descriptive, type: :model do
   subject { create(:curator_metastreams_descriptive) }
@@ -259,6 +260,36 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
                            source(:mapped_term).
                            class_name(relation_class)
       end
+    end
+  end
+
+  describe 'Scopes' do
+    describe '.with_mappings' do
+      subject { described_class }
+
+      let(:expected_scope_sql) { described_class.includes(:desc_terms, :name_roles, :desc_host_collections).to_sql }
+
+      it { is_expected.to respond_to(:with_mappings) }
+
+      it 'expects the scope sql to match the :expected_scope_sql' do
+        expect(subject.with_mappings.to_sql).to eq(expected_scope_sql)
+      end
+    end
+
+    describe '.with_physical_location' do
+      subject { described_class }
+
+      let(:expected_scope_sql) { described_class.includes(:physical_location).to_sql }
+
+      it { is_expected.to respond_to(:with_physical_location) }
+
+      it 'expects the scope sql to match the :expected_scope_sql' do
+        expect(subject.with_physical_location.to_sql).to eq(expected_scope_sql)
+      end
+    end
+
+    it_behaves_like 'for_serialization' do
+      let(:expected_scope_sql) { described_class.merge(described_class.with_mappings).merge(described_class.with_physical_location).to_sql }
     end
   end
 end
