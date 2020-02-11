@@ -15,19 +15,26 @@ RSpec.shared_examples 'dsl', type: :lib_serializers do
   end
 
   describe 'inherited schemas' do
-    let(:inherited_class) { Class.new(described_serializer_class) }
-    let(:inherited_class_schemas) { inherited_class.send(:_adapter_schemas) }
-    let(:schema_object_ids_proc) { ->(val) { val.schema.object_id if val.schema } }
+    let(:inherited_class) do
+      Class.new(described_serializer_class) do
+        schema_as_json do
+          attributes :a_different_attribute
+        end
+      end
+    end
+
+    let(:inherited_class_adapter_schemas) { inherited_class.send(:_adapter_schemas) }
+    let(:schema_attributes_proc) { ->(val) { schema_attribute_keys(val.schema) if val.schema } }
+    let(:schema_attributes) { adapter_schemas.values.flat_map(&schema_attributes_proc).compact }
+    let(:inherited_schema_attributes) { inherited_class_adapter_schemas.values.flat_map(&schema_attributes_proc).compact }
 
     it 'expects the inherited class to have its cache enabled setting match the parent' do
       expect(subject.cache_enabled?).to eq(inherited_class.cache_enabled?)
     end
 
-    it 'expects the same schema adapters to be mapped to the serializer' do
-      expect(adapter_schemas.keys).to match_array(inherited_class_schemas.keys)
-      expect(adapter_schemas.values.map(&:object_id)).not_to match_array(inherited_class_schemas.values.map(&:object_id))
-      expect(inherited_class_schemas.values).to all(be_a_kind_of(Curator::Serializers::AdapterBase))
-      expect(adapter_schemas.values.map(&schema_object_ids_proc).compact).not_to match_array(inherited_class_schemas.values.map(&schema_object_ids_proc).compact)
+    it 'expects the inherted class to have more attributes mapped to the adapters schema' do
+      expect(schema_attributes).not_to match_array(inherited_schema_attributes)
+      expect(schema_attributes.count).to be < inherited_schema_attributes.count
     end
 
     it 'expects the inherited class to issue warnings about overidding attributes' do

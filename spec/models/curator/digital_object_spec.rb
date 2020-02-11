@@ -25,7 +25,7 @@ RSpec.describe Curator::DigitalObject, type: :model do
   end
 
   describe 'Associations' do
-    it_behaves_like 'metastreamable'
+    it_behaves_like 'metastreamable_all'
     it_behaves_like 'has_exemplary_file_set'
 
     let!(:file_sets_class_map) do
@@ -140,6 +140,24 @@ RSpec.describe Curator::DigitalObject, type: :model do
           expect(subject.container_for.count).to be >= 1
         end
       end
+    end
+  end
+
+  describe 'Scopes' do
+    describe '.with_mappings' do
+      subject { described_class }
+
+      let(:expected_scope_sql) { described_class.includes(:exemplary_image_mapping, :collection_members, :file_set_member_mappings).to_sql }
+
+      it { is_expected.to respond_to(:with_mappings) }
+
+      it 'expects the scope sql to match the expected_scope_sql' do
+        expect(subject.with_mappings.to_sql).to eq(expected_scope_sql)
+      end
+    end
+
+    it_behaves_like 'for_serialization' do
+      let(:expected_scope_sql) { described_class.merge(described_class.with_metastreams).merge(described_class.with_mappings).to_sql }
     end
   end
 end

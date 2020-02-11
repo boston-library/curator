@@ -24,6 +24,10 @@ module Curator
         def to_h
           Concurrent::Hash[type, schema_attribute]
         end
+
+        def deep_dup
+          super.freeze
+        end
       end
 
       attr_reader :root, :facets, :options
@@ -37,8 +41,13 @@ module Curator
       def update_root!(root = nil)
         @root = root
       end
-      # DSL METHODS
 
+      def initialize_dup(source)
+        @facets = source.facets.inject(Concurrent::Array.new) { |res, facet| res << facet.deep_dup }
+        super
+      end
+
+      # DSL METHODS
       def attribute(key, **opts, &block)
         add_facet(type: :attributes, schema_attribute: Attribute.new(key: key, method: block || key, options: opts))
       end

@@ -4,13 +4,23 @@ module Curator
   class Filestreams::FileSet < ApplicationRecord
     self.inheritance_column = :file_set_type
 
+    include AttrJson::Record
+    include AttrJson::Record::QueryScopes
+    include AttrJson::Record::Dirty
     include Curator::Filestreams::Characterizable
     include Curator::Filestreams::MetadataFoxable
     include Curator::Mappings::Exemplary::FileSet
     include Curator::Mintable
-    include Curator::Metastreams::Workflowable
-    include Curator::Metastreams::Administratable
+    include Curator::Metastreamable::Basic
     include Curator::Indexable
+
+    self.curator_indexable_mapper = Curator::FileSetIndexer.new
+
+    attr_json_config(default_container_attribute: :pagination)
+
+    attr_json :page_label, :string
+    attr_json :page_type, :string
+    attr_json :hand_side, :string
 
     acts_as_list scope: [:file_set_of, :file_set_type], top_of_list: 0
 
@@ -24,8 +34,6 @@ module Curator
 
     validates :file_name_base, presence: true
     validates :file_set_type, presence: true, inclusion: { in: Filestreams.file_set_types.collect { |type| "Curator::Filestreams::#{type}" } }
-
-    self.curator_indexable_mapper = Curator::FileSetIndexer.new
 
     private
 

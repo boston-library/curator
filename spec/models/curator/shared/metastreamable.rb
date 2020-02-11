@@ -42,7 +42,7 @@ RSpec.shared_examples 'workflowable', type: :model do
   end
 end
 
-RSpec.shared_examples 'metastreamable', type: :model do
+RSpec.shared_examples 'metastreamable_all', type: :model do
   it_behaves_like 'administratable'
   it_behaves_like 'descriptable'
   it_behaves_like 'workflowable'
@@ -50,8 +50,29 @@ RSpec.shared_examples 'metastreamable', type: :model do
   describe '#with_metastreams' do
     subject { described_class }
 
-    it 'is expected to respond_to #with_metastreams' do
-      expect(subject).to respond_to(:with_metastreams)
+    let(:expected_sql) { described_class.includes(:administratable, :descriptable, :workflowable).to_sql }
+
+    it { is_expected.to respond_to(:with_metastreams) }
+
+    it 'expects the sql for #with_metastreams to match the :expected_sql' do
+      expect(subject.with_metastreams.to_sql).to match(expected_sql)
+    end
+  end
+end
+
+RSpec.shared_examples 'metastreamable_basic', type: :model do
+  it_behaves_like 'administratable'
+  it_behaves_like 'workflowable'
+
+  describe '#with_metastreams' do
+    subject { described_class }
+
+    let(:expected_sql) { described_class.includes(:administratable, :workflowable).to_sql }
+
+    it { is_expected.to respond_to(:with_metastreams) }
+
+    it 'expects the sql for #with_metastreams to match the :expected_sql' do
+      expect(subject.with_metastreams.to_sql).to match(expected_sql)
     end
   end
 end

@@ -35,9 +35,11 @@ RSpec.describe Curator::Serializers::Schema, type: :lib_serializers do
 
     let!(:schema_facets) { %i(attribute attributes link meta node relation has_one has_many belongs_to) }
 
-    it { is_expected.to respond_to(:root, :facets, :options) }
+    it { is_expected.to respond_to(:root, :facets, :options, :facet_groups, :cache_enabled?, :cache_options, :key_transform_method) }
     it { is_expected.to respond_to(*schema_facets) }
-    it { is_expected.to respond_to(:is_collection?, :facet_groups, :serialize, :serialize_each) }
+    it { is_expected.to respond_to(:is_collection?).with(1).argument }
+    it { is_expected.to respond_to(:key_in_group?).with(2).arguments }
+    it { is_expected.to respond_to(:serialize, :serialize_each).with(1..2).arguments }
 
     describe 'schema configuration' do
       it 'is expected to store attribute facets' do
@@ -57,7 +59,7 @@ RSpec.describe Curator::Serializers::Schema, type: :lib_serializers do
     let!(:custom_attr) { :abstract_trunc }
     let!(:custom_link_attr) { :https_url }
     let!(:meta_attr) { :collection_count }
-    let(:node_attr) { :ark_attributes }
+    let!(:node_attr) { :ark_attributes }
     let!(:collection_serializer) do
       Class.new(Curator::Serializers::AbstractSerializer) do
         schema_as_json root: :collection do

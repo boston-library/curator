@@ -11,6 +11,7 @@ module Curator
   class CuratorError < StandardError; end
 
   eager_autoload do
+    autoload :Decorators
     autoload :Descriptives
     autoload :Services
     autoload :Parsers
@@ -20,6 +21,7 @@ module Curator
   def self.eager_load!
     super
     Curator::Descriptives.eager_load!
+    Curator::Decorators.eager_load!
     Curator::Parsers.eager_load!
     Curator::Services.eager_load!
     Curator::Serializers.eager_load!
