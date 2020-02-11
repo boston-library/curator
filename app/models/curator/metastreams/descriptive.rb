@@ -53,9 +53,11 @@ module Curator
 
     # TERMS
     with_options through: :desc_terms, source: :mapped_term do
+      has_one :license, class_name: 'Curator::ControlledTerms::License'
+      #This wont work through the ,map table. Think we should just map the license directly to the table instead
+
       has_many :genres, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Genre'
       has_many :resource_types, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::ResourceType'
-      has_many :licenses, class_name: 'Curator::ControlledTerms::License'
       has_many :languages, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Language'
       has_many :subject_topics, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Subject'
       has_many :subject_names, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Name'

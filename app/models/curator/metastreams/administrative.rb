@@ -8,10 +8,5 @@ module Curator
 
     validates :administratable_id, uniqueness: { scope: :administratable_type }
     validates :administratable_type, inclusion: { in: Metastreams.valid_base_types + Metastreams.valid_filestream_types }
-
-    def administratable=(administratable)
-      super
-      self.administratable_type = administratable.class.to_s
-    end
   end
 end

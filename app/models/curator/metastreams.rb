@@ -13,7 +13,7 @@ module Curator
     end
 
     def self.valid_filestream_types
-      Curator::Filestreams.file_set_types.collect { |fstream_type| "Curator::Filestreams::#{fstream_type}" }.freeze
+      Array.wrap('Curator::Filestreams::FileSet').freeze
     end
 
     namespace_klass_accessors :administrative, :descriptive, :workflow
