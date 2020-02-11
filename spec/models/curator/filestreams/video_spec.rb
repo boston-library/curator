@@ -3,6 +3,7 @@
 require 'rails_helper'
 require_relative '../shared/filestreams/file_set'
 require_relative '../shared/filestreams/file_attachments'
+require_relative '../shared/filestreams/thumbnailable'
 
 RSpec.describe Curator::Filestreams::Video, type: :model do
   subject { create(:curator_filestreams_video) }
@@ -15,8 +16,10 @@ RSpec.describe Curator::Filestreams::Video, type: :model do
                         class_name('Curator::DigitalObject').
                         required }
 
+    it_behaves_like 'thumbnailable'
+
     it_behaves_like 'has_file_attachments' do
-      let(:has_one_file_attachments) { %i(document_master document_access image_thumbnail_300 text_plain video_master video_access) }
+      let(:has_one_file_attachments) { %i(document_master document_access text_plain video_master video_access) }
     end
   end
 end

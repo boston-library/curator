@@ -2,9 +2,10 @@
 
 module Curator
   class Institution < ApplicationRecord
+    include Curator::Indexable
     include Curator::Mintable
     include Curator::Metastreamable::Basic
-    include Curator::Indexable
+    include Curator::Filestreams::Thumbnailable
 
     self.curator_indexable_mapper = Curator::InstitutionIndexer.new
 

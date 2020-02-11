@@ -7,6 +7,7 @@ require_relative './shared/optimistic_lockable'
 require_relative './shared/timestampable'
 require_relative './shared/archivable'
 require_relative './shared/for_serialization'
+require_relative './shared/filestreams/thumbnailable'
 
 RSpec.describe Curator::Institution, type: :model do
   subject { create(:curator_institution) }
@@ -30,6 +31,7 @@ RSpec.describe Curator::Institution, type: :model do
 
   describe 'Associations' do
     it_behaves_like 'metastreamable_basic'
+    it_behaves_like 'thumbnailable'
 
     it { is_expected.to belong_to(:location).
       inverse_of(:institution_locations).
