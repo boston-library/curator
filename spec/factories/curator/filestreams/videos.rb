@@ -8,5 +8,12 @@ FactoryBot.define do
     file_name_base { Faker::TvShows::Simpsons.character }
     position { 1 }
     archived_at { nil }
+
+    trait :with_metastreams do
+      after :create do |video_file_set|
+        create(:curator_metastreams_administrative, administratable: video_file_set)
+        create(:curator_metastreams_workflow, workflowable: video_file_set)
+      end
+    end
   end
 end

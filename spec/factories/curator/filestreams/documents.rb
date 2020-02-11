@@ -7,7 +7,13 @@ FactoryBot.define do
     file_set_type { 'Curator::Filestreams::Document' }
     file_name_base { Faker::Books::Lovecraft.tome }
     position { 1 }
-    pagination { {} }
     archived_at { nil }
+
+    trait :with_metastreams do
+      after :create do |document_file_set|
+        create(:curator_metastreams_administrative, administratable: document_file_set)
+        create(:curator_metastreams_workflow, workflowable: document_file_set)
+      end
+    end
   end
 end

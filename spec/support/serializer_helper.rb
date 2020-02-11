@@ -149,9 +149,18 @@ module SerializerHelper
     include AsJsonHelper
     def record_as_json(record, options = {})
       record_root_key = record_root_key(record)
-      return post_process_as_json(record.as_json(options.dup.slice(:root, :include, :only, :methods)), record_root_key, options) unless record.respond_to?(:metastreams)
+      as_json_opts = options.dup.slice(:root, :include, :only, :methods)
 
-      rec_as_json = record.as_json(options.slice(:root, :include, :only, :methods))
+      if as_json_opts.fetch(:root, false) && record_root_key.include?('file_set')
+        rec_as_json = record.as_json(as_json_opts)
+        key = record.model_name.element
+
+        rec_as_json[record_root_key] = rec_as_json.delete(key) if rec_as_json.key?(key)
+      else
+        rec_as_json = record.as_json(as_json_opts)
+      end
+
+      return post_process_as_json(rec_as_json, record_root_key, options) unless record.respond_to?(:metastreams)
 
       meta_as_json = metastreams_json(record.metastreams, options)
 
@@ -165,9 +174,12 @@ module SerializerHelper
     end
 
     def record_root_key(record)
-      return record.first.model_name.element.pluralize if record.is_a?(Array) && record.present?
+      for_collection = record.is_a?(Array) || record.kind_of?(ActiveRecord::Associations::CollectionProxy)
+      model_name = for_collection && record.first.present? ? record.first.model_name : record.model_name
+      element_name = model_name.singular.include?('filestreams') ? 'file_set' : model_name.element
+      return element_name.pluralize if for_collection
 
-      record.model_name.element
+      element_name
     end
 
     # NOTE: Use record.metastreams for decorator object

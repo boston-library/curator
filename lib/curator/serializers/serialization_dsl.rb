@@ -64,7 +64,7 @@ module Curator
 
           if _has_schema_adapter?(adapter_key.to_sym)
             adapter_instance = _schema_for_adapter(adapter_key)
-            adapter_instance.schema.update_root!(schema_options.dup.fetch(:root, nil))
+            adapter_instance.schema.update_root!(schema_options.dup.fetch(:root)) if schema_options.dup.fetch(:root, nil)
             adapter_instance.schema.options.merge!(schema_options.dup.except(:root))
             adapter_instance.instance_eval(&block)
           else

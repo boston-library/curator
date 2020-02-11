@@ -7,6 +7,16 @@ FactoryBot.define do
     file_set_type { 'Curator::Filestreams::Metadata' }
     file_name_base { Faker::Internet.uuid }
     position { 1 }
+    hand_side { 'left' }
+    page_type { 'TOC' }
+    page_label { 'OAI HARVEST META' }
     archived_at { nil }
+
+    trait :with_metastreams do
+      after :create do |metadata_file_set|
+        create(:curator_metastreams_administrative, administratable: metadata_file_set)
+        create(:curator_metastreams_workflow, workflowable: metadata_file_set)
+      end
+    end
   end
 end

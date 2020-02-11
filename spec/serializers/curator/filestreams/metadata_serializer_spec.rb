@@ -4,10 +4,10 @@ require 'rails_helper'
 require_relative '../shared/inherited_serializers'
 require_relative '../shared/json_serialization'
 
-RSpec.describe Curator::Filestreams::ImageSerializer, type: :serializers do
-  let!(:image_file_set_count) { 3 }
-  let!(:record) { create(:curator_filestreams_image, :with_metastreams) }
-  let!(:record_collection) { create_list(:curator_filestreams_image, image_file_set_count, :with_metastreams) }
+RSpec.describe Curator::Filestreams::MetadataSerializer, type: :serializers do
+  let!(:metadata_file_set_count) { 3 }
+  let!(:record) { create(:curator_filestreams_metadata, :with_metastreams) }
+  let!(:record_collection) { create_list(:curator_filestreams_ereader, metadata_file_set_count, :with_metastreams) }
 
   describe 'Base Behavior' do
     it_behaves_like 'file_set_serializer'
