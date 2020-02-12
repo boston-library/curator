@@ -27,31 +27,33 @@
             "invalid": true
           }
         ],
-        "title_primary": {
-          "label": "The wintermind",
-          "subtitle": "William Bonk and American letters",
-          "display": "primary",
-          "usage": "primary",
-          "supplied": true,
-          "language": "eng",
-          "authority_code": "naf",
-          "id_from_auth": "n00020514",
-          "part_number": "Vol. 1",
-          "part_name": "Being the third book"
-        },
-        "title_other": [
-          {
-            "label": "The man who would be king",
-            "type": "alternative",
-            "display": "Below map:"
-          },
-          {
-            "label": "Bible",
-            "type": "uniform",
+        "title": {
+          "primary": {
+            "label": "The wintermind",
+            "subtitle": "William Bonk and American letters",
+            "display": "primary",
+            "usage": "primary",
+            "supplied": true,
+            "language": "eng",
             "authority_code": "naf",
-            "id_from_auth": "n00020514"
-          }
-        ],
+            "id_from_auth": "n00020514",
+            "part_number": "Vol. 1",
+            "part_name": "Being the third book"
+          },
+          "other": [
+            {
+              "label": "The man who would be king",
+              "type": "alternative",
+              "display": "Below map:"
+            },
+            {
+              "label": "Bible",
+              "type": "uniform",
+              "authority_code": "naf",
+              "id_from_auth": "n00020514"
+            }
+          ]
+        },
         "name_roles": [
           {
             "name": {
@@ -114,10 +116,12 @@
         "date": {
           "created": "1495~"
         },
-        "edition_name": "First edition",
-        "edition_number": "1",
-        "volume": "Vol. III",
-        "issue_number": "20",
+        "publication": {
+          "edition_name": "First edition",
+          "edition_number": "1",
+          "volume": "Vol. III",
+          "issue_number": "20"
+        },
         "issuance": "monographic",
         "frequency": "annual",
         "languages": [
@@ -209,11 +213,13 @@
             "1900/"
           ]
         },
-        "scale": [
-          "Scale [ca. 1:18,000]",
-          "Scale [ca. 1:1,200,000]"
-        ],
-        "projection": "azimuthal equal-area proj.",
+        "cartographic": {
+          "scale": [
+            "Scale [ca. 1:18,000]",
+            "Scale [ca. 1:1,200,000]"
+          ],
+          "projection": "azimuthal equal-area proj."
+        },
         "host_collections": [
           "Medieval and Early Renaissance Manuscripts (Collection of Distinction)",
           "Colonial and Revolutionary Boston"
@@ -229,11 +235,25 @@
         },
         "physical_location_department": "Rare Books Department",
         "physical_location_shelf_locator": "Box 27, Folder 3",
-        "related_referenced_by_url": [
-          "http://nrs.harvard.edu/urn-3:HLS.Libr:law00030",
-          "http://abcd.efg"
-        ],
-        "related_constituent": "Constituency",
+        "related": {
+          "referenced_by_url": [
+            "http://nrs.harvard.edu/urn-3:HLS.Libr:law00030",
+            "http://abcd.efg"
+          ],
+          "constituent": "Constituency",
+          "references_url": [
+            "http://references.edu/123456",
+            "http://hijk.lmn"
+          ],
+          "other_format": [
+            "http://other_format.org/foo",
+            "http://opqr.stu"
+          ],
+          "review_url": [
+            "http://review.net/bar",
+            "http://vwx.yz"
+          ]
+        },
         "rights": "Copyright (c) Leslie Jones.",
         "licenses": [
           {
