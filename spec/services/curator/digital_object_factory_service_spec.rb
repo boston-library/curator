@@ -76,6 +76,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
         end
 
         let(:primary_title) { titles.primary }
+        let(:title_json) { desc_json['title'] }
         let(:title_attributes) do
           %w(label usage display language subtitle supplied part_name part_number
              id_from_auth authority_code type)
@@ -84,7 +85,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
         it 'sets primary title values' do
           expect(primary_title).to be_an_instance_of(Curator::Descriptives::Title)
           title_attributes.each do |attr|
-            expect(primary_title.public_send(attr)).to eq desc_json['title_primary'][attr]
+            expect(primary_title.public_send(attr)).to eq title_json['primary'][attr]
           end
         end
 
@@ -93,7 +94,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
           expect(other_titles.count).to eq 2
           expect(other_titles).to all(be_an_instance_of(Curator::Descriptives::Title))
 
-          desc_json['title_other'].each do |title_other_json|
+          title_json['other'].each do |title_other_json|
             expect(collection_as_json(other_titles, { only: title_attributes })).to include(title_other_json)
           end
         end
@@ -113,25 +114,31 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
         end
 
         let(:publication) { descriptive.publication }
+        let(:pub_json) { desc_json['publication'] }
         it 'sets publication data' do
           expect(publication).to be_an_instance_of(Curator::Descriptives::Publication)
           %w(volume edition_name edition_number issue_number).each do |attr|
-            expect(publication.send(attr)).to eq desc_json[attr]
+            expect(publication.send(attr)).to eq pub_json[attr]
           end
         end
 
         let(:cartographic) { descriptive.cartographic }
+        let(:carto_json) { desc_json['cartographic'] }
         it 'sets cartographic data' do
           expect(cartographic).to be_an_instance_of(Curator::Descriptives::Cartographic)
-          expect(cartographic.scale).to eq desc_json['scale']
-          expect(cartographic.projection).to eq desc_json['projection']
+          expect(cartographic.scale).to eq carto_json['scale']
+          expect(cartographic.projection).to eq carto_json['projection']
         end
 
         let(:related) { descriptive.related }
+        let(:related_json) { desc_json['related'] }
         it 'sets related data' do
           expect(related).to be_an_instance_of(Curator::Descriptives::Related)
-          expect(related.referenced_by_url).to eq desc_json['related_referenced_by_url']
-          expect(related.constituent).to eq desc_json['related_constituent']
+          expect(related.referenced_by_url).to eq related_json['referenced_by_url']
+          expect(related.constituent).to eq related_json['constituent']
+          expect(related.references_url).to eq related_json['references_url']
+          expect(related.other_format).to eq related_json['other_format']
+          expect(related.review_url).to eq related_json['review_url']
         end
       end
 
