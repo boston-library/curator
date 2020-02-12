@@ -30,7 +30,7 @@ RSpec.shared_examples 'file_set', type: :model do
 
     it { is_expected.to have_db_column(:pagination).
                         of_type(:jsonb).
-                        with_options(default: '{}', null: false) }
+                        with_options(default: '{}') }
 
     it { is_expected.to have_db_column(:file_set_of_id).
                         of_type(:integer).

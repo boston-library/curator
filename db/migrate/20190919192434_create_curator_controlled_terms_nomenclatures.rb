@@ -4,7 +4,7 @@ class CreateCuratorControlledTermsNomenclatures < ActiveRecord::Migration[5.2]
   def change
     create_table :curator_controlled_terms_nomenclatures do |t|
       t.belongs_to :authority, index: { using: :btree }, foreign_key: { to_table: :curator_controlled_terms_authorities, on_delete: :nullify }
-      t.jsonb :term_data, default: '{}', index: { using: :gin }, null: false
+      t.jsonb :term_data, default: '{}', index: { using: :gin }
       t.string :type, index: { using: :btree }, null: false
       t.integer :lock_version
       t.timestamps null: false

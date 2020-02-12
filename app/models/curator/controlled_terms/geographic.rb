@@ -8,7 +8,7 @@ module Curator
 
     belongs_to :authority, inverse_of: :geographics, class_name: 'Curator::ControlledTerms::Authority', optional: true
 
-    has_many :institution_locations, inverse_of: :location, class_name: 'Curator::Institution', foreign_key: :location_id, dependent: :nullify
+    has_many :institution_locations, inverse_of: :location, class_name: 'Curator::Institution', foreign_key: :location_id, dependent: :destroy
 
     attr_json :area_type, :string
     attr_json :coordinates, :string

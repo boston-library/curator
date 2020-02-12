@@ -23,7 +23,7 @@ RSpec.describe Curator::Metastreams::Workflow, type: :model do
 
     it { is_expected.to have_db_column(:publishing_state).
                         of_type(:integer).
-                        with_options(default: 'draft', null: false) }
+                        with_options(default: 'draft') }
 
     it { is_expected.to have_db_column(:processing_state).
                        of_type(:integer) }

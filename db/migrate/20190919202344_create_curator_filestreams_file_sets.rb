@@ -7,7 +7,7 @@ class CreateCuratorFilestreamsFileSets < ActiveRecord::Migration[5.2]
       t.string :file_set_type, index: { using: :btree }, null: false
       t.string :file_name_base, null: false
       t.integer :position, index: { using: :btree, order: 'asc' }, null: false # Alias as Sequenece
-      t.jsonb :pagination, index: { using: :gin, opclass: :jsonb_path_ops }, default: '{}', null: false
+      t.jsonb :pagination, index: { using: :gin, opclass: :jsonb_path_ops }, default: '{}'
       t.integer :lock_version
       t.timestamps null: false
       t.datetime :archived_at, index: { using: :btree, where: 'archived_at is null' }

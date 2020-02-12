@@ -2,7 +2,6 @@
 
 require 'rails_helper'
 require_relative '../shared/controlled_terms/nomenclature'
-require_relative '../shared/mappings/mapped_terms'
 # NOTE: No authority delegations/ cannnicable shared examples in this class is by design
 
 RSpec.describe Curator::ControlledTerms::License, type: :model do
@@ -23,10 +22,18 @@ RSpec.describe Curator::ControlledTerms::License, type: :model do
   end
 
   describe 'Associations' do
-    it_behaves_like 'mapped_term'
+    describe 'Not mappable' do
+      it { is_expected.not_to respond_to(:desc_terms) }
+    end
 
     it { is_expected.to belong_to(:authority).
                         class_name('Curator::ControlledTerms::Authority').
                         optional }
+
+    it { is_expected.to have_many(:licensees).
+                        inverse_of(:license).
+                        class_name('Curator::Metastreams::Descriptive').
+                        with_foreign_key(:license_id).
+                        dependent(:destroy) }
   end
 end

@@ -6,7 +6,7 @@ class CreateCuratorCollections < ActiveRecord::Migration[5.2]
       t.string :ark_id, index: { using: :btree, unique: true }, null: false
       t.belongs_to :institution, index: { using: :btree }, foreign_key: { to_table: :curator_institutions }, null: false
       t.string :name, null: false
-      t.text :abstract, default: '', null: false
+      t.text :abstract, null: false
       t.integer :lock_version
       t.timestamps null: false
       t.datetime :archived_at, index: { using: :btree, where: 'archived_at is null' }

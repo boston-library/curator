@@ -24,24 +24,34 @@ RSpec.describe Curator::Metastreams::Administrative, type: :model do
     it { is_expected.to have_db_column(:description_standard).
                         of_type(:integer)}
 
+    it { is_expected.to have_db_column(:hosting_status).
+                        of_type(:integer).
+                        with_options(default: 'hosted') }
+
     it { is_expected.to have_db_column(:harvestable).
                         of_type(:boolean).
-                        with_options(default: true, null: false) }
+                        with_options(default: true) }
 
     it { is_expected.to have_db_column(:flagged).
                         of_type(:boolean).
-                        with_options(default: false, null: false) }
+                        with_options(default: false) }
 
     it { is_expected.to have_db_column(:destination_site).
                         of_type(:string).
-                        with_options(default: ['commonwealth'], null: false, array: true) }
+                        with_options(default: ['commonwealth'], array: true) }
 
     it { is_expected.to have_db_index([:administratable_type, :administratable_id]).unique(true) }
+    it { is_expected.to have_db_index(:description_standard) }
+    it { is_expected.to have_db_index(:hosting_status) }
     it { is_expected.to have_db_index(:destination_site) }
     it { is_expected.to have_db_index(:harvestable) }
 
     it { is_expected.to define_enum_for(:description_standard).
                         with_values(aacr: 0, cco: 1, dacs: 2, gihc: 3, local: 4, rda: 5, dcrmg: 6, amremm: 7, dcrmb: 8, dcrmc: 9, dcrmmss: 10, appm: 11).
+                        backed_by_column_of_type(:integer) }
+
+    it { is_expected.to define_enum_for(:hosting_status).
+                        with_values(hosted: 0, harvested: 1).
                         backed_by_column_of_type(:integer) }
   end
 
@@ -59,6 +69,7 @@ RSpec.describe Curator::Metastreams::Administrative, type: :model do
       expect(default_admin.harvestable).to be(true)
       expect(default_admin.flagged).to be(false)
       expect(default_admin.destination_site).to be_a_kind_of(Array).and include('commonwealth')
+      expect(default_admin.hosting_status).to eq('hosted')
     end
   end
 

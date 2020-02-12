@@ -55,7 +55,7 @@ module SerializerHelper
             only: [:label, :id_from_auth, :authority_code],
             methods: [:label, :id_from_auth, :authority_code]
           },
-          licenses: {
+          license: {
             only: [:label, :uri],
             methods: [:label, :uri]
           },

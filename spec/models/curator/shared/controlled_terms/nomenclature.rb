@@ -13,7 +13,7 @@ RSpec.shared_examples 'nomenclature', type: :model do
     it_behaves_like 'archivable'
 
     it { is_expected.to have_db_column(:type).of_type(:string).with_options(null: false) }
-    it { is_expected.to have_db_column(:term_data).of_type(:jsonb).with_options(null: false) }
+    it { is_expected.to have_db_column(:term_data).of_type(:jsonb) }
     it { is_expected.to have_db_column(:authority_id).of_type(:integer) }
 
     it { is_expected.to have_db_index(:authority_id) }
