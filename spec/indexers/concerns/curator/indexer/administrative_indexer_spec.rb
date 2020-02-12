@@ -22,6 +22,10 @@ RSpec.describe Curator::Indexer::AdministrativeIndexer do
       expect(indexed['destination_site_ssim']).to eq administrative.destination_site
     end
 
+    it 'sets the hosting_status field' do
+      expect(indexed['hosting_status_ssi']).to eq [administrative.hosting_status]
+    end
+
     it 'sets the harvesting_status field' do
       expect(indexed['harvesting_status_bsi']).to eq [administrative.harvestable]
     end
