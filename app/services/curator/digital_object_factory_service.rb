@@ -129,15 +129,17 @@ module Curator
 
     def publication(json_attrs = {})
       pub_hash = {}
+      pub_attrs = json_attrs.fetch(:publication, {})
       %i(edition_name edition_number volume issue_number).each do |k|
-        pub_hash[k] = json_attrs.fetch(k, nil)
+        pub_hash[k] = pub_attrs.fetch(k, nil)
       end
       Descriptives::Publication.new(pub_hash.compact)
     end
 
     def title(json_attrs = {})
-      primary = json_attrs.fetch(:title_primary, {})
-      other = json_attrs.fetch(:title_other, {}).map { |t_attrs| title_attr(t_attrs) }
+      titles = json_attrs.fetch(:title, {})
+      primary = titles.fetch(:primary, {})
+      other = titles.fetch(:other, {}).map { |t_attrs| title_attr(t_attrs) }
       Descriptives::TitleSet.new(primary: primary, other: other)
     end
 
@@ -150,14 +152,12 @@ module Curator
     end
 
     def related(json_attrs = {})
-      constituent = json_attrs.fetch(:related_constituent, nil)
-      referenced_by_url = json_attrs.fetch(:related_referenced_by_url, [])
-      references_url = json_attrs.fetch(:related_references_url, [])
-      other_format = json_attrs.fetch(:related_other_format, [])
-      review_url = json_attrs.fetch(:related_review_url, [])
-      Descriptives::Related.new(constituent: constituent, referenced_by_url: referenced_by_url,
-                                references_url: references_url, other_format: other_format,
-                                review_url: review_url)
+      related_hash = {}
+      related_attrs = json_attrs.fetch(:related, {})
+      %i(constituent referenced_by_url references_url other_format review_url).each do |k|
+        related_hash[k] = related_attrs.fetch(k, nil)
+      end
+      Descriptives::Related.new(related_hash)
     end
 
     def physical_location(json_attrs = {})
@@ -176,9 +176,10 @@ module Curator
     end
 
     def cartographics(json_attrs = {})
+      carto_attrs = json_attrs.fetch(:cartographic, {})
       Descriptives::Cartographic.new(
-        scale: json_attrs.fetch(:scale, []),
-        projection: json_attrs.fetch(:projection, nil)
+        scale: carto_attrs.fetch(:scale, []),
+        projection: carto_attrs.fetch(:projection, nil)
       )
     end
 
