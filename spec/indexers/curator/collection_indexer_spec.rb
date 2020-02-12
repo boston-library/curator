@@ -9,6 +9,7 @@ RSpec.describe Curator::CollectionIndexer do
     exemplary_mapping = Curator::Mappings::ExemplaryImage.new(exemplary_object: @collection,
                                                               exemplary_file_set: exemplary_file_set)
     exemplary_mapping.save!
+    @collection = @collection.reload
   end
 
   describe 'indexing' do

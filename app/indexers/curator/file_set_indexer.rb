@@ -21,10 +21,7 @@ module Curator
     configure do
       to_field 'is_file_set_of_ssim', obj_extract('file_set_of', 'ark_id')
       to_field 'is_exemplary_image_of_ssim' do |rec, acc|
-        # NOTE: Changed the bottom two lines to .pluck(:ark_id) instead of .map(&:ark_id) as its more efficient
-        # Definetly review other indexers and change to .pluck method
-        acc.concat rec.exemplary_image_objects.pluck(:ark_id) if rec.respond_to?(:exemplary_image_objects)
-        acc.concat rec.exemplary_image_collections.pluck(:ark_id) if rec.respond_to?(:exemplary_image_collections)
+        acc.concat rec.exemplary_image_of.map(&:ark_id)
       end
       to_field 'filename_base_ssi', obj_extract('file_name_base')
       to_field 'position_isi', obj_extract('position')
