@@ -26,18 +26,27 @@ module Curator
           end
 
           def exemplary_image_of
-            exemplary_sql =  <<-SQL.strip
-              WITH RECURSIVE exemplary_of(ark_id) AS (
-                SELECT exemplary.ark_id FROM (
-                  #{exemplary_image_of_collections.select(:id, :ark_id).to_sql}
-                  UNION
-                  #{exemplary_image_of_objects.select(:id, :ark_id).to_sql}
-                ) exemplary
-              ) SELECT ark_id
-                FROM exemplary_of
-            SQL
+            return self.class.none if exemplary_image_of_collections.blank? && exemplary_image_of_objects.blank?
 
-            self.class.connection.select_all(exemplary_sql, 'exemplary_image_of', preparable: true).to_a
+            collection_sql = exemplary_image_of_collections.select(:id, :ark_id).to_sql.strip
+            object_sql = exemplary_image_of_objects.select(:id, :ark_id).to_sql.strip
+            union_clause = collection_sql.present? && object_sql.present? ? 'UNION' : ''
+            exemplary_clause = <<-SQL.strip_heredoc
+                                  #{collection_sql}
+                                  #{union_clause}
+                                  #{object_sql}
+                                SQL
+
+            full_sql_clause = <<-SQL.strip_heredoc
+                                  WITH RECURSIVE exemplary_of(ark_id) AS (
+                                    SELECT exemplary.ark_id FROM (
+                                      #{exemplary_clause}
+                                    ) exemplary
+                                  ) SELECT ark_id
+                                    FROM exemplary_of
+                                SQL
+
+            self.class.connection.select_all(full_sql_clause, 'exemplary_image_of', preparable: true).to_a
           end
         end
       end
