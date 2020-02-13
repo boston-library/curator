@@ -2,6 +2,8 @@
 
 module Curator
   class Mappings::DescTerm < ApplicationRecord
+    VALID_TERM_CLASSES = Curator::ControlledTerms.nomenclature_types.collect { |klass| "Curator::ControlledTerms::#{klass}" unless klass == 'License' }.compact.freeze
+
     belongs_to :descriptive, inverse_of: :desc_terms, class_name: 'Curator::Metastreams::Descriptive'
 
     belongs_to :mapped_term, inverse_of: :desc_terms, class_name: 'Curator::ControlledTerms::Nomenclature'
@@ -13,9 +15,8 @@ module Curator
     private
 
     def mapped_term_class_name_validator
-      valid_class_names = Curator::ControlledTerms.nomenclature_types.collect { |klass| "Curator::ControlledTerms::#{klass}" }
       term_class_name = mapped_term&.class&.name
-      errors.add(:mapped_term, "#{term_class_name} is not valid!") if !valid_class_names.include?(term_class_name)
+      errors.add(:mapped_term, "#{term_class_name} is not valid!") if !VALID_TERM_CLASSES.include?(term_class_name)
     end
   end
 end

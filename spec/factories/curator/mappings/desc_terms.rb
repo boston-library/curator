@@ -21,10 +21,6 @@ FactoryBot.define do
       mapped_term { create(:curator_controlled_terms_language) }
     end
 
-    trait :license do
-      mapped_term { create(:curator_controlled_terms_license) }
-    end
-
     trait :subject_topic do
       mapped_term { create(:curator_controlled_terms_subject) }
     end

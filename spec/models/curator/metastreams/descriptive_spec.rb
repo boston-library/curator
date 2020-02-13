@@ -25,37 +25,41 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
                         of_type(:integer).
                         with_options(null: false) }
 
+    it { is_expected.to have_db_column(:license_id).
+                       of_type(:integer).
+                       with_options(null: false) }
+
     it { is_expected.to have_db_column(:identifier_json).
                         of_type(:jsonb).
-                        with_options(default: { 'identifier' => [] }, null: false) }
+                        with_options(default: { 'identifier' => [] }) }
 
     it { is_expected.to have_db_column(:title_json).
                         of_type(:jsonb).
-                        with_options(default: '{}', null: false) }
+                        with_options(default: '{}') }
 
     it { is_expected.to have_db_column(:date_json).
                         of_type(:jsonb).
-                        with_options(default: '{}', null: false) }
+                        with_options(default: '{}') }
 
     it { is_expected.to have_db_column(:note_json).
                         of_type(:jsonb).
-                        with_options(default: { 'note' => [] }, null: false) }
+                        with_options(default: { 'note' => [] }) }
 
     it { is_expected.to have_db_column(:subject_json).
                         of_type(:jsonb).
-                        with_options(default: '{}', null: false) }
+                        with_options(default: '{}') }
 
     it { is_expected.to have_db_column(:related_json).
                         of_type(:jsonb).
-                        with_options(default: '{}', null: false) }
+                        with_options(default: '{}') }
 
     it { is_expected.to have_db_column(:cartographics_json).
                         of_type(:jsonb).
-                        with_options(default: '{}', null: false) }
+                        with_options(default: '{}') }
 
     it { is_expected.to have_db_column(:publication_json).
                         of_type(:jsonb).
-                        with_options(default: '{}', null: false) }
+                        with_options(default: '{}') }
 
     it { is_expected.to have_db_column(:digital_origin).
                         of_type(:integer).
@@ -66,7 +70,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
 
     it { is_expected.to have_db_column(:resource_type_manuscript).
                         of_type(:boolean).
-                        with_options(default: false, null: false) }
+                        with_options(default: false) }
 
     it { is_expected.to have_db_column(:origin_event).
                        of_type(:string) }
@@ -120,6 +124,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
 
     it { is_expected.to have_db_index([:descriptable_type, :descriptable_id]).unique(true) }
     it { is_expected.to have_db_index(:physical_location_id) }
+    it { is_expected.to have_db_index(:license_id) }
     it { is_expected.to have_db_index(:identifier_json) }
     it { is_expected.to have_db_index(:title_json) }
     it { is_expected.to have_db_index(:date_json) }
@@ -218,7 +223,6 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
       {
         genres: 'Curator::ControlledTerms::Genre',
         resource_types: 'Curator::ControlledTerms::ResourceType',
-        licenses: 'Curator::ControlledTerms::License',
         languages: 'Curator::ControlledTerms::Language',
         subject_topics: 'Curator::ControlledTerms::Subject',
         subject_names: 'Curator::ControlledTerms::Name',
@@ -233,6 +237,11 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
                         inverse_of(:physical_locations_of).
                         class_name('Curator::ControlledTerms::Name').
                         required }
+
+    it { is_expected.to belong_to(:license).
+                       inverse_of(:licensees).
+                       class_name('Curator::ControlledTerms::License').
+                       required }
 
     it { is_expected.to have_many(:name_roles).
                         inverse_of(:descriptive).
@@ -288,8 +297,20 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
       end
     end
 
+    describe '.with_license' do
+      subject { described_class }
+
+      let(:expected_scope_sql) { described_class.includes(:license).to_sql }
+
+      it { is_expected.to respond_to(:with_license) }
+
+      it 'expects the scope sql to match the :expected_scope_sql' do
+        expect(subject.with_license.to_sql).to eq(expected_scope_sql)
+      end
+    end
+
     it_behaves_like 'for_serialization' do
-      let(:expected_scope_sql) { described_class.merge(described_class.with_mappings).merge(described_class.with_physical_location).to_sql }
+      let(:expected_scope_sql) { described_class.merge(described_class.with_mappings).merge(described_class.with_physical_location).merge(described_class.with_license).to_sql }
     end
   end
 end

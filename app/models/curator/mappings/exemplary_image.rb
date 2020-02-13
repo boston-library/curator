@@ -3,7 +3,7 @@
 module Curator
   class Mappings::ExemplaryImage < ApplicationRecord
     VALID_EXEMPLARY_OBJECT_TYPES = %w(Collection DigitalObject).freeze
-    VALID_EXEMPLARY_FILE_SET_TYPES = %w(Image Document Video).freeze
+    VALID_EXEMPLARY_FILE_SET_TYPES = %w(Image Document Video Metadata).freeze
 
     belongs_to :exemplary_object, inverse_of: :exemplary_image_mapping, polymorphic: true
 

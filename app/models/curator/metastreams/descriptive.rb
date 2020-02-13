@@ -13,7 +13,8 @@ module Curator
 
     scope :with_mappings, -> { includes(:desc_terms, :name_roles, :desc_host_collections) }
     scope :with_physical_location, -> { includes(:physical_location) }
-    scope :for_serialization, -> { merge(with_mappings).merge(with_physical_location) }
+    scope :with_license, -> { includes(:license) }
+    scope :for_serialization, -> { merge(with_mappings).merge(with_physical_location).merge(with_license) }
     # Identifier
     attr_json :identifier, Curator::Descriptives::Identifier.to_type, container_attribute: :identifier_json, array: true, default: []
 
@@ -41,8 +42,8 @@ module Curator
     # RELS
     # PARENTS
     belongs_to :descriptable, polymorphic: true, inverse_of: :descriptive
+    belongs_to :license, inverse_of: :licensees, class_name: 'Curator::ControlledTerms::License'
     belongs_to :physical_location, -> { merge(with_authority) }, inverse_of: :physical_locations_of, class_name: 'Curator::ControlledTerms::Name'
-
     # MAPPING OBJECTS
     with_options inverse_of: :descriptive, dependent: :destroy do
       has_many :desc_terms, -> { includes(:mapped_term) }, class_name: 'Curator::Mappings::DescTerm'
@@ -65,7 +66,6 @@ module Curator
     with_options through: :desc_terms, source: :mapped_term do
       has_many :genres, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Genre'
       has_many :resource_types, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::ResourceType'
-      has_many :licenses, class_name: 'Curator::ControlledTerms::License'
       has_many :languages, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Language'
       has_many :subject_topics, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Subject'
       has_many :subject_names, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Name'

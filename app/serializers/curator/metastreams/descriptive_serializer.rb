@@ -8,11 +8,11 @@ module Curator
       attribute(:host_collections) { |record| record.host_collections.names }
 
       belongs_to :physical_location, serializer: Curator::ControlledTerms::NameSerializer
+      belongs_to :license, serializer: Curator::ControlledTerms::LicenseSerializer
 
       has_many :resource_types, serializer: Curator::ControlledTerms::ResourceTypeSerializer
       has_many :genres, serializer: Curator::ControlledTerms::GenreSerializer
       has_many :languages, serializer: Curator::ControlledTerms::LanguageSerializer
-      has_many :licenses, serializer: Curator::ControlledTerms::LicenseSerializer
 
       node :identifier, target: :key do
         attributes :label, :type, :invalid

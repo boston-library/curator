@@ -8,7 +8,7 @@ RSpec.describe Curator::FileSetIndexer, type: :indexer do
     let(:exemplary_image_mapping) { create(:curator_mappings_exemplary_image) }
     let(:file_set) { exemplary_image_mapping.exemplary_file_set }
     let(:indexer) { described_class.new }
-    let(:indexed) { indexer.map_record(file_set) }
+    let(:indexed) { indexer.map_record(file_set.reload) }
 
     it 'sets the file_set_of field' do
       expect(indexed['is_file_set_of_ssim']).to eq [file_set.file_set_of.ark_id]
@@ -30,7 +30,7 @@ RSpec.describe Curator::FileSetIndexer, type: :indexer do
 
     it 'sets the exemplary image field' do
       expect(indexed['is_exemplary_image_of_ssim']).to eq(
-        file_set.exemplary_image_objects.map { |obj| obj.ark_id }
+        file_set.exemplary_image_of.pluck('ark_id')
       )
     end
 

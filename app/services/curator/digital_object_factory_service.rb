@@ -33,7 +33,7 @@ module Curator
           end
 
           build_administrative(digital_object) do |admin|
-            [:description_standard, :flagged, :destination_site, :harvestable].each do |attr|
+            [:description_standard, :flagged, :destination_site, :hosting_status, :harvestable].each do |attr|
               admin.send("#{attr}=", @admin_json_attrs.fetch(attr, nil))
             end
           end
@@ -50,6 +50,7 @@ module Curator
             descriptive.resource_type_manuscript ||= false # nil not allowed for this attribute
             descriptive.identifier = identifier(@desc_json_attrs)
             descriptive.physical_location = physical_location(@desc_json_attrs)
+            descriptive.license = license(@desc_json_attrs)
             descriptive.date = date(@desc_json_attrs)
             descriptive.publication = publication(@desc_json_attrs)
             descriptive.title = title(@desc_json_attrs)
@@ -68,15 +69,6 @@ module Curator
               host = find_or_create_host_collection(host_col,
                                                     admin_set.institution.id)
               descriptive.desc_host_collections.build(host_collection: host)
-            end
-            licenses = @desc_json_attrs.fetch(:licenses, [])
-            licenses.each do |license_attrs|
-              descriptive.desc_terms.build(
-                mapped_term: term_for_mapping(
-                  license_attrs,
-                  nomenclature_class: Curator.controlled_terms.license_class
-                )
-              )
             end
             @desc_json_attrs.fetch(:subject, {}).each do |k, v|
               map_type = case k.to_s
@@ -168,6 +160,14 @@ module Curator
         nomenclature_class: Curator.controlled_terms.name_class,
         term_data: term_data,
         authority_code: authority_code
+      )
+    end
+
+    def license(json_attrs = {})
+      license_term_data = json_attrs.fetch(:license)
+      find_or_create_nomenclature(
+        nomenclature_class: Curator.controlled_terms.license_class,
+        term_data: license_term_data
       )
     end
 

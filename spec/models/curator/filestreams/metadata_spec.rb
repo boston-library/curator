@@ -3,6 +3,7 @@
 require 'rails_helper'
 require_relative '../shared/filestreams/file_set'
 require_relative '../shared/filestreams/file_attachments'
+require_relative '../shared/filestreams/thumbnailable'
 
 RSpec.describe Curator::Filestreams::Metadata, type: :model do
   subject { create(:curator_filestreams_metadata) }
@@ -15,8 +16,10 @@ RSpec.describe Curator::Filestreams::Metadata, type: :model do
                         class_name('Curator::DigitalObject').
                         required }
 
+    it_behaves_like 'thumbnailable'
+
     it_behaves_like 'has_file_attachments' do
-      let(:has_one_file_attachments) { %i(metadata_ia metadata_ia_scan metadata_marc_xml metadata_mods metadata_oai image_thumbnail_300) }
+      let(:has_one_file_attachments) { %i(metadata_ia metadata_ia_scan metadata_marc_xml metadata_mods metadata_oai) }
     end
   end
 end

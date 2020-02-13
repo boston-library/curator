@@ -3,7 +3,12 @@
 require 'rails_helper'
 RSpec.describe Curator::DigitalObjectIndexer, type: :indexer do
   describe 'indexing' do
-    let(:digital_object) { create(:curator_digital_object, :with_contained_by) }
+    let!(:digital_object) do
+      digital_obj = create(:curator_digital_object, :with_contained_by, :with_metastreams)
+      create(:curator_mappings_exemplary_image, exemplary_object: digital_obj)
+      digital_obj
+    end
+
     let(:indexer) { described_class.new }
     let(:indexed) { indexer.map_record(digital_object) }
     let(:collections) { digital_object.is_member_of_collection }
@@ -28,14 +33,13 @@ RSpec.describe Curator::DigitalObjectIndexer, type: :indexer do
     end
 
     describe 'exemplary image indexing' do
-      # instantiate DigitalObject from :curator_mappings_exemplary_image factory
-      # otherwise exemplary_image indexing doesn't work in test env
-      let(:exemplary_image_mapping) { create(:curator_mappings_exemplary_image) }
-      let(:file_set) { exemplary_image_mapping.exemplary_file_set }
-      let(:digital_object) { exemplary_image_mapping.exemplary_object }
+      let(:file_set) { digital_object.exemplary_file_set }
+      before(:each) do
+        digital_object.reload
+      end
 
       it 'sets the exemplary image field' do
-        expect(indexed['exemplary_image_ssi']).to eq [file_set.ark_id]
+        expect(indexed['exemplary_image_ssi']).to include(file_set.ark_id)
       end
     end
 

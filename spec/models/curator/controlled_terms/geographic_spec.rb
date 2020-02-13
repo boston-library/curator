@@ -43,6 +43,6 @@ RSpec.describe Curator::ControlledTerms::Geographic, type: :model do
                         inverse_of(:location).
                         class_name('Curator::Institution').
                         with_foreign_key(:location_id).
-                        dependent(:nullify) }
+                        dependent(:destroy) }
   end
 end

@@ -207,13 +207,13 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
           end
         end
 
-        describe 'licenses' do
-          let(:licenses) { descriptive.licenses }
+        describe 'license' do
+          let(:license) { descriptive.license }
           let(:license_attrs) { %i(label uri) }
           it 'sets the licenses data' do
-            expect(licenses).to all(be_an_instance_of(Curator::ControlledTerms::License))
-            desc_json['licenses'].each do |license_json|
-              expect(collection_as_json(licenses, { methods: license_attrs, only: license_attrs })).to include(license_json.slice(*license_attrs))
+            expect(license).to be_an_instance_of(Curator::ControlledTerms::License)
+            license_attrs.each do |attr|
+              expect(license.send(attr)).to eq desc_json['license'][attr]
             end
           end
         end
@@ -300,6 +300,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
       it 'sets the correct administrative metadata' do
         expect(administrative.description_standard).to eq administrative_json['description_standard']
         expect(administrative.flagged).to eq administrative_json['flagged']
+        expect(administrative.hosting_status).to eq(administrative_json['hosting_status'])
       end
     end
   end
