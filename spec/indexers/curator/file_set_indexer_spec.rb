@@ -30,7 +30,7 @@ RSpec.describe Curator::FileSetIndexer, type: :indexer do
 
     it 'sets the exemplary image field' do
       expect(indexed['is_exemplary_image_of_ssim']).to eq(
-        file_set.exemplary_image_of.map(&:ark_id)
+        file_set.exemplary_image_of.pluck('ark_id')
       )
     end
 
