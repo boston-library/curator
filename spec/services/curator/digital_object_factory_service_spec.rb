@@ -300,6 +300,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
       it 'sets the correct administrative metadata' do
         expect(administrative.description_standard).to eq administrative_json['description_standard']
         expect(administrative.flagged).to eq administrative_json['flagged']
+        expect(administrative.hosting_status).to eq(administrative_json['hosting_status'])
       end
     end
   end

@@ -33,12 +33,6 @@ RSpec.describe Curator::DigitalObjectIndexer, type: :indexer do
     end
 
     describe 'exemplary image indexing' do
-      # UPDATE: Fixed!
-      # instantiate DigitalObject from :curator_mappings_exemplary_image factory
-      # otherwise exemplary_image indexing doesn't work in test env
-      # let(:exemplary_image_mapping) { create(:curator_mappings_exemplary_image) }
-      # let(:file_set) { exemplary_image_mapping.exemplary_file_set }
-      # let(:digital_object) { exemplary_image_mapping.exemplary_object }
       let(:file_set) { digital_object.exemplary_file_set }
       before(:each) do
         digital_object.reload

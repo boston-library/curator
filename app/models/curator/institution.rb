@@ -13,7 +13,6 @@ module Curator
     scope :for_serialization, -> { merge(with_metastreams).merge(with_location) }
 
     validates :url, format: { with: URI.regexp(%w(http https)), allow_blank: true }
-    validates :abstract, presence: { allow_blank: true }
 
     belongs_to :location, -> { merge(with_authority) }, inverse_of: :institution_locations, class_name: 'Curator::ControlledTerms::Geographic', optional: true
 
