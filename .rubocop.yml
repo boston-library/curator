@@ -470,14 +470,8 @@ Rails/ActionFilter:
 Rails/CreateTableWithTimestamps:
   Enabled: true
   Exclude:
-    - 'db/migrate/20190920170759_create_curator_mapping_desc_terms.rb'
-    - 'db/migrate/20190920170814_create_curator_mapping_desc_name_roles.rb'
-    - 'db/migrate/20190923145916_create_curator_mappings_host_collections.rb'
-    - 'db/migrate/20190923155026_create_curator_mappings_exemplary_images.rb'
-    - 'db/migrate/20190923160316_create_curator_mappings_desc_host_collections.rb'
-    - 'db/migrate/20190923164102_create_curator_mappings_collection_members.rb'
-    - 'db/migrate/20191016182158_create_curator_mappings_issues.rb'
-    - 'db/migrate/20200115181909_create_curator_mappings_file_set_members.rb'
+    - 'db/migrate/*_mapping*.rb'
+
 Rails/ActiveSupportAliases:
   Enabled: true
 
