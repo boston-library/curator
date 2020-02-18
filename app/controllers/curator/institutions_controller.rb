@@ -2,7 +2,7 @@
 
 module Curator
   class InstitutionsController < ApplicationController
-    before_action :set_institution, only: [:show, :update, :destroy]
+    before_action :set_institution, only: [:show, :update]
 
     # GET /institutions
     def index
@@ -36,21 +36,21 @@ module Curator
       end
     end
 
-    # DELETE /institutions/1
-    def destroy
-      @institution.destroy
-    end
+    # # DELETE /institutions/1
+    # def destroy
+    #   @institution.destroy
+    # end
 
     private
 
     # Use callbacks to share common setup or constraints between actions.
     def set_institution
-      @institution = Institution.find(params[:id])
+      @institution = resource_scope.find_by(ark_id: params.fetch())
     end
 
     # Only allow a trusted parameter "white list" through.
     def institution_params
-      params.fetch(:institution, {})
+      params.require(:institution).permit(:ark_id, :name, :url, )
     end
   end
 end

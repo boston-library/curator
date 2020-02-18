@@ -50,7 +50,7 @@ module Curator
 
     # Only allow a trusted parameter "white list" through.
     def collection_params
-      params.fetch(:collection, {})
+      params.require(:collection)
     end
   end
 end

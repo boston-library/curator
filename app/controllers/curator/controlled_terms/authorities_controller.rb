@@ -6,8 +6,8 @@ module Curator
 
     # GET /controlled_terms/authorities
     def index
-      @controlled_terms_authorities = ControlledTerms::Authority.all
-
+      @controlled_terms_authorities = ControlledTerms.authority_class.all
+      #Need to add limits/sorting for pagination
       render json: @controlled_terms_authorities
     end
 
@@ -40,7 +40,7 @@ module Curator
 
     # Use callbacks to share common setup or constraints between actions.
     def set_controlled_terms_authority
-      @controlled_terms_authority = ControlledTerms::Authority.find(params[:id])
+      @controlled_terms_authority = ControlledTerms.authority_class
     end
 
     # Only allow a trusted parameter "white list" through.

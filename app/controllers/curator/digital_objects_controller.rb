@@ -50,7 +50,7 @@ module Curator
 
     # Only allow a trusted parameter "white list" through.
     def digital_object_params
-      params.fetch(:digital_object, {})
+      params.require(:digital_object)
     end
   end
 end
