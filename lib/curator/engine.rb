@@ -51,6 +51,11 @@ module Curator
       Curator.setup!
     end
 
+    initializer 'mime_types' do
+      Mime::Type.register 'application/marcxml+xml', :marc, %w(application/marc)
+      Mime::Type.register 'application/mods+xml', :mods
+    end
+
     initializer 'curator.append_migrations' do |app|
       unless app.root.to_s.match root.to_s
         config.paths['db/migrate'].expanded.each do |path|

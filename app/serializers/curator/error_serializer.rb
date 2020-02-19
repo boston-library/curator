@@ -2,11 +2,11 @@
 
 module Curator
   class ErrorSerializer < Curator::Serializers::AbstractSerializer
-    schema_as_json :error do
+    schema_as_json root: :error do
       attributes :status, :title, :detail, :source
     end
 
-    schema_as_xml :error do
+    schema_as_xml root: :error do
       attributes :status, :title, :detail, :source
     end
   end

@@ -13,6 +13,7 @@ module Curator
   eager_autoload do
     autoload :Decorators
     autoload :Descriptives
+    autoload :Exceptions
     autoload :Services
     autoload :Parsers
     autoload :Serializers
@@ -22,6 +23,7 @@ module Curator
     super
     Curator::Descriptives.eager_load!
     Curator::Decorators.eager_load!
+    Curator::Exceptions.eager_load!
     Curator::Parsers.eager_load!
     Curator::Services.eager_load!
     Curator::Serializers.eager_load!

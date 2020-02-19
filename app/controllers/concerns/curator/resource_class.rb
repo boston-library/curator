@@ -9,16 +9,22 @@ module Curator
       resource_class
     end
 
-    def resource_class
-      return @resource_class if defined?(@resource_class)
-
-      @resource_class = define_resource_class
+    def serialized_resource(resource)
+      serializer_class.new(resource, @adapter_key).render
     end
+
+    protected
 
     def serializer_class
       return @serializer_class if defined?(@serializer_class)
 
       @serializer_class = define_serializer_class
+    end
+
+    def resource_class
+      return @resource_class if defined?(@resource_class)
+
+      @resource_class = define_resource_class
     end
 
 
@@ -28,27 +34,29 @@ module Curator
       @resource_type = define_resource_type
     end
 
-    protected
+    private
     def define_resource_class
-      return controller_path.dup.classify.safe_constantize if resource_type.blank?
+      return controller_path.dup.classify.constantize if resource_type.blank?
 
       sti_parent_class = controller_path.dup.split('/').last
       sti_class_path = controller_path.dup.gsub(sti_parent_class, resource_type)
-      sti_class_path.classify.safe_constantize
+      sti_class_path.classify.constantize
+    rescue
+      raise Curator::Exceptions::UnknownResourceType, "Unknown Resource Type #{controller_path.dup.classify}"
     end
 
     def define_serializer_class
-      return "#{controller_path.dup.classify}Serializer".safe_constantize if resource_class.blank?
+      return "#{controller_path.dup.classify}Serializer".constantize if resource_class.blank?
 
       sti_parent_class = controller_path.dup.split('/').last
       sti_class_path = controller_path.dup.gsub(sti_parent_class, resource_type)
-      "#{sti_class_path.classify}Serializer".safe_constantize
+      "#{sti_class_path.classify}Serializer".constantize
+    rescue
+      raise Curator::Exceptions::UnknownSerializer, "Unknown serializer for #{controller_path.dup.classify}"
     end
 
-
     def define_resource_type
-
-      return params.to_unsafe_h.fetch(:type) unless params.to_unsafe_h.fetch(:type).blank?
+      return params.fetch(:type) unless params.fetch(:type, nil).blank?
 
       type = controller_path.dup.classify.demodulize.to_sym
       params.to_unsafe_h.dig(type, :type)

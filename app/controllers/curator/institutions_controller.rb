@@ -2,18 +2,18 @@
 
 module Curator
   class InstitutionsController < ApplicationController
+    include Curator::ArkResource
     before_action :set_institution, only: [:show, :update]
 
     # GET /institutions
     def index
-      @institutions = Institution.all
-
-      render json: @institutions
+      @institutions = resource_scope.all
+      json_response(serialized_resource(@institutions))
     end
 
     # GET /institutions/1
     def show
-      render json: @institution
+      json_response(serialized_resource(@institution))
     end
 
     # POST /institutions
@@ -45,12 +45,12 @@ module Curator
 
     # Use callbacks to share common setup or constraints between actions.
     def set_institution
-      @institution = resource_scope.find_by(ark_id: params.fetch())
+      @institution = resource_scope.find_by(ark_id: @ark_id ) || resource_scope.find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.
     def institution_params
-      params.require(:institution).permit(:ark_id, :name, :url, )
+      params.require(:institution).permit(:ark_id, :name, :url, :abstract)
     end
   end
 end

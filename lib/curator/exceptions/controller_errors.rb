@@ -1,38 +1,69 @@
 # frozen_string_literal: true
 
-module Curator
-  module Exceptions
-    class RouteNotFound < SerializableError
-      def initialize
-        super(
-          title: 'URL Not Found',
-          status: :not_found,
-          detail: message || 'Unknown request URL'
-        )
-      end
-    end
+module Curator::Exceptions
+  # Raiseable Exceptions
 
-    class Unauthorized < SerializableError
-      def initialize
-        super(
-          title: 'URL Not Found',
-          status: :not_found,
-          detail: message || 'Unknown request URL'
-        )
-      end
-    end
+  class UnknownFormat < CuratorError; end
+  class UnknownSerializer < CuratorError; end
+  class UnknownResourceType < CuratorError; end
 
-    class BadRequest < SerializableError
+  # Server Response Exceptions
+  # 40x Response Codes
+  class BadRequest < SerializableError
+    def initialize(message = 'Request query or payload is invalid', pointer = 'request/params')
+      super(
+        title: 'Bad Request',
+        status: :bad_request,
+        detail: message,
+        source: { pointer: pointer }
+      )
     end
+  end
 
-    class ServerError < SerializableError
-      def initialize
-        super(
-          title: 'Internal Server Error',
-          status: :internal_server_error,
-          detail: message || 'Error'
-        )
-      end
+  class Unauthorized < SerializableError
+    def initialize(message = 'You must be logged in to do this', pointer = 'request/headers/authorization')
+      super(
+        title: 'Unauthorized',
+        status: :unauthorized,
+        detail: message,
+        source: { pointer: pointer }
+      )
+    end
+  end
+
+
+  class RouteNotFound < SerializableError
+    def initialize(message = 'Unknown request URL', pointer = '/request/url')
+      super(
+        title: 'URL Not Found',
+        status: :not_found,
+        detail: message ,
+        source: { pointer: pointer }
+      )
+    end
+  end
+
+  class RecordNotFound < SerializableError
+    def initialize(message = 'Object not found', pointer = '/request/url/:identifier')
+      super(
+        title: 'Record Not Found',
+        status: :not_found,
+        detail: message,
+        source: { pointer: pointer }
+      )
+    end
+  end
+
+
+  # 50x response codes
+  class ServerError < SerializableError
+    def initialize(message = 'Unknown internal server error', pointer = 'unknown')
+      super(
+        title: 'Internal Server Error',
+        status: :internal_server_error,
+        detail: message,
+        source: { pointer: pointer }
+      )
     end
   end
 end
