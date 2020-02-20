@@ -12,6 +12,7 @@ module Curator
     require 'acts_as_list'
     require 'attr_json'
     require 'htmlentities'
+    require 'ox'
     require 'oj'
     require 'rsolr'
     require 'singleton'
@@ -47,7 +48,7 @@ module Curator
       Oj.default_options = { mode: :rails,
                              time_format: :ruby,
                              hash_class: ActiveSupport::HashWithIndifferentAccess
-                           }
+                           }                
       Curator.setup!
     end
 

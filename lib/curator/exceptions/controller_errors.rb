@@ -54,6 +54,16 @@ module Curator::Exceptions
     end
   end
 
+  class NotAcceptable < SerializableError
+    def initialize(message = 'Method not allowed in requested format', pointer = '/headers/:content_type')
+      super(
+        title: 'Not Acceptable',
+        status: :not_acceptable,
+        detail: message,
+        source: { pointer: pointer }
+      )
+    end
+  end
 
   # 50x response codes
   class ServerError < SerializableError

@@ -15,8 +15,6 @@ module Curator
     }.freeze
 
     included do
-      include ActionController::MimeResponds
-
       prepend_before_action :set_adapter_key
 
       rescue_from StandardError, with: :handle_error
@@ -29,7 +27,7 @@ module Curator
       raise Curator::Execptions::UnknownFormat, "Unknown request mime type #{request.format}"
     end
 
-    def successful_response(response_object, status: :ok)
+    def multi_response(response_object, status: :ok)
       respond_to do |format|
         format.json { json_response(response_object, status) }
         format.xml { xml_response(response_object, status) }

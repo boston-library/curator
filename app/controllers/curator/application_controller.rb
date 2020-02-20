@@ -2,6 +2,7 @@
 
 module Curator
   class ApplicationController < ActionController::API
+    include ActionController::MimeResponds
     include ResourceClass
     include Responses
   end

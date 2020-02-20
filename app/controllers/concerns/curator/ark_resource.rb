@@ -5,18 +5,12 @@ module Curator
     extend ActiveSupport::Concern
 
     included do
-      prepend_before_action :set_ark_id, only: [:show, :update]
+      before_action :set_curator_resource, only: [:show, :update]
     end
 
     protected
-
-    def set_ark_id
-      type = controller_path.dup.split('/').last&.to_sym
-      if params.key?(:ark_id)
-        @ark_id = params[:ark_id]
-      elsif params.fetch(type, {}).key?(:ark_id)
-        @ark_id = params.dig(type, :ark_id)
-      end
+    def set_curator_resource
+      @curator_resource = resource_scope.find_by(ark_id: params[:id]) || resource_scope.find(params[:id] )
     end
   end
 end

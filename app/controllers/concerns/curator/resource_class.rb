@@ -35,6 +35,7 @@ module Curator
     end
 
     private
+    #NOTE in certain cases were going to need to get the parent class
     def define_resource_class
       return controller_path.dup.classify.constantize if resource_type.blank?
 
@@ -58,8 +59,7 @@ module Curator
     def define_resource_type
       return params.fetch(:type) unless params.fetch(:type, nil).blank?
 
-      type = controller_path.dup.classify.demodulize.to_sym
-      params.to_unsafe_h.dig(type, :type)
+      nil
     end
   end
 end
