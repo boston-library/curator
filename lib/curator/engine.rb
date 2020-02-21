@@ -45,10 +45,11 @@ module Curator
 
     config.before_initialize do
       Oj.optimize_rails
-      Oj.default_options = { mode: :rails,
+      Oj.default_options = {
+                             mode: :rails,
                              time_format: :ruby,
                              hash_class: ActiveSupport::HashWithIndifferentAccess
-                           }                
+                           }
       Curator.setup!
     end
 

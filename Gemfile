@@ -28,6 +28,7 @@ group :development, :test do
   gem 'pry', '~> 0.12.2'
   gem 'pry-byebug', '~> 3.7.0'
   gem 'pry-rails', '~> 0.3.9'
+  gem 'puma', '~> 4.3.0'
   gem 'rubocop', '~> 0.75.0', require: false
   gem 'rubocop-performance', '~> 1.5.0', require: false
   gem 'rubocop-rails', '~> 2.3.2', require: false

@@ -27,7 +27,6 @@ module Curator
       @resource_class = define_resource_class
     end
 
-
     def resource_type
       return @resource_type if defined?(@resource_type)
 
@@ -35,14 +34,15 @@ module Curator
     end
 
     private
-    #NOTE in certain cases were going to need to get the parent class
+
+    # NOTE: in certain cases were going to need to get the parent class
     def define_resource_class
       return controller_path.dup.classify.constantize if resource_type.blank?
 
       sti_parent_class = controller_path.dup.split('/').last
       sti_class_path = controller_path.dup.gsub(sti_parent_class, resource_type)
       sti_class_path.classify.constantize
-    rescue
+    rescue StandardError
       raise Curator::Exceptions::UnknownResourceType, "Unknown Resource Type #{controller_path.dup.classify}"
     end
 
@@ -52,12 +52,12 @@ module Curator
       sti_parent_class = controller_path.dup.split('/').last
       sti_class_path = controller_path.dup.gsub(sti_parent_class, resource_type)
       "#{sti_class_path.classify}Serializer".constantize
-    rescue
+    rescue StandardError
       raise Curator::Exceptions::UnknownSerializer, "Unknown serializer for #{controller_path.dup.classify}"
     end
 
     def define_resource_type
-      return params.fetch(:type) unless params.fetch(:type, nil).blank?
+      return params.fetch(:type) if params.fetch(:type, nil).present?
 
       nil
     end

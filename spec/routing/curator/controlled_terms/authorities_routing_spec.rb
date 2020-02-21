@@ -1,32 +1,30 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../shared/shared_routing'
 
-module Curator
-  RSpec.describe ControlledTerms::AuthoritiesController, type: :routing do
-    describe 'routing' do
-      it 'routes to #index' do
-        expect(:get => '/controlled_terms/authorities').to route_to('curator/controlled_terms/authorities#index')
+RSpec.describe Curator::ControlledTerms::AuthoritiesController, type: :routing do
+  routes { Curator::Engine.routes }
+
+  let!(:default_format) { :json }
+  let!(:default_id) { '1' }
+  let!(:default_controller) { 'curator/controlled_terms/authorities' }
+
+  describe 'default routing' do
+    describe 'collection routes' do
+      include_examples 'collection' do
+        subject { controlled_terms_authorities_path }
+        let(:expected_controller) { default_controller }
+        let(:expected_format) { default_format }
       end
+    end
 
-      it 'routes to #show' do
-        expect(:get => '/controlled_terms/authorities/1').to route_to('curator/controlled_terms/authorities#show', :id => '1')
-      end
-
-      it 'routes to #create' do
-        expect(:post => '/controlled_terms/authorities').to route_to('curator/controlled_terms/authorities#create')
-      end
-
-      it 'routes to #update via PUT' do
-        expect(:put => '/controlled_terms/authorities/1').to route_to('curator/controlled_terms/authorities#update', :id => '1')
-      end
-
-      it 'routes to #update via PATCH' do
-        expect(:patch => '/controlled_terms/authorities/1').to route_to('curator/controlled_terms/authorities#update', :id => '1')
-      end
-
-      it 'routes to #destroy' do
-        expect(:delete => '/controlled_terms/authorities/1').to route_to('curator/controlled_terms/authorities#destroy', :id => '1')
+    describe 'member routes' do
+      include_examples 'member' do
+        subject { controlled_terms_authority_path(default_id) }
+        let(:expected_controller) { default_controller }
+        let(:expected_id) { default_id }
+        let(:expected_format) { default_format }
       end
     end
   end

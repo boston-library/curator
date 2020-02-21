@@ -4,12 +4,14 @@ module Curator
   module Exceptions
     extend ActiveSupport::Autoload
 
-     # Base Exception for everything curataor related
+    # Base Exception for everything curataor related
     class CuratorError < StandardError; end
 
     # Base exception for any error expected to be serialized in controller
     class SerializableError < CuratorError
       attr_reader :title, :detail, :status, :source
+
+      delegate :to_s, to: :to_h
 
       def initialize(title: 'Something went wrong', detail: 'We encountered unexpected error', status: 500, source: {})
         @title, @detail = title, detail
@@ -27,10 +29,6 @@ module Curator
           source: source
         }
       end
-
-      def to_s
-        to_h.to_s
-      end
     end
 
     # Base exception wrapper for generating an array of exceptions related to a model's errors
@@ -39,10 +37,11 @@ module Curator
       def initalize(model_errors: {})
         @model_errors = format_model_errors(model_errors)
         @status = :bad_request
-        @title = "Bad Request"
+        @title = 'Bad Request'
       end
 
       protected
+
       def format_model_errors(errors = {})
         errors.reduce([]) do |r, (att, msg)|
           r << self.class.superclass.new(

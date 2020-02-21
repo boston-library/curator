@@ -9,8 +9,9 @@ module Curator
     end
 
     protected
+
     def set_curator_resource
-      @curator_resource = resource_scope.find_by(ark_id: params[:id]) || resource_scope.find(params[:id] )
+      @curator_resource = resource_scope.find_by(ark_id: params[:id]) || resource_scope.find(params[:id])
     end
   end
 end

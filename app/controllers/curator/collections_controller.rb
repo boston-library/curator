@@ -2,11 +2,12 @@
 
 module Curator
   class CollectionsController < ApplicationController
+    include Curator::ResourceClass
     include Curator::ArkResource
 
     # GET /collections
     def index
-      collections = resource_scope.all
+      collections = resource_scope.limit(50)
       multi_response(serialized_resource(collections))
     end
 
@@ -17,13 +18,8 @@ module Curator
 
     # POST /collections
     def create
-      @collection = Collection.new(collection_params)
-
-      if @collection.save
-        render json: @collection, status: :created, location: @collection
-      else
-        render json: @collection.errors, status: :unprocessable_entity
-      end
+      collection = Curator::CollectionFactoryService.call(collection_create_params)
+      json_response(serialized_resource(collection))
     end
 
     # PATCH/PUT /collections/1
@@ -45,8 +41,7 @@ module Curator
                                          :name,
                                          :abstract,
                                           administrative: [:description_standard, :flagged, :harvestable, :destination_site],
-                                          workflow: [:publishing_state, :processing_state, :ingest_origin]
-                                        )
+                                          workflow:       [:publishing_state, :processing_state, :ingest_origin])
     end
   end
 end

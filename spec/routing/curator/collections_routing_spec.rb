@@ -1,32 +1,40 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative './shared/shared_routing'
 
-module Curator
-  RSpec.describe CollectionsController, type: :routing do
-    describe 'routing' do
-      it 'routes to #index' do
-        expect(:get => '/collections').to route_to('curator/collections#index')
+RSpec.describe Curator::CollectionsController, type: :routing do
+  routes { Curator::Engine.routes }
+
+  let!(:default_format) { :json }
+  let!(:default_id) { '1' }
+  let!(:ark_id) { 'commonwealth:abcdef123' }
+  let!(:default_controller) { 'curator/collections' }
+
+  describe 'default routing' do
+    describe 'collection routes' do
+      include_examples 'collection' do
+        subject { collections_path }
+        let(:expected_controller) { default_controller }
+        let(:expected_format) { default_format }
+      end
+    end
+
+    describe 'member routes' do
+      include_examples 'member' do
+        subject { collection_path(default_id) }
+        let(:expected_controller) { default_controller }
+        let(:expected_id) { default_id }
+        let(:expected_format) { default_format }
       end
 
-      it 'routes to #show' do
-        expect(:get => '/collections/1').to route_to('curator/collections#show', :id => '1')
-      end
-
-      it 'routes to #create' do
-        expect(:post => '/collections').to route_to('curator/collections#create')
-      end
-
-      it 'routes to #update via PUT' do
-        expect(:put => '/collections/1').to route_to('curator/collections#update', :id => '1')
-      end
-
-      it 'routes to #update via PATCH' do
-        expect(:patch => '/collections/1').to route_to('curator/collections#update', :id => '1')
-      end
-
-      it 'routes to #destroy' do
-        expect(:delete => '/collections/1').to route_to('curator/collections#destroy', :id => '1')
+      context '#ark_id as :id' do
+        include_examples 'member' do
+          subject { collection_path(ark_id) }
+          let(:expected_controller) { default_controller }
+          let(:expected_id) { ark_id }
+          let(:expected_format) { default_format }
+        end
       end
     end
   end

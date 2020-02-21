@@ -21,9 +21,10 @@ module Curator
     end
 
     protected
+
     def set_adapter_key
       @adapter_key = request.format.symbol
-    rescue
+    rescue StandardError
       raise Curator::Execptions::UnknownFormat, "Unknown request mime type #{request.format}"
     end
 
@@ -41,7 +42,6 @@ module Curator
     def xml_response(response_object, status = :ok)
       render xml: response_object, status: status
     end
-
 
     def handle_error(e)
       error_klass = mapped_error_klass(e)
@@ -65,10 +65,9 @@ module Curator
       json_response(serialized_error, status)
     end
 
-
     def mapped_error_klass(e)
       error_klass = e.class.name
-      return e if ERROR_MAP.values.include?(error_klass)
+      return e if ERROR_MAP.value?(error_klass)
 
       ERROR_MAP[error_klass].safe_constantize
     end

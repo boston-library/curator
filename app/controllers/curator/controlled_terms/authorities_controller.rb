@@ -7,7 +7,7 @@ module Curator
     # GET /controlled_terms/authorities
     def index
       @controlled_terms_authorities = ControlledTerms.authority_class.all
-      #Need to add limits/sorting for pagination
+      # Need to add limits/sorting for pagination
       render json: @controlled_terms_authorities
     end
 

@@ -31,13 +31,12 @@ module Curator::Exceptions
     end
   end
 
-
   class RouteNotFound < SerializableError
     def initialize(message = 'Unknown request URL', pointer = '/request/url')
       super(
         title: 'URL Not Found',
         status: :not_found,
-        detail: message ,
+        detail: message,
         source: { pointer: pointer }
       )
     end

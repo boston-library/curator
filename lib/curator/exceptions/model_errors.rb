@@ -3,9 +3,9 @@
 module Curator::Exceptions
   class InvalidRecord < ModelError
     def initalize(model_errors: {})
-      super(model_errors: errors)
+      super(model_errors: model_errors)
       @status = :unprocessable_entity
-      @title = "Unprocessable Entity"
+      @title = 'Unprocessable Entity'
     end
   end
 end

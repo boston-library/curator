@@ -2,11 +2,12 @@
 
 module Curator
   class InstitutionsController < ApplicationController
+    include Curator::ResourceClass
     include Curator::ArkResource
 
     # GET /institutions
     def index
-      institutions = resource_scope.all
+      institutions = resource_scope.limit(50)
       multi_response(serialized_resource(institutions))
     end
 
@@ -17,8 +18,8 @@ module Curator
 
     # POST /institutions
     def create
-      @institution = Curator::InstitutionFactoryService.call(institution_create_params)
-      json_response(serialized_resource(@institution))
+      institution = Curator::InstitutionFactoryService.call(institution_create_params)
+      json_response(serialized_resource(institution))
     end
 
     # PATCH/PUT /institutions/1
@@ -40,11 +41,10 @@ module Curator
                                           :name,
                                           :url,
                                           :abstract,
-                                          :image_thumbnail_300
-                                          location: [:area_type, :coordinates, :bounding_box, :authority_code, :label, :id_from_auth],
+                                          :image_thumbnail_300,
+                                          location:       [:area_type, :coordinates, :bounding_box, :authority_code, :label, :id_from_auth],
                                           administrative: [:description_standard, :flagged, :harvestable, :destination_site],
-                                          workflow: [:publishing_state, :processing_state, :ingest_origin]
-                                        )
+                                          workflow:       [:publishing_state, :processing_state, :ingest_origin])
     end
   end
 end

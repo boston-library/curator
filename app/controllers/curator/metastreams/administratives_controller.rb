@@ -2,11 +2,15 @@
 
 module Curator
   class Metastreams::AdministrativesController < ApplicationController
+    def show
+    end
+
     def update
     end
 
-    def set_metastreamable
-      
+    private
+
+    def set_administrative
     end
   end
 end
