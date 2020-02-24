@@ -35,8 +35,8 @@ Curator::Engine.routes.draw do
                 constraints: Curator::Middleware::ArkOrIdConstraint.new do
                   member do
                     scope module: :metastreams do
-                      concerns :administratable, only: [:show, :update], as: 'institution_administrative'
-                      concerns :workflowable, only: [:show, :update], as: 'institution_workflow'
+                      concerns :administratable, only: [:show, :update], as: 'institution_administrative', metastreamable_type: 'Institution'
+                      concerns :workflowable, only: [:show, :update], as: 'institution_workflow', metastreamable_type: 'Institution'
                     end
                   end
                 end
@@ -47,8 +47,8 @@ Curator::Engine.routes.draw do
                 constraints: Curator::Middleware::ArkOrIdConstraint.new do
                   member do
                     scope module: :metastreams do
-                      concerns :administratable, only: [:show, :update], as: 'collection_administrative'
-                      concerns :workflowable, only: [:show, :update], as: 'collection_workflow'
+                      concerns :administratable, only: [:show, :update], as: 'collection_administrative', metastreamable_type: 'Collection'
+                      concerns :workflowable, only: [:show, :update], as: 'collection_workflow', metastreamable_type: 'Collection'
                     end
                   end
                 end
@@ -59,9 +59,9 @@ Curator::Engine.routes.draw do
                 constraints: Curator::Middleware::ArkOrIdConstraint.new do
                   member do
                     scope module: :metastreams do
-                      concerns :administratable, only: [:show, :update], as: 'digital_object_administrative'
-                      concerns :descriptable, only: [:show, :update], as: 'digital_object_descriptive'
-                      concerns :workflowable, only: [:show, :update], as: 'digital_object_workflow'
+                      concerns :administratable, only: [:show, :update], as: 'digital_object_administrative', metastreamable_type: 'DigitalObject'
+                      concerns :descriptable, only: [:show, :update], as: 'digital_object_descriptive', metastreamable_type: 'DigitalObject'
+                      concerns :workflowable, only: [:show, :update], as: 'digital_object_workflow', metastreamable_type: 'DigitalObject'
                     end
                   end
                 end
@@ -90,8 +90,8 @@ Curator::Engine.routes.draw do
                     path: '/:type',
                     constraints: Curator::Middleware::ArkOrIdConstraint.new do
                       member do
-                        concerns :administratable, only: [:show, :update], as: 'file_set_administrative', controller: '/curator/metastreams/administratives'
-                        concerns :workflowable, only: [:show, :update], as: 'file_set_workflow', controller: '/curator/metastreams/workflows'
+                        concerns :administratable, only: [:show, :update], as: 'file_set_administrative', metastreamable_type: 'Filestreams::FileSet', controller: '/curator/metastreams/administratives'
+                        concerns :workflowable, only: [:show, :update], as: 'file_set_workflow', metastreamable_type: 'Filestreams::FileSet', controller: '/curator/metastreams/workflows'
                       end
                     end
         end

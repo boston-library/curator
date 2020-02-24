@@ -45,7 +45,7 @@ module Curator
 
     def handle_error(e)
       error_klass = mapped_error_klass(e)
-      error_klass = Curator::Exceptions::ServerError.new if error_klass.blank?
+      error_klass = Curator::Exceptions::ServerError if error_klass.blank?
       error = set_error(error_klass, e)
 
       error_response(error)
@@ -67,9 +67,10 @@ module Curator
 
     def mapped_error_klass(e)
       error_klass = e.class.name
+
       return e if ERROR_MAP.value?(error_klass)
 
-      ERROR_MAP[error_klass].safe_constantize
+      ERROR_MAP[error_klass]&.safe_constantize
     end
 
     def set_error(error_klass, e)

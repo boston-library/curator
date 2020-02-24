@@ -42,17 +42,15 @@ module Curator
       sti_parent_class = controller_path.dup.split('/').last
       sti_class_path = controller_path.dup.gsub(sti_parent_class, resource_type)
       sti_class_path.classify.constantize
-    rescue StandardError
+    rescue StandardError => e
+      Rails.logger.error e.awesome_inspect
       raise Curator::Exceptions::UnknownResourceType, "Unknown Resource Type #{controller_path.dup.classify}"
     end
 
     def define_serializer_class
-      return "#{controller_path.dup.classify}Serializer".constantize if resource_class.blank?
-
-      sti_parent_class = controller_path.dup.split('/').last
-      sti_class_path = controller_path.dup.gsub(sti_parent_class, resource_type)
-      "#{sti_class_path.classify}Serializer".constantize
-    rescue StandardError
+      return "#{resource_class.name}Serializer".constantize
+    rescue StandardError => e
+      Rails.logger.error e.awesome_inspect
       raise Curator::Exceptions::UnknownSerializer, "Unknown serializer for #{controller_path.dup.classify}"
     end
 

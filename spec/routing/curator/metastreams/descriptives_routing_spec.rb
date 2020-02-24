@@ -14,19 +14,21 @@ RSpec.describe Curator::Metastreams::DescriptivesController, type: :routing do
     describe 'member routes' do
       context '#descriptable' do
         context 'DigitalObject' do
-          include_examples 'member' do
+          include_examples 'metastreamable_member' do
             subject { digital_object_descriptive_path(default_id) }
             let(:expected_controller) { default_controller }
             let(:expected_id) { default_id }
             let(:expected_format) { default_format }
+            let(:expected_metastreamable_type) { 'DigitalObject' }
           end
 
           context '#ark_id as :id' do
-            include_examples 'member' do
+            include_examples 'metastreamable_member' do
               subject { digital_object_descriptive_path(ark_id) }
               let(:expected_controller) { default_controller }
               let(:expected_id) { ark_id }
               let(:expected_format) { default_format }
+              let(:expected_metastreamable_type) { 'DigitalObject' }
             end
           end
         end
