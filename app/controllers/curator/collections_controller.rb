@@ -40,8 +40,8 @@ module Curator
       params.require(:collection).permit(:ark_id,
                                          :name,
                                          :abstract,
-                                          administrative: [:description_standard, :flagged, :harvestable, :destination_site],
-                                          workflow:       [:publishing_state, :processing_state, :ingest_origin])
+                                         administrative: [:description_standard, :flagged, :harvestable, :destination_site],
+                                         workflow:       [:publishing_state, :processing_state, :ingest_origin])
     end
   end
 end

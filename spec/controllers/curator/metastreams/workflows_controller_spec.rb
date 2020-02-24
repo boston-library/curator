@@ -1,14 +1,12 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-module Curator
-  RSpec.describe Metastreams::WorkflowsController, type: :controller do
-
-    describe "GET #update" do
-      it "returns http success" do
-        get :update
-        expect(response).to have_http_status(:success)
-      end
+RSpec.describe Curator::Metastreams::WorkflowsController, type: :controller do
+  skip "GET #update" do
+    it "returns http success" do
+      get :update
+      expect(response).to have_http_status(:success)
     end
-
   end
 end

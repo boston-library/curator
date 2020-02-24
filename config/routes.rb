@@ -5,40 +5,66 @@ Curator::Engine.routes.draw do
   NOMENCLATURE_TYPES = Curator.controlled_terms.nomenclature_types.map(&:downcase)
   FILE_SET_TYPES = Curator.filestreams.file_set_types.map(&:downcase)
 
-  concern :administratable do
-    resource :administrative, only: [:update, :show], module: :metatstreams
+  concern :administratable do |options|
+    resource :administrative, options
   end
 
-  concern :descriptable do
-    resource :descriptive, only: [:update, :show], module: :metastreams
+  concern :descriptable do |options|
+    resource :descriptive, options
   end
 
-  concern :workflowable do
-    resource :workflow, only: [:update, :show], module: :metatstreams
+  concern :workflowable do |options|
+    resource :workflow, options
   end
 
   scope :api, defaults: { format: :json } do
+    match '*path' => 'application#method_not_allowed', via: [:delete]
+
     constraints(JSON_CONSTRAINT) do
       root to: Curator::Middleware::RootApp.new
 
-      resources :collections, only: [:index, :create]
-      resources :digital_objects, only: [:index, :create]
-      resources :institutions, only: [:index, :create]
+      resources :institutions, :collections, :digital_objects, only: [:index, :create]
 
-      resources :digital_objects,
+      resources :institutions, :collections, :digital_objects,
                 only: [:show, :update],
-                concerns: [:administratable, :descriptable, :workflowable],
-                constraints: Curator::Middleware::ArkOrIdConstraint.new
-
-      resources :collections,
-                only: [:show, :update],
-                concerns: [:administratable, :workflowable],
                 constraints: Curator::Middleware::ArkOrIdConstraint.new
 
       resources :institutions,
-                only: [:show, :update],
-                concerns: [:administratable, :workflowable],
-                constraints: Curator::Middleware::ArkOrIdConstraint.new
+                only: [],
+                param: :id,
+                constraints: Curator::Middleware::ArkOrIdConstraint.new do
+                  member do
+                    scope module: :metastreams do
+                      concerns :administratable, only: [:show, :update], as: 'institution_administrative'
+                      concerns :workflowable, only: [:show, :update], as: 'institution_workflow'
+                    end
+                  end
+                end
+
+      resources :collections,
+                only: [],
+                param: :id,
+                constraints: Curator::Middleware::ArkOrIdConstraint.new do
+                  member do
+                    scope module: :metastreams do
+                      concerns :administratable, only: [:show, :update], as: 'collection_administrative'
+                      concerns :workflowable, only: [:show, :update], as: 'collection_workflow'
+                    end
+                  end
+                end
+
+      resources :digital_objects,
+                param: :id,
+                only: [],
+                constraints: Curator::Middleware::ArkOrIdConstraint.new do
+                  member do
+                    scope module: :metastreams do
+                      concerns :administratable, only: [:show, :update], as: 'digital_object_administrative'
+                      concerns :descriptable, only: [:show, :update], as: 'digital_object_descriptive'
+                      concerns :workflowable, only: [:show, :update], as: 'digital_object_workflow'
+                    end
+                  end
+                end
 
       namespace :controlled_terms do
         resources :authorities, only: [:index, :show, :update, :create]
@@ -55,9 +81,19 @@ Curator::Engine.routes.draw do
 
           resources :file_sets,
                     only: [:show, :update],
-                    concerns: [:administratable, :workflowable],
                     constraints: Curator::Middleware::ArkOrIdConstraint.new,
                     path: '/:type'
+
+          resources :file_sets,
+                    only: [],
+                    param: :id,
+                    path: '/:type',
+                    constraints: Curator::Middleware::ArkOrIdConstraint.new do
+                      member do
+                        concerns :administratable, only: [:show, :update], as: 'file_set_administrative', controller: '/curator/metastreams/administratives'
+                        concerns :workflowable, only: [:show, :update], as: 'file_set_workflow', controller: '/curator/metastreams/workflows'
+                      end
+                    end
         end
       end
     end

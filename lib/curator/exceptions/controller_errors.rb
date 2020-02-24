@@ -54,10 +54,21 @@ module Curator::Exceptions
   end
 
   class NotAcceptable < SerializableError
-    def initialize(message = 'Method not allowed in requested format', pointer = '/headers/:content_type')
+    def initialize(message = 'Method not allowed in requested format', pointer = 'request/headers/:content_type')
       super(
         title: 'Not Acceptable',
         status: :not_acceptable,
+        detail: message,
+        source: { pointer: pointer }
+      )
+    end
+  end
+
+  class NotAllowed < SerializableError
+    def initialize(message = 'Http method is not allowed', pointer = 'request/:http_method')
+      super(
+        title: 'Method Not Allowed',
+        status: :method_not_allowed,
         detail: message,
         source: { pointer: pointer }
       )

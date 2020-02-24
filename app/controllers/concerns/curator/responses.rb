@@ -5,13 +5,13 @@ module Curator
     extend ActiveSupport::Concern
 
     ERROR_MAP = {
-        'StandardError' => 'Curator::Exceptions::ServerError',
-        'ActiveRecord::RecordNotFound' => 'Curator::Exceptions::RecordNotFound',
-        'ActiveRecord::RecordInvalid' => 'Curator::Exceptions::InvalidRecord',
-        'ActionController::RoutingError' => 'Curator::Execptions::RouteNotFound',
-        'Curator::Exceptions::UnknownFormat' => 'Curator::Exceptions::BadRequest',
-        'Curator::Exceptions::UnknownSerializer' => 'Curator::Execptions::BadRequest',
-        'Curator::Exceptions::UnknownResourceType' => 'Curator::Exceptions::BadRequest'
+      'StandardError' => 'Curator::Exceptions::ServerError',
+                  'ActiveRecord::RecordNotFound' => 'Curator::Exceptions::RecordNotFound',
+                  'ActiveRecord::RecordInvalid' => 'Curator::Exceptions::InvalidRecord',
+                  'ActionController::RoutingError' => 'Curator::Execptions::RouteNotFound',
+                  'Curator::Exceptions::UnknownFormat' => 'Curator::Exceptions::BadRequest',
+                  'Curator::Exceptions::UnknownSerializer' => 'Curator::Execptions::BadRequest',
+                  'Curator::Exceptions::UnknownResourceType' => 'Curator::Exceptions::BadRequest'
     }.freeze
 
     included do
