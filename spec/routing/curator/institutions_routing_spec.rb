@@ -16,7 +16,7 @@ RSpec.describe Curator::InstitutionsController, type: :routing do
       include_examples 'collection' do
         subject { institutions_path }
         let(:expected_controller) { default_controller }
-        let(:expected_format) { default_format }
+        let(:expected_kwargs) { { format: default_format } }
       end
     end
 
@@ -24,16 +24,14 @@ RSpec.describe Curator::InstitutionsController, type: :routing do
       include_examples 'member' do
         subject { institution_path(default_id) }
         let(:expected_controller) { default_controller }
-        let(:expected_id) { default_id }
-        let(:expected_format) { default_format }
+        let(:expected_kwargs) { { id: default_id, format: default_format } }
       end
 
       context '#ark_id as :id' do
         include_examples 'member' do
           subject { institution_path(ark_id) }
           let(:expected_controller) { default_controller }
-          let(:expected_id) { ark_id }
-          let(:expected_format) { default_format }
+          let(:expected_kwargs) { { id: ark_id, format: default_format } }
         end
       end
     end

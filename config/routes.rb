@@ -97,5 +97,7 @@ Curator::Engine.routes.draw do
         end
       end
     end
+
+    match '*path' => 'application#not_found', via: [:get, :post]
   end
 end

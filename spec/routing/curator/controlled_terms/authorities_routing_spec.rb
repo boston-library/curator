@@ -16,6 +16,7 @@ RSpec.describe Curator::ControlledTerms::AuthoritiesController, type: :routing d
         subject { controlled_terms_authorities_path }
         let(:expected_controller) { default_controller }
         let(:expected_format) { default_format }
+        let(:expected_kwargs) { { format: default_format } }
       end
     end
 
@@ -23,8 +24,7 @@ RSpec.describe Curator::ControlledTerms::AuthoritiesController, type: :routing d
       include_examples 'member' do
         subject { controlled_terms_authority_path(default_id) }
         let(:expected_controller) { default_controller }
-        let(:expected_id) { default_id }
-        let(:expected_format) { default_format }
+        let(:expected_kwargs) { { id: default_id, format: default_format } }
       end
     end
   end

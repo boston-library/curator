@@ -13,31 +13,26 @@ RSpec.describe Curator::Filestreams::FileSetsController, type: :routing do
 
   describe 'default routing' do
     Curator.filestreams.file_set_types.map(&:downcase).each do |file_set_type|
-      describe "#{file_set_type} collection routes" do
-        include_examples 'sti_collection' do
+      describe "#{file_set_type.classify} collection routes" do
+        include_examples 'collection' do
           subject { filestreams_file_sets_path(type: file_set_type) }
-          let(:expected_type) { file_set_type }
           let(:expected_controller) { default_controller }
-          let(:expected_format) { default_format }
+          let(:expected_kwargs) { { type: file_set_type, format: default_format } }
         end
       end
 
-      describe "#{file_set_type} member routes" do
-        include_examples 'sti_member' do
+      describe "#{file_set_type.classify} member routes" do
+        include_examples 'member' do
           subject { filestreams_file_set_path(default_id, type: file_set_type) }
-          let(:expected_type) { file_set_type }
           let(:expected_controller) { default_controller }
-          let(:expected_id) { default_id }
-          let(:expected_format) { default_format }
+          let(:expected_kwargs) { { id: default_id, type: file_set_type, format: default_format } }
         end
 
         context '#ark_id as :id' do
-          include_examples 'sti_member' do
+          include_examples 'member' do
             subject { filestreams_file_set_path(ark_id, type: file_set_type) }
-            let(:expected_type) { file_set_type }
             let(:expected_controller) { default_controller }
-            let(:expected_id) { ark_id }
-            let(:expected_format) { default_format }
+            let(:expected_kwargs) { { id: ark_id, type: file_set_type, format: default_format } }
           end
         end
       end

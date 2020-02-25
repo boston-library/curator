@@ -12,21 +12,18 @@ RSpec.describe Curator::ControlledTerms::NomenclaturesController, type: :routing
   describe 'default routing' do
     Curator.controlled_terms.nomenclature_types.map(&:downcase).each do |nomenclature_type|
       describe "#{nomenclature_type} collection routes" do
-        include_examples 'sti_collection' do
+        include_examples 'collection' do
           subject { controlled_terms_nomenclatures_path(type: nomenclature_type) }
-          let(:expected_type) { nomenclature_type }
           let(:expected_controller) { default_controller }
-          let(:expected_format) { default_format }
+          let(:expected_kwargs) { { type: nomenclature_type, format: default_format } }
         end
       end
 
       describe "#{nomenclature_type} member routes" do
-        include_examples 'sti_member' do
+        include_examples 'member' do
           subject { controlled_terms_nomenclature_path(default_id, type: nomenclature_type) }
-          let(:expected_type) { nomenclature_type }
           let(:expected_controller) { default_controller }
-          let(:expected_id) { default_id }
-          let(:expected_format) { default_format }
+          let(:expected_kwargs) { { id: default_id, type: nomenclature_type, format: default_format } }
         end
       end
     end

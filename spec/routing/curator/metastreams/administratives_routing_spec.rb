@@ -14,85 +14,38 @@ RSpec.describe Curator::Metastreams::AdministrativesController, type: :routing d
   describe 'default routing' do
     describe 'member routes' do
       context '#administratable' do
-        context 'Institution' do
-          include_examples 'metastreamable_member' do
-            subject { institution_administrative_path(default_id) }
-            let(:expected_controller) { default_controller }
-            let(:expected_id) { default_id }
-            let(:expected_format) { default_format }
-            let(:expected_metastreamable_type) { 'Institution' }
-          end
-
-          context '#ark_id as :id' do
-            include_examples 'metastreamable_member' do
-              subject { institution_administrative_path(ark_id) }
+        ['Institution', 'Collection', 'DigitalObject'].each do |metastreamable_type|
+          context "#{metastreamable_type}" do
+            include_examples 'member' do
+              subject { public_send("#{metastreamable_type.underscore}_administrative_path", default_id) }
               let(:expected_controller) { default_controller }
-              let(:expected_id) { ark_id }
-              let(:expected_format) { default_format }
-              let(:expected_metastreamable_type) { 'Institution' }
-            end
-          end
-        end
-
-        context 'Collection' do
-          include_examples 'metastreamable_member' do
-            subject { collection_administrative_path(default_id) }
-            let(:expected_controller) { default_controller }
-            let(:expected_id) { default_id }
-            let(:expected_format) { default_format }
-            let(:expected_metastreamable_type) { 'Collection' }
-          end
-
-          context '#ark_id as :id' do
-            include_examples 'metastreamable_member' do
-              subject { collection_administrative_path(ark_id) }
-              let(:expected_controller) { default_controller }
-              let(:expected_id) { ark_id }
-              let(:expected_format) { default_format }
-              let(:expected_metastreamable_type) { 'Collection' }
-            end
-          end
-        end
-
-        context 'DigitalObject' do
-          include_examples 'metastreamable_member' do
-            subject { digital_object_administrative_path(default_id) }
-            let(:expected_controller) { default_controller }
-            let(:expected_id) { default_id }
-            let(:expected_format) { default_format }
-            let(:expected_metastreamable_type) { 'DigitalObject' }
-          end
-
-          context '#ark_id as :id' do
-            include_examples 'metastreamable_member' do
-              subject { digital_object_administrative_path(ark_id) }
-              let(:expected_controller) { default_controller }
-              let(:expected_id) { ark_id }
-              let(:expected_format) { default_format }
-              let(:expected_metastreamable_type) { 'DigitalObject' }
-            end
-          end
-        end
-
-        Curator.filestreams.file_set_types.map(&:downcase).each do |file_set_type|
-          context "#{file_set_type.camelize}" do
-            include_examples 'sti_metastreamable_member' do
-              subject { filestreams_file_set_administrative_path(default_id, type: file_set_type) }
-              let(:expected_controller) { default_controller }
-              let(:expected_id) { default_id }
-              let(:expected_type) { file_set_type }
-              let(:expected_format) { default_format
-              let(:expected_metastreamable_type) { 'FileSet' }
+              let(:expected_kwargs) { { id: default_id, metastreamable_type: metastreamable_type, format: default_format } }
             end
 
             context '#ark_id as :id' do
-              include_examples 'sti_metastreamable_member' do
+              include_examples 'member' do
+                subject { public_send("#{metastreamable_type.underscore}_administrative_path", ark_id) }
+                let(:expected_controller) { default_controller }
+                let(:expected_kwargs) { { id: ark_id, metastreamable_type: metastreamable_type, format: default_format } }
+              end
+            end
+          end
+        end
+
+
+        Curator.filestreams.file_set_types.map(&:downcase).each do |file_set_type|
+          context "#{file_set_type.camelize}" do
+            include_examples 'member' do
+              subject { filestreams_file_set_administrative_path(default_id, type: file_set_type) }
+              let(:expected_controller) { default_controller }
+              let(:expected_kwargs) { { id: default_id, type: file_set_type, metastreamable_type: 'Filestreams::FileSet', format: default_format } }
+            end
+
+            context '#ark_id as :id' do
+              include_examples 'member' do
                 subject { filestreams_file_set_administrative_path(ark_id, type: file_set_type) }
                 let(:expected_controller) { default_controller }
-                let(:expected_id) { ark_id }
-                let(:expected_type) { file_set_type }
-                let(:expected_format) { default_format }
-                let(:expected_metastreamable_type) { 'FileSet' }
+                let(:expected_kwargs) { { id: ark_id, type: file_set_type, metastreamable_type: 'Filestreams::FileSet', format: default_format } }
               end
             end
           end
