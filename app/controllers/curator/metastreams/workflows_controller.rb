@@ -2,8 +2,11 @@
 
 module Curator
   class Metastreams::WorkflowsController < ApplicationController
-    before_action :set_workflow
-    
+    include Curator::ResourceClass
+    include Curator::ArkResource
+
+    before_action :set_workflow, only: [:show, :update]
+
     def show
       json_response(serialized_resource(@workflow))
     end
@@ -15,7 +18,7 @@ module Curator
     private
 
     def set_workflow
-      @workflow = @metastreamble_resource.workflow
+      @workflow = @curator_resource.workflow
     end
   end
 end

@@ -2,9 +2,10 @@
 
 module Curator
   class Metastreams::AdministrativesController < ApplicationController
-    include Curator::MetastreamableResource
+    include Curator::ResourceClass
+    include Curator::ArkResource
 
-    before_action :set_administrative
+    before_action :set_administrative, only: [:show, :update]
 
     def show
       json_response(serialized_resource(@administrative))
@@ -18,7 +19,7 @@ module Curator
     private
 
     def set_administrative
-      @administrative = @metastreamble_resource.administrative
+      @administrative = @curator_resource.administrative
     end
   end
 end

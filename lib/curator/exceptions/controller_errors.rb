@@ -6,6 +6,7 @@ module Curator::Exceptions
   class UnknownFormat < CuratorError; end
   class UnknownSerializer < CuratorError; end
   class UnknownResourceType < CuratorError; end
+  class UndeletableResource < CuratorError; end
 
   # Server Response Exceptions
   # 40x Response Codes
@@ -64,7 +65,7 @@ module Curator::Exceptions
     end
   end
 
-  class NotAllowed < SerializableError
+  class MethodNotAllowed < SerializableError
     def initialize(message = 'Http method is not allowed', pointer = 'request/:http_method')
       super(
         title: 'Method Not Allowed',

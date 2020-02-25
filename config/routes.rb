@@ -18,10 +18,11 @@ Curator::Engine.routes.draw do
   end
 
   scope :api, defaults: { format: :json } do
+    root to: Curator::Middleware::RootApp.new
+
     match '*path' => 'application#method_not_allowed', via: [:delete]
 
     constraints(JSON_CONSTRAINT) do
-      root to: Curator::Middleware::RootApp.new
 
       resources :institutions, :collections, :digital_objects, only: [:index, :create]
 
@@ -98,6 +99,6 @@ Curator::Engine.routes.draw do
       end
     end
 
-    match '*path' => 'application#not_found', via: [:get, :post]
+    match '*path' => 'application#not_found', via: [:all]
   end
 end

@@ -26,6 +26,7 @@ require 'rails_helper'
 # `rails-controller-testing` gem.
 
 RSpec.describe Curator::InstitutionsController, type: :controller do
+  routes { Curator::Engine.routes }
   # This should return the minimal set of attributes required to create a valid
   # Institution. As you add validations to Institution, be sure to
   # adjust the attributes here as well.
@@ -43,76 +44,101 @@ RSpec.describe Curator::InstitutionsController, type: :controller do
     skip("Add a hash of attributes invalid for your model")
   }
 
-  skip "GET #index" do
-    it "returns a success response" do
-      institution = Curator::Institution.create! valid_attributes
-      get :index, params: {}, session: valid_session
-      expect(response).to be_successful
-    end
-  end
+  let(:serializer_class) { Curator::InstitutionSerializer }
 
-  skip "GET #show" do
-    it "returns a success response" do
-      institution = Curator::Institution.create! valid_attributes
-      get :show, params: { id: institution.to_param }, session: valid_session
-      expect(response).to be_successful
-    end
-  end
+  context 'JSON(Default)' do
+    let!(:format) { :json }
+    let!(:institution) { create(:curator_institution, :with_location, :with_metastreams) }
+    let!(:serialized_hash) { serializer_class.new(institution, format).serializable_hash['institution'].as_json }
+    # Have to add as_json so the dates match
 
-  skip 'POST #create' do
-    context "with valid params" do
-      it "creates a new Curator::Institution" do
-        expect {
-          post :create, params: { institution: valid_attributes }, session: valid_session
-        }.to change(Curator::Institution, :count).by(1)
-      end
-
-      it "renders a JSON response with the new institution" do
-        post :create, params: { institution: valid_attributes }, session: valid_session
-        expect(response).to have_http_status(:created)
-        expect(response.content_type).to eq('application/json')
-        expect(response.location).to eq(institution_url(Curator::Institution.last))
-      end
-    end
-
-    context "with invalid params" do
-      it "renders a JSON response with errors for the new institution" do
-        post :create, params: { institution: invalid_attributes }, session: valid_session
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq('application/json')
-      end
-    end
-  end
-
-  skip "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested institution" do
-        institution = Curator::Institution.create! valid_attributes
-        put :update, params: { id: institution.to_param, institution: new_attributes }, session: valid_session
-        institution.reload
-        skip("Add assertions for updated state")
-      end
-
-      it "renders a JSON response with the institution" do
-        institution = Curator::Institution.create! valid_attributes
-
-        put :update, params: { id: institution.to_param, institution: valid_attributes }, session: valid_session
+    describe "GET #index" do
+      it "returns a success response" do
+        get :index, params: { format: format }
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq('application/json')
+        expect(json_response).to be_a_kind_of(Hash).and have_key('institutions')
+        expect(json_response).to include('institutions' => include(a_hash_including(serialized_hash)))
       end
     end
 
-    skip "with invalid params" do
-      it "renders a JSON response with errors for the institution" do
-        institution = Curator::Institution.create! valid_attributes
+    describe "GET #show" do
+      context 'with :id' do
+        it "returns a success response" do
+          get :show, params: { id: institution.to_param, format: format }
+          expect(response).to have_http_status(:ok)
+          expect(response.content_type).to eq('application/json')
+          expect(json_response).to be_a_kind_of(Hash).and have_key('institution')
+          expect(json_response['institution']).to eq(serialized_hash)
+        end
+      end
+      
+      context 'with #ark_id as :id' do
+        it "returns a success response" do
+          get :show, params: { id: institution.ark_id, format: format }
+          expect(response).to have_http_status(:ok)
+          expect(response.content_type).to eq('application/json')
+          expect(json_response).to be_a_kind_of(Hash).and have_key('institution')
+          expect(json_response['institution']).to eq(serialized_hash)
+        end
+      end
+    end
 
-        put :update, params: { id: institution.to_param, institution: invalid_attributes }, session: valid_session
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq('application/json')
+    skip 'POST #create' do
+      context "with valid params" do
+        it "creates a new Curator::Institution" do
+          expect {
+            post :create, params: { institution: valid_attributes }, session: valid_session
+          }.to change(Curator::Institution, :count).by(1)
+        end
+
+        it "renders a JSON response with the new institution" do
+          post :create, params: { institution: valid_attributes }, session: valid_session
+          expect(response).to have_http_status(:created)
+          expect(response.content_type).to eq('application/json')
+          expect(response.location).to eq(institution_url(Curator::Institution.last))
+        end
+      end
+
+      context "with invalid params" do
+        it "renders a JSON response with errors for the new institution" do
+          post :create, params: { institution: invalid_attributes }, session: valid_session
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response.content_type).to eq('application/json')
+        end
+      end
+    end
+
+    skip "PUT #update" do
+      context "with valid params" do
+        let(:new_attributes) {
+          skip("Add a hash of attributes valid for your model")
+        }
+
+        it "updates the requested institution" do
+          institution = Curator::Institution.create! valid_attributes
+          put :update, params: { id: institution.to_param, institution: new_attributes }, session: valid_session
+          institution.reload
+          skip("Add assertions for updated state")
+        end
+
+        it "renders a JSON response with the institution" do
+          institution = Curator::Institution.create! valid_attributes
+
+          put :update, params: { id: institution.to_param, institution: valid_attributes }, session: valid_session
+          expect(response).to have_http_status(:ok)
+          expect(response.content_type).to eq('application/json')
+        end
+      end
+
+      skip "with invalid params" do
+        it "renders a JSON response with errors for the institution" do
+          institution = Curator::Institution.create! valid_attributes
+
+          put :update, params: { id: institution.to_param, institution: invalid_attributes }, session: valid_session
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response.content_type).to eq('application/json')
+        end
       end
     end
   end

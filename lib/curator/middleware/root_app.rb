@@ -51,7 +51,7 @@ module Curator::Middleware
 
     def text_response
       headers = { 'Content-Type' => 'text/plain' }
-      [RESPONSE_BODY[:status], headers, RESPONSE_BODY.to_a.map { |r| r.join(' ----> ') }.join(' \n')]
+      [RESPONSE_BODY[:status], headers, RESPONSE_BODY.to_a.map { |r| "#{r.join(' ----> ')}\n" }]
     end
   end
 end

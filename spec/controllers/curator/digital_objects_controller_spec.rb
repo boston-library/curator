@@ -27,6 +27,7 @@ require 'rails_helper'
 
 
 RSpec.describe Curator::DigitalObjectsController, type: :controller do
+  routes { Curator::Engine.routes }
   # This should return the minimal set of attributes required to create a valid
   # DigitalObject. As you add validations to DigitalObject, be sure to
   # adjust the attributes here as well.

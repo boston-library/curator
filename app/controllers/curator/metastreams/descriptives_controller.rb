@@ -2,9 +2,10 @@
 
 module Curator
   class Metastreams::DescriptivesController < ApplicationController
-    include Curator::MetastreamableResource
+    include Curator::ResourceClass
+    include Curator::ArkResource
 
-    before_action :set_descriptive
+    before_action :set_descriptive, only: [:show, :update]
 
     def show
       json_response(serialized_resource(@descriptive))
@@ -18,7 +19,7 @@ module Curator
     private
 
     def set_descriptive
-      @descriptive = @metastreamble_resource.descriptive
+      @descriptive = @curator_resource.descriptive
     end
   end
 end

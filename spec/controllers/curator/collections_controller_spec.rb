@@ -27,6 +27,7 @@ require 'rails_helper'
 
 
 RSpec.describe Curator::CollectionsController, type: :controller do
+  routes { Curator::Engine.routes }
   # This should return the minimal set of attributes required to create a valid
   # Collection. As you add validations to Collection, be sure to
   # adjust the attributes here as well.
@@ -46,7 +47,7 @@ RSpec.describe Curator::CollectionsController, type: :controller do
   skip "GET #index" do
     it "returns a success response" do
       collection = Curator::Collection.create! valid_attributes
-      get :index, params: {}, session: valid_session
+      get :index, params: {}
       expect(response).to be_successful
     end
   end
