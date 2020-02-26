@@ -2,8 +2,7 @@
 
 require 'rails_helper'
 
-module Curator
-  RSpec.describe Filestreams::FileSetsController, type: :controller do
-    pending  'Not Ready'
-  end
+
+RSpec.describe Curator::Filestreams::FileSetsController, type: :controller do
+  pending  'Controller Not implmented'
 end

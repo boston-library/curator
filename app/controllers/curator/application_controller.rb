@@ -79,15 +79,15 @@ module Curator
     def mapped_error_klass(e)
       error_klass = e.class.name
 
-      return e if ERROR_MAP.value?(error_klass)
+      return e if ERROR_MAP.values.include?(error_klass)
 
       ERROR_MAP[error_klass]&.safe_constantize
     end
 
     def set_error(error_klass, e)
-      return e if e.class == error_klass
+      return e if e.kind_of(error_klass)
 
-      case error_klass.name
+      case "#{error_klass}"
       when 'Curator::Execptions::ServerError'
         return error_klass.new(e.message)
       when 'Curator::Exceptions::InvalidRecord'

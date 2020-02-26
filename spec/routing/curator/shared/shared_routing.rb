@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples 'collection', type: :routing do
+  specify { expect(subject).to be_truthy.and be_a_kind_of(String) }
+  specify { expect(expected_kwargs).to be_truthy.and be_a_kind_of(Hash) }
+
   it 'routes to #index' do
     expect(:get => subject).to route_to("#{expected_controller}#index", **expected_kwargs)
   end
@@ -11,6 +14,9 @@ RSpec.shared_examples 'collection', type: :routing do
 end
 
 RSpec.shared_examples 'member', type: :routing do
+  specify { expect(subject).to be_truthy.and be_a_kind_of(String) }
+  specify { expect(expected_kwargs).to be_truthy.and be_a_kind_of(Hash) }
+
   it 'routes to #show' do
     expect(:get => subject).to route_to("#{expected_controller}#show", **expected_kwargs)
   end

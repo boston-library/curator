@@ -18,7 +18,7 @@ Curator::Engine.routes.draw do
   end
 
   scope :api, defaults: { format: :json } do
-    root to: Curator::Middleware::RootApp.new
+    root to: Curator::Middleware::RootApp.new 
 
     match '*path' => 'application#method_not_allowed', via: [:delete]
 

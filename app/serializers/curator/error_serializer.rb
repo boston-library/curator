@@ -6,8 +6,8 @@ module Curator
       attributes :status, :title, :detail, :source
     end
 
-    schema_as_xml root: :error do
-      attributes :status, :title, :detail, :source
-    end
+    # schema_as_xml root: :error do
+    #   attributes :status, :title, :detail, :source
+    # end
   end
 end

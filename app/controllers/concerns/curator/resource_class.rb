@@ -53,7 +53,9 @@ module Curator
     end
 
     def define_serializer_class
-      "#{resource_class.name}Serializer".constantize
+      "#{resource_class.name}Serializer".constantize if !resource_for_metastream?
+
+      "#{controller_path.dup.classify}Serializer".constantize
     rescue StandardError => e
       Rails.logger.error "===========#{e.inspect}================"
       raise Curator::Exceptions::UnknownSerializer, "Unknown serializer for #{controller_path.dup.classify}"
