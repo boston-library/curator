@@ -21,5 +21,14 @@ module Curator
     def set_descriptive
       @descriptive = @curator_resource.descriptive
     end
+
+    def descriptive_params
+      case params[:action]
+      when 'update'
+        params.require(:descriptive).permit!
+      else
+        params
+      end
+    end
   end
 end

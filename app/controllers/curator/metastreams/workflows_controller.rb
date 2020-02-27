@@ -20,5 +20,14 @@ module Curator
     def set_workflow
       @workflow = @curator_resource.workflow
     end
+
+    def workflow_params
+      case params[:action]
+      when 'update'
+        params.require(:administrative).permit!
+      else
+        params
+      end
+    end
   end
 end

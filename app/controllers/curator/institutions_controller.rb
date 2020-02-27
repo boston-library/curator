@@ -18,7 +18,7 @@ module Curator
 
     # POST /institutions
     def create
-      institution = Curator::InstitutionFactoryService.call(institution_create_params)
+      institution = Curator::InstitutionFactoryService.call(institution_create)
       json_response(serialized_resource(institution))
     end
 
@@ -28,15 +28,11 @@ module Curator
       json_response(serialized_resource(@curator_resource))
     end
 
-    # # DELETE /institutions/1
-    # def destroy
-    #   @institution.destroy
-    # end
-
     private
 
-    # Only allow a trusted parameter "white list" through.
-    def institution_create_params
+    def institution_params
+      case params[:action]
+      when 'create'
       params.require(:institution).permit(:ark_id,
                                           :name,
                                           :url,
@@ -45,6 +41,9 @@ module Curator
                                           location:       [:area_type, :coordinates, :bounding_box, :authority_code, :label, :id_from_auth],
                                           administrative: [:description_standard, :flagged, :harvestable, :destination_site],
                                           workflow:       [:publishing_state, :processing_state, :ingest_origin])
+      else
+        params                                   
+      end
     end
   end
 end

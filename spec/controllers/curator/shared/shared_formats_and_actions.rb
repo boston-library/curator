@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: false, has_collection_methods: true|
+RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: false, has_collection_methods: true, has_member_methods: true|
   routes { Curator::Engine.routes }
   specify { expect(format).to be_truthy.and be_a_kind_of(Symbol) }
   specify { expect(params).to be_truthy.and be_a_kind_of(Hash) }
@@ -19,7 +19,7 @@ RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: f
       end
     end
 
-    describe "#show" do
+    describe "#show", if: has_member_methods do
       context 'with :id' do
         it "returns a success response" do
           id_params = params.dup
@@ -52,18 +52,18 @@ RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: f
   end
 end
 
-RSpec.shared_examples 'shared_put_patch', type: :controller do
-  routes { Curator::Engine.routes }
-  pending 'Example pending until implmented properly'
-end
+# RSpec.shared_examples 'shared_put_patch', type: :controller do
+#   routes { Curator::Engine.routes }
+#   pending 'Example pending until implmented properly'
+# end
 
-RSpec.shared_examples 'shared_post', type: :controller do
-  routes { Curator::Engine.routes }
-  pending 'Example pending until implmented properly'
-end
+# RSpec.shared_examples 'shared_post', type: :controller do
+#   routes { Curator::Engine.routes }
+#   pending 'Example pending until implmented properly'
+# end
 
 
-RSpec.shared_examples "shared_formats", type: :controller do |include_ark_context: false, has_collection_methods: true|
+RSpec.shared_examples "shared_formats", type: :controller do |include_ark_context: false, has_collection_methods: true, has_member_methods: true|
   specify { expect(serializer_class).to be_truthy.and be <= Curator::Serializers::AbstractSerializer }
   specify { expect(resource_key).to be_truthy.and be_a_kind_of(String) }
   specify { expect(base_params).to be_truthy.and be_a_kind_of(Hash) }
@@ -75,10 +75,10 @@ RSpec.shared_examples "shared_formats", type: :controller do |include_ark_contex
     let(:params) { base_params.merge({ format: format }) }
     # NOTE: Have to add as_json so the dates match the serialized response
 
-    include_examples 'shared_get', include_ark_context: include_ark_context
+    include_examples 'shared_get', include_ark_context: include_ark_context, has_collection_methods: has_collection_methods, has_member_methods: has_member_methods
   end
 
-  context 'XML' do
-    pending 'XML Context is pending until serializers are built'
-  end
+  # context 'XML' do
+  #   pending 'Context is pending until serializers are built'
+  # end
 end

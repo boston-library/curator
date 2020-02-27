@@ -11,7 +11,7 @@ module Curator::Exceptions
   # Server Response Exceptions
   # 40x Response Codes
   class BadRequest < SerializableError
-    def initialize(message = 'Request query or payload is invalid', pointer = 'request/params')
+    def initialize(message = 'Request query or payload is invalid', pointer = 'request/:params')
       super(
         title: 'Bad Request',
         status: :bad_request,
@@ -22,7 +22,7 @@ module Curator::Exceptions
   end
 
   class Unauthorized < SerializableError
-    def initialize(message = 'You must be logged in to do this', pointer = 'request/headers/authorization')
+    def initialize(message = 'You must be logged in to do this', pointer = 'request/headers/:authorization')
       super(
         title: 'Unauthorized',
         status: :unauthorized,
@@ -33,7 +33,7 @@ module Curator::Exceptions
   end
 
   class RouteNotFound < SerializableError
-    def initialize(message = 'Unknown request URL', pointer = '/request/url')
+    def initialize(message = 'Unknown request URL', pointer = '/request/:url')
       super(
         title: 'URL Not Found',
         status: :not_found,

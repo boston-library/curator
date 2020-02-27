@@ -21,5 +21,14 @@ module Curator
     def set_administrative
       @administrative = @curator_resource.administrative
     end
+
+    def administrative_params
+      case params[:action]
+      when 'update'
+        params.require(:administrative).permit!
+      else
+        params
+      end
+    end
   end
 end

@@ -2,7 +2,7 @@
 
 Curator::Engine.routes.draw do
   JSON_CONSTRAINT = ->(request) { request.format.symbol == :json }
-  NOMENCLATURE_TYPES = Curator.controlled_terms.nomenclature_types.map(&:downcase)
+  NOMENCLATURE_TYPES = Curator.controlled_terms.nomenclature_types.map(&:underscore)
   FILE_SET_TYPES = Curator.filestreams.file_set_types.map(&:downcase)
 
   concern :administratable do |options|
@@ -18,7 +18,7 @@ Curator::Engine.routes.draw do
   end
 
   scope :api, defaults: { format: :json } do
-    root to: Curator::Middleware::RootApp.new 
+    root to: Curator::Middleware::RootApp.new
 
     match '*path' => 'application#method_not_allowed', via: [:delete]
 
@@ -68,10 +68,10 @@ Curator::Engine.routes.draw do
                 end
 
       namespace :controlled_terms do
-        resources :authorities, only: [:index, :show, :update, :create]
+        resources :authorities, only: [:index]
 
         resources :nomenclatures,
-                  only: [:index, :show, :update, :create],
+                  only: [:show, :update],
                   constraints: Curator::Middleware::StiTypesConstraint.new(NOMENCLATURE_TYPES),
                   path: '/:type'
       end

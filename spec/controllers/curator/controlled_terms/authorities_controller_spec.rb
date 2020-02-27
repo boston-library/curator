@@ -22,9 +22,7 @@ RSpec.describe Curator::ControlledTerms::AuthoritiesController, type: :controlle
   let!(:resource_key) { 'authority' }
   let!(:base_params) { {} }
 
-  skip 'Pending' do
-    include_examples 'shared_formats'
-  end
+  include_examples 'shared_formats', has_member_methods: false
 
   skip "POST #create" do
     context "with valid params" do

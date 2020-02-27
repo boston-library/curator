@@ -9,14 +9,21 @@ RSpec.describe Curator::ControlledTerms::NomenclaturesController, type: :control
   let(:valid_attributes) {
     skip("Add a hash of attributes valid for your model")
   }
-
   let(:invalid_attributes) {
     skip("Add a hash of attributes invalid for your model")
   }
-  # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # ControlledTerms::NomenclaturesController. Be sure to keep this updated too.
   let(:valid_session) { {} }
+
+  Curator.controlled_terms.nomenclature_types.map(&:underscore).each do |nomenclature_type|
+    context "with :type as #{nomenclature_type}" do
+      let!(:serializer_class) { "Curator::ControlledTerms::#{nomenclature_type.classify}Serializer".safe_constantize }
+      let!(:resource) { create("curator_controlled_terms_#{nomenclature_type}".to_sym) }
+      let!(:resource_key) { nomenclature_type }
+      let!(:base_params) { { type: nomenclature_type } }
+
+      include_examples 'shared_formats', has_collection_methods: false
+    end
+  end
 
   skip "POST #create" do
     context "with valid params" do

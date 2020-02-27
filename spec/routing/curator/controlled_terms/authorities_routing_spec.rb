@@ -12,19 +12,11 @@ RSpec.describe Curator::ControlledTerms::AuthoritiesController, type: :routing d
 
   describe 'default routing' do
     describe 'collection routes' do
-      include_examples 'collection' do
+      include_examples 'collection', read_only: true do
         subject { controlled_terms_authorities_path }
         let(:expected_controller) { default_controller }
         let(:expected_format) { default_format }
         let(:expected_kwargs) { { format: default_format } }
-      end
-    end
-
-    describe 'member routes' do
-      include_examples 'member' do
-        subject { controlled_terms_authority_path(default_id) }
-        let(:expected_controller) { default_controller }
-        let(:expected_kwargs) { { id: default_id, format: default_format } }
       end
     end
   end

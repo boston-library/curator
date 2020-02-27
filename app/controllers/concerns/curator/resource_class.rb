@@ -40,7 +40,6 @@ module Curator
 
     private
 
-    # NOTE: in certain cases were going to need to get the parent class
     def define_resource_class
       return controller_path.dup.classify.constantize if resource_type.blank?
 
@@ -53,7 +52,7 @@ module Curator
     end
 
     def define_serializer_class
-      "#{resource_class.name}Serializer".constantize if !resource_for_metastream?
+      return "#{resource_class.name}Serializer".constantize if !resource_for_metastream?
 
       "#{controller_path.dup.classify}Serializer".constantize
     rescue StandardError => e
@@ -62,6 +61,8 @@ module Curator
     end
 
     def sti_resource_class
+      return if !resource_for_sti?
+
       sti_parent_class = controller_path.dup.split('/').last
       sti_class_path = controller_path.dup.gsub(sti_parent_class, resource_type)
       sti_class_path.classify
