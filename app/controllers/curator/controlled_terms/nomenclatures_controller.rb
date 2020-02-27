@@ -32,7 +32,7 @@ module Curator
       end
     rescue StandardError => e
       Rails.logger.error "===========#{e.inspect}================"
-      raise Curator::Exceptions::BadRequest, "Invalid value for for type params", "#{controller_path.dup}/params/:type"
+      raise Curator::Exceptions::BadRequest, 'Invalid value for for type params', "#{controller_path.dup}/params/:type"
     end
   end
 end

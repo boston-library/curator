@@ -8,7 +8,7 @@ RSpec.describe Curator::Middleware::StiTypesConstraint do
   describe 'instance' do
     subject { described_class.new(example_sti_list) }
 
-    let(:expected_pattern) { Regexp.union(example_sti_list)  }
+    let(:expected_pattern) { Regexp.union(example_sti_list) }
 
     it_behaves_like 'constraint'
 

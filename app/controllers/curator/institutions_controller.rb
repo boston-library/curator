@@ -33,16 +33,16 @@ module Curator
     def institution_params
       case params[:action]
       when 'create'
-      params.require(:institution).permit(:ark_id,
-                                          :name,
-                                          :url,
-                                          :abstract,
-                                          :image_thumbnail_300,
-                                          location:       [:area_type, :coordinates, :bounding_box, :authority_code, :label, :id_from_auth],
-                                          administrative: [:description_standard, :flagged, :harvestable, :destination_site],
-                                          workflow:       [:publishing_state, :processing_state, :ingest_origin])
+        params.require(:institution).permit(:ark_id,
+                                            :name,
+                                            :url,
+                                            :abstract,
+                                            :image_thumbnail_300,
+                                            location:       [:area_type, :coordinates, :bounding_box, :authority_code, :label, :id_from_auth],
+                                            administrative: [:description_standard, :flagged, :harvestable, :destination_site],
+                                            workflow:       [:publishing_state, :processing_state, :ingest_origin])
       else
-        params                                   
+        params
       end
     end
   end

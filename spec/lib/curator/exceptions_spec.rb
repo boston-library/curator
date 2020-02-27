@@ -5,7 +5,6 @@ require_relative './shared/autoloadable'
 require_relative './exceptions/shared/inheritance'
 
 RSpec.describe Curator::Exceptions do
-
   it_behaves_like 'autoloadable'
 
   it { is_expected.to be_const_defined(:CuratorError) }
@@ -29,7 +28,7 @@ RSpec.describe Curator::Exceptions do
       it 'expects attributes to have defaults' do
         expect(subject.title).to eql('Something went wrong')
         expect(subject.detail).to eql('We encountered unexpected error')
-        expect(subject.status).to eql(500)
+        expect(subject.status).to be(500)
         expect(subject.source).to be_a_kind_of(Hash).and be_empty
       end
     end

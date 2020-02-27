@@ -24,7 +24,6 @@ module Curator
       json_response(serialized_resource(@institution))
     end
 
-
     private
 
     def collection_params

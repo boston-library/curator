@@ -9,7 +9,6 @@ module Curator
 
     # Base exception for any error expected to be serialized in controller
     class SerializableError < CuratorError
-
       attr_reader :title, :detail, :status, :source
 
       delegate :to_s, to: :to_h
@@ -26,7 +25,7 @@ module Curator
 
         hash = to_h.as_json
 
-        return {'error' => hash } if root
+        return { 'error' => hash } if root
 
         hash
       end
@@ -77,7 +76,7 @@ module Curator
       autoload :RecordNotFound, File.expand_path('./exceptions/controller_errors.rb', __dir__)
       autoload :ServerError, File.expand_path('./exceptions/controller_errors.rb', __dir__)
       autoload :MethodNotAllowed, File.expand_path('./exceptions/controller_errors.rb', __dir__)
-      autoload :NotAcceptable, File.expand_path('./exceptions/controller_errors.rb', __dir__) 
+      autoload :NotAcceptable, File.expand_path('./exceptions/controller_errors.rb', __dir__)
       # Serializable ModelError Subclasses
       autoload :InvalidRecord, File.expand_path('./exceptions/model_errors.rb', __dir__)
     end

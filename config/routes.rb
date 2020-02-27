@@ -23,7 +23,6 @@ Curator::Engine.routes.draw do
     match '*path' => 'application#method_not_allowed', via: [:delete]
 
     constraints(JSON_CONSTRAINT) do
-
       resources :institutions, :collections, :digital_objects, only: [:index, :create]
 
       resources :institutions, :collections, :digital_objects,

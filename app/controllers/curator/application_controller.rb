@@ -31,12 +31,12 @@ module Curator
     def set_serializer_adapter_key
       Rails.logger.debug "== request format is #{request.format.inspect} =="
 
-      raise StandardError, "Invalid format key #{request.format&.symbol}"  unless Curator::Serializers.registered_adapter_keys.include?(request.format&.symbol)
+      raise StandardError, "Invalid format key #{request.format&.symbol}" unless Curator::Serializers.registered_adapter_keys.include?(request.format&.symbol)
 
       @serializer_adapter_key = request.format.symbol
     rescue StandardError => e
       Rails.logger.error "===========#{e.inspect}================"
-      raise Curator::Exceptions::UnknownFormat, "Unknown serializer adapter"
+      raise Curator::Exceptions::UnknownFormat, 'Unknown serializer adapter'
     end
 
     def multi_response(rendered_object, status: :ok)
@@ -79,7 +79,7 @@ module Curator
     def mapped_error_klass(e)
       error_klass = e.class.name
 
-      return e if ERROR_MAP.values.include?(error_klass)
+      return e if ERROR_MAP.value?(error_klass)
 
       ERROR_MAP[error_klass]&.safe_constantize
     end
@@ -87,7 +87,7 @@ module Curator
     def set_error(error_klass, e)
       return e if e.kind_of(error_klass)
 
-      case "#{error_klass}"
+      case error_klass.to_s
       when 'Curator::Execptions::ServerError'
         return error_klass.new(e.message)
       when 'Curator::Exceptions::InvalidRecord'
