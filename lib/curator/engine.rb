@@ -12,6 +12,7 @@ module Curator
     require 'acts_as_list'
     require 'attr_json'
     require 'htmlentities'
+    require 'ox'
     require 'oj'
     require 'rsolr'
     require 'singleton'
@@ -44,11 +45,18 @@ module Curator
 
     config.before_initialize do
       Oj.optimize_rails
-      Oj.default_options = { mode: :rails,
-                             time_format: :ruby,
-                             hash_class: ActiveSupport::HashWithIndifferentAccess
-                           }
+      Oj.default_options =
+      {
+        mode: :rails,
+        time_format: :ruby,
+        hash_class: ActiveSupport::HashWithIndifferentAccess
+      }
       Curator.setup!
+    end
+
+    initializer 'mime_types' do
+      Mime::Type.register 'application/marcxml+xml', :marc, %w(application/marc)
+      Mime::Type.register 'application/mods+xml', :mods
     end
 
     initializer 'curator.append_migrations' do |app|

@@ -1,35 +1,22 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../shared/shared_routing'
 
-module Curator
-  RSpec.describe ControlledTerms::NomenclaturesController, type: :routing do
-    describe 'routing' do
-      Curator::ControlledTerms.nomenclature_types.map { |nom_type| nom_type.underscore.pluralize }.each do |nom_type|
-        it 'routes to #index' do
-          expect(:get => "/controlled_terms/#{nom_type}").to route_to('curator/controlled_terms/nomenclatures#index', :type => nom_type.singularize.camelize)
+RSpec.describe Curator::ControlledTerms::NomenclaturesController, type: :routing do
+  routes { Curator::Engine.routes }
+  let!(:default_format) { :json }
+  let!(:default_id) { '1' }
+  let!(:default_controller) { 'curator/controlled_terms/nomenclatures' }
+
+  describe 'default routing' do
+    Curator.controlled_terms.nomenclature_types.map(&:underscore).each do |nomenclature_type|
+      describe "#{nomenclature_type} member routes" do
+        include_examples 'member' do
+          subject { controlled_terms_nomenclature_path(default_id, type: nomenclature_type) }
+          let(:expected_controller) { default_controller }
+          let(:expected_kwargs) { { id: default_id, type: nomenclature_type, format: default_format } }
         end
-
-        it 'routes to #show' do
-          expect(:get => "/controlled_terms/#{nom_type}/1").to route_to('curator/controlled_terms/nomenclatures#show', :id => '1', :type => nom_type.singularize.camelize)
-        end
-
-        it 'routes to #create' do
-          expect(:post => "/controlled_terms/#{nom_type}").to route_to('curator/controlled_terms/nomenclatures#create', :type => nom_type.singularize.camelize)
-        end
-
-        it 'routes to #update via PUT' do
-          expect(:put => "/controlled_terms/#{nom_type}/1").to route_to('curator/controlled_terms/nomenclatures#update', :id => '1', :type => nom_type.singularize.camelize)
-        end
-
-        it 'routes to #update via PATCH' do
-          expect(:patch => "/controlled_terms/#{nom_type}/1").to route_to('curator/controlled_terms/nomenclatures#update', :id => '1', :type => nom_type.singularize.camelize)
-        end
-
-        # TODO implement this using soft delete
-        # it "routes to #destroy" do
-        #   expect(:delete => "/controlled_terms/nomenclatures/1").to route_to("controlled_terms/nomenclatures#destroy", :id => "1")
-        # end
       end
     end
   end

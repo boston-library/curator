@@ -82,7 +82,7 @@ module Curator
       end
 
       def is_collection?(record)
-        record.kind_of?(ActiveRecord::Associations::CollectionProxy) || record.kind_of?(Array)
+        record.kind_of?(ActiveRecord::Relation) || record.kind_of?(Array)
       end
 
       def key_in_group?(facet_group, key)

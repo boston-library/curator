@@ -1,32 +1,38 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative './shared/shared_routing'
 
-module Curator
-  RSpec.describe InstitutionsController, type: :routing do
-    describe 'routing' do
-      it 'routes to #index' do
-        expect(:get => '/institutions').to route_to('curator/institutions#index')
+RSpec.describe Curator::InstitutionsController, type: :routing do
+  routes { Curator::Engine.routes }
+
+  let!(:default_format) { :json }
+  let!(:default_id) { '1' }
+  let!(:ark_id) { 'commonwealth:abcdef123' }
+  let!(:default_controller) { 'curator/institutions' }
+
+  describe 'default routing' do
+    describe 'collection routes' do
+      include_examples 'collection' do
+        subject { institutions_path }
+        let(:expected_controller) { default_controller }
+        let(:expected_kwargs) { { format: default_format } }
+      end
+    end
+
+    describe 'member routes' do
+      include_examples 'member' do
+        subject { institution_path(default_id) }
+        let(:expected_controller) { default_controller }
+        let(:expected_kwargs) { { id: default_id, format: default_format } }
       end
 
-      it 'routes to #show' do
-        expect(:get => '/institutions/1').to route_to('curator/institutions#show', :id => '1')
-      end
-
-      it 'routes to #create' do
-        expect(:post => '/institutions').to route_to('curator/institutions#create')
-      end
-
-      it 'routes to #update via PUT' do
-        expect(:put => '/institutions/1').to route_to('curator/institutions#update', :id => '1')
-      end
-
-      it 'routes to #update via PATCH' do
-        expect(:patch => '/institutions/1').to route_to('curator/institutions#update', :id => '1')
-      end
-
-      it 'routes to #destroy' do
-        expect(:delete => '/institutions/1').to route_to('curator/institutions#destroy', :id => '1')
+      context '#ark_id as :id' do
+        include_examples 'member' do
+          subject { institution_path(ark_id) }
+          let(:expected_controller) { default_controller }
+          let(:expected_kwargs) { { id: ark_id, format: default_format } }
+        end
       end
     end
   end

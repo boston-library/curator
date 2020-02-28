@@ -2,55 +2,42 @@
 
 module Curator
   class CollectionsController < ApplicationController
-    before_action :set_collection, only: [:show, :update, :destroy]
+    include Curator::ResourceClass
+    include Curator::ArkResource
 
-    # GET /collections
     def index
-      @collections = Collection.all
-
-      render json: @collections
+      collections = resource_scope.order(created_at: :desc).limit(25)
+      multi_response(serialized_resource(collections))
     end
 
-    # GET /collections/1
     def show
-      render json: @collection
+      multi_response(serialized_resource(@curator_resource))
     end
 
-    # POST /collections
     def create
-      @collection = Collection.new(collection_params)
-
-      if @collection.save
-        render json: @collection, status: :created, location: @collection
-      else
-        render json: @collection.errors, status: :unprocessable_entity
-      end
+      collection = Curator::CollectionFactoryService.call(collection_params)
+      json_response(serialized_resource(collection))
     end
 
-    # PATCH/PUT /collections/1
     def update
-      if @collection.update(collection_params)
-        render json: @collection
-      else
-        render json: @collection.errors, status: :unprocessable_entity
-      end
-    end
-
-    # DELETE /collections/1
-    def destroy
-      @collection.destroy
+      @curator_resource.touch
+      json_response(serialized_resource(@institution))
     end
 
     private
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_collection
-      @collection = Collection.find(params[:id])
-    end
-
-    # Only allow a trusted parameter "white list" through.
     def collection_params
-      params.fetch(:collection, {})
+      case params[:action]
+      when 'create'
+        params.require(:collection).permit!
+      else
+        params
+      end
+      # TODO: Permit only these
+      # :name,
+      # :abstract,
+      # administrative: [:description_standard, :flagged, :harvestable, :destination_site],
+      # workflow:       [:publishing_state, :processing_state, :ingest_origin]
     end
   end
 end

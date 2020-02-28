@@ -35,6 +35,10 @@ RSpec.shared_examples 'json_serialization', type: :serializers do
   end
 
   describe 'JSON serialization behavior' do
+    specify { expect(json_record).to be_truthy }
+    specify { expect(json_array).to be_truthy.and respond_to(:each, :map) }
+    specify { expect(expected_as_json_options).to be_truthy.and be_a_kind_of(Hash) }
+
     describe 'For single record' do
       let(:serializer_for_one) { described_class.new(json_record, adapter_key) }
       let(:expected_json_hash) { record_as_json(json_record, expected_as_json_options) }

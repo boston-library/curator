@@ -2,55 +2,41 @@
 
 module Curator
   class DigitalObjectsController < ApplicationController
-    before_action :set_digital_object, only: [:show, :update, :destroy]
+    include Curator::ResourceClass
+    include Curator::ArkResource
 
     # GET /digital_objects
     def index
-      @digital_objects = DigitalObject.all
-
-      render json: @digital_objects
+      digital_objects = resource_scope.order(created_at: :desc).limit(25)
+      multi_response(serialized_resource(digital_objects))
     end
 
     # GET /digital_objects/1
     def show
-      render json: @digital_object
+      multi_response(serialized_resource(@curator_resource))
     end
 
     # POST /digital_objects
     def create
-      @digital_object = DigitalObject.new(digital_object_params)
-
-      if @digital_object.save
-        render json: @digital_object, status: :created, location: @digital_object
-      else
-        render json: @digital_object.errors, status: :unprocessable_entity
-      end
+      digital_object = Curator::DigitalObjectFactoryService(digital_object_params)
+      json_response(serialized_resource(digital_object))
     end
 
     # PATCH/PUT /digital_objects/1
     def update
-      if @digital_object.update(digital_object_params)
-        render json: @digital_object
-      else
-        render json: @digital_object.errors, status: :unprocessable_entity
-      end
-    end
-
-    # DELETE /digital_objects/1
-    def destroy
-      @digital_object.destroy
+      @curator_resource.touch
+      json_response(serialized_resource(@curator_resource))
     end
 
     private
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_digital_object
-      @digital_object = DigitalObject.find(params[:id])
-    end
-
-    # Only allow a trusted parameter "white list" through.
     def digital_object_params
-      params.fetch(:digital_object, {})
+      case params[:action]
+      when 'create'
+        params.require(:digital_object).permit!
+      else
+        params
+      end
     end
   end
 end
