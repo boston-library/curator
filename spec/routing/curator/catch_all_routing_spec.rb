@@ -21,13 +21,12 @@ RSpec.describe 'catch all routes', type: :routing do
 
   context 'GET POST' do
     let(:bad_paths) { ['/api/foo', '/api/phpAdmin', '/api/some_file'] }
-
+    let(:http_verbs) { %i(get put patch post) }
     it 'routes to application#not_found for any route not in api' do
       bad_paths.each do |bad_path|
-        expect(:get => bad_path).to route_to("curator/application#not_found", format: :json, path: bad_path.gsub('/api/', ''))
-        expect(:post => bad_path).to route_to("curator/application#not_found", format: :json, path: bad_path.gsub('/api/', ''))
-        expect(:put => bad_path).to route_to("curator/application#not_found", format: :json, path: bad_path.gsub('/api/', ''))
-        expect(:post => bad_path).to route_to("curator/application#not_found", format: :json, path: bad_path.gsub('/api/', ''))
+        http_verbs.each do |verb|
+          expect(verb => bad_path).to route_to("curator/application#not_found", format: :json, path: bad_path.gsub('/api/', '')), "Fails on #{bad_path} for #{verb}"
+        end
       end
     end
   end
