@@ -21,7 +21,7 @@ RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: f
 
     describe "#show", if: has_member_methods do
       context 'with :id' do
-        it "returns a success response" do
+        it "returns a sucessful response" do
           id_params = params.dup
           id_params[:id] ||= resource.to_param
 
@@ -33,9 +33,21 @@ RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: f
         end
       end
 
-      context 'with #ark_id as :id', if: include_ark_context do
+      context 'with invalid :id' do
+        it 'return a :not_found response' do
+          invalid_id_params = params.dup
+          invalid_id_params[:id] = '0'
 
-        it "returns a success response" do
+          get :show, params: invalid_id_params
+          expect(response).to have_http_status(:not_found)
+          expect(response.content_type).to eq(expected_content_type)
+          expect(json_response).to be_a_kind_of(Hash).and have_key('errors')
+          expect(json_response['errors'][0]).to include('status' => 404, 'title' => 'Record Not Found', 'detail' => a_kind_of(String), 'source' => a_hash_including('pointer'))
+        end
+      end
+
+      context 'with #ark_id as :id', if: include_ark_context do
+        it "returns a successful response" do
           ark_params = params.dup
 
           ark_params[:id] = ark_params.delete(:ark_id) if ark_params.key?(:ark_id)
@@ -46,6 +58,19 @@ RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: f
           expect(response.content_type).to eq(expected_content_type)
           expect(json_response).to be_a_kind_of(Hash).and have_key(resource_key)
           expect(json_response[resource_key]).to eq(serialized_hash)
+        end
+      end
+
+      context 'with invalid #ark_id as :id', if: include_ark_context do
+        it "returns a :not_found response response" do
+          invalid_ark_params = params.dup
+          invalid_ark_params[:id] = "non-existent-namespace:#{SecureRandom.hex(4)}"
+
+          get :show, params: invalid_ark_params
+          expect(response).to have_http_status(:not_found)
+          expect(response.content_type).to eq(expected_content_type)
+          expect(json_response).to be_a_kind_of(Hash).and have_key('errors')
+          expect(json_response['errors'][0]).to include('status' => 404, 'title' => 'Record Not Found', 'detail' => a_kind_of(String), 'source' => a_hash_including('pointer'))
         end
       end
     end

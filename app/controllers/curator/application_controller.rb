@@ -85,7 +85,7 @@ module Curator
     end
 
     def set_error(error_klass, e)
-      return e if e.kind_of(error_klass)
+      return e if e.kind_of?(error_klass)
 
       case error_klass.to_s
       when 'Curator::Execptions::ServerError'
