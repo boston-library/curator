@@ -6,97 +6,90 @@ module Curator
 
     # TODO: set relationships for is_issue_of values
     def call
-      admin_set_ark_id = @json_attrs.dig('admin_set', 'ark_id')
-      begin
-        Curator.digital_object_class.transaction do
-          admin_set = Curator.collection_class.find_by(ark_id: admin_set_ark_id)
-          raise "AdminSet #{admin_set_ark_id} not found!" unless admin_set
+      with_transaction do
+        admin_set_ark_id = @json_attrs.dig('admin_set', 'ark_id')
+        admin_set = Curator.collection_class.find_by!(ark_id: admin_set_ark_id)
 
-          digital_object = Curator.digital_object_class.find_or_initialize_by(ark_id: @ark_id)
-          digital_object.admin_set = admin_set
-          collections = @json_attrs.fetch('exemplary_image_of', [])
-          collections.each do |collection|
-            col_ark_id = collection['ark_id']
-            col = Curator.collection_class.find_by(ark_id: col_ark_id)
-            raise "Collection #{col_ark_id} not found!" unless col
-
-            digital_object.is_member_of_collection << col
-          end
-          digital_object.created_at = @created if @created
-          digital_object.updated_at = @updated if @updated
-          digital_object.save!
-
-          build_workflow(digital_object) do |workflow|
-            [:ingest_origin, :processing_state, :publishing_state].each do |attr|
-              workflow.send("#{attr}=", @workflow_json_attrs.fetch(attr, nil))
-            end
-          end
-
-          build_administrative(digital_object) do |admin|
-            [:description_standard, :flagged, :destination_site, :hosting_status, :harvestable].each do |attr|
-              admin.send("#{attr}=", @admin_json_attrs.fetch(attr, nil))
-            end
-          end
-
-          build_descriptive(digital_object) do |descriptive|
-            simple_fields = %i(abstract access_restrictions digital_origin frequency
-                               issuance origin_event extent physical_location_department
-                               physical_location_shelf_locator place_of_publication
-                               publisher rights series subseries subsubseries toc toc_url
-                               resource_type_manuscript text_direction)
-            simple_fields.each do |attr|
-              descriptive.send("#{attr}=", @desc_json_attrs.fetch(attr, nil))
-            end
-            descriptive.resource_type_manuscript ||= false # nil not allowed for this attribute
-            descriptive.identifier = identifier(@desc_json_attrs)
-            descriptive.physical_location = physical_location(@desc_json_attrs)
-            descriptive.license = license(@desc_json_attrs)
-            descriptive.date = date(@desc_json_attrs)
-            descriptive.publication = publication(@desc_json_attrs)
-            descriptive.title = title(@desc_json_attrs)
-            descriptive.note = note(@desc_json_attrs)
-            descriptive.subject_other = subject_other(@desc_json_attrs)
-            descriptive.cartographic = cartographics(@desc_json_attrs)
-            descriptive.related = related(@desc_json_attrs)
-            %w(genres resource_types languages).each do |map_type|
-              @desc_json_attrs.fetch(map_type, []).each do |map_attrs|
-                mapped_term = term_for_mapping(map_attrs,
-                                               nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
-                descriptive.desc_terms.build(mapped_term: mapped_term)
-              end
-            end
-            @desc_json_attrs.fetch(:host_collections, []).each do |host_col|
-              host = find_or_create_host_collection(host_col,
-                                                    admin_set.institution.id)
-              descriptive.desc_host_collections.build(host_collection: host)
-            end
-            @desc_json_attrs.fetch(:subject, {}).each do |k, v|
-              map_type = case k.to_s
-                         when 'topics'
-                           :subject
-                         when 'names'
-                           :name
-                         when 'geos'
-                           :geographic
-                         end
-              next if map_type.blank?
-
-              v.each do |map_attrs|
-                descriptive.desc_terms.build(mapped_term: term_for_mapping(map_attrs,
-                                                                           nomenclature_class: Curator.controlled_terms.public_send("#{map_type}_class")))
-              end
-            end
-
-            @desc_json_attrs.fetch(:name_roles, []).each do |name_role_attrs|
-              name_role_attrs = name_role(name_role_attrs.fetch(:name), name_role_attrs.fetch(:role))
-              descriptive.name_roles.build(name_role_attrs)
-            end
-          end
-          return digital_object
+        @record = Curator.digital_object_class.find_or_initialize_by(ark_id: @ark_id)
+        @record.admin_set = admin_set
+        collections = @json_attrs.fetch('exemplary_image_of', [])
+        collections.each do |collection|
+          col_ark_id = collection['ark_id']
+          @record.is_member_of_collection << Curator.collection_class.find_by!(ark_id: col_ark_id)
         end
-      rescue => e
-        puts e.to_s
+        @record.created_at = @created if @created
+        @record.updated_at = @updated if @updated
+
+        build_workflow(@record) do |workflow|
+          [:ingest_origin, :processing_state, :publishing_state].each do |attr|
+            workflow.send("#{attr}=", @workflow_json_attrs.fetch(attr, nil))
+          end
+        end
+
+        build_administrative(@record) do |admin|
+          [:description_standard, :flagged, :destination_site, :hosting_status, :harvestable].each do |attr|
+            admin.send("#{attr}=", @admin_json_attrs.fetch(attr, nil))
+          end
+        end
+
+        build_descriptive(@record) do |descriptive|
+          simple_fields = %i(abstract access_restrictions digital_origin frequency
+                             issuance origin_event extent physical_location_department
+                             physical_location_shelf_locator place_of_publication
+                             publisher rights series subseries subsubseries toc toc_url
+                             resource_type_manuscript text_direction)
+          simple_fields.each do |attr|
+            descriptive.send("#{attr}=", @desc_json_attrs.fetch(attr, nil))
+          end
+          descriptive.resource_type_manuscript ||= false # nil not allowed for this attribute
+          descriptive.identifier = identifier(@desc_json_attrs)
+          descriptive.physical_location = physical_location(@desc_json_attrs)
+          descriptive.license = license(@desc_json_attrs)
+          descriptive.date = date(@desc_json_attrs)
+          descriptive.publication = publication(@desc_json_attrs)
+          descriptive.title = title(@desc_json_attrs)
+          descriptive.note = note(@desc_json_attrs)
+          descriptive.subject_other = subject_other(@desc_json_attrs)
+          descriptive.cartographic = cartographics(@desc_json_attrs)
+          descriptive.related = related(@desc_json_attrs)
+          %w(genres resource_types languages).each do |map_type|
+            @desc_json_attrs.fetch(map_type, []).each do |map_attrs|
+              mapped_term = term_for_mapping(map_attrs,
+                                             nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
+              descriptive.desc_terms.build(mapped_term: mapped_term)
+            end
+          end
+          @desc_json_attrs.fetch(:host_collections, []).each do |host_col|
+            host = find_or_create_host_collection(host_col,
+                                                  admin_set.institution.id)
+            descriptive.desc_host_collections.build(host_collection: host)
+          end
+          @desc_json_attrs.fetch(:subject, {}).each do |k, v|
+            map_type = case k.to_s
+                       when 'topics'
+                         :subject
+                       when 'names'
+                         :name
+                       when 'geos'
+                         :geographic
+                       end
+            next if map_type.blank?
+
+            v.each do |map_attrs|
+              descriptive.desc_terms.build(mapped_term: term_for_mapping(map_attrs,
+                                                                         nomenclature_class: Curator.controlled_terms.public_send("#{map_type}_class")))
+            end
+          end
+
+          @desc_json_attrs.fetch(:name_roles, []).each do |name_role_attrs|
+            name_role_attrs = name_role(name_role_attrs.fetch(:name), name_role_attrs.fetch(:role))
+            descriptive.name_roles.build(name_role_attrs)
+          end
+        end
+        @record.save!
       end
+    ensure
+      return @success, @record
     end
 
     def identifier(json_attrs = {})
@@ -211,18 +204,24 @@ module Curator
     end
 
     def find_or_create_host_collection(host_col_name = nil, institution_id = nil)
-      return nil unless host_col_name && institution_id
+      return if host_col_name.blank? && institution_id.blank?
 
+      retires = 0
       begin
-        inst = Curator::Institution.find(institution_id)
-        raise "Bad institution_id #{institution_id} for host_collection!" if inst.blank?
-
-        return Curator::Mappings.host_collection_class.where(name: host_col_name,
-                                                             institution_id: institution_id).first_or_create!
-      rescue => e
-        puts e.message
+        return Curator.mappings.host_collection_class.transaction(requires_new: true) do
+          inst = Curator.institution_class.find(institution_id)
+          inst.host_collections.where(name: host_col_name).first_or_create!
+        end
+      rescue ActiveRecord::StaleObjectError => e
+        if (retries += 1) <= MAX_RETRIES
+          Rails.logger.info "Record is stale retrying in 2 seconds.."
+          sleep(2)
+          retry
+        else
+          Rails.logger.error "=================#{e.inspect}=================="
+          raise ActiveRecord::RecordNotSaved, "Max retries reached! caused by: #{e.message}", e.record
+        end
       end
-      nil
     end
   end
 end

@@ -49,7 +49,8 @@ module Curator
       {
         mode: :rails,
         time_format: :ruby,
-        hash_class: ActiveSupport::HashWithIndifferentAccess
+        hash_class: ActiveSupport::HashWithIndifferentAccess,
+        omit_nil: true
       }
       Curator.setup!
     end

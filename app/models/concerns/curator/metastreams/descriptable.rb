@@ -7,6 +7,9 @@ module Curator
       included do
         scope :with_descriptive, -> { includes(:descriptive) }
         has_one :descriptive, -> { merge(for_serialization) }, as: :descriptable, inverse_of: :descriptable, class_name: 'Curator::Metastreams::Descriptive', dependent: :destroy
+
+        validates :descriptive, presence: true
+        validates_associated :descriptive, on: :create
       end
     end
   end
