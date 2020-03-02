@@ -39,7 +39,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'faraday_middleware', '~> 0.13'
   spec.add_dependency 'htmlentities', '~> 4.3.4'
   spec.add_dependency 'net-http-persistent', '~> 3.1'
-  spec.add_dependency 'oj', '~> 3.10.0'
+  spec.add_dependency 'oj', '~> 3.10'
   spec.add_dependency 'ox', '~> 2.11'
   spec.add_dependency 'paper_trail', '~> 10.3' # have not implemented this yet but does version control
   spec.add_dependency 'rails', '~> 5.2.4.1'
@@ -49,5 +49,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'mini_magick', '~> 4.9.5'
   spec.add_development_dependency 'pg', '~> 1.1'
   spec.add_development_dependency 'redis', '~> 4.1.3'
-  spec.add_development_dependency 'solr_wrapper', '>= 1.1', '< 3.0'
+  spec.add_development_dependency 'solr_wrapper', '>= 2.1', '< 3.0'
 end
