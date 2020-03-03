@@ -15,7 +15,7 @@ RSpec.describe Curator::InstitutionsController, type: :controller do
   }
 
   let!(:serializer_class) { Curator::InstitutionSerializer }
-  let!(:resource) { create(:curator_institution, :with_location, :with_metastreams) }
+  let!(:resource) { create(:curator_institution, :with_location) }
   let!(:resource_key) { 'institution' }
   let!(:base_params) { {} }
 

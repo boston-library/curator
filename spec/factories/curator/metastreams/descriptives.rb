@@ -32,7 +32,6 @@ FactoryBot.define do
     toc_url { Faker::Internet.url }
     toc { Faker::Lorem.paragraph }
     abstract { Faker::Lorem.paragraph }
-    archived_at { nil }
 
     trait :manuscript? do
       resource_type_manuscript { true }
@@ -43,11 +42,11 @@ FactoryBot.define do
         desc_term_count { nil }
       end
 
-      after :create do |descriptive, options|
+      after :build do |descriptive, options|
         %i(specific_genre language resource_type subject_topic subject_name subject_geo).each do |desc_term_type|
-          create_list(:curator_mappings_desc_term, options.desc_term_count, desc_term_type, descriptive: descriptive) if options.desc_term_count
+          build_list(:curator_mappings_desc_term, options.desc_term_count, desc_term_type, descriptive: descriptive) if options.desc_term_count
         end
-        create_list(:curator_mappings_desc_name_role, options.desc_term_count, descriptive: descriptive) if options.desc_term_count
+        build_list(:curator_mappings_desc_name_role, options.desc_term_count, descriptive: descriptive) if options.desc_term_count
       end
     end
 

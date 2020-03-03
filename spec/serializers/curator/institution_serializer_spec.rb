@@ -5,8 +5,8 @@ require_relative './shared/inherited_serializers'
 require_relative './shared/json_serialization'
 RSpec.describe Curator::InstitutionSerializer, type: :serializers do
   let!(:institution_count) { 3 }
-  let!(:record) { create(:curator_institution, :with_location, :with_metastreams) }
-  let!(:record_collection) { create_list(:curator_institution, institution_count, :with_location, :with_metastreams) }
+  let!(:record) { create(:curator_institution, :with_location) }
+  let!(:record_collection) { create_list(:curator_institution, institution_count, :with_location) }
 
   describe 'Base Behavior' do
     it_behaves_like 'curator_serializer'

@@ -17,7 +17,8 @@ module Curator
     require 'rsolr'
     require 'singleton'
     require 'traject'
-
+    require 'digest'
+    
     if Rails.env.development? || Rails.env.test?
       begin
         require 'factory_bot_rails'

@@ -6,8 +6,8 @@ require_relative '../shared/json_serialization'
 
 RSpec.describe Curator::Filestreams::VideoSerializer, type: :serializers do
   let!(:video_file_set_count) { 3 }
-  let!(:record) { create(:curator_filestreams_video, :with_metastreams) }
-  let!(:record_collection) { create_list(:curator_filestreams_ereader, video_file_set_count, :with_metastreams) }
+  let!(:record) { create(:curator_filestreams_video) }
+  let!(:record_collection) { create_list(:curator_filestreams_ereader, video_file_set_count) }
 
   describe 'Base Behavior' do
     it_behaves_like 'file_set_serializer'

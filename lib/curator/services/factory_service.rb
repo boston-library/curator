@@ -101,7 +101,10 @@ module Curator
         rescue ActiveStorage::IntegrityError, ActiveStorage::Error => e
           Rails.logger.error "=================#{e.inspect}=================="
           @success = false
-        rescue StandardError => e
+        rescue NoMethodError, ArgumentError, StandardError => e
+          Rails.logger.error "=================#{e.inspect}=================="
+          @success = false
+        rescue Exception => e
           Rails.logger.error "=================#{e.inspect}=================="
           @success = false
         end

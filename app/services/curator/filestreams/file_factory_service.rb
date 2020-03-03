@@ -4,31 +4,41 @@ module Curator
   class Filestreams::FileFactoryService < Services::Base
     include Services::FactoryService
 
-    FILE_INGEST_ROOT = Curator::Engine.root.join('spec', 'fixtures', 'files')
     # TODO: figure out a way to call attach without invoking ActiveStorage::AnalyzeJob
     # We can invoke NullAnalyzer by setting below in config/application.rb:
     #   config.active_storage.analyzers = []
     #   config.active_storage.previewers = []
     # However, even if we do above, ActiveStorage will compute byte_size, content_type, and checksum anyway
+    # TODO: Make the FILE_INGEST_ROOT a configurable setting
     def call
       with_transaction do
         file_set_ark_id = @json_attrs.dig('filestream_of', 'ark_id')
-        file_set = Curator::Filestreams::FileSet.find_by!(ark_id: file_set_ark_id)
         attachment_type = attachment_for_ds(@json_attrs.fetch('file_type', ''))
+
+        raise ActiveStorage::Error, "Invalid attachment type #{attachment_type}" if attachment_type.blank?
+
         filename = @json_attrs.fetch('file_name', nil)
         content_type = @json_attrs.fetch('content_type', nil)
         byte_size = @json_attrs.fetch('byte_size', nil)
         checksum_md5 = @json_attrs.fetch('checksum_md5', nil)
         metadata = @json_attrs.fetch('metadata', {})
+        file_set_type = @json_attrs.dig('filestream_of', 'file_set_type')
 
-        file_to_attach = io_for_file(@json_attrs.fetch('fedora_content_location', nil), File.join(FILE_INGEST_ROOT, metadata['ingest_filepath']))
-        file_set.send(attachment_type).attach(io: file_to_attach,
-                                              filename: filename,
-                                              content_type: content_type,
-                                              metadata: metadata)
+        file_set = Curator.filestreams.public_send("#{file_set_type}_class").public_send("with_attached_#{attachment_type}").find_by!(ark_id: file_set_ark_id)
 
-        @record = file_set.send("reload_#{attachment_type}_blob")
-        if @record && @record.attached?
+        file_to_attach = io_for_file(@json_attrs.fetch('fedora_content_location', nil), File.join(ENV['HOME'], metadata['ingest_filepath']))
+
+        file_set.public_send(attachment_type).attach(io: file_to_attach,
+                                                     filename: filename,
+                                                     content_type: content_type,
+                                                     metadata: metadata)
+
+        @record = file_set.public_send(attachment_type).blob if file_set.public_send(attachment_type)&.attached? && file_set.public_send(attachment_type)&.blob
+
+        raise ActiveStorage::IntegrityError, "Could not get blob for #{attachment_type} for FileSet ark_id=#{file_set.ark_id}" if @record.blank?
+
+        @record.transaction(requires_new: true) do
+          @record.lock!
           check_file_fixity(@record, byte_size, checksum_md5)
           @record.created_at = @created if @created
           @record.save!

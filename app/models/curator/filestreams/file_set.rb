@@ -14,6 +14,11 @@ module Curator
     include Curator::Metastreamable::Basic
     include Curator::Indexable
 
+    def self.with_all_attachments
+      reflections.keys.select { |ref| ref =~ /_attachment/ }
+      eager_load(attachment_reflections)
+    end
+
     self.curator_indexable_mapper = Curator::FileSetIndexer.new
 
     attr_json_config(default_container_attribute: :pagination)

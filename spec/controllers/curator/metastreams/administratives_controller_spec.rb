@@ -18,7 +18,7 @@ RSpec.describe Curator::Metastreams::AdministrativesController, type: :controlle
 
   ['Institution', 'Collection', 'DigitalObject'].each do |metastreamable_type|
     context "with :metastreamable_type as #{metastreamable_type}" do
-      let!(:parent_resource) { create("curator_#{metastreamable_type.underscore}", :with_metastreams) }
+      let!(:parent_resource) { create("curator_#{metastreamable_type.underscore}") }
       let!(:resource) { parent_resource.administrative }
       let!(:resource_key) { 'administrative' }
       let!(:base_params) do
@@ -38,7 +38,7 @@ RSpec.describe Curator::Metastreams::AdministrativesController, type: :controlle
 
     Curator.filestreams.file_set_types.map(&:underscore).each do |file_set_type|
       context "with :type as #{file_set_type}" do
-        let!(:parent_resource) { create("curator_filestreams_#{file_set_type}", :with_metastreams) }
+        let!(:parent_resource) { create("curator_filestreams_#{file_set_type}") }
         let!(:resource) { parent_resource.administrative }
         let!(:resource_key) { 'administrative' }
         let!(:base_params) do

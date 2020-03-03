@@ -22,7 +22,7 @@ RSpec.describe Curator::DigitalObjectsController, type: :controller do
   }
 
   let!(:serializer_class) { Curator::DigitalObjectSerializer }
-  let!(:resource) { create(:curator_digital_object, :with_metastreams) }
+  let!(:resource) { create(:curator_digital_object) }
   let!(:resource_key) { 'digital_object' }
   let!(:base_params) { {} }
 

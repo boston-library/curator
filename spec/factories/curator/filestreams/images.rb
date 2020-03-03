@@ -10,13 +10,10 @@ FactoryBot.define do
     hand_side { 'left' }
     page_type { 'TOC' }
     page_label { '3' }
-    archived_at { nil }
 
-    trait :with_metastreams do
-      after :create do |image_file_set|
-        create(:curator_metastreams_administrative, administratable: image_file_set)
-        create(:curator_metastreams_workflow, workflowable: image_file_set)
-      end
+    after :build do |image_file_set|
+      build(:curator_metastreams_administrative, administratable: image_file_set)
+      build(:curator_metastreams_workflow, workflowable: image_file_set)
     end
   end
 end

@@ -18,7 +18,7 @@ RSpec.describe Curator::CollectionsController, type: :controller do
   let(:valid_session) { {} }
 
   let!(:serializer_class) { Curator::CollectionSerializer }
-  let!(:resource) { create(:curator_collection, :with_metastreams) }
+  let!(:resource) { create(:curator_collection) }
   let!(:resource_key) { 'collection' }
   let!(:base_params) { {} }
 

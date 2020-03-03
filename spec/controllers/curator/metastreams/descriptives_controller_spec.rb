@@ -15,7 +15,7 @@ RSpec.describe Curator::Metastreams::DescriptivesController, type: :controller d
   # }
   let!(:metastreamable_type) { 'DigitalObject' }
   let!(:serializer_class) { Curator::Metastreams::DescriptiveSerializer }
-  let!(:parent_resource) { create(:curator_digital_object, :with_metastreams) }
+  let!(:parent_resource) { create(:curator_digital_object) }
   let!(:resource) { parent_resource.descriptive }
   let!(:resource_key) { 'descriptive' }
   let!(:base_params) do

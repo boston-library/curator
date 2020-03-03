@@ -6,8 +6,8 @@ require_relative './shared/json_serialization'
 
 RSpec.describe Curator::CollectionSerializer, type: :serializers do
   let!(:collection_count) { 3 }
-  let!(:record) { create(:curator_collection, :with_metastreams) }
-  let!(:record_collection) { create_list(:curator_collection, collection_count, :with_metastreams) }
+  let!(:record) { create(:curator_collection) }
+  let!(:record_collection) { create_list(:curator_collection, collection_count) }
 
   describe 'Base Behavior' do
     it_behaves_like 'curator_serializer'

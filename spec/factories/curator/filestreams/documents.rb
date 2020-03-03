@@ -9,11 +9,9 @@ FactoryBot.define do
     position { 1 }
     archived_at { nil }
 
-    trait :with_metastreams do
-      after :create do |document_file_set|
-        create(:curator_metastreams_administrative, administratable: document_file_set)
-        create(:curator_metastreams_workflow, workflowable: document_file_set)
-      end
+    after :build do |document_file_set|
+      build(:curator_metastreams_administrative, administratable: document_file_set)
+      build(:curator_metastreams_workflow, workflowable: document_file_set)
     end
   end
 end

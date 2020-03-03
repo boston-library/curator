@@ -7,13 +7,10 @@ FactoryBot.define do
     file_set_type { 'Curator::Filestreams::Audio' }
     file_name_base { Faker::Music.album }
     position { 1 }
-    archived_at { nil }
 
-    trait :with_metastreams do
-      after :create do |audio_file_set|
-        create(:curator_metastreams_administrative, administratable: audio_file_set)
-        create(:curator_metastreams_workflow, workflowable: audio_file_set)
-      end
+    after :build do |audio_file_set|
+      build(:curator_metastreams_administrative, administratable: audio_file_set)
+      build(:curator_metastreams_workflow, workflowable: audio_file_set)
     end
   end
 end

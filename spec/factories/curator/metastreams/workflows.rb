@@ -6,6 +6,5 @@ FactoryBot.define do
     publishing_state { Curator::Metastreams::Workflow.publishing_states.keys.sample }
     processing_state { Curator::Metastreams::Workflow.processing_states.keys.sample }
     ingest_origin { Faker::Internet.uuid }
-    archived_at { nil }
   end
 end
