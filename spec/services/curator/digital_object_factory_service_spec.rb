@@ -11,12 +11,15 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
     @object_json['admin_set']['ark_id'] = parent.ark_id
     @object_json['is_member_of_collection'][0]['ark_id'] = parent.ark_id
     expect do
-      @object = described_class.call(json_data: @object_json)
+      @success, @object = described_class.call(json_data: @object_json)
     end.to change { Curator::DigitalObject.count }.by(1)
   end
 
+  specify { expect(@success).to be_truthy }
+  specify { expect(@object).to be_valid }
+
   describe '#call' do
-    subject { @object }
+    subject { @object.reload }
 
     it 'has the correct properties' do
       expect(subject.ark_id).to eq @object_json['ark_id']

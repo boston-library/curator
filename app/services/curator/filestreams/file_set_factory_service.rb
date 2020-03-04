@@ -9,7 +9,7 @@ module Curator
         object_ark_id = @json_attrs.dig('file_set_of', 'ark_id')
         obj = Curator.digital_object_class.find_by!(ark_id: object_ark_id)
         file_set_type = @json_attrs.fetch('file_set_type', {})
-        @record = Curator.filestreams.send("#{file_set_type}_class").find_or_initialize_by(ark_id: @ark_id)
+        @record = Curator.filestreams.send("#{file_set_type}_class").new(ark_id: @ark_id)
         @record.file_set_of = obj
         @record.file_name_base = @json_attrs.fetch('file_name_base')
         @record.position = @json_attrs.fetch('position', 0)

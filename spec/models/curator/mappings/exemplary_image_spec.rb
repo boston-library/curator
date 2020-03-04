@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Curator::Mappings::ExemplaryImage, type: :model do
-  subject { create(:curator_mappings_exemplary_image) }
+  subject { build(:curator_mappings_exemplary_image) }
 
   describe 'Database' do
     it { is_expected.to have_db_column(:exemplary_object_id).

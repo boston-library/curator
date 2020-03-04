@@ -9,24 +9,22 @@ module Curator
     #   config.active_storage.analyzers = []
     #   config.active_storage.previewers = []
     # However, even if we do above, ActiveStorage will compute byte_size, content_type, and checksum anyway
-    # TODO: Make the FILE_INGEST_ROOT a configurable setting
     def call
-      with_transaction do
-        file_set_ark_id = @json_attrs.dig('filestream_of', 'ark_id')
-        attachment_type = attachment_for_ds(@json_attrs.fetch('file_type', ''))
+      file_set_ark_id = @json_attrs.dig('filestream_of', 'ark_id')
 
+      filename = @json_attrs.fetch('file_name', nil)
+      content_type = @json_attrs.fetch('content_type', nil)
+      byte_size = @json_attrs.fetch('byte_size', nil)
+      checksum_md5 = @json_attrs.fetch('checksum_md5', nil)
+      metadata = @json_attrs.fetch('metadata', {})
+      file_set_type = @json_attrs.dig('filestream_of', 'file_set_type')
+
+      with_transaction do
+        attachment_type = attachment_for_ds(@json_attrs.fetch('file_type', ''))
         raise ActiveStorage::Error, "Invalid attachment type #{attachment_type}" if attachment_type.blank?
 
-        filename = @json_attrs.fetch('file_name', nil)
-        content_type = @json_attrs.fetch('content_type', nil)
-        byte_size = @json_attrs.fetch('byte_size', nil)
-        checksum_md5 = @json_attrs.fetch('checksum_md5', nil)
-        metadata = @json_attrs.fetch('metadata', {})
-        file_set_type = @json_attrs.dig('filestream_of', 'file_set_type')
-
         file_set = Curator.filestreams.public_send("#{file_set_type}_class").public_send("with_attached_#{attachment_type}").find_by!(ark_id: file_set_ark_id)
-
-        file_to_attach = io_for_file(@json_attrs.fetch('fedora_content_location', nil), File.join(ENV['HOME'], metadata['ingest_filepath']))
+        file_to_attach = io_for_file(@json_attrs.fetch('fedora_content_location', nil), metadata['ingest_filepath'])
 
         file_set.public_send(attachment_type).attach(io: file_to_attach,
                                                      filename: filename,

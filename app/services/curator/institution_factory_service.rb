@@ -7,7 +7,7 @@ module Curator
     def call
       location_json_attrs = @json_attrs.fetch('location', {}).with_indifferent_access
       with_transaction do
-        @record = Curator.institution_class.find_or_initialize_by(ark_id: @ark_id)
+        @record = Curator.institution_class.new(ark_id: @ark_id)
         @record.name = @json_attrs.fetch(:name)
         @record.abstract = @json_attrs.fetch(:abstract, '')
         @record.url = @json_attrs.fetch(:url, nil)

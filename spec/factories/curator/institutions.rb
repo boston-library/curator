@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :curator_institution, class: 'Curator::Institution' do
+  factory :curator_institution, class: 'Curator::Institution', aliases: [:institution] do
     ark_id
+    with_metastreams
     association :location, factory: :curator_controlled_terms_geographic
     name { Faker::University.name }
     abstract { Faker::Lorem.paragraph(sentence_count: 12) }
@@ -18,9 +19,14 @@ FactoryBot.define do
       location { create(:curator_controlled_terms_geographic) }
     end
 
-    after :build do |institution|
-      build(:curator_metastreams_administrative, administratable: institution)
-      build(:curator_metastreams_workflow, workflowable: institution)
+    trait :with_metastreams do
+      administrative { nil }
+      workflow { nil }
+
+      after :build do |institution|
+        institution.administrative = build(:curator_metastreams_administrative, administratable: institution) if institution.administrative.blank?
+        institution.workflow = build(:curator_metastreams_workflow, workflowable: institution) if institution.workflow.blank?
+      end
     end
 
     after :create do |institution, options|

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Curator::Mappings::DescNameRole, type: :model do
-  subject { create(:curator_mappings_desc_name_role) }
+  subject { build(:curator_mappings_desc_name_role) }
 
   describe 'Database' do
     it { is_expected.to have_db_column(:descriptive_id).

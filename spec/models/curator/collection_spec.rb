@@ -10,7 +10,7 @@ require_relative './shared/mappings/has_exemplary_file_set'
 require_relative './shared/for_serialization'
 
 RSpec.describe Curator::Collection, type: :model do
-  subject { create(:curator_collection) }
+  subject { build(:curator_collection) }
 
   it_behaves_like 'mintable'
 

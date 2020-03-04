@@ -9,7 +9,7 @@ module Curator
 
     self.curator_indexable_mapper = Curator::CollectionIndexer.new
 
-    scope :for_serialization, -> { merge(with_metastreams) }
+    scope :for_serialization, -> { with_metastreams }
 
     belongs_to :institution, inverse_of: :collections, class_name: 'Curator::Institution'
 

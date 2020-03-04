@@ -7,7 +7,7 @@ require_relative '../shared/archivable'
 require_relative '../shared/for_serialization'
 
 RSpec.describe Curator::Metastreams::Descriptive, type: :model do
-  subject { create(:curator_metastreams_descriptive) }
+  subject { build(:curator_metastreams_descriptive) }
 
   describe 'Database' do
     it_behaves_like 'optimistic_lockable'
@@ -288,7 +288,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     describe '.with_physical_location' do
       subject { described_class }
 
-      let(:expected_scope_sql) { described_class.includes(:physical_location).to_sql }
+      let(:expected_scope_sql) { described_class.joins(:physical_location).includes(:physical_location).to_sql }
 
       it { is_expected.to respond_to(:with_physical_location) }
 
@@ -300,7 +300,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     describe '.with_license' do
       subject { described_class }
 
-      let(:expected_scope_sql) { described_class.includes(:license).to_sql }
+      let(:expected_scope_sql) { described_class.joins(:license).includes(:license).to_sql }
 
       it { is_expected.to respond_to(:with_license) }
 
@@ -310,7 +310,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     end
 
     it_behaves_like 'for_serialization' do
-      let(:expected_scope_sql) { described_class.merge(described_class.with_mappings).merge(described_class.with_physical_location).merge(described_class.with_license).to_sql }
+      let(:expected_scope_sql) { described_class.merge(described_class.with_physical_location.with_license).merge(described_class.with_mappings).to_sql }
     end
   end
 end

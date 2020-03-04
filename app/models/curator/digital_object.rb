@@ -10,7 +10,7 @@ module Curator
     self.curator_indexable_mapper = Curator::DigitalObjectIndexer.new
 
     scope :with_mappings, -> { includes(:exemplary_image_mapping, :collection_members, :file_set_member_mappings) }
-    scope :for_serialization, -> { merge(with_metastreams).merge(with_mappings) }
+    scope :for_serialization, -> { merge(with_metastreams.with_mappings) }
 
     validates :contained_by_id, exclusion: { in: -> (digital_object) { Array.wrap(digital_object.id) } }, uniqueness: { scope: :id }, unless: -> { contained_by.blank? }
 
@@ -34,10 +34,10 @@ module Curator
 
     has_many :container_for, inverse_of: :contained_by, class_name: 'Curator::DigitalObject', foreign_key: :contained_by_id, dependent: :nullify
 
-    has_many :collection_members, -> { includes(:collection) }, inverse_of: :digital_object, class_name: 'Curator::Mappings::CollectionMember', dependent: :destroy
+    has_many :collection_members, -> { joins(:collection).includes(:collection) }, inverse_of: :digital_object, class_name: 'Curator::Mappings::CollectionMember', dependent: :destroy
     has_many :is_member_of_collection, through: :collection_members, source: :collection
 
-    has_many :file_set_member_mappings, -> { includes(:file_set) }, inverse_of: :digital_object, class_name: 'Curator::Mappings::FileSetMember', dependent: :destroy
+    has_many :file_set_member_mappings, -> { joins(:file_set).includes(:file_set) }, inverse_of: :digital_object, class_name: 'Curator::Mappings::FileSetMember', dependent: :destroy
     with_options through: :file_set_member_mappings, source: :file_set do
       has_many :file_set_members, class_name: 'Curator::Filestreams::FileSet'
       has_many :audio_file_set_members, source_type: 'Curator::Filestreams::Audio'

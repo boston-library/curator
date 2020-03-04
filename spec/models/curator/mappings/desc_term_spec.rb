@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Curator::Mappings::DescTerm, type: :model do
-  subject { create(:curator_mappings_desc_term) }
+  subject { build(:curator_mappings_desc_term) }
 
   it { is_expected.to have_db_column(:descriptive_id).
                       of_type(:integer).

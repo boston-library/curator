@@ -9,7 +9,7 @@ require_relative './shared/archivable'
 require_relative './shared/mappings/has_exemplary_file_set'
 
 RSpec.describe Curator::DigitalObject, type: :model do
-  subject { create(:curator_digital_object) }
+  subject { build(:curator_digital_object) }
 
   it_behaves_like 'mintable'
 
@@ -157,7 +157,7 @@ RSpec.describe Curator::DigitalObject, type: :model do
     end
 
     it_behaves_like 'for_serialization' do
-      let(:expected_scope_sql) { described_class.merge(described_class.with_metastreams).merge(described_class.with_mappings).to_sql }
+      let(:expected_scope_sql) { described_class.merge(described_class.with_metastreams.with_mappings).to_sql }
     end
   end
 end

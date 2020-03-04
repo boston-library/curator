@@ -5,7 +5,7 @@ require_relative '../shared/optimistic_lockable'
 require_relative '../shared/timestampable'
 
 RSpec.describe Curator::ControlledTerms::Authority, type: :model do
-  subject { create(:curator_controlled_terms_authority) }
+  subject { build(:curator_controlled_terms_authority) }
 
   describe 'Database' do
     it_behaves_like 'optimistic_lockable'

@@ -2,7 +2,8 @@
 
 FactoryBot.define do
   factory :curator_metastreams_descriptive, class: 'Curator::Metastreams::Descriptive' do
-    association :descriptable, factory: :curator_digital_object
+    descriptable { nil }
+    for_digital_object
     association :physical_location, factory: :curator_controlled_terms_name
     association :license, factory: :curator_controlled_terms_license
     identifier { create_list(:curator_descriptives_identifier, 3) }
@@ -37,6 +38,12 @@ FactoryBot.define do
       resource_type_manuscript { true }
     end
 
+    trait :for_digital_object do
+      after :build do |descriptive|
+        descriptive.descriptable = build(:curator_digital_object, descriptive: descriptive) if descriptive.descriptable.blank?
+      end
+    end
+
     trait :with_all_desc_terms do
       transient do
         desc_term_count { nil }
@@ -44,9 +51,9 @@ FactoryBot.define do
 
       after :build do |descriptive, options|
         %i(specific_genre language resource_type subject_topic subject_name subject_geo).each do |desc_term_type|
-          build_list(:curator_mappings_desc_term, options.desc_term_count, desc_term_type, descriptive: descriptive) if options.desc_term_count
+          descriptive.desc_terms << build_list(:curator_mappings_desc_term, options.desc_term_count, desc_term_type) if options.desc_term_count
         end
-        build_list(:curator_mappings_desc_name_role, options.desc_term_count, descriptive: descriptive) if options.desc_term_count
+        descriptive.name_roles = build_list(:curator_mappings_desc_name_role, options.desc_term_count) if options.desc_term_count
       end
     end
 

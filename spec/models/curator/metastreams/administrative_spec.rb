@@ -6,7 +6,7 @@ require_relative '../shared/timestampable'
 require_relative '../shared/archivable'
 
 RSpec.describe Curator::Metastreams::Administrative, type: :model do
-  subject { create(:curator_metastreams_administrative) }
+  subject { build(:curator_metastreams_administrative) }
 
   describe 'Database' do
     it_behaves_like 'optimistic_lockable'

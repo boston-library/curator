@@ -9,19 +9,21 @@ RSpec.describe Curator::Filestreams::FileSetFactoryService, type: :service do
     # create parent DigitalObject and Collection
     parent_col = create(:curator_collection)
     parent_obj = create(:curator_digital_object)
-    parent_obj.workflow = create(:curator_metastreams_workflow)
     @object_json['ark_id'] = "commonwealth:#{SecureRandom.hex(rand(4..16))}"
     @object_json['file_set_of']['ark_id'] = parent_obj.ark_id
     @object_json['exemplary_image_of'][0]['ark_id'] = parent_obj.ark_id
     @object_json['exemplary_image_of'][1]['ark_id'] = parent_col.ark_id
     @object_json['metastreams']['workflow']['publishing_state'] = parent_obj.workflow.publishing_state
     expect do
-      @file_set = described_class.call(json_data: @object_json)
+      @success, @file_set = described_class.call(json_data: @object_json)
     end.to change { Curator::Filestreams::FileSet.count }.by(1)
   end
 
+  specify { expect(@success).to be_truthy }
+  specify { expect(@file_set).to be_valid }
+
   describe '#call' do
-    subject { @file_set }
+    subject { @file_set.reload }
 
     let(:file_set_type) { @object_json['file_set_type'] }
 

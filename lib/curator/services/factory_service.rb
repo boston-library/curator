@@ -80,10 +80,6 @@ module Curator
               yield
             end
           end
-        rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique, ActiveRecord::RecordNotSaved => e
-          Rails.logger.error "=================#{e.inspect}=================="
-          @success = false
-          @record = e.record
         rescue ActiveRecord::StaleObjectError => e
           if (retries += 1) <= MAX_RETRIES
             Rails.logger.info "Record is stale retrying in 2 seconds.."
@@ -95,16 +91,20 @@ module Curator
             @success = false
             @record = e.record
           end
-        rescue ActiveRecord::StatementInvalid => e
+        rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique, ActiveRecord::RecordNotSaved => e
           Rails.logger.error "=================#{e.inspect}=================="
           @success = false
-        rescue ActiveStorage::IntegrityError, ActiveStorage::Error => e
+          @record = e.record
+        rescue ActiveRecord::RecordNotFound, ActiveRecord::StatementInvalid, ActiveStorage::IntegrityError, ActiveStorage::Error => e
+          awesome_print e
           Rails.logger.error "=================#{e.inspect}=================="
           @success = false
-        rescue NoMethodError, ArgumentError, StandardError => e
+        rescue Errno::ENOENT, StandardError => e
+          awesome_print e
           Rails.logger.error "=================#{e.inspect}=================="
           @success = false
         rescue Exception => e
+          awesome_print e
           Rails.logger.error "=================#{e.inspect}=================="
           @success = false
         end

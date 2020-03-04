@@ -7,12 +7,15 @@ RSpec.describe Curator::InstitutionFactoryService, type: :service do
   before(:all) do
     @object_json = load_json_fixture('institution')
     expect do
-      @institution = described_class.call(json_data: @object_json)
+      @success, @institution = described_class.call(json_data: @object_json)
     end.to change { Curator::Institution.count }.by(1)
   end
 
+  specify { expect(@success).to be_truthy }
+  specify { expect(@institution).to be_valid }
+
   describe '#call' do
-    subject { @institution }
+    subject { @institution.reload }
 
     it 'has the correct properties' do
       expect(subject.name).to eq @object_json['name']

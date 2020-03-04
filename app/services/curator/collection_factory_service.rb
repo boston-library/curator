@@ -9,7 +9,7 @@ module Curator
         institution_ark_id = @json_attrs.dig('institution', 'ark_id')
         institution = Curator.institution_class.find_by!(ark_id: institution_ark_id)
 
-        @record = Curator.collection_class.find_or_initialize_by(ark_id: @ark_id)
+        @record = Curator.collection_class.new(ark_id: @ark_id)
         @record.name = @json_attrs.fetch(:name)
         @record.abstract = @json_attrs.fetch(:abstract, '')
         @record.institution = institution
@@ -30,7 +30,7 @@ module Curator
             administrative.send("#{attr}=", @admin_json_attrs.fetch(attr)) if @admin_json_attrs.fetch(attr, nil).present?
           end
         end
-        
+
         @record.save!
       end
     ensure

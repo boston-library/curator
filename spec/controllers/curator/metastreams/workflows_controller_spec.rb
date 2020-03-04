@@ -18,7 +18,7 @@ RSpec.describe Curator::Metastreams::WorkflowsController, type: :controller do
 
   ['Institution', 'Collection', 'DigitalObject'].each do |metastreamable_type|
     context "with :metastreamable_type as #{metastreamable_type}" do
-      let!(:parent_resource) { create("curator_#{metastreamable_type.underscore}" }
+      let!(:parent_resource) { create("curator_#{metastreamable_type.underscore}") }
       let!(:resource) { parent_resource.workflow }
       let!(:resource_key) { 'workflow' }
       let!(:base_params) do

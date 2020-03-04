@@ -10,7 +10,7 @@ module Curator
         admin_set_ark_id = @json_attrs.dig('admin_set', 'ark_id')
         admin_set = Curator.collection_class.find_by!(ark_id: admin_set_ark_id)
 
-        @record = Curator.digital_object_class.find_or_initialize_by(ark_id: @ark_id)
+        @record = Curator.digital_object_class.new(ark_id: @ark_id)
         @record.admin_set = admin_set
         collections = @json_attrs.fetch('exemplary_image_of', [])
         collections.each do |collection|

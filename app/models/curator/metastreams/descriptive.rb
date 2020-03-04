@@ -12,9 +12,9 @@ module Curator
     # JSON ATTRS
 
     scope :with_mappings, -> { includes(:desc_terms, :name_roles, :desc_host_collections) }
-    scope :with_physical_location, -> { includes(:physical_location) }
-    scope :with_license, -> { includes(:license) }
-    scope :for_serialization, -> { merge(with_mappings).merge(with_physical_location).merge(with_license) }
+    scope :with_physical_location, -> { joins(:physical_location).includes(:physical_location) }
+    scope :with_license, -> { joins(:license).includes(:license) }
+    scope :for_serialization, -> { merge(with_physical_location.with_license).merge(with_mappings) }
     # Identifier
     attr_json :identifier, Curator::Descriptives::Identifier.to_type, container_attribute: :identifier_json, array: true, default: []
 
@@ -43,12 +43,12 @@ module Curator
     # PARENTS
     belongs_to :descriptable, polymorphic: true, inverse_of: :descriptive
     belongs_to :license, inverse_of: :licensees, class_name: 'Curator::ControlledTerms::License'
-    belongs_to :physical_location, -> { merge(with_authority) }, inverse_of: :physical_locations_of, class_name: 'Curator::ControlledTerms::Name'
+    belongs_to :physical_location, -> { with_authority }, inverse_of: :physical_locations_of, class_name: 'Curator::ControlledTerms::Name'
     # MAPPING OBJECTS
     with_options inverse_of: :descriptive, dependent: :destroy do
-      has_many :desc_terms, -> { includes(:mapped_term) }, class_name: 'Curator::Mappings::DescTerm'
-      has_many :name_roles, -> { includes(:name, :role) }, class_name: 'Curator::Mappings::DescNameRole'
-      has_many :desc_host_collections, -> { includes(:host_collection) }, class_name: 'Curator::Mappings::DescHostCollection'
+      has_many :desc_terms, -> { joins(:mapped_term).includes(:mapped_term) }, class_name: 'Curator::Mappings::DescTerm'
+      has_many :name_roles, -> { joins(:name, :role).includes(:name, :role) }, class_name: 'Curator::Mappings::DescNameRole'
+      has_many :desc_host_collections, -> { joins(:host_collection).includes(:host_collection) }, class_name: 'Curator::Mappings::DescHostCollection'
     end
 
     has_many :host_collections, through: :desc_host_collections, source: :host_collection do
@@ -64,12 +64,12 @@ module Curator
 
     # TERMS
     with_options through: :desc_terms, source: :mapped_term do
-      has_many :genres, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Genre'
-      has_many :resource_types, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::ResourceType'
-      has_many :languages, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Language'
-      has_many :subject_topics, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Subject'
-      has_many :subject_names, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Name'
-      has_many :subject_geos, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Geographic'
+      has_many :genres, -> { with_authority }, class_name: 'Curator::ControlledTerms::Genre'
+      has_many :resource_types, -> { with_authority }, class_name: 'Curator::ControlledTerms::ResourceType'
+      has_many :languages, -> { with_authority }, class_name: 'Curator::ControlledTerms::Language'
+      has_many :subject_topics, -> { with_authority }, class_name: 'Curator::ControlledTerms::Subject'
+      has_many :subject_names, -> { with_authority }, class_name: 'Curator::ControlledTerms::Name'
+      has_many :subject_geos, -> { with_authority }, class_name: 'Curator::ControlledTerms::Geographic'
     end
 
     # VALIDATIONS
