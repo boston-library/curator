@@ -5,7 +5,7 @@ module Curator
     module Descriptable
       extend ActiveSupport::Concern
       included do
-        scope :with_descriptive, -> { joins(:descriptive).includes(:descriptive => [:desc_terms, :name_roles, :physical_location, :desc_host_collections]) }
+        scope :with_descriptive, -> { joins(:descriptive).includes(:descriptive) }
         has_one :descriptive, as: :descriptable, inverse_of: :descriptable, class_name: 'Curator::Metastreams::Descriptive', dependent: :destroy
 
         validates :descriptive, presence: true

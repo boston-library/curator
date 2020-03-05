@@ -276,7 +276,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     describe '.with_mappings' do
       subject { described_class }
 
-      let(:expected_scope_sql) { described_class.includes(:desc_terms, :name_roles, :desc_host_collections).to_sql }
+      let(:expected_scope_sql) { described_class.includes(:desc_terms => [:mapped_term], :name_roles => [:name, :role], :desc_host_collections => [:host_collection]).references(:desc_terms, :name_roles, :desc_host_collections).to_sql }
 
       it { is_expected.to respond_to(:with_mappings) }
 

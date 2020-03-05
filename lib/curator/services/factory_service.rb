@@ -7,9 +7,28 @@ module Curator
 
       MAX_RETRIES = 2.freeze
 
+      RECORD_ERRORS = [
+                        ActiveRecord::RecordInvalid,
+                        ActiveRecord::RecordNotUnique,
+                        ActiveRecord::RecordNotSaved
+                      ].freeze
+
+      # These are errors that will be passed to the @result variable. That way these can be raised on failure up the chain
+      RESULT_ERRORS = [
+                        ActiveRecord::RecordNotFound,
+                        ActiveRecord::StatementInvalid,
+                        ActiveRecord::ActiveRecordError,
+                        SystemCallError,
+                        ArgumentError,
+                        NameError,
+                        NoMethodError,
+                        StandardError
+                      ].freeze
+
       def initialize(json_data: {})
-        @success = true
         @record = nil
+        @success = true
+        @result = nil
         @json_attrs = json_data.with_indifferent_access
         @ark_id = @json_attrs.fetch('ark_id', nil)
         @created = Time.zone.parse(@json_attrs.fetch('created_at', ''))
@@ -43,6 +62,11 @@ module Curator
 
       private
 
+      def handle_result!
+        @success = false if @record.blank?
+        @result ||= @record
+      end
+
       def setup_metastream_attributes!
         metastream_json_attrs = @json_attrs.fetch('metastreams', {}).with_indifferent_access
         @workflow_json_attrs = metastream_json_attrs.fetch('workflow', {}).with_indifferent_access
@@ -66,9 +90,11 @@ module Curator
             sleep(2)
             retry
           else
-            Rails.logger.error "=================#{e.inspect}=================="
             raise ActiveRecord::RecordNotSaved, "Max retries reached! caused by: #{e.message}", e.record
           end
+        rescue *RECORD_ERRORS => e
+          Rails.logger.error "=================#{e.inspect}=================="
+          raise
         end
       end
 
@@ -82,31 +108,21 @@ module Curator
           end
         rescue ActiveRecord::StaleObjectError => e
           if (retries += 1) <= MAX_RETRIES
-            Rails.logger.info "Record is stale retrying in 2 seconds.."
+            Rails.logger.info "Record is stale retrying in 2 seconds..."
             sleep(2)
             retry
           else
             Rails.logger.error "===============MAX RETRIES REACHED!============"
             Rails.logger.error "=================#{e.inspect}=================="
             @success = false
-            @record = e.record
           end
-        rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique, ActiveRecord::RecordNotSaved => e
+        rescue *RECORD_ERRORS => e
           Rails.logger.error "=================#{e.inspect}=================="
           @success = false
-          @record = e.record
-        rescue ActiveRecord::RecordNotFound, ActiveRecord::StatementInvalid, ActiveStorage::IntegrityError, ActiveStorage::Error => e
-          awesome_print e
+        rescue *RESULT_ERRORS => e
           Rails.logger.error "=================#{e.inspect}=================="
           @success = false
-        rescue Errno::ENOENT, StandardError => e
-          awesome_print e
-          Rails.logger.error "=================#{e.inspect}=================="
-          @success = false
-        rescue Exception => e
-          awesome_print e
-          Rails.logger.error "=================#{e.inspect}=================="
-          @success = false
+          @result = e
         end
       end
     end

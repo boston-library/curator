@@ -21,7 +21,7 @@ module Curator
 
       with_transaction do
         attachment_type = attachment_for_ds(@json_attrs.fetch('file_type', ''))
-        raise ActiveStorage::Error, "Invalid attachment type #{attachment_type}" if attachment_type.blank?
+        raise ArgumentError, "Invalid attachment type #{attachment_type}" if attachment_type.blank?
 
         file_set = Curator.filestreams.public_send("#{file_set_type}_class").public_send("with_attached_#{attachment_type}").find_by!(ark_id: file_set_ark_id)
         file_to_attach = io_for_file(@json_attrs.fetch('fedora_content_location', nil), metadata['ingest_filepath'])
@@ -33,7 +33,7 @@ module Curator
 
         @record = file_set.public_send(attachment_type).blob if file_set.public_send(attachment_type)&.attached? && file_set.public_send(attachment_type)&.blob
 
-        raise ActiveStorage::IntegrityError, "Could not get blob for #{attachment_type} for FileSet ark_id=#{file_set.ark_id}" if @record.blank?
+        raise ActiveRecord::Error, "Could not get blob for #{attachment_type} for FileSet ark_id=#{file_set.ark_id}" if @record.blank?
 
         @record.transaction(requires_new: true) do
           @record.lock!
@@ -43,7 +43,8 @@ module Curator
         end
       end
     ensure
-      return @success, @record
+      handle_result!
+      return @success, @result
     end
 
     private

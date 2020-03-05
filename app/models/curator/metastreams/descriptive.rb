@@ -11,10 +11,12 @@ module Curator
     enum text_direction: %w(ltr rtl).freeze
     # JSON ATTRS
 
-    scope :with_mappings, -> { includes(:desc_terms, :name_roles, :desc_host_collections) }
-    scope :with_physical_location, -> { joins(:physical_location).includes(:physical_location) }
-    scope :with_license, -> { joins(:license).includes(:license) }
-    scope :for_serialization, -> { merge(with_physical_location.with_license).merge(with_mappings) }
+    scope :with_desc_terms, -> { preload(:genres, :resource_types, :languages, :subject_topics, :subject_names, :subject_geos) }
+
+    scope :with_mappings, -> { joins(:license, :physical_location, :name_roles => [:name, :role]).eager_load(:host_collections, :license, :name_roles => [{:name => :authority }, {:role => :authority}], :physical_location => [:authority])
+    }
+
+    scope :for_serialization, -> { merge(with_mappings).merge(with_desc_terms)  }
     # Identifier
     attr_json :identifier, Curator::Descriptives::Identifier.to_type, container_attribute: :identifier_json, array: true, default: []
 
@@ -43,13 +45,15 @@ module Curator
     # PARENTS
     belongs_to :descriptable, polymorphic: true, inverse_of: :descriptive
     belongs_to :license, inverse_of: :licensees, class_name: 'Curator::ControlledTerms::License'
-    belongs_to :physical_location, -> { with_authority }, inverse_of: :physical_locations_of, class_name: 'Curator::ControlledTerms::Name'
+    belongs_to :physical_location, inverse_of: :physical_locations_of, class_name: 'Curator::ControlledTerms::Name'
     # MAPPING OBJECTS
     with_options inverse_of: :descriptive, dependent: :destroy do
-      has_many :desc_terms, -> { joins(:mapped_term).includes(:mapped_term) }, class_name: 'Curator::Mappings::DescTerm'
-      has_many :name_roles, -> { joins(:name, :role).includes(:name, :role) }, class_name: 'Curator::Mappings::DescNameRole'
-      has_many :desc_host_collections, -> { joins(:host_collection).includes(:host_collection) }, class_name: 'Curator::Mappings::DescHostCollection'
+      has_many :desc_terms, class_name: 'Curator::Mappings::DescTerm'
+      has_many :name_roles, class_name: 'Curator::Mappings::DescNameRole'
+      has_many :desc_host_collections, class_name: 'Curator::Mappings::DescHostCollection'
     end
+
+    validates_associated :desc_terms, :name_roles, :desc_host_collections
 
     has_many :host_collections, through: :desc_host_collections, source: :host_collection do
       def names
@@ -64,12 +68,12 @@ module Curator
 
     # TERMS
     with_options through: :desc_terms, source: :mapped_term do
-      has_many :genres, -> { with_authority }, class_name: 'Curator::ControlledTerms::Genre'
-      has_many :resource_types, -> { with_authority }, class_name: 'Curator::ControlledTerms::ResourceType'
-      has_many :languages, -> { with_authority }, class_name: 'Curator::ControlledTerms::Language'
-      has_many :subject_topics, -> { with_authority }, class_name: 'Curator::ControlledTerms::Subject'
-      has_many :subject_names, -> { with_authority }, class_name: 'Curator::ControlledTerms::Name'
-      has_many :subject_geos, -> { with_authority }, class_name: 'Curator::ControlledTerms::Geographic'
+      has_many :genres, class_name: 'Curator::ControlledTerms::Genre'
+      has_many :resource_types, class_name: 'Curator::ControlledTerms::ResourceType'
+      has_many :languages, class_name: 'Curator::ControlledTerms::Language'
+      has_many :subject_topics, class_name: 'Curator::ControlledTerms::Subject'
+      has_many :subject_names, class_name: 'Curator::ControlledTerms::Name'
+      has_many :subject_geos, class_name: 'Curator::ControlledTerms::Geographic'
     end
 
     # VALIDATIONS

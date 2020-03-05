@@ -16,10 +16,12 @@ module Curator
 
     def self.with_all_attachments
       reflections.keys.select { |ref| ref =~ /_attachment/ }
-      eager_load(attachment_reflections)
+      includes(attachment_reflections)
     end
 
     self.curator_indexable_mapper = Curator::FileSetIndexer.new
+
+    scope :for_serialization, -> { merge(with_metastreams) }
 
     attr_json_config(default_container_attribute: :pagination)
 

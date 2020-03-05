@@ -11,7 +11,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
     @object_json['admin_set']['ark_id'] = parent.ark_id
     @object_json['is_member_of_collection'][0]['ark_id'] = parent.ark_id
     expect do
-      @success, @object = described_class.call(json_data: @object_json)
+      @success, @object = handle_factory_result(described_class, @object_json)
     end.to change { Curator::DigitalObject.count }.by(1)
   end
 
@@ -19,7 +19,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
   specify { expect(@object).to be_valid }
 
   describe '#call' do
-    subject { @object.reload }
+    subject { @object }
 
     it 'has the correct properties' do
       expect(subject.ark_id).to eq @object_json['ark_id']
@@ -27,10 +27,8 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
     end
 
     describe 'setting admin set' do
-      let(:admin_set) { subject.admin_set }
-
       it 'creates the admin set relationship' do
-        expect(admin_set).to be_an_instance_of(Curator::Collection)
+        expect(subject.admin_set).to be_an_instance_of(Curator::Collection)
       end
     end
 
@@ -52,13 +50,15 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
            text_direction)
       end
 
+      specify { expect(descriptive).to be_truthy.and be_valid }
+
       it 'creates the descriptive object' do
         expect(descriptive).to be_an_instance_of(Curator::Metastreams::Descriptive)
       end
 
       it 'sets basic metadata properties' do
         simple_fields.each do |attr|
-          expect(descriptive.send(attr)).to eq desc_json[attr]
+          expect(subject.descriptive.send(attr)).to eq desc_json[attr]
         end
       end
 
@@ -243,6 +243,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
         describe 'subject' do
           # NOTE: for some reason object order in db is reverse of source JSON
           let(:subject_topics) { descriptive.subject_topics }
+
           it 'sets the subject_topic data' do
             expect(subject_topics.count).to eq 3
             expect(subject_topics).to all(be_an_instance_of(Curator::ControlledTerms::Subject))

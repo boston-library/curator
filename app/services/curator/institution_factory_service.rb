@@ -7,7 +7,7 @@ module Curator
     def call
       location_json_attrs = @json_attrs.fetch('location', {}).with_indifferent_access
       with_transaction do
-        @record = Curator.institution_class.new(ark_id: @ark_id)
+        @record = Curator.institution_class.with_metastreams.new(ark_id: @ark_id)
         @record.name = @json_attrs.fetch(:name)
         @record.abstract = @json_attrs.fetch(:abstract, '')
         @record.url = @json_attrs.fetch(:url, nil)
@@ -27,11 +27,11 @@ module Curator
           destination_site = @admin_json_attrs.fetch(:destination_site, nil)
           administrative.destination_site = destination_site if destination_site
         end
-        Rails.logger.debug "Saving Record....."
         @record.save!
       end
     ensure
-      return @success, @record
+      handle_result!
+      return @success, @result
     end
 
     protected

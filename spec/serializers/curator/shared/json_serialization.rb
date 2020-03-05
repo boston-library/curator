@@ -2,7 +2,7 @@
 
 RSpec.shared_examples 'json_serialization', type: :serializers do
   let!(:adapter_key) { :json }
-  let!(:json_regex) { /[{\[]{1}([,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]|".*?")+[}\]]{1}/ }
+  let!(:json_regex) { /[{\[]{1}([,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]|".*?")+[}\]]{1}/.freeze }
   let!(:recurse_keys_to_json_map) do
     proc do |val|
       case val
@@ -40,9 +40,9 @@ RSpec.shared_examples 'json_serialization', type: :serializers do
     specify { expect(expected_as_json_options).to be_truthy.and be_a_kind_of(Hash) }
 
     describe 'For single record' do
-      let(:serializer_for_one) { described_class.new(json_record, adapter_key) }
-      let(:expected_json_hash) { record_as_json(json_record, expected_as_json_options) }
-      let(:json_root_key) { record_root_key(json_record) }
+      let!(:serializer_for_one) { described_class.new(json_record, adapter_key) }
+      let!(:expected_json_hash) { record_as_json(json_record, expected_as_json_options) }
+      let!(:json_root_key) { record_root_key(json_record) }
 
       describe '#serializable_hash' do
         subject { serializer_for_one.serializable_hash }
@@ -57,9 +57,9 @@ RSpec.shared_examples 'json_serialization', type: :serializers do
       describe '#render' do
         subject { serializer_for_one.render }
 
-        let(:expected_json) { Oj.dump(expected_json_hash) }
-        let(:expected_json_key_matchers) { recurse_keys_to_json_map.call(expected_json_hash[json_root_key]) }
-        let(:expected_json_val_matchers) { recurse_vals_to_json_map.call(expected_json_hash[json_root_key]) }
+        let!(:expected_json) { Oj.dump(expected_json_hash) }
+        let!(:expected_json_key_matchers) { recurse_keys_to_json_map.call(expected_json_hash[json_root_key]) }
+        let!(:expected_json_val_matchers) { recurse_vals_to_json_map.call(expected_json_hash[json_root_key]) }
 
         it { is_expected.to be_a_kind_of(String).and match(json_regex).and match(json_root_key) }
 
@@ -78,13 +78,13 @@ RSpec.shared_examples 'json_serialization', type: :serializers do
     end
 
     describe 'For collection of records' do
-      let(:serializer_for_many) { described_class.new(json_array, adapter_key) }
-      let(:expected_json_array) { json_array.map { |json_record| record_as_json(json_record, expected_as_json_options.merge(root: false)) } }
+      let!(:serializer_for_many) { described_class.new(json_array, adapter_key) }
+      let!(:expected_json_array) { json_array.map { |json_record| record_as_json(json_record, expected_as_json_options.merge(root: false)) } }
 
       describe '#serializable_hash' do
         subject { serializer_for_many.serializable_hash }
 
-        let(:json_root_key) { record_root_key(json_array) }
+        let!(:json_root_key) { record_root_key(json_array) }
 
         it { is_expected.to be_a_kind_of(Hash).and have_key(json_root_key) }
 
@@ -101,18 +101,19 @@ RSpec.shared_examples 'json_serialization', type: :serializers do
       describe '#render' do
         subject { serializer_for_many.render }
 
-        let(:json_root_key) { record_root_key(json_array) }
-        let(:expected_json) { Oj.dump(Hash[json_root_key, expected_json_array]) }
-        let(:expected_json_key_matchers) { expected_json_array.map { |json_record| recurse_keys_to_json_map.call(json_record) } }
-        let(:expected_json_val_matchers) { expected_json_array.map { |json_record| recurse_vals_to_json_map.call(json_record) } }
-        let(:json_key_tally) do
+        let!(:expected_json) { Oj.dump(Hash[json_root_key, expected_json_array]) }
+        let!(:expected_json_key_matchers) { expected_json_array.map { |json_record| recurse_keys_to_json_map.call(json_record) } }
+        let!(:expected_json_val_matchers) { expected_json_array.map { |json_record| recurse_vals_to_json_map.call(json_record) } }
+
+        let!(:json_root_key) { record_root_key(json_array) }
+        let!(:json_key_tally) do
           expected_json_key_matchers.flatten.inject(Hash.new(0)) do |ret, json_matcher|
             ret[json_matcher] += 1
             ret
           end.reject { |key, _v| expected_json_val_matchers.flatten.uniq.include?(key) }
         end
 
-        let(:json_val_tally) do
+        let!(:json_val_tally) do
           expected_json_val_matchers.flatten.inject(Hash.new(0)) do |ret, json_matcher|
             ret[json_matcher] += 1
             ret

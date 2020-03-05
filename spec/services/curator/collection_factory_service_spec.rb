@@ -10,7 +10,7 @@ RSpec.describe Curator::CollectionFactoryService, type: :service do
     parent = create(:curator_institution)
     @object_json['institution']['ark_id'] = parent.ark_id
     expect do
-      @success, @collection = described_class.call(json_data: @object_json)
+      @success, @collection = handle_factory_result(described_class, @object_json)
     end.to change { Curator::Collection.count }.by(1)
   end
 
@@ -18,7 +18,7 @@ RSpec.describe Curator::CollectionFactoryService, type: :service do
   specify { expect(@collection).to be_valid }
 
   describe '#call' do
-    subject { @collection.reload }
+    subject { @collection }
 
     it 'has the correct properties' do
       expect(subject.name).to eq @object_json['name']

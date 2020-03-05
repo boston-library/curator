@@ -7,7 +7,7 @@ RSpec.describe Curator::InstitutionFactoryService, type: :service do
   before(:all) do
     @object_json = load_json_fixture('institution')
     expect do
-      @success, @institution = described_class.call(json_data: @object_json)
+      @success, @institution = handle_factory_result(described_class, @object_json)
     end.to change { Curator::Institution.count }.by(1)
   end
 
@@ -15,7 +15,7 @@ RSpec.describe Curator::InstitutionFactoryService, type: :service do
   specify { expect(@institution).to be_valid }
 
   describe '#call' do
-    subject { @institution.reload }
+    subject { @institution }
 
     it 'has the correct properties' do
       expect(subject.name).to eq @object_json['name']
@@ -25,15 +25,15 @@ RSpec.describe Curator::InstitutionFactoryService, type: :service do
     end
 
     describe 'setting location data' do
-      let(:location) { subject.location }
+      specify { expect(subject.location).to be_truthy }
 
       it 'creates the associated location' do
-        expect(location).to be_an_instance_of(Curator::ControlledTerms::Geographic)
+        expect(subject.location).to be_an_instance_of(Curator::ControlledTerms::Geographic)
       end
 
       it 'sets the correct location properties' do
-        expect(location.label).to eq @object_json['location']['label']
-        expect(location.id_from_auth).to eq @object_json['location']['id_from_auth']
+        expect(subject.location.label).to eq @object_json['location']['label']
+        expect(subject.location.id_from_auth).to eq @object_json['location']['id_from_auth']
       end
     end
 

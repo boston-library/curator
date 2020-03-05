@@ -9,7 +9,7 @@ module Curator
         institution_ark_id = @json_attrs.dig('institution', 'ark_id')
         institution = Curator.institution_class.find_by!(ark_id: institution_ark_id)
 
-        @record = Curator.collection_class.new(ark_id: @ark_id)
+        @record = Curator.collection_class.with_metastreams.new(ark_id: @ark_id)
         @record.name = @json_attrs.fetch(:name)
         @record.abstract = @json_attrs.fetch(:abstract, '')
         @record.institution = institution
@@ -34,7 +34,8 @@ module Curator
         @record.save!
       end
     ensure
-      return @success, @record
+      handle_result!
+      return @success, @result
     end
   end
 end

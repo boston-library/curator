@@ -10,7 +10,7 @@ module Curator
     self.curator_indexable_mapper = Curator::DigitalObjectIndexer.new
 
     scope :with_mappings, -> { includes(:exemplary_image_mapping, :collection_members, :file_set_member_mappings) }
-    scope :for_serialization, -> { merge(with_metastreams.with_mappings) }
+    scope :for_serialization, -> { with_mappings.merge(with_metastreams.merge(Curator::Metastreams::Descriptive.for_serialization)) }
 
     validates :contained_by_id, exclusion: { in: -> (digital_object) { Array.wrap(digital_object.id) } }, uniqueness: { scope: :id }, unless: -> { contained_by.blank? }
 

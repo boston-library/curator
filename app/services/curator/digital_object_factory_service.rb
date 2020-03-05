@@ -9,8 +9,7 @@ module Curator
       with_transaction do
         admin_set_ark_id = @json_attrs.dig('admin_set', 'ark_id')
         admin_set = Curator.collection_class.find_by!(ark_id: admin_set_ark_id)
-
-        @record = Curator.digital_object_class.new(ark_id: @ark_id)
+        @record = Curator.digital_object_class.with_metastreams.new(ark_id: @ark_id)
         @record.admin_set = admin_set
         collections = @json_attrs.fetch('exemplary_image_of', [])
         collections.each do |collection|
@@ -73,13 +72,16 @@ module Curator
                        when 'geos'
                          :geographic
                        end
+
             next if map_type.blank?
 
             v.each do |map_attrs|
-              descriptive.desc_terms.build(mapped_term: term_for_mapping(map_attrs,
-                                                                         nomenclature_class: Curator.controlled_terms.public_send("#{map_type}_class")))
+              mapped_term = term_for_mapping(map_attrs,
+                                             nomenclature_class: Curator.controlled_terms.public_send("#{map_type}_class"))
+              descriptive.desc_terms.build(mapped_term: mapped_term)
             end
           end
+          awesome_print descriptive.desc_terms.size
 
           @desc_json_attrs.fetch(:name_roles, []).each do |name_role_attrs|
             name_role_attrs = name_role(name_role_attrs.fetch(:name), name_role_attrs.fetch(:role))
@@ -89,7 +91,9 @@ module Curator
         @record.save!
       end
     ensure
-      return @success, @record
+      handle_result!
+      awesome_print @result.descriptive.desc_terms.count
+      return @success, @result
     end
 
     def identifier(json_attrs = {})
