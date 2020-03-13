@@ -11,13 +11,41 @@ module Curator
     enum text_direction: %w(ltr rtl).freeze
     # JSON ATTRS
 
-    scope :with_desc_terms, -> { preload(:genres, :resource_types, :languages, :subject_topics, :subject_names, :subject_geos) }
 
-    scope :with_mappings, -> { joins(:license, :physical_location, :name_roles => [:name, :role]).eager_load(:host_collections, :license, :name_roles => [{:name => :authority }, {:role => :authority}], :physical_location => [:authority])
+    scope :with_mappings, -> {
+      distinct.joins(:license,
+                      :physical_location,
+                      :desc_host_collections => [:host_collection],
+                      :name_roles => [:name, :role]
+              )
+              .includes(:license,
+                       :host_collections,
+                       :physical_location => [:authority],
+                       :name_roles => [{ :name => [:authority] }, {:role => [:authority] }]
+              )
     }
 
-    scope :for_serialization, -> { merge(with_mappings).merge(with_desc_terms)  }
+
+    scope :with_desc_terms, -> { left_outer_joins(:genres,
+                                                  :subject_topics,
+                                                  :subject_names,
+                                                  :subject_geos,
+                                                  :resource_types => [:authority],
+                                                  :languages => [:authority]
+                                                  )
+                                .includes(:genres => [:authority],
+                                          :resource_types => [:authority],
+                                          :languages => [:authority],
+                                          :subject_topics => [:authority],
+                                          :subject_names => [:authority],
+                                          :subject_geos => [:authority]
+                                        )
+                              }
+
+    scope :for_serialization, -> { with_mappings.merge(with_desc_terms)  }
     # Identifier
+
+
     attr_json :identifier, Curator::Descriptives::Identifier.to_type, container_attribute: :identifier_json, array: true, default: []
 
     # #Title
