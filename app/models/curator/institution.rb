@@ -9,7 +9,7 @@ module Curator
 
     self.curator_indexable_mapper = Curator::InstitutionIndexer.new
 
-    scope :with_location, -> { joins(:location).includes(:location) }
+    scope :with_location, -> { joins(:location).preload(:location) }
     scope :for_serialization, -> { merge(with_location).merge(with_metastreams) }
 
     validates :url, format: { with: URI.regexp(%w(http https)), allow_blank: true }

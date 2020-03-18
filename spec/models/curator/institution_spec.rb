@@ -51,7 +51,7 @@ RSpec.describe Curator::Institution, type: :model do
     describe '.with_location' do
       subject { described_class }
 
-      let(:expected_scope_sql) { described_class.joins(:location).includes(:location).to_sql }
+      let(:expected_scope_sql) { described_class.joins(:location).preload(:location).to_sql }
 
       it { is_expected.to respond_to(:with_location) }
 

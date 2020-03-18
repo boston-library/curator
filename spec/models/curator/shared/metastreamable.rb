@@ -56,7 +56,7 @@ RSpec.shared_examples 'metastreamable_all', type: :model do
   describe '#with_metastreams' do
     subject { described_class }
 
-    let(:expected_sql) { described_class.merge(described_class.with_workflow.with_administrative).merge(described_class.with_descriptive).to_sql }
+    let(:expected_sql) { described_class.joins(:administrative, :workflow).preload(:administrative, :workflow).merge(described_class.with_descriptive).to_sql}
 
     it { is_expected.to respond_to(:with_metastreams) }
 
@@ -73,7 +73,7 @@ RSpec.shared_examples 'metastreamable_basic', type: :model do
   describe '#with_metastreams' do
     subject { described_class }
 
-    let(:expected_sql) { described_class.merge(described_class.with_workflow.with_administrative).to_sql }
+    let(:expected_sql) { described_class.joins(:administrative, :workflow).preload(:administrative, :workflow).to_sql }
 
     it { is_expected.to respond_to(:with_metastreams) }
 

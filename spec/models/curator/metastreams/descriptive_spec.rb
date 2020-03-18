@@ -273,10 +273,33 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
   end
 
   describe 'Scopes' do
+    describe '.with_desc_terms' do
+      subject { described_class }
+
+      let(:expected_scope_sql) do
+        described_class.
+        left_outer_joins(:desc_terms => :mapped_term).
+        eager_load(:desc_terms => :mapped_term).
+        where('curator_controlled_terms_nomenclatures.type IN (?)', %w(Genre ResourceType Language Subject Name Geographic).map { |type| "Curator::ControlledTerms::#{type}"  } ).
+        to_sql
+      end
+
+      it { is_expected.to respond_to(:with_desc_terms) }
+
+      it 'expects the scope #to_sql to match the :expected_scope_sql' do
+        expect(subject.with_desc_terms.to_sql).to eq(expected_scope_sql)
+      end
+    end
+
     describe '.with_mappings' do
       subject { described_class }
 
-      let(:expected_scope_sql) { described_class.includes(:desc_terms => [:mapped_term], :name_roles => [:name, :role], :desc_host_collections => [:host_collection]).references(:desc_terms, :name_roles, :desc_host_collections).to_sql }
+      let(:expected_scope_sql) do
+        described_class.joins(:desc_host_collections => [:host_collection], :name_roles => [:name, :role]).
+        preload(:host_collections, :name_roles => [{ :name => [:authority] }, {:role => [:authority] }]).
+        merge(described_class.with_desc_terms).
+        to_sql
+      end
 
       it { is_expected.to respond_to(:with_mappings) }
 
@@ -288,7 +311,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     describe '.with_physical_location' do
       subject { described_class }
 
-      let(:expected_scope_sql) { described_class.joins(:physical_location).includes(:physical_location).to_sql }
+      let(:expected_scope_sql) { described_class.joins(:physical_location).preload(:physical_location => [:authority]).to_sql }
 
       it { is_expected.to respond_to(:with_physical_location) }
 
@@ -300,7 +323,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     describe '.with_license' do
       subject { described_class }
 
-      let(:expected_scope_sql) { described_class.joins(:license).includes(:license).to_sql }
+      let(:expected_scope_sql) { described_class.joins(:license).preload(:license).to_sql }
 
       it { is_expected.to respond_to(:with_license) }
 

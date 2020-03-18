@@ -10,41 +10,25 @@ module Curator
     enum digital_origin: ['born digital', 'reformatted digital', 'digitized microfilm', 'digitized other analog'].freeze
     enum text_direction: %w(ltr rtl).freeze
     # JSON ATTRS
+    scope :with_physical_location, -> { joins(:physical_location).preload(:physical_location => [:authority]) }
 
+    scope :with_license, -> { joins(:license).preload(:license) }
 
-    scope :with_mappings, -> {
-      distinct.joins(:license,
-                      :physical_location,
-                      :desc_host_collections => [:host_collection],
-                      :name_roles => [:name, :role]
-              )
-              .includes(:license,
-                       :host_collections,
-                       :physical_location => [:authority],
-                       :name_roles => [{ :name => [:authority] }, {:role => [:authority] }]
-              )
+    scope :with_desc_terms, -> {
+      left_outer_joins(:desc_terms => :mapped_term).
+      eager_load(:desc_terms => :mapped_term).
+      where('curator_controlled_terms_nomenclatures.type IN (?)', %w(Genre ResourceType Language Subject Name Geographic).map { |type| "Curator::ControlledTerms::#{type}"  } )
     }
 
+    scope :with_mappings, -> {
+      joins(:desc_host_collections => [:host_collection], :name_roles => [:name, :role]).
+      preload(:host_collections, :name_roles => [{ :name => [:authority] }, {:role => [:authority] }]).
+      merge(with_desc_terms)
+    }
 
-    scope :with_desc_terms, -> { left_outer_joins(:genres,
-                                                  :subject_topics,
-                                                  :subject_names,
-                                                  :subject_geos,
-                                                  :resource_types => [:authority],
-                                                  :languages => [:authority]
-                                                  )
-                                .includes(:genres => [:authority],
-                                          :resource_types => [:authority],
-                                          :languages => [:authority],
-                                          :subject_topics => [:authority],
-                                          :subject_names => [:authority],
-                                          :subject_geos => [:authority]
-                                        )
-                              }
+    scope :for_serialization, -> { merge(with_physical_location.with_license).merge(with_mappings) }
 
-    scope :for_serialization, -> { with_mappings.merge(with_desc_terms)  }
     # Identifier
-
 
     attr_json :identifier, Curator::Descriptives::Identifier.to_type, container_attribute: :identifier_json, array: true, default: []
 
@@ -96,12 +80,12 @@ module Curator
 
     # TERMS
     with_options through: :desc_terms, source: :mapped_term do
-      has_many :genres, class_name: 'Curator::ControlledTerms::Genre'
-      has_many :resource_types, class_name: 'Curator::ControlledTerms::ResourceType'
-      has_many :languages, class_name: 'Curator::ControlledTerms::Language'
-      has_many :subject_topics, class_name: 'Curator::ControlledTerms::Subject'
-      has_many :subject_names, class_name: 'Curator::ControlledTerms::Name'
-      has_many :subject_geos, class_name: 'Curator::ControlledTerms::Geographic'
+      has_many :genres, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Genre'
+      has_many :resource_types, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::ResourceType'
+      has_many :languages, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Language'
+      has_many :subject_topics, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Subject'
+      has_many :subject_names, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Name'
+      has_many :subject_geos, -> { merge(with_authority) }, class_name: 'Curator::ControlledTerms::Geographic'
     end
 
     # VALIDATIONS

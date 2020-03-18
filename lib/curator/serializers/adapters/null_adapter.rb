@@ -3,8 +3,10 @@
 module Curator
   module Serializers
     class NullAdapter < AdapterBase
+      def_delegators :schema, :root
+      
       def initialize(_options = {}, &_block)
-        @schema = nil
+        @schema = Curator::Serializers::Schema.new(root: nil, options: {})
       end
 
       def serializable_hash(record = nil, serializer_params = {})
