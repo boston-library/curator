@@ -86,10 +86,11 @@ module Curator
 
       ##
       # returns a well-formatted placename for display on a map
-      # @param hiergeo_hash [Hash] hash of <mods:hierarchicalGeographic> elements
-      # hiergeo_hash looks like:
-      # {country: '', region: '', province: '', state: '', territory: '', county: '', island: '', city: '', city_section: '', area: '', extarea: ''}
+      # @param hiergeo_hash [Hash] hash of <mods:hierarchicalGeographic> elements, e.g.:
+      #   { continent: '', country: '', region: '', province: '', state: '', territory: '', county: '',
+      #     island: '', city: '', city_section: '', area: '', extarea: '', other: '' }
       # @return [String]
+      # TODO: fix display of GeoNames "other" values (e.g. Lucy Vincent Beach)
       def self.display_placename(hiergeo_hash)
         placename = []
         case hiergeo_hash[:country]
@@ -120,6 +121,26 @@ module Curator
         else
           nil
         end
+      end
+
+      ##
+      # takes Geomash::Geonames data and makes it look like Geomash::TGN
+      # @param hiergeo_hash [Hash] e.g.:
+      #   { area: '', cont: '', pcli: '', adm1: '', adm2: '', adm3: '', mt: '' }
+      # @return [Hash]
+      def self.normalize_geonames_hiergeo(hiergeo_hash)
+        normalized = {}
+        normalized[:continent] = hiergeo_hash[:cont]
+        normalized[:country] = hiergeo_hash[:pcli]
+        normalized[:state] = hiergeo_hash[:adm1]
+        normalized[:county] = hiergeo_hash[:adm2]
+        normalized[:city] = hiergeo_hash[:adm3]
+        last_value = hiergeo_hash.values.last
+        hiergeo_hash[:other] = last_value unless normalized.values.include?(last_value)
+        # have to clean data after dupe check above
+        normalized[:county]&.gsub!(/\sCounty\z/, '')
+        normalized[:city]&.gsub!(/\A(Town\sof|City\sof)\s/, '')
+        normalized.compact
       end
 
       private_class_method :coords_to_wkt_polygon, :normalize_bbox, :bbox_dateline_fix

@@ -7,45 +7,47 @@ module Curator
       included do
         configure do
           each_record do |record, context|
-            next unless record.descriptive&.subject_geos
+            # handle both DigitalObject and Institution
+            geo_subjects = record.try(:descriptive)&.subject_geos || Array.wrap(record.try(:location))
+            next unless geo_subjects.present?
 
-            geo_fields = %w(subject_geographic_tsim subject_geographic_ssim subject_geo_city_ssim
-                            subject_geo_country_ssim subject_geo_county_ssim subject_geo_citysection_ssim
-                            subject_coordinates_geospatial subject_point_geospatial subject_bbox_geospatial
-                            subject_geojson_facet_ssim subject_hiergeo_geojson_ssm subject_geo_label_ssim
-                            subject_geo_continent_ssim subject_geo_nonhier_ssm)
-            geo_fields.each do |geo_field|
-              context.output_hash[geo_field] = []
-            end
-            record.descriptive.subject_geos.each do |subject_geo|
+            geo_fields = %w(subject_geographic_tim subject_geographic_sim subject_geo_label_sim
+                            subject_geo_citysection_sim subject_geo_city_sim subject_geo_county_sim
+                            subject_geo_state_sim subject_geo_country_sim subject_geo_continent_sim 
+                            subject_geo_other_ssm subject_coordinates_geospatial subject_point_geospatial 
+                            subject_bbox_geospatial subject_geojson_facet_ssim subject_hiergeo_geojson_ssm)
+            geo_fields.each { |geo_field| context.output_hash[geo_field] = [] }
+
+            geo_subjects.each do |subject_geo|
               geo_label = subject_geo.label
               display_placename = geo_label
               geo_auth = subject_geo.authority&.code
               coords = subject_geo.coordinates
-              context.output_hash['subject_geo_label_ssim'] << geo_label if geo_auth
+              context.output_hash['subject_geo_label_sim'] << geo_label if geo_auth
 
-              if geo_auth == 'tgn'
-                auth_url = "#{ENV['AUTHORITY_API_URL']}/geomash/tgn/#{subject_geo.id_from_auth}"
+              if geo_auth == 'tgn' || geo_auth == 'geonames'
+                auth_url = "#{ENV['AUTHORITY_API_URL']}/geomash/#{geo_auth}/#{subject_geo.id_from_auth}"
                 auth_data = Curator::ControlledTerms::CannonicalLabelService.call(url: auth_url,
                                                                                   json_path: nil)
                 if auth_data && auth_data[:hier_geo].present?
+                  auth_data[:hier_geo] = Curator::Parsers::GeoParser.normalize_geonames_hiergeo(auth_data[:hier_geo]) if geo_auth == 'geonames'
                   auth_data[:hier_geo].each do |k, v|
-                    puts "KEY = #{k}; VALUE = #{v}"
-                    context.output_hash['subject_geographic_tsim'] << v
+                    context.output_hash['subject_geographic_tim'] << v
                     v += ' (county)' if k == 'county'
-                    context.output_hash['subject_geographic_ssim'] << v
-                    context.output_hash["subject_geo_#{k}_ssim"] << v if context.output_hash["subject_geo_#{k}_ssim"]
+                    context.output_hash['subject_geographic_sim'] << v
+                    context.output_hash["subject_geo_#{k}_sim"] << v if context.output_hash["subject_geo_#{k}_sim"]
                   end
+                  context.output_hash['subject_geo_nonhier_ssm'] << auth_data[:hier_geo][:other]
                   hiergeo_geojson = { type: 'Feature',
-                                      'geometry': { type: 'Point',
-                                                    coordinates: coords&.split(',')&.reverse&.map(&:to_f) },
-                                      'properties': auth_data[:hier_geo] }
+                                      geometry: { type: 'Point',
+                                                  coordinates: coords&.split(',')&.reverse&.map(&:to_f) },
+                                      properties: auth_data[:hier_geo] }
                   context.output_hash['subject_hiergeo_geojson_ssm'] << hiergeo_geojson.to_json
                   display_placename = Curator::Parsers::GeoParser.display_placename(auth_data[:hier_geo])
                 end
               else
-                context.output_hash['subject_geographic_tsim'] << geo_label
-                context.output_hash['subject_geographic_ssim'] << geo_label
+                context.output_hash['subject_geographic_tim'] << geo_label
+                context.output_hash['subject_geographic_sim'] << geo_label
                 context.output_hash['subject_geo_nonhier_ssm'] << geo_label
               end
 
@@ -75,6 +77,7 @@ module Curator
                 context.output_hash['subject_geojson_facet_ssim'] << geojson_hash.to_json
               end
             end
+            geo_fields.each { |geo_field| context.output_hash[geo_field].uniq! }
           end
         end
       end

@@ -193,6 +193,20 @@
                 "area_type": "city"
             },
             {
+              "label": "Chippewa Falls",
+              "authority_code": "tgn",
+              "id_from_auth": "2120926",
+              "coordinates": "44.9333,-91.3833",
+              "area_type": "city"
+            },
+            {
+              "label": "Great Chebeague Island",
+              "authority_code": "tgn",
+              "id_from_auth": "2362636",
+              "coordinates": "43.7333,-70.1167",
+              "area_type": "island"
+            },
+            {
                 "label": "Lucy Vincent Beach",
                 "authority_code": "geonames",
                 "id_from_auth": "4942742",
@@ -200,6 +214,17 @@
             },
             {
                 "bounding_box": "-87.6175 41.7725 -87.565 41.8025"
+            },
+            {
+                "coordinates": "42.7,-71.4"
+            },
+            {
+                "label": "Seine and Pont Neuf from Saint Gervais",
+                "coordinates": "48.855289,2.354813"
+            },
+            {
+                "label": "Asgard",
+                "authority_code": "local"
             }
           ],
           "titles": [

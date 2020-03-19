@@ -40,7 +40,7 @@ module Curator
     #   subject_geo_country_ssim->subject_geo_country_sim subject_geo_state_ssim->subject_geo_state_sim
     #   subject_geo_county_ssim->subject_geo_county_sim subject_geo_city_ssim->subject_geo_city_sim
     #   subject_geo_citysection_ssim->subject_geo_citysection_sim subject_geographic_ssim->subject_geographic_sim
-    #   subject_geo_nonhier_ssim->subject_geo_nonhier_ssm
+    #   subject_geo_nonhier_ssim->subject_geo_other_ssm
     #   subject_geo_city_ssim->subject_geo_label_sim (for MLT relevancy only)
     #
     # NOTE: fields below are new:
@@ -51,14 +51,6 @@ module Curator
 
     # TODO: add indexing for:
     #         contained_by_ark_id_ssi edit_access_group_ssim
-    #
-    #         DESCRIPTIVE:
-    #         subject_geo_country_sim
-    #         subject_geo_state_sim subject_geo_county_sim subject_geo_city_sim subject_geo_citysection_ssim
-    #
-    #         subject_geographic_tim subject_geographic_sim subject_geo_label_sim
-    #         subject_coordinates_geospatial subject_point_geospatial subject_bbox_geospatial
-    #         subject_geojson_facet_ssim subject_hiergeo_geojson_ssm subject_geo_nonhier_ssm
     configure do
       to_field 'admin_set_name_ssi', obj_extract('admin_set', 'name')
       to_field 'admin_set_ark_id_ssi', obj_extract('admin_set', 'ark_id')
