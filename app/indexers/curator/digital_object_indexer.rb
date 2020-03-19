@@ -8,7 +8,8 @@ module Curator
 
     # NOTE: fields below were previously set in Bplmodels::ObjectBase#to_solr, but no longer needed(?):
     #   internet_media_type_ssim classification_tsim label_ssim date_facet_ssim supplied_alternative_title_bs
-    #   supplied_title_bs subject_temporal_facet_ssim object_profile_ssm
+    #   supplied_title_bs subject_temporal_facet_ssim object_profile_ssm subject_geo_province_ssim
+    #   subject_geo_region_ssim subject_geo_territory_ssim subject_geo_island_ssim subject_geo_area_ssim
     #
     # NOTE: fields below were previously set in Bplmodels::ObjectBase#to_solr, but have been updated:
     #   institution_pid_si->institution_ark_id_ssi institution_name_ssim->institution_name_ssi
@@ -35,23 +36,29 @@ module Curator
     #   physical_location_tsim->physical_location_tim sub_location_tsim->sub_location_tsi shelf_locator_tsim->shelf_locator_tsi
     #   date_facet_yearly_ssim->date_facet_yearly_itim subtitle_tsim->title_info_other_subtitle_tsim
     #   subject_date_start_tsim->subject_date_tsim subject_date_end_tsim->subject_date_tsim
-    #   has_searchable_text_bsi->has_searchable_pages_bsi
+    #   has_searchable_text_bsi->has_searchable_pages_bsi subject_geographic_tsim->subject_geographic_tim
+    #   subject_geo_country_ssim->subject_geo_country_sim subject_geo_state_ssim->subject_geo_state_sim
+    #   subject_geo_county_ssim->subject_geo_county_sim subject_geo_city_ssim->subject_geo_city_sim
+    #   subject_geo_citysection_ssim->subject_geo_citysection_sim subject_geographic_ssim->subject_geographic_sim
+    #   subject_geo_nonhier_ssim->subject_geo_nonhier_ssm
+    #   subject_geo_city_ssim->subject_geo_label_sim (for MLT relevancy only)
     #
     # NOTE: fields below are new:
     #   title_info_primary_subtitle_tsi date_edtf_ssm license_uri_ssm subject_temporal_tsim
     #   note_exhibitions_tsim note_arrangement_tsim note_language_tsim note_funding_tsim
-    #   note_biographical_tsim note_publications_tsim note_credits_tsim
+    #   note_biographical_tsim note_publications_tsim note_credits_tsim subject_geo_label_sim
+    #   subject_geo_continent_ssim
 
     # TODO: add indexing for:
     #         contained_by_ark_id_ssi edit_access_group_ssim
     #
     #         DESCRIPTIVE:
-    #         subject_geo_country_ssim subject_geo_province_ssim subject_geo_region_ssim subject_geo_territory_ssim
-    #         subject_geo_state_ssim subject_geo_county_ssim subject_geo_city_ssim subject_geo_citysection_ssim
-    #         subject_geo_island_ssim subject_geo_area_ssim
-    #         subject_geographic_tsim subject_geographic_ssim
+    #         subject_geo_country_sim
+    #         subject_geo_state_sim subject_geo_county_sim subject_geo_city_sim subject_geo_citysection_ssim
+    #
+    #         subject_geographic_tim subject_geographic_sim subject_geo_label_sim
     #         subject_coordinates_geospatial subject_point_geospatial subject_bbox_geospatial
-    #         subject_geojson_facet_ssim subject_hiergeo_geojson_ssm subject_geo_nonhier_ssim
+    #         subject_geojson_facet_ssim subject_hiergeo_geojson_ssm subject_geo_nonhier_ssm
     configure do
       to_field 'admin_set_name_ssi', obj_extract('admin_set', 'name')
       to_field 'admin_set_ark_id_ssi', obj_extract('admin_set', 'ark_id')

@@ -84,6 +84,44 @@ module Curator
         [min_x, max_x]
       end
 
+      ##
+      # returns a well-formatted placename for display on a map
+      # @param hiergeo_hash [Hash] hash of <mods:hierarchicalGeographic> elements
+      # hiergeo_hash looks like:
+      # {country: '', region: '', province: '', state: '', territory: '', county: '', island: '', city: '', city_section: '', area: '', extarea: ''}
+      # @return [String]
+      def self.display_placename(hiergeo_hash)
+        placename = []
+        case hiergeo_hash[:country]
+        when 'United States', 'Canada'
+          if hiergeo_hash[:state] || hiergeo_hash[:province]
+            placename[0] = hiergeo_hash[:other].presence || hiergeo_hash[:city_section].presence || hiergeo_hash[:city].presence || hiergeo_hash[:island].presence || hiergeo_hash[:area].presence
+            if placename[0].nil? && hiergeo_hash[:county]
+              placename[0] = hiergeo_hash[:county] + ' (county)'
+            end
+            if placename[0]
+              placename[1] = Constants::STATE_ABBR.key(hiergeo_hash[:state]) || hiergeo_hash[:province].presence
+            else
+              placename[1] = hiergeo_hash[:state].presence || hiergeo_hash[:province].presence
+            end
+          else
+            placename[0] = hiergeo_hash[:other].presence || hiergeo_hash[:city_section].presence || hiergeo_hash[:city].presence || hiergeo_hash[:island].presence || hiergeo_hash[:area].presence || hiergeo_hash[:region].presence || hiergeo_hash[:territory].presence || hiergeo_hash[:country].presence
+          end
+        else
+          placename[0] = hiergeo_hash[:other].presence || hiergeo_hash[:city_section].presence || hiergeo_hash[:city].presence || hiergeo_hash[:island].presence || hiergeo_hash[:area].presence || hiergeo_hash[:state].presence || hiergeo_hash[:province].presence || hiergeo_hash[:region].presence || hiergeo_hash[:territory].presence
+          if placename[0].nil? && hiergeo_hash[:county]
+            placename[0] = hiergeo_hash[:county] + ' (county)'
+          end
+          placename[1] = hiergeo_hash[:country]
+        end
+
+        if !placename.blank?
+          placename.join(', ').gsub(/(\A,\s)|(,\s\z)/,'')
+        else
+          nil
+        end
+      end
+
       private_class_method :coords_to_wkt_polygon, :normalize_bbox, :bbox_dateline_fix
     end
   end

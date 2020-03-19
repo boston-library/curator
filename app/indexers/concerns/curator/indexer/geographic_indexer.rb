@@ -9,21 +9,46 @@ module Curator
           each_record do |record, context|
             next unless record.descriptive&.subject_geos
 
-            geo_fields = %w(subject_geographic_tim subject_geographic_ssim subject_geo_city_ssim
+            geo_fields = %w(subject_geographic_tsim subject_geographic_ssim subject_geo_city_ssim
+                            subject_geo_country_ssim subject_geo_county_ssim subject_geo_citysection_ssim
                             subject_coordinates_geospatial subject_point_geospatial subject_bbox_geospatial
-                            subject_geojson_facet_ssim)
+                            subject_geojson_facet_ssim subject_hiergeo_geojson_ssm subject_geo_label_ssim
+                            subject_geo_continent_ssim subject_geo_nonhier_ssm)
             geo_fields.each do |geo_field|
               context.output_hash[geo_field] = []
             end
             record.descriptive.subject_geos.each do |subject_geo|
               geo_label = subject_geo.label
-              context.output_hash['subject_geographic_tim'] << geo_label
-              context.output_hash['subject_geographic_ssim'] << geo_label
-              if subject_geo.area_type == 'city' || subject_geo.area_type == 'city_section'
-                context.output_hash['subject_geo_city_ssim'] << geo_label
+              display_placename = geo_label
+              geo_auth = subject_geo.authority&.code
+              coords = subject_geo.coordinates
+              context.output_hash['subject_geo_label_ssim'] << geo_label if geo_auth
+
+              if geo_auth == 'tgn'
+                auth_url = "#{ENV['AUTHORITY_API_URL']}/geomash/tgn/#{subject_geo.id_from_auth}"
+                auth_data = Curator::ControlledTerms::CannonicalLabelService.call(url: auth_url,
+                                                                                  json_path: nil)
+                if auth_data && auth_data[:hier_geo].present?
+                  auth_data[:hier_geo].each do |k, v|
+                    puts "KEY = #{k}; VALUE = #{v}"
+                    context.output_hash['subject_geographic_tsim'] << v
+                    v += ' (county)' if k == 'county'
+                    context.output_hash['subject_geographic_ssim'] << v
+                    context.output_hash["subject_geo_#{k}_ssim"] << v if context.output_hash["subject_geo_#{k}_ssim"]
+                  end
+                  hiergeo_geojson = { type: 'Feature',
+                                      'geometry': { type: 'Point',
+                                                    coordinates: coords&.split(',')&.reverse&.map(&:to_f) },
+                                      'properties': auth_data[:hier_geo] }
+                  context.output_hash['subject_hiergeo_geojson_ssm'] << hiergeo_geojson.to_json
+                  display_placename = Curator::Parsers::GeoParser.display_placename(auth_data[:hier_geo])
+                end
+              else
+                context.output_hash['subject_geographic_tsim'] << geo_label
+                context.output_hash['subject_geographic_ssim'] << geo_label
+                context.output_hash['subject_geo_nonhier_ssm'] << geo_label
               end
 
-              coords = subject_geo.coordinates
               context.output_hash['subject_point_geospatial'] << coords
               context.output_hash['subject_coordinates_geospatial'] << coords
 
@@ -32,23 +57,23 @@ module Curator
               context.output_hash['subject_bbox_geospatial'] << bbox_to_env
               context.output_hash['subject_coordinates_geospatial'] << bbox_to_env
 
-              next unless coords || bbox
-
-              geojson_hash = { type: 'Feature', geometry: {} }
-              if bbox
-                unless bbox == '-180.0 -90.0 180.0 90.0' # don't want 'whole world' bboxes
-                  geojson_hash[:bbox] = bbox.split(' ').map(&:to_f)
-                  geojson_hash[:geometry][:type] = 'Polygon'
-                  geojson_hash[:geometry][:coordinates] = [
-                      Curator::Parsers::GeoParser.bbox_formatter(bbox, 'wkt_array')
-                  ]
+              if coords || bbox
+                geojson_hash = { type: 'Feature', geometry: {} }
+                if bbox
+                  unless bbox == '-180.0 -90.0 180.0 90.0' # don't want 'whole world' bboxes
+                    geojson_hash[:bbox] = bbox.split(' ').map(&:to_f)
+                    geojson_hash[:geometry][:type] = 'Polygon'
+                    geojson_hash[:geometry][:coordinates] = [
+                        Curator::Parsers::GeoParser.bbox_formatter(bbox, 'wkt_array')
+                    ]
+                  end
+                elsif coords
+                  geojson_hash[:geometry][:type] = 'Point'
+                  geojson_hash[:geometry][:coordinates] = coords.split(',').reverse.map(&:to_f)
                 end
-              elsif coords
-                geojson_hash[:geometry][:type] = 'Point'
-                geojson_hash[:geometry][:coordinates] = coords.split(',').reverse.map(&:to_f)
+                geojson_hash[:properties] = { placename: display_placename } if display_placename
+                context.output_hash['subject_geojson_facet_ssim'] << geojson_hash.to_json
               end
-              geojson_hash[:properties] = { placename: geo_label } if geo_label
-              context.output_hash['subject_geojson_facet_ssim'] << geojson_hash.to_json
             end
           end
         end

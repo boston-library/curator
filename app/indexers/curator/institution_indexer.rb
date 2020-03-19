@@ -13,7 +13,7 @@ module Curator
     #         edit_access_group_ssim
     #         subject_geo_country_ssim subject_geo_state_ssim subject_geo_county_ssim
     #         subject_geo_city_ssim subject_geo_citysection_ssim
-    #         subject_geographic_tsim subject_geographic_ssim
+    #         subject_geographic_tim subject_geographic_ssim
     #         subject_coordinates_geospatial subject_point_geospatial
     #         subject_geojson_facet_ssim subject_hiergeo_geojson_ssm
     configure do
