@@ -6,8 +6,13 @@ require_relative '../shared/json_serialization'
 
 RSpec.describe Curator::Filestreams::VideoSerializer, type: :serializers do
   let!(:video_file_set_count) { 3 }
-  let!(:record) { create(:curator_filestreams_video) }
-  let!(:record_collection) { create_list(:curator_filestreams_ereader, video_file_set_count) }
+
+  let!(:record_collection) do
+    videos = create_list(:curator_filestreams_video, video_file_set_count)
+    Curator.filestreams.video_class.where(id: videos.pluck(:id)).for_serialization
+  end
+
+  let!(:record) { record_collection.last }
 
   describe 'Base Behavior' do
     it_behaves_like 'file_set_serializer'
@@ -15,8 +20,8 @@ RSpec.describe Curator::Filestreams::VideoSerializer, type: :serializers do
 
   describe 'Serialization' do
     it_behaves_like 'json_serialization' do
-      let(:json_record) { record }
-      let(:json_array) { record_collection }
+      let!(:json_record) { record }
+      let!(:json_array) { record_collection }
       let(:expected_as_json_options) do
         {
           after_as_json: -> (json_record) { json_record['file_set_type'] = json_record['file_set_type'].to_s.demodulize.downcase if json_record.key?('file_set_type'); json_record },

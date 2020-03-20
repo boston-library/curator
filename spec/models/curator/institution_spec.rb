@@ -61,7 +61,7 @@ RSpec.describe Curator::Institution, type: :model do
     end
 
     it_behaves_like 'for_serialization' do
-      let(:expected_scope_sql) { described_class.merge(described_class.with_metastreams.with_location).to_sql }
+      let(:expected_scope_sql) { described_class.merge(described_class.with_location).merge(described_class.with_metastreams).to_sql }
     end
   end
 end

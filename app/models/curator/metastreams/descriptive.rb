@@ -21,12 +21,11 @@ module Curator
     }
 
     scope :with_mappings, -> {
-      joins(:desc_host_collections => [:host_collection], :name_roles => [:name, :role]).
-      preload(:host_collections, :name_roles => [{ :name => [:authority] }, {:role => [:authority] }]).
-      merge(with_desc_terms)
+      joins(:desc_host_collections, :name_roles).
+      preload(:host_collections, :name_roles => [{ :name => [:authority] }, {:role => [:authority] }])
     }
 
-    scope :for_serialization, -> { merge(with_physical_location.with_license).merge(with_mappings) }
+    scope :for_serialization, -> { merge(with_physical_location).merge(with_license).merge(with_mappings).merge(with_desc_terms) }
 
     # Identifier
 

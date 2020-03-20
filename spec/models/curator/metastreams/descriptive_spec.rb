@@ -295,9 +295,8 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
       subject { described_class }
 
       let(:expected_scope_sql) do
-        described_class.joins(:desc_host_collections => [:host_collection], :name_roles => [:name, :role]).
+        described_class.joins(:desc_host_collections, :name_roles).
         preload(:host_collections, :name_roles => [{ :name => [:authority] }, {:role => [:authority] }]).
-        merge(described_class.with_desc_terms).
         to_sql
       end
 
@@ -333,7 +332,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     end
 
     it_behaves_like 'for_serialization' do
-      let(:expected_scope_sql) { described_class.merge(described_class.with_physical_location.with_license).merge(described_class.with_mappings).to_sql }
+      let(:expected_scope_sql) { described_class.merge(described_class.with_physical_location).merge(described_class.with_license).merge(described_class.with_mappings).merge(described_class.with_desc_terms).to_sql }
     end
   end
 end
