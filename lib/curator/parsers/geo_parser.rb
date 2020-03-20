@@ -86,57 +86,50 @@ module Curator
 
       ##
       # returns a well-formatted placename for display on a map
-      # @param hiergeo_hash [Hash] hash of <mods:hierarchicalGeographic> elements, e.g.:
+      # @param hgeo_hash [Hash] hash of <mods:hierarchicalGeographic> elements, e.g.:
       #   { continent: '', country: '', region: '', province: '', state: '', territory: '', county: '',
       #     island: '', city: '', city_section: '', area: '', extarea: '', other: '' }
       # @return [String]
-      # TODO: fix display of GeoNames "other" values (e.g. Lucy Vincent Beach)
-      def self.display_placename(hiergeo_hash)
+      def self.display_placename(hgeo_hash)
         placename = []
-        case hiergeo_hash[:country]
+        pref_label = hgeo_hash[:other] || hgeo_hash[:city_section] || hgeo_hash[:city] ||
+                     hgeo_hash[:island] || hgeo_hash[:area]
+        case hgeo_hash[:country]
         when 'United States', 'Canada'
-          if hiergeo_hash[:state] || hiergeo_hash[:province]
-            placename[0] = hiergeo_hash[:other].presence || hiergeo_hash[:city_section].presence || hiergeo_hash[:city].presence || hiergeo_hash[:island].presence || hiergeo_hash[:area].presence
-            if placename[0].nil? && hiergeo_hash[:county]
-              placename[0] = hiergeo_hash[:county] + ' (county)'
-            end
+          if hgeo_hash[:state] || hgeo_hash[:province]
+            placename[0] = pref_label
+            placename[0] = "#{hgeo_hash[:county]} (county)" if pref_label.nil? && hgeo_hash[:county]
             if placename[0]
-              placename[1] = Constants::STATE_ABBR.key(hiergeo_hash[:state]) || hiergeo_hash[:province].presence
+              placename[1] = Constants::STATE_ABBR.key(hgeo_hash[:state]) || hgeo_hash[:province]
             else
-              placename[1] = hiergeo_hash[:state].presence || hiergeo_hash[:province].presence
+              placename[1] = hgeo_hash[:state] || hgeo_hash[:province]
             end
           else
-            placename[0] = hiergeo_hash[:other].presence || hiergeo_hash[:city_section].presence || hiergeo_hash[:city].presence || hiergeo_hash[:island].presence || hiergeo_hash[:area].presence || hiergeo_hash[:region].presence || hiergeo_hash[:territory].presence || hiergeo_hash[:country].presence
+            placename[0] = pref_label || hgeo_hash[:region] || hgeo_hash[:territory] || hgeo_hash[:country]
           end
         else
-          placename[0] = hiergeo_hash[:other].presence || hiergeo_hash[:city_section].presence || hiergeo_hash[:city].presence || hiergeo_hash[:island].presence || hiergeo_hash[:area].presence || hiergeo_hash[:state].presence || hiergeo_hash[:province].presence || hiergeo_hash[:region].presence || hiergeo_hash[:territory].presence
-          if placename[0].nil? && hiergeo_hash[:county]
-            placename[0] = hiergeo_hash[:county] + ' (county)'
-          end
-          placename[1] = hiergeo_hash[:country]
+          placename[0] = pref_label || hgeo_hash[:state] || hgeo_hash[:province] ||
+                         hgeo_hash[:region] || hgeo_hash[:territory]
+          placename[0] = "#{hgeo_hash[:county]} (county)" if placename[0].nil? && hgeo_hash[:county]
+          placename[1] = hgeo_hash[:country]
         end
-
-        if !placename.blank?
-          placename.join(', ').gsub(/(\A,\s)|(,\s\z)/,'')
-        else
-          nil
-        end
+        !placename.blank? ? placename.join(', ').gsub(/(\A,\s)|(,\s\z)/,'') : nil
       end
 
       ##
       # takes Geomash::Geonames data and makes it look like Geomash::TGN
-      # @param hiergeo_hash [Hash] e.g.:
+      # @param hgeo_hash [Hash] e.g.:
       #   { area: '', cont: '', pcli: '', adm1: '', adm2: '', adm3: '', mt: '' }
       # @return [Hash]
-      def self.normalize_geonames_hiergeo(hiergeo_hash)
+      def self.normalize_geonames_hiergeo(hgeo_hash)
         normalized = {}
-        normalized[:continent] = hiergeo_hash[:cont]
-        normalized[:country] = hiergeo_hash[:pcli]
-        normalized[:state] = hiergeo_hash[:adm1]
-        normalized[:county] = hiergeo_hash[:adm2]
-        normalized[:city] = hiergeo_hash[:adm3]
-        last_value = hiergeo_hash.values.last
-        hiergeo_hash[:other] = last_value unless normalized.values.include?(last_value)
+        normalized[:continent] = hgeo_hash[:cont]
+        normalized[:country] = hgeo_hash[:pcli]
+        normalized[:state] = hgeo_hash[:adm1]
+        normalized[:county] = hgeo_hash[:adm2]
+        normalized[:city] = hgeo_hash[:adm3]
+        last_value = hgeo_hash.values.last
+        normalized[:other] = last_value unless normalized.values.include?(last_value)
         # have to clean data after dupe check above
         normalized[:county]&.gsub!(/\sCounty\z/, '')
         normalized[:city]&.gsub!(/\A(Town\sof|City\sof)\s/, '')
