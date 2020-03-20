@@ -121,7 +121,7 @@ module Curator
       # @param hgeo_hash [Hash] e.g.:
       #   { area: '', cont: '', pcli: '', adm1: '', adm2: '', adm3: '', mt: '' }
       # @return [Hash]
-      def self.normalize_geonames_hiergeo(hgeo_hash)
+      def self.normalize_geonames_hgeo(hgeo_hash)
         normalized = {}
         normalized[:continent] = hgeo_hash[:cont]
         normalized[:country] = hgeo_hash[:pcli]
@@ -130,9 +130,9 @@ module Curator
         normalized[:city] = hgeo_hash[:adm3]
         last_value = hgeo_hash.values.last
         normalized[:other] = last_value unless normalized.values.include?(last_value)
-        # have to clean data after dupe check above
-        normalized[:county]&.gsub!(/\sCounty\z/, '')
-        normalized[:city]&.gsub!(/\A(Town\sof|City\sof)\s/, '')
+        # clean data after dupe check above; use hgeo_hash values to avoid frozen string errors
+        normalized[:county] = hgeo_hash[:adm2]&.gsub(/\sCounty\z/, '')
+        normalized[:city] = hgeo_hash[:adm3]&.gsub(/\A(Town\sof|City\sof)\s/, '')
         normalized.compact
       end
 

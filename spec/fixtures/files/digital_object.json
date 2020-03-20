@@ -186,31 +186,32 @@
           ],
           "geos": [
             {
-                "label": "Piacenza",
+                "label": "Back Bay",
                 "authority_code": "tgn",
-                "id_from_auth": "7004939",
-                "coordinates": "45.0167,9.6667",
+                "id_from_auth": "1004027",
+                "coordinates": "42.3500,-71.0833",
+                "area_type": "city_section"
+            },
+            {
+                "label": "Chippewa Falls",
+                "authority_code": "tgn",
+                "id_from_auth": "2120926",
+                "coordinates": "44.9333,-91.3833",
                 "area_type": "city"
             },
             {
-              "label": "Chippewa Falls",
-              "authority_code": "tgn",
-              "id_from_auth": "2120926",
-              "coordinates": "44.9333,-91.3833",
-              "area_type": "city"
-            },
-            {
-              "label": "Great Chebeague Island",
-              "authority_code": "tgn",
-              "id_from_auth": "2362636",
-              "coordinates": "43.7333,-70.1167",
-              "area_type": "island"
+                "label": "Great Chebeague Island",
+                "authority_code": "tgn",
+                "id_from_auth": "2362636",
+                "coordinates": "43.7333,-70.1167",
+                "area_type": "island"
             },
             {
                 "label": "Lucy Vincent Beach",
                 "authority_code": "geonames",
                 "id_from_auth": "4942742",
-                "coordinates": "41.33845,-70.72669"
+                "coordinates": "41.33845,-70.72669",
+                "area_type": "other"
             },
             {
                 "bounding_box": "-87.6175 41.7725 -87.565 41.8025"
