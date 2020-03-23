@@ -12,7 +12,7 @@ module Curator
             next unless geo_subjects.present?
 
             geo_fields = %w(subject_geographic_tim subject_geographic_sim subject_geo_label_sim
-                            subject_geo_citysection_sim subject_geo_city_sim subject_geo_county_sim
+                            subject_geo_city_section_sim subject_geo_city_sim subject_geo_county_sim
                             subject_geo_state_sim subject_geo_country_sim subject_geo_continent_sim 
                             subject_geo_other_ssm subject_coordinates_geospatial subject_point_geospatial 
                             subject_bbox_geospatial subject_geojson_facet_ssim subject_hiergeo_geojson_ssm)
@@ -55,7 +55,7 @@ module Curator
               context.output_hash['subject_coordinates_geospatial'] << coords
 
               bbox = subject_geo.bounding_box
-              bbox_to_env = Curator::Parsers::GeoParser.bbox_formatter(bbox, 'wkt_envelope') if bbox
+              bbox_to_env = bbox ? Curator::Parsers::GeoParser.bbox_formatter(bbox, 'wkt_envelope') : nil
               context.output_hash['subject_bbox_geospatial'] << bbox_to_env
               context.output_hash['subject_coordinates_geospatial'] << bbox_to_env
 

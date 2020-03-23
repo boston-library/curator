@@ -39,7 +39,7 @@ module Curator
     #   has_searchable_text_bsi->has_searchable_pages_bsi subject_geographic_tsim->subject_geographic_tim
     #   subject_geo_country_ssim->subject_geo_country_sim subject_geo_state_ssim->subject_geo_state_sim
     #   subject_geo_county_ssim->subject_geo_county_sim subject_geo_city_ssim->subject_geo_city_sim
-    #   subject_geo_citysection_ssim->subject_geo_citysection_sim subject_geographic_ssim->subject_geographic_sim
+    #   subject_geo_citysection_ssim->subject_geo_city_section_sim subject_geographic_ssim->subject_geographic_sim
     #   subject_geo_nonhier_ssim->subject_geo_other_ssm
     #   subject_geo_city_ssim->subject_geo_label_sim (for MLT relevancy only)
     #

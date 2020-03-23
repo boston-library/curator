@@ -31,12 +31,15 @@ RSpec.describe Curator::Indexer::GeographicIndexer do
     end
     let(:geo_subject_labels) { descriptive.subject_geos.map(&:label).compact }
 
-    it 'sets the subject_geographic_tim field' do
+    it 'adds all subject labels to the subject_geographic_* fields' do
       expect(geo_subject_labels - indexed['subject_geographic_tim']).to be_empty
+      expect(geo_subject_labels - indexed['subject_geographic_sim']).to be_empty
     end
 
-    it 'sets the subject_geographic_sim field' do
-      expect(geo_subject_labels - indexed['subject_geographic_sim']).to be_empty
+    let(:parent_geos) { ['Maine', 'Wisconsin', 'Massachusetts', 'United States'] }
+    it 'adds parent locations to the subject_geographic_* fields' do
+      expect(parent_geos - indexed['subject_geographic_tim']).to be_empty
+      expect(parent_geos - indexed['subject_geographic_sim']).to be_empty
     end
 
     it 'sets the subject_geo_label_sim field' do
@@ -45,16 +48,57 @@ RSpec.describe Curator::Indexer::GeographicIndexer do
     end
 
     it 'sets the subject_geo_[hierarchical_place_type]_sim fields' do
-      %w(citysection city county state country continent).each do |place_type|
-        puts "subject_geo_#{place_type}_sim = #{indexed["subject_geo_#{place_type}_sim"]}"
-        expect(indexed["subject_geo_#{place_type}_sim"]).not_to be_blank
+      %w(city_section city county state country continent).each do |place_type|
+        expect(indexed["subject_geo_#{place_type}_sim"].compact).not_to be_blank
       end
     end
 
     it 'sets the subject_geo_other_ssm field' do
-      puts "subject_geo_other_ssm = #{indexed['subject_geo_other_ssm']}"
       expect(indexed['subject_geo_other_ssm']).not_to be_blank
-      expect(indexed['subject_geo_other_ssm'] - geo_subject_labels).to be_empty
+      expect(indexed['subject_geo_other_ssm'].compact - geo_subject_labels).to be_empty
+    end
+
+    it 'sets the subject_point_geospatial field' do
+      expect(indexed['subject_point_geospatial'].compact.length).to eq(
+        descriptive.subject_geos.select { |geo| geo.coordinates.present? }.count
+      )
+      expect(indexed['subject_point_geospatial'].first).to match /\A-?[0-9.]*,-?[0-9.]*\Z/
+    end
+
+    it 'sets the subject_bbox_geospatial field' do
+      expect(indexed['subject_bbox_geospatial'].compact.length).to eq(
+        descriptive.subject_geos.select { |geo| geo.bounding_box.present? }.count
+      )
+      expect(indexed['subject_bbox_geospatial'].compact.first).to match(
+        /\AENVELOPE\(-?[0-9.]*, -?[0-9.]*, -?[0-9.]*, -?[0-9.]*\)\Z/
+      )
+    end
+
+    it 'sets the subject_coordinates_geospatial field' do
+      expect(indexed['subject_coordinates_geospatial'].compact.length).to eq(
+        descriptive.subject_geos.select do |geo|
+          geo.coordinates.present? || geo.bounding_box.present?
+        end.count
+      )
+    end
+
+    let(:geojson_facet) { JSON.parse(indexed['subject_geojson_facet_ssim'].first) }
+    it 'sets the subject_geojson_facet_ssim field' do
+      expect(indexed['subject_geojson_facet_ssim'].length).to eq(
+        descriptive.subject_geos.select do |geo|
+          geo.coordinates.present? || geo.bounding_box.present?
+        end.count
+      )
+      expect(geojson_facet['type']).to eq 'Feature'
+      expect(geojson_facet.dig('geometry', 'coordinates')).to be_a_kind_of Array
+    end
+
+    let(:hiergeo_geojson) { JSON.parse(indexed['subject_hiergeo_geojson_ssm'].first) }
+    it 'sets the subject_hiergeo_geojson_ssm field' do
+      expect(hiergeo_geojson['type']).to eq 'Feature'
+      expect(hiergeo_geojson.dig('geometry', 'type')).to eq 'Point'
+      expect(hiergeo_geojson.dig('geometry', 'coordinates')).to be_a_kind_of Array
+      expect(hiergeo_geojson.dig('properties', 'country')).not_to be_blank
     end
   end
 end
