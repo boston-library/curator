@@ -9,7 +9,7 @@ module Curator
           each_record do |record, context|
             # handle both DigitalObject and Institution
             geo_subjects = record.try(:descriptive)&.subject_geos || Array.wrap(record.try(:location))
-            next unless geo_subjects.present?
+            next if geo_subjects.blank?
 
             geo_fields = %w(subject_geographic_tim subject_geographic_sim subject_geo_label_sim
                             subject_geo_city_section_sim subject_geo_city_sim subject_geo_county_sim

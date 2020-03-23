@@ -110,7 +110,7 @@ module Curator
           placename[0] ||= "#{hgeo_hash[:county]} (county)" if hgeo_hash[:county]
           placename[1] = hgeo_hash[:country]
         end
-        !placename.blank? ? placename.join(', ').gsub(/(\A,\s)|(,\s\z)/, '') : nil
+        placename.present? ? placename.join(', ').gsub(/(\A,\s)|(,\s\z)/, '') : nil
       end
       # rubocop:enable Metrics/CyclomaticComplexity
 
@@ -127,7 +127,7 @@ module Curator
         normalized[:county] = hgeo_hash[:adm2]
         normalized[:city] = hgeo_hash[:adm3]
         last_value = hgeo_hash.values.last
-        normalized[:other] = last_value unless normalized.values.include?(last_value)
+        normalized[:other] = last_value unless normalized.value?(last_value)
         # clean data after dupe check above; use hgeo_hash values to avoid frozen string errors
         normalized[:county] = hgeo_hash[:adm2]&.gsub(/\sCounty\z/, '')
         normalized[:city] = hgeo_hash[:adm3]&.gsub(/\A(Town\sof|City\sof)\s/, '')

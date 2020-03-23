@@ -60,14 +60,14 @@ RSpec.describe Curator::Indexer::GeographicIndexer do
 
     it 'sets the subject_point_geospatial field' do
       expect(indexed['subject_point_geospatial'].compact.length).to eq(
-        descriptive.subject_geos.select { |geo| geo.coordinates.present? }.count
+        descriptive.subject_geos.count { |geo| geo.coordinates.present? }
       )
       expect(indexed['subject_point_geospatial'].first).to match(/\A-?[0-9.]*,-?[0-9.]*\Z/)
     end
 
     it 'sets the subject_bbox_geospatial field' do
       expect(indexed['subject_bbox_geospatial'].compact.length).to eq(
-        descriptive.subject_geos.select { |geo| geo.bounding_box.present? }.count
+        descriptive.subject_geos.count { |geo| geo.bounding_box.present? }
       )
       expect(indexed['subject_bbox_geospatial'].compact.first).to match(
         /\AENVELOPE\(-?[0-9.]*, -?[0-9.]*, -?[0-9.]*, -?[0-9.]*\)\Z/
@@ -76,18 +76,16 @@ RSpec.describe Curator::Indexer::GeographicIndexer do
 
     it 'sets the subject_coordinates_geospatial field' do
       expect(indexed['subject_coordinates_geospatial'].compact.length).to eq(
-        descriptive.subject_geos.select do |geo|
-          geo.coordinates.present? || geo.bounding_box.present?
-        end.count
+        descriptive.subject_geos.count { |geo| geo.coordinates.present? || geo.bounding_box.present? }
       )
     end
 
     let(:geojson_facet) { JSON.parse(indexed['subject_geojson_facet_ssim'].first) }
     it 'sets the subject_geojson_facet_ssim field' do
       expect(indexed['subject_geojson_facet_ssim'].length).to eq(
-        descriptive.subject_geos.select do |geo|
+        descriptive.subject_geos.count do |geo|
           geo.coordinates.present? || geo.bounding_box.present?
-        end.count
+        end
       )
       expect(geojson_facet['type']).to eq 'Feature'
       expect(geojson_facet.dig('geometry', 'coordinates')).to be_a_kind_of Array
