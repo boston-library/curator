@@ -7,7 +7,7 @@ module Curator
 
     # GET /institutions
     def index
-      institutions = resource_scope.limit(50)
+      institutions = resource_scope.order(created_at: :desc).limit(25)
       multi_response(serialized_resource(institutions))
     end
 
@@ -18,11 +18,10 @@ module Curator
 
     # POST /institutions
     def create
-      success, institution = Curator::InstitutionFactoryService.call(institution_params)
+      success, institution = Curator::InstitutionFactoryService.call(json_data: institution_params)
+      raise ActiveRecord::RecordInvalid.new(institution) if !success
 
-      raise ActiveRecord::RecordInvalid.new(institution) if !successa
-
-      json_response(serialized_resource(institution))
+      json_response(serialized_resource(institution), :created)
     end
 
     # PATCH/PUT /institutions/1
@@ -38,9 +37,9 @@ module Curator
       when 'create'
         params.require(:institution).permit(
                     :ark_id, :created_at, :updated_at, :name, :abstract, :url,
-                    :location => [:label, :authority_code, :id_from_auth, :coordinates, :area_type, :bounding_box ],
-                    :metastreams => [:administrative => [:destination_site, :description_standard, :hosting_status, :harvestable, :flagged],
-                    :workflow => [:ingest_origin, :publishing_state, :processing_state]])
+                    :image_thumbnail_300,
+                    location: {},
+                    metastreams:  { administrative: {}, workflow: {} })
       else
         params
       end

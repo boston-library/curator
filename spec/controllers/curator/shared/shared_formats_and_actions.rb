@@ -2,6 +2,10 @@
 
 RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: false, has_collection_methods: true, has_member_methods: true|
   routes { Curator::Engine.routes }
+
+  specify { expect(serializer_class).to be_truthy.and be <= Curator::Serializers::AbstractSerializer }
+  specify { expect(resource_key).to be_truthy.and be_a_kind_of(String) }
+
   specify { expect(format).to be_truthy.and be_a_kind_of(Symbol) }
   specify { expect(params).to be_truthy.and be_a_kind_of(Hash) }
   specify { expect(serialized_hash).to be_truthy.and be_a_kind_of(Hash) }
@@ -84,19 +88,31 @@ end
 
 RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true|
   routes { Curator::Engine.routes }
+
   describe 'POST', unless: skip_post do
+    let(:expected_content_type) { Mime[:json].to_str }
+
     specify { expect(format).to be_truthy.and be_a_kind_of(Symbol) }
     specify { expect(valid_attributes).to be_truthy.and be_a_kind_of(Hash) }
     specify { expect(invalid_attributes).to be_truthy.and be_a_kind_of(Hash) }
     specify { expect(valid_session).to be_truthy.and be_a_kind_of(Hash) }
     specify { expect(resource_class).to be_truthy.and be <= ActiveRecord::Base }
+    specify { expect(resource_key).to be_truthy.and be_a_kind_of(String) }
 
     describe '#create' do
-      context "with valid params" do
-        specify "creates Curator::Institution" do
+      context 'with :valid_params' do
+        specify 'creates resource' do
           expect {
-            post :create, params: { institution: valid_attributes, format: format }, session: valid_session
+            post :create, params: {resource_key => valid_attributes, format: format }, session: valid_session
           }.to change(resource_class, :count).by(1)
+        end
+
+        it 'renders a JSON response with the new resource' do
+          post :create, params: { resource_key => valid_attributes, format: format }, session: valid_session
+          expect(response).to have_http_status(:created)
+          expect(response.content_type).to eq(expected_content_type)
+          expect(json_response).to be_a_kind_of(Hash).and have_key(resource_key)
+          expect(json_response[resource_key]).to be_a_kind_of(Hash)
         end
       end
     end
@@ -105,16 +121,13 @@ end
 
 
 RSpec.shared_examples "shared_formats", type: :controller do |include_ark_context: false, has_collection_methods: true, has_member_methods: true, skip_post: true|
-  specify { expect(serializer_class).to be_truthy.and be <= Curator::Serializers::AbstractSerializer }
-  specify { expect(resource_class).to be_truthy.and be <= ActiveRecord::Base }
-  specify { expect(resource_key).to be_truthy.and be_a_kind_of(String) }
   specify { expect(base_params).to be_truthy.and be_a_kind_of(Hash) }
-  specify { expect(resource).to be_truthy.and be_an_instance_of(ActiveRecord::Base) }
+  specify { expect(resource).to be_truthy.and be_a_kind_of(ActiveRecord::Base) }
 
   context 'JSON(Default)' do
-    let(:format) { :json }
-    let(:serialized_hash) { serializer_class.new(resource, format).serializable_hash[resource_key].as_json }
-    let(:params) { base_params.merge({ format: format }) }
+    let!(:format) { :json }
+    let!(:serialized_hash) { serializer_class.new(resource, format).serializable_hash[resource_key].as_json }
+    let!(:params) { base_params.merge({ format: format }) }
     # NOTE: Have to add as_json so the dates match the serialized response
 
     include_examples 'shared_get', include_ark_context: include_ark_context, has_collection_methods: has_collection_methods, has_member_methods: has_member_methods

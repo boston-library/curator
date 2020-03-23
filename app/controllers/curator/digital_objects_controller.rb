@@ -18,8 +18,10 @@ module Curator
 
     # POST /digital_objects
     def create
-      success, digital_object = Curator::DigitalObjectFactoryService(digital_object_params)
-      json_response(serialized_resource(digital_object))
+      success, digital_object = Curator::DigitalObjectFactoryService(json_data: digital_object_params)
+      raise ActiveRecord::RecordInvalid.new(digital_object) if !success
+
+      json_response(serialized_resource(digital_object), :created)
     end
 
     # PATCH/PUT /digital_objects/1

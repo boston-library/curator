@@ -15,13 +15,15 @@ module Curator
     end
 
     def create
-      success, collection = Curator::CollectionFactoryService.call(collection_params)
-      json_response(serialized_resource(collection))
+      success, collection = Curator::CollectionFactoryService.call(json_data: collection_params)
+      raise ActiveRecord::RecordInvalid.new(collection) if !success
+
+      json_response(serialized_resource(collection), :created)
     end
 
     def update
       @curator_resource.touch
-      json_response(serialized_resource(@institution))
+      json_response(serialized_resource(@curator_resource))
     end
 
     private
@@ -29,7 +31,9 @@ module Curator
     def collection_params
       case params[:action]
       when 'create'
-        params.require(:collection).permit!
+        params.require(:collection).permit(:ark_id, :created_at, :updated_at, :name, :abstract,
+                                    admin_set: [:ark_id],
+                                    metastreams: { administrative: {}, workflow: {} })
       else
         params
       end

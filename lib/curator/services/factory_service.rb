@@ -29,7 +29,8 @@ module Curator
         @record = nil
         @success = true
         @result = nil
-        @json_attrs = json_data.with_indifferent_access
+        # NOTE: Had to add #to_h for when :json_data is recieved through the controller as ActionController::Parameters
+        @json_attrs = json_data.to_h.with_indifferent_access
         @ark_id = @json_attrs.fetch('ark_id', nil)
         @created = Time.zone.parse(@json_attrs.fetch('created_at', ''))
         @updated = Time.zone.parse(@json_attrs.fetch('updated_at', ''))
@@ -63,7 +64,7 @@ module Curator
 
       def handle_result!
         @success = false if @record.blank?
-        
+
         unless @record.blank?
           @result = @record.class.respond_to?(:for_serialization) ? @record.class.for_serialization.find(@record.id) : @record
         end
