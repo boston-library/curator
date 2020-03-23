@@ -15,7 +15,7 @@ module Curator
     end
 
     def create
-      collection = Curator::CollectionFactoryService.call(collection_params)
+      success, collection = Curator::CollectionFactoryService.call(collection_params)
       json_response(serialized_resource(collection))
     end
 

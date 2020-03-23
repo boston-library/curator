@@ -18,7 +18,7 @@ module Curator
 
     # POST /digital_objects
     def create
-      digital_object = Curator::DigitalObjectFactoryService(digital_object_params)
+      success, digital_object = Curator::DigitalObjectFactoryService(digital_object_params)
       json_response(serialized_resource(digital_object))
     end
 

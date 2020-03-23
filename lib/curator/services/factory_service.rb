@@ -63,6 +63,10 @@ module Curator
 
       def handle_result!
         @success = false if @record.blank?
+        
+        unless @record.blank?
+          @result = @record.class.respond_to?(:for_serialization) ? @record.class.for_serialization.find(@record.id) : @record
+        end
         @result ||= @record
       end
 
