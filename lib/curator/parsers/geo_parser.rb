@@ -17,16 +17,14 @@ module Curator
         max_y = coords_array[3]
         case output_format
         when 'wkt_array' # used for geojson bounding box
-          if min_x > max_x
-            min_x, max_x = bbox_dateline_fix(min_x, max_x)
-          end
+          min_x, max_x = bbox_dateline_fix(min_x, max_x) if min_x > max_x
           coords_to_wkt_polygon(min_x, min_y, max_x, max_y)
         when 'wkt_envelope' # used for subject_bbox_geospatial field
-          coords = normalize_bbox(min_x, min_y, max_x, max_y)
-          "ENVELOPE(#{coords[0]}, #{coords[2]}, #{coords[3]}, #{coords[1]})"
+          wkt_e_coords = normalize_bbox(min_x, min_y, max_x, max_y)
+          "ENVELOPE(#{wkt_e_coords[0]}, #{wkt_e_coords[2]}, #{wkt_e_coords[3]}, #{wkt_e_coords[1]})"
         when 'wkt_polygon' # may need if we use Solr JTS for _geospatial field
           wkt_polygon = coords_to_wkt_polygon(min_x, min_y, max_x, max_y)
-          wkt_order_strings = wkt_polygon.map { |coords| "#{coords[0]} #{coords[1]}" }
+          wkt_order_strings = wkt_polygon.map { |wkt_p_coords| "#{wkt_p_coords[0]} #{wkt_p_coords[1]}" }
           "POLYGON((#{wkt_order_strings.join(', ')}))"
         else
           Rails.logger.error("UNSUPPORTED BBOX OUTPUT REQUESTED: '#{output_format}'")
@@ -90,31 +88,31 @@ module Curator
       #   { continent: '', country: '', region: '', province: '', state: '', territory: '', county: '',
       #     island: '', city: '', city_section: '', area: '', extarea: '', other: '' }
       # @return [String]
+      # rubocop:disable Metrics/CyclomaticComplexity
       def self.display_placename(hgeo_hash)
         placename = []
-        pref_label = hgeo_hash[:other] || hgeo_hash[:city_section] || hgeo_hash[:city] ||
-                     hgeo_hash[:island] || hgeo_hash[:area]
+        placename[0] = hgeo_hash[:other] || hgeo_hash[:city_section] || hgeo_hash[:city] ||
+                       hgeo_hash[:island] || hgeo_hash[:area]
         case hgeo_hash[:country]
         when 'United States', 'Canada'
           if hgeo_hash[:state] || hgeo_hash[:province]
-            placename[0] = pref_label
-            placename[0] = "#{hgeo_hash[:county]} (county)" if pref_label.nil? && hgeo_hash[:county]
+            placename[0] ||= "#{hgeo_hash[:county]} (county)" if hgeo_hash[:county]
             if placename[0]
               placename[1] = Constants::STATE_ABBR.key(hgeo_hash[:state]) || hgeo_hash[:province]
             else
               placename[1] = hgeo_hash[:state] || hgeo_hash[:province]
             end
           else
-            placename[0] = pref_label || hgeo_hash[:region] || hgeo_hash[:territory] || hgeo_hash[:country]
+            placename[0] ||= hgeo_hash[:region] || hgeo_hash[:territory] || hgeo_hash[:country]
           end
         else
-          placename[0] = pref_label || hgeo_hash[:state] || hgeo_hash[:province] ||
-                         hgeo_hash[:region] || hgeo_hash[:territory]
-          placename[0] = "#{hgeo_hash[:county]} (county)" if placename[0].nil? && hgeo_hash[:county]
+          placename[0] ||= hgeo_hash[:state] || hgeo_hash[:province] || hgeo_hash[:region] || hgeo_hash[:territory]
+          placename[0] ||= "#{hgeo_hash[:county]} (county)" if hgeo_hash[:county]
           placename[1] = hgeo_hash[:country]
         end
-        !placename.blank? ? placename.join(', ').gsub(/(\A,\s)|(,\s\z)/,'') : nil
+        !placename.blank? ? placename.join(', ').gsub(/(\A,\s)|(,\s\z)/, '') : nil
       end
+      # rubocop:enable Metrics/CyclomaticComplexity
 
       ##
       # takes Geomash::Geonames data and makes it look like Geomash::TGN

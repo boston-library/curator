@@ -13,8 +13,8 @@ module Curator
 
             geo_fields = %w(subject_geographic_tim subject_geographic_sim subject_geo_label_sim
                             subject_geo_city_section_sim subject_geo_city_sim subject_geo_county_sim
-                            subject_geo_state_sim subject_geo_country_sim subject_geo_continent_sim 
-                            subject_geo_other_ssm subject_coordinates_geospatial subject_point_geospatial 
+                            subject_geo_state_sim subject_geo_country_sim subject_geo_continent_sim
+                            subject_geo_other_ssm subject_coordinates_geospatial subject_point_geospatial
                             subject_bbox_geospatial subject_geojson_facet_ssim subject_hiergeo_geojson_ssm)
             geo_fields.each { |geo_field| context.output_hash[geo_field] = [] }
 
@@ -59,23 +59,23 @@ module Curator
               context.output_hash['subject_bbox_geospatial'] << bbox_to_env
               context.output_hash['subject_coordinates_geospatial'] << bbox_to_env
 
-              if coords || bbox
-                geojson_hash = { type: 'Feature', geometry: {} }
-                if bbox
-                  unless bbox == '-180.0 -90.0 180.0 90.0' # don't want 'whole world' bboxes
-                    geojson_hash[:bbox] = bbox.split(' ').map(&:to_f)
-                    geojson_hash[:geometry][:type] = 'Polygon'
-                    geojson_hash[:geometry][:coordinates] = [
-                        Curator::Parsers::GeoParser.bbox_formatter(bbox, 'wkt_array')
-                    ]
-                  end
-                elsif coords
-                  geojson_hash[:geometry][:type] = 'Point'
-                  geojson_hash[:geometry][:coordinates] = coords.split(',').reverse.map(&:to_f)
+              next unless coords || bbox
+
+              geojson_hash = { type: 'Feature', geometry: {} }
+              if bbox
+                unless bbox == '-180.0 -90.0 180.0 90.0' # don't want 'whole world' bboxes
+                  geojson_hash[:bbox] = bbox.split(' ').map(&:to_f)
+                  geojson_hash[:geometry][:type] = 'Polygon'
+                  geojson_hash[:geometry][:coordinates] = [
+                      Curator::Parsers::GeoParser.bbox_formatter(bbox, 'wkt_array')
+                  ]
                 end
-                geojson_hash[:properties] = { placename: display_placename } if display_placename
-                context.output_hash['subject_geojson_facet_ssim'] << geojson_hash.to_json
+              elsif coords
+                geojson_hash[:geometry][:type] = 'Point'
+                geojson_hash[:geometry][:coordinates] = coords.split(',').reverse.map(&:to_f)
               end
+              geojson_hash[:properties] = { placename: display_placename } if display_placename
+              context.output_hash['subject_geojson_facet_ssim'] << geojson_hash.to_json
             end
             geo_fields.each { |geo_field| context.output_hash[geo_field].uniq! }
           end

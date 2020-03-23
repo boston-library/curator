@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-include AuthorityFinder
 RSpec.describe Curator::Indexer::GeographicIndexer do
+  include AuthorityFinder
   describe 'indexing' do
     let(:indexer_test_class) do
       Class.new(Curator::Indexer) do
@@ -62,7 +62,7 @@ RSpec.describe Curator::Indexer::GeographicIndexer do
       expect(indexed['subject_point_geospatial'].compact.length).to eq(
         descriptive.subject_geos.select { |geo| geo.coordinates.present? }.count
       )
-      expect(indexed['subject_point_geospatial'].first).to match /\A-?[0-9.]*,-?[0-9.]*\Z/
+      expect(indexed['subject_point_geospatial'].first).to match(/\A-?[0-9.]*,-?[0-9.]*\Z/)
     end
 
     it 'sets the subject_bbox_geospatial field' do
