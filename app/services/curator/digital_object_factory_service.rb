@@ -81,7 +81,6 @@ module Curator
               descriptive.desc_terms.build(mapped_term: mapped_term)
             end
           end
-          awesome_print descriptive.desc_terms.size
 
           @desc_json_attrs.fetch(:name_roles, []).each do |name_role_attrs|
             name_role_attrs = name_role(name_role_attrs.fetch(:name), name_role_attrs.fetch(:role))
@@ -90,9 +89,6 @@ module Curator
         end
         @record.save!
       end
-    ensure
-      handle_result!
-      awesome_print @result.descriptive.desc_terms.count
       return @success, @result
     end
 
@@ -210,7 +206,7 @@ module Curator
     def find_or_create_host_collection(host_col_name = nil, institution_id = nil)
       return if host_col_name.blank? && institution_id.blank?
 
-      retires = 0
+      retries = 0
       begin
         return Curator.mappings.host_collection_class.transaction(requires_new: true) do
           inst = Curator.institution_class.find(institution_id)
@@ -218,7 +214,7 @@ module Curator
         end
       rescue ActiveRecord::StaleObjectError => e
         if (retries += 1) <= MAX_RETRIES
-          Rails.logger.info "Record is stale retrying in 2 seconds.."
+          Rails.logger.info 'Record is stale retrying in 2 seconds..'
           sleep(2)
           retry
         else

@@ -18,7 +18,7 @@ RSpec.describe Curator::Serializers::NullAdapter, type: :lib_serializers do
     expect(subject.schema).to be_an_instance_of(Curator::Serializers::Schema)
     expect(subject).to delegate_method(:root).to(:schema)
     %i(attribute attributes node meta link has_one belongs_to has_many).each do |schema_method|
-      expect(subject).not_to delegate_method(schema_method).to (:schema)
+      expect(subject).not_to delegate_method(schema_method).to(:schema)
     end
   end
 

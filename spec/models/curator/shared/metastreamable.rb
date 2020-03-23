@@ -56,7 +56,7 @@ RSpec.shared_examples 'metastreamable_all', type: :model do
   describe '#with_metastreams' do
     subject { described_class }
 
-    let(:expected_sql) { described_class.joins(:administrative, :descriptive ,:workflow).preload(:administrative, :descriptive, :workflow).to_sql}
+    let(:expected_sql) { described_class.joins(:administrative, :descriptive, :workflow).preload(:administrative, :descriptive, :workflow).to_sql }
 
     it { is_expected.to respond_to(:with_metastreams) }
 

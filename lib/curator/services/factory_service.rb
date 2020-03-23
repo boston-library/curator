@@ -5,7 +5,7 @@ module Curator
     module FactoryService
       extend ActiveSupport::Concern
 
-      MAX_RETRIES = 2.freeze
+      MAX_RETRIES = 2
 
       RECORD_ERRORS = [
                         ActiveRecord::RecordInvalid,
@@ -39,7 +39,6 @@ module Curator
 
       protected
 
-      # TODO: Need to refactor these methods to handle updates as well and use the objects relationship instead of initailizing a new instance
       def build_descriptive(descriptable, &_block)
         descriptive = descriptable.build_descriptive
         yield descriptive
@@ -85,13 +84,11 @@ module Curator
             nomenclature_class.where(authority: authority, term_data: term_data).first_or_create!
           end
         rescue ActiveRecord::StaleObjectError => e
-          if (retries += 1) <= MAX_RETRIES
-            Rails.logger.info "Record is stale retrying in 2 seconds.."
-            sleep(2)
-            retry
-          else
-            raise ActiveRecord::RecordNotSaved, "Max retries reached! caused by: #{e.message}", e.record
-          end
+          raise ActiveRecord::RecordNotSaved, "Max retries reached! caused by: #{e.message}", e.record unless (retries += 1) <= MAX_RETRIES
+
+          Rails.logger.info 'Record is stale retrying in 2 seconds..'
+          sleep(2)
+          retry
         rescue *RECORD_ERRORS => e
           Rails.logger.error "=================#{e.inspect}=================="
           raise
@@ -108,11 +105,11 @@ module Curator
           end
         rescue ActiveRecord::StaleObjectError => e
           if (retries += 1) <= MAX_RETRIES
-            Rails.logger.info "Record is stale retrying in 2 seconds..."
+            Rails.logger.info 'Record is stale retrying in 2 seconds...'
             sleep(2)
             retry
           else
-            Rails.logger.error "===============MAX RETRIES REACHED!============"
+            Rails.logger.error '===============MAX RETRIES REACHED!============'
             Rails.logger.error "=================#{e.inspect}=================="
             @success = false
           end
@@ -123,6 +120,8 @@ module Curator
           Rails.logger.error "=================#{e.inspect}=================="
           @success = false
           @result = e
+        ensure
+          handle_result!
         end
       end
     end

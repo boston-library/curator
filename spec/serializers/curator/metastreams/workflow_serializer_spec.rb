@@ -10,9 +10,9 @@ RSpec.describe Curator::Metastreams::WorkflowSerializer, type: :serializers do
 
   describe 'Serialization' do
     it_behaves_like 'json_serialization' do
-      let!(:json_record) { record }
-      let!(:json_array) { record_collection }
-      let!(:expected_as_json_options) do
+      let(:json_record) { record }
+      let(:json_array) { record_collection }
+      let(:expected_as_json_options) do
         {
           root: true,
           only: [:publishing_state, :processing_state, :ingest_origin]

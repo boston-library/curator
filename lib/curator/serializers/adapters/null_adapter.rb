@@ -7,8 +7,6 @@ module Curator
 
       def_delegators :schema, :root
 
-
-
       def initialize(_options = {}, &_block)
         @schema = Curator::Serializers::Schema.new(root: nil, options: {})
       end

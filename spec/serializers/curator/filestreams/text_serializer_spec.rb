@@ -6,7 +6,7 @@ require_relative '../shared/json_serialization'
 
 RSpec.describe Curator::Filestreams::TextSerializer, type: :serializers do
   let!(:text_file_set_count) { 3 }
-  
+
   let!(:record_collection) do
     texts = create_list(:curator_filestreams_text, text_file_set_count)
     Curator.filestreams.text_class.where(id: texts.pluck(:id)).for_serialization

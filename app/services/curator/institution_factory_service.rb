@@ -29,8 +29,6 @@ module Curator
         end
         @record.save!
       end
-    ensure
-      handle_result!
       return @success, @result
     end
 

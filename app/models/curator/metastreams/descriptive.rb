@@ -14,15 +14,15 @@ module Curator
 
     scope :with_license, -> { joins(:license).preload(:license) }
 
-    scope :with_desc_terms, -> {
+    scope :with_desc_terms, lambda {
       left_outer_joins(:desc_terms => :mapped_term).
       eager_load(:desc_terms => :mapped_term).
-      where('curator_controlled_terms_nomenclatures.type IN (?)', %w(Genre ResourceType Language Subject Name Geographic).map { |type| "Curator::ControlledTerms::#{type}"  } )
+      where('curator_controlled_terms_nomenclatures.type IN (?)', %w(Genre ResourceType Language Subject Name Geographic).map { |type| "Curator::ControlledTerms::#{type}" })
     }
 
-    scope :with_mappings, -> {
+    scope :with_mappings, lambda {
       joins(:desc_host_collections, :name_roles).
-      preload(:host_collections, :name_roles => [{ :name => [:authority] }, {:role => [:authority] }])
+      preload(:host_collections, :name_roles => [{ :name => [:authority] }, { :role => [:authority] }])
     }
 
     scope :for_serialization, -> { merge(with_physical_location).merge(with_license).merge(with_mappings).merge(with_desc_terms) }

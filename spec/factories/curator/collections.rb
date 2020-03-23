@@ -8,7 +8,6 @@ FactoryBot.define do
     name { "#{Faker::FunnyName.four_word_name} Collection" }
     abstract { Faker::Lorem.paragraph }
 
-
     trait :with_metastreams do
       administrative { nil }
       workflow { nil }

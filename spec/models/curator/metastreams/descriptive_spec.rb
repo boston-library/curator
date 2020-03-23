@@ -280,7 +280,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
         described_class.
         left_outer_joins(:desc_terms => :mapped_term).
         eager_load(:desc_terms => :mapped_term).
-        where('curator_controlled_terms_nomenclatures.type IN (?)', %w(Genre ResourceType Language Subject Name Geographic).map { |type| "Curator::ControlledTerms::#{type}"  } ).
+        where('curator_controlled_terms_nomenclatures.type IN (?)', %w(Genre ResourceType Language Subject Name Geographic).map { |type| "Curator::ControlledTerms::#{type}" }).
         to_sql
       end
 
@@ -296,7 +296,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
 
       let(:expected_scope_sql) do
         described_class.joins(:desc_host_collections, :name_roles).
-        preload(:host_collections, :name_roles => [{ :name => [:authority] }, {:role => [:authority] }]).
+        preload(:host_collections, :name_roles => [{ :name => [:authority] }, { :role => [:authority] }]).
         to_sql
       end
 

@@ -12,7 +12,7 @@ FactoryBot.define do
     trait :with_metastreams do
       administrative { nil }
       workflow { nil }
-       
+
       after :build do |file_set|
         file_set.administrative = build(:curator_metastreams_administrative, administratable: file_set) if file_set.administrative.blank?
         file_set.workflow = build(:curator_metastreams_workflow, workflowable: file_set) if file_set.workflow.blank?

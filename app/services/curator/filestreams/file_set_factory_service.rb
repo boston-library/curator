@@ -24,6 +24,7 @@ module Curator
           ex_obj = Curator.digital_object_class.find_by(ark_id: ex_ark_id) ||
                    Curator.collection_class.find_by(ark_id: ex_ark_id)
           raise "Bad exemplary id! #{ex_ark_id} is either not in the repo or is not a DigitalObject or Collection" unless ex_obj
+
           ex_obj.with_lock do
             build_exemplary(@record) do |exemplary_img|
               exemplary_img.exemplary_object = ex_obj
@@ -49,8 +50,6 @@ module Curator
 
         @record.save!
       end
-    ensure
-      handle_result!
       return @success, @result
     end
   end
