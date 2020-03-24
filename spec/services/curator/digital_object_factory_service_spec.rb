@@ -10,9 +10,11 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
     parent = create(:curator_collection)
     @object_json['admin_set']['ark_id'] = parent.ark_id
     @object_json['is_member_of_collection'][0]['ark_id'] = parent.ark_id
-    expect do
-      @object = described_class.call(json_data: @object_json)
-    end.to change { Curator::DigitalObject.count }.by(1)
+    VCR.use_cassette('services/digital_object_factory_service') do
+      expect do
+        @object = described_class.call(json_data: @object_json)
+      end.to change { Curator::DigitalObject.count }.by(1)
+    end
   end
 
   describe '#call' do
@@ -258,9 +260,9 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
           end
 
           let(:subject_geos) { descriptive.subject_geos }
-          let(:geo_attrs) { controlled_term_attrs + %w(coordinates) }
+          let(:geo_attrs) { controlled_term_attrs + %w(area_type coordinates bounding_box) }
           it 'sets the subject_geos data' do
-            expect(subject_geos.count).to eq 2
+            expect(subject_geos.count).to eq 8
             expect(subject_geos).to all(be_an_instance_of(Curator::ControlledTerms::Geographic))
 
             desc_json['subject']['geos'].each do |subject_geo_json|

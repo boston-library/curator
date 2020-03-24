@@ -4,18 +4,9 @@ module Curator
   class InstitutionIndexer < Curator::Indexer
     include Curator::Indexer::WorkflowIndexer
     include Curator::Indexer::AdministrativeIndexer
+    include Curator::Indexer::GeographicIndexer
 
-    # NOTE: fields below were previously set in Bplmodels::Institution#to_solr, but no longer needed(?):
-    #   ingest_origin_ssim ingest_path_ssim exemplary_image_ssi physical_location_tsim
-    #   institution_pid_si institution_pid_ssi label_ssim
-
-    # TODO: add indexing for:
-    #         edit_access_group_ssim
-    #         subject_geo_country_ssim subject_geo_state_ssim subject_geo_county_ssim
-    #         subject_geo_city_ssim subject_geo_citysection_ssim
-    #         subject_geographic_tsim subject_geographic_ssim
-    #         subject_coordinates_geospatial subject_point_geospatial
-    #         subject_geojson_facet_ssim subject_hiergeo_geojson_ssm
+    # TODO: add indexing for: edit_access_group_ssim
     configure do
       to_field %w(title_info_primary_tsi physical_location_ssim), obj_extract('name')
       to_field 'title_info_primary_ssort' do |record, accumulator|

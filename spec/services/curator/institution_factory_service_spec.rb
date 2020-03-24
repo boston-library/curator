@@ -6,9 +6,11 @@ require_relative './shared/factory_service_metastreams_shared'
 RSpec.describe Curator::InstitutionFactoryService, type: :service do
   before(:all) do
     @object_json = load_json_fixture('institution')
-    expect do
-      @institution = described_class.call(json_data: @object_json)
-    end.to change { Curator::Institution.count }.by(1)
+    VCR.use_cassette('services/institution_factory_service') do
+      expect do
+        @institution = described_class.call(json_data: @object_json)
+      end.to change { Curator::Institution.count }.by(1)
+    end
   end
 
   describe '#call' do
