@@ -10,9 +10,11 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
     parent = create(:curator_collection)
     @object_json['admin_set']['ark_id'] = parent.ark_id
     @object_json['is_member_of_collection'][0]['ark_id'] = parent.ark_id
-    expect do
-      @success, @object = handle_factory_result(described_class, @object_json)
-    end.to change { Curator::DigitalObject.count }.by(1)
+     VCR.use_cassette('services/digital_object_factory_service') do
+       expect do
+        @success, @object = handle_factory_result(described_class, @object_json)
+       end.to change { Curator::DigitalObject.count }.by(1)
+     end
   end
 
   specify { expect(@success).to be_truthy }
@@ -27,8 +29,10 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
     end
 
     describe 'setting admin set' do
+      let(:admin_set) { subject.admin_set }
+
       it 'creates the admin set relationship' do
-        expect(subject.admin_set).to be_an_instance_of(Curator::Collection)
+        expect(admin_set).to be_an_instance_of(Curator::Collection)
       end
     end
 
@@ -58,7 +62,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
 
       it 'sets basic metadata properties' do
         simple_fields.each do |attr|
-          expect(subject.descriptive.send(attr)).to eq desc_json[attr]
+          expect(descriptive.send(attr)).to eq desc_json[attr]
         end
       end
 
@@ -262,9 +266,9 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
           end
 
           let(:subject_geos) { descriptive.subject_geos }
-          let(:geo_attrs) { controlled_term_attrs + %w(coordinates) }
+          let(:geo_attrs) { controlled_term_attrs + %w(area_type coordinates bounding_box) }
           it 'sets the subject_geos data' do
-            expect(subject_geos.count).to eq 2
+            expect(subject_geos.count).to eq 8
             expect(subject_geos).to all(be_an_instance_of(Curator::ControlledTerms::Geographic))
 
             desc_json['subject']['geos'].each do |subject_geo_json|

@@ -5,19 +5,7 @@ module Curator
     include Curator::Indexer::WorkflowIndexer
     include Curator::Indexer::AttachmentIndexer
 
-    # NOTE: fields below were previously set in Bplmodels::File#to_solr, but no longer needed(?):
-    #   label_ssi filename_ssi page_num_label_type_ssi mime_type_tesim(set on Blob instead)
-    #   is_image_of_ssim is_audio_of_ssim is_document_of_ssim is_ereader_of_ssim is_volume_of_ssim
-    #   is_following_image_of_ssim is_following_audio_of_ssim is_following_document_of_ssim is_following_ereader_of_ssim
-    #   is_preceding_image_of_ssim is_preceding_audio_of_ssim is_preceding_document_of_ssim is_preceding_ereader_of_ssim
-
-    # NOTE: fields below were previously set in Bplmodels::File#to_solr, but have been updated:
-    #   derivative_processsed_ssi->processing_state_ssi is_file_of_ssim->is_file_set_of_ssim
-    #   hand_side_ssi->page_hand_side_ssi has_djvu_json_ssi->has_wordcoords_json_bsi
-    #   object_profile_ssm->attachments_ss
-
-    # TODO: add indexing for:
-    #         edit_access_group_ssim
+    # TODO: add indexing for: edit_access_group_ssim
     configure do
       to_field 'is_file_set_of_ssim', obj_extract('file_set_of', 'ark_id')
       to_field 'is_exemplary_image_of_ssim' do |rec, acc|

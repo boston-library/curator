@@ -7,6 +7,7 @@ module Curator
       autoload :InputParser
       autoload :Constants
       autoload :EdtfDateParser
+      autoload :GeoParser
     end
   end
 end

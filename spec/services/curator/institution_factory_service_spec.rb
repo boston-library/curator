@@ -6,9 +6,11 @@ require_relative './shared/factory_service_metastreams_shared'
 RSpec.describe Curator::InstitutionFactoryService, type: :service do
   before(:all) do
     @object_json = load_json_fixture('institution')
-    expect do
-      @success, @institution = handle_factory_result(described_class, @object_json)
-    end.to change { Curator::Institution.count }.by(1)
+    VCR.use_cassette('services/institution_factory_service') do
+      expect do
+        @success, @institution = handle_factory_result(described_class, @object_json)
+      end.to change { Curator::Institution.count }.by(1)
+    end
   end
 
   specify { expect(@success).to be_truthy }
@@ -25,15 +27,15 @@ RSpec.describe Curator::InstitutionFactoryService, type: :service do
     end
 
     describe 'setting location data' do
-      specify { expect(subject.location).to be_truthy }
+      let(:location) { subject.location }
 
       it 'creates the associated location' do
-        expect(subject.location).to be_an_instance_of(Curator::ControlledTerms::Geographic)
+        expect(location).to be_an_instance_of(Curator::ControlledTerms::Geographic)
       end
 
       it 'sets the correct location properties' do
-        expect(subject.location.label).to eq @object_json['location']['label']
-        expect(subject.location.id_from_auth).to eq @object_json['location']['id_from_auth']
+        expect(location.label).to eq @object_json['location']['label']
+        expect(location.id_from_auth).to eq @object_json['location']['id_from_auth']
       end
     end
 
