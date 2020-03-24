@@ -5,16 +5,7 @@ module Curator
     include Curator::Indexer::WorkflowIndexer
     include Curator::Indexer::AdministrativeIndexer
 
-    # NOTE: fields below were previously set in Bplmodels::Collection#to_solr, but no longer needed(?):
-    #   label_ssim
-
-    # NOTE: fields below were previously set in Bplmodels::Collection#to_solr, but have been updated:
-    #   institution_pid_ssi->institution_ark_id_ssi institution_name_ssim->institution_name_ssi
-    #   institution_name_tsim->institution_name_ti genre_basic_tsim->genre_basic_tim
-    #   physical_location_tsim->physical_location_tim
-
-    # TODO: add indexing for:
-    #         edit_access_group_ssim
+    # TODO: add indexing for: edit_access_group_ssim
     configure do
       to_field 'title_info_primary_tsi', obj_extract('name')
       to_field 'title_info_primary_ssort' do |record, accumulator|

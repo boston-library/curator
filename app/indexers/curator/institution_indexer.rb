@@ -6,12 +6,7 @@ module Curator
     include Curator::Indexer::AdministrativeIndexer
     include Curator::Indexer::GeographicIndexer
 
-    # NOTE: fields below were previously set in Bplmodels::Institution#to_solr, but no longer needed(?):
-    #   ingest_origin_ssim ingest_path_ssim exemplary_image_ssi physical_location_tsim
-    #   institution_pid_si institution_pid_ssi label_ssim
-
-    # TODO: add indexing for:
-    #         edit_access_group_ssim
+    # TODO: add indexing for: edit_access_group_ssim
     configure do
       to_field %w(title_info_primary_tsi physical_location_ssim), obj_extract('name')
       to_field 'title_info_primary_ssort' do |record, accumulator|

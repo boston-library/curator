@@ -34,25 +34,38 @@ Currently all data models have been created with basic routes and json serialize
       * Marc XML
       * RDF
 
-## Installation (For development only)
+## Installation (for development only)
 
-Ensure you have the following installed on your development machine
+1. Ensure you have the following installed on your development machine
+    * `Postgresql ~9.6`
+    * `Redis`
+    * `Imagemagick`
+    * `Ruby  >= 2.5.7`
+    * [Docker](https://docs.docker.com/)
 
-`Postgresql ~9.6`
+2. Clone Project
 
-`Redis`
+3. Run `bundle install`
 
-`Imagemagick`
+4. Check `spec/internal/config/database.yml` and make sure your `postgres` credentials are correct.
 
-`Ruby  >= 2.5.7`
+5. `cd` into the `spec/internal` directory and run `rails curator:setup` this will run the databse setup scripts for
+ you and install active storage.
 
-Clone Project
+## Running (for development only)
+Curator requires several additional services:
+* [Solr](https://lucene.apache.org/solr/) (for indexing records)
+* [BPLDC Authority API](https://github.com/boston-library/bpldc_authority_api) (for retrieving authority data for
+ controlled vocabluaries)
 
-Run `bundle install`
-
-Check `spec/internal/config/database.yml` and make sure your `postgres` credentials are correct.
-
-`cd` into the `spec/internal` directory and run `rails curator:setup` this will run the databse setup scripts for you and install active storage.
+To set up these services:
+1. Clone the BPLDC Authority API project and run the Docker container (see the project README for instructions). The
+ application should be running on `127.0.0.1:3001`
+2. In the Curator project, start Solr using the following command (see [solr_wrapper](https://github.com/cbeer/solr_wrapper) for more documentation):
+    * `$ cd ./spec/internal && solr_wrapper` (development)
+    * `$ solr_wrapper` (test)
+3. Make sure the URLs for these services are set as `ENV` variables (`AUTHORITY_API_URL` and `SOLR_URL`). You can set
+ these using the `spec/internal/.env.#{RAILS_ENV}` files.
 
 
 ## Contributing
