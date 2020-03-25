@@ -18,10 +18,9 @@ RSpec.describe Curator::ControlledTerms::NomenclaturesController, type: :control
     context "with :type as #{nomenclature_type}" do
       let!(:serializer_class) { "Curator::ControlledTerms::#{nomenclature_type.classify}Serializer".safe_constantize }
       let!(:resource) { create("curator_controlled_terms_#{nomenclature_type}".to_sym) }
-      let!(:resource_key) { nomenclature_type }
       let!(:base_params) { { type: nomenclature_type } }
 
-      include_examples 'shared_formats', has_collection_methods: false
+      include_examples 'shared_formats', has_collection_methods: false, resource_key: nomenclature_type
     end
   end
 

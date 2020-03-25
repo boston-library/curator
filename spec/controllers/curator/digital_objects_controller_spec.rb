@@ -23,11 +23,10 @@ RSpec.describe Curator::DigitalObjectsController, type: :controller do
 
   let!(:serializer_class) { Curator::DigitalObjectSerializer }
   let!(:resource) { create(:curator_digital_object) }
-  let!(:resource_key) { 'digital_object' }
   let!(:base_params) { {} }
 
 
-  include_examples 'shared_formats', include_ark_context: true
+  include_examples 'shared_formats', include_ark_context: true, resource_key: 'digital_object'
 
   skip "POST #create" do
     context "with valid params" do

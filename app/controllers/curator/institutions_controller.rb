@@ -18,10 +18,15 @@ module Curator
 
     # POST /institutions
     def create
-      success, institution = Curator::InstitutionFactoryService.call(json_data: institution_params)
-      raise ActiveRecord::RecordInvalid.new(institution) if !success
+      success, result = Curator::InstitutionFactoryService.call(json_data: institution_params)
 
-      json_response(serialized_resource(institution), :created)
+      unless success
+        raise ActiveRecord::RecordInvalid.new(result) if result.blank? || result.class <= ActiveRecord::Base
+
+        raise result if result.kind_of?(Exception)
+      end
+
+      json_response(serialized_resource(result), :created)
     end
 
     # PATCH/PUT /institutions/1
@@ -39,7 +44,11 @@ module Curator
                     :ark_id, :created_at, :updated_at, :name, :abstract, :url,
                     :image_thumbnail_300,
                     location: {},
-                    metastreams:  { administrative: {}, workflow: {} })
+                    metastreams: {
+                                    administrative: [:description_standard, :hosting_status, :harvestable, :flagged , destination_site: [], access_edit_group: []],
+                                    workflow: [:ingest_origin, :publishing_state, :processing_state]
+                                 }
+                  )
       else
         params
       end

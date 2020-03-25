@@ -43,7 +43,7 @@ module Curator
     # Base exception wrapper for generating an array of exceptions related to a model's errors
     class ModelError < SerializableError
       attr_reader :model_errors
-      def initalize(model_errors: {})
+      def initialize(model_errors: {})
         @model_errors = format_model_errors(model_errors)
         @status = :bad_request
         @title = 'Bad Request'

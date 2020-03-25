@@ -41,17 +41,17 @@ module Curator
       protected
 
       def build_descriptive(descriptable, &_block)
-        descriptive = descriptable.build_descriptive
+        descriptive = descriptable.descriptive.present? ? descriptable.descriptive : descriptable.build_descriptive
         yield descriptive
       end
 
       def build_workflow(workflowable, &_block)
-        workflow = workflowable.build_workflow
+        workflow = workflowable.workflow.present? ? workflowable.workflow : workflowable.build_workflow
         yield(workflow)
       end
 
       def build_administrative(administratable, &_block)
-        administrative = administratable.build_administrative
+        administrative = administratable.administrative.present? ? administratable.administrative : administratable.build_administrative
         yield(administrative)
       end
 
@@ -80,13 +80,14 @@ module Curator
 
       def find_or_create_nomenclature(nomenclature_class:, term_data: {}, authority_code: nil)
         retries = 0
+        term_data = term_data.dup.symbolize_keys
         begin
           return nomenclature_class.transaction(requires_new: true) do
-            break nomenclature_class.where(term_data: term_data).first_or_create! if authority_code.blank?
+            break find_nomenclature(nomenclature_class, term_data) || create_nomenclature!(nomenclature_class, term_data) if authority_code.blank?
 
             authority = Curator.controlled_terms.authority_class.find_by!(code: authority_code)
 
-            nomenclature_class.where(authority: authority, term_data: term_data).first_or_create!
+            find_nomenclature(nomenclature_class, term_data, authority) || create_nomenclature!(nomenclature_class, term_data, authority)
           end
         rescue ActiveRecord::StaleObjectError => e
           raise ActiveRecord::RecordNotSaved, "Max retries reached! caused by: #{e.message}", e.record unless (retries += 1) <= MAX_RETRIES
@@ -98,6 +99,18 @@ module Curator
           Rails.logger.error "=================#{e.inspect}=================="
           raise
         end
+      end
+
+      def find_nomenclature(nomenclature_class, term_data = {}, authority = nil)
+        return nomenclature_class.jsonb_contains(**term_data).first if authority.blank?
+
+        nomenclature_class.where(authority: authority).jsonb_contains(**term_data).first
+      end
+
+      def create_nomenclature!(nomenclature_class, term_data = {}, authority = nil)
+        return nomenclature_class.create!(term_data: term_data) if authority.blank?
+
+        nomenclature_class.create!(authority: authority, term_data: term_data)
       end
 
       def with_transaction(&_block)

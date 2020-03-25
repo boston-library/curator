@@ -6,28 +6,18 @@ require_relative './shared/shared_formats_and_actions'
 RSpec.describe Curator::InstitutionsController, type: :controller do
 
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
 
   let!(:valid_session) { {} }
   let!(:valid_attributes) { load_json_fixture('institution')  }
+  let!(:invalid_attributes) { valid_attributes.dup.except('ark_id', 'name') }
   let!(:serializer_class) { Curator::InstitutionSerializer }
   let!(:resource) { create(:curator_institution, :with_location) }
   let!(:resource_class) { Curator::Institution }
-  let!(:resource_key) { 'institution' }
   let!(:base_params) { {} }
 
-  include_examples 'shared_formats', include_ark_context: true, skip_post: false
+  include_examples 'shared_formats', include_ark_context: true, skip_post: false, resource_key: 'institution'
 
   skip 'POST #create' do
-    context "with invalid params" do
-      it "renders a JSON response with errors for the new institution" do
-        post :create, params: { institution: invalid_attributes }, session: valid_session
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq('application/json')
-      end
-    end
   end
 
   skip "PUT #update" do

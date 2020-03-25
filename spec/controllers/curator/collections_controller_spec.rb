@@ -19,10 +19,9 @@ RSpec.describe Curator::CollectionsController, type: :controller do
 
   let!(:serializer_class) { Curator::CollectionSerializer }
   let!(:resource) { create(:curator_collection) }
-  let!(:resource_key) { 'collection' }
   let!(:base_params) { {} }
 
-  include_examples 'shared_formats', include_ark_context: true
+  include_examples 'shared_formats', include_ark_context: true, resource_key: 'collection'
 
   skip "POST #create" do
     context "with valid params" do

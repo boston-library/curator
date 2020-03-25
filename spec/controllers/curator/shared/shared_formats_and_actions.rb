@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: false, has_collection_methods: true, has_member_methods: true|
+RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: false, has_collection_methods: true, has_member_methods: true, resource_key: nil|
   routes { Curator::Engine.routes }
 
   specify { expect(serializer_class).to be_truthy.and be <= Curator::Serializers::AbstractSerializer }
   specify { expect(resource_key).to be_truthy.and be_a_kind_of(String) }
-
   specify { expect(format).to be_truthy.and be_a_kind_of(Symbol) }
   specify { expect(params).to be_truthy.and be_a_kind_of(Hash) }
   specify { expect(serialized_hash).to be_truthy.and be_a_kind_of(Hash) }
@@ -86,7 +85,7 @@ end
 #   pending 'Example pending until implmented properly'
 # end
 
-RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true|
+RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true, resource_key: nil|
   routes { Curator::Engine.routes }
 
   describe 'POST', unless: skip_post do
@@ -101,18 +100,32 @@ RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true|
 
     describe '#create' do
       context 'with :valid_params' do
-        specify 'creates resource' do
+        specify "creates #{resource_key}" do
           expect {
-            post :create, params: {resource_key => valid_attributes, format: format }, session: valid_session
+            VCR.use_cassette("controllers/#{resource_key}_create") do
+              post :create, params: { resource_key => valid_attributes, format: format }, session: valid_session
+            end
           }.to change(resource_class, :count).by(1)
         end
 
-        it 'renders a JSON response with the new resource' do
-          post :create, params: { resource_key => valid_attributes, format: format }, session: valid_session
+        it 'renders a 201 JSON response with the new resource' do
+          VCR.use_cassette("controllers/#{resource_key}_create") do
+            post :create, params: { resource_key => valid_attributes, format: format }, session: valid_session
+          end
           expect(response).to have_http_status(:created)
           expect(response.content_type).to eq(expected_content_type)
           expect(json_response).to be_a_kind_of(Hash).and have_key(resource_key)
           expect(json_response[resource_key]).to be_a_kind_of(Hash)
+        end
+      end
+      context 'with :invalid_params' do
+        it 'returns a 422 JSON with array of errors' do
+          VCR.use_cassette("controllers/#{resource_key}_invalid_create") do
+            post :create, params: { resource_key => invalid_attributes, format: format }, session: valid_session
+          end
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response.content_type).to eq(expected_content_type)
+          awesome_print json_response
         end
       end
     end
@@ -120,7 +133,7 @@ RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true|
 end
 
 
-RSpec.shared_examples "shared_formats", type: :controller do |include_ark_context: false, has_collection_methods: true, has_member_methods: true, skip_post: true|
+RSpec.shared_examples "shared_formats", type: :controller do |include_ark_context: false, has_collection_methods: true, has_member_methods: true, skip_post: true, resource_key: nil|
   specify { expect(base_params).to be_truthy.and be_a_kind_of(Hash) }
   specify { expect(resource).to be_truthy.and be_a_kind_of(ActiveRecord::Base) }
 
@@ -130,9 +143,9 @@ RSpec.shared_examples "shared_formats", type: :controller do |include_ark_contex
     let!(:params) { base_params.merge({ format: format }) }
     # NOTE: Have to add as_json so the dates match the serialized response
 
-    include_examples 'shared_get', include_ark_context: include_ark_context, has_collection_methods: has_collection_methods, has_member_methods: has_member_methods
+    include_examples 'shared_get', include_ark_context: include_ark_context, has_collection_methods: has_collection_methods, has_member_methods: has_member_methods, resource_key: resource_key
 
-    include_examples 'shared_post', skip_post: skip_post
+    include_examples 'shared_post', skip_post: skip_post, resource_key: resource_key
   end
 
   # context 'XML' do

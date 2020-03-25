@@ -25,6 +25,7 @@ RSpec.describe Curator::Institution, type: :model do
   end
 
   describe 'Validations' do
+    it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to allow_values('', nil, 'http://myinstitution.org').for(:url) }
     it { is_expected.not_to allow_value('not a website string').for(:url) }
   end
