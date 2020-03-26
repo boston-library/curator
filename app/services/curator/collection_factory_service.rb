@@ -7,12 +7,10 @@ module Curator
     def call
       with_transaction do
         institution_ark_id = @json_attrs.dig('institution', 'ark_id')
-        institution = Curator.institution_class.find_by!(ark_id: institution_ark_id)
-
         @record = Curator.collection_class.where(ark_id: @ark_id).first_or_create! do |collection|
-          collection.name = @json_attrs.fetch(:name)
+          collection.name = @json_attrs.fetch(:name, nil)
           collection.abstract = @json_attrs.fetch(:abstract, '')
-          collection.institution = institution
+          collection.institution = Curator.institution_class.find_by(ark_id: institution_ark_id)
           collection.created_at = @created if @created
           collection.updated_at = @updated if @updated
 

@@ -26,6 +26,10 @@ RSpec.describe Curator::Collection, type: :model do
     it { is_expected.to have_db_column(:abstract).of_type(:text).with_options(default: '') }
   end
 
+  describe 'Validations' do
+    it { is_expected.to validate_presence_of(:name) }
+  end
+
   describe 'Associations' do
     it_behaves_like 'metastreamable_basic'
     it_behaves_like 'has_exemplary_file_set'

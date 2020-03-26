@@ -8,7 +8,7 @@ module Curator
       location_json_attrs = @json_attrs.fetch('location', {}).with_indifferent_access
       with_transaction do
         @record = Curator.institution_class.where(ark_id: @ark_id).first_or_create! do |institution|
-          institution.name = @json_attrs.fetch(:name)
+          institution.name = @json_attrs.fetch(:name, nil)
           institution.abstract = @json_attrs.fetch(:abstract, '')
           institution.url = @json_attrs.fetch(:url, nil)
           institution.location = location(location_json_attrs) if location_json_attrs.present?

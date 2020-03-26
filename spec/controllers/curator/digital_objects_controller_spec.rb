@@ -11,16 +11,10 @@ RSpec.describe Curator::DigitalObjectsController, type: :controller do
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # DigitalObjectsController. Be sure to keep this updated too.
-  let(:valid_session) { {} }
-
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
-
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
-
+  let!(:valid_session) { {} }
+  let!(:valid_attributes) { load_json_fixture('digital_object') }
+  let!(:invalid_attributes) { valid_attributes.dup.update(admin_set: nil) }
+  let!(:resource_class) { Curator::DigitalObject }
   let!(:serializer_class) { Curator::DigitalObjectSerializer }
   let!(:resource) { create(:curator_digital_object) }
   let!(:base_params) { {} }

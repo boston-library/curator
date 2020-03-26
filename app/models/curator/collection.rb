@@ -16,5 +16,7 @@ module Curator
     has_many :admin_set_objects, inverse_of: :admin_set, class_name: 'Curator::DigitalObject', foreign_key: :admin_set_id, dependent: :destroy
 
     has_many :collection_members, inverse_of: :collection, class_name: 'Curator::Mappings::CollectionMember', dependent: :destroy
+
+    validates :name, presence: true
   end
 end

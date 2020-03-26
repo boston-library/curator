@@ -7,46 +7,21 @@ RSpec.describe Curator::CollectionsController, type: :controller do
   # This should return the minimal set of attributes required to create a valid
   # Collection. As you add validations to Collection, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
-
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
-
-  let(:valid_session) { {} }
-
+  let!(:valid_session) { {} }
+  let!(:valid_attributes) do
+    parent = create(:curator_institution)
+    collection_json = load_json_fixture('collection')
+    collection_json['institution']['ark_id'] = parent.ark_id
+    collection_json
+  end
+  let!(:invalid_attributes) { valid_attributes.dup.update(name: '') }
   let!(:serializer_class) { Curator::CollectionSerializer }
   let!(:resource) { create(:curator_collection) }
   let!(:base_params) { {} }
 
-  include_examples 'shared_formats', include_ark_context: true, resource_key: 'collection'
+  let(:resource_class) { Curator::Collection }
 
-  skip "POST #create" do
-    context "with valid params" do
-      it "creates a new Collection" do
-        expect {
-          post :create, params: { collection: valid_attributes }, session: valid_session
-        }.to change(Curator::Collection, :count).by(1)
-      end
-
-      it "renders a JSON response with the new collection" do
-        post :create, params: { collection: valid_attributes }, session: valid_session
-        expect(response).to have_http_status(:created)
-        expect(response.content_type).to eq('application/json')
-        expect(response.location).to eq(collection_url(Curator::Collection.last))
-      end
-    end
-
-    context "with invalid params" do
-      it "renders a JSON response with errors for the new collection" do
-        post :create, params: { collection: invalid_attributes }, session: valid_session
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq('application/json')
-      end
-    end
-  end
+  include_examples 'shared_formats', include_ark_context: true, skip_post: false, resource_key: 'collection'
 
   skip "PUT #update" do
     context "with valid params" do

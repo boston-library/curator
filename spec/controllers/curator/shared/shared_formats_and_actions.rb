@@ -102,14 +102,14 @@ RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true, reso
       context 'with :valid_params' do
         specify "creates #{resource_key}" do
           expect {
-            VCR.use_cassette("controllers/#{resource_key}_create") do
+            VCR.use_cassette("controllers/#{resource_key}_create", record: :new_episodes) do
               post :create, params: { resource_key => valid_attributes, format: format }, session: valid_session
             end
           }.to change(resource_class, :count).by(1)
         end
 
         it 'renders a 201 JSON response with the new resource' do
-          VCR.use_cassette("controllers/#{resource_key}_create") do
+          VCR.use_cassette("controllers/#{resource_key}_create", record: :new_episodes) do
             post :create, params: { resource_key => valid_attributes, format: format }, session: valid_session
           end
           expect(response).to have_http_status(:created)
@@ -120,12 +120,11 @@ RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true, reso
       end
       context 'with :invalid_params' do
         it 'returns a 422 JSON with array of errors' do
-          VCR.use_cassette("controllers/#{resource_key}_invalid_create") do
+          VCR.use_cassette("controllers/#{resource_key}_invalid_create", record: :new_episodes) do
             post :create, params: { resource_key => invalid_attributes, format: format }, session: valid_session
           end
           expect(response).to have_http_status(:unprocessable_entity)
           expect(response.content_type).to eq(expected_content_type)
-          awesome_print json_response
         end
       end
     end

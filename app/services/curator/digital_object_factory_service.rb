@@ -8,12 +8,13 @@ module Curator
     def call
       with_transaction do
         admin_set_ark_id = @json_attrs.dig('admin_set', 'ark_id')
-        admin_set = Curator.collection_class.find_by!(ark_id: admin_set_ark_id)
         collection_ark_ids = @json_attrs.fetch('exemplary_image_of', []).pluck('ark_id')
+        admin_set = Curator.collection_class.find_by(ark_id: admin_set_ark_id)
         @record = Curator.digital_object_class.where(ark_id: @ark_id).first_or_create! do |digital_object|
+          awesome_print digital_object.ark_id
           digital_object.admin_set = admin_set
           Curator.collection_class.select(:id, :ark_id).where(ark_id: collection_ark_ids).find_each do |collection|
-            digital_object.collection_members.build(collection: collection) unless collection.id == admin_set.id
+            digital_object.collection_members.build(collection: collection) unless collection.ark_id == admin_set.ark_id
           end
           digital_object.created_at = @created if @created
           digital_object.updated_at = @updated if @updated
@@ -59,7 +60,7 @@ module Curator
             end
             @desc_json_attrs.fetch(:host_collections, []).each do |host_col|
               host = find_or_create_host_collection(host_col,
-                                                    admin_set.institution.id)
+                                                    admin_set.institution_id)
               descriptive.desc_host_collections.build(host_collection: host)
             end
             @desc_json_attrs.fetch(:subject, {}).each do |k, v|

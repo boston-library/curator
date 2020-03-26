@@ -91,7 +91,7 @@ module Curator
       when 'Curator::Execptions::ServerError'
         return error_klass.new(e.message)
       when 'Curator::Exceptions::InvalidRecord'
-        return error_klass.new(model_errors: e&.record&.errors)
+        return error_klass.new(model_errors: e&.record&.errors || {})
       else
         return error_klass.new(e.message, request.env['PATH_INFO'])
       end
