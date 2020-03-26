@@ -93,5 +93,18 @@ module Curator
 
       rsolr.delete_by_query('*:*', params: params)
     end
+
+    ##
+    # check if Solr is online
+    def self.solr_ready?(solr_url: Curator.indexable_settings.solr_url)
+      rsolr = RSolr.connect url: solr_url
+      begin
+        ping_request = rsolr.head('admin/ping')
+        ping_request&.response[:status] == 200 ? true : false
+      rescue => e
+        puts "ERROR: Solr is not ready: #{e}"
+        false
+      end
+    end
   end
 end
