@@ -69,9 +69,7 @@ module Curator
     end
 
     def indexer_health_check
-      raise Curator::Exceptions::CuratorError,
-            'Indexing service is not ready!' unless SolrUtil.solr_ready? &&
-                                                    AuthorityApiUtil.authority_api_ready?
+      raise Curator::Exceptions::CuratorError, 'Indexing service is not ready!' unless SolrUtil.solr_ready?
     end
   end
 end

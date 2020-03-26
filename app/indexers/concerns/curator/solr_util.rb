@@ -100,8 +100,8 @@ module Curator
       rsolr = RSolr.connect url: solr_url
       begin
         ping_request = rsolr.head('admin/ping')
-        ping_request&.response[:status] == 200 ? true : false
-      rescue => e
+        ping_request.response[:status] == 200 ? true : false
+      rescue RSolr::Error => e
         puts "ERROR: Solr is not ready: #{e}"
         false
       end

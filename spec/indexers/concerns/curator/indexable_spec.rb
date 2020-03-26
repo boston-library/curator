@@ -57,4 +57,15 @@ RSpec.describe Curator::Indexable do
       end
     end
   end
+
+  describe '#indexer_health_check' do
+    it 'throws a Curator::Exceptions::CuratorError if the indexing service is not available' do
+      cached_solr_url = Curator.indexable_settings.solr_url
+      Curator.indexable_settings.solr_url = 'localhost:9999'
+      expect do
+        @indexable_object.indexer_health_check
+      end.to raise_error(Curator::Exceptions::CuratorError)
+      Curator.indexable_settings.solr_url = cached_solr_url
+    end
+  end
 end
