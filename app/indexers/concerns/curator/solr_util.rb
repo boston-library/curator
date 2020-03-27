@@ -99,7 +99,6 @@ module Curator
     # use ENV as default rather than Curator.indexable_settings,
     # since the latter may not be loaded in all cases where this gets called
     def self.solr_ready?(solr_url: ENV['SOLR_URL'])
-      awesome_print solr_url
       rsolr = RSolr.connect url: solr_url
       begin
         ping_request = rsolr.head('admin/ping')
