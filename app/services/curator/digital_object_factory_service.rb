@@ -11,7 +11,6 @@ module Curator
         collection_ark_ids = @json_attrs.fetch('exemplary_image_of', []).pluck('ark_id')
         admin_set = Curator.collection_class.find_by(ark_id: admin_set_ark_id)
         @record = Curator.digital_object_class.where(ark_id: @ark_id).first_or_create! do |digital_object|
-          awesome_print digital_object.ark_id
           digital_object.admin_set = admin_set
           Curator.collection_class.select(:id, :ark_id).where(ark_id: collection_ark_ids).find_each do |collection|
             digital_object.collection_members.build(collection: collection) unless collection.ark_id == admin_set.ark_id

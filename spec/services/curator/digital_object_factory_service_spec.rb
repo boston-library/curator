@@ -5,30 +5,27 @@ require_relative './shared/factory_service_metastreams_shared'
 
 RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
   before(:all) do
-    @object_json = load_json_fixture('digital_object')
+    @digital_object_json = load_json_fixture('digital_object')
     # create parent Collection
     parent = create(:curator_collection)
-    @object_json['admin_set']['ark_id'] = parent.ark_id
-    @object_json['is_member_of_collection'][0]['ark_id'] = parent.ark_id
+    @digital_object_json['admin_set']['ark_id'] = parent.ark_id
+    @digital_object_json['is_member_of_collection'][0]['ark_id'] = parent.ark_id
      VCR.use_cassette('services/digital_object_factory_service', record: :new_episodes) do
        expect do
-        @success, @object = handle_factory_result(described_class, @object_json)
+        @success, @digital_object = handle_factory_result(described_class, @digital_object_json)
        end.to change { Curator::DigitalObject.count }.by(1)
      end
   end
 
   specify { expect(@success).to be_truthy }
-  specify { expect(@object).to be_valid }
+  specify { expect(@digital_object).to be_valid }
 
   describe '#call' do
-    subject { @object }
+    subject { @digital_object }
 
     it 'has the correct properties' do
-      awesome_print @object.ark_id
-      awesome_print @object_json['ark_id']
-      awesome_print subject.ark_id
-      expect(subject.ark_id).to eq @object_json['ark_id']
-      expect(subject.created_at).to eq Time.zone.parse(@object_json['created_at'])
+      expect(subject.ark_id).to eq @digital_object['ark_id']
+      expect(subject.created_at).to eq Time.zone.parse(@digital_object_json['created_at'])
     end
 
     describe 'setting admin set' do
@@ -49,7 +46,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
 
     describe 'descriptive metastream' do
       let(:descriptive) { subject.descriptive }
-      let(:desc_json)   { @object_json['metastreams']['descriptive'] }
+      let(:desc_json)   { @digital_object_json['metastreams']['descriptive'] }
       let(:simple_fields) do
         %w(abstract access_restrictions digital_origin frequency issuance origin_event extent
            physical_location_department physical_location_shelf_locator place_of_publication
@@ -302,12 +299,20 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
       end
     end
 
-    it_behaves_like 'factory_workflowable', @object_json
-    it_behaves_like 'factory_administratable', @object_json
+    it_behaves_like 'factory_workflowable' do
+      before do
+        @object_json = @digital_object_json
+      end
+    end
+    it_behaves_like 'factory_administratable' do
+      before do
+        @object_json = @digital_object_json
+      end
+    end
 
     describe 'administrative metastream' do
       let(:administrative) { subject.administrative }
-      let(:administrative_json) { @object_json['metastreams']['administrative'] }
+      let(:administrative_json) { @digital_object_json['metastreams']['administrative'] }
       it 'sets the correct administrative metadata' do
         expect(administrative.description_standard).to eq administrative_json['description_standard']
         expect(administrative.flagged).to eq administrative_json['flagged']

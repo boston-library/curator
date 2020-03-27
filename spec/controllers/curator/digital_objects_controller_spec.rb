@@ -11,41 +11,22 @@ RSpec.describe Curator::DigitalObjectsController, type: :controller do
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # DigitalObjectsController. Be sure to keep this updated too.
-  let!(:valid_session) { {} }
-  let!(:valid_attributes) { load_json_fixture('digital_object') }
-  let!(:invalid_attributes) { valid_attributes.dup.update(admin_set: nil) }
-  let!(:resource_class) { Curator::DigitalObject }
-  let!(:serializer_class) { Curator::DigitalObjectSerializer }
-  let!(:resource) { create(:curator_digital_object) }
-  let!(:base_params) { {} }
-
-
-  include_examples 'shared_formats', include_ark_context: true, resource_key: 'digital_object'
-
-  skip "POST #create" do
-    context "with valid params" do
-      it "creates a new Curator::DigitalObject" do
-        expect {
-          post :create, params: { digital_object: valid_attributes }, session: valid_session
-        }.to change(Curator::DigitalObject, :count).by(1)
-      end
-
-      it "renders a JSON response with the new digital_object" do
-        post :create, params: { digital_object: valid_attributes }, session: valid_session
-        expect(response).to have_http_status(:created)
-        expect(response.content_type).to eq('application/json')
-        expect(response.location).to eq(digital_object_url(Curator::DigitalObject.last))
-      end
-    end
-
-    context "with invalid params" do
-      it "renders a JSON response with errors for the new digital_object" do
-        post :create, params: { digital_object: invalid_attributes }, session: valid_session
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq('application/json')
-      end
-    end
+  let(:valid_session) { {} }
+  let!(:valid_attributes) do
+    parent = create(:curator_collection)
+    digital_object_json = load_json_fixture('digital_object')
+    digital_object_json['admin_set']['ark_id'] = parent.ark_id
+    digital_object_json['is_member_of_collection'][0]['ark_id'] = parent.ark_id
+    digital_object_json
   end
+  let(:invalid_attributes) { valid_attributes.dup.update(admin_set: nil) }
+  let(:serializer_class) { Curator::DigitalObjectSerializer }
+  let(:resource_class) { Curator::DigitalObject }
+  let(:base_params) { {} }
+  let!(:resource) { create(:curator_digital_object) }
+
+
+  include_examples 'shared_formats', include_ark_context: true, skip_post: false, resource_key: 'digital_object'
 
   skip "PUT #update" do
     context "with valid params" do

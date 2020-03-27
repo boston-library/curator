@@ -4,22 +4,19 @@ require 'rails_helper'
 require_relative './shared/shared_formats_and_actions'
 
 RSpec.describe Curator::CollectionsController, type: :controller do
-  # This should return the minimal set of attributes required to create a valid
-  # Collection. As you add validations to Collection, be sure to
-  # adjust the attributes here as well.
-  let!(:valid_session) { {} }
+  let(:resource_class) { Curator::Collection }
+  let(:base_params) { {} }
+  let(:valid_session) { {} }
+  let(:invalid_attributes) { valid_attributes.dup.update(name: nil) }
+  let(:serializer_class) { Curator::CollectionSerializer }
+
+  let!(:resource) { create(:curator_collection) }
   let!(:valid_attributes) do
-    parent = create(:curator_institution)
+    parent = create(:curator_institution, :with_location)
     collection_json = load_json_fixture('collection')
     collection_json['institution']['ark_id'] = parent.ark_id
     collection_json
   end
-  let!(:invalid_attributes) { valid_attributes.dup.update(name: '') }
-  let!(:serializer_class) { Curator::CollectionSerializer }
-  let!(:resource) { create(:curator_collection) }
-  let!(:base_params) { {} }
-
-  let(:resource_class) { Curator::Collection }
 
   include_examples 'shared_formats', include_ark_context: true, skip_post: false, resource_key: 'collection'
 

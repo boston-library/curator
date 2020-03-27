@@ -4,14 +4,14 @@ require 'rails_helper'
 require_relative './shared/shared_formats_and_actions'
 
 RSpec.describe Curator::InstitutionsController, type: :controller do
-  let!(:valid_session) { {} }
-  let!(:valid_attributes) { load_json_fixture('institution')  }
-  let!(:invalid_attributes) { valid_attributes.dup.update(name: '') }
-  let!(:serializer_class) { Curator::InstitutionSerializer }
-  let!(:resource) { create(:curator_institution, :with_location) }
-  let!(:base_params) { {} }
-
+  let(:serializer_class) { Curator::InstitutionSerializer }
   let(:resource_class) { Curator::Institution }
+  let(:base_params) { {} }
+  let(:invalid_attributes) { valid_attributes.dup.update(name: nil) }
+  let(:valid_session) { {} }
+
+  let!(:valid_attributes) { load_json_fixture('institution')  }
+  let!(:resource) { create(:curator_institution, :with_location) }
 
   include_examples 'shared_formats', include_ark_context: true, skip_post: false, resource_key: 'institution'
 
