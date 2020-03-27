@@ -53,7 +53,6 @@ module Curator
       # whether to invoke after_commit callback. true = auto indexing
       class_attribute :curator_indexable_auto_callbacks, default: true
 
-      # make sure Solr is ready before we commit the transaction and call :update_index
       after_save :indexer_health_check
 
       # runs after new, update, destroy, etc.
@@ -68,6 +67,7 @@ module Curator
       RecordIndexUpdater.new(self, mapper: mapper, writer: writer).update_index
     end
 
+    # make sure indexing service is ready before we commit transactions and :update_index
     def indexer_health_check
       raise Curator::Exceptions::CuratorError, 'Indexing service is not ready!' unless SolrUtil.solr_ready?
     end

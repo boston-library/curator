@@ -96,12 +96,15 @@ module Curator
 
     ##
     # check if Solr is online
-    def self.solr_ready?(solr_url: Curator.indexable_settings.solr_url)
+    # use ENV as default rather than Curator.indexable_settings,
+    # since the latter may not be loaded in all cases where this gets called
+    def self.solr_ready?(solr_url: ENV['SOLR_URL'])
+      awesome_print solr_url
       rsolr = RSolr.connect url: solr_url
       begin
         ping_request = rsolr.head('admin/ping')
         ping_request.response[:status] == 200 ? true : false
-      rescue RSolr::Error => e
+      rescue StandardError => e
         puts "ERROR: Solr is not ready: #{e}"
         false
       end
