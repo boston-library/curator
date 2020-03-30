@@ -41,17 +41,17 @@ module Curator
       protected
 
       def build_descriptive(descriptable, &_block)
-        descriptive = descriptable.descriptive.present? ? descriptable.descriptive : descriptable.build_descriptive
+        descriptive = descriptable.descriptive.presence || descriptable.build_descriptive
         yield descriptive
       end
 
       def build_workflow(workflowable, &_block)
-        workflow = workflowable.workflow.present? ? workflowable.workflow : workflowable.build_workflow
+        workflow = workflowable.workflow.presence || workflowable.build_workflow
         yield(workflow)
       end
 
       def build_administrative(administratable, &_block)
-        administrative = administratable.administrative.present? ? administratable.administrative : administratable.build_administrative
+        administrative = administratable.administrative.presence || administratable.build_administrative
         yield(administrative)
       end
 
@@ -65,7 +65,7 @@ module Curator
       def handle_result!
         @success = false if @record.blank?
 
-        unless @record.blank?
+        if @record.present?
           @result = @record.class.respond_to?(:for_serialization) ? @record.class.for_serialization.find(@record.id) : @record
         end
         @result ||= @record

@@ -10,11 +10,11 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
     parent = create(:curator_collection)
     @digital_object_json['admin_set']['ark_id'] = parent.ark_id
     @digital_object_json['is_member_of_collection'][0]['ark_id'] = parent.ark_id
-     VCR.use_cassette('services/digital_object_factory_service', record: :new_episodes) do
-       expect do
+    VCR.use_cassette('services/digital_object_factory_service', record: :new_episodes) do
+      expect do
         @success, @digital_object = handle_factory_result(described_class, @digital_object_json)
-       end.to change { Curator::DigitalObject.count }.by(1)
-     end
+      end.to change { Curator::DigitalObject.count }.by(1)
+    end
   end
 
   specify { expect(@success).to be_truthy }
@@ -300,12 +300,12 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
     end
 
     it_behaves_like 'factory_workflowable' do
-      before do
+      before(:each) do
         @object_json = @digital_object_json
       end
     end
     it_behaves_like 'factory_administratable' do
-      before do
+      before(:each) do
         @object_json = @digital_object_json
       end
     end

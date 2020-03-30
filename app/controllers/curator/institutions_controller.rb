@@ -45,9 +45,9 @@ module Curator
                     :image_thumbnail_300,
                     location: {},
                     metastreams: {
-                                    administrative: [:description_standard, :hosting_status, :harvestable, :flagged , destination_site: [], access_edit_group: []],
+                      administrative: [:description_standard, :hosting_status, :harvestable, :flagged, destination_site: [], access_edit_group: []],
                                     workflow: [:ingest_origin, :publishing_state, :processing_state]
-                                 }
+                    }
                   )
       else
         params

@@ -59,7 +59,7 @@ RSpec.describe Curator::Filestreams::FileSetFactoryService, type: :service do
     end
 
     it_behaves_like 'factory_workflowable' do
-      before do
+      before(:each) do
         @object_json = @file_set_json
       end
     end

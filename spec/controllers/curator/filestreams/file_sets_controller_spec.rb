@@ -2,7 +2,6 @@
 
 require 'rails_helper'
 
-
 RSpec.describe Curator::Filestreams::FileSetsController, type: :controller do
   let(:valid_attributes) {
     skip("Add a hash of attributes valid for your model")
@@ -13,32 +12,6 @@ RSpec.describe Curator::Filestreams::FileSetsController, type: :controller do
   }
 
   let(:valid_session) { {} }
-
-
-  skip "POST #create" do
-    context "with valid params" do
-      it "creates a new Curator::Filestreams::FileSet" do
-        expect {
-          post :create, params: { filestreams_file_set: valid_attributes }, session: valid_session
-        }.to change(Curator::Filestreams::FileSet, :count).by(1)
-      end
-
-      it "renders a JSON response with the new controlled_terms_authority" do
-        post :create, params: { filestreams_file_set: valid_attributes }, session: valid_session
-        expect(response).to have_http_status(:created)
-        expect(response.content_type).to eq('application/json')
-        # expect(response.location).to eq(controlled_terms_authority_url(Curator::ControlledTerms::Authority.last))
-      end
-    end
-
-    context "with invalid params" do
-      it "renders a JSON response with errors for the new controlled_terms_authority" do
-        post :create, params: { controlled_terms_authority: invalid_attributes }, session: valid_session
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq('application/json')
-      end
-    end
-  end
 
   skip "PUT #update" do
     context "with valid params" do

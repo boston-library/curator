@@ -18,7 +18,7 @@ module Curator
 
     # POST /digital_objects
     def create
-      success, result = Curator::DigitalObjectFactoryService(json_data: digital_object_params)
+      success, result = Curator::DigitalObjectFactoryService.call(json_data: digital_object_params)
       unless success
         raise ActiveRecord::RecordInvalid.new(result) if result.blank? || result.class <= ActiveRecord::Base
 
@@ -39,7 +39,15 @@ module Curator
     def digital_object_params
       case params[:action]
       when 'create'
-        params.require(:digital_object).permit!
+        params.require(:digital_object).permit(:ark_id, :created_at, :updated_at,
+                                               admin_set: [:ark_id],
+                                               is_member_of_collection: [:ark_id],
+                                               contained_by: [:ark_id],
+                                               metastreams: {
+                                                 descriptive: {},
+                                                               administrative: [:description_standard, :hosting_status, :harvestable, :flagged, destination_site: [], access_edit_group: []],
+                                                               workflow: [:ingest_origin, :publishing_state, :processing_state]
+                                               })
       else
         params
       end

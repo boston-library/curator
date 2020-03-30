@@ -11,7 +11,7 @@
         "ark_id": "commonwealth:987654321"
       }
     ],
-    "is_issue_of": {
+    "contained_by": {
       "ark_id": "commonwealth:zyxwvutsr"
     },
     "metastreams": {

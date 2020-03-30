@@ -37,12 +37,11 @@ module Curator
       case params[:action]
       when 'create'
         params.require(:collection).permit(:ark_id, :created_at, :updated_at, :name, :abstract,
-                                    institution: [:ark_id],
-                                    metastreams: {
-                                                    administrative: [:description_standard, :hosting_status, :harvestable, :flagged , destination_site: [], access_edit_group: []],
-                                                    workflow: [:ingest_origin, :publishing_state, :processing_state]
-                                                 }
-                                    )
+                                           institution: [:ark_id],
+                                           metastreams: {
+                                             administrative: [:description_standard, :hosting_status, :harvestable, :flagged, destination_site: [], access_edit_group: []],
+                                                           workflow: [:ingest_origin, :publishing_state, :processing_state]
+                                           })
       else
         params
       end

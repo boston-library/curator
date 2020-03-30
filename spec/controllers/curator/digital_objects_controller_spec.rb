@@ -19,7 +19,7 @@ RSpec.describe Curator::DigitalObjectsController, type: :controller do
     digital_object_json['is_member_of_collection'][0]['ark_id'] = parent.ark_id
     digital_object_json
   end
-  let(:invalid_attributes) { valid_attributes.dup.update(admin_set: nil) }
+  let(:invalid_attributes) { valid_attributes.dup.update(admin_set: {}) }
   let(:serializer_class) { Curator::DigitalObjectSerializer }
   let(:resource_class) { Curator::DigitalObject }
   let(:base_params) { {} }

@@ -13,7 +13,7 @@ module Curator
         @record = Curator.digital_object_class.where(ark_id: @ark_id).first_or_create! do |digital_object|
           digital_object.admin_set = admin_set
           Curator.collection_class.select(:id, :ark_id).where(ark_id: collection_ark_ids).find_each do |collection|
-            digital_object.collection_members.build(collection: collection) unless collection.ark_id == admin_set.ark_id
+            digital_object.collection_members.build(collection: collection) unless collection.ark_id == admin_set&.ark_id
           end
           digital_object.created_at = @created if @created
           digital_object.updated_at = @updated if @updated
@@ -58,6 +58,8 @@ module Curator
               end
             end
             @desc_json_attrs.fetch(:host_collections, []).each do |host_col|
+              next if admin_set.blank?
+
               host = find_or_create_host_collection(host_col,
                                                     admin_set.institution_id)
               descriptive.desc_host_collections.build(host_collection: host)
