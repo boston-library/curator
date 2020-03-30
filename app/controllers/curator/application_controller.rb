@@ -9,6 +9,7 @@ module Curator
       'StandardError' => 'Curator::Exceptions::ServerError',
       'ActiveRecord::RecordNotFound' => 'Curator::Exceptions::RecordNotFound',
       'ActiveRecord::RecordInvalid' => 'Curator::Exceptions::InvalidRecord',
+      'ActiveRecord::RecordNotSaved' => 'Curator::Exceptions::UnprocessableEntity',
       'ActionController::RoutingError' => 'Curator::Exceptions::RouteNotFound',
       'Curator::Exceptions::UnknownFormat' => 'Curator::Exceptions::BadRequest',
       'Curator::Exceptions::UnknownSerializer' => 'Curator::Exceptions::BadRequest',
@@ -44,6 +45,14 @@ module Curator
         format.json { json_response(rendered_object, status) }
         format.xml { xml_response(rendered_object, status) }
       end
+    end
+
+    def raise_failure(result = nil)
+      raise ActiveRecord::RecordNotSaved, 'Unknown error occured saving record. Check logs' if result.blank?
+
+      raise ActiveRecord::RecordInvalid.new(result) if result.class <= ActiveRecord::Base
+
+      raise raise result if result.kind_of?(Exception)
     end
 
     def json_response(rendered_object, status = :ok)
@@ -92,6 +101,8 @@ module Curator
         return error_klass.new(e.message)
       when 'Curator::Exceptions::InvalidRecord'
         return error_klass.new(model_errors: e&.record&.errors || {})
+      when 'Curator::Exceptions::UnprocessableEntity'
+        return error_klass.new(e.message, "#{request.env['PATH_INFO']}/:params")
       else
         return error_klass.new(e.message, request.env['PATH_INFO'])
       end

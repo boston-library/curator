@@ -4,8 +4,6 @@ module Curator
   module Mintable
     extend ActiveSupport::Concern
     included do
-      attr_readonly :ark_id
-
       before_validation :generate_ark_id, on: :create, if: proc { |m| m.ark_id.blank? }
 
       validates :ark_id, presence: true, uniqueness: true, on: :create

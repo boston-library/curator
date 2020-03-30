@@ -54,6 +54,17 @@ module Curator::Exceptions
     end
   end
 
+  class UnprocessableEntity < SerializableError
+    def initialize(message = 'Unable to process entity', pointer = '/request/:params')
+      super(
+        title: 'Record Not Found',
+        status: :unprocessable_entity,
+        detail: message,
+        source: { pointer: pointer }
+      )
+    end
+  end
+
   class NotAcceptable < SerializableError
     def initialize(message = 'Method not allowed in requested format', pointer = 'request/headers/:content_type')
       super(

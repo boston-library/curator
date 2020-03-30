@@ -17,11 +17,7 @@ module Curator
     def create
       success, result = Curator::CollectionFactoryService.call(json_data: collection_params)
 
-      unless success
-        raise ActiveRecord::RecordInvalid.new(result) if result.blank? || result.class <= ActiveRecord::Base
-
-        raise result if result.kind_of?(Exception)
-      end
+      raise_failure(result) unless success
 
       json_response(serialized_resource(result), :created)
     end

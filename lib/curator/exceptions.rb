@@ -76,6 +76,7 @@ module Curator
       autoload :RecordNotFound, File.expand_path('./exceptions/controller_errors.rb', __dir__)
       autoload :ServerError, File.expand_path('./exceptions/controller_errors.rb', __dir__)
       autoload :MethodNotAllowed, File.expand_path('./exceptions/controller_errors.rb', __dir__)
+      autoload :UnprocessableEntity, File.expand_path('./exceptions/controller_errors.rb', __dir__)
       autoload :NotAcceptable, File.expand_path('./exceptions/controller_errors.rb', __dir__)
       # Serializable ModelError Subclasses
       autoload :InvalidRecord, File.expand_path('./exceptions/model_errors.rb', __dir__)
