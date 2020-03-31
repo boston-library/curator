@@ -4,14 +4,21 @@ require 'rails_helper'
 require_relative './shared/shared_formats_and_actions'
 
 RSpec.describe Curator::InstitutionsController, type: :controller do
-  let(:serializer_class) { Curator::InstitutionSerializer }
-  let(:resource_class) { Curator::Institution }
+  let!(:resource) { create(:curator_institution, :with_location) }
+  let!(:valid_attributes) do
+    attributes = attributes_for(:curator_institution, :with_location).except(:administrative, :workflow)
+    relation_attributes = load_json_fixture('institution')
+    attributes.merge!({
+      location: relation_attributes.dup.delete('location'),
+      metastreams: relation_attributes.dup.delete('metastreams')
+    })
+  end
+
+  let(:valid_session) { {} }
   let(:base_params) { {} }
   let(:invalid_attributes) { valid_attributes.dup.update(name: nil) }
-  let(:valid_session) { {} }
-
-  let!(:valid_attributes) { load_json_fixture('institution')  }
-  let!(:resource) { create(:curator_institution, :with_location) }
+  let(:resource_class) { Curator::Institution }
+  let(:serializer_class) { Curator::InstitutionSerializer }
 
   include_examples 'shared_formats', include_ark_context: true, skip_post: false, resource_key: 'institution'
 

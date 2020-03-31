@@ -4,19 +4,23 @@ require 'rails_helper'
 require_relative './shared/shared_formats_and_actions'
 
 RSpec.describe Curator::CollectionsController, type: :controller do
-  let(:resource_class) { Curator::Collection }
-  let(:base_params) { {} }
-  let(:valid_session) { {} }
-  let(:invalid_attributes) { valid_attributes.dup.update(name: nil) }
-  let(:serializer_class) { Curator::CollectionSerializer }
-
   let!(:resource) { create(:curator_collection) }
   let!(:valid_attributes) do
+    attributes = attributes_for(:curator_collection).except(:administrative, :workflow)
+    relation_attributes = load_json_fixture('collection')
     parent = create(:curator_institution, :with_location)
-    collection_json = load_json_fixture('collection')
-    collection_json['institution']['ark_id'] = parent.ark_id
-    collection_json
+    attributes.merge!({
+      institution: { ark_id: parent.ark_id },
+      metastreams: relation_attributes.dup.delete('metastreams')
+    })
   end
+
+  let(:valid_session) { {} }
+  let(:base_params) { {} }
+  let(:invalid_attributes) { valid_attributes.dup.update(name: nil) }
+  let(:resource_class) { Curator::Collection }
+  let(:serializer_class) { Curator::CollectionSerializer }
+
 
   include_examples 'shared_formats', include_ark_context: true, skip_post: false, resource_key: 'collection'
 

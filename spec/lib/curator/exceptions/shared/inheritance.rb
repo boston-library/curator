@@ -15,8 +15,8 @@ RSpec.shared_examples 'serializable_error' do
   end
 end
 
-RSpec.shared_examples 'model_error' do
-  specify { expect(described_const).to be_truthy.and be <= Curator::Exceptions::ModelError }
+RSpec.shared_examples 'model_error_wrapper' do
+  specify { expect(described_const).to be_truthy.and be <= Curator::Exceptions::ModelErrorWrapper }
 
   let!(:model_error_instance) { described_const.new }
 

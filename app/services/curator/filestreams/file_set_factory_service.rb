@@ -9,9 +9,7 @@ module Curator
         object_ark_id = @json_attrs.dig('file_set_of', 'ark_id')
         file_set_type = @json_attrs.fetch('file_set_type', {})
         obj = Curator.digital_object_class.find_by(ark_id: object_ark_id)
-        awesome_print @ark_id
         @record = Curator.filestreams.send("#{file_set_type}_class").where(ark_id: @ark_id).first_or_create! do |file_set|
-          awesome_print file_set.ark_id
           file_set.file_set_of = obj
           file_set.file_name_base = @json_attrs.fetch('file_name_base')
           file_set.position = @json_attrs.fetch('position', 0)
@@ -20,13 +18,15 @@ module Curator
           file_set.updated_at = @updated if @updated
 
           # set exemplary relationships
-          exemplary_ids = @json_attrs.fetch('exemplary_image_of', []).pluck('ark_id')
-          exemplary_ids.each do |ex_ark_id|
-            ex_obj = Curator.digital_object_class.find_by(ark_id: ex_ark_id) ||
-                     Curator.collection_class.find_by(ark_id: ex_ark_id)
-            raise "Bad exemplary id! #{ex_ark_id} is either not in the repo or is not a DigitalObject or Collection" unless ex_obj
+          if Curator::Mappings::ExemplaryImage::VALID_EXEMPLARY_FILE_SET_TYPES.include?(file_set_type.classify)
+            exemplary_ids = @json_attrs.fetch('exemplary_image_of', []).pluck('ark_id')
+            exemplary_ids.each do |ex_ark_id|
+              ex_obj = Curator.digital_object_class.find_by(ark_id: ex_ark_id) ||
+                       Curator.collection_class.find_by(ark_id: ex_ark_id)
 
-            ex_obj.with_lock do
+              raise ActiveRecord::RecordNotSaved, "Bad exemplary id! #{ex_ark_id} is either not in the repo or is not a DigitalObject or Collection" unless ex_obj
+
+              ex_obj.lock!
               build_exemplary(file_set) do |exemplary_img|
                 exemplary_img.exemplary_object = ex_obj
               end

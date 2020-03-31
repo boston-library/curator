@@ -56,6 +56,13 @@ module Curator
       Curator.setup!
     end
 
+    initializer 'inflections' do
+      # NOTE: This is needed to prevent 'metadata'.classify from becomming Metadatum
+      ActiveSupport::Inflector.inflections(:en) do |inflect|
+        inflect.singular 'metadata', 'metadata'
+      end
+    end
+
     initializer 'mime_types' do
       Mime::Type.register 'application/marcxml+xml', :marc, %w(application/marc)
       Mime::Type.register 'application/mods+xml', :mods

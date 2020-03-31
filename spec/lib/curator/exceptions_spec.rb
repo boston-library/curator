@@ -9,7 +9,7 @@ RSpec.describe Curator::Exceptions do
 
   it { is_expected.to be_const_defined(:CuratorError) }
   it { is_expected.to be_const_defined(:SerializableError) }
-  it { is_expected.to be_const_defined(:ModelError) }
+  it { is_expected.to be_const_defined(:ModelErrorWrapper) }
 
   describe Curator::Exceptions::CuratorError do
     it { is_expected.to be_a_kind_of(StandardError) }
@@ -34,14 +34,10 @@ RSpec.describe Curator::Exceptions do
     end
   end
 
-  describe Curator::Exceptions::ModelError do
-    it { is_expected.to be_a_kind_of(Curator::Exceptions::SerializableError) }
+  describe Curator::Exceptions::ModelErrorWrapper do
+    it { is_expected.to be_a_kind_of(Curator::Exceptions::CuratorError) }
 
-    it_behaves_like 'serializable_error' do
-      let(:described_const) { described_class }
-    end
-
-    it_behaves_like 'model_error' do
+    it_behaves_like 'model_error_wrapper' do
       let(:described_const) { described_class }
     end
   end

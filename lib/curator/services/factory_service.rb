@@ -6,17 +6,13 @@ module Curator
       extend ActiveSupport::Concern
 
       MAX_RETRIES = 2
-
-      RECORD_ERRORS = [
-                        ActiveRecord::RecordInvalid,
-                        ActiveRecord::RecordNotUnique,
-                        ActiveRecord::RecordNotSaved
-                      ].freeze
-
       # These are errors that will be passed to the @result variable. That way these can be raised on failure up the chain
       RESULT_ERRORS = [
                         ActiveRecord::RecordNotFound,
                         ActiveRecord::StatementInvalid,
+                        ActiveRecord::RecordInvalid,
+                        ActiveRecord::RecordNotUnique,
+                        ActiveRecord::RecordNotSaved,
                         ActiveRecord::ActiveRecordError,
                         SystemCallError,
                         ArgumentError,
@@ -65,10 +61,11 @@ module Curator
       def handle_result!
         @success = false if @record.blank?
 
-        if @record.present?
-          @result = @record.class.respond_to?(:for_serialization) ? @record.class.for_serialization.find(@record.id) : @record
+        unless defined?(@result) && @result.present?
+          if @record.present?
+            @result = @record.class.respond_to?(:for_serialization) ? @record.class.for_serialization.find(@record.id) : @record
+          end
         end
-        @result ||= @record
       end
 
       def setup_metastream_attributes!
@@ -95,9 +92,9 @@ module Curator
           Rails.logger.info 'Record is stale retrying in 2 seconds..'
           sleep(2)
           retry
-        rescue *RECORD_ERRORS => e
+        rescue *RESULT_ERRORS => e
           Rails.logger.error "=================#{e.inspect}=================="
-          raise
+          raise e
         end
       end
 
@@ -123,17 +120,15 @@ module Curator
           end
         rescue ActiveRecord::StaleObjectError => e
           if (retries += 1) <= MAX_RETRIES
-            Rails.logger.info 'Record is stale retrying in 2 seconds...'
+            Rails.logger.info '====Record is stale retrying in 2 seconds...==='
             sleep(2)
             retry
           else
             Rails.logger.error '===============MAX RETRIES REACHED!============'
             Rails.logger.error "=================#{e.inspect}=================="
             @success = false
+            @result = ActiveRecord::RecordNotSaved, "Max retries reached! caused by: #{e.message}", e.record
           end
-        rescue *RECORD_ERRORS => e
-          Rails.logger.error "=================#{e.inspect}=================="
-          @success = false
         rescue *RESULT_ERRORS => e
           Rails.logger.error "=================#{e.inspect}=================="
           @success = false
