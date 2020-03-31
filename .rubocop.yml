@@ -533,7 +533,6 @@ Rails/Present:
 Rails/Output:
   Enabled: true
   Exclude:
-    - 'app/indexers/concerns/curator/solr_util.rb'
     - 'app/services/curator/collection_factory_service.rb'
     - 'app/services/curator/institution_factory_service.rb'
     - 'app/services/curator/digital_object_factory_service.rb'

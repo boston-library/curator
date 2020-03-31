@@ -104,7 +104,7 @@ module Curator
         ping_request = rsolr.head('admin/ping')
         ping_request.response[:status] == 200 ? true : false
       rescue StandardError => e
-        puts "ERROR: Solr is not ready: #{e}"
+        Rails.logger.error "ERROR: Solr is not ready: #{e}"
         false
       end
     end
