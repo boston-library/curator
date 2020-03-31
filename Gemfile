@@ -36,7 +36,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'climate_control', '~>0.1'
+  gem 'climate_control', '~> 0.1'
   gem 'coveralls', require: false
   gem 'database_cleaner', '~> 1.8'
   gem 'rspec-rails', '~> 3.9', '< 4.0'
