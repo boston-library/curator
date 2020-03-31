@@ -93,5 +93,20 @@ module Curator
 
       rsolr.delete_by_query('*:*', params: params)
     end
+
+    ##
+    # check if Solr is online
+    # use ENV as default rather than Curator.indexable_settings,
+    # since the latter may not be loaded in all cases where this gets called
+    def self.solr_ready?(solr_url: ENV['SOLR_URL'])
+      rsolr = RSolr.connect url: solr_url
+      begin
+        ping_request = rsolr.head('admin/ping')
+        ping_request.response[:status] == 200 ? true : false
+      rescue StandardError => e
+        Rails.logger.error "ERROR: Solr is not ready: #{e}"
+        false
+      end
+    end
   end
 end
