@@ -9,7 +9,9 @@ module Curator
         object_ark_id = @json_attrs.dig('file_set_of', 'ark_id')
         file_set_type = @json_attrs.fetch('file_set_type', {})
         obj = Curator.digital_object_class.find_by(ark_id: object_ark_id)
+        awesome_print @ark_id
         @record = Curator.filestreams.send("#{file_set_type}_class").where(ark_id: @ark_id).first_or_create! do |file_set|
+          awesome_print file_set.ark_id
           file_set.file_set_of = obj
           file_set.file_name_base = @json_attrs.fetch('file_name_base')
           file_set.position = @json_attrs.fetch('position', 0)
@@ -34,7 +36,7 @@ module Curator
           build_workflow(file_set) do |workflow|
             workflow.send('ingest_origin=', @workflow_json_attrs.fetch(:ingest_origin, ENV['HOME'].to_s))
             processing_state = @workflow_json_attrs.fetch(:processing_state, nil)
-            publishing_state = obj.workflow.publishing_state
+            publishing_state = obj&.workflow&.publishing_state
             # set publishing state to same value as parent DigitalObject
             workflow.send('processing_state=', processing_state) if processing_state
             workflow.send('publishing_state=', publishing_state) if publishing_state
