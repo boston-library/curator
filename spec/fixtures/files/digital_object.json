@@ -99,7 +99,7 @@
         "genres": [
           {
             "label": "Manuscripts",
-            "authority_code": "lctgm",
+            "authority_code": "gmgpc",
             "id_from_auth": "tgm012286",
             "basic": true
           },
