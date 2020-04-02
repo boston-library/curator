@@ -33,16 +33,16 @@ module Curator
       # NOTE: Should we only whitelist the master files on create?
       case params[:action]
       when 'create'
-          params.require(:file_set).permit(:ark_id, :created_at, :updated_at,
-                                            :file_set_type, :file_name_base, :position,
-                                            file_set_of: [:ark_id],
-                                            exemplary_image_of: [:ark_id],
-                                            pagination: [:page_label, :page_type, :hand_side],
-                                            metastreams: {
-                                              administrative: [:description_standard, :hosting_status, :harvestable, :flagged, destination_site: [], access_edit_group: []],
-                                               workflow: [:ingest_origin, :publishing_state, :processing_state]
-                                            },
-                                            files: [])
+        params.require(:file_set).permit(:ark_id, :created_at, :updated_at,
+                                         :file_set_type, :file_name_base, :position,
+                                         file_set_of: [:ark_id],
+                                          exemplary_image_of: [:ark_id],
+                                          pagination: [:page_label, :page_type, :hand_side],
+                                          metastreams: {
+                                            administrative: [:description_standard, :hosting_status, :harvestable, :flagged, destination_site: [], access_edit_group: []],
+                                             workflow: [:ingest_origin, :publishing_state, :processing_state]
+                                          },
+                                          files: [])
       else
         params
       end

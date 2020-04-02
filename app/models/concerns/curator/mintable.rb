@@ -13,7 +13,7 @@ module Curator
     private
 
     def generate_ark_id
-      self.ark_id = Curator::MinterService.call unless ark_id.present?
+      self.ark_id = Curator::MinterService.call if ark_id.blank?
     end
   end
 end

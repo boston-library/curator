@@ -103,14 +103,14 @@ RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true, reso
         let(:valid_create_params) { params.dup.merge({ resource_key => valid_attributes }) }
         specify "creates #{resource_key}" do
           expect {
-            VCR.use_cassette("controllers/#{resource_key}_create", record: :new_episodes) do
+            VCR.use_cassette("controllers/#{resource_key}_create") do
               post :create, params: valid_create_params, session: valid_session
             end
           }.to change(resource_class, :count).by(1)
         end
 
         it 'renders a 201 JSON response with the new resource' do
-          VCR.use_cassette("controllers/#{resource_key}_create", record: :new_episodes) do
+          VCR.use_cassette("controllers/#{resource_key}_create") do
             post :create, params: valid_create_params, session: valid_session
           end
           expect(response).to have_http_status(:created)
@@ -122,11 +122,13 @@ RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true, reso
       context 'with :invalid_params' do
         let(:invalid_create_params) { params.dup.merge({ resource_key => invalid_attributes }) }
         it 'returns a 422 JSON with array of errors' do
-          VCR.use_cassette("controllers/#{resource_key}_invalid_create", record: :new_episodes) do
+          VCR.use_cassette("controllers/#{resource_key}_invalid_create") do
             post :create, params: invalid_create_params, session: valid_session
           end
           expect(response).to have_http_status(:unprocessable_entity)
           expect(response.content_type).to eq(expected_content_type)
+          expect(json_response).to be_a_kind_of(Hash).and have_key('errors')
+          expect(json_response['errors'][0]).to include('status' => 422, 'title' => a_kind_of(String), 'detail' => a_kind_of(String), 'source' => a_hash_including('pointer'))
         end
       end
     end

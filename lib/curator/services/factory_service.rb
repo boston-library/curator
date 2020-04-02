@@ -61,11 +61,11 @@ module Curator
       def handle_result!
         @success = false if @record.blank?
 
-        unless defined?(@result) && @result.present?
-          if @record.present?
-            @result = @record.class.respond_to?(:for_serialization) ? @record.class.for_serialization.find(@record.id) : @record
-          end
-        end
+        return if defined?(@result) && @result.present?
+
+        return if @record.blank?
+
+        @result = @record.class.respond_to?(:for_serialization) ? @record.class.for_serialization.find(@record.id) : @record
       end
 
       def setup_metastream_attributes!
