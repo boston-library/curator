@@ -30,7 +30,6 @@ module Curator
     private
 
     def file_set_params
-      # NOTE: Should we only whitelist the master files on create?
       case params[:action]
       when 'create'
         params.require(:file_set).permit(:ark_id, :created_at, :updated_at,

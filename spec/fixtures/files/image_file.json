@@ -11,7 +11,7 @@
       "ingest_filepath": "curator/spec/fixtures/files/image_thumbnail_300.jpg"
     },
     "filestream_of": {
-      "ark_id": "commonwealth:000000000",
+      "ark_id": "commonwealth:1fda3335",
       "file_set_type": "image"
     }
   }

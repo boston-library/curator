@@ -14,10 +14,11 @@ module Curator
     include Curator::Metastreamable::Basic
     include Curator::Indexable
 
-    def self.with_all_attachments
-      reflections.keys.select { |ref| ref =~ /_attachment/ }
-      includes(attachment_reflections)
-    end
+    # TODO: Add this scope to :for_serialization once we start attaching files in the FileSetFactoryService
+    # def self.with_all_attachments
+    #   reflections.keys.select { |ref| ref =~ /_attachment/ }
+    #   includes(attachment_reflections)
+    # end
 
     self.curator_indexable_mapper = Curator::FileSetIndexer.new
 

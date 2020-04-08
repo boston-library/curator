@@ -8,13 +8,16 @@ module Curator
     def call
       with_transaction do
         admin_set_ark_id = @json_attrs.dig('admin_set', 'ark_id')
-        collection_ark_ids = @json_attrs.fetch('exemplary_image_of', []).pluck('ark_id')
-        admin_set = Curator.collection_class.find_by(ark_id: admin_set_ark_id)
+        collection_ark_ids = @json_attrs.fetch('is_member_of_collection', []).pluck('ark_id')
+        admin_set = Curator.collection_class.find_by!(ark_id: admin_set_ark_id)
         @record = Curator.digital_object_class.where(ark_id: @ark_id).first_or_create! do |digital_object|
           digital_object.admin_set = admin_set
-          Curator.collection_class.select(:id, :ark_id).where(ark_id: collection_ark_ids).find_each do |collection|
-            digital_object.collection_members.build(collection: collection) unless collection.ark_id == admin_set&.ark_id
+          collection_members = Curator.collection_class.select(:id, :ark_id).where(ark_id: collection_ark_ids).where.not(ark_id: admin_set.ark_id)
+
+          collection_members.find_each do |collection|
+            digital_object.collection_members.build(collection: collection)
           end
+
           digital_object.created_at = @created if @created
           digital_object.updated_at = @updated if @updated
 

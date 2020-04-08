@@ -52,7 +52,7 @@ module Curator
 
       raise ActiveRecord::RecordInvalid.new(result) if result.class <= ActiveRecord::Base
 
-      raise raise result if result.kind_of?(Exception)
+      raise result if result.kind_of?(Exception)
     end
 
     def json_response(rendered_object, status = :ok)
