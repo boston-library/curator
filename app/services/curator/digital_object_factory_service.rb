@@ -212,11 +212,12 @@ module Curator
 
           collection = Curator.collection_class.select(:id, :ark_id).find_by!(ark_id: collection_ark_id)
 
-          next if !digital_object.new_record? && digital_object.collection_members.exists?(ark_id: collection_ark_id)
+          next if digital_object.collection_members.exists?(collection: collection)
 
           digital_object.collection_members.build(collection: collection)
         rescue ActiveRecord::RecordNotFound => e
           digital_object.errors.add(:collection_members, "#{e.message} with ark id=#{collection_ark_id}")
+          raise ActiveRecord::RecordInvalid, digital_object
         end
       end
     end

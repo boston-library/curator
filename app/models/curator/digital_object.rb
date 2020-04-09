@@ -33,7 +33,8 @@ module Curator
 
     has_many :container_for, inverse_of: :contained_by, class_name: 'Curator::DigitalObject', foreign_key: :contained_by_id, dependent: :nullify
 
-    has_many :collection_members, -> { joins(:collection).includes(:collection) }, inverse_of: :digital_object, class_name: 'Curator::Mappings::CollectionMember', dependent: :destroy
+    has_many :collection_members, -> { includes(:collection) }, inverse_of: :digital_object, class_name: 'Curator::Mappings::CollectionMember', dependent: :destroy
+
     has_many :is_member_of_collection, through: :collection_members, source: :collection
 
     has_many :file_set_member_mappings, -> { joins(:file_set).includes(:file_set) }, inverse_of: :digital_object, class_name: 'Curator::Mappings::FileSetMember', dependent: :destroy
