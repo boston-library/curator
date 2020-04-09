@@ -9,17 +9,13 @@ module Curator
       with_transaction do
         admin_set_ark_id = @json_attrs.dig('admin_set', 'ark_id')
         collection_ark_ids = @json_attrs.fetch('is_member_of_collection', []).pluck('ark_id')
-        admin_set = Curator.collection_class.find_by!(ark_id: admin_set_ark_id)
         @record = Curator.digital_object_class.where(ark_id: @ark_id).first_or_create! do |digital_object|
+          admin_set = find_admin_set!(admin_set_ark_id, digital_object)
           digital_object.admin_set = admin_set
-          collection_members = Curator.collection_class.select(:id, :ark_id).where(ark_id: collection_ark_ids).where.not(ark_id: admin_set.ark_id)
-
-          collection_members.find_each do |collection|
-            digital_object.collection_members.build(collection: collection)
-          end
-
           digital_object.created_at = @created if @created
           digital_object.updated_at = @updated if @updated
+
+          find_or_build_collection_members!(digital_object, admin_set_ark_id, collection_ark_ids)
 
           build_workflow(digital_object) do |workflow|
             [:ingest_origin, :processing_state, :publishing_state].each do |attr|
@@ -205,6 +201,31 @@ module Curator
           authority_code: role_attrs.fetch(:authority_code, nil)
         )
       }
+    end
+
+    def find_or_build_collection_members!(digital_object, admin_set_ark_id, collection_ark_ids = [])
+      return if collection_ark_ids.blank?
+
+      collection_ark_ids.each do |collection_ark_id|
+        begin
+          next if collection_ark_id == admin_set_ark_id
+
+          collection = Curator.collection_class.select(:id, :ark_id).find_by!(ark_id: collection_ark_id)
+
+          next if !digital_object.new_record? && digital_object.collection_members.exists?(ark_id: collection_ark_id)
+
+          digital_object.collection_members.build(collection: collection)
+        rescue ActiveRecord::RecordNotFound => e
+          digital_object.errors.add(:collection_members, "#{e.message} with ark id=#{collection_ark_id}")
+        end
+      end
+    end
+
+    def find_admin_set!(admin_set_ark_id, digital_object)
+      return Curator.collection_class.find_by!(ark_id: admin_set_ark_id)
+    rescue ActiveRecord::RecordNotFound => e
+      digital_object.errors.add(:admin_set, "#{e.message} with ark_id=#{admin_set_ark_id}")
+      nil
     end
 
     def find_or_create_host_collection(host_col_name = nil, institution_id = nil)

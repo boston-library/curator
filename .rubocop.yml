@@ -430,7 +430,7 @@ Metrics/BlockLength:
 
 Metrics/ClassLength:
   Enabled: true
-  Max: 200
+  Max: 250
 
 Metrics/CyclomaticComplexity:
   Enabled: true
