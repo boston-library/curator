@@ -9,9 +9,12 @@ RSpec.describe Curator::Filestreams::FileFactoryService, type: :service do
     @object_json['filestream_of']['ark_id'] = @file_set.ark_id
     @object_json['metadata']['ingest_filepath'] = file_fixture('image_thumbnail_300.jpg').to_s
     expect do
-      @file = described_class.call(json_data: @object_json)
+      @success, @file = described_class.call(json_data: @object_json)
     end.to change { ActiveStorage::Blob.count }.by(1)
   end
+
+  specify { expect(@success).to be_truthy }
+  specify { expect(@file).to be_valid }
 
   describe '#call' do
     subject { @file }

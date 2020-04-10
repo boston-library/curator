@@ -19,10 +19,9 @@ RSpec.describe Curator::ControlledTerms::AuthoritiesController, type: :controlle
 
   let!(:serializer_class) { Curator::ControlledTerms::AuthoritySerializer }
   let!(:resource) { create(:curator_controlled_terms_authority) }
-  let!(:resource_key) { 'authority' }
   let!(:base_params) { {} }
 
-  include_examples 'shared_formats', has_member_methods: false
+  include_examples 'shared_formats', has_member_methods: false, resource_key: 'authority'
 
   skip "POST #create" do
     context "with valid params" do

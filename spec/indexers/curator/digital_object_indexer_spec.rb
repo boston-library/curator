@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe Curator::DigitalObjectIndexer, type: :indexer do
   describe 'indexing' do
     let!(:digital_object) do
-      digital_obj = create(:curator_digital_object, :with_contained_by, :with_metastreams)
+      digital_obj = create(:curator_digital_object, :with_contained_by)
       create(:curator_mappings_exemplary_image, exemplary_object: digital_obj)
       digital_obj
     end

@@ -10,12 +10,25 @@ module Curator
     enum digital_origin: ['born digital', 'reformatted digital', 'digitized microfilm', 'digitized other analog'].freeze
     enum text_direction: %w(ltr rtl).freeze
     # JSON ATTRS
+    scope :with_physical_location, -> { joins(:physical_location).preload(:physical_location => [:authority]) }
 
-    scope :with_mappings, -> { includes(:desc_terms, :name_roles, :desc_host_collections) }
-    scope :with_physical_location, -> { includes(:physical_location) }
-    scope :with_license, -> { includes(:license) }
-    scope :for_serialization, -> { merge(with_mappings).merge(with_physical_location).merge(with_license) }
+    scope :with_license, -> { joins(:license).preload(:license) }
+
+    scope :with_desc_terms, lambda {
+      left_outer_joins(:desc_terms => :mapped_term).
+      eager_load(:desc_terms => :mapped_term).
+      where('curator_controlled_terms_nomenclatures.type IN (?)', %w(Genre ResourceType Language Subject Name Geographic).map { |type| "Curator::ControlledTerms::#{type}" })
+    }
+
+    scope :with_mappings, lambda {
+      joins(:desc_host_collections, :name_roles).
+      preload(:host_collections, :name_roles => [{ :name => [:authority] }, { :role => [:authority] }])
+    }
+
+    scope :for_serialization, -> { merge(with_physical_location).merge(with_license).merge(with_mappings).merge(with_desc_terms) }
+
     # Identifier
+
     attr_json :identifier, Curator::Descriptives::Identifier.to_type, container_attribute: :identifier_json, array: true, default: []
 
     # #Title
@@ -43,13 +56,15 @@ module Curator
     # PARENTS
     belongs_to :descriptable, polymorphic: true, inverse_of: :descriptive
     belongs_to :license, inverse_of: :licensees, class_name: 'Curator::ControlledTerms::License'
-    belongs_to :physical_location, -> { merge(with_authority) }, inverse_of: :physical_locations_of, class_name: 'Curator::ControlledTerms::Name'
+    belongs_to :physical_location, inverse_of: :physical_locations_of, class_name: 'Curator::ControlledTerms::Name'
     # MAPPING OBJECTS
     with_options inverse_of: :descriptive, dependent: :destroy do
-      has_many :desc_terms, -> { includes(:mapped_term) }, class_name: 'Curator::Mappings::DescTerm'
-      has_many :name_roles, -> { includes(:name, :role) }, class_name: 'Curator::Mappings::DescNameRole'
-      has_many :desc_host_collections, -> { includes(:host_collection) }, class_name: 'Curator::Mappings::DescHostCollection'
+      has_many :desc_terms, class_name: 'Curator::Mappings::DescTerm'
+      has_many :name_roles, class_name: 'Curator::Mappings::DescNameRole'
+      has_many :desc_host_collections, class_name: 'Curator::Mappings::DescHostCollection'
     end
+
+    validates_associated :desc_terms, :name_roles, :desc_host_collections
 
     has_many :host_collections, through: :desc_host_collections, source: :host_collection do
       def names

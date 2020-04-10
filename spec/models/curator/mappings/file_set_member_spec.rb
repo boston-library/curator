@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Curator::Mappings::FileSetMember, type: :model do
-  subject { create(:curator_mappings_file_set_member) }
+  subject { build(:curator_mappings_file_set_member) }
 
   describe 'Database Attributes' do
     it { is_expected.to have_db_column(:digital_object_id).

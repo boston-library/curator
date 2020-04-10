@@ -10,7 +10,7 @@ require_relative './shared/mappings/has_exemplary_file_set'
 require_relative './shared/for_serialization'
 
 RSpec.describe Curator::Collection, type: :model do
-  subject { create(:curator_collection) }
+  subject { build(:curator_collection) }
 
   it_behaves_like 'mintable'
 
@@ -24,6 +24,10 @@ RSpec.describe Curator::Collection, type: :model do
 
     it { is_expected.to have_db_column(:name).of_type(:string).with_options(null: false) }
     it { is_expected.to have_db_column(:abstract).of_type(:text).with_options(default: '') }
+  end
+
+  describe 'Validations' do
+    it { is_expected.to validate_presence_of(:name) }
   end
 
   describe 'Associations' do

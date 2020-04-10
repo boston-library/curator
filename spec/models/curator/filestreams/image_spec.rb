@@ -6,7 +6,7 @@ require_relative '../shared/filestreams/file_attachments'
 require_relative '../shared/filestreams/thumbnailable'
 
 RSpec.describe Curator::Filestreams::Image, type: :model do
-  subject { create(:curator_filestreams_image) }
+  subject { build(:curator_filestreams_image) }
 
   it_behaves_like 'file_set'
 

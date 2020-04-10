@@ -7,7 +7,7 @@ require_relative '../shared/archivable'
 require_relative '../shared/for_serialization'
 
 RSpec.describe Curator::Metastreams::Descriptive, type: :model do
-  subject { create(:curator_metastreams_descriptive) }
+  subject { build(:curator_metastreams_descriptive) }
 
   describe 'Database' do
     it_behaves_like 'optimistic_lockable'
@@ -273,10 +273,32 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
   end
 
   describe 'Scopes' do
+    describe '.with_desc_terms' do
+      subject { described_class }
+
+      let(:expected_scope_sql) do
+        described_class.
+        left_outer_joins(:desc_terms => :mapped_term).
+        eager_load(:desc_terms => :mapped_term).
+        where('curator_controlled_terms_nomenclatures.type IN (?)', %w(Genre ResourceType Language Subject Name Geographic).map { |type| "Curator::ControlledTerms::#{type}" }).
+        to_sql
+      end
+
+      it { is_expected.to respond_to(:with_desc_terms) }
+
+      it 'expects the scope #to_sql to match the :expected_scope_sql' do
+        expect(subject.with_desc_terms.to_sql).to eq(expected_scope_sql)
+      end
+    end
+
     describe '.with_mappings' do
       subject { described_class }
 
-      let(:expected_scope_sql) { described_class.includes(:desc_terms, :name_roles, :desc_host_collections).to_sql }
+      let(:expected_scope_sql) do
+        described_class.joins(:desc_host_collections, :name_roles).
+        preload(:host_collections, :name_roles => [{ :name => [:authority] }, { :role => [:authority] }]).
+        to_sql
+      end
 
       it { is_expected.to respond_to(:with_mappings) }
 
@@ -288,7 +310,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     describe '.with_physical_location' do
       subject { described_class }
 
-      let(:expected_scope_sql) { described_class.includes(:physical_location).to_sql }
+      let(:expected_scope_sql) { described_class.joins(:physical_location).preload(:physical_location => [:authority]).to_sql }
 
       it { is_expected.to respond_to(:with_physical_location) }
 
@@ -300,7 +322,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     describe '.with_license' do
       subject { described_class }
 
-      let(:expected_scope_sql) { described_class.includes(:license).to_sql }
+      let(:expected_scope_sql) { described_class.joins(:license).preload(:license).to_sql }
 
       it { is_expected.to respond_to(:with_license) }
 
@@ -310,7 +332,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     end
 
     it_behaves_like 'for_serialization' do
-      let(:expected_scope_sql) { described_class.merge(described_class.with_mappings).merge(described_class.with_physical_location).merge(described_class.with_license).to_sql }
+      let(:expected_scope_sql) { described_class.merge(described_class.with_physical_location).merge(described_class.with_license).merge(described_class.with_mappings).merge(described_class.with_desc_terms).to_sql }
     end
   end
 end

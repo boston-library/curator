@@ -5,8 +5,11 @@ module Curator
     module Administratable
       extend ActiveSupport::Concern
       included do
-        scope :with_administrative, -> { includes(:administrative) }
+        scope :with_administrative, -> { joins(:administrative).preload(:administrative) }
         has_one :administrative, as: :administratable, inverse_of: :administratable, class_name: 'Curator::Metastreams::Administrative', dependent: :destroy
+
+        validates :administrative, presence: true
+        validates_associated :administrative, on: :create
       end
     end
   end

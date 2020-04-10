@@ -5,8 +5,8 @@ require_relative '../shared/json_serialization'
 
 RSpec.describe Curator::Metastreams::AdministrativeSerializer, type: :serializers do
   let!(:administrative_count) { 3 }
-  let!(:record) { create(:curator_metastreams_administrative) }
   let!(:record_collection) { create_list(:curator_metastreams_administrative, administrative_count) }
+  let!(:record) { record_collection.last }
 
   describe 'Serialization' do
     it_behaves_like 'json_serialization' do

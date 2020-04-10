@@ -62,7 +62,7 @@ RSpec.describe Curator::Indexable do
     it 'does not raise an error if the indexing service is available' do
       expect do
         @indexable_object.indexer_health_check
-      end.not_to raise_error(StandardError)
+      end.not_to raise_error
     end
 
     it 'throws a CuratorError if the indexing service is not available' do

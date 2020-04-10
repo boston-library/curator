@@ -33,8 +33,11 @@ module Curator
         end
         next if record.text_file_sets.blank?
 
-        text_file_set = record.text_file_sets.first
-        text_file_set.text_plain_attachment.download do |file|
+        text_plain_attachment = record.text_file_sets.first.text_plain_attachment
+
+        next if text_plain_attachment.blank?
+
+        text_plain_attachment.download do |file|
           context.output_hash['ocr_tiv'] = Curator::Parsers::InputParser.utf8_encode(file)
         end
       end

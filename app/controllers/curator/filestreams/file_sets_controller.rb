@@ -15,8 +15,11 @@ module Curator
     end
 
     def create
-      file_set = Curator::FileSetFactoryService.call(file_set_params)
-      json_response(serialized_resource(file_set))
+      success, result = Curator::Filestreams::FileSetFactoryService.call(json_data: file_set_params)
+
+      raise_failure(result) unless success
+
+      json_response(serialized_resource(result), :created)
     end
 
     def update
@@ -27,10 +30,18 @@ module Curator
     private
 
     def file_set_params
-      # Placeholder for now. need to whitelist params based on type in case/when
       case params[:action]
       when 'create'
-        params.require(resource_type.to_sym).permit!
+        params.require(:file_set).permit(:ark_id, :created_at, :updated_at,
+                                         :file_set_type, :file_name_base, :position,
+                                         file_set_of: [:ark_id],
+                                          exemplary_image_of: [:ark_id],
+                                          pagination: [:page_label, :page_type, :hand_side],
+                                          metastreams: {
+                                            administrative: [:description_standard, :hosting_status, :harvestable, :flagged, destination_site: [], access_edit_group: []],
+                                             workflow: [:ingest_origin, :publishing_state, :processing_state]
+                                          },
+                                          files: [])
       else
         params
       end

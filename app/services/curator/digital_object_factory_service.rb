@@ -6,25 +6,16 @@ module Curator
 
     # TODO: set relationships for is_issue_of values
     def call
-      admin_set_ark_id = @json_attrs.dig('admin_set', 'ark_id')
-      begin
-        Curator.digital_object_class.transaction do
-          admin_set = Curator.collection_class.find_by(ark_id: admin_set_ark_id)
-          raise "AdminSet #{admin_set_ark_id} not found!" unless admin_set
-
-          digital_object = Curator.digital_object_class.find_or_initialize_by(ark_id: @ark_id)
+      with_transaction do
+        admin_set_ark_id = @json_attrs.dig('admin_set', 'ark_id')
+        collection_ark_ids = @json_attrs.fetch('is_member_of_collection', []).pluck('ark_id')
+        @record = Curator.digital_object_class.where(ark_id: @ark_id).first_or_create! do |digital_object|
+          admin_set = find_admin_set!(admin_set_ark_id, digital_object)
           digital_object.admin_set = admin_set
-          collections = @json_attrs.fetch('exemplary_image_of', [])
-          collections.each do |collection|
-            col_ark_id = collection['ark_id']
-            col = Curator.collection_class.find_by(ark_id: col_ark_id)
-            raise "Collection #{col_ark_id} not found!" unless col
-
-            digital_object.is_member_of_collection << col
-          end
           digital_object.created_at = @created if @created
           digital_object.updated_at = @updated if @updated
-          digital_object.save!
+
+          find_or_build_collection_members!(digital_object, admin_set_ark_id, collection_ark_ids)
 
           build_workflow(digital_object) do |workflow|
             [:ingest_origin, :processing_state, :publishing_state].each do |attr|
@@ -66,8 +57,10 @@ module Curator
               end
             end
             @desc_json_attrs.fetch(:host_collections, []).each do |host_col|
+              next if admin_set.blank?
+
               host = find_or_create_host_collection(host_col,
-                                                    admin_set.institution.id)
+                                                    admin_set.institution_id)
               descriptive.desc_host_collections.build(host_collection: host)
             end
             @desc_json_attrs.fetch(:subject, {}).each do |k, v|
@@ -79,11 +72,13 @@ module Curator
                          when 'geos'
                            :geographic
                          end
+
               next if map_type.blank?
 
               v.each do |map_attrs|
-                descriptive.desc_terms.build(mapped_term: term_for_mapping(map_attrs,
-                                                                           nomenclature_class: Curator.controlled_terms.public_send("#{map_type}_class")))
+                mapped_term = term_for_mapping(map_attrs,
+                                               nomenclature_class: Curator.controlled_terms.public_send("#{map_type}_class"))
+                descriptive.desc_terms.build(mapped_term: mapped_term)
               end
             end
 
@@ -92,11 +87,9 @@ module Curator
               descriptive.name_roles.build(name_role_attrs)
             end
           end
-          return digital_object
         end
-      rescue => e
-        puts e.to_s
       end
+      return @success, @result
     end
 
     def identifier(json_attrs = {})
@@ -210,19 +203,51 @@ module Curator
       }
     end
 
-    def find_or_create_host_collection(host_col_name = nil, institution_id = nil)
-      return nil unless host_col_name && institution_id
+    def find_or_build_collection_members!(digital_object, admin_set_ark_id, collection_ark_ids = [])
+      return if collection_ark_ids.blank?
 
-      begin
-        inst = Curator::Institution.find(institution_id)
-        raise "Bad institution_id #{institution_id} for host_collection!" if inst.blank?
+      collection_ark_ids.each do |collection_ark_id|
+        begin
+          next if collection_ark_id == admin_set_ark_id
 
-        return Curator::Mappings.host_collection_class.where(name: host_col_name,
-                                                             institution_id: institution_id).first_or_create!
-      rescue => e
-        puts e.message
+          collection = Curator.collection_class.select(:id, :ark_id).find_by!(ark_id: collection_ark_id)
+
+          next if digital_object.collection_members.exists?(collection: collection)
+
+          digital_object.collection_members.build(collection: collection)
+        rescue ActiveRecord::RecordNotFound => e
+          digital_object.errors.add(:collection_members, "#{e.message} with ark id=#{collection_ark_id}")
+          raise ActiveRecord::RecordInvalid, digital_object
+        end
       end
+    end
+
+    def find_admin_set!(admin_set_ark_id, digital_object)
+      return Curator.collection_class.find_by!(ark_id: admin_set_ark_id)
+    rescue ActiveRecord::RecordNotFound => e
+      digital_object.errors.add(:admin_set, "#{e.message} with ark_id=#{admin_set_ark_id}")
       nil
+    end
+
+    def find_or_create_host_collection(host_col_name = nil, institution_id = nil)
+      return if host_col_name.blank? && institution_id.blank?
+
+      retries = 0
+      begin
+        return Curator.mappings.host_collection_class.transaction(requires_new: true) do
+          inst = Curator.institution_class.find(institution_id)
+          inst.host_collections.where(name: host_col_name).first_or_create!
+        end
+      rescue ActiveRecord::StaleObjectError => e
+        if (retries += 1) <= MAX_RETRIES
+          Rails.logger.info 'Record is stale retrying in 2 seconds..'
+          sleep(2)
+          retry
+        else
+          Rails.logger.error "=================#{e.inspect}=================="
+          raise ActiveRecord::RecordNotSaved, "Max retries reached! caused by: #{e.message}", e.record
+        end
+      end
     end
   end
 end

@@ -8,10 +8,13 @@ RSpec.describe Curator::InstitutionFactoryService, type: :service do
     @object_json = load_json_fixture('institution')
     VCR.use_cassette('services/institution_factory_service') do
       expect do
-        @institution = described_class.call(json_data: @object_json)
+        @success, @institution = handle_factory_result(described_class, @object_json)
       end.to change { Curator::Institution.count }.by(1)
     end
   end
+
+  specify { expect(@success).to be_truthy }
+  specify { expect(@institution).to be_valid }
 
   describe '#call' do
     subject { @institution }

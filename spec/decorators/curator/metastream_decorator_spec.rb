@@ -4,7 +4,7 @@ require 'rails_helper'
 require_relative './shared/curator_decorator'
 
 RSpec.describe Curator::MetastreamDecorator, type: :decorators do
-  let!(:metastreamable_record) { create(:curator_institution, :with_metastreams) }
+  let!(:metastreamable_record) { create(:curator_institution) }
 
   describe 'Base Behavior' do
     it_behaves_like 'curator_decorator' do

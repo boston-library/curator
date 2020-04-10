@@ -6,8 +6,12 @@ require_relative '../shared/json_serialization'
 
 RSpec.describe Curator::Filestreams::DocumentSerializer, type: :serializers do
   let!(:document_file_set_count) { 3 }
-  let!(:record) { create(:curator_filestreams_document, :with_metastreams) }
-  let!(:record_collection) { create_list(:curator_filestreams_document, document_file_set_count, :with_metastreams) }
+  let!(:record_collection) do
+    docs = create_list(:curator_filestreams_document, document_file_set_count)
+    Curator.filestreams.document_class.where(id: docs.pluck(:id)).for_serialization
+  end
+
+  let!(:record) { record_collection.last }
 
   describe 'Base Behavior' do
     it_behaves_like 'file_set_serializer'

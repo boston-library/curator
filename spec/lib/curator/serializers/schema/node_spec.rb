@@ -23,7 +23,7 @@ RSpec.describe Curator::Serializers::Node, type: :lib_serializers do
   end
 
   include_examples 'conditional_attributes' do
-    let(:serializable_record) { descriptive }
+    let(:serializable_record) { descriptive.reload }
     let(:key) { :title }
     let(:if_facet) do
       build_facet_inst(klass: described_class, key: key, options: { target: :key }.merge(if_proc)) do
@@ -51,13 +51,13 @@ RSpec.describe Curator::Serializers::Node, type: :lib_serializers do
   end
 
   describe 'complex node' do
-    subject { complex_node.serialize(descriptive, { adapter_key: :json }) }
+    subject { complex_node.serialize(descriptive.reload, { adapter_key: :json }) }
 
     let!(:serialized_facet_keys) { %i(attributes nodes relations) }
     let!(:node_attributes) { %i(abstract access_restrictions digital_origin frequency issuance origin_event extent physical_location_department physical_location_shelf_locator place_of_publication publisher rights series subseries subsubseries toc toc_url) }
     let!(:identifier_json) { descriptive.identifier.as_json.map { |a| { attributes: a.reject { |_k, v| v.blank? }.symbolize_keys } } }
     let!(:relation_json) do
-      descriptive.genres.map do |genre|
+      descriptive.reload.genres.map do |genre|
         {
           attributes: genre.as_json(only: [:basic, :label, :id_from_auth],
                                     methods: [:basic, :label, :id_from_auth]).

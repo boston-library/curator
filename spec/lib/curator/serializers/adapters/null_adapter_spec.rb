@@ -14,8 +14,12 @@ RSpec.describe Curator::Serializers::NullAdapter, type: :lib_serializers do
     end
   end
 
-  it 'is expected to have a nil schema' do
-    expect(subject.schema).to be_nil
+  it 'is expected to have a limited schema' do
+    expect(subject.schema).to be_an_instance_of(Curator::Serializers::Schema)
+    expect(subject).to delegate_method(:root).to(:schema)
+    %i(attribute attributes node meta link has_one belongs_to has_many).each do |schema_method|
+      expect(subject).not_to delegate_method(schema_method).to(:schema)
+    end
   end
 
   it 'expects #serializable_hash to return an empty hash depending on what is passed in' do

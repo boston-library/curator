@@ -9,10 +9,11 @@ module Curator
 
     self.curator_indexable_mapper = Curator::InstitutionIndexer.new
 
-    scope :with_location, -> { includes(:location) }
-    scope :for_serialization, -> { merge(with_metastreams).merge(with_location) }
+    scope :with_location, -> { joins(:location).preload(:location) }
+    scope :for_serialization, -> { merge(with_location).merge(with_metastreams) }
 
     validates :url, format: { with: URI.regexp(%w(http https)), allow_blank: true }
+    validates :name, presence: true
 
     belongs_to :location, -> { merge(with_authority) }, inverse_of: :institution_locations, class_name: 'Curator::ControlledTerms::Geographic', optional: true
 

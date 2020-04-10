@@ -6,16 +6,14 @@ module Curator
 
     def call
       location_json_attrs = @json_attrs.fetch('location', {}).with_indifferent_access
-      begin
-        Curator.institution_class.transaction do
-          institution = Curator.institution_class.find_or_initialize_by(ark_id: @ark_id)
-          institution.name = @json_attrs.fetch(:name)
+      with_transaction do
+        @record = Curator.institution_class.where(ark_id: @ark_id).first_or_create! do |institution|
+          institution.name = @json_attrs.fetch(:name, nil)
           institution.abstract = @json_attrs.fetch(:abstract, '')
           institution.url = @json_attrs.fetch(:url, nil)
           institution.location = location(location_json_attrs) if location_json_attrs.present?
           institution.created_at = @created if @created
           institution.updated_at = @updated if @updated
-          institution.save!
 
           build_workflow(institution) do |workflow|
             workflow.ingest_origin = @workflow_json_attrs.fetch(:ingest_origin, ENV['HOME'].to_s)
@@ -29,11 +27,9 @@ module Curator
             destination_site = @admin_json_attrs.fetch(:destination_site, nil)
             administrative.destination_site = destination_site if destination_site
           end
-          return institution
         end
-      rescue => e
-        puts e.to_s
       end
+      return @success, @result
     end
 
     protected

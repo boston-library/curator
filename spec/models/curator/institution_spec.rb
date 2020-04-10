@@ -10,7 +10,7 @@ require_relative './shared/for_serialization'
 require_relative './shared/filestreams/thumbnailable'
 
 RSpec.describe Curator::Institution, type: :model do
-  subject { create(:curator_institution) }
+  subject { build(:curator_institution) }
 
   it_behaves_like 'mintable'
 
@@ -25,6 +25,7 @@ RSpec.describe Curator::Institution, type: :model do
   end
 
   describe 'Validations' do
+    it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to allow_values('', nil, 'http://myinstitution.org').for(:url) }
     it { is_expected.not_to allow_value('not a website string').for(:url) }
   end
@@ -51,7 +52,7 @@ RSpec.describe Curator::Institution, type: :model do
     describe '.with_location' do
       subject { described_class }
 
-      let(:expected_scope_sql) { described_class.includes(:location).to_sql }
+      let(:expected_scope_sql) { described_class.joins(:location).preload(:location).to_sql }
 
       it { is_expected.to respond_to(:with_location) }
 
@@ -61,7 +62,7 @@ RSpec.describe Curator::Institution, type: :model do
     end
 
     it_behaves_like 'for_serialization' do
-      let(:expected_scope_sql) { described_class.merge(described_class.with_metastreams).merge(described_class.with_location).to_sql }
+      let(:expected_scope_sql) { described_class.merge(described_class.with_location).merge(described_class.with_metastreams).to_sql }
     end
   end
 end

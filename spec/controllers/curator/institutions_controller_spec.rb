@@ -4,47 +4,23 @@ require 'rails_helper'
 require_relative './shared/shared_formats_and_actions'
 
 RSpec.describe Curator::InstitutionsController, type: :controller do
-  let(:valid_session) { {} }
-
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
-
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
-
-  let!(:serializer_class) { Curator::InstitutionSerializer }
-  let!(:resource) { create(:curator_institution, :with_location, :with_metastreams) }
-  let!(:resource_key) { 'institution' }
-  let!(:base_params) { {} }
-
-  include_examples 'shared_formats', include_ark_context: true
-
-  skip 'POST #create' do
-    context "with valid params" do
-      it "creates a new Curator::Institution" do
-        expect {
-          post :create, params: { institution: valid_attributes }, session: valid_session
-        }.to change(Curator::Institution, :count).by(1)
-      end
-
-      it "renders a JSON response with the new institution" do
-        post :create, params: { institution: valid_attributes }, session: valid_session
-        expect(response).to have_http_status(:created)
-        expect(response.content_type).to eq('application/json')
-        expect(response.location).to eq(institution_url(Curator::Institution.last))
-      end
-    end
-
-    context "with invalid params" do
-      it "renders a JSON response with errors for the new institution" do
-        post :create, params: { institution: invalid_attributes }, session: valid_session
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq('application/json')
-      end
-    end
+  let!(:resource) { create(:curator_institution, :with_location) }
+  let!(:valid_attributes) do
+    attributes = attributes_for(:curator_institution, :with_location).except(:administrative, :workflow)
+    relation_attributes = load_json_fixture('institution')
+    attributes.merge!({
+      location: relation_attributes.dup.delete('location'),
+      metastreams: relation_attributes.dup.delete('metastreams')
+    })
   end
+
+  let(:valid_session) { {} }
+  let(:base_params) { {} }
+  let(:invalid_attributes) { valid_attributes.dup.update(name: nil) }
+  let(:resource_class) { Curator::Institution }
+  let(:serializer_class) { Curator::InstitutionSerializer }
+
+  include_examples 'shared_formats', include_ark_context: true, skip_post: false, resource_key: 'institution'
 
   skip "PUT #update" do
     context "with valid params" do

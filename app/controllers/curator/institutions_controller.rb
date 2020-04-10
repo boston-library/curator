@@ -7,7 +7,7 @@ module Curator
 
     # GET /institutions
     def index
-      institutions = resource_scope.limit(50)
+      institutions = resource_scope.order(created_at: :desc).limit(25)
       multi_response(serialized_resource(institutions))
     end
 
@@ -18,8 +18,11 @@ module Curator
 
     # POST /institutions
     def create
-      institution = Curator::InstitutionFactoryService.call(institution_create)
-      json_response(serialized_resource(institution))
+      success, result = Curator::InstitutionFactoryService.call(json_data: institution_params)
+
+      raise_failure(result) unless success
+
+      json_response(serialized_resource(result), :created)
     end
 
     # PATCH/PUT /institutions/1
@@ -33,14 +36,15 @@ module Curator
     def institution_params
       case params[:action]
       when 'create'
-        params.require(:institution).permit(:ark_id,
-                                            :name,
-                                            :url,
-                                            :abstract,
-                                            :image_thumbnail_300,
-                                            location:       [:area_type, :coordinates, :bounding_box, :authority_code, :label, :id_from_auth],
-                                            administrative: [:description_standard, :flagged, :harvestable, :destination_site],
-                                            workflow:       [:publishing_state, :processing_state, :ingest_origin])
+        params.require(:institution).permit(
+                    :ark_id, :created_at, :updated_at, :name, :abstract, :url,
+                    :image_thumbnail_300,
+                    location: {},
+                    metastreams: {
+                      administrative: [:description_standard, :hosting_status, :harvestable, :flagged, destination_site: [], access_edit_group: []],
+                                    workflow: [:ingest_origin, :publishing_state, :processing_state]
+                    }
+                  )
       else
         params
       end

@@ -13,9 +13,22 @@ module FactoryHelpers
       collection.as_json(opts).each(&:compact!)
     end
   end
+
+  module FactoryHandler
+    def handle_factory_result(factory_class, json_data = {})
+      success, result = factory_class.call(json_data: json_data)
+
+      return success, result if success
+
+      raise result.class, result.message if result.kind_of?(Exception)
+
+      raise ActiveRecord::RecordInvalid, result
+    end
+  end
 end
 
 RSpec.configure do |config|
   config.include FactoryHelpers::FactoryFor, type: :model
   config.include FactoryHelpers::CollectionAsJson, type: :service
+  config.include FactoryHelpers::FactoryHandler, type: :service
 end

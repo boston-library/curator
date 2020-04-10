@@ -5,6 +5,8 @@ RSpec.shared_examples 'administratable', type: :model do
     inverse_of(:administratable).
     class_name('Curator::Metastreams::Administrative').dependent(:destroy) }
 
+  it { is_expected.to validate_presence_of(:administrative) }
+
   describe '#with_administrative' do
     subject { described_class }
 
@@ -19,6 +21,8 @@ RSpec.shared_examples 'descriptable', type: :model do
     inverse_of(:descriptable).
     class_name('Curator::Metastreams::Descriptive').dependent(:destroy) }
 
+  it { is_expected.to validate_presence_of(:descriptive) }
+
   describe '#with_descriptive' do
     subject { described_class }
 
@@ -32,6 +36,8 @@ RSpec.shared_examples 'workflowable', type: :model do
   it { is_expected.to have_one(:workflow).
     inverse_of(:workflowable).
     class_name('Curator::Metastreams::Workflow').dependent(:destroy) }
+
+  it { is_expected.to validate_presence_of(:workflow) }
 
   describe '#with_workflow' do
     subject { described_class }
@@ -50,7 +56,7 @@ RSpec.shared_examples 'metastreamable_all', type: :model do
   describe '#with_metastreams' do
     subject { described_class }
 
-    let(:expected_sql) { described_class.includes(:administratable, :descriptable, :workflowable).to_sql }
+    let(:expected_sql) { described_class.joins(:administrative, :descriptive, :workflow).preload(:administrative, :descriptive, :workflow).to_sql }
 
     it { is_expected.to respond_to(:with_metastreams) }
 
@@ -67,7 +73,7 @@ RSpec.shared_examples 'metastreamable_basic', type: :model do
   describe '#with_metastreams' do
     subject { described_class }
 
-    let(:expected_sql) { described_class.includes(:administratable, :workflowable).to_sql }
+    let(:expected_sql) { described_class.joins(:administrative, :workflow).preload(:administrative, :workflow).to_sql }
 
     it { is_expected.to respond_to(:with_metastreams) }
 

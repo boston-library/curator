@@ -18,9 +18,8 @@ RSpec.describe Curator::Metastreams::WorkflowsController, type: :controller do
 
   ['Institution', 'Collection', 'DigitalObject'].each do |metastreamable_type|
     context "with :metastreamable_type as #{metastreamable_type}" do
-      let!(:parent_resource) { create("curator_#{metastreamable_type.underscore}", :with_metastreams) }
+      let!(:parent_resource) { create("curator_#{metastreamable_type.underscore}") }
       let!(:resource) { parent_resource.workflow }
-      let!(:resource_key) { 'workflow' }
       let!(:base_params) do
         {
           metastreamable_type: metastreamable_type,
@@ -29,7 +28,7 @@ RSpec.describe Curator::Metastreams::WorkflowsController, type: :controller do
         }
       end
 
-      include_examples 'shared_formats', include_ark_context: true, has_collection_methods: false
+      include_examples 'shared_formats', include_ark_context: true, has_collection_methods: false, resource_key: 'workflow'
     end
   end
 
@@ -38,9 +37,8 @@ RSpec.describe Curator::Metastreams::WorkflowsController, type: :controller do
 
     Curator.filestreams.file_set_types.map(&:underscore).each do |file_set_type|
       context "with :type as #{file_set_type}" do
-        let!(:parent_resource) { create("curator_filestreams_#{file_set_type}", :with_metastreams) }
+        let!(:parent_resource) { create("curator_filestreams_#{file_set_type}") }
         let!(:resource) { parent_resource.workflow }
-        let!(:resource_key) { 'workflow' }
         let!(:base_params) do
           {
             metastreamable_type: metastreamable_type,
@@ -50,7 +48,7 @@ RSpec.describe Curator::Metastreams::WorkflowsController, type: :controller do
           }
         end
 
-        include_examples 'shared_formats', include_ark_context: true, has_collection_methods: false
+        include_examples 'shared_formats', include_ark_context: true, has_collection_methods: false, resource_key: 'workflow'
       end
     end
   end

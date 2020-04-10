@@ -15,7 +15,7 @@ RSpec.describe Curator::Exceptions do
       end
     end
 
-    %i(BadRequest Unauthorized RouteNotFound RecordNotFound NotAcceptable MethodNotAllowed ServerError).each do |serializable_error_const|
+    %i(BadRequest Unauthorized RouteNotFound RecordNotFound NotAcceptable MethodNotAllowed UnprocessableEntity ServerError).each do |serializable_error_const|
       it { is_expected.to be_const_defined(serializable_error_const) }
 
       describe "Curator::Exception::#{serializable_error_const}" do
@@ -32,8 +32,7 @@ RSpec.describe Curator::Exceptions do
       describe "Curator::Exception::#{model_error_const}" do
         let(:described_const) { described_class.const_get(model_error_const) }
 
-        it_behaves_like 'serializable_error'
-        it_behaves_like 'model_error'
+        it_behaves_like 'model_error_wrapper'
       end
     end
   end

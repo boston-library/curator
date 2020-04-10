@@ -17,6 +17,7 @@ module Curator
     require 'rsolr'
     require 'singleton'
     require 'traject'
+    require 'digest'
 
     if Rails.env.development? || Rails.env.test?
       begin
@@ -49,9 +50,17 @@ module Curator
       {
         mode: :rails,
         time_format: :ruby,
-        hash_class: ActiveSupport::HashWithIndifferentAccess
+        hash_class: ActiveSupport::HashWithIndifferentAccess,
+        omit_nil: true
       }
       Curator.setup!
+    end
+
+    initializer 'inflections' do
+      # NOTE: This is needed to prevent 'metadata'.classify from becomming Metadatum
+      ActiveSupport::Inflector.inflections(:en) do |inflect|
+        inflect.singular 'metadata', 'metadata'
+      end
     end
 
     initializer 'mime_types' do

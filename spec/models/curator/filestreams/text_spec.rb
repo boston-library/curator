@@ -5,7 +5,7 @@ require_relative '../shared/filestreams/file_set'
 require_relative '../shared/filestreams/file_attachments'
 
 RSpec.describe Curator::Filestreams::Text, type: :model do
-  subject { create(:curator_filestreams_text) }
+  subject { build(:curator_filestreams_text) }
 
   it_behaves_like 'file_set'
 

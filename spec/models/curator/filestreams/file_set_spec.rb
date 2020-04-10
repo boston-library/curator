@@ -4,7 +4,7 @@ require 'rails_helper'
 require_relative '../shared/filestreams/file_set'
 
 RSpec.describe Curator::Filestreams::FileSet, type: :model do
-  subject { create(:curator_filestreams_file_set) }
+  subject { build(:curator_filestreams_file_set) }
 
   it_behaves_like 'file_set'
 

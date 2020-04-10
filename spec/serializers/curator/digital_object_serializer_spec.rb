@@ -6,9 +6,13 @@ require_relative './shared/json_serialization'
 
 RSpec.describe Curator::DigitalObjectSerializer, type: :serializers do
   let!(:digital_object_count) { 3 }
-  let!(:descriptive_term_counts) { 2 }
-  let!(:record) { create(:curator_digital_object, :with_metastreams, :with_contained_by, desc_term_count: descriptive_term_counts) }
-  let!(:record_collection) { create_list(:curator_digital_object, digital_object_count, :with_contained_by, :with_metastreams, desc_term_count: descriptive_term_counts) }
+  let!(:desc_term_count) { 2 }
+  let!(:objs) { create_list(:curator_digital_object, digital_object_count, desc_term_count: desc_term_count) }
+  let!(:record_collection) do
+    Curator.digital_object_class.where(id: objs.pluck(:id)).for_serialization
+  end
+
+  let!(:record) { record_collection.last }
 
   describe 'Base Behavior' do
     it_behaves_like 'curator_serializer'

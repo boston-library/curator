@@ -6,8 +6,11 @@ require_relative '../shared/json_serialization'
 
 RSpec.describe Curator::Filestreams::EreaderSerializer, type: :serializers do
   let!(:ereader_file_set_count) { 3 }
-  let!(:record) { create(:curator_filestreams_ereader, :with_metastreams) }
-  let!(:record_collection) { create_list(:curator_filestreams_ereader, ereader_file_set_count, :with_metastreams) }
+  let!(:record_collection) do
+    ereaders = create_list(:curator_filestreams_ereader, ereader_file_set_count)
+    Curator.filestreams.ereader_class.where(id: ereaders.pluck(:id)).for_serialization
+  end
+  let!(:record) { record_collection.last }
 
   describe 'Base Behavior' do
     it_behaves_like 'file_set_serializer'

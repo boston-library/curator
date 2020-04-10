@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Curator::Mappings::DescHostCollection, type: :model do
-  subject { create(:curator_mappings_desc_host_collection) }
+  subject { build(:curator_mappings_desc_host_collection) }
 
   it { is_expected.to have_db_column(:descriptive_id).
                       of_type(:integer).

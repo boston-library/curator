@@ -41,20 +41,29 @@ module Curator
     end
 
     # Base exception wrapper for generating an array of exceptions related to a model's errors
-    class ModelError < SerializableError
-      attr_reader :model_errors
-      def initalize(model_errors: {})
+    class ModelErrorWrapper < CuratorError
+      attr_reader :model_errors, :status
+      def initialize(model_errors: {})
+        @status = :unprocessable_entity
         @model_errors = format_model_errors(model_errors)
-        @status = :bad_request
-        @title = 'Bad Request'
+      end
+
+      def as_json(options = {})
+        root = options.fetch(:root, false)
+
+        hash = model_errors.map(&:as_json)
+
+        return { 'error' => hash } if root
+
+        hash
       end
 
       protected
 
       def format_model_errors(errors = {})
         errors.reduce([]) do |r, (att, msg)|
-          r << self.class.superclass.new(
-            title: title,
+          r << SerializableError.new(
+            title: 'Unprocessable Entity',
             status: status,
             detail: msg,
             source: { pointer: "/data/attributes/#{att}" }
@@ -76,6 +85,7 @@ module Curator
       autoload :RecordNotFound, File.expand_path('./exceptions/controller_errors.rb', __dir__)
       autoload :ServerError, File.expand_path('./exceptions/controller_errors.rb', __dir__)
       autoload :MethodNotAllowed, File.expand_path('./exceptions/controller_errors.rb', __dir__)
+      autoload :UnprocessableEntity, File.expand_path('./exceptions/controller_errors.rb', __dir__)
       autoload :NotAcceptable, File.expand_path('./exceptions/controller_errors.rb', __dir__)
       # Serializable ModelError Subclasses
       autoload :InvalidRecord, File.expand_path('./exceptions/model_errors.rb', __dir__)

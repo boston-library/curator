@@ -6,8 +6,12 @@ require_relative '../shared/json_serialization'
 
 RSpec.describe Curator::Filestreams::AudioSerializer, type: :serializers do
   let!(:audio_file_set_count) { 3 }
-  let!(:record) { create(:curator_filestreams_audio, :with_metastreams) }
-  let!(:record_collection) { create_list(:curator_filestreams_audio, audio_file_set_count, :with_metastreams) }
+  let!(:record_collection) do
+    audios = create_list(:curator_filestreams_audio, audio_file_set_count)
+    Curator.filestreams.audio_class.where(id: audios.pluck(:id)).for_serialization
+  end
+
+  let!(:record) { record_collection.last }
 
   describe 'Base Behavior' do
     it_behaves_like 'file_set_serializer'

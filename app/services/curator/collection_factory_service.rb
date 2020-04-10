@@ -5,19 +5,14 @@ module Curator
     include Services::FactoryService
 
     def call
-      institution_ark_id = @json_attrs.fetch('institution').fetch('ark_id')
-      begin
-        Curator.collection_class.transaction do
-          institution = Curator.institution_class.find_by(ark_id: institution_ark_id)
-          raise 'Institution not found!' unless institution
-
-          collection = Curator.collection_class.find_or_initialize_by(ark_id: @ark_id)
-          collection.name = @json_attrs.fetch(:name)
+      with_transaction do
+        institution_ark_id = @json_attrs.dig('institution', 'ark_id')
+        @record = Curator.collection_class.where(ark_id: @ark_id).first_or_create! do |collection|
+          collection.name = @json_attrs.fetch(:name, nil)
           collection.abstract = @json_attrs.fetch(:abstract, '')
-          collection.institution = institution
+          collection.institution = Curator.institution_class.find_by(ark_id: institution_ark_id)
           collection.created_at = @created if @created
           collection.updated_at = @updated if @updated
-          collection.save!
 
           build_workflow(collection) do |workflow|
             [:ingest_origin].each do |attr|
@@ -33,11 +28,9 @@ module Curator
               administrative.send("#{attr}=", @admin_json_attrs.fetch(attr)) if @admin_json_attrs.fetch(attr, nil).present?
             end
           end
-          return collection
         end
-      rescue => e
-        puts e.to_s
       end
+      return @success, @result
     end
   end
 end
