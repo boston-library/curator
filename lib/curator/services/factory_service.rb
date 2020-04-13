@@ -98,10 +98,28 @@ module Curator
         end
       end
 
+      # find existing ControlledTerms objects
+      # raise error if term is from pre-seeded class and not found (new values are not allowed)
       def find_nomenclature(nomenclature_class, term_data = {}, authority = nil)
-        return nomenclature_class.jsonb_contains(**term_data).first if authority.blank?
+        nomenclature = if authority.blank?
+                         nomenclature_class.jsonb_contains(**term_data).first
+                       else
+                         nomenclature_class.where(authority: authority).jsonb_contains(**term_data).first
+                       end
+        raise_error = case nomenclature_class.new
+                      when Curator.controlled_terms.resource_type_class,
+                           Curator.controlled_terms.role_class,
+                           Curator.controlled_terms.language_class,
+                           Curator.controlled_terms.license_class
+                        true unless nomenclature
+                      when Curator.controlled_terms.genre_class
+                        true if nomenclature.blank? && term_data[:basic] == true
+                      else
+                        false
+                      end
+        raise ActiveRecord::RecordInvalid if raise_error
 
-        nomenclature_class.where(authority: authority).jsonb_contains(**term_data).first
+        nomenclature
       end
 
       def create_nomenclature!(nomenclature_class, term_data = {}, authority = nil)
