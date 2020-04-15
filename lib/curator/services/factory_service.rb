@@ -25,7 +25,7 @@ module Curator
         @record = nil
         @success = true
         @result = nil
-        # NOTE: Had to add #to_h for when :json_data is recieved through the controller as ActionController::Parameters
+        # NOTE: Had to add #to_h for when :json_data is received through the controller as ActionController::Parameters
         @json_attrs = json_data.to_h.with_indifferent_access
         @ark_id = @json_attrs.fetch('ark_id', nil)
         @created = Time.zone.parse(@json_attrs.fetch('created_at', ''))
@@ -98,31 +98,33 @@ module Curator
         end
       end
 
-      # find existing ControlledTerms objects
-      # raise error if term is from pre-seeded class and not found (new values are not allowed)
       def find_nomenclature(nomenclature_class, term_data = {}, authority = nil)
-        nomenclature = if authority.blank?
-                         nomenclature_class.jsonb_contains(**term_data).first
-                       else
-                         nomenclature_class.where(authority: authority).jsonb_contains(**term_data).first
-                       end
-        raise_error = case nomenclature_class.new
+        return nomenclature_class.jsonb_contains(**term_data).first if authority.blank?
+
+        nomenclature_class.where(authority: authority).jsonb_contains(**term_data).first
+      end
+
+      # raise error if term is from pre-seeded class and not found (new values are not allowed)
+      def create_nomenclature!(nomenclature_class, term_data = {}, authority = nil)
+        nomenclature = nomenclature_class.new
+        raise_error = case nomenclature
                       when Curator.controlled_terms.resource_type_class,
                            Curator.controlled_terms.role_class,
                            Curator.controlled_terms.language_class,
                            Curator.controlled_terms.license_class
-                        true unless nomenclature
+                        true
                       when Curator.controlled_terms.genre_class
-                        true if nomenclature.blank? && term_data[:basic] == true
+                        true if term_data[:basic] == true
                       else
                         false
                       end
-        raise ActiveRecord::RecordInvalid if raise_error
+        if raise_error
+          nomenclature_type = nomenclature_class.name.demodulize
+          nomenclature.errors.add(nomenclature_type.downcase.to_sym,
+                                  "Invalid data submitted for #{nomenclature_type}: #{term_data} is not allowed.")
+          raise ActiveRecord::RecordInvalid, nomenclature
+        end
 
-        nomenclature
-      end
-
-      def create_nomenclature!(nomenclature_class, term_data = {}, authority = nil)
         return nomenclature_class.create!(term_data: term_data) if authority.blank?
 
         nomenclature_class.create!(authority: authority, term_data: term_data)

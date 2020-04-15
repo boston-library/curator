@@ -320,4 +320,17 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
       end
     end
   end
+
+  describe 'failure' do
+    describe 'invalid data submitted for seeded ControlledTerms values' do
+      it 'returns an error and does not save the record' do
+        bad_digital_object_json = load_json_fixture('digital_object')
+        bad_digital_object_json['ark_id'] = 'commonwealth:xinvalidx'
+        bad_digital_object_json['metastreams']['descriptive']['license']['label'] = 'No rights reserved.'
+        expect do
+          handle_factory_result(described_class, bad_digital_object_json)
+        end.to raise_error ActiveRecord::RecordInvalid
+      end
+    end
+  end
 end

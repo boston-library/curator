@@ -4,7 +4,7 @@ module Curator
   class DigitalObjectFactoryService < Services::Base
     include Services::FactoryService
 
-    # TODO: set relationships for is_issue_of values
+    # TODO: set relationships for contained_by values
     def call
       with_transaction do
         admin_set_ark_id = @json_attrs.dig('admin_set', 'ark_id')
