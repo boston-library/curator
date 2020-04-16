@@ -12,15 +12,15 @@ addons:
   postgresql: "9.6"
 
 before_install:
-  - gem update --system 3.0.6
+  - gem update --system 3.1.2
   - gem install bundler
 
 rvm:
-  - 2.5.7
-  - 2.6.5
+  - 2.5.8
+  - 2.6.6
 
 env:
   global:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
   matrix:
-    - "RAILS_VERSION=5.2.4.1"
+    - "RAILS_VERSION=5.2.4.2"
