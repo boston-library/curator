@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 module Curator
-  class ControlledTerms::CannonicalLabelService < Services::Base
-    # TODO: Build microservice api to use QA and Geomesh
-    def initialize(url:, json_path:)
+  class ControlledTerms::AuthorityService < Services::Base
+    def initialize(url:, json_path: nil)
       @url = Addressable::URI.parse(url)
       @json_path = json_path
     end

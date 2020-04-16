@@ -10,7 +10,7 @@ RSpec.shared_examples 'authority_delegation', type: :model do
   it { is_expected.to delegate_method(:name).to(:authority).with_prefix(true).allow_nil }
   it { is_expected.to delegate_method(:code).to(:authority).with_prefix(true).allow_nil }
   it { is_expected.to delegate_method(:base_url).to(:authority).with_prefix(true).allow_nil }
-  it { is_expected.to delegate_method(:cannonical_json_format).to(:authority).allow_nil }
+  it { is_expected.to delegate_method(:canonical_json_format).to(:authority).allow_nil }
 
   it { is_expected.to respond_to(:value_uri) }
 
