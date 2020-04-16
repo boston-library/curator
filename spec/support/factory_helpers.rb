@@ -17,8 +17,9 @@ module FactoryHelpers
   module FactoryHandler
     def handle_factory_result(factory_class, json_data = {})
       success, result = factory_class.call(json_data: json_data)
-
       return success, result if success
+
+      raise result.class, result.record if result.kind_of?(ActiveRecord::RecordInvalid)
 
       raise result.class, result.message if result.kind_of?(Exception)
 

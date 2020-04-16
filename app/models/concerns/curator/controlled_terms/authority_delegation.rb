@@ -10,7 +10,7 @@ module Curator
 
         delegate :name, :code, :base_url, to: :authority, prefix: true, allow_nil: true # authority_#attr
 
-        delegate :cannonical_json_format, to: :authority, prefix: false, allow_nil: true
+        delegate :canonical_json_format, to: :authority, prefix: false, allow_nil: true
 
         validates :authority_id, uniqueness: { conditions: -> { where(term_data: { id_from_auth: select(Arel.sql("term_data ->> 'id_from_auth'")).pluck(Arel.sql("term_data ->> 'id_from_auth'")) }) }, allow_nil: true }, if: proc { |n| n.authority.present? && n.id_from_auth.present? } # We want these to be unique if the authority is present
 

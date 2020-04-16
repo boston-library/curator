@@ -3,7 +3,7 @@
 module Curator
   class ControlledTerms::Name < ControlledTerms::Nomenclature
     include ControlledTerms::AuthorityDelegation
-    include ControlledTerms::Cannonicable
+    include ControlledTerms::Canonicable
     include Mappings::MappedTerms
 
     belongs_to :authority, inverse_of: :names, class_name: 'Curator::ControlledTerms::Authority', optional: true

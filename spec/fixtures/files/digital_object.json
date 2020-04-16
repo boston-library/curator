@@ -85,7 +85,7 @@
         ],
         "resource_types": [
           {
-            "label": "Still Image",
+            "label": "Still image",
             "authority_code": "resourceTypes",
             "id_from_auth": "img"
           },
@@ -287,7 +287,7 @@
         "rights": "Copyright (c) Leslie Jones.",
         "license": {
             "label": "This work is licensed for use under a Creative Commons Attribution Non-Commercial No Derivatives License (CC BY-NC-ND).",
-            "uri": "https://creativecommons.org/licenses/by-nc-nd/2.0/"
+            "uri": "https://creativecommons.org/licenses/by-nc-nd/4.0"
         },
         "access_restrictions": "Access to physical copy/copies by appointment only."
       }
