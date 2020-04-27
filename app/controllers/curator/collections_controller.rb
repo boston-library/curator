@@ -38,6 +38,8 @@ module Curator
                                              administrative: [:description_standard, :hosting_status, :harvestable, :flagged, destination_site: [], access_edit_group: []],
                                                            workflow: [:ingest_origin, :publishing_state, :processing_state]
                                            })
+      when 'update'
+        params.require(:collection).permit(:name, :abstract)
       else
         params
       end

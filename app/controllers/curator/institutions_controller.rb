@@ -45,6 +45,8 @@ module Curator
                                     workflow: [:ingest_origin, :publishing_state, :processing_state]
                     }
                   )
+      when 'update'
+        params.require(:institution).permit(:abstract, :url, :image_thumbnail_300, location: {}, host_collections: [:id, :name])
       else
         params
       end
