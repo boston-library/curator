@@ -27,8 +27,11 @@ module Curator
 
     # PATCH/PUT /institutions/1
     def update
-      @curator_resource.touch # NOTE: TEMPORARY until we make an updater service
-      json_response(serialized_resource(@curator_resource))
+      success, result = Curator::InstitutionUpdaterService.call(@curator_resource, json_data: institution_params)
+
+      raise_failure(result) unless success
+
+      json_response(serialized_resource(result), :ok)
     end
 
     private
@@ -46,7 +49,7 @@ module Curator
                     }
                   )
       when 'update'
-        params.require(:institution).permit(:abstract, :url, :image_thumbnail_300, location: {}, host_collections: [:id, :name])
+        params.require(:institution).permit(:abstract, :url, :image_thumbnail_300, location: {}, host_collection_attributes: [:id, :name, :_deleted])
       else
         params
       end

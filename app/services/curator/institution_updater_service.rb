@@ -5,14 +5,12 @@ module Curator
     include Services::UpdaterService
     include Locateable
 
-    UPDATEABLE_ATTRIBUTES = %i(abstract url).freeze
+    UPDATEABLE_ATTRIBUTES = %i(abstract url host_collection_attributes).freeze
 
     def call
       location_json_attrs = @json_attrs.fetch('location', {}).with_indifferent_access
       image_thumbnail_300_attrs = @json_attrs.fetch('image_thumbnail_300', {}).with_indifferent_access
-      host_collection_json_attrs = @json_attrs.fetch('host_collections', [])
       with_transaction do
-
         UPDATEABLE_ATTRIBUTES.each do |attr_key|
           next if !should_update_attr(attr_key)
 
@@ -30,10 +28,6 @@ module Curator
         @record.save!
       end
       return @success, @result
-    end
-
-    protected
-    def create_or_update_host_collections(host_collection_json_attrs = [])
     end
   end
 end

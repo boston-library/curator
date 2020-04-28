@@ -34,6 +34,25 @@ RSpec.describe Curator::Collection, type: :model do
     it_behaves_like 'metastreamable_basic'
     it_behaves_like 'has_exemplary_file_set'
 
+    let!(:file_sets_source_map) do
+      [
+        :file_sets,
+        :audio_file_sets,
+        :image_file_sets,
+        :document_file_sets,
+        :ereader_file_sets,
+        :metadata_file_sets,
+        :text_file_sets,
+        :video_file_sets
+      ]
+    end
+
+    let!(:file_set_options) do
+      {
+        through: :admin_set_objects
+      }
+    end
+
     it { is_expected.to belong_to(:institution).
       inverse_of(:collections).
       class_name('Curator::Institution').required }
@@ -45,11 +64,33 @@ RSpec.describe Curator::Collection, type: :model do
     it { is_expected.to have_many(:collection_members).
         inverse_of(:collection).
         class_name('Curator::Mappings::CollectionMember').dependent(:destroy) }
+
+    ########### FILE SETS ###################################################
+    it 'is expected to have various #file_sets relationships defined' do
+      file_sets_source_map.each do |relation_key|
+        expect(subject).to have_many(relation_key).
+                           through(file_set_options[:through]).
+                           source(relation_key)
+      end
+    end
   end
 
   describe 'Scopes' do
     it_behaves_like 'for_serialization' do
       let(:expected_scope_sql) { described_class.merge(described_class.with_metastreams).to_sql }
+    end
+
+    describe '#file_sets.exemplaryable' do
+      let(:exemplaryable_file_types) { Curator::Mappings::ExemplaryImage::VALID_EXEMPLARY_FILE_SET_TYPES.map { |exemplary_file_type| "Curator::Filestreams::#{exemplary_file_type}" } }
+      let(:expected_scope_sql) { subject.file_sets.where(file_set_type: exemplaryable_file_types).to_sql }
+
+      it 'expects the subjects #file_sets to respond_to #exemplaryable' do
+        expect(subject.file_sets).to respond_to(:exemplaryable)
+      end
+
+      it 'expects subject.file_sets.exemplaryable to eq the expected_scope_sql' do
+        expect(subject.file_sets.exemplaryable.to_sql).to eq(expected_scope_sql)
+      end
     end
   end
 end

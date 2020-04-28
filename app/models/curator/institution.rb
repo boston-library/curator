@@ -22,5 +22,7 @@ module Curator
     has_many :collections, inverse_of: :institution, class_name: 'Curator::Collection', dependent: :destroy
 
     has_many :collection_admin_set_objects, through: :collections, source: :admin_set_objects
+
+    accepts_nested_attributes_for :host_collections, allow_destroy: true, reject_if: :all_blank
   end
 end

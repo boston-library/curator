@@ -12,7 +12,11 @@ module Curator
     end
 
     def update
-      json_response(serialized_resource(@workflow))
+      success, result = Metastreams::WorkflowUpdaterService.call(@workflow, json_data: workflow_params)
+
+      raise_failure(result) unless success
+
+      json_response(serialized_resource(result), :ok)
     end
 
     private
@@ -24,7 +28,18 @@ module Curator
     def workflow_params
       case params[:action]
       when 'update'
-        params.require(:administrative).permit!
+        case resource_class&.name&.demodulize&.downcase
+          when 'institution'
+            params.require(:workflow).permit(:publishing_state)
+          when 'collection'
+            params.require(:workflow).permit(:publishing_state)
+          when 'digital_object'
+            params.require(:workflow).permit(:publishing_state)
+          when 'audio', 'document', 'ereader', 'image', 'metadata', 'text', 'video'
+            params.require(:workflow).permit(:publishing_state)
+          else
+            params
+        end
       else
         params
       end

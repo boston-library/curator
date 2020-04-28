@@ -6,6 +6,7 @@ require_relative './shared/metastreamable'
 require_relative './shared/optimistic_lockable'
 require_relative './shared/timestampable'
 require_relative './shared/archivable'
+require_relative './shared/for_serialization'
 require_relative './shared/mappings/has_exemplary_file_set'
 
 RSpec.describe Curator::DigitalObject, type: :model do
@@ -146,6 +147,19 @@ RSpec.describe Curator::DigitalObject, type: :model do
   describe 'Scopes' do
     it_behaves_like 'for_serialization' do
       let(:expected_scope_sql) { described_class.merge(described_class.with_metastreams).to_sql }
+    end
+
+    describe '#file_sets.exemplaryable' do
+      let(:exemplaryable_file_types) { Curator::Mappings::ExemplaryImage::VALID_EXEMPLARY_FILE_SET_TYPES.map { |exemplary_file_type| "Curator::Filestreams::#{exemplary_file_type}" } }
+      let(:expected_scope_sql) { subject.file_sets.where(file_set_type: exemplaryable_file_types).to_sql }
+
+      it 'expects the subjects #file_sets to respond_to #exemplaryable' do
+        expect(subject.file_sets).to respond_to(:exemplaryable)
+      end
+
+      it 'expects subject.file_sets.exemplaryable to eq the expected_scope_sql' do
+        expect(subject.file_sets.exemplaryable.to_sql).to eq(expected_scope_sql)
+      end
     end
   end
 end
