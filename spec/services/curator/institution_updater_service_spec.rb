@@ -3,37 +3,68 @@
 require 'rails_helper'
 
 RSpec.describe Curator::InstitutionUpdaterService, type: :service do
-  subject { create(:curator_institution) }
-
-  let!(:location) { create(:curator_controlled_terms_geographic) }
-  let!(:thumbnail_path) { file_fixture('image_thumbnail_300.jpg') }
-
-  let!(:update_attributes) do
-    {
-      abstract: "#{subject.asbtract} [UPDATED]",
-      url: Faker::Internet.unique.url(host: 'example-updated-institution.org'),
+  before(:all) do
+    @institution ||= create(:curator_institution)
+    @location ||= create(:curator_controlled_terms_geographic)
+    @thumbnail_path ||= file_fixture('image_thumbnail_300.jpg')
+    @update_attributes ||= {
+      abstract: "#{@institution.abstract} [UPDATED]",
+      url: Faker::Internet.unique.url(host: "#{@institution.name.downcase}-updated-institution.org"),
       image_thumbnail_300: {
-        io: File.open(thumbnail_path.to_s, 'rb'),
-        filename: thumbnail_path.basename.to_s
+        io: File.open(@thumbnail_path.to_s, 'rb'),
+        filename: @thumbnail_path.basename.to_s
       },
       location: {
-        label: location.label,
-        id_from_auth: location.id_from_auth
-        coordinates: location.coordinates,
-        authority_code: location.authority_code,
-        area_type: location.area_type
+        label: @location.label,
+        id_from_auth: @location.id_from_auth,
+        coordinates: @location.coordinates,
+        authority_code: @location.authority_code,
+        area_type: @location.area_type
       },
-      host_collection_attributes: [
+      host_collections_attributes: [
         { name: 'Host Collection One' },
         { name: 'Host Collection Two' }
       ]
     }
+    VCR.use_cassette('institutions/update', record: :new_episodes) do
+      @success, @result = described_class.call(@institution, json_data: @update_attributes)
+    end
+  end
 
-    # before(:all) do
-    #   VCR.use_cassete('')
-    # end
+  describe '#call' do
+    specify { expect(@success).to be_truthy }
 
-    describe '#call result' do
+    describe ':result' do
+      subject { @result }
+
+      specify { expect(subject.id).to eq(@institution.id) }
+      specify { expect(subject.ark_id).to eq(@institution.ark_id) }
+
+      it { is_expected.to be_valid }
+
+      it 'expects the attributes to have been updated' do
+        awesome_print subject
+        [:url, :abstract].each do |attr|
+          expect(subject.public_send(attr)).to eq(@update_attributes[attr])
+        end
+      end
+
+      it 'expects there to be an updated #image_thumbnail_300' do
+        expect(subject.image_thumbnail_300).to be_attached
+        awesome_print subject.image_thumbnail_300.filename
+        awesome_print subject.image_thumbnail_300.content_type
+      end
+
+      it 'expects the #location to have been updated' do
+        expect(subject.location).to be_truthy
+        [:label, :id_from_auth, :coordinates, :authority_code, :area_type].each do |loc_attr|
+          expect(subject.location.public_send(loc_attr)).to eq(@update_attributes[:location][loc_attr])
+        end
+      end
+
+      it 'expects the #host_collections to have been updated' do
+        expect(subject.host_collections.count).to eq(2)
+      end
     end
   end
 end

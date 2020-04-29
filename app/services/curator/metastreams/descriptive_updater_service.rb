@@ -4,7 +4,7 @@ module Curator
   class Metastreams::DescriptiveUpdaterService < Services::Base
     include Services::UpdaterService
 
-    UPDATEABLE_ATTRIBUTES = %i().freeze
+    SIMPLE_ATTRIBUTES_LIST = %i().freeze
 
     def call
       return @success, @result

@@ -21,6 +21,17 @@ module Curator
 
       private
 
+      def simple_attributes_update(attributes_list = [])
+        raise RuntimeError, 'no attributes given!' if attributes_list.blank?
+
+        attributes_list.each do |attr|
+          next if !should_update_attr?(attr)
+
+          yield(attr)
+        end
+      end
+
+
       def should_update_attr?(attr_key)
         return false if @json_attrs.fetch(attr_key, nil).blank?
 

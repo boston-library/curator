@@ -59,9 +59,9 @@ module Curator
             @desc_json_attrs.fetch(:host_collections, []).each do |host_col|
               next if admin_set.blank?
 
-              host = find_or_create_host_collection(host_col,
-                                                    admin_set.institution_id)
-              descriptive.desc_host_collections.build(host_collection: host)
+              host_col = find_or_create_host_collection(host_col,
+                                                    admin_set.institution)
+              descriptive.desc_host_collections.build(host_collection: host_col)
             end
             @desc_json_attrs.fetch(:subject, {}).each do |k, v|
               map_type = case k.to_s
@@ -229,14 +229,13 @@ module Curator
       nil
     end
 
-    def find_or_create_host_collection(host_col_name = nil, institution_id = nil)
-      return if host_col_name.blank? && institution_id.blank?
+    def find_or_create_host_collection(host_col_name = nil, institution = nil)
+      return if host_col_name.blank? || institution.blank?
 
       retries = 0
       begin
         return Curator.mappings.host_collection_class.transaction(requires_new: true) do
-          inst = Curator.institution_class.find(institution_id)
-          inst.host_collections.where(name: host_col_name).first_or_create!
+          institution.host_collections.name_lower(host_col_name).first || institution.host_collections.create!(name: host_col_name)
         end
       rescue ActiveRecord::StaleObjectError => e
         if (retries += 1) <= MAX_RETRIES

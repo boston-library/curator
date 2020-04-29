@@ -2,20 +2,18 @@
 
 module Curator
   class CollectionUpdaterService < Services::Base
+    SIMPLE_ATTRIBUTES_LIST = %i(abstract).freeze
+
     include Services::UpdaterService
 
-    UPDATEABLE_ATTRIBUTES = %i(abstract).freeze
     def call
       with_transaction do
-        UPDATEABLE_ATTRIBUTES.each do |attr_key|
-          next if !should_update_attr(attr_key)
-
-          @record.public_send("#{attr_key}=", @json_attrs.fetch(attr_key))
+        simple_attributes_update(SIMPLE_ATTRIBUTES_LIST) do |attr|
+          @record.public_send("#{attr_key}=", @json_attrs.fetch(attr))
         end
-
         @record.save!
       end
-      
+
       return @success, @result
     end
   end

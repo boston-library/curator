@@ -6,6 +6,8 @@ module Curator
     def resource_scope
       return resource_class.with_metastreams if resource_for_metastream?
 
+      return resource_class if params[:action] == 'update'
+
       return resource_class.for_serialization if resource_class.respond_to?(:for_serialization)
 
       resource_class

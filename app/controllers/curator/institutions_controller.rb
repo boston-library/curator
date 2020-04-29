@@ -49,7 +49,7 @@ module Curator
                     }
                   )
       when 'update'
-        params.require(:institution).permit(:abstract, :url, :image_thumbnail_300, location: {}, host_collection_attributes: [:id, :name, :_deleted])
+        params.require(:institution).permit(:abstract, :url, :image_thumbnail_300, location: {}, host_collections_attributes: [:id, :name, :_deleted])
       else
         params
       end

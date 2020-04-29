@@ -23,11 +23,10 @@ module Curator
     with_options inverse_of: :file_set_of, foreign_key: :file_set_of_id, dependent: :destroy do
       has_many :file_sets, class_name: 'Curator::Filestreams::FileSet' do
         def exemplaryable
-          exemplaryable_type = Curator::Mappings::ExemplaryImage::VALID_EXEMPLARY_FILE_SET_TYPES.map { |exemplary_file_type| "Curator::Filestreams::#{exemplary_file_type}" }
-          where(file_set_type: exemplaryable_type)
+          where(file_set_type: EXEMPLARYABLE_FILE_SETS)
         end
       end
-      
+
       has_many :audio_file_sets, class_name: 'Curator::Filestreams::Audio'
       has_many :image_file_sets, class_name: 'Curator::Filestreams::Image'
       has_many :document_file_sets, class_name: 'Curator::Filestreams::Document'
