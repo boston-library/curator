@@ -13,5 +13,13 @@ module Curator
     attr_json :area_type, :string
     attr_json :coordinates, :string
     attr_json :bounding_box, :string
+
+    after_update_commit :reindex_associated_institutions
+
+    private
+
+    def reindex_associated_institutions
+      institution_locations.each { |inst| inst.update_index }
+    end
   end
 end

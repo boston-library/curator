@@ -18,5 +18,13 @@ module Curator
     has_many :collection_members, inverse_of: :collection, class_name: 'Curator::Mappings::CollectionMember', dependent: :destroy
 
     validates :name, presence: true
+
+    after_update_commit :reindex_collection_members
+
+    private
+
+    def reindex_collection_members
+      collection_members.each { |col_mem| col_mem.digital_object.update_index } if saved_change_to_name?
+    end
   end
 end

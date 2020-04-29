@@ -22,5 +22,18 @@ module Curator
     has_many :collections, inverse_of: :institution, class_name: 'Curator::Collection', dependent: :destroy
 
     has_many :collection_admin_set_objects, through: :collections, source: :admin_set_objects
+
+    after_update_commit :reindex_associations
+
+    private
+
+    def reindex_associations
+      return unless saved_change_to_name?
+
+      collections.each do |col|
+        col.collection_members.each { |col_mem| col_mem.digital_object.update_index }
+        col.update_index
+      end
+    end
   end
 end

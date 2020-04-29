@@ -43,10 +43,16 @@ module Curator
     validates :file_name_base, presence: true
     validates :file_set_type, presence: true, inclusion: { in: Filestreams.file_set_types.collect { |type| "Curator::Filestreams::#{type}" } }
 
+    after_update_commit :reindex_digital_objects
+
     private
 
     def add_file_set_of_to_members
       file_set_member_of_mappings.build(digital_object: file_set_of)
+    end
+
+    def reindex_digital_objects
+      file_set_members_of.each { |digital_object| digital_object.update_index }
     end
   end
 end

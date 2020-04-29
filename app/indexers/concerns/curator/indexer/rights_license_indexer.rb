@@ -23,7 +23,7 @@ module Curator
                     elsif license_text.include?('all rights reserved')
                       'all rights reserved'
                     end
-            context.output_hash['license_ss'] = license_text
+            context.output_hash['license_ss'] = license.label
             context.output_hash['reuse_allowed_ssi'] = reuse
             context.output_hash['license_uri_ss'] = license.uri
           end
