@@ -35,7 +35,7 @@ module Curator
       def should_update_attr?(attr_key)
         return false if @json_attrs.fetch(attr_key, nil).blank?
 
-        @record.public_send(attr_key) == @json_attrs.fetch(attr_key)
+        @record.public_send(attr_key) != @json_attrs.fetch(attr_key)
       end
     end
   end

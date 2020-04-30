@@ -9,7 +9,7 @@ RSpec.describe Curator::InstitutionUpdaterService, type: :service do
     @thumbnail_path ||= file_fixture('image_thumbnail_300.jpg')
     @update_attributes ||= {
       abstract: "#{@institution.abstract} [UPDATED]",
-      url: Faker::Internet.unique.url(host: "#{@institution.name.downcase}-updated-institution.org"),
+      url: Faker::Internet.unique.url(host: "#{@institution.name.downcase.split(' ').join('-')}-updated-institution.org"),
       image_thumbnail_300: {
         io: File.open(@thumbnail_path.to_s, 'rb'),
         filename: @thumbnail_path.basename.to_s
@@ -43,7 +43,6 @@ RSpec.describe Curator::InstitutionUpdaterService, type: :service do
       it { is_expected.to be_valid }
 
       it 'expects the attributes to have been updated' do
-        awesome_print subject
         [:url, :abstract].each do |attr|
           expect(subject.public_send(attr)).to eq(@update_attributes[attr])
         end
@@ -51,8 +50,8 @@ RSpec.describe Curator::InstitutionUpdaterService, type: :service do
 
       it 'expects there to be an updated #image_thumbnail_300' do
         expect(subject.image_thumbnail_300).to be_attached
-        awesome_print subject.image_thumbnail_300.filename
-        awesome_print subject.image_thumbnail_300.content_type
+        expect(subject.image_thumbnail_300.filename).to eq(@update_attributes[:image_thumbnail_300][:filename])
+        expect(subject.image_thumbnail_300.content_type).to eq('image/jpeg')
       end
 
       it 'expects the #location to have been updated' do
@@ -64,6 +63,7 @@ RSpec.describe Curator::InstitutionUpdaterService, type: :service do
 
       it 'expects the #host_collections to have been updated' do
         expect(subject.host_collections.count).to eq(2)
+        expect(subject.host_collections.pluck(:name)).to include('Host Collection One', 'Host Collection Two')
       end
     end
   end
