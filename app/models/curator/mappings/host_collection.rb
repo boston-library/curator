@@ -6,6 +6,17 @@ module Curator
 
     validates :name, presence: true, uniqueness: { scope: :institution_id }
 
-    has_many :desc_host_collections, inverse_of: :host_collection, class_name: 'Curator::Mappings::DescHostCollection', dependent: :destroy
+    has_many :desc_host_collections, inverse_of: :host_collection,
+             class_name: 'Curator::Mappings::DescHostCollection', dependent: :destroy
+
+    after_update_commit :reindex_digital_object
+
+    private
+
+    def reindex_digital_object
+      desc_host_collections.each do |desc_host_col|
+        desc_host_col.descriptive.descriptable.update_index
+      end
+    end
   end
 end
