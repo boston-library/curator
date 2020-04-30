@@ -9,7 +9,7 @@ module Curator
     def call
       with_transaction do
         simple_attributes_update(SIMPLE_ATTRIBUTES_LIST) do |simple_attr|
-          @record.public_send("#{attr_key}=", @json_attrs.fetch(attr_key))
+          @record.public_send("#{simple_attr}=", @json_attrs.fetch(simple_attr))
         end
         @record.save!
       end

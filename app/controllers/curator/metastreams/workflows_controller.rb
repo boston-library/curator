@@ -28,18 +28,7 @@ module Curator
     def workflow_params
       case params[:action]
       when 'update'
-        case resource_class&.name&.demodulize&.downcase
-          when 'institution'
-            params.require(:workflow).permit(:publishing_state)
-          when 'collection'
-            params.require(:workflow).permit(:publishing_state)
-          when 'digital_object'
-            params.require(:workflow).permit(:publishing_state)
-          when 'audio', 'document', 'ereader', 'image', 'metadata', 'text', 'video'
-            params.require(:workflow).permit(:publishing_state)
-          else
-            params
-        end
+        params.require(:workflow).permit(:publishing_state)
       else
         params
       end

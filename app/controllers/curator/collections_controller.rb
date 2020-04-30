@@ -42,7 +42,7 @@ module Curator
                                                            workflow: [:ingest_origin, :publishing_state, :processing_state]
                                            })
       when 'update'
-        params.require(:collection).permit(:abstract, exemplary_file_set: [:ark_id, :type] )
+        params.require(:collection).permit(:abstract, exemplary_file_set: [:ark_id] )
       else
         params
       end

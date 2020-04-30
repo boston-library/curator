@@ -45,6 +45,8 @@ module Curator
                                                                administrative: [:description_standard, :hosting_status, :harvestable, :flagged, destination_site: [], access_edit_group: []],
                                                                workflow: [:ingest_origin, :publishing_state, :processing_state]
                                                })
+      when 'update'
+        params.require(:digital_object).permit(collection_members: [:ark_id], exemplary_file_set: [:ark_id])
       else
         params
       end

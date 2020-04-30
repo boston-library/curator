@@ -6,9 +6,9 @@ module Curator
       module Object
         extend ActiveSupport::Concern
         EXEMPLARYABLE_FILE_SETS = Mappings::ExemplaryImage::VALID_EXEMPLARY_FILE_SET_TYPES.map { |exemplary_file_type| "Curator::Filestreams::#{exemplary_file_type}" }.freeze
-        
+
         included do
-          has_one :exemplary_image_mapping, -> { includes(:exemplary_file_set) }, as: :exemplary_object, inverse_of: :exemplary_object, class_name: 'Curator::Mappings::ExemplaryImage', dependent: :destroy
+          has_one :exemplary_image_mapping, -> { includes(:exemplary_file_set) }, as: :exemplary_object, inverse_of: :exemplary_object, class_name: 'Curator::Mappings::ExemplaryImage', dependent: :destroy, autosave: true
 
           # delegate :exemplary_file_set, to: :exemplary_image_mapping, allow_nil: true
 
