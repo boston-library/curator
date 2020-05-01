@@ -20,6 +20,7 @@ RSpec.describe Curator::CollectionUpdaterService, type: :service do
 
   describe '#call' do
     specify { expect(@success).to be_truthy }
+
     describe ':result' do
       subject { @result }
 

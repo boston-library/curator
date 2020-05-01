@@ -3,5 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe Curator::Metastreams::WorkflowUpdaterService, type: :service do
-  pending "Awaiting implementation"
+  before(:all) do
+  end
+
+  describe '#call' do
+  end
 end

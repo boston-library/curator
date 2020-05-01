@@ -31,7 +31,6 @@ module Curator
         end
       end
 
-
       def should_update_attr?(attr_key)
         return false if @json_attrs.fetch(attr_key, nil).blank?
 

@@ -10,11 +10,11 @@ module Curator
       access_edit_group_attrs = @json_attrs.fetch('access_edit_group', [])
       with_transaction do
         simple_attributes_update(SIMPLE_ATTRIBUTES_LIST) do |simple_attr|
-          @record.public_send("#{attr_key}=", @json_attrs.fetch(attr_key))
+          @record.public_send("#{simple_attr}=", @json_attrs.fetch(simple_attr))
         end
 
         access_edit_group_attrs.each do |access_edit_group_attr|
-          Rails.logger.debug "TODO: Add access_edit_group #{access_edit_group} to this object"
+          Rails.logger.debug "TODO: Add access_edit_group #{access_edit_group_attr} to this object"
         end
 
         @record.save!

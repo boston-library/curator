@@ -46,7 +46,7 @@ module Curator
                                                                workflow: [:ingest_origin, :publishing_state, :processing_state]
                                                })
       when 'update'
-        params.require(:digital_object).permit(collection_members: [:ark_id], exemplary_file_set: [:ark_id])
+        params.require(:digital_object).permit(collection_members: [:id, :ark_id, :_destroy], exemplary_file_set: [:ark_id])
       else
         params
       end

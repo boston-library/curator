@@ -4,7 +4,7 @@ module Curator
   module Services
     module TransactionHandler
       extend ActiveSupport::Concern
-      
+
       MAX_RETRIES = 2
 
       # These are errors that will be passed to the @result variable. That way these can be raised on failure up the chain
