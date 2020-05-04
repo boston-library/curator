@@ -6,6 +6,7 @@ RSpec.describe Curator::Metastreams::DescriptiveUpdaterService, type: :service d
   pending 'Awaiting implementation'
 
   before(:all) do
+    skip 'pending implementation'
   end
 
   describe '#call' do
