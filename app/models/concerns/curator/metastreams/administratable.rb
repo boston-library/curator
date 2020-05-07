@@ -7,7 +7,7 @@ module Curator
       included do
         scope :with_administrative, -> { joins(:administrative).preload(:administrative) }
         has_one :administrative, as: :administratable, inverse_of: :administratable,
-                class_name: 'Curator::Metastreams::Administrative', dependent: :destroy, autosave: true
+                class_name: 'Curator::Metastreams::Administrative', dependent: :destroy
 
         validates :administrative, presence: true
         validates_associated :administrative, on: :create
