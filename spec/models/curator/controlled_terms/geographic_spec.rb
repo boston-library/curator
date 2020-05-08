@@ -53,5 +53,13 @@ RSpec.describe Curator::ControlledTerms::Geographic, type: :model do
         create(:curator_metastreams_descriptive, subject_count: 1).reload.subject_geos.first
       end
     end
+
+    describe 'reindex_associated_institutions' do
+      let(:location) { create(:curator_institution, :with_location).location }
+      it 'runs the reindex_associated_institutions callback' do
+        expect(location).to receive(:reindex_associated_institutions)
+        location.save
+      end
+    end
   end
 end
