@@ -36,8 +36,7 @@ RSpec.describe Curator::ControlledTerms::Role, type: :model do
   describe 'Callbacks' do
     it_behaves_like 'reindex_descriptable' do
       let(:test_term) do
-        create(:curator_metastreams_descriptive, :with_all_desc_terms,
-               desc_term_count: 1).name_roles.first.role
+        create(:curator_metastreams_descriptive, name_role_count: 1).reload.name_roles.first.role
       end
     end
   end

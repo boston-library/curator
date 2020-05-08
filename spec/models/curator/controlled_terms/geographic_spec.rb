@@ -50,8 +50,7 @@ RSpec.describe Curator::ControlledTerms::Geographic, type: :model do
   describe 'Callbacks' do
     it_behaves_like 'reindex_descriptable' do
       let(:test_term) do
-        create(:curator_metastreams_descriptive, :with_all_desc_terms,
-               desc_term_count: 1).subject_geos.first
+        create(:curator_metastreams_descriptive, subject_count: 1).reload.subject_geos.first
       end
     end
   end

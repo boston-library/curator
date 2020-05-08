@@ -63,8 +63,7 @@ RSpec.describe Curator::ControlledTerms::Genre, type: :model do
   describe 'Callbacks' do
     it_behaves_like 'reindex_descriptable' do
       let(:test_term) do
-        create(:curator_metastreams_descriptive, :with_all_desc_terms,
-               desc_term_count: 1).genres.first
+        create(:curator_metastreams_descriptive, genre_count: 1).reload.genres.first
       end
     end
   end
