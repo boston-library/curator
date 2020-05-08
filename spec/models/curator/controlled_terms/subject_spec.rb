@@ -4,6 +4,7 @@ require 'rails_helper'
 require_relative '../shared/controlled_terms/nomenclature'
 require_relative '../shared/controlled_terms/authority_delegation'
 require_relative '../shared/controlled_terms/canonicable'
+require_relative '../shared/controlled_terms/reindex_descriptable'
 require_relative '../shared/mappings/mapped_terms'
 
 RSpec.describe Curator::ControlledTerms::Subject, type: :model do
@@ -34,5 +35,14 @@ RSpec.describe Curator::ControlledTerms::Subject, type: :model do
                         inverse_of(:subjects).
                         class_name('Curator::ControlledTerms::Authority').
                         optional }
+  end
+
+  describe 'Callbacks' do
+    it_behaves_like 'reindex_descriptable' do
+      let(:test_term) do
+        create(:curator_metastreams_descriptive, :with_all_desc_terms,
+               desc_term_count: 1).subject_topics.first
+      end
+    end
   end
 end

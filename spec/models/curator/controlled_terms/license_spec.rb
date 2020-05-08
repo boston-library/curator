@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 require_relative '../shared/controlled_terms/nomenclature'
+require_relative '../shared/controlled_terms/reindex_descriptable'
 # NOTE: No authority delegations/ cannnicable shared examples in this class is by design
 
 RSpec.describe Curator::ControlledTerms::License, type: :model do
@@ -35,5 +36,14 @@ RSpec.describe Curator::ControlledTerms::License, type: :model do
                         class_name('Curator::Metastreams::Descriptive').
                         with_foreign_key(:license_id).
                         dependent(:destroy) }
+  end
+
+  describe 'Callbacks' do
+    it_behaves_like 'reindex_descriptable' do
+      let(:test_term) do
+        create(:curator_metastreams_descriptive, :with_all_desc_terms,
+               desc_term_count: 1).license
+      end
+    end
   end
 end

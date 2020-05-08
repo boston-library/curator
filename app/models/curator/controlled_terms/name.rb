@@ -4,7 +4,7 @@ module Curator
   class ControlledTerms::Name < ControlledTerms::Nomenclature
     include ControlledTerms::AuthorityDelegation
     include ControlledTerms::Canonicable
-    include ControlledTerms::ReindexNameRole
+    include ControlledTerms::ReindexDescriptable
     include Mappings::MappedTerms
 
     belongs_to :authority, inverse_of: :names, class_name: 'Curator::ControlledTerms::Authority', optional: true

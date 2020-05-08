@@ -4,6 +4,7 @@ require 'rails_helper'
 require_relative '../shared/controlled_terms/nomenclature'
 require_relative '../shared/controlled_terms/authority_delegation'
 require_relative '../shared/controlled_terms/canonicable'
+require_relative '../shared/controlled_terms/reindex_descriptable'
 require_relative '../shared/mappings/mapped_terms'
 RSpec.describe Curator::ControlledTerms::Language, type: :model do
   it_behaves_like 'nomenclature'
@@ -23,5 +24,14 @@ RSpec.describe Curator::ControlledTerms::Language, type: :model do
                         inverse_of(:languages).
                         class_name('Curator::ControlledTerms::Authority').
                         required }
+  end
+
+  describe 'Callbacks' do
+    it_behaves_like 'reindex_descriptable' do
+      let(:test_term) do
+        create(:curator_metastreams_descriptive, :with_all_desc_terms,
+               desc_term_count: 1).languages.first
+      end
+    end
   end
 end

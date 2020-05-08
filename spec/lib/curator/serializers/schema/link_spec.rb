@@ -12,7 +12,7 @@ RSpec.describe Curator::Serializers::Link, type: :lib_serializers do
 
     let!(:collection_dbl) { double(collection) }
     before(:each) do
-      allow(collection_dbl).to receive(:link).and_return(link_string)
+      expect(collection_dbl).to receive(:link).and_return(link_string)
     end
 
     it 'expects the link method on the record to serialize to the correct value' do
@@ -27,7 +27,7 @@ RSpec.describe Curator::Serializers::Link, type: :lib_serializers do
       let(:unless_facet) { build_facet_inst(klass: described_class, key: key, method: method, options: unless_proc) }
       let(:combined_facet) { build_facet_inst(klass: described_class, key: key, method: method, options: if_proc.merge(unless_proc)) }
       before(:each) do
-        allow(serializable_record).to receive(key).and_return(link_string)
+        expect(serializable_record).to receive(key).and_return(link_string)
       end
     end
   end

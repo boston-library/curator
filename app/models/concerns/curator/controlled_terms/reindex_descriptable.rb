@@ -11,9 +11,21 @@ module Curator
         private
 
         def reindex_descriptable_objects
-          puts "HOLLA CALLBACK"
-          desc_terms.each do |desc_term|
-            desc_term.descriptive.descriptable.update_index
+          term_type = self.class.name.demodulize
+          if term_type == 'License'
+            licensees.each do |descriptive|
+              descriptive.descriptable.update_index
+            end
+          else
+            iterator = case term_type
+                       when 'Name', 'Role'
+                         :desc_name_roles
+                       else
+                         :desc_terms
+                       end
+            public_send(iterator).each do |desc_mapping|
+              desc_mapping.descriptive.descriptable.update_index
+            end
           end
         end
       end

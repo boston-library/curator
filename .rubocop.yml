@@ -728,6 +728,7 @@ RSpec/LetSetup:
 
 RSpec/MessageExpectation:
   Enabled: true
+  EnforcedStyle: expect
 
 RSpec/MissingExampleGroupArgument:
   Enabled: true

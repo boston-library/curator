@@ -2,6 +2,7 @@
 
 module Curator
   class ControlledTerms::License < ControlledTerms::Nomenclature
+    include ControlledTerms::ReindexDescriptable
     undef_method :desc_terms # Removed relation method since License is not a a valid Term to be mapped
     belongs_to :authority, class_name: 'Curator::ControlledTerms::Authority', optional: true
     # NOTE These don't really have authorities but this line is required so rails doesn't try to validate this relationship
@@ -13,16 +14,5 @@ module Curator
 
     validates :label, presence: true
     validates :uri, format: { with: URI.regexp(%w(http https)), allow_blank: true }
-
-    after_update_commit :reindex_descriptable_objects
-
-    private
-
-    def reindex_descriptable_objects
-      puts "HOLLA CALLBACK"
-      licensees.each do |descriptive|
-        descriptive.descriptable.update_index
-      end
-    end
   end
 end
