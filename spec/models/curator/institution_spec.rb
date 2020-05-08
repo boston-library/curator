@@ -65,4 +65,15 @@ RSpec.describe Curator::Institution, type: :model do
       let(:expected_scope_sql) { described_class.merge(described_class.with_location).merge(described_class.with_metastreams).to_sql }
     end
   end
+
+  describe 'Callbacks' do
+    describe 'reindex_associations' do
+      let(:inst_for_reindex) { create(:curator_institution) }
+      it 'runs the reindex_associations callback' do
+        inst_for_reindex.name = 'Updated Name'
+        expect(inst_for_reindex).to receive(:reindex_associations)
+        inst_for_reindex.save
+      end
+    end
+  end
 end
