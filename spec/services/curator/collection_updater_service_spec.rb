@@ -6,14 +6,18 @@ RSpec.describe Curator::CollectionUpdaterService, type: :service do
   before(:all) do
     @collection ||= create(:curator_collection)
     @digital_object ||= create(:curator_digital_object, admin_set: @collection)
-    @image_file_set ||= create(:curator_filestreams_image, file_set_of: @digital_object)
+    @old_image_file_set ||= create(:curator_filestreams_image, file_set_of: @digital_object)
+    @new_image_file_set ||= create(:curator_filestreams_image, file_set_of: @digital_object)
+
+    create(:curator_mappings_exemplary_image, exemplary_object: @collection, exemplary_file_set: @old_image_file_set)
+
     @update_attributes ||= {
       abstract: "#{@collection.abstract} [UPDATED]",
       exemplary_file_set: {
-        ark_id: @image_file_set.ark_id
+        ark_id: @new_image_file_set.ark_id
       }
     }
-    VCR.use_cassette('collections/update', record: :new_episodes) do
+    VCR.use_cassette('services/collections/update', record: :new_episodes) do
       @success, @result = described_class.call(@collection, json_data: @update_attributes)
     end
   end
@@ -24,12 +28,8 @@ RSpec.describe Curator::CollectionUpdaterService, type: :service do
     describe ':result' do
       subject { @result }
 
-      specify { expect(subject.id).to eq(@collection.id) }
+      specify { expect(subject).to be_valid }
       specify { expect(subject.ark_id).to eq(@collection.ark_id) }
-      specify { expect(subject.admin_set_objects.pluck(:ark_id)).to include(@digital_object.ark_id) }
-      specify { expect(@digital_object.file_sets.exemplaryable.pluck(:ark_id)).to include(@image_file_set.ark_id) }
-
-      it { is_expected.to be_valid }
 
       it 'expects the attributes to have been updated' do
         [:abstract].each do |attr|
@@ -38,8 +38,9 @@ RSpec.describe Curator::CollectionUpdaterService, type: :service do
       end
 
       it 'expects the #exemplary_file_set to have been replaced' do
-        expect(subject.exemplary_file_set).to be_truthy
-        expect(subject.exemplary_file_set.ark_id).to eq(@image_file_set.ark_id)
+        expect(subject.exemplary_file_set).to be_valid
+        expect(subject.exemplary_file_set.ark_id).not_to eq(@old_image_file_set.ark_id)
+        expect(subject.exemplary_file_set.ark_id).to eq(@new_image_file_set.ark_id)
       end
     end
   end

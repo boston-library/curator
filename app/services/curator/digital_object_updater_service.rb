@@ -10,6 +10,7 @@ module Curator
       collection_members_attrs =  @json_attrs.fetch('collection_members', []).map(&:with_indifferent_access).delete_if { |cm| [:id, :ark_id].all? {|key| cm[key].blank? } }
       with_transaction do
         create_or_replace_exemplary!(exemplary_file_set_ark_id)
+        create_or_update_collection_members!(collection_members_attrs)
         @record.save!
       end
 
@@ -21,33 +22,55 @@ module Curator
     def create_or_update_collection_members!(collection_members_attrs = [])
       return if collection_members_attrs.blank?
 
-      members_to_remove = collection_members_attrs.dup.select(&should_remove_collection_member?)
-      members_to_add = collection_members_attrs.dup.pluck(:ark_id).compact
+      members_to_add = collection_members_attrs.select(&should_add_collection_member?).pluck(:ark_id)
+      members_to_remove = collection_members_attrs.select(&should_remove_collection_member?).pluck(:id)
 
       return if members_to_add.blank? && members_to_remove.blank?
 
-      # NOTE: Using #find with an array of ids raises an exception if ANY value in the array does not exist
-      # We definetly want to leverage that insde of factory/updater services to raise errors.
+      add_collection_members(members_to_add)
+      remove_collection_members(members_to_remove)
+    end
 
-      members_to_remove.pluck(:id).each do |member_id|
-        @record.collection_members.find(member_id).mark_for_destruction
+    def remove_collection_members(members_to_remove = [])
+      return if members_to_remove.blank?
+
+      # NOTE: Dont remove the collection member if it belongs to the #admin_set collection for the #admin_set
+      if @record.collection_members.can_remove.find(members_to_remove.uniq)
+        @record.collection_members.can_remove.where(id: members_to_remove.uniq).destroy_all
       end
+    end
 
+    def add_collection_members(members_to_add = [])
       return if members_to_add.blank?
 
-      institution_collections = @record.institution.collections.select(:ark_id, :id)
-
-      members_to_add.pluck(:ark_id).each do |member_ark_id|
-        col = institution_collections.find_by!(ark_id: member_ark_id)
-
-        @record.collection_members.build(collection_id: col.id) unless @record.collection_members.exists?(collection_id: col.id)
+      if can_add_members_scope.find_by!(ark_id: members_to_add.uniq)
+        can_add_members_scope.where(ark_id: members_to_add.uniq).find_each do |collection|
+          @record.collection_members.build(collection: collection)
+        end
       end
     end
 
     private
 
+    def can_add_members_scope
+      # NOTE: the #admin_set should always be mapped
+      Curator.collection_class
+                              .select(:id, :ark_id, :institution_id)
+                              .where(institution_id: @record.institution.id)
+                              .where
+                              .not(id: record_collection_member_ids.uniq)
+    end
+
+    def record_collection_member_ids
+      [@record.admin_set_id] + @record.collection_members.pluck(:collection_id)
+    end
+
+    def should_add_collection_member?
+      proc { |cm| cm[:_destroy].blank? && cm[:ark_id].present? }
+    end
+
     def should_remove_collection_member?
-      proc { |cm| cm[:id].present? && cm[:_deleted].present? }
+      proc { |cm| cm[:_destroy].present? && cm[:id].present? }
     end
   end
 end

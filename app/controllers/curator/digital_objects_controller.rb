@@ -27,8 +27,11 @@ module Curator
 
     # PATCH/PUT /digital_objects/1
     def update
-      @curator_resource.touch
-      json_response(serialized_resource(@curator_resource))
+      success, result = Curator::DigitalObjectUpdaterService.call(@curator_resource, json_data: digital_object_params)
+
+      raise_failure(result) unless success
+
+      json_response(serialized_resource(result), :ok)
     end
 
     private
@@ -46,6 +49,7 @@ module Curator
                                                                workflow: [:ingest_origin, :publishing_state, :processing_state]
                                                })
       when 'update'
+        # NOTE: for collection_members to remove pass in the :id of the mapping object and :_destroy = 1/true to remove and just :ark_id for the collection to add see #should_add_collection_member?/ #should_remove_collection_member? in /services/digital_object_updater_service.rb
         params.require(:digital_object).permit(collection_members: [:id, :ark_id, :_destroy], exemplary_file_set: [:ark_id])
       else
         params
