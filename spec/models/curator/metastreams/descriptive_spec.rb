@@ -231,6 +231,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     end
     it { is_expected.to belong_to(:descriptable).
                         inverse_of(:descriptive).
+                        autosave(true).
                         required }
 
     it { is_expected.to belong_to(:physical_location).

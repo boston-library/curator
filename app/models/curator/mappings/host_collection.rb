@@ -9,11 +9,11 @@ module Curator
     has_many :desc_host_collections, inverse_of: :host_collection,
              class_name: 'Curator::Mappings::DescHostCollection', dependent: :destroy
 
-    after_update_commit :reindex_digital_object
+    after_update_commit :reindex_descriptable_objects
 
     private
 
-    def reindex_digital_object
+    def reindex_descriptable_objects
       desc_host_collections.each do |desc_host_col|
         desc_host_col.descriptive.descriptable.update_index
       end

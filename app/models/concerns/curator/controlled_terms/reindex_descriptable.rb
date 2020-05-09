@@ -12,19 +12,23 @@ module Curator
 
         def reindex_descriptable_objects
           term_type = self.class.name.demodulize
-          if term_type == 'License'
+          case term_type
+          when 'License'
             licensees.each do |descriptive|
               descriptive.descriptable.update_index
             end
+          when 'Name', 'Role'
+            desc_name_roles.each do |desc_name_role|
+              desc_name_role.descriptive.descriptable.update_index
+            end
+            if term_type == 'Name'
+              physical_locations_of.each do |descriptive|
+                descriptive.descriptable.update_index
+              end
+            end
           else
-            iterator = case term_type
-                       when 'Name', 'Role'
-                         :desc_name_roles
-                       else
-                         :desc_terms
-                       end
-            public_send(iterator).each do |desc_mapping|
-              desc_mapping.descriptive.descriptable.update_index
+            desc_terms.each do |desc_term|
+              desc_term.descriptive.descriptable.update_index
             end
           end
         end

@@ -729,6 +729,8 @@ RSpec/LetSetup:
 RSpec/MessageExpectation:
   Enabled: true
   EnforcedStyle: expect
+  Exclude:
+    - 'spec/lib/curator/serializers/schema/link_spec.rb'
 
 RSpec/MissingExampleGroupArgument:
   Enabled: true

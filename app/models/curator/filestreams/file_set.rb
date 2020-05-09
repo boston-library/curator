@@ -43,7 +43,7 @@ module Curator
     validates :file_name_base, presence: true
     validates :file_set_type, presence: true, inclusion: { in: Filestreams.file_set_types.collect { |type| "Curator::Filestreams::#{type}" } }
 
-    after_update_commit :reindex_digital_objects
+    after_commit :reindex_digital_objects
 
     private
 
