@@ -20,7 +20,7 @@ module Curator
     private
 
     def reindex_associated_institutions
-      institution_locations.each { |inst| inst.update_index }
+      institution_locations.find_each { |inst| inst.update_index }
     end
   end
 end

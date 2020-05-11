@@ -24,7 +24,7 @@ module Curator
     private
 
     def reindex_collection_members
-      collection_members.each { |col_mem| col_mem.digital_object.update_index } if saved_change_to_name?
+      collection_members.find_each { |col_mem| col_mem.digital_object.update_index } if saved_change_to_name?
     end
   end
 end

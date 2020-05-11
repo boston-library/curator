@@ -52,7 +52,7 @@ module Curator
     end
 
     def reindex_digital_objects
-      file_set_members_of.each { |digital_object| digital_object.update_index }
+      file_set_members_of.find_each { |digital_object| digital_object.update_index }
     end
   end
 end

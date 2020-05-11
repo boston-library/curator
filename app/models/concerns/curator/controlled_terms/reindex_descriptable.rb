@@ -14,20 +14,20 @@ module Curator
           term_type = self.class.name.demodulize
           case term_type
           when 'License'
-            licensees.each do |descriptive|
+            licensees.find_each do |descriptive|
               descriptive.descriptable.update_index
             end
           when 'Name', 'Role'
-            desc_name_roles.each do |desc_name_role|
+            desc_name_roles.find_each do |desc_name_role|
               desc_name_role.descriptive.descriptable.update_index
             end
             if term_type == 'Name'
-              physical_locations_of.each do |descriptive|
+              physical_locations_of.find_each do |descriptive|
                 descriptive.descriptable.update_index
               end
             end
           else
-            desc_terms.each do |desc_term|
+            desc_terms.find_each do |desc_term|
               desc_term.descriptive.descriptable.update_index
             end
           end

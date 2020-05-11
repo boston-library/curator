@@ -30,8 +30,8 @@ module Curator
     def reindex_associations
       return unless saved_change_to_name?
 
-      collections.each do |col|
-        col.collection_members.each { |col_mem| col_mem.digital_object.update_index }
+      collections.find_each do |col|
+        col.collection_members.find_each { |col_mem| col_mem.digital_object.update_index }
         col.update_index
       end
     end
