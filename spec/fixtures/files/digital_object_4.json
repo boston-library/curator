@@ -1,0 +1,159 @@
+{
+  "digital_object": {
+    "ark_id": "commonwealth:d504rm722",
+    "created_at": "2020-04-27T20:32:56.545Z",
+    "updated_at": "2020-04-29T19:43:45.666Z",
+    "admin_set": {
+      "ark_id": "commonwealth:453627189",
+      "name": "Tallulah Morgan v. James W. Hennigan Case File"
+    },
+    "is_member_of_collection": [
+      {
+        "ark_id": "commonwealth:453627189",
+        "name": "Tallulah Morgan v. James W. Hennigan Case File"
+      }
+    ],
+    "metastreams": {
+      "descriptive": {
+        "identifier": [
+          {
+            "label": "https://catalog.archives.gov/id/132147823",
+            "type": "uri"
+          }
+        ],
+        "title": {
+          "primary": {
+            "label": "Document 597 [folder 1 of 4]",
+            "display": "primary",
+            "usage": "primary"
+          }
+        },
+        "name_roles": [
+          {
+            "name": {
+              "name_type": "corporate",
+              "authority_code": "naf",
+              "id_from_auth": "n85013076",
+              "label": "United States. District Court (Massachusetts)"
+            },
+            "role": {
+              "label": "Creator",
+              "authority_code": "marcrelator",
+              "id_from_auth": "cre"
+            }
+          }
+        ],
+        "genres": [
+          {
+            "label": "Documents",
+            "authority_code": "gmgpc",
+            "id_from_auth": "tgm003185",
+            "basic": true
+          }
+        ],
+        "date": {
+          "created": "1975-01-27"
+        },
+        "note": [
+          {
+            "label": "The Morgan v. Hennigan case file is held by the National Archives and Records Administration at its Boston/Waltham facility (NARA ID: 99293814). The collection was digitized by Harvard University and subsequently deposited into their online repository as part of their digital collections. This process was initiated by and overseen by Digital Commonwealth and the Boston Public Library in coordination with NARA."
+          }
+        ],
+        "abstract": "Document number 597. Student desegregation plan submitted by the School Committee of the City of Boston [1 of 4 folders], 1/27/1975",
+        "subject": {
+          "topics": [
+            {
+              "label": "Busing for school integration",
+              "authority_code": "lcsh",
+              "id_from_auth": "sh85018339"
+            },
+            {
+              "label": "Segregation in education",
+              "authority_code": "lcsh",
+              "id_from_auth": "sh85119590"
+            },
+            {
+              "label": "Public schools--Massachusetts--Boston",
+              "authority_code": "lcsh",
+              "id_from_auth": "sh2008110241"
+            },
+            {
+              "label": "African American students",
+              "authority_code": "lcsh",
+              "id_from_auth": "sh85001908"
+            },
+            {
+              "label": "African Americans",
+              "authority_code": "lcsh",
+              "id_from_auth": "sh85001932"
+            },
+            {
+              "label": "Education",
+              "authority_code": "lcsh",
+              "id_from_auth": "sh85040989"
+            },
+            {
+              "label": "Civil rights",
+              "authority_code": "lcsh",
+              "id_from_auth": "sh85026371"
+            },
+            {
+              "label": "Discrimination in education",
+              "authority_code": "lcsh",
+              "id_from_auth": "sh85038386"
+            },
+            {
+              "label": "School integration",
+              "authority_code": "lcsh",
+              "id_from_auth": "sh85118341"
+            },
+            {
+              "label": "Segregation",
+              "authority_code": "lcsh",
+              "id_from_auth": "sh85119585"
+            },
+            {
+              "label": "Segregation in education--Massachusetts--Boston--History"
+            }
+          ],
+          "names": [
+            {
+              "label": "Boston Public Schools",
+              "name_type": "corporate",
+              "authority_code": "naf",
+              "id_from_auth": "n87109868"
+            }
+          ]
+        },
+        "host_collections": [
+          "Tallulah Morgan et al. vs James W. Hennigan et al. Case File, 1972 - 1995"
+        ],
+        "physical_location": {
+          "label": "National Archives at Boston",
+          "name_type": "corporate"
+        },
+        "rights": "Rights status not evaluated.",
+        "license": {
+          "label": "Contact host institution for more information."
+        }
+      },
+      "administrative": {
+        "flagged": false,
+        "destination_site": [
+          "commonwealth"
+        ],
+        "harvestable": true,
+        "hosting_status": "harvested",
+        "access_edit_group": [
+          "superuser",
+          "admin[bpl-test:d504rm34n]"
+        ]
+      },
+      "workflow": {
+        "ingest_origin": "wid00007c01203",
+        "processing_state": "complete",
+        "publishing_state": "published"
+      }
+    }
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "digital_object": {
+    "ark_id": "commonwealth:5999n996x",
+    "created_at": "2016-07-29T18:51:41.603Z",
+    "updated_at": "2018-04-05T20:00:06.553Z",
+    "admin_set": {
+      "ark_id": "commonwealth:198765432",
+      "name": "Norman B. Leventhal Map Center Collection"
+    },
+    "is_member_of_collection": [
+      {
+        "ark_id": "commonwealth:198765432",
+        "name": "Norman B. Leventhal Map Center Collection"
+      }
+    ],
+    "metastreams": {
+      "descriptive": {
+        "identifier": [
+          {
+            "label": "39999065696625",
+            "type": "local-barcode"
+          }
+        ],
+        "title": {
+          "primary": {
+            "label": "Aero view of Lynn, Mass, 1916",
+            "subtitle": "looking north",
+            "display": "primary",
+            "usage": "primary"
+          }
+        },
+        "name_roles": [
+          {
+            "name": {
+              "name_type": "corporate",
+              "label": "Fowler u0026 Downs"
+            },
+            "role": {
+              "label": "Creator",
+              "authority_code": "marcrelator",
+              "id_from_auth": "cre"
+            }
+          }
+        ],
+        "resource_types": [
+          {
+            "label": "Cartographic",
+            "authority_code": "resourceTypes",
+            "id_from_auth": "car"
+          },
+          {
+            "label": "Still image",
+            "authority_code": "resourceTypes",
+            "id_from_auth": "img"
+          }
+        ],
+        "genres": [
+          {
+            "label": "Maps",
+            "authority_code": "gmgpc",
+            "id_from_auth": "tgm006261",
+            "basic": true
+          }
+        ],
+        "digital_origin": "reformatted digital",
+        "place_of_publication": "Boston",
+        "publisher": "Hughes u0026 Bailey,",
+        "date": {
+          "created": "1916"
+        },
+        "issuance": "monographic",
+        "languages": [
+          {
+            "label": "English",
+            "authority_code": "iso639-2",
+            "id_from_auth": "eng"
+          }
+        ],
+        "note": [
+          {
+            "label": "Includes list of businesses and 46 illustrations of buildings."
+          },
+          {
+            "label": "Fowler u0026 Downs del.",
+            "type": "statement of responsibility"
+          }
+        ],
+        "extent": "1 view ; sheet 66 x 101 cm",
+        "subject": {
+          "topics": [
+            {
+              "label": "Lynn (Mass.)--Aerial views",
+              "authority_code": "lcsh"
+            }
+          ],
+          "geos": [
+            {
+              "authority_code": "tgn",
+              "id_from_auth": "2050042",
+              "coordinates": "42.4667,-70.95",
+              "area_type": "city",
+              "label": "Lynn"
+            },
+            {
+              "coordinates": "42.47,-70.95"
+            }
+          ]
+        },
+        "cartographic": {
+          "scale": [
+            "Not drawn to scale"
+          ]
+        },
+        "host_collections": [
+          "Norman B. Leventhal Map Center Collection"
+        ],
+        "physical_location": {
+          "label": "Boston Public Library",
+          "name_type": "corporate"
+        },
+        "physical_location_department": "Norman B. Leventhal Map Center",
+        "rights": "No known copyright restrictions.",
+        "license": {
+          "label": "No known restrictions on use."
+        }
+      },
+      "administrative": {
+        "description_standard": "aacr",
+        "flagged": false,
+        "destination_site": [
+          "commonwealth",
+          "bpl",
+          "nblmc"
+        ],
+        "harvestable": true,
+        "hosting_status": "hosted",
+        "access_edit_group": [
+          "superuser",
+          "admin[bpl-test:zs25x848x]"
+        ]
+      },
+      "workflow": {
+        "ingest_origin": "spreadsheet",
+        "processing_state": "complete",
+        "publishing_state": "published"
+      }
+    }
+  }
+}

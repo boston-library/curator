@@ -62,4 +62,13 @@ RSpec.shared_examples 'file_set', type: :model do
       it_behaves_like 'metadata_foxable'
     end
   end
+
+  describe 'Callbacks' do
+    describe 'reindex_digital_objects' do
+      it 'runs the reindex_digital_objects callback' do
+        expect(subject).to receive(:reindex_digital_objects)
+        subject.save
+      end
+    end
+  end
 end

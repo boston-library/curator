@@ -4,6 +4,7 @@ require 'rails_helper'
 require_relative '../shared/controlled_terms/nomenclature'
 require_relative '../shared/controlled_terms/authority_delegation'
 require_relative '../shared/controlled_terms/canonicable'
+require_relative '../shared/controlled_terms/reindex_descriptable'
 require_relative '../shared/mappings/mapped_terms'
 
 RSpec.describe Curator::ControlledTerms::Geographic, type: :model do
@@ -44,5 +45,21 @@ RSpec.describe Curator::ControlledTerms::Geographic, type: :model do
                         class_name('Curator::Institution').
                         with_foreign_key(:location_id).
                         dependent(:destroy) }
+  end
+
+  describe 'Callbacks' do
+    it_behaves_like 'reindex_descriptable' do
+      let(:test_term) do
+        create(:curator_metastreams_descriptive, subject_count: 1).reload.subject_geos.first
+      end
+    end
+
+    describe 'reindex_associated_institutions' do
+      let(:location) { create(:curator_institution, :with_location).location }
+      it 'runs the reindex_associated_institutions callback' do
+        expect(location).to receive(:reindex_associated_institutions)
+        location.save
+      end
+    end
   end
 end

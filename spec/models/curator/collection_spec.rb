@@ -52,4 +52,15 @@ RSpec.describe Curator::Collection, type: :model do
       let(:expected_scope_sql) { described_class.merge(described_class.with_metastreams).to_sql }
     end
   end
+
+  describe 'Callbacks' do
+    describe 'reindex_collection_members' do
+      let(:col_for_reindex) { create(:curator_collection) }
+      it 'runs the reindex_collection_members callback' do
+        col_for_reindex.name = 'Updated Name'
+        expect(col_for_reindex).to receive(:reindex_collection_members)
+        col_for_reindex.save
+      end
+    end
+  end
 end
