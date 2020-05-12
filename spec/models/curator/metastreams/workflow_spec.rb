@@ -57,7 +57,6 @@ RSpec.describe Curator::Metastreams::Workflow, type: :model do
   describe 'Associations' do
     it { is_expected.to belong_to(:workflowable).
                         inverse_of(:workflow).
-                        autosave(true).
                         required }
   end
 end

@@ -2,7 +2,7 @@
 
 module Curator
   class Metastreams::Administrative < ApplicationRecord
-    belongs_to :administratable, polymorphic: true, inverse_of: :administrative, autosave: true
+    belongs_to :administratable, polymorphic: true, inverse_of: :administrative
 
     enum description_standard: { aacr: 0, cco: 1, dacs: 2, gihc: 3, local: 4, rda: 5, dcrmg: 6, amremm: 7, dcrmb: 8, dcrmc: 9, dcrmmss: 10, appm: 11 }.freeze
     enum hosting_status: { hosted: 0, harvested: 1 }.freeze

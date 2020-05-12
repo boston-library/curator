@@ -76,7 +76,6 @@ RSpec.describe Curator::Metastreams::Administrative, type: :model do
   describe 'Associations' do
     it { is_expected.to belong_to(:administratable).
                         inverse_of(:administrative).
-                        autosave(true).
                         required }
   end
 end
