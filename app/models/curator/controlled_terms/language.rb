@@ -3,6 +3,7 @@
 module Curator
   class ControlledTerms::Language < ControlledTerms::Nomenclature
     include ControlledTerms::AuthorityDelegation
+    include ControlledTerms::ReindexDescriptable
     include Mappings::MappedTerms
     belongs_to :authority, inverse_of: :languages, class_name: 'Curator::ControlledTerms::Authority'
 

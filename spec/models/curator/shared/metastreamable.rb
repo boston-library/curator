@@ -2,8 +2,10 @@
 
 RSpec.shared_examples 'administratable', type: :model do
   it { is_expected.to have_one(:administrative).
-    inverse_of(:administratable).
-    class_name('Curator::Metastreams::Administrative').dependent(:destroy) }
+                      inverse_of(:administratable).
+                      class_name('Curator::Metastreams::Administrative').
+                      dependent(:destroy).
+                      autosave(true) }
 
   it { is_expected.to validate_presence_of(:administrative) }
 
@@ -18,8 +20,10 @@ end
 
 RSpec.shared_examples 'descriptable', type: :model do
   it { is_expected.to have_one(:descriptive).
-    inverse_of(:descriptable).
-    class_name('Curator::Metastreams::Descriptive').dependent(:destroy) }
+                      inverse_of(:descriptable).
+                      class_name('Curator::Metastreams::Descriptive').
+                      dependent(:destroy).
+                      autosave(true) }
 
   it { is_expected.to validate_presence_of(:descriptive) }
 
@@ -34,8 +38,10 @@ end
 
 RSpec.shared_examples 'workflowable', type: :model do
   it { is_expected.to have_one(:workflow).
-    inverse_of(:workflowable).
-    class_name('Curator::Metastreams::Workflow').dependent(:destroy) }
+                      inverse_of(:workflowable).
+                      class_name('Curator::Metastreams::Workflow').
+                      dependent(:destroy).
+                      autosave(true) }
 
   it { is_expected.to validate_presence_of(:workflow) }
 

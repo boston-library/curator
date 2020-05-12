@@ -7,7 +7,9 @@ module Curator
 
     # TODO: add indexing for: edit_access_group_ssim
     configure do
-      to_field 'is_file_set_of_ssim', obj_extract('file_set_of', 'ark_id')
+      to_field 'is_file_set_of_ssim' do |rec, acc|
+        acc.concat rec.file_set_members_of.pluck('ark_id')
+      end
       to_field 'is_exemplary_image_of_ssim' do |rec, acc|
         acc.concat rec.exemplary_image_of.pluck('ark_id')
       end

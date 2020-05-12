@@ -4,6 +4,7 @@ module Curator
   class ControlledTerms::Genre < ControlledTerms::Nomenclature
     include ControlledTerms::AuthorityDelegation
     include ControlledTerms::Canonicable
+    include ControlledTerms::ReindexDescriptable
     include Mappings::MappedTerms
 
     belongs_to :authority, inverse_of: :genres, class_name: 'Curator::ControlledTerms::Authority', optional: true

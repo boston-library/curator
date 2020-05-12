@@ -4,6 +4,7 @@ require 'rails_helper'
 require_relative '../shared/controlled_terms/nomenclature'
 require_relative '../shared/controlled_terms/authority_delegation'
 require_relative '../shared/controlled_terms/canonicable'
+require_relative '../shared/controlled_terms/reindex_descriptable'
 require_relative '../shared/mappings/mapped_terms'
 
 RSpec.describe Curator::ControlledTerms::Name, type: :model do
@@ -54,5 +55,13 @@ RSpec.describe Curator::ControlledTerms::Name, type: :model do
                         class_name('Curator::Metastreams::Descriptive').
                         with_foreign_key(:physical_location_id).
                         dependent(:destroy) }
+  end
+
+  describe 'Callbacks' do
+    it_behaves_like 'reindex_descriptable' do
+      let(:test_term) do
+        create(:curator_metastreams_descriptive, name_role_count: 1).reload.name_roles.first.name
+      end
+    end
   end
 end

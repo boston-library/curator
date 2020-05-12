@@ -50,4 +50,13 @@ RSpec.describe Curator::Mappings::HostCollection, type: :model do
                         class_name('Curator::Mappings::DescHostCollection').
                         dependent(:destroy) }
   end
+
+  describe 'Callbacks' do
+    let(:host_collection) { create(:curator_mappings_host_collection) }
+    it 'runs the reindex_descriptable_objects callback' do
+      host_collection.name = 'Updated Name'
+      expect(host_collection).to receive(:reindex_descriptable_objects)
+      host_collection.save
+    end
+  end
 end

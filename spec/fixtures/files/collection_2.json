@@ -1,0 +1,30 @@
+{
+  "collection": {
+    "ark_id": "commonwealth:198765432",
+    "created_at": "2015-02-26T18:23:37.753Z",
+    "updated_at": "2019-10-02T14:24:14.287Z",
+    "institution": {
+      "ark_id": "commonwealth:123456789"
+    },
+    "name": "Norman B. Leventhal Map Center Collection",
+    "abstract": "Single-origin coffee small batch yr readymade brunch. Fanny pack man bun green juice sustainable asymmetrical, hot chicken truffaut tbh fixie kale chips chambray ramps master cleanse. Whatever four loko tousled, hell of activated charcoal iceland normcore. Tumblr chicharrones glossier, knausgaard bicycle rights hot chicken PBR&B gochujang. Celiac venmo pabst, jianbing brooklyn air plant quinoa before they sold out fap heirloom XOXO kitsch. Helvetica kale chips trust fund 3 wolf moon, flexitarian marfa vegan. Lomo kinfolk fixie humblebrag, ugh letterpress pinterest pour-over sartorial.<br/><br/>Gastropub franzen biodiesel etsy. Activated charcoal XOXO succulents authentic, meh health goth franzen blue bottle af deep v poke. Umami hot chicken godard actually blog narwhal kinfolk. Woke thundercats dreamcatcher cornhole chicharrones asymmetrical, locavore you probably haven't heard of them kogi selvage swag vaporware.",
+    "metastreams": {
+      "administrative": {
+        "destination_site": [
+          "commonwealth",
+          "bpl",
+          "nblmc"
+        ],
+        "harvestable": true,
+        "hosting_status": "hosted",
+        "access_edit_group": [
+          "superuser",
+          "admin[bpl-test:zs25x848x]"
+        ]
+      },
+      "workflow": {
+        "publishing_state": "published"
+      }
+    }
+  }
+}

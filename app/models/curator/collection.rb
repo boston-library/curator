@@ -34,5 +34,13 @@ module Curator
     end
 
     validates :name, presence: true
+
+    after_update_commit :reindex_collection_members
+
+    private
+
+    def reindex_collection_members
+      collection_members.find_each { |col_mem| col_mem.digital_object.update_index } if saved_change_to_name?
+    end
   end
 end

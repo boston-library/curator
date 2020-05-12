@@ -6,7 +6,8 @@ module Curator
       extend ActiveSupport::Concern
       included do
         scope :with_workflow, -> { joins(:workflow).preload(:workflow) }
-        has_one :workflow, as: :workflowable, inverse_of: :workflowable, class_name: 'Curator::Metastreams::Workflow', dependent: :destroy
+        has_one :workflow, as: :workflowable, inverse_of: :workflowable,
+                class_name: 'Curator::Metastreams::Workflow', dependent: :destroy, autosave: true
 
         validates :workflow, presence: true
         validates_associated :workflow, on: :create

@@ -24,5 +24,18 @@ module Curator
     has_many :collection_admin_set_objects, through: :collections, source: :admin_set_objects
 
     accepts_nested_attributes_for :host_collections, allow_destroy: true, reject_if: :all_blank
+
+    after_update_commit :reindex_associations
+
+    private
+
+    def reindex_associations
+      return unless saved_change_to_name?
+
+      collections.find_each do |col|
+        col.collection_members.find_each { |col_mem| col_mem.digital_object.update_index }
+        col.update_index
+      end
+    end
   end
 end

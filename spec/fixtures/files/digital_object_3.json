@@ -1,0 +1,195 @@
+{
+  "digital_object": {
+    "ark_id": "commonwealth:g445cd121",
+    "created_at": "2018-12-19T21:18:15.315Z",
+    "updated_at": "2018-12-19T21:34:06.079Z",
+    "admin_set": {
+      "ark_id": "commonwealth:198765432",
+      "name": "Norman B. Leventhal Map Center Collection"
+    },
+    "is_member_of_collection": [
+      {
+        "ark_id": "commonwealth:198765432",
+        "name": "Norman B. Leventhal Map Center Collection"
+      }
+    ],
+    "metastreams": {
+      "descriptive": {
+        "identifier": [
+          {
+            "label": "G1234_B6_B7_1898_2v5_0008",
+            "type": "local-other"
+          },
+          {
+            "label": "39999059011229",
+            "type": "local-barcode"
+          },
+          {
+            "label": "G1234.B6 B7 1898.2 v.5",
+            "type": "local-call"
+          }
+        ],
+        "title": {
+          "other": [
+            {
+              "label": "Part of ward 20, Dorchester, city of Boston",
+              "type": "alternative"
+            }
+          ],
+          "primary": {
+            "label": "Atlas of the city of Boston, Dorchester, Mass., vol. 5 : from actual surveys and official plans",
+            "subtitle": "plate 5",
+            "display": "primary",
+            "usage": "primary"
+          }
+        },
+        "name_roles": [
+          {
+            "name": {
+              "name_type": "personal",
+              "authority_code": "naf",
+              "id_from_auth": "n50081503",
+              "label": "Bromley, George Washington"
+            },
+            "role": {
+              "label": "Cartographer",
+              "authority_code": "marcrelator",
+              "id_from_auth": "ctg"
+            }
+          },
+          {
+            "name": {
+              "name_type": "personal",
+              "authority_code": "naf",
+              "id_from_auth": "html",
+              "label": "Bromley, Walter Scott"
+            },
+            "role": {
+              "label": "Cartographer",
+              "authority_code": "marcrelator",
+              "id_from_auth": "ctg"
+            }
+          },
+          {
+            "name": {
+              "name_type": "corporate",
+              "authority_code": "naf",
+              "id_from_auth": "n50081706",
+              "label": "G.W. Bromley u0026 Co."
+            },
+            "role": {
+              "label": "Publisher",
+              "authority_code": "marcrelator",
+              "id_from_auth": "pbl"
+            }
+          }
+        ],
+        "resource_types": [
+          {
+            "label": "Cartographic",
+            "authority_code": "resourceTypes",
+            "id_from_auth": "car"
+          }
+        ],
+        "genres": [
+          {
+            "label": "Maps",
+            "authority_code": "gmgpc",
+            "id_from_auth": "tgm006261",
+            "basic": true
+          }
+        ],
+        "digital_origin": "reformatted digital",
+        "place_of_publication": "Philadelphia",
+        "publisher": "G.W. Bromley and Co.",
+        "date": {
+          "created": "1898"
+        },
+        "publication": {
+          "edition_name": "Third edition"
+        },
+        "languages": [
+          {
+            "label": "English",
+            "authority_code": "iso639-2",
+            "id_from_auth": "eng"
+          }
+        ],
+        "note": [
+          {
+            "label": "Digitization made possible with support from the Council on Library and Information Resources."
+          }
+        ],
+        "extent": "1 map : color ; sheet 58 x 83 cm",
+        "subject": {
+          "topics": [
+            {
+              "label": "Real property--Massachusetts--Boston--Maps",
+              "authority_code": "lcsh"
+            },
+            {
+              "label": "Landowners--Massachusetts--Boston--Maps--940816257",
+              "authority_code": "lcsh"
+            },
+            {
+              "label": "Dorchester (Boston, Mass.)--Maps",
+              "authority_code": "lcsh"
+            }
+          ],
+          "geos": [
+            {
+              "authority_code": "tgn",
+              "id_from_auth": "7013575",
+              "coordinates": "42.2833,-71.0667",
+              "area_type": "city_section",
+              "label": "Dorchester"
+            },
+            {
+              "coordinates": "42.3135,-71.0568"
+            },
+            {
+              "bounding_box": "5.9559 45.818 10.4921 47.8084"
+            }
+          ]
+        },
+        "cartographic": {
+          "scale": [
+            "Scale 1:1,200"
+          ]
+        },
+        "host_collections": [
+          "Norman B. Leventhal Map Center Collection"
+        ],
+        "physical_location": {
+          "label": "Boston Public Library",
+          "name_type": "corporate"
+        },
+        "physical_location_department": "Norman B. Leventhal Map Center",
+        "rights": "No known copyright restrictions.",
+        "license": {
+          "label": "No known restrictions on use."
+        }
+      },
+      "administrative": {
+        "description_standard": "rda",
+        "flagged": false,
+        "destination_site": [
+          "commonwealth",
+          "bpl",
+          "nblmc"
+        ],
+        "harvestable": true,
+        "hosting_status": "hosted",
+        "access_edit_group": [
+          "superuser",
+          "admin[bpl-test:zs25x848x]"
+        ]
+      },
+      "workflow": {
+        "ingest_origin": "spreadsheet",
+        "processing_state": "complete",
+        "publishing_state": "published"
+      }
+    }
+  }
+}

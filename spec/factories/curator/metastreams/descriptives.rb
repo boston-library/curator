@@ -68,11 +68,11 @@ FactoryBot.define do
 
     after :create do |descriptive, options|
       create_list(:curator_mappings_desc_term, options.genre_count, :specific_genre, descriptive: descriptive) if options.genre_count
-      %i(subject_topic subject_name subject_other).each do |subject_type|
+      %i(subject_topic subject_name subject_geo).each do |subject_type|
         create_list(:curator_mappings_desc_term, options.subject_count, subject_type, descriptive: descriptive) if options.subject_count
       end
       %i(language resource_type).each do |desc_term_type|
-        create_list(:curator_mappings_desc_term, options.send("#{desc_term_type}_count"), :language, descriptive: descriptive) if options.send("#{desc_term_type}_count")
+        create_list(:curator_mappings_desc_term, options.send("#{desc_term_type}_count"), desc_term_type, descriptive: descriptive) if options.send("#{desc_term_type}_count")
       end
       create_list(:curator_mappings_desc_name_role, options.name_role_count, descriptive: descriptive) if options.name_role_count
       create_list(:curator_mappings_desc_host_collection, options.host_collection_count, descriptive: descriptive) if options.host_collection_count
