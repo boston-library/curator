@@ -9,10 +9,10 @@ RSpec.describe Curator::DigitalObjectUpdaterService, type: :service do
     create(:curator_mappings_exemplary_image, exemplary_object: @digital_object, exemplary_file_set: @old_image_file_set)
 
     @new_image_file_set ||= create(:curator_filestreams_image, file_set_of: @digital_object)
-    @add_collection  ||= create(:curator_collection, institution: @digital_object.institution)
+    @add_collection ||= create(:curator_collection, institution: @digital_object.institution)
     @remove_collection ||= create(:curator_mappings_collection_member, collection: create(:curator_collection, institution: @digital_object.institution), digital_object: @digital_object)
     @update_attributes ||= {
-      collection_members: [{ ark_id: @add_collection.ark_id }, { id: @remove_collection.id, _destroy: '1'}],
+      collection_members: [{ ark_id: @add_collection.ark_id }, { id: @remove_collection.id, _destroy: '1' }],
       exemplary_file_set: {
         ark_id: @new_image_file_set.ark_id
       }

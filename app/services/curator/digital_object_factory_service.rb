@@ -60,7 +60,7 @@ module Curator
               next if admin_set.blank?
 
               host_col = find_or_create_host_collection(host_col,
-                                                    admin_set.institution)
+                                                        admin_set.institution)
               descriptive.desc_host_collections.build(host_collection: host_col)
             end
             @desc_json_attrs.fetch(:subject, {}).each do |k, v|

@@ -80,10 +80,50 @@ RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: f
   end
 end
 
-# RSpec.shared_examples 'shared_put_patch', type: :controller do
-#   routes { Curator::Engine.routes }
-#   pending 'Example pending until implmented properly'
-# end
+RSpec.shared_examples 'shared_put_patch', type: :controller do |skip_put_patch: false, resource_key: nil|
+  routes { Curator::Engine.routes }
+
+  describe 'PUT/PATCH', unless: skip_put_patch do
+    let(:expected_content_type) { Mime[:json].to_str }
+
+    specify { expect(params).to be_truthy.and be_a_kind_of(Hash) }
+    specify { expect(valid_update_attributes).to be_truthy.and be_a_kind_of(Hash) }
+    specify { expect(invalid_update_attributes).to be_truthy.and be_a_kind_of(Hash) }
+    specify { expect(valid_session).to be_truthy.and be_a_kind_of(Hash) }
+    specify { expect(resource).to be_truthy.and be_a_kind_of(ActiveRecord::Base) }
+    specify { expect(resource_key).to be_truthy.and be_a_kind_of(String) }
+
+    context 'with :valid_params' do
+      let(:valid_update_params) { params.dup.merge({ resource_key => valid_update_attributes, id: resource.to_param }) }
+
+      it 'renders a 200 JSON response with the new resource' do
+        VCR.use_cassette("controllers/#{resource_key}_update", record: :new_episodes) do
+          put :update, params: valid_update_params, session: valid_session
+        end
+
+        expect(response).to have_http_status(:ok)
+        expect(response.content_type).to eq(expected_content_type)
+        expect(json_response).to be_a_kind_of(Hash).and have_key(resource_key)
+        expect(json_response[resource_key]).to be_a_kind_of(Hash)
+        expect(json_response[resource_key]).not_to be_empty
+      end
+    end
+
+    context 'with :invalid_params' do
+      let(:invalid_update_params) { params.dup.merge({ resource_key => invalid_update_attributes, id: resource.to_param }) }
+
+      it 'returns a 422 JSON response with array of errors' do
+        VCR.use_cassette("controllers/#{resource_key}_invalid_create") do
+          post :create, params: invalid_update_params, session: valid_session
+        end
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.content_type).to eq(expected_content_type)
+        expect(json_response).to be_a_kind_of(Hash).and have_key('errors')
+        expect(json_response['errors'][0]).to include('status' => 422, 'title' => a_kind_of(String), 'detail' => a_kind_of(String), 'source' => a_hash_including('pointer'))
+      end
+    end
+  end
+end
 
 RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true, resource_key: nil|
   routes { Curator::Engine.routes }
@@ -119,9 +159,10 @@ RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true, reso
           expect(json_response[resource_key]).to be_a_kind_of(Hash)
         end
       end
+
       context 'with :invalid_params' do
         let(:invalid_create_params) { params.dup.merge({ resource_key => invalid_attributes }) }
-        it 'returns a 422 JSON with array of errors' do
+        it 'returns a 422 JSON response with array of errors' do
           VCR.use_cassette("controllers/#{resource_key}_invalid_create") do
             post :create, params: invalid_create_params, session: valid_session
           end
@@ -136,7 +177,7 @@ RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true, reso
 end
 
 
-RSpec.shared_examples "shared_formats", type: :controller do |include_ark_context: false, has_collection_methods: true, has_member_methods: true, skip_post: true, resource_key: nil|
+RSpec.shared_examples "shared_formats", type: :controller do |include_ark_context: false, has_collection_methods: true, has_member_methods: true, skip_put_patch: true, skip_post: true, resource_key: nil|
   specify { expect(base_params).to be_truthy.and be_a_kind_of(Hash) }
   specify { expect(resource).to be_truthy.and be_a_kind_of(ActiveRecord::Base) }
 
@@ -149,6 +190,8 @@ RSpec.shared_examples "shared_formats", type: :controller do |include_ark_contex
     include_examples 'shared_get', include_ark_context: include_ark_context, has_collection_methods: has_collection_methods, has_member_methods: has_member_methods, resource_key: resource_key
 
     include_examples 'shared_post', skip_post: skip_post, resource_key: resource_key
+
+    include_examples 'shared_put_patch', skip_put_patch: skip_put_patch, resource_key: resource_key
   end
 
   # context 'XML' do

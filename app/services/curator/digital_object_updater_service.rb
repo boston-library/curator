@@ -7,7 +7,7 @@ module Curator
 
     def call
       exemplary_file_set_ark_id = @json_attrs.dig('exemplary_file_set', 'ark_id')
-      collection_members_attrs =  @json_attrs.fetch('collection_members', []).map(&:with_indifferent_access).delete_if { |cm| [:id, :ark_id].all? {|key| cm[key].blank? } }
+      collection_members_attrs =  @json_attrs.fetch('collection_members', []).map(&:with_indifferent_access).delete_if { |cm| [:id, :ark_id].all? { |key| cm[key].blank? } }
       with_transaction do
         create_or_replace_exemplary!(exemplary_file_set_ark_id)
         create_or_update_collection_members!(collection_members_attrs)
@@ -35,18 +35,17 @@ module Curator
       return if members_to_remove.blank?
 
       # NOTE: Dont remove the collection member if it belongs to the #admin_set collection for the #admin_set
-      if @record.collection_members.can_remove.find(members_to_remove.uniq)
-        @record.collection_members.can_remove.where(id: members_to_remove.uniq).destroy_all
-      end
+
+      @record.collection_members.can_remove.where(id: members_to_remove.uniq).destroy_all if @record.collection_members.can_remove.find(members_to_remove.uniq)
     end
 
     def add_collection_members(members_to_add = [])
       return if members_to_add.blank?
 
-      if can_add_members_scope.find_by!(ark_id: members_to_add.uniq)
-        can_add_members_scope.where(ark_id: members_to_add.uniq).find_each do |collection|
-          @record.collection_members.build(collection: collection)
-        end
+      return unless can_add_members_scope.find_by!(ark_id: members_to_add.uniq)
+
+      can_add_members_scope.where(ark_id: members_to_add.uniq).find_each do |collection|
+        @record.collection_members.build(collection: collection)
       end
     end
 

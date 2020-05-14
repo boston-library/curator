@@ -15,45 +15,23 @@ RSpec.describe Curator::CollectionsController, type: :controller do
     })
   end
 
+  let!(:valid_update_attributes) do
+    digital_object = create(:curator_digital_object, admin_set: resource)
+    image_file = create(:curator_filestreams_image, file_set_of: digital_object)
+    attributes = {}
+    attributes[:abstract] = resource.abstract
+    attributes[:exemplary_file_set] = { ark_id: image_file.ark_id }
+    attributes
+  end
+
+
   let(:valid_session) { {} }
   let(:base_params) { {} }
   let(:invalid_attributes) { valid_attributes.dup.update(name: nil) }
+  let(:invalid_update_attributes) { valid_update_attributes.dup.update(abstract: nil) }
   let(:resource_class) { Curator::Collection }
   let(:serializer_class) { Curator::CollectionSerializer }
 
 
-  include_examples 'shared_formats', include_ark_context: true, skip_post: false, resource_key: 'collection'
-
-  skip "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested collection" do
-        collection = Curator::Collection.create! valid_attributes
-        put :update, params: { id: collection.to_param, collection: new_attributes }, session: valid_session
-        collection.reload
-        skip("Add assertions for updated state")
-      end
-
-      it "renders a JSON response with the collection" do
-        collection = Curator::Collection.create! valid_attributes
-
-        put :update, params: { id: collection.to_param, collection: valid_attributes }, session: valid_session
-        expect(response).to have_http_status(:ok)
-        expect(response.content_type).to eq('application/json')
-      end
-    end
-
-    skip "with invalid params" do
-      it "renders a JSON response with errors for the collection" do
-        collection = Curator::Collection.create! valid_attributes
-
-        put :update, params: { id: collection.to_param, collection: invalid_attributes }, session: valid_session
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq('application/json')
-      end
-    end
-  end
+  include_examples 'shared_formats', include_ark_context: true, skip_put_patch: false, skip_post: false, resource_key: 'collection'
 end

@@ -31,7 +31,6 @@ module Curator
             administrative.destination_site = destination_site if destination_site
           end
         end
-
       end
       return @success, @result
     end

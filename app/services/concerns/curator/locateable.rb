@@ -11,7 +11,7 @@ module Curator
         nomenclature_class: Curator.controlled_terms.geographic_class,
         term_data: json_attrs.except(:authority_code),
         authority_code: json_attrs.fetch(:authority_code, nil)
-      )  
+      )
     end
   end
 end

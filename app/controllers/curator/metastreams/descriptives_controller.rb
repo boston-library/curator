@@ -44,7 +44,7 @@ module Curator
                                             :text_direction,
                                             :toc,
                                             :toc_url
-                                          )
+                                           )
       else
         params
       end
