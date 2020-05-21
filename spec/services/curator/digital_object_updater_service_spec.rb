@@ -32,7 +32,6 @@ RSpec.describe Curator::DigitalObjectUpdaterService, type: :service do
       specify { expect(subject.ark_id).to eq(@digital_object.ark_id) }
 
       it 'expects the #collection_members to have been updated' do
-        awesome_print subject
         expect(subject.collection_members.count).to eq(2)
         expect(subject.collection_members.pluck(:collection_id)).not_to include(@remove_collection.id)
         expect(subject.collection_members.pluck(:collection_id)).to include(@digital_object.admin_set_id, @add_collection.id)

@@ -153,6 +153,7 @@ RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true, reso
           VCR.use_cassette("controllers/#{resource_key}_create") do
             post :create, params: valid_create_params, session: valid_session
           end
+          awesome_print json_response
           expect(response).to have_http_status(:created)
           expect(response.content_type).to eq(expected_content_type)
           expect(json_response).to be_a_kind_of(Hash).and have_key(resource_key)
