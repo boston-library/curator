@@ -3,7 +3,7 @@
 module Curator
   class InstitutionFactoryService < Services::Base
     include Services::FactoryService
-    include Locateable
+    include ControlledTerms::Locateable
 
     def call
       location_json_attrs = @json_attrs.fetch('location', {}).with_indifferent_access

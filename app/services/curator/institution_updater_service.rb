@@ -5,7 +5,7 @@ module Curator
     SIMPLE_ATTRIBUTES_LIST = %i(abstract url).freeze
 
     include Services::UpdaterService
-    include Locateable
+    include ControlledTerms::Locateable
 
     def call
       location_json_attrs = @json_attrs.fetch('location', {}).with_indifferent_access

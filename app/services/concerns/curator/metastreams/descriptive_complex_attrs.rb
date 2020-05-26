@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Curator
-  module DescriptiveComplexAttrs
+  module Metastreams::DescriptiveComplexAttrs
     extend ActiveSupport::Concern
 
     included do

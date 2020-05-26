@@ -3,8 +3,9 @@
 module Curator
   class DigitalObjectFactoryService < Services::Base
     include Services::FactoryService
-    include DescriptiveComplexAttrs
-
+    include Metastreams::DescriptiveComplexAttrs
+    include Mappings::TermMappable
+    include Mappings::NameRolable
     # TODO: set relationships for contained_by values
     def call
       with_transaction do
@@ -54,6 +55,8 @@ module Curator
               @desc_json_attrs.fetch(map_type, []).each do |map_attrs|
                 mapped_term = term_for_mapping(map_attrs,
                                                nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
+                next if descriptive.desc_terms.exists?(mapped_term: mapped_term)
+
                 descriptive.desc_terms.build(mapped_term: mapped_term)
               end
             end
@@ -62,29 +65,27 @@ module Curator
 
               host_col = find_or_create_host_collection(host_col,
                                                         admin_set.institution)
+
+              next if descriptive.desc_host_collections.exists?(host_collection: host_col)
+
               descriptive.desc_host_collections.build(host_collection: host_col)
             end
-            @desc_json_attrs.fetch(:subject, {}).each do |k, v|
-              map_type = case k.to_s
-                         when 'topics'
-                           :subject
-                         when 'names'
-                           :name
-                         when 'geos'
-                           :geographic
-                         end
 
-              next if map_type.blank?
+            subject_mapped_terms = terms_for_subject(@desc_json_attrs.fetch(:subject, {}))
 
-              v.each do |map_attrs|
-                mapped_term = term_for_mapping(map_attrs,
-                                               nomenclature_class: Curator.controlled_terms.public_send("#{map_type}_class"))
-                descriptive.desc_terms.build(mapped_term: mapped_term)
-              end
+            subject_mapped_terms.each do |mapped_term|
+              next if descriptive.desc_terms.exists?(mapped_term: mapped_term)
+
+              descriptive.desc_terms.build(mapped_term: mapped_term)
             end
 
-            @desc_json_attrs.fetch(:name_roles, []).each do |name_role_attrs|
-              name_role_attrs = name_role(name_role_attrs.fetch(:name), name_role_attrs.fetch(:role))
+            mapped_name_roles = @desc_json_attrs.fetch(:name_roles, []).map do |name_role_attrs|
+              name_role(name_role_attrs.fetch(:name), name_role_attrs.fetch(:role))
+            end
+
+            mapped_name_roles.each do |name_role_attrs|
+              next if descriptive.name_roles.exists?(name_role_attrs)
+
               descriptive.name_roles.build(name_role_attrs)
             end
           end
@@ -94,31 +95,6 @@ module Curator
     end
 
     private
-
-    def term_for_mapping(json_attrs = {}, nomenclature_class:)
-      authority_code = json_attrs.fetch(:authority_code, nil)
-      term_data = json_attrs.except(:authority_code)
-      find_or_create_nomenclature(
-        nomenclature_class: nomenclature_class,
-        term_data: term_data,
-        authority_code: authority_code
-      )
-    end
-
-    def name_role(name_attrs = {}, role_attrs = {})
-      {
-        name: find_or_create_nomenclature(
-          nomenclature_class: Curator.controlled_terms.name_class,
-          term_data: name_attrs.except(:authority_code),
-          authority_code: name_attrs.fetch(:authority_code, nil)
-        ),
-        role: find_or_create_nomenclature(
-          nomenclature_class: Curator.controlled_terms.role_class,
-          term_data: role_attrs.except(:authority_code),
-          authority_code: role_attrs.fetch(:authority_code, nil)
-        )
-      }
-    end
 
     def find_or_build_collection_members!(digital_object, admin_set_ark_id, collection_ark_ids = [])
       return if collection_ark_ids.blank?

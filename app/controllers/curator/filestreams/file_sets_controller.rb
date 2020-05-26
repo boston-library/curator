@@ -23,8 +23,11 @@ module Curator
     end
 
     def update
-      @curator_resource.touch
-      json_response(serialized_resource(@curator_resource))
+      success, result = Curator::Filestreams::FileSetUpdaterService.call(@curator_resource, json_data: file_set_params)
+
+      raise_failure(result) unless success
+
+      json_response(serialized_resource(result), :ok)
     end
 
     private
@@ -35,13 +38,15 @@ module Curator
         params.require(:file_set).permit(:ark_id, :created_at, :updated_at,
                                          :file_set_type, :file_name_base, :position,
                                          file_set_of: [:ark_id],
-                                          exemplary_image_of: [:ark_id],
+                                          exemplary_image_of: [:ark_id, :_destroy],
                                           pagination: [:page_label, :page_type, :hand_side],
                                           metastreams: {
                                             administrative: [:description_standard, :hosting_status, :harvestable, :flagged, destination_site: [], access_edit_group: []],
                                              workflow: [:ingest_origin, :publishing_state, :processing_state]
                                           },
                                           files: [])
+      when 'update'
+        params.require(:file_set).permit(:position, pagination: [:page_label, :page_type, :hand_side], exemplary_image_of: [:ark_id])
       else
         params
       end

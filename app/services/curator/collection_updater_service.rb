@@ -5,7 +5,7 @@ module Curator
     SIMPLE_ATTRIBUTES_LIST = %i(abstract).freeze
 
     include Services::UpdaterService
-    include CreateOrReplaceExemplary
+    include Mappings::CreateOrReplaceExemplary
 
     def call
       exemplary_file_set_ark_id = @json_attrs.dig('exemplary_file_set', 'ark_id')

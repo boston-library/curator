@@ -15,11 +15,22 @@ RSpec.describe Curator::DigitalObjectsController, type: :controller do
         is_member_of_collection: [{ ark_id: parent.ark_id }],
         metastreams: relation_attributes.dup.delete('metastreams')
       })
-    end
+  end
+
+  let!(:valid_update_attributes) do
+    admin_set = create(:curator_collection)
+    digital_object = create(:digital_object, admin_set: admin_set)
+    exemplary_image = create_list(:image_file_set, file_set_of: digital_object)
+
+    attributes = {}
+    attributes[]
+
+  end
 
   let(:valid_session) { {} }
   let(:base_params) { {} }
   let(:invalid_attributes) { valid_attributes.dup.update(admin_set: {}) }
+  let(:invalid_update_attributes) { valid_attributes.dup.update(admin_set: {}) }
   let(:resource_class) { Curator::DigitalObject }
   let(:serializer_class) { Curator::DigitalObjectSerializer }
 
