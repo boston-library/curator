@@ -20,6 +20,7 @@ module Curator
         @record.exemplary_image_mapping.exemplary_file_set = exemplary_file_set
       rescue ActiveRecord::RecordNotFound => e
         @record.errors.add(:exemplary_file_set, e.message)
+        raise ActiveRecord::RecordInvalid, @record
       end
     end
   end

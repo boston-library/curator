@@ -57,6 +57,9 @@ module Curator
 
         @record.license = license_from_json if license_from_json  && @record.license_id != license_from_json.id
 
+        term_mappings_update!
+        subject_update!
+
         @record.save!
       end
 
@@ -120,14 +123,21 @@ module Curator
       return if subject_terms.blank?
 
       subject_terms.each do |subject_term|
-        next if @record.desc_terms.exists?(mapped_term: mapped_term)
+        next if @record.desc_terms.exists?(mapped_term: subject_term)
 
-        @record.desc_terms.build(mapped_term: mapped_term)
+        @record.desc_terms.build(mapped_term: subject_term)
       end
     end
 
     def remove_subject_terms!(subject_terms = [])
       return if subject_terms.blank?
+
+      subject_terms.each do |subject_term|
+
+        next if !@record.desc_terms.exists?(mapped_term: subject_term)
+
+        @record.desc_terms.where(mapped_term: mapped_term).destroy_all
+      end
     end
 
     def add_mapped_terms!(mapped_terms = [])

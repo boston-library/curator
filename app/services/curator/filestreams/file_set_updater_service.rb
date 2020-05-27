@@ -15,7 +15,7 @@ module Curator
           @record.public_send("#{simple_attr}=", @json_attrs.fetch(simple_attr))
         end
         update_pagination!(pagination_attrs)
-
+        update_exemplary_image_of!(exemplary_image_of_attrs) if has_exemplary_image_of?
         @record.save!
       end
 
@@ -24,9 +24,23 @@ module Curator
 
     protected
 
+    def has_exemplary_image_of?
+      Curator::Mappings::ExemplaryImage::VALID_EXEMPLARY_FILE_SET_TYPES.include?(@record.class.name.demodulize)
+    end
+
     def update_exemplary_image_of!(exemplary_image_of_attrs = [])
       return if exemplary_image_of_attrs.blank?
 
+      should_remove_exemplary = ->(ex_img_attrs) { ex_img_attrs[:_destroy].present? && ex_img_attrs[:_destroy] == '1' }
+      should_add_exemplary = ->(ex_img_attrs) { !should_remove_exemplary.call(ex_img_attrs) }
+
+      exemplaries_to_add = exemplary_image_of_attrs.select(&should_add_exemplary).pluck('ark_id')
+      exemplaries_to_remove = exemplary_image_of_attrs.select(&should_remove_exemplary).pluck('ark_id')
+
+      return if exemplaries_to_add.blank? && exemplaries_to_remove.blank?
+
+      add_exemplary_image_of!(exemplaries_to_add)
+      remove_exemplary_image_of(exemplaries_to_remove)
     end
 
     def update_pagination!(pagination_attrs = {})
@@ -39,14 +53,31 @@ module Curator
 
     private
 
-    def add_exemplary_image_of!(exemplary_image_of_ark_ids = [])
-      return if exemplary_image_of_ark_ids.blank?
+    def add_exemplary_image_of!(exemplary_object_ark_ids = [])
+      return if exemplary_object_ark_ids.blank?
 
+      exemplary_image_of_ark_ids.each do |ex_obj_ark_id|
+        ex_obj = Curator.digital_object_class.find_by(ark_id: ex_obj_ark_id) ||
+                 Curator.collection_class.find_by!(ark_id: ex_obj_ark_id)
+
+        @record.exemplary_image_of_mappings.build(exemplary_object: ex_obj)
+      end
+    rescue ActiveRecord::RecordNotFound => e
+      @record.errors.add(:exemplary_image_of_mappings, "#{e.message} with ark_id=#{admin_set_ark_id}")
+      raise ActiveRecord::RecordInvalid, @record
     end
 
-    def remove_exemplary_image_of!(exemplary_image_of_ark_ids = [])
-      return if exemplary_image_of_ark_ids.blank?
-      
+    def remove_exemplary_image_of!(exemplary_object_ark_ids = [])
+      return if exemplary_object_ark_ids.blank?
+
+      exemplary_image_of_ark_ids.each do |exemplary_obj_ark_id|
+        ex_obj = Curator.digital_object_class.find_by(ark_id: ex_obj_ark_id) ||
+                 Curator.collection_class.find_by!(ark_id: ex_obj_ark_id)
+        @record.exemplary_image_of_mappings.where(exemplary_object: ex_obj).destroy_all
+      end
+    rescue ActiveRecord::RecordNotFound => e
+      @record.errors.add(:exemplary_image_of_mappings, "#{e.message} with ark_id=#{admin_set_ark_id}")
+      raise ActiveRecord::RecordInvalid, @record
     end
   end
 end

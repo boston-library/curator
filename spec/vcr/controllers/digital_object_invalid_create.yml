@@ -1,0 +1,167 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/geonames/4942742
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - '30'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"23c0222291b5937590682a584052bb6f"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - eec94b5f-c8bb-4fb0-865f-b019f2589fae
+      X-Runtime:
+      - '1.658001'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"41.33845","longitude":"-70.72669","combined":"41.33845,-70.72669","box":{}},"hier_geo":{"area":"Earth","cont":"North
+        America","pcli":"United States","adm1":"Massachusetts","adm2":"Dukes County","adm3":"Town
+        of Chilmark","bch":"Lucy Vincent Beach"}}'
+    http_version: null
+  recorded_at: Wed, 27 May 2020 20:30:38 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/tgn/2362636
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - '30'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"f9836fb9c94d119272fed2726ba18ad6"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 25c252b1-06c1-4a2e-9b76-136b62620833
+      X-Runtime:
+      - '1.116763'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"43.7333","longitude":"-70.1167","combined":"43.7333,-70.1167"},"hier_geo":{"island":"Great
+        Chebeague Island","continent":"North and Central America","county":"Cumberland","country":"United
+        States","state":"Maine"}}'
+    http_version: null
+  recorded_at: Wed, 27 May 2020 20:30:39 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/tgn/2120926
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - '30'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"fd77e23b4555c7045798e21df4331e8d"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 16253769-29a9-47ed-9024-e0bae172d350
+      X-Runtime:
+      - '0.809298'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"44.9333","longitude":"-91.3833","combined":"44.9333,-91.3833"},"hier_geo":{"city":"Chippewa
+        Falls","continent":"North and Central America","county":"Chippewa","country":"United
+        States","state":"Wisconsin"}}'
+    http_version: null
+  recorded_at: Wed, 27 May 2020 20:30:40 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/tgn/1004027
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - '30'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"461a1cfe0d2c73952d6af55b76a37c47"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - ae9ff219-44d5-4fe6-ae9a-9e7a8e716144
+      X-Runtime:
+      - '0.282338'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"42.35","longitude":"-71.0833","combined":"42.35,-71.0833"},"hier_geo":{"city_section":"Back
+        Bay","city":"Boston","continent":"North and Central America","county":"Suffolk","country":"United
+        States","state":"Massachusetts"}}'
+    http_version: null
+  recorded_at: Wed, 27 May 2020 20:30:40 GMT
+recorded_with: VCR 5.1.0

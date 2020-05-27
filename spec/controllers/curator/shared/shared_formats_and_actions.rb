@@ -94,13 +94,16 @@ RSpec.shared_examples 'shared_put_patch', type: :controller do |skip_put_patch: 
     specify { expect(resource_key).to be_truthy.and be_a_kind_of(String) }
 
     context 'with :valid_params' do
-      let(:valid_update_params) { params.dup.merge({ resource_key => valid_update_attributes, id: resource.to_param }) }
+      let(:valid_update_params) do
+        merged_params = params.dup.merge({ resource_key => valid_update_attributes })
+        merged_params[:id] ||= resource.to_param
+        merged_params
+      end
 
       it 'renders a 200 JSON response with the new resource' do
         VCR.use_cassette("controllers/#{resource_key}_update", record: :new_episodes) do
           put :update, params: valid_update_params, session: valid_session
         end
-
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq(expected_content_type)
         expect(json_response).to be_a_kind_of(Hash).and have_key(resource_key)
@@ -110,12 +113,17 @@ RSpec.shared_examples 'shared_put_patch', type: :controller do |skip_put_patch: 
     end
 
     context 'with :invalid_params' do
-      let(:invalid_update_params) { params.dup.merge({ resource_key => invalid_update_attributes, id: resource.to_param }) }
+      let(:invalid_update_params) do
+        merged_params = params.dup.merge({ resource_key => invalid_update_attributes })
+        merged_params[:id] ||= resource.to_param
+        merged_params
+      end
 
       it 'returns a 422 JSON response with array of errors' do
         VCR.use_cassette("controllers/#{resource_key}_invalid_create") do
-          post :create, params: invalid_update_params, session: valid_session
+          put :update, params: invalid_update_params, session: valid_session
         end
+        awesome_print json_response
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq(expected_content_type)
         expect(json_response).to be_a_kind_of(Hash).and have_key('errors')
@@ -153,7 +161,6 @@ RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true, reso
           VCR.use_cassette("controllers/#{resource_key}_create") do
             post :create, params: valid_create_params, session: valid_session
           end
-          awesome_print json_response
           expect(response).to have_http_status(:created)
           expect(response.content_type).to eq(expected_content_type)
           expect(json_response).to be_a_kind_of(Hash).and have_key(resource_key)

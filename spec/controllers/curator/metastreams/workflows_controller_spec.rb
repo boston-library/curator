@@ -4,16 +4,6 @@ require 'rails_helper'
 require_relative '../shared/shared_formats_and_actions'
 
 RSpec.describe Curator::Metastreams::WorkflowsController, type: :controller do
-  # let(:valid_session) { {} }
-  #
-  # let(:valid_attributes) {
-  #   skip("Add a hash of attributes valid for your model")
-  # }
-  #
-  # let(:invalid_attributes) {
-  #   skip("Add a hash of attributes invalid for your model")
-  # }
-
   let!(:serializer_class) { Curator::Metastreams::WorkflowSerializer }
 
   ['Institution', 'Collection', 'DigitalObject'].each do |metastreamable_type|
@@ -28,7 +18,15 @@ RSpec.describe Curator::Metastreams::WorkflowsController, type: :controller do
         }
       end
 
-      include_examples 'shared_formats', include_ark_context: true, has_collection_methods: false, resource_key: 'workflow'
+      let!(:valid_update_attributes) do
+        {
+          publishing_state: 'published'
+        }
+      end
+
+      let(:invalid_update_attributes) { valid_update_attributes.dup.update(publishing_state: 'FOO') }
+
+      include_examples 'shared_formats', include_ark_context: true, skip_put_patch: false, has_collection_methods: false, resource_key: 'workflow'
     end
   end
 
@@ -48,7 +46,15 @@ RSpec.describe Curator::Metastreams::WorkflowsController, type: :controller do
           }
         end
 
-        include_examples 'shared_formats', include_ark_context: true, has_collection_methods: false, resource_key: 'workflow'
+        let!(:valid_update_attributes) do
+          {
+            publishing_state: 'published'
+          }
+        end
+
+        let(:invalid_update_attributes) { valid_update_attributes.dup.update(publishing_state: 'FOO') }
+
+        include_examples 'shared_formats', include_ark_context: true, skip_put_patch: false, has_collection_methods: false, resource_key: 'workflow'
       end
     end
   end

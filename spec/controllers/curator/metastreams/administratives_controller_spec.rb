@@ -4,16 +4,6 @@ require 'rails_helper'
 require_relative '../shared/shared_formats_and_actions'
 
 RSpec.describe Curator::Metastreams::AdministrativesController, type: :controller do
-  # let(:valid_session) { {} }
-  #
-  # let(:valid_attributes) {
-  #   skip("Add a hash of attributes valid for your model")
-  # }
-  #
-  # let(:invalid_attributes) {
-  #   skip("Add a hash of attributes invalid for your model")
-  # }
-
   let!(:serializer_class) { Curator::Metastreams::AdministrativeSerializer }
 
   ['Institution', 'Collection', 'DigitalObject'].each do |metastreamable_type|
@@ -28,7 +18,21 @@ RSpec.describe Curator::Metastreams::AdministrativesController, type: :controlle
         }
       end
 
-      include_examples 'shared_formats', include_ark_context: true, has_collection_methods: false, resource_key: 'administrative'
+      let!(:valid_update_attributes) do
+        attributes = {}
+        attributes[:destination_site] = ['bpl', 'commonwealth']
+        case metastreamable_type.downcase
+        when 'collection'
+          attributes[:harvestable] = false
+        when 'digital_object'
+          attributes[:description_standard] = 'cco'
+          attributes[:flagged] = true
+          attributes[:harvestable] = true
+        end
+        attributes
+      end
+      let(:invalid_update_attributes) { valid_update_params.dup.update(description_standard: 'BAR') }
+      include_examples 'shared_formats', include_ark_context: true, skip_put_patch: metastreamable_type.underscore != 'descriptive', has_collection_methods: false, resource_key: 'administrative'
     end
   end
 

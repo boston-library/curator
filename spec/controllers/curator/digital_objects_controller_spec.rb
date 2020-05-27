@@ -18,21 +18,27 @@ RSpec.describe Curator::DigitalObjectsController, type: :controller do
   end
 
   let!(:valid_update_attributes) do
-    admin_set = create(:curator_collection)
-    digital_object = create(:digital_object, admin_set: admin_set)
-    exemplary_image = create_list(:image_file_set, file_set_of: digital_object)
-
     attributes = {}
-    attributes[]
+    member_to_add = create(:curator_collection, institution: resource.institution)
+    member_to_remove = create(:curator_collection, institution: resource.institution)
+    exemplary_image = create(:curator_filestreams_image, file_set_of: resource)
 
+    create(:curator_mappings_collection_member, digital_object: resource, collection: member_to_remove)
+
+    attributes.merge!({
+        is_member_of_collection: [{ ark_id: member_to_add.ark_id }, { ark_id: member_to_remove.ark_id, _destroy: '1' } ],
+        exemplary_file_set: {
+          ark_id: exemplary_image.ark_id
+        }
+    })
   end
 
   let(:valid_session) { {} }
   let(:base_params) { {} }
   let(:invalid_attributes) { valid_attributes.dup.update(admin_set: {}) }
-  let(:invalid_update_attributes) { valid_attributes.dup.update(admin_set: {}) }
+  let(:invalid_update_attributes) { valid_update_attributes.dup.update(is_member_of_collection: [{ ark_id: resource.admin_set.ark_id, _destroy: '1' }]) }
   let(:resource_class) { Curator::DigitalObject }
   let(:serializer_class) { Curator::DigitalObjectSerializer }
 
-  include_examples 'shared_formats', include_ark_context: true, skip_post: false, resource_key: 'digital_object'
+  include_examples 'shared_formats', include_ark_context: true, skip_put_patch: false, skip_post: false, resource_key: 'digital_object'
 end

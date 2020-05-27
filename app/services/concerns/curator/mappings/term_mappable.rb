@@ -30,7 +30,7 @@ module Curator
           next if map_type.blank?
 
           terms += v.map do |map_attrs|
-                    term_for_mapping(map_attrs,
+                    term_for_mapping(map_attrs.except(:_destroy),
                                      nomenclature_class: Curator.controlled_terms.public_send("#{map_type}_class"))
           end
         end
@@ -42,7 +42,7 @@ module Curator
 
       def term_for_mapping(json_attrs = {}, nomenclature_class:)
         authority_code = json_attrs.fetch(:authority_code, nil)
-        term_data = json_attrs.except(:authority_code)
+        term_data = json_attrs.except(:authority_code, :_destroy)
         find_or_create_nomenclature(
           nomenclature_class: nomenclature_class,
           term_data: term_data,
