@@ -17,7 +17,18 @@ RSpec.describe Curator::Filestreams::FileSetUpdaterService, type: :service do
 
     }
     VCR.use_cassette('services/filestreams/file_set/update', record: :new_episodes) do
-      @success, @result = described_class.call(@collection, json_data: @update_attributes)
+      @success, @result = described_class.call(@file_set, json_data: @update_attributes)
+    end
+  end
+
+  describe '#call' do
+    specify { expect(@success).to be_truthy }
+
+    describe ':result' do
+      subject { @result }
+
+      specify { expect(subject).to be_valid }
+      specify { expect(subject.ark_id).to eq(@file_set.ark_id) }
     end
   end
 end

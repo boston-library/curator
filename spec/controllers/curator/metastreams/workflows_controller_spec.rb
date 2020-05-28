@@ -5,6 +5,7 @@ require_relative '../shared/shared_formats_and_actions'
 
 RSpec.describe Curator::Metastreams::WorkflowsController, type: :controller do
   let!(:serializer_class) { Curator::Metastreams::WorkflowSerializer }
+  let!(:valid_session) { {} }
 
   ['Institution', 'Collection', 'DigitalObject'].each do |metastreamable_type|
     context "with :metastreamable_type as #{metastreamable_type}" do

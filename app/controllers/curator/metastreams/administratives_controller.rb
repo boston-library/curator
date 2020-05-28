@@ -28,13 +28,13 @@ module Curator
     def administrative_params
       case params[:action]
       when 'update'
-        case resource_class&.name&.demodulize&.downcase
+        case resource_class&.name&.demodulize&.underscore
         when 'institution'
-          params.require(:administrative).permit(:destination_site, access_edit_group: [])
+          params.require(:administrative).permit(destination_site: [], access_edit_group: [])
         when 'collection'
-          params.require(:administrative).permit(:destination_site, :harvestable, access_edit_group: [])
+          params.require(:administrative).permit(:harvestable, destination_site: [], access_edit_group: [])
         when 'digital_object'
-          params.require(:administrative).permit(:destination_site, :description_standard, :flagged, :harvestable, access_edit_group: [])
+          params.require(:administrative).permit(:description_standard, :flagged, :harvestable, destination_site: [], access_edit_group: [])
         when 'audio', 'document', 'ereader', 'image', 'metadata', 'text', 'video'
           params.require(:administrative).permit(access_edit_group: [])
         else
