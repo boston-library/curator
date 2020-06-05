@@ -69,7 +69,7 @@ module Curator
     protected
 
     def term_mappings_update!
-      needs_removal = proc { |term_attr| term_attr.key?(:_destroy) && term_attr[:_destroy] == '1' }
+      needs_removal = proc { |term_attrs| term_attrs.key?(:_destroy) && term_attrs[:_destroy] == '1' }
 
       TERM_MAPPINGS.each do |map_type|
 
@@ -82,9 +82,9 @@ module Curator
 
         next if terms_to_add.blank? && terms_to_remove.blank?
 
-        add_mapped_terms!(terms_to_add)
+        add_mapped_terms!(map_type, terms_to_add)
 
-        remove_mapped_terms!(terms_to_remove)
+        remove_mapped_terms!(map_type, terms_to_remove)
       end
     end
 
@@ -98,7 +98,7 @@ module Curator
       end.with_indifferent_access
 
       terms_to_remove = subject_terms.reduce({}) do |ret, (k,v)|
-        ret.merge(k => v.select { |term_attr| term_attrs.key?(:_destroy)  && term_attrs[:_destroy] == '1' })
+        ret.merge(k => v.select { |term_attrs| term_attrs.key?(:_destroy)  && term_attrs[:_destroy] == '1' })
       end.with_indifferent_access
 
       return if terms_to_add.blank? && terms_to_remove.blank?
@@ -140,10 +140,10 @@ module Curator
       end
     end
 
-    def add_mapped_terms!(mapped_terms = [])
+    def add_mapped_terms!(map_type, mapped_terms = [])
       return if mapped_terms.blank?
 
-      mapped_terms.each do |map_attr|
+      mapped_terms.each do |map_attrs|
 
         next if map_attrs.key?(:_destroy)
 
@@ -156,10 +156,10 @@ module Curator
       end
     end
 
-    def remove_mapped_terms!(mapped_terms = [])
+    def remove_mapped_terms!(map_type, mapped_terms = [])
       return if mapped_terms.blank?
 
-      mapped_terms.each do |map_attr|
+      mapped_terms.each do |map_attrs|
 
         next if !map_attrs.key?(:_destroy)
 

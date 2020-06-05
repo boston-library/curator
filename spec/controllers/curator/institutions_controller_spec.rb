@@ -39,7 +39,7 @@ RSpec.describe Curator::InstitutionsController, type: :controller do
   let(:valid_session) { {} }
   let(:base_params) { {} }
   let(:invalid_attributes) { valid_attributes.dup.update(name: nil) }
-  let(:invalid_update_attributes) { valid_update_attributes.dup.update(abstract: nil) }
+  let(:invalid_update_attributes) { valid_update_attributes.dup.update(url: 'xyz://foo.bar.org') }
   let(:resource_class) { Curator::Institution }
   let(:serializer_class) { Curator::InstitutionSerializer }
 

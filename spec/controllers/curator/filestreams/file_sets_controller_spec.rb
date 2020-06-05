@@ -23,17 +23,14 @@ RSpec.describe Curator::Filestreams::FileSetsController, type: :controller do
       end
 
       let!(:valid_update_attributes) do
-        collection = create(:curator_collection)
-        digital_object = create(:curator_digital_object, admin_set: collection)
-        file_set = create("curator_filestreams_#{file_set_type}", file_set_of: digital_object)
         if Curator::Mappings::ExemplaryImage::VALID_EXEMPLARY_FILE_SET_TYPES.include?(file_set_type.capitalize)
-          create(:curator_mappings_exemplary_image, exemplary_file_set: file_set, exemplary_object: digital_object)
+          create(:curator_mappings_exemplary_image, exemplary_file_set: resource, exemplary_object: parent_obj)
         end
         attributes = {}
         attributes[:position] = 2
-        attributes[:pagination] = { page_size: '3', page_type: 'TOC', hand_side: 'left' }
+        attributes[:pagination] = { page_label: '3', page_type: 'TOC', hand_side: 'left' }
         if Curator::Mappings::ExemplaryImage::VALID_EXEMPLARY_FILE_SET_TYPES.include?(file_set_type.capitalize)
-          attributes[:exemplary_image_of] = [{ ark_id: digital_object.ark_id, _destroy: '1' }, { ark_id: collection.ark_id }]
+          attributes[:exemplary_image_of] = [{ ark_id: parent_obj.ark_id, _destroy: '1' }, { ark_id: parent_col.ark_id }]
         end
         attributes
       end

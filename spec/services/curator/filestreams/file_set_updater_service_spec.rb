@@ -12,8 +12,8 @@ RSpec.describe Curator::Filestreams::FileSetUpdaterService, type: :service do
 
     @update_attributes ||= {
       position: 2,
-      pagination: { page_size: '4', page_type: 'TOC', hand_side: 'left' },
-      exemplary_image_of: [{ ark_id: @digital_object.ark_id }, { ark_id: @collection.ark_id, _destroy: 1 } ]
+      pagination: { page_label: '4', page_type: 'TOC', hand_side: 'left' },
+      exemplary_image_of: [{ ark_id: @digital_object.ark_id }, { ark_id: @collection.ark_id, _destroy: '1' } ]
 
     }
     VCR.use_cassette('services/filestreams/file_set/update', record: :new_episodes) do
@@ -29,6 +29,23 @@ RSpec.describe Curator::Filestreams::FileSetUpdaterService, type: :service do
 
       specify { expect(subject).to be_valid }
       specify { expect(subject.ark_id).to eq(@file_set.ark_id) }
+
+
+      it 'expects #position to have been updated' do
+        expect(subject.position).to eq(@update_attributes[:position])
+      end
+
+      it 'expects :pagination atrributes to have been updated' do
+        @update_attributes[:pagination].keys.each do |pagination_attr|
+          expect(subject.public_send(pagination_attr)).to eq(@update_attributes[:pagination][pagination_attr])
+        end
+      end
+
+      it 'expects the #exemplary_image_of_mappings to have been updated' do
+        expect(subject.exemplary_image_of_mappings.count).to eq(1)
+        expect(subject.exemplary_image_of.pluck('ark_id')).to include(@digtial_object.ark_id)
+        expect(subject.exemplary_image_of.pluck('ark_id')).not_to include(@collection.ark_id)
+      end
     end
   end
 end

@@ -12,7 +12,7 @@ RSpec.describe Curator::Metastreams::AdministrativeUpdaterService, type: :servic
       harvestable: true,
       destination_site: ['commonwealth', 'bpl']
     }
-    VCR.use_cassette('metastreams/administrative/update', record: :new_episodes) do
+    VCR.use_cassette('services/metastreams/administrative/update', record: :new_episodes) do
       @success, @result = described_class.call(@digital_object.administrative, json_data: @update_attributes)
     end
   end

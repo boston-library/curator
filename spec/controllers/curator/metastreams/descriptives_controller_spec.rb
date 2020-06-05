@@ -24,6 +24,11 @@ RSpec.describe Curator::Metastreams::DescriptivesController, type: :controller d
       id: parent_resource.to_param
     }
   end
+  let!(:valid_update_attributes) {
+    load_json_fixture('digital_object_2', 'digital_object').dig('metastreams', 'descriptive') || {}
+  }
+  let(:invalid_update_attributes) { valid_update_attributes.dup.update(toc_url: 'xyz://foo.bar.org') }
+
   context "with :metastreamable_type as DigitalObject" do
     include_examples 'shared_formats', include_ark_context: true, has_collection_methods: false, resource_key: 'descriptive'
   end

@@ -3,13 +3,13 @@
 module Curator
   class Filestreams::FileSetUpdaterService < Services::Base
     SIMPLE_ATTRIBUTES_LIST = %i(position).freeze
-    PAGINATION_ATTRIBUTES_LIST = %i(page_label page_type page_size).freeze
+    PAGINATION_ATTRIBUTES_LIST = %i(page_label page_type hand_side).freeze
 
     include Services::UpdaterService
 
     def call
-      exemplary_image_of_attrs = @json_attr.fetch(:exemplary_image_of, [])
-      pagination_attributes = @json_attr.fetch(:pagination, {})
+      exemplary_image_of_attrs = @json_attrs.fetch(:exemplary_image_of, [])
+      pagination_attrs = @json_attrs.fetch(:pagination, {})
       with_transaction do
         simple_attributes_update(SIMPLE_ATTRIBUTES_LIST) do |simple_attr|
           @record.public_send("#{simple_attr}=", @json_attrs.fetch(simple_attr))
@@ -40,11 +40,11 @@ module Curator
       return if exemplaries_to_add.blank? && exemplaries_to_remove.blank?
 
       add_exemplary_image_of!(exemplaries_to_add)
-      remove_exemplary_image_of(exemplaries_to_remove)
+      remove_exemplary_image_of!(exemplaries_to_remove)
     end
 
     def update_pagination!(pagination_attrs = {})
-      return if pagination_attr.empty?
+      return if pagination_attrs.empty?
 
       PAGINATION_ATTRIBUTES_LIST.each do |pagination_attr|
         @record.public_send("#{pagination_attr}=", pagination_attrs[pagination_attr]) if pagination_attrs[pagination_attr].present?
@@ -56,7 +56,7 @@ module Curator
     def add_exemplary_image_of!(exemplary_object_ark_ids = [])
       return if exemplary_object_ark_ids.blank?
 
-      exemplary_image_of_ark_ids.each do |ex_obj_ark_id|
+      exemplary_object_ark_ids.each do |ex_obj_ark_id|
         ex_obj = Curator.digital_object_class.find_by(ark_id: ex_obj_ark_id) ||
                  Curator.collection_class.find_by!(ark_id: ex_obj_ark_id)
 
@@ -70,7 +70,7 @@ module Curator
     def remove_exemplary_image_of!(exemplary_object_ark_ids = [])
       return if exemplary_object_ark_ids.blank?
 
-      exemplary_image_of_ark_ids.each do |exemplary_obj_ark_id|
+      exemplary_object_ark_ids.each do |ex_obj_ark_id|
         ex_obj = Curator.digital_object_class.find_by(ark_id: ex_obj_ark_id) ||
                  Curator.collection_class.find_by!(ark_id: ex_obj_ark_id)
         @record.exemplary_image_of_mappings.where(exemplary_object: ex_obj).destroy_all
