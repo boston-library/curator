@@ -25,18 +25,16 @@ module Curator
                                 toc
                                 toc_url
                                 resource_type_manuscript
-                                text_direction
-                              ).freeze
+                                text_direction).freeze
 
     JSON_ATTRS = %i(cartographic
-                  date
-                  identifier
-                  note
-                  publication
-                  related
-                  subject_other
-                  title
-               ).freeze
+                    date
+                    identifier
+                    note
+                    publication
+                    related
+                    subject_other
+                    title).freeze
 
     TERM_MAPPINGS = %w(genres resource_types languages).freeze
 
@@ -55,7 +53,7 @@ module Curator
 
         @record.physical_location = physical_location_from_json if physical_location_from_json && @record.physical_location_id != physical_location_from_json.id
 
-        @record.license = license_from_json if license_from_json  && @record.license_id != license_from_json.id
+        @record.license = license_from_json if license_from_json && @record.license_id != license_from_json.id
 
         term_mappings_update!
         subject_update!
@@ -72,7 +70,6 @@ module Curator
       needs_removal = proc { |term_attrs| term_attrs.key?(:_destroy) && term_attrs[:_destroy] == '1' }
 
       TERM_MAPPINGS.each do |map_type|
-
         mapped_terms = @json_attrs.fetch(map_type.to_s, [])
 
         next if mapped_terms.blank?
@@ -93,12 +90,12 @@ module Curator
 
       return if subject_terms.blank?
 
-      terms_to_add = subject_terms.reduce({}) do |ret, (k,v)|
-        ret.merge(k => v.select { |term_attrs| !term_attrs.key?(:_destroy) } )
+      terms_to_add = subject_terms.reduce({}) do |ret, (k, v)|
+        ret.merge(k => v.select { |term_attrs| !term_attrs.key?(:_destroy) })
       end.with_indifferent_access
 
-      terms_to_remove = subject_terms.reduce({}) do |ret, (k,v)|
-        ret.merge(k => v.select { |term_attrs| term_attrs.key?(:_destroy)  && term_attrs[:_destroy] == '1' })
+      terms_to_remove = subject_terms.reduce({}) do |ret, (k, v)|
+        ret.merge(k => v.select { |term_attrs| term_attrs.key?(:_destroy) && term_attrs[:_destroy] == '1' })
       end.with_indifferent_access
 
       return if terms_to_add.blank? && terms_to_remove.blank?
@@ -133,7 +130,6 @@ module Curator
       return if subject_terms.blank?
 
       subject_terms.each do |subject_term|
-
         next if !@record.desc_terms.exists?(mapped_term: subject_term)
 
         @record.desc_terms.where(mapped_term: mapped_term).destroy_all
@@ -144,7 +140,6 @@ module Curator
       return if mapped_terms.blank?
 
       mapped_terms.each do |map_attrs|
-
         next if map_attrs.key?(:_destroy)
 
         mapped_term = term_for_mapping(map_attrs,
@@ -160,7 +155,6 @@ module Curator
       return if mapped_terms.blank?
 
       mapped_terms.each do |map_attrs|
-
         next if !map_attrs.key?(:_destroy)
 
         mapped_term = term_for_mapping(map_attrs.except(:_destroy),

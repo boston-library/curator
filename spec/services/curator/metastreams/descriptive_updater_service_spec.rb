@@ -15,11 +15,11 @@ RSpec.describe Curator::Metastreams::DescriptiveUpdaterService, type: :service d
     specify { expect(@success).to be_truthy }
 
     describe ':result' do
+      subject { @result }
+
       let(:simple_attributes_list) { described_class.const_get(:SIMPLE_ATTRIBUTES_LIST) }
       let(:json_attributes_list) { described_class.const_get(:JSON_ATTRS) }
       let(:term_mappings_list) { described_class.const_get(:TERM_MAPPINGS) }
-
-      subject { @result }
 
       specify { expect(subject).to be_valid }
       specify { expect(subject.descriptable.ark_id).to eq(@digital_object.ark_id) }

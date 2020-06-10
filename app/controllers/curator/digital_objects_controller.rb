@@ -77,8 +77,7 @@ module Curator
                                                                related: [:constituent, referenced_by_url: [], references_url: [], other_format: [], review_url: []],
                                                                resource_types: [:label, :authority_code, :id_from_auth],
                                                                subject: [topics: [:label, :authority_code, :id_from_auth], names: [:label, :name_type, :authority_code, :id_from_auth, :affiliation], geos: [:label, :authority_code, :id_from_auth, :coordinates, :bounding_box, :area_type], titles: [:label, :id_from_auth, :subtitle, :authority_code, :display, :display_label, :usage, :supplied, :language, :type, :part_number, :part_name], temporals: [], dates: []],
-                                                               title: [primary: [:label, :id_from_auth, :authority_code, :subtitle, :display, :display_label, :usage, :supplied, :language, :type, :part_number, :part_name], other: [:label, :id_from_auth, :subtitle, :authority_code, :display, :display_label, :usage, :supplied, :language, :type, :part_number, :part_name]]
-                                                             ],
+                                                               title: [primary: [:label, :id_from_auth, :authority_code, :subtitle, :display, :display_label, :usage, :supplied, :language, :type, :part_number, :part_name], other: [:label, :id_from_auth, :subtitle, :authority_code, :display, :display_label, :usage, :supplied, :language, :type, :part_number, :part_name]]],
                                                                administrative: [:description_standard, :hosting_status, :harvestable, :flagged, destination_site: [], access_edit_group: []],
                                                                workflow: [:ingest_origin, :publishing_state, :processing_state]
                                                })

@@ -13,7 +13,7 @@ RSpec.describe Curator::Filestreams::FileSetUpdaterService, type: :service do
     @update_attributes ||= {
       position: 2,
       pagination: { page_label: '4', page_type: 'TOC', hand_side: 'left' },
-      exemplary_image_of: [{ ark_id: @digital_object.ark_id }, { ark_id: @collection.ark_id, _destroy: '1' } ]
+      exemplary_image_of: [{ ark_id: @digital_object.ark_id }, { ark_id: @collection.ark_id, _destroy: '1' }]
 
     }
     VCR.use_cassette('services/filestreams/file_set/update', record: :new_episodes) do
@@ -29,7 +29,6 @@ RSpec.describe Curator::Filestreams::FileSetUpdaterService, type: :service do
 
       specify { expect(subject).to be_valid }
       specify { expect(subject.ark_id).to eq(@file_set.ark_id) }
-
 
       it 'expects #position to have been updated' do
         expect(subject.position).to eq(@update_attributes[:position])

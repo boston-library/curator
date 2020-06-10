@@ -9,7 +9,6 @@ module Curator
     end
 
     module InstanceMethods
-
       protected
 
       def terms_for_subject(subject_attrs = {})
@@ -30,8 +29,8 @@ module Curator
           next if map_type.blank?
 
           terms += v.map do |map_attrs|
-                    term_for_mapping(map_attrs.except(:_destroy),
-                                     nomenclature_class: Curator.controlled_terms.public_send("#{map_type}_class"))
+            term_for_mapping(map_attrs.except(:_destroy),
+                             nomenclature_class: Curator.controlled_terms.public_send("#{map_type}_class"))
           end
         end
 
