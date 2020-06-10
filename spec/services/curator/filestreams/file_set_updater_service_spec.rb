@@ -43,7 +43,7 @@ RSpec.describe Curator::Filestreams::FileSetUpdaterService, type: :service do
 
       it 'expects the #exemplary_image_of_mappings to have been updated' do
         expect(subject.exemplary_image_of_mappings.count).to eq(1)
-        expect(subject.exemplary_image_of.pluck('ark_id')).to include(@digtial_object.ark_id)
+        expect(subject.exemplary_image_of.pluck('ark_id')).to include(@digital_object.ark_id)
         expect(subject.exemplary_image_of.pluck('ark_id')).not_to include(@collection.ark_id)
       end
     end

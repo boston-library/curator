@@ -14,6 +14,8 @@ RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: f
   describe 'GET' do
     describe "#index", if: has_collection_methods do
       it "return a serialized array of json objects" do
+        resource.reload
+
         get :index, params: params
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq(expected_content_type)
@@ -122,11 +124,10 @@ RSpec.shared_examples 'shared_put_patch', type: :controller do |skip_put_patch: 
       end
 
       it 'returns a 422 JSON response with array of errors' do
+        awesome_print invalid_update_params
         VCR.use_cassette("controllers/#{resource_key}_invalid_update", record: :new_episodes) do
           put :update, params: invalid_update_params, session: valid_session
         end
-
-        awesome_print json_response
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq(expected_content_type)
         expect(json_response).to be_a_kind_of(Hash).and have_key('errors')
@@ -164,6 +165,7 @@ RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true, reso
           VCR.use_cassette("controllers/#{resource_key}_create", record: :new_episodes) do
             post :create, params: valid_create_params, session: valid_session
           end
+          
           expect(response).to have_http_status(:created)
           expect(response.content_type).to eq(expected_content_type)
           expect(json_response).to be_a_kind_of(Hash).and have_key(resource_key)
@@ -188,15 +190,14 @@ RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true, reso
   end
 end
 
-
 RSpec.shared_examples "shared_formats", type: :controller do |include_ark_context: false, has_collection_methods: true, has_member_methods: true, skip_put_patch: true, skip_post: true, resource_key: nil|
   specify { expect(base_params).to be_truthy.and be_a_kind_of(Hash) }
   specify { expect(resource).to be_truthy.and be_a_kind_of(ActiveRecord::Base) }
 
   context 'JSON(Default)' do
     let!(:format) { :json }
-    let!(:serialized_hash) { serializer_class.new(resource, format).serializable_hash[resource_key].as_json }
-    let!(:params) { base_params.merge({ format: format }) }
+    let!(:params) { base_params.dup.merge({ format: format }) }
+    let(:serialized_hash) { serializer_class.new(resource, format).serializable_hash[resource_key].as_json }
     # NOTE: Have to add as_json so the dates match the serialized response
 
     include_examples 'shared_get', include_ark_context: include_ark_context, has_collection_methods: has_collection_methods, has_member_methods: has_member_methods, resource_key: resource_key

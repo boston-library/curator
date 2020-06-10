@@ -25,6 +25,8 @@ module Curator
     def update
       success, result = Curator::Filestreams::FileSetUpdaterService.call(@curator_resource, json_data: file_set_params)
 
+      Rails.logger.error result.inspect
+
       raise_failure(result) unless success
 
       json_response(serialized_resource(result), :ok)
