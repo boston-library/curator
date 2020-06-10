@@ -11,8 +11,6 @@ module Curator
           has_one :exemplary_image_mapping, -> { includes(:exemplary_file_set) }, as: :exemplary_object, inverse_of: :exemplary_object, class_name: 'Curator::Mappings::ExemplaryImage', dependent: :destroy, autosave: true
 
           # delegate :exemplary_file_set, to: :exemplary_image_mapping, allow_nil: true
-
-          # NOTE: no idea why this doesn't work will add a delegator instead seeing how that still works
           has_one :exemplary_file_set, through: :exemplary_image_mapping, source: :exemplary_file_set
         end
       end

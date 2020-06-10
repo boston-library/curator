@@ -124,7 +124,6 @@ RSpec.shared_examples 'shared_put_patch', type: :controller do |skip_put_patch: 
       end
 
       it 'returns a 422 JSON response with array of errors' do
-        awesome_print invalid_update_params
         VCR.use_cassette("controllers/#{resource_key}_invalid_update", record: :new_episodes) do
           put :update, params: invalid_update_params, session: valid_session
         end
@@ -165,7 +164,7 @@ RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true, reso
           VCR.use_cassette("controllers/#{resource_key}_create", record: :new_episodes) do
             post :create, params: valid_create_params, session: valid_session
           end
-          
+
           expect(response).to have_http_status(:created)
           expect(response.content_type).to eq(expected_content_type)
           expect(json_response).to be_a_kind_of(Hash).and have_key(resource_key)

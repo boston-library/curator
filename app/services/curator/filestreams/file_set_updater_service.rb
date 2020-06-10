@@ -18,7 +18,6 @@ module Curator
         update_exemplary_image_of!(exemplary_image_of_attrs) if has_exemplary_image_of?
         @record.save!
       end
-
       return @success, @result
     end
 

@@ -28,11 +28,6 @@ RSpec.describe Curator::Filestreams::FileSetsController, type: :controller do
         attributes[:position] = 2
         attributes[:pagination] = { page_label: '3', page_type: 'TOC', hand_side: 'left' }
         if can_be_exemplary?(file_set_type)
-
-          create(:curator_mappings_exemplary_image, exemplary_object: parent_obj, exemplary_file_set: resource) if !resource.exemplary_image_of_mappings.exists?(exemplary_object: parent_obj)
-
-          resource.exemplary_image_of_mappings.where(exemplary_object: parent_col).destroy_all if resource.exemplary_image_of_mappings.exists?(exemplary_object: parent_col)
-
           attributes[:exemplary_image_of] = [{ ark_id: parent_obj.ark_id, _destroy: '1' }, { ark_id: parent_col.ark_id }]
         end
         attributes
