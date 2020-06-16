@@ -22,11 +22,10 @@ module Curator
     def create_or_update_collection_members!(collection_members_attrs = [])
       return if collection_members_attrs.blank?
 
-      should_remove_collection_member = ->(cm) { cm[:_destroy].present? && cm[:_destroy] == '1' }
-      should_add_collection_member = ->(cm) { !should_remove_collection_member.call(cm) }
+      should_add_collection_member = ->(cm) { !SHOULD_REMOVE.call(cm) }
 
+      members_to_remove = collection_members_attrs.select(&SHOULD_REMOVE).pluck(:ark_id)
       members_to_add = collection_members_attrs.select(&should_add_collection_member).pluck(:ark_id)
-      members_to_remove = collection_members_attrs.select(&should_remove_collection_member).pluck(:ark_id)
 
       return if members_to_add.blank? && members_to_remove.blank?
 

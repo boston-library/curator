@@ -50,11 +50,9 @@ module Curator
                                                  workflow: [:ingest_origin, :publishing_state, :processing_state]
                                                })
       when 'update'
-=begin
-  NOTE: for collection_members to remove pass in the :id of the mapping object and :_destroy = 1/true to
-  remove and just :ark_id for the collection to add see #should_add_collection_member?/
-  should_remove_collection_member? in /services/digital_object_updater_service.rb
-=end
+        # NOTE: for collection_members to remove pass in the :id of the mapping object and :_destroy = 1/true to
+        # remove and just :ark_id for the collection to add see #should_add_collection_member?/
+        # should_remove_collection_member? in /services/digital_object_updater_service.rb
         params.require(:digital_object).permit(is_member_of_collection: [:ark_id, :_destroy], exemplary_file_set: [:ark_id])
       else
         params

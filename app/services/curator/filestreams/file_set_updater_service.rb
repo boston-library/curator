@@ -30,11 +30,10 @@ module Curator
     def update_exemplary_image_of!(exemplary_image_of_attrs = [])
       return if exemplary_image_of_attrs.blank?
 
-      should_remove_exemplary = ->(ex_img_attrs) { ex_img_attrs[:_destroy].present? && ex_img_attrs[:_destroy] == '1' }
-      should_add_exemplary = ->(ex_img_attrs) { !should_remove_exemplary.call(ex_img_attrs) }
+      should_add_exemplary = ->(ex_img_attrs) { !SHOULD_REMOVE.call(ex_img_attrs) }
 
       exemplaries_to_add = exemplary_image_of_attrs.select(&should_add_exemplary).pluck('ark_id')
-      exemplaries_to_remove = exemplary_image_of_attrs.select(&should_remove_exemplary).pluck('ark_id')
+      exemplaries_to_remove = exemplary_image_of_attrs.select(&SHOULD_REMOVE).pluck('ark_id')
 
       return if exemplaries_to_add.blank? && exemplaries_to_remove.blank?
 
