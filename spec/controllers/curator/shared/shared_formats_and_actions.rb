@@ -127,6 +127,7 @@ RSpec.shared_examples 'shared_put_patch', type: :controller do |skip_put_patch: 
         VCR.use_cassette("controllers/#{resource_key}_invalid_update", record: :new_episodes) do
           put :update, params: invalid_update_params, session: valid_session
         end
+
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq(expected_content_type)
         expect(json_response).to be_a_kind_of(Hash).and have_key('errors')

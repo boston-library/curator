@@ -17,7 +17,6 @@ module Curator
 
     has_many :collection_members, inverse_of: :collection, class_name: 'Curator::Mappings::CollectionMember', dependent: :destroy
 
-    # NOTE: Should this include the file sets included by the collection members as well?
     with_options through: :admin_set_objects do
       has_many :file_sets, source: :file_sets do
         def exemplaryable

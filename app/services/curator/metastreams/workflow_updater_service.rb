@@ -4,7 +4,7 @@ module Curator
   class Metastreams::WorkflowUpdaterService < Services::Base
     include Services::UpdaterService
 
-    SIMPLE_ATTRIBUTES_LIST = %i(publishing_state).freeze
+    SIMPLE_ATTRIBUTES_LIST = %i(publishing_state processing_state).freeze
 
     def call
       with_transaction do

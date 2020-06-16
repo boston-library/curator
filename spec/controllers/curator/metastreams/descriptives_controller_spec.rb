@@ -4,14 +4,6 @@ require 'rails_helper'
 require_relative '../shared/shared_formats_and_actions'
 
 RSpec.describe Curator::Metastreams::DescriptivesController, type: :controller do
-  #
-  # let(:valid_attributes) {
-  #   skip("Add a hash of attributes valid for your model")
-  # }
-  #
-  # let(:invalid_attributes) {
-  #   skip("Add a hash of attributes invalid for your model")
-  # }
   let!(:valid_session) { {} }
   let!(:metastreamable_type) { 'DigitalObject' }
   let!(:serializer_class) { Curator::Metastreams::DescriptiveSerializer }

@@ -8,7 +8,7 @@ module Curator
     enum processing_state: { derivatives: 0, complete: 1 }.freeze
 
     validates :ingest_origin, presence: true
-    validates :publishing_state, presence: true
+
     validates :workflowable_id, uniqueness: { scope: :workflowable_type }, on: :create
     validates :workflowable_type, inclusion: { in: Metastreams.valid_base_types + Metastreams.valid_filestream_types }, on: :create
   end
