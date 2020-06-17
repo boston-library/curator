@@ -45,7 +45,7 @@ module Curator
                                                is_member_of_collection: [:ark_id],
                                                contained_by: [:ark_id],
                                                metastreams: {
-                                                 descriptive: decriptive_permitted_params,
+                                                 descriptive: descriptive_permitted_params,
                                                  administrative: [:description_standard, :hosting_status, :harvestable, :flagged, destination_site: [], access_edit_group: []],
                                                  workflow: [:ingest_origin, :publishing_state, :processing_state]
                                                })

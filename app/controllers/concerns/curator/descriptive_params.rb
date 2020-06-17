@@ -52,7 +52,7 @@ module Curator
         title: [primary: [:label, :id_from_auth, :authority_code, :subtitle, :display, :display_label, :usage, :supplied, :language, :type, :part_number, :part_name], other: [:label, :id_from_auth, :subtitle, :authority_code, :display, :display_label, :usage, :supplied, :language, :type, :part_number, :part_name]]
       ].freeze
 
-      def decriptive_permitted_params(operation = 'create')
+      def descriptive_permitted_params(operation = 'create')
         case operation
         when 'create'
           return PERMITTED_PARAMS.dup

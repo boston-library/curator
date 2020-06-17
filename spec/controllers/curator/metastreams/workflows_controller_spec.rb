@@ -49,7 +49,7 @@ RSpec.describe Curator::Metastreams::WorkflowsController, type: :controller do
 
         let!(:valid_update_attributes) do
           {
-            processing_state: 'published'
+            processing_state: 'complete'
           }
         end
 

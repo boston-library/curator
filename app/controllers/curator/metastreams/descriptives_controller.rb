@@ -29,7 +29,7 @@ module Curator
     def descriptive_params
       case params[:action]
       when 'update'
-        params.require(:descriptive).permit(decriptive_permitted_params('update'))
+        params.require(:descriptive).permit(descriptive_permitted_params('update'))
       else
         params
       end
