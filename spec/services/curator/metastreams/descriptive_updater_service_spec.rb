@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe Curator::Metastreams::DescriptiveUpdaterService, type: :service do
   before(:all) do
     @digital_object ||= create(:curator_digital_object)
+    @descriptable_updated_at = @digital_object.updated_at
     @update_attributes ||= load_json_fixture('digital_object_2', 'digital_object').dig('metastreams', 'descriptive')
     VCR.use_cassette('services/metastreams/descriptive/update', record: :new_episodes) do
       @success, @result = described_class.call(@digital_object.descriptive, json_data: @update_attributes || {})
@@ -23,6 +24,7 @@ RSpec.describe Curator::Metastreams::DescriptiveUpdaterService, type: :service d
 
       specify { expect(subject).to be_valid }
       specify { expect(subject.descriptable.ark_id).to eq(@digital_object.ark_id) }
+      specify { expect(subject.descriptable.updated_at).not_to eq(@descriptable_updated_at) }
 
       it 'expects the simple attributes to have been updated' do
         simple_attributes_list.each do |simple_attr|

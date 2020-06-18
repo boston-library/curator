@@ -28,7 +28,7 @@ module Curator
     def administrative_params
       case params[:action]
       when 'update'
-        case resource_class&.name&.demodulize&.underscore
+        case @curator_resource&.class&.name&.demodulize&.underscore
         when 'institution'
           params.require(:administrative).permit(destination_site: [], access_edit_group: [])
         when 'collection'

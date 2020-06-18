@@ -9,6 +9,7 @@ RSpec.describe Curator::DigitalObjectUpdaterService, type: :service do
     create(:curator_mappings_exemplary_image, exemplary_object: @digital_object, exemplary_file_set: @old_image_file_set)
 
     @new_image_file_set ||= create(:curator_filestreams_image, file_set_of: @digital_object)
+    @new_image_file_set_updated_at ||= @new_image_file_set.updated_at
     @add_collection ||= create(:curator_collection, institution: @digital_object.institution)
     @remove_collection ||= create(:curator_mappings_collection_member, collection: create(:curator_collection, institution: @digital_object.institution), digital_object: @digital_object).collection
     @update_attributes ||= {
@@ -41,6 +42,7 @@ RSpec.describe Curator::DigitalObjectUpdaterService, type: :service do
         expect(subject.exemplary_file_set).to be_valid
         expect(subject.exemplary_file_set.ark_id).not_to eq(@old_image_file_set.ark_id)
         expect(subject.exemplary_file_set.ark_id).to eq(@new_image_file_set.ark_id)
+        expect(subject.exemplary_file_set.updated_at).not_to eq(@new_image_file_set_updated_at)
       end
     end
   end

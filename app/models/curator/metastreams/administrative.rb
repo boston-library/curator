@@ -2,7 +2,7 @@
 
 module Curator
   class Metastreams::Administrative < ApplicationRecord
-    belongs_to :administratable, polymorphic: true, inverse_of: :administrative
+    belongs_to :administratable, polymorphic: true, inverse_of: :administrative, touch: true
 
     VALID_DESTINATION_SITES = %w(bpl commonwealth nblmc).freeze
 

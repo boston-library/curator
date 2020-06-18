@@ -6,6 +6,7 @@ module Curator
     include Metastreams::DescriptiveComplexAttrs
     include Mappings::TermMappable
     include Mappings::NameRolable
+    include Mappings::FindOrCreateHostCollection
 
     SIMPLE_ATTRIBUTES_LIST = %i(abstract
                                 access_restrictions
@@ -55,7 +56,9 @@ module Curator
 
         @record.license = license_from_json if license_from_json && @record.license_id != license_from_json.id
 
+        host_collections_update!
         term_mappings_update!
+        name_roles_update!
         subject_update!
 
         @record.save!
@@ -81,6 +84,27 @@ module Curator
 
         remove_mapped_terms!(map_type, terms_to_remove)
       end
+    end
+
+    def name_roles_update!
+      name_role_attrs = @json_attrs.dup.fetch(:name_roles, [])
+
+      return if name_role_attrs.blank?
+
+      name_roles_to_add = name_role_attrs.reduce([]) do |ret, nr_attrs|
+        ret << nr_attrs if !SHOULD_REMOVE.call(nr_attrs)
+        ret
+      end
+
+      name_roles_to_remove = name_role_attrs.reduce([]) do |ret, nr_attrs|
+        ret << nr_attrs if SHOULD_REMOVE.call(nr_attrs)
+        ret
+      end
+
+      return if name_roles_to_add.blank? && name_roles_to_remove.blank?
+
+      add_name_roles!(name_roles_to_add)
+      remove_name_roles!(name_roles_to_remove)
     end
 
     def subject_update!
@@ -112,6 +136,21 @@ module Curator
       end
     end
 
+    def host_collections_update!
+      host_collection_names = @json_attrs.fetch(:host_collections, [])
+
+      return if host_collection_names.blank?
+
+      host_collection_names.each do |host_col_name|
+        host_collection = find_or_create_host_collection(host_col_name,
+                                                         @record.descriptable.institution)
+
+        next if @record.desc_host_collections.exists?(host_collection: host_collection)
+
+        @record.desc_host_collections.build(host_collection: host_collection)
+      end
+    end
+
     private
 
     def add_subject_terms!(subject_terms = [])
@@ -130,7 +169,7 @@ module Curator
       subject_terms.each do |subject_term|
         next if !@record.desc_terms.exists?(mapped_term: subject_term)
 
-        @record.desc_terms.where(mapped_term: mapped_term).destroy_all
+        @record.desc_terms.where(mapped_term: subject_term).destroy_all
       end
     end
 
@@ -161,6 +200,34 @@ module Curator
         next if !@record.desc_terms.exists?(mapped_term: mapped_term)
 
         @record.desc_terms.where(mapped_term: mapped_term).destroy_all
+      end
+    end
+
+    def add_name_roles!(name_role_attrs = [])
+      return if name_role_attrs.blank?
+
+      mapped_name_roles = name_role_attrs.map do |nr_attrs|
+        name_role(nr_attrs.fetch(:name), nr_attrs.fetch(:role))
+      end
+
+      mapped_name_roles.each do |mnr_attrs|
+        next if @record.name_roles.exists?(mnr_attrs)
+
+        @record.name_roles.build(mnr_attrs)
+      end
+    end
+
+    def remove_name_roles!(name_role_attrs = [])
+      return if name_role_attrs.blank?
+
+      mapped_name_roles = name_role_attrs.map do |nr_attrs|
+        name_role(nr_attrs.fetch(:name), nr_attrs.fetch(:role))
+      end
+
+      mapped_name_roles.each do |mnr_attrs|
+        next if !@record.name_roles.exists?(mnr_attrs)
+
+        @record.name_roles.where(mnr_attrs).destroy_all
       end
     end
   end

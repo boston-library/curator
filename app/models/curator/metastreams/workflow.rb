@@ -2,7 +2,7 @@
 
 module Curator
   class Metastreams::Workflow < ApplicationRecord
-    belongs_to :workflowable, polymorphic: true, inverse_of: :workflow
+    belongs_to :workflowable, polymorphic: true, inverse_of: :workflow, touch: true
 
     enum publishing_state: { draft: 0, review: 1, published: 2 }.freeze
     enum processing_state: { derivatives: 0, complete: 1 }.freeze

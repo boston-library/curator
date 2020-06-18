@@ -51,7 +51,7 @@ module Curator
 
     # RELS
     # PARENTS
-    belongs_to :descriptable, polymorphic: true, inverse_of: :descriptive
+    belongs_to :descriptable, polymorphic: true, inverse_of: :descriptive, touch: true
     belongs_to :license, inverse_of: :licensees, class_name: 'Curator::ControlledTerms::License'
     belongs_to :physical_location, inverse_of: :physical_locations_of, class_name: 'Curator::ControlledTerms::Name'
     # MAPPING OBJECTS

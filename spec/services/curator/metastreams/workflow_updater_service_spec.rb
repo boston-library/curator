@@ -6,6 +6,7 @@ RSpec.describe Curator::Metastreams::WorkflowUpdaterService, type: :service do
   before(:all) do
     @workflow ||= build(:curator_metastreams_workflow, :draft)
     @digital_object ||= create(:curator_digital_object, administrative: @administrative)
+    @workflowable_updated_at = @digital_object.updated_at
     @update_attributes ||= {
       publishing_state: :review
     }
@@ -20,9 +21,9 @@ RSpec.describe Curator::Metastreams::WorkflowUpdaterService, type: :service do
     describe ':result' do
       subject { @result }
 
+      specify { expect(subject).to be_valid }
       specify { expect(subject.workflowable.ark_id).to eq(@digital_object.ark_id) }
-
-      it { is_expected.to be_valid }
+      specify { expect(subject.workflowable.updated_at).to be >= @workflowable_updated_at }
 
       it 'expects the attributes to have been updated' do
         expect(subject.publishing_state).to eq(@update_attributes[:publishing_state].to_s)

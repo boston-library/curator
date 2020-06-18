@@ -31,7 +31,7 @@ RSpec.describe Curator::Filestreams::FileSetFactoryService, type: :service do
         expect(@file_set.send(attr)).to eq @file_set_json[attr]
       end
       expect(subject.file_set_type).to eq Curator.filestreams.send("#{file_set_type}_class").to_s
-      expect(subject.updated_at).to eq Time.zone.parse(@file_set_json['updated_at'])
+      expect(subject.created_at).to eq Time.zone.parse(@file_set_json['created_at'])
     end
 
     describe 'object relationships' do
