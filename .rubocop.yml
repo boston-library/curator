@@ -442,7 +442,7 @@ Metrics/MethodLength:
 
 Metrics/LineLength:
   Enabled: true
-  Max: 400
+  Max: 500
 
 ####################### SECURITY ###############################
 

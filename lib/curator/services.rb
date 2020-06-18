@@ -7,6 +7,8 @@ module Curator
     eager_autoload do
       autoload :Base
       autoload :FactoryService
+      autoload :TransactionHandler
+      autoload :UpdaterService
     end
   end
 end

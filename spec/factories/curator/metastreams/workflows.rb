@@ -8,6 +8,10 @@ FactoryBot.define do
     processing_state { Curator::Metastreams::Workflow.processing_states.keys.sample }
     ingest_origin { Faker::Internet.uuid }
 
+    trait :draft do
+      publishing_state { :draft }
+    end
+
     trait :for_institution do
       after :build do |workflow|
         workflow.workflowable = build(:curator_institution, workflow: workflow) if workflow.workflowable.blank?

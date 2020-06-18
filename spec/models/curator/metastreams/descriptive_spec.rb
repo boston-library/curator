@@ -278,9 +278,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
 
       let(:expected_scope_sql) do
         described_class.
-        left_outer_joins(:desc_terms => :mapped_term).
-        eager_load(:desc_terms => :mapped_term).
-        where('curator_controlled_terms_nomenclatures.type IN (?)', %w(Genre ResourceType Language Subject Name Geographic).map { |type| "Curator::ControlledTerms::#{type}" }).
+        includes(:genres, :resource_types, :languages, :subject_topics, :subject_names, :subject_geos).
         to_sql
       end
 
@@ -295,8 +293,8 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
       subject { described_class }
 
       let(:expected_scope_sql) do
-        described_class.joins(:desc_host_collections, :name_roles).
-        preload(:host_collections, :name_roles => [{ :name => [:authority] }, { :role => [:authority] }]).
+        described_class.
+        includes(:host_collections, :name_roles => [:name, :role]).
         to_sql
       end
 
@@ -310,7 +308,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     describe '.with_physical_location' do
       subject { described_class }
 
-      let(:expected_scope_sql) { described_class.joins(:physical_location).preload(:physical_location => [:authority]).to_sql }
+      let(:expected_scope_sql) { described_class.includes(:physical_location => :authority).to_sql }
 
       it { is_expected.to respond_to(:with_physical_location) }
 
@@ -322,7 +320,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     describe '.with_license' do
       subject { described_class }
 
-      let(:expected_scope_sql) { described_class.joins(:license).preload(:license).to_sql }
+      let(:expected_scope_sql) { described_class.includes(:license).to_sql }
 
       it { is_expected.to respond_to(:with_license) }
 

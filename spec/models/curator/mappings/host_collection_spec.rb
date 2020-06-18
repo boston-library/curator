@@ -5,21 +5,39 @@ require 'rails_helper'
 RSpec.describe Curator::Mappings::HostCollection, type: :model do
   subject { build(:curator_mappings_host_collection) }
 
-  it { is_expected.to have_db_column(:name).
+  describe 'Database' do
+    it { is_expected.to have_db_column(:name).
                       of_type(:string).
                       with_options(null: false) }
 
-  it { is_expected.to have_db_column(:institution_id).
+    it { is_expected.to have_db_column(:institution_id).
                       of_type(:integer).
                       with_options(null: false) }
 
-  it { is_expected.to have_db_index(:institution_id) }
-  it { is_expected.to have_db_index([:name, :institution_id]).unique(true) }
+    it { is_expected.to have_db_index(:institution_id) }
+    it { is_expected.to have_db_index([:name, :institution_id]).unique(true) }
 
-  it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:name) }
 
-  it { is_expected.to validate_uniqueness_of(:name).
-                      scoped_to(:institution_id) }
+    it { is_expected.to validate_uniqueness_of(:name).
+                        scoped_to(:institution_id) }
+  end
+
+  describe 'Scopes' do
+    describe '.name_lower' do
+      subject { described_class }
+
+      let(:name) { 'Test Collection' }
+
+      let(:expected_scope_sql) { described_class.where('lower(name) = ?', name.downcase).to_sql }
+
+      it { is_expected.to respond_to(:name_lower) }
+
+      it 'expects the scope sql to match the :expected_scope_sql' do
+        expect(subject.name_lower(name).to_sql).to eq(expected_scope_sql)
+      end
+    end
+  end
 
   describe 'Associations' do
     it { is_expected.to belong_to(:institution).

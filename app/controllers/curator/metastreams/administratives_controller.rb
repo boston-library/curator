@@ -12,8 +12,11 @@ module Curator
     end
 
     def update
-      @administrative.touch
-      json_response(serialized_resource(@administrative))
+      success, result = Metastreams::AdministrativeUpdaterService.call(@administrative, json_data: administrative_params)
+
+      raise_failure(result) unless success
+
+      json_response(serialized_resource(result), :ok)
     end
 
     private
@@ -25,7 +28,18 @@ module Curator
     def administrative_params
       case params[:action]
       when 'update'
-        params.require(:administrative).permit!
+        case @curator_resource&.class&.name&.demodulize&.underscore
+        when 'institution'
+          params.require(:administrative).permit(destination_site: [], access_edit_group: [])
+        when 'collection'
+          params.require(:administrative).permit(:harvestable, destination_site: [], access_edit_group: [])
+        when 'digital_object'
+          params.require(:administrative).permit(:description_standard, :flagged, :harvestable, destination_site: [], access_edit_group: [])
+        when 'audio', 'document', 'ereader', 'image', 'metadata', 'text', 'video'
+          params.require(:administrative).permit(access_edit_group: [])
+        else
+          params
+        end
       else
         params
       end

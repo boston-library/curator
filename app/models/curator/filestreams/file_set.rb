@@ -4,6 +4,8 @@ module Curator
   class Filestreams::FileSet < ApplicationRecord
     self.inheritance_column = :file_set_type
 
+    VALID_HAND_SIDES = %w(right left).freeze
+
     include AttrJson::Record
     include AttrJson::Record::QueryScopes
     include AttrJson::Record::Dirty
@@ -29,6 +31,8 @@ module Curator
     attr_json :page_label, :string
     attr_json :page_type, :string
     attr_json :hand_side, :string
+
+    validates :hand_side, inclusion: { in: VALID_HAND_SIDES, allow_nil: true }
 
     acts_as_list scope: [:file_set_of, :file_set_type], top_of_list: 0
 

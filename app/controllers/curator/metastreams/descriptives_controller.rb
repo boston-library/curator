@@ -4,6 +4,7 @@ module Curator
   class Metastreams::DescriptivesController < ApplicationController
     include Curator::ResourceClass
     include Curator::ArkResource
+    include Curator::DescriptiveParams
 
     before_action :set_descriptive, only: [:show, :update]
 
@@ -12,8 +13,11 @@ module Curator
     end
 
     def update
-      @descriptive.touch
-      json_response(serialized_resource(@descriptive))
+      success, result = Metastreams::DescriptiveUpdaterService.call(@descriptive, json_data: descriptive_params)
+
+      raise_failure(result) unless success
+
+      json_response(serialized_resource(result), :ok)
     end
 
     private
@@ -25,7 +29,7 @@ module Curator
     def descriptive_params
       case params[:action]
       when 'update'
-        params.require(:descriptive).permit!
+        params.require(:descriptive).permit(descriptive_permitted_params('update'))
       else
         params
       end

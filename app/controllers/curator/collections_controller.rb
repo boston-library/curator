@@ -23,8 +23,11 @@ module Curator
     end
 
     def update
-      @curator_resource.touch
-      json_response(serialized_resource(@curator_resource))
+      success, result = Curator::CollectionUpdaterService.call(@curator_resource, json_data: collection_params)
+
+      raise_failure(result) unless success
+
+      json_response(serialized_resource(result), :ok)
     end
 
     private
@@ -38,6 +41,8 @@ module Curator
                                              administrative: [:description_standard, :hosting_status, :harvestable, :flagged, destination_site: [], access_edit_group: []],
                                                            workflow: [:ingest_origin, :publishing_state, :processing_state]
                                            })
+      when 'update'
+        params.require(:collection).permit(:abstract, exemplary_file_set: [:ark_id])
       else
         params
       end

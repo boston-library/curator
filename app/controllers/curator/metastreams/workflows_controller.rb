@@ -12,7 +12,12 @@ module Curator
     end
 
     def update
-      json_response(serialized_resource(@workflow))
+      Rails.logger.info workflow_params.awesome_inspect
+      success, result = Metastreams::WorkflowUpdaterService.call(@workflow, json_data: workflow_params)
+
+      raise_failure(result) unless success
+
+      json_response(serialized_resource(result), :ok)
     end
 
     private
@@ -24,7 +29,13 @@ module Curator
     def workflow_params
       case params[:action]
       when 'update'
-        params.require(:administrative).permit!
+        Rails.logger.info @curator_resource&.class&.name&.demodulize&.underscore.awesome_inspect
+        case @curator_resource&.class&.name&.demodulize&.underscore
+        when 'institution', 'collection', 'digital_object'
+          params.require(:workflow).permit(:publishing_state)
+        when 'audio', 'document', 'ereader', 'image', 'metadata', 'text', 'video'
+          params.require(:workflow).permit(:processing_state)
+        end
       else
         params
       end

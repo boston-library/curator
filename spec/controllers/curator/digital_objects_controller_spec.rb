@@ -15,46 +15,30 @@ RSpec.describe Curator::DigitalObjectsController, type: :controller do
         is_member_of_collection: [{ ark_id: parent.ark_id }],
         metastreams: relation_attributes.dup.delete('metastreams')
       })
-    end
+  end
+
+  let!(:valid_update_attributes) do
+    attributes = {}
+    member_to_add = create(:curator_collection, institution: resource.institution)
+    member_to_remove = create(:curator_collection, institution: resource.institution)
+    exemplary_image = create(:curator_filestreams_image, file_set_of: resource)
+
+    create(:curator_mappings_collection_member, digital_object: resource, collection: member_to_remove)
+
+    attributes.merge!({
+        is_member_of_collection: [{ ark_id: member_to_add.ark_id }, { ark_id: member_to_remove.ark_id, _destroy: '1' } ],
+        exemplary_file_set: {
+          ark_id: exemplary_image.ark_id
+        }
+    })
+  end
 
   let(:valid_session) { {} }
   let(:base_params) { {} }
   let(:invalid_attributes) { valid_attributes.dup.update(admin_set: {}) }
+  let(:invalid_update_attributes) { valid_update_attributes.dup.update(is_member_of_collection: [{ ark_id: resource.admin_set.ark_id, _destroy: '1' }]) }
   let(:resource_class) { Curator::DigitalObject }
   let(:serializer_class) { Curator::DigitalObjectSerializer }
 
-  include_examples 'shared_formats', include_ark_context: true, skip_post: false, resource_key: 'digital_object'
-
-  skip "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested digital_object" do
-        digital_object = Curator::DigitalObject.create! valid_attributes
-        put :update, params: { id: digital_object.to_param, digital_object: new_attributes }, session: valid_session
-        digital_object.reload
-        skip("Add assertions for updated state")
-      end
-
-      it "renders a JSON response with the digital_object" do
-        digital_object = Curator::DigitalObject.create! valid_attributes
-
-        put :update, params: { id: digital_object.to_param, digital_object: valid_attributes }, session: valid_session
-        expect(response).to have_http_status(:ok)
-        expect(response.content_type).to eq('application/json')
-      end
-    end
-
-    context "with invalid params" do
-      it "renders a JSON response with errors for the digital_object" do
-        digital_object = Curator::DigitalObject.create! valid_attributes
-
-        put :update, params: { id: digital_object.to_param, digital_object: invalid_attributes }, session: valid_session
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq('application/json')
-      end
-    end
-  end
+  include_examples 'shared_formats', include_ark_context: true, skip_put_patch: false, skip_post: false, resource_key: 'digital_object'
 end

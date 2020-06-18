@@ -23,7 +23,7 @@ RSpec.describe Curator::CollectionFactoryService, type: :service do
     it 'has the correct properties' do
       expect(subject.name).to eq @object_json['name']
       expect(subject.abstract).to eq @object_json['abstract']
-      expect(subject.updated_at).to eq Time.zone.parse(@object_json['updated_at'])
+      expect(subject.created_at).to eq Time.zone.parse(@object_json['created_at'])
     end
 
     describe 'setting institution' do

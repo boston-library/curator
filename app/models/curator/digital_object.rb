@@ -13,7 +13,7 @@ module Curator
 
     validates :contained_by_id, exclusion: { in: -> (digital_object) { Array.wrap(digital_object.id) } }, uniqueness: { scope: :id }, unless: -> { contained_by.blank? }
 
-    before_create :add_admin_set_to_members, if: -> { admin_set.present? } # Should Fail if admin set is not present
+    before_create :add_admin_set_to_members
 
     belongs_to :admin_set, inverse_of: :admin_set_objects, class_name: 'Curator::Collection'
     belongs_to :contained_by, inverse_of: :container_for, class_name: 'Curator::DigitalObject', optional: true
@@ -21,7 +21,12 @@ module Curator
     has_one :institution, through: :admin_set, class_name: 'Curator::Institution'
 
     with_options inverse_of: :file_set_of, foreign_key: :file_set_of_id, dependent: :destroy do
-      has_many :file_sets, class_name: 'Curator::Filestreams::FileSet'
+      has_many :file_sets, class_name: 'Curator::Filestreams::FileSet' do
+        def exemplaryable
+          where(file_set_type: EXEMPLARYABLE_FILE_SETS)
+        end
+      end
+
       has_many :audio_file_sets, class_name: 'Curator::Filestreams::Audio'
       has_many :image_file_sets, class_name: 'Curator::Filestreams::Image'
       has_many :document_file_sets, class_name: 'Curator::Filestreams::Document'
@@ -33,7 +38,11 @@ module Curator
 
     has_many :container_for, inverse_of: :contained_by, class_name: 'Curator::DigitalObject', foreign_key: :contained_by_id, dependent: :nullify
 
-    has_many :collection_members, -> { includes(:collection) }, inverse_of: :digital_object, class_name: 'Curator::Mappings::CollectionMember', dependent: :destroy
+    has_many :collection_members, -> { includes(:collection) }, inverse_of: :digital_object, autosave: true, class_name: 'Curator::Mappings::CollectionMember', dependent: :destroy do
+      def can_remove
+        where.not(collection_id: proxy_association.owner.admin_set_id)
+      end
+    end
 
     has_many :is_member_of_collection, through: :collection_members, source: :collection
 
@@ -52,7 +61,7 @@ module Curator
     private
 
     def add_admin_set_to_members
-      collection_members.build(collection: admin_set)
+      collection_members.build(collection: admin_set) if admin_set.present?
     end
   end
 end

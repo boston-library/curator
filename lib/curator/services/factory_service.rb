@@ -5,21 +5,10 @@ module Curator
     module FactoryService
       extend ActiveSupport::Concern
 
-      MAX_RETRIES = 2
-      # These are errors that will be passed to the @result variable. That way these can be raised on failure up the chain
-      RESULT_ERRORS = [
-                        ActiveRecord::RecordNotFound,
-                        ActiveRecord::StatementInvalid,
-                        ActiveRecord::RecordInvalid,
-                        ActiveRecord::RecordNotUnique,
-                        ActiveRecord::RecordNotSaved,
-                        ActiveRecord::ActiveRecordError,
-                        SystemCallError,
-                        ArgumentError,
-                        NameError,
-                        NoMethodError,
-                        StandardError
-                      ].freeze
+      included do
+        include Services::TransactionHandler
+        include NomenclatureHelpers
+      end
 
       def initialize(json_data: {})
         @record = nil
@@ -56,18 +45,6 @@ module Curator
         yield(exemplary)
       end
 
-      private
-
-      def handle_result!
-        @success = false if @record.blank?
-
-        return if defined?(@result) && @result.present?
-
-        return if @record.blank?
-
-        @result = @record.class.respond_to?(:for_serialization) ? @record.class.for_serialization.find(@record.id) : @record
-      end
-
       def setup_metastream_attributes!
         metastream_json_attrs = @json_attrs.fetch('metastreams', {}).with_indifferent_access
         @workflow_json_attrs = metastream_json_attrs.fetch('workflow', {}).with_indifferent_access
@@ -75,86 +52,62 @@ module Curator
         @desc_json_attrs = metastream_json_attrs.fetch('descriptive', {}).with_indifferent_access
       end
 
-      def find_or_create_nomenclature(nomenclature_class:, term_data: {}, authority_code: nil)
-        retries = 0
-        term_data = term_data.dup.symbolize_keys
-        begin
-          return nomenclature_class.transaction(requires_new: true) do
-            break find_nomenclature(nomenclature_class, term_data) || create_nomenclature!(nomenclature_class, term_data) if authority_code.blank?
+      module NomenclatureHelpers
+        private
 
-            authority = Curator.controlled_terms.authority_class.find_by!(code: authority_code)
+        def find_or_create_nomenclature(nomenclature_class:, term_data: {}, authority_code: nil)
+          retries = 0
+          term_data = term_data.dup.symbolize_keys
+          begin
+            return nomenclature_class.transaction(requires_new: true) do
+              break find_nomenclature(nomenclature_class, term_data) || create_nomenclature!(nomenclature_class, term_data) if authority_code.blank?
 
-            find_nomenclature(nomenclature_class, term_data, authority) || create_nomenclature!(nomenclature_class, term_data, authority)
-          end
-        rescue ActiveRecord::StaleObjectError => e
-          raise ActiveRecord::RecordNotSaved, "Max retries reached! caused by: #{e.message}", e.record unless (retries += 1) <= MAX_RETRIES
+              authority = Curator.controlled_terms.authority_class.find_by!(code: authority_code)
 
-          Rails.logger.info 'Record is stale retrying in 2 seconds..'
-          sleep(2)
-          retry
-        rescue *RESULT_ERRORS => e
-          Rails.logger.error "=================#{e.inspect}=================="
-          raise e
-        end
-      end
-
-      def find_nomenclature(nomenclature_class, term_data = {}, authority = nil)
-        return nomenclature_class.jsonb_contains(**term_data).first if authority.blank?
-
-        nomenclature_class.where(authority: authority).jsonb_contains(**term_data).first
-      end
-
-      # raise error if term is from pre-seeded class and not found (new values are not allowed)
-      def create_nomenclature!(nomenclature_class, term_data = {}, authority = nil)
-        nomenclature = nomenclature_class.new
-        raise_error = case nomenclature
-                      when Curator.controlled_terms.resource_type_class,
-                           Curator.controlled_terms.role_class,
-                           Curator.controlled_terms.language_class,
-                           Curator.controlled_terms.license_class
-                        true
-                      when Curator.controlled_terms.genre_class
-                        true if term_data[:basic] == true
-                      else
-                        false
-                      end
-        if raise_error
-          nomenclature_type = nomenclature_class.name.demodulize
-          nomenclature.errors.add(nomenclature_type.downcase.to_sym,
-                                  "Invalid data submitted for #{nomenclature_type}: #{term_data} is not allowed.")
-          raise ActiveRecord::RecordInvalid, nomenclature
-        end
-
-        return nomenclature_class.create!(term_data: term_data) if authority.blank?
-
-        nomenclature_class.create!(authority: authority, term_data: term_data)
-      end
-
-      def with_transaction(&_block)
-        retries = 0
-        begin
-          Curator::ApplicationRecord.connection_pool.with_connection do
-            Curator::ApplicationRecord.transaction do
-              yield
+              find_nomenclature(nomenclature_class, term_data, authority) || create_nomenclature!(nomenclature_class, term_data, authority)
             end
-          end
-        rescue ActiveRecord::StaleObjectError => e
-          if (retries += 1) <= MAX_RETRIES
-            Rails.logger.info '====Record is stale retrying in 2 seconds...==='
+          rescue ActiveRecord::StaleObjectError => e
+            raise ActiveRecord::RecordNotSaved, "Max retries reached! caused by: #{e.message}", e.record unless (retries += 1) <= TransactionHandler::MAX_RETRIES
+
+            Rails.logger.info 'Record is stale retrying in 2 seconds..'
             sleep(2)
             retry
-          else
-            Rails.logger.error '===============MAX RETRIES REACHED!============'
+          rescue *TransactionHandler::RESULT_ERRORS => e
             Rails.logger.error "=================#{e.inspect}=================="
-            @success = false
-            @result = ActiveRecord::RecordNotSaved, "Max retries reached! caused by: #{e.message}", e.record
+            raise e
           end
-        rescue *RESULT_ERRORS => e
-          Rails.logger.error "=================#{e.inspect}=================="
-          @success = false
-          @result = e
-        ensure
-          handle_result!
+        end
+
+        def find_nomenclature(nomenclature_class, term_data = {}, authority = nil)
+          return nomenclature_class.jsonb_contains(**term_data).first if authority.blank?
+
+          nomenclature_class.where(authority: authority).jsonb_contains(**term_data).first
+        end
+
+        # raise error if term is from pre-seeded class and not found (new values are not allowed)
+        def create_nomenclature!(nomenclature_class, term_data = {}, authority = nil)
+          nomenclature = nomenclature_class.new
+          raise_error = case nomenclature
+                        when Curator.controlled_terms.resource_type_class,
+                             Curator.controlled_terms.role_class,
+                             Curator.controlled_terms.language_class,
+                             Curator.controlled_terms.license_class
+                          true
+                        when Curator.controlled_terms.genre_class
+                          true if term_data[:basic] == true
+                        else
+                          false
+                        end
+          if raise_error
+            nomenclature_type = nomenclature_class.name.demodulize
+            nomenclature.errors.add(nomenclature_type.downcase.to_sym,
+                                    "Invalid data submitted for #{nomenclature_type}: #{term_data} is not allowed.")
+            raise ActiveRecord::RecordInvalid, nomenclature
+          end
+
+          return nomenclature_class.create!(term_data: term_data) if authority.blank?
+
+          nomenclature_class.create!(authority: authority, term_data: term_data)
         end
       end
     end

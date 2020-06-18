@@ -9,6 +9,8 @@ module Curator
     has_many :desc_host_collections, inverse_of: :host_collection,
              class_name: 'Curator::Mappings::DescHostCollection', dependent: :destroy
 
+    scope :name_lower, ->(name) { where('lower(name) = ?', name.downcase) }
+
     after_update_commit :reindex_descriptable_objects
 
     private

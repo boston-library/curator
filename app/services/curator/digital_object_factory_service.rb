@@ -3,7 +3,10 @@
 module Curator
   class DigitalObjectFactoryService < Services::Base
     include Services::FactoryService
-
+    include Metastreams::DescriptiveComplexAttrs
+    include Mappings::TermMappable
+    include Mappings::NameRolable
+    include Mappings::FindOrCreateHostCollection
     # TODO: set relationships for contained_by values
     def call
       with_transaction do
@@ -47,43 +50,43 @@ module Curator
             descriptive.title = title(@desc_json_attrs)
             descriptive.note = note(@desc_json_attrs)
             descriptive.subject_other = subject_other(@desc_json_attrs)
-            descriptive.cartographic = cartographics(@desc_json_attrs)
+            descriptive.cartographic = cartographic(@desc_json_attrs)
             descriptive.related = related(@desc_json_attrs)
             %w(genres resource_types languages).each do |map_type|
               @desc_json_attrs.fetch(map_type, []).each do |map_attrs|
                 mapped_term = term_for_mapping(map_attrs,
                                                nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
+                next if descriptive.desc_terms.exists?(mapped_term: mapped_term)
+
                 descriptive.desc_terms.build(mapped_term: mapped_term)
               end
             end
             @desc_json_attrs.fetch(:host_collections, []).each do |host_col|
               next if admin_set.blank?
 
-              host = find_or_create_host_collection(host_col,
-                                                    admin_set.institution_id)
-              descriptive.desc_host_collections.build(host_collection: host)
-            end
-            @desc_json_attrs.fetch(:subject, {}).each do |k, v|
-              map_type = case k.to_s
-                         when 'topics'
-                           :subject
-                         when 'names'
-                           :name
-                         when 'geos'
-                           :geographic
-                         end
+              host_col = find_or_create_host_collection(host_col,
+                                                        admin_set.institution)
 
-              next if map_type.blank?
+              next if descriptive.desc_host_collections.exists?(host_collection: host_col)
 
-              v.each do |map_attrs|
-                mapped_term = term_for_mapping(map_attrs,
-                                               nomenclature_class: Curator.controlled_terms.public_send("#{map_type}_class"))
-                descriptive.desc_terms.build(mapped_term: mapped_term)
-              end
+              descriptive.desc_host_collections.build(host_collection: host_col)
             end
 
-            @desc_json_attrs.fetch(:name_roles, []).each do |name_role_attrs|
-              name_role_attrs = name_role(name_role_attrs.fetch(:name), name_role_attrs.fetch(:role))
+            subject_mapped_terms = terms_for_subject(@desc_json_attrs.fetch(:subject, {}))
+
+            subject_mapped_terms.each do |mapped_term|
+              next if descriptive.desc_terms.exists?(mapped_term: mapped_term)
+
+              descriptive.desc_terms.build(mapped_term: mapped_term)
+            end
+
+            mapped_name_roles = @desc_json_attrs.fetch(:name_roles, []).map do |name_role_attrs|
+              name_role(name_role_attrs.fetch(:name), name_role_attrs.fetch(:role))
+            end
+
+            mapped_name_roles.each do |name_role_attrs|
+              next if descriptive.name_roles.exists?(name_role_attrs)
+
               descriptive.name_roles.build(name_role_attrs)
             end
           end
@@ -92,116 +95,7 @@ module Curator
       return @success, @result
     end
 
-    def identifier(json_attrs = {})
-      json_attrs.fetch(:identifier, []).map do |ident_attrs|
-        Descriptives::Identifier.new(ident_attrs)
-      end
-    end
-
-    def note(json_attrs = {})
-      json_attrs.fetch(:note, []).map do |note_attrs|
-        Descriptives::Note.new(note_attrs)
-      end
-    end
-
-    def date(json_attrs = {})
-      date_attrs = json_attrs.fetch(:date, {})
-      created = date_attrs.fetch(:created, nil)
-      issued = date_attrs.fetch(:issued, nil)
-      copyright = date_attrs.fetch(:copyright, nil)
-      Descriptives::Date.new(created: created, issued: issued, copyright: copyright)
-    end
-
-    def publication(json_attrs = {})
-      pub_hash = {}
-      pub_attrs = json_attrs.fetch(:publication, {})
-      %i(edition_name edition_number volume issue_number).each do |k|
-        pub_hash[k] = pub_attrs.fetch(k, nil)
-      end
-      Descriptives::Publication.new(pub_hash.compact)
-    end
-
-    def title(json_attrs = {})
-      titles = json_attrs.fetch(:title, {})
-      primary = titles.fetch(:primary, {})
-      other = titles.fetch(:other, {}).map { |t_attrs| title_attr(t_attrs) }
-      Descriptives::TitleSet.new(primary: primary, other: other)
-    end
-
-    def subject_other(json_attrs = {})
-      subject_json = json_attrs.fetch(:subject, {})
-      uniform_title = subject_json.fetch(:titles, []).map { |ut_attrs| title_attr(ut_attrs) }
-      temporal = subject_json.fetch(:temporals, [])
-      date = subject_json.fetch(:dates, [])
-      Descriptives::Subject.new(titles: uniform_title, temporals: temporal, dates: date)
-    end
-
-    def related(json_attrs = {})
-      related_hash = {}
-      related_attrs = json_attrs.fetch(:related, {})
-      %i(constituent referenced_by_url references_url other_format review_url).each do |k|
-        related_hash[k] = related_attrs.fetch(k, nil)
-      end
-      Descriptives::Related.new(related_hash)
-    end
-
-    def physical_location(json_attrs = {})
-      physical_location_attrs = json_attrs.fetch(:physical_location)
-      authority_code = physical_location_attrs.fetch(:authority_code, nil)
-      term_data = physical_location_attrs.except(:authority_code)
-      find_or_create_nomenclature(
-        nomenclature_class: Curator.controlled_terms.name_class,
-        term_data: term_data,
-        authority_code: authority_code
-      )
-    end
-
-    def license(json_attrs = {})
-      license_term_data = json_attrs.fetch(:license)
-      find_or_create_nomenclature(
-        nomenclature_class: Curator.controlled_terms.license_class,
-        term_data: license_term_data
-      )
-    end
-
-    def title_attr(json_attrs = {})
-      Descriptives::Title.new(json_attrs)
-    end
-
-    def cartographics(json_attrs = {})
-      carto_attrs = json_attrs.fetch(:cartographic, {})
-      Descriptives::Cartographic.new(
-        scale: carto_attrs.fetch(:scale, []),
-        projection: carto_attrs.fetch(:projection, nil)
-      )
-    end
-
     private
-
-    def term_for_mapping(json_attrs = {}, nomenclature_class:)
-      authority_code = json_attrs.fetch(:authority_code, nil)
-      term_data = json_attrs.except(:authority_code)
-      find_or_create_nomenclature(
-        nomenclature_class: nomenclature_class,
-        term_data: term_data,
-        authority_code: authority_code
-      )
-    end
-
-    def name_role(name_attrs = {}, role_attrs = {})
-      {
-        name: find_or_create_nomenclature(
-          nomenclature_class: Curator.controlled_terms.name_class,
-          term_data: name_attrs.except(:authority_code),
-          authority_code: name_attrs.fetch(:authority_code, nil)
-        ),
-        role: find_or_create_nomenclature(
-          nomenclature_class: Curator.controlled_terms.role_class,
-          term_data: role_attrs.except(:authority_code),
-          authority_code: role_attrs.fetch(:authority_code, nil)
-        )
-      }
-    end
 
     def find_or_build_collection_members!(digital_object, admin_set_ark_id, collection_ark_ids = [])
       return if collection_ark_ids.blank?
@@ -227,27 +121,6 @@ module Curator
     rescue ActiveRecord::RecordNotFound => e
       digital_object.errors.add(:admin_set, "#{e.message} with ark_id=#{admin_set_ark_id}")
       nil
-    end
-
-    def find_or_create_host_collection(host_col_name = nil, institution_id = nil)
-      return if host_col_name.blank? && institution_id.blank?
-
-      retries = 0
-      begin
-        return Curator.mappings.host_collection_class.transaction(requires_new: true) do
-          inst = Curator.institution_class.find(institution_id)
-          inst.host_collections.where(name: host_col_name).first_or_create!
-        end
-      rescue ActiveRecord::StaleObjectError => e
-        if (retries += 1) <= MAX_RETRIES
-          Rails.logger.info 'Record is stale retrying in 2 seconds..'
-          sleep(2)
-          retry
-        else
-          Rails.logger.error "=================#{e.inspect}=================="
-          raise ActiveRecord::RecordNotSaved, "Max retries reached! caused by: #{e.message}", e.record
-        end
-      end
     end
   end
 end
