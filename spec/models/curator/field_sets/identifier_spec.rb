@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require_relative '../../shared/field_sets/field_set_base'
+require_relative '../shared/field_sets/field_set_base'
 RSpec.describe Curator::FieldSets::Identifier, type: :model do
   subject { create(:curator_descriptives_identifier) }
 

@@ -39,7 +39,7 @@ group :test do
   gem 'climate_control', '~> 0.1'
   gem 'coveralls', require: false
   gem 'database_cleaner', '~> 1.8'
-  gem 'rspec-rails', '~> 3.9', '< 4.0'
+  gem 'rspec-rails', '~> 4.0'
   gem 'shoulda-matchers', '~> 4.1'
   gem 'vcr', '~> 5.1.0'
   gem 'webmock', '~> 3.8'
