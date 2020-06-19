@@ -26,28 +26,28 @@ module Curator
 
     # Identifier
 
-    attr_json :identifier, Curator::Descriptives::Identifier.to_type, container_attribute: :identifier_json, array: true, default: []
+    attr_json :identifier, Curator::FieldSets::Identifier.to_type, container_attribute: :identifier_json, array: true, default: []
 
     # #Title
-    attr_json :title, Curator::Descriptives::TitleSet.to_type, container_attribute: :title_json
+    attr_json :title, Curator::FieldSets::TitleSet.to_type, container_attribute: :title_json
 
     # Notes
-    attr_json :note, Curator::Descriptives::Note.to_type, container_attribute: :note_json, array: true, default: []
+    attr_json :note, Curator::FieldSets::Note.to_type, container_attribute: :note_json, array: true, default: []
 
     # Date
-    attr_json :date, Curator::Descriptives::Date.to_type, container_attribute: :date_json
+    attr_json :date, Curator::FieldSets::Date.to_type, container_attribute: :date_json
 
     # Publication
-    attr_json :publication, Curator::Descriptives::Publication.to_type, container_attribute: :publication_json
+    attr_json :publication, Curator::FieldSets::Publication.to_type, container_attribute: :publication_json
 
     # Related
-    attr_json :related, Curator::Descriptives::Related.to_type, container_attribute: :related_json
+    attr_json :related, Curator::FieldSets::Related.to_type, container_attribute: :related_json
 
     # Cartographics
-    attr_json :cartographic, Curator::Descriptives::Cartographic.to_type, container_attribute: :cartographics_json
+    attr_json :cartographic, Curator::FieldSets::Cartographic.to_type, container_attribute: :cartographics_json
 
     # Non REL Subjects
-    attr_json :subject_other, Curator::Descriptives::Subject.to_type, container_attribute: :subject_json
+    attr_json :subject_other, Curator::FieldSets::Subject.to_type, container_attribute: :subject_json
 
     # RELS
     # PARENTS

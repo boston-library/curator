@@ -164,11 +164,11 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
       lambda do |type|
         case type
         when :identifier, :note, :date, :publication, :related, :cartographic
-          "Curator::Descriptives::#{type.capitalize}".safe_constantize
+          "Curator::FieldSets::#{type.capitalize}".safe_constantize
         when :title
-          Curator::Descriptives::TitleSet
+          Curator::FieldSets::TitleSet
         when :subject_other
-          Curator::Descriptives::Subject
+          Curator::FieldSets::Subject
         else
           NilClass
         end

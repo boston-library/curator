@@ -13,13 +13,13 @@ module Curator
 
       def identifier(json_attrs = {})
         json_attrs.fetch(:identifier, []).map do |ident_attrs|
-          Descriptives::Identifier.new(ident_attrs)
+          FieldSets::Identifier.new(ident_attrs)
         end
       end
 
       def note(json_attrs = {})
         json_attrs.fetch(:note, []).map do |note_attrs|
-          Descriptives::Note.new(note_attrs)
+          FieldSets::Note.new(note_attrs)
         end
       end
 
@@ -28,7 +28,7 @@ module Curator
         created = date_attrs.fetch(:created, nil)
         issued = date_attrs.fetch(:issued, nil)
         copyright = date_attrs.fetch(:copyright, nil)
-        Descriptives::Date.new(created: created, issued: issued, copyright: copyright)
+        FieldSets::Date.new(created: created, issued: issued, copyright: copyright)
       end
 
       def publication(json_attrs = {})
@@ -37,14 +37,14 @@ module Curator
         %i(edition_name edition_number volume issue_number).each do |k|
           pub_hash[k] = pub_attrs.fetch(k, nil)
         end
-        Descriptives::Publication.new(pub_hash.compact)
+        FieldSets::Publication.new(pub_hash.compact)
       end
 
       def title(json_attrs = {})
         titles = json_attrs.fetch(:title, {})
         primary = titles.fetch(:primary, {})
         other = titles.fetch(:other, []).map { |t_attrs| title_attr(t_attrs) }
-        Descriptives::TitleSet.new(primary: primary, other: other)
+        FieldSets::TitleSet.new(primary: primary, other: other)
       end
 
       def subject_other(json_attrs = {})
@@ -52,7 +52,7 @@ module Curator
         uniform_title = subject_json.fetch(:titles, []).map { |ut_attrs| title_attr(ut_attrs) }
         temporal = subject_json.fetch(:temporals, [])
         date = subject_json.fetch(:dates, [])
-        Descriptives::Subject.new(titles: uniform_title, temporals: temporal, dates: date)
+        FieldSets::Subject.new(titles: uniform_title, temporals: temporal, dates: date)
       end
 
       def related(json_attrs = {})
@@ -61,7 +61,7 @@ module Curator
         %i(constituent referenced_by_url references_url other_format review_url).each do |k|
           related_hash[k] = related_attrs.fetch(k, nil)
         end
-        Descriptives::Related.new(related_hash)
+        FieldSets::Related.new(related_hash)
       end
 
       def physical_location(json_attrs = {})
@@ -84,12 +84,12 @@ module Curator
       end
 
       def title_attr(json_attrs = {})
-        Descriptives::Title.new(json_attrs)
+        FieldSets::Title.new(json_attrs)
       end
 
       def cartographic(json_attrs = {})
         carto_attrs = json_attrs.fetch(:cartographic, {})
-        Descriptives::Cartographic.new(
+        FieldSets::Cartographic.new(
           scale: carto_attrs.fetch(:scale, []),
           projection: carto_attrs.fetch(:projection, nil)
         )
