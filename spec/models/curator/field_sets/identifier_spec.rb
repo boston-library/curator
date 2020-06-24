@@ -15,7 +15,7 @@ RSpec.describe Curator::FieldSets::Identifier, type: :model do
       it { is_expected.to validate_presence_of(:label) }
 
       it { is_expected.to validate_inclusion_of(:type).
-                          in_array(Curator::Descriptives::IDENTIFIER_TYPES) }
+                          in_array(Curator::FieldSets::IDENTIFIER_TYPES) }
     end
 
     describe 'attr_json settings' do

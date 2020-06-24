@@ -26,7 +26,7 @@ RSpec.describe Curator::FieldSets::Subject, type: :model do
       end
 
       it 'expects the attributes to have types that match values' do
-        expect(subject.titles).to be_a_kind_of(Array).and all(be_an_instance_of(Curator::Descriptives::Title))
+        expect(subject.titles).to be_a_kind_of(Array).and all(be_an_instance_of(Curator::FieldSets::Title))
         expect(subject.temporals).to be_a_kind_of(Array).and all(be_an_instance_of(String))
         expect(subject.dates).to be_a_kind_of(Array).and all(be_an_instance_of(String))
       end

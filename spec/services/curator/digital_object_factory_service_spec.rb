@@ -70,7 +70,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
         let(:identifiers) { descriptive.identifier }
         it 'sets identifiers' do
           expect(identifiers.count).to eq 2
-          expect(identifiers).to all(be_an_instance_of(Curator::Descriptives::Identifier))
+          expect(identifiers).to all(be_an_instance_of(Curator::FieldSets::Identifier))
           desc_json['identifier'].each do |identifier_json|
             expect(collection_as_json(identifiers, { only: %i(label type) })).to include(identifier_json.except('invalid'))
           end
@@ -79,7 +79,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
 
         let(:titles) { descriptive.title }
         it 'creates a TitleSet' do
-          expect(titles).to be_an_instance_of(Curator::Descriptives::TitleSet)
+          expect(titles).to be_an_instance_of(Curator::FieldSets::TitleSet)
         end
 
         let(:primary_title) { titles.primary }
@@ -90,7 +90,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
         end
 
         it 'sets primary title values' do
-          expect(primary_title).to be_an_instance_of(Curator::Descriptives::Title)
+          expect(primary_title).to be_an_instance_of(Curator::FieldSets::Title)
           title_attributes.each do |attr|
             expect(primary_title.public_send(attr)).to eq title_json['primary'][attr]
           end
@@ -99,7 +99,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
         let(:other_titles) { titles.other }
         it 'sets the other title values' do
           expect(other_titles.count).to eq 2
-          expect(other_titles).to all(be_an_instance_of(Curator::Descriptives::Title))
+          expect(other_titles).to all(be_an_instance_of(Curator::FieldSets::Title))
 
           title_json['other'].each do |title_other_json|
             expect(collection_as_json(other_titles, { only: title_attributes })).to include(title_other_json)
@@ -107,14 +107,14 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
         end
 
         it 'sets date values' do
-          expect(descriptive.date).to be_an_instance_of(Curator::Descriptives::Date)
+          expect(descriptive.date).to be_an_instance_of(Curator::FieldSets::Date)
           expect(descriptive.date.created).to eq desc_json['date']['created']
         end
 
         let(:notes) { descriptive.note }
         it 'sets notes' do
           expect(notes.count).to eq 3
-          expect(notes).to all(be_an_instance_of(Curator::Descriptives::Note))
+          expect(notes).to all(be_an_instance_of(Curator::FieldSets::Note))
           desc_json['note'].each do |note_json|
             expect(collection_as_json(notes, { only: %i(label type) })).to include(note_json)
           end
@@ -123,7 +123,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
         let(:publication) { descriptive.publication }
         let(:pub_json) { desc_json['publication'] }
         it 'sets publication data' do
-          expect(publication).to be_an_instance_of(Curator::Descriptives::Publication)
+          expect(publication).to be_an_instance_of(Curator::FieldSets::Publication)
           %w(volume edition_name edition_number issue_number).each do |attr|
             expect(publication.send(attr)).to eq pub_json[attr]
           end
@@ -132,7 +132,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
         let(:cartographic) { descriptive.cartographic }
         let(:carto_json) { desc_json['cartographic'] }
         it 'sets cartographic data' do
-          expect(cartographic).to be_an_instance_of(Curator::Descriptives::Cartographic)
+          expect(cartographic).to be_an_instance_of(Curator::FieldSets::Cartographic)
           expect(cartographic.scale).to eq carto_json['scale']
           expect(cartographic.projection).to eq carto_json['projection']
         end
@@ -140,7 +140,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
         let(:related) { descriptive.related }
         let(:related_json) { desc_json['related'] }
         it 'sets related data' do
-          expect(related).to be_an_instance_of(Curator::Descriptives::Related)
+          expect(related).to be_an_instance_of(Curator::FieldSets::Related)
           expect(related.referenced_by_url).to eq related_json['referenced_by_url']
           expect(related.constituent).to eq related_json['constituent']
           expect(related.references_url).to eq related_json['references_url']
@@ -279,7 +279,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
           describe 'subject_other' do
             let(:subject_other) { descriptive.subject_other }
             it 'sets the subject_other data' do
-              expect(subject_other).to be_an_instance_of(Curator::Descriptives::Subject)
+              expect(subject_other).to be_an_instance_of(Curator::FieldSets::Subject)
               expect(subject_other.dates).to contain_exactly(*desc_json['subject']['dates'])
               expect(subject_other.temporals).to contain_exactly(*desc_json['subject']['temporals'])
             end
@@ -288,7 +288,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
               let(:subject_other_titles) { subject_other.titles }
               let(:subject_other_title_attrs) { controlled_term_attrs + %i(type) }
               it 'sets the subject_other > title data' do
-                expect(subject_other_titles).to all(be_an_instance_of(Curator::Descriptives::Title))
+                expect(subject_other_titles).to all(be_an_instance_of(Curator::FieldSets::Title))
                 desc_json['subject']['titles'].each do |subject_other_title_json|
                   expect(collection_as_json(subject_other_titles, { methods: subject_other_title_attrs, only: subject_other_title_attrs })).to include(subject_other_title_json)
                 end

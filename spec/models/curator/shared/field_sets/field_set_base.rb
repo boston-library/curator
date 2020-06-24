@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples 'field_set_base', type: :model do
-  it { is_expected.to be_a_kind_of(Curator::FieldSet::Base) }
+  it { is_expected.to be_a_kind_of(Curator::FieldSets::Base) }
   it { is_expected.to respond_to(:read_attribute_for_serialization) }
 
   it 'expects to have AttrJson::Model in its .ancestors' do
