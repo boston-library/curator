@@ -33,7 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'aasm', '~> 5.0.5' # Acts as a state machine. Useful for tracking states of objects and triggering call backs between state trasnistion
   spec.add_dependency 'acts_as_list', '~> 0.9'
   spec.add_dependency 'addressable', '2.7'
-  spec.add_dependency 'attr_json', '~> 1.0.0'
+  spec.add_dependency 'attr_json', '~> 1.2'
   spec.add_dependency 'faraday', '~> 0.17'
   spec.add_dependency 'faraday-http-cache', '~> 2.0'
   spec.add_dependency 'faraday_middleware', '~> 0.13'

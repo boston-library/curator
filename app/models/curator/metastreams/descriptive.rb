@@ -24,30 +24,29 @@ module Curator
 
     scope :for_serialization, -> { merge(with_physical_location).merge(with_license).merge(with_mappings).merge(with_desc_terms) }
 
+
+    # NOTE: need to use attr json for array items
     # Identifier
-
-    attr_json :identifier, Curator::FieldSets::Identifier.to_type, container_attribute: :identifier_json, array: true, default: []
-
-    # #Title
-    attr_json :title, Curator::FieldSets::TitleSet.to_type, container_attribute: :title_json
+    attr_json :identifier, DescriptiveFieldSets::Identifier.to_type, container_attribute: :identifier_json, array: true, default: []
 
     # Notes
-    attr_json :note, Curator::FieldSets::Note.to_type, container_attribute: :note_json, array: true, default: []
+    attr_json :note, DescriptiveFieldSets::Note.to_type, container_attribute: :note_json, array: true, default: []
 
+    # NOTE: per changes in  attr_json 1.2 we can now use the built in #serialize method
+    # #Title
+    serialize :title, DescriptiveFieldSets::TitleSet.to_serialization_coder
     # Date
-    attr_json :date, Curator::FieldSets::Date.to_type, container_attribute: :date_json
-
+    serialize :date, DescriptiveFieldSets::Date.to_serialization_coder
     # Publication
-    attr_json :publication, Curator::FieldSets::Publication.to_type, container_attribute: :publication_json
-
+    serialize :publication, DescriptiveFieldSets::Publication.to_serialization_coder
     # Related
-    attr_json :related, Curator::FieldSets::Related.to_type, container_attribute: :related_json
+    serialize :related, DescriptiveFieldSets::Related.to_serialization_coder
 
     # Cartographics
-    attr_json :cartographic, Curator::FieldSets::Cartographic.to_type, container_attribute: :cartographics_json
+    serialize :cartographic, DescriptiveFieldSets::Cartographic.to_serialization_coder
 
     # Non REL Subjects
-    attr_json :subject_other, Curator::FieldSets::Subject.to_type, container_attribute: :subject_json
+    serialize :subject_other, DescriptiveFieldSets::Subject.to_serialization_coder
 
     # RELS
     # PARENTS

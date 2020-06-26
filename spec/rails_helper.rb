@@ -35,7 +35,7 @@ VCR.configure do |c|
 end
 
 require 'rspec/rails'
-require 'database_cleaner'
+require 'database_cleaner/active_record'
 require 'factory_bot_rails'
 
 Shoulda::Matchers.configure do |config|

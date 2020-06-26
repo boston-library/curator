@@ -3,7 +3,7 @@
 module Curator
   class Metastreams::DescriptiveUpdaterService < Services::Base
     include Services::UpdaterService
-    include Metastreams::DescriptiveComplexAttrs
+    include Metastreams::DescriptiveFieldSetAttrs
     include Mappings::TermMappable
     include Mappings::NameRolable
     include Mappings::FindOrCreateHostCollection

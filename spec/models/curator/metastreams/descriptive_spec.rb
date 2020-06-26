@@ -33,33 +33,27 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
                         of_type(:jsonb).
                         with_options(default: { 'identifier' => [] }) }
 
-    it { is_expected.to have_db_column(:title_json).
-                        of_type(:jsonb).
-                        with_options(default: '{}') }
+    it { is_expected.to have_db_column(:title).
+                        of_type(:jsonb) }
 
-    it { is_expected.to have_db_column(:date_json).
-                        of_type(:jsonb).
-                        with_options(default: '{}') }
+    it { is_expected.to have_db_column(:date).
+                        of_type(:jsonb) }
 
     it { is_expected.to have_db_column(:note_json).
                         of_type(:jsonb).
                         with_options(default: { 'note' => [] }) }
 
-    it { is_expected.to have_db_column(:subject_json).
-                        of_type(:jsonb).
-                        with_options(default: '{}') }
+    it { is_expected.to have_db_column(:subject_other).
+                        of_type(:jsonb) }
 
-    it { is_expected.to have_db_column(:related_json).
-                        of_type(:jsonb).
-                        with_options(default: '{}') }
+    it { is_expected.to have_db_column(:related).
+                        of_type(:jsonb) }
 
-    it { is_expected.to have_db_column(:cartographics_json).
-                        of_type(:jsonb).
-                        with_options(default: '{}') }
+    it { is_expected.to have_db_column(:cartographic).
+                        of_type(:jsonb) }
 
-    it { is_expected.to have_db_column(:publication_json).
-                        of_type(:jsonb).
-                        with_options(default: '{}') }
+    it { is_expected.to have_db_column(:publication).
+                        of_type(:jsonb) }
 
     it { is_expected.to have_db_column(:digital_origin).
                         of_type(:integer).
@@ -126,13 +120,13 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     it { is_expected.to have_db_index(:physical_location_id) }
     it { is_expected.to have_db_index(:license_id) }
     it { is_expected.to have_db_index(:identifier_json) }
-    it { is_expected.to have_db_index(:title_json) }
-    it { is_expected.to have_db_index(:date_json) }
     it { is_expected.to have_db_index(:note_json) }
-    it { is_expected.to have_db_index(:subject_json) }
-    it { is_expected.to have_db_index(:related_json) }
-    it { is_expected.to have_db_index(:cartographics_json) }
-    it { is_expected.to have_db_index(:publication_json) }
+    it { is_expected.to have_db_index(:subject_other) }
+    it { is_expected.to have_db_index(:title) }
+    it { is_expected.to have_db_index(:date) }
+    it { is_expected.to have_db_index(:related) }
+    it { is_expected.to have_db_index(:cartographic) }
+    it { is_expected.to have_db_index(:publication) }
   end
 
   describe 'Enum attributes' do
@@ -164,11 +158,11 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
       lambda do |type|
         case type
         when :identifier, :note, :date, :publication, :related, :cartographic
-          "Curator::FieldSets::#{type.capitalize}".safe_constantize
+          "Curator::DescriptiveFieldSets::#{type.capitalize}".safe_constantize
         when :title
-          Curator::FieldSets::TitleSet
+          Curator::DescriptiveFieldSets::TitleSet
         when :subject_other
-          Curator::FieldSets::Subject
+          Curator::DescriptiveFieldSets::Subject
         else
           NilClass
         end
@@ -178,11 +172,6 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     it { is_expected.to respond_to(*(json_attributes + array_json_attributes)) }
 
     describe 'registry settings' do
-      it 'expects the the settings for #json_attributes to be set correctly' do
-        expect(json_attributes).to all(satisfy { |json_attribute| registry.has_attribute?(json_attribute) })
-        expect(json_attributes).to all(satisfy { |json_attribute| registry.fetch(json_attribute).container_attribute == container_attribute.call(json_attribute) })
-      end
-
       it 'expects the settings for #array_json_attributes to be set correctly' do
         expect(array_json_attributes).to all(satisfy { |json_attribute| registry.has_attribute?(json_attribute) })
         expect(array_json_attributes).to all(satisfy { |json_attribute| registry.fetch(json_attribute).container_attribute == container_attribute.call(json_attribute) })
@@ -190,13 +179,6 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
       end
 
       describe 'types' do
-        it 'expects all the #json_attributes to match the correct types' do
-          expect(json_attributes.map { |json_attr| registry.fetch(json_attr).type }).to all(be_a_kind_of(AttrJson::Type::Model))
-          json_attributes.each do |json_attribute|
-            expect(registry.fetch(json_attribute).type.model).to be(attr_type.call(json_attribute))
-          end
-        end
-
         it 'expects all the #array_json_attributes to match the correct_types' do
           expect(array_json_attributes.map { |json_attr| registry.fetch(json_attr).type }).to all(be_a_kind_of(AttrJson::Type::Array))
           expect(array_json_attributes.map { |json_attr| registry.fetch(json_attr).type.base_type }).to all(be_a_kind_of(AttrJson::Type::Model))
