@@ -24,7 +24,7 @@ RSpec.describe Curator::Serializers::Node, type: :lib_serializers do
 
   include_examples 'conditional_attributes' do
     let(:serializable_record) { descriptive.reload }
-    let(:key) { :title }
+    let(:key) { :subject }
     let(:if_facet) do
       build_facet_inst(klass: described_class, key: key, options: { target: :key }.merge(if_proc)) do
         attribute :primary do |target, _serializer_params|
@@ -55,7 +55,7 @@ RSpec.describe Curator::Serializers::Node, type: :lib_serializers do
 
     let!(:serialized_facet_keys) { %i(attributes nodes relations) }
     let!(:node_attributes) { %i(abstract access_restrictions digital_origin frequency issuance origin_event extent physical_location_department physical_location_shelf_locator place_of_publication publisher rights series subseries subsubseries toc toc_url) }
-    let!(:identifier_json) { descriptive.identifier.as_json.map { |a| { attributes: a.reject { |_k, v| v.blank? }.symbolize_keys } } }
+    let!(:subject_json) { descriptive.subject.attributes.map { |a| { attributes: a.reject { |_k, v| v.blank? }.symbolize_keys } } }
     let!(:relation_json) do
       descriptive.reload.genres.map do |genre|
         {
@@ -73,8 +73,8 @@ RSpec.describe Curator::Serializers::Node, type: :lib_serializers do
 
         has_many :genres, serializer: Class.new(Curator::Serializers::AbstractSerializer) { schema_as_json(root: :genre) { attributes :basic, :label, :id_from_auth } }
 
-        node :identifier, target: :key do
-          attributes :label, :type, :invalid
+        node :subject, target: :key do
+          attributes :temporals, :dates
         end
       end
     end
@@ -95,7 +95,7 @@ RSpec.describe Curator::Serializers::Node, type: :lib_serializers do
     it 'should have a sub node that serializes as array' do
       expect(subject[:nodes]).to have_key(:identifier)
       expect(subject[:nodes][:identifier]).to be_a_kind_of(Array).and all(have_key(:attributes))
-      expect(subject[:nodes][:identifier]).to match_array(identifier_json)
+      expect(subject[:nodes][:identifier]).to match_array(subject_json)
     end
 
     it 'should have serialized relationships' do

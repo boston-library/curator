@@ -92,7 +92,9 @@ module Curator
     # Subject Node in Serialzer using decorator
 
     def subject
-      Metastreams::SubjectDecorator.new(self)
+      return @subject if defined?(@subject)
+
+       @subject = Metastreams::SubjectDecorator.new(self)
     end
   end
 end

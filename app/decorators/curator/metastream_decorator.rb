@@ -2,15 +2,28 @@
 
 module Curator
   class MetastreamDecorator < Decorators::BaseDecorator
-    attr_reader :administrative, :descriptive, :workflow
-    def initialize(metastreamable_object)
-      @administrative = metastreamable_object.administrative if metastreamable_object.respond_to?(:administrative)
-      @descriptive = metastreamable_object.descriptive if metastreamable_object.respond_to?(:descriptive)
-      @workflow = metastreamable_object.workflow if metastreamable_object.respond_to?(:workflow)
+    def administrative
+      return @administrative if defined?(@administrative)
+
+      @administrative = __getobj__.administrative if __getobj__.respond_to?(:administrative)
+    end
+
+    def descriptive
+      return @descriptive if defined?(@descriptive)
+
+      @administrative = __getobj__.descriptive if __getobj__.respond_to?(:descriptive)
+    end
+
+    def workflow
+      return @workflow if defined?(@workflow)
+
+      @workflow = __getobj__.administrative if __getobj__.respond_to?(:administrative)
     end
 
     def blank?
-      @administrative.blank? && @descriptive.blank? && @workflow.blank?
+      return true if __getobj__.blank?
+
+      administrative.blank? && descriptive.blank? && workflow.blank?
     end
   end
 end

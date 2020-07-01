@@ -10,9 +10,11 @@ RSpec.describe Curator::Serializers::AbstractSerializer, type: :lib_serializers 
       end
     end
   end
+
   include_examples 'dsl' do
     let(:described_serializer_class) { serializer_class }
   end
+
   describe 'class functionality' do
     describe 'inheritance' do
       let(:child_serializer) do

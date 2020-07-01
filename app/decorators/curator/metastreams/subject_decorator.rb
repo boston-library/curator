@@ -2,17 +2,28 @@
 
 module Curator
   class Metastreams::SubjectDecorator < Decorators::BaseDecorator
-    attr_reader :topics, :names, :geos, :other
+    def topics
+      return @topics if defined?(@topics)
 
-    def initialize(descriptive)
-      @topics = descriptive.subject_topics if descriptive.respond_to?(:subject_topics)
-      @names = descriptive.subject_names if descriptive.respond_to?(:subject_names)
-      @geos = descriptive.subject_geos if descriptive.respond_to?(:subject_geos)
-      @other = descriptive.subject_other if descriptive.respond_to?(:subject_other)
+      @topics = __getobj__.subject_topics if __getobj__.respond_to?(:subject_topics)
     end
 
-    def blank?
-      @topics.blank? && @names.blank? && @geos.blank? && @other.blank?
+    def names
+      return @names if defined?(@names)
+
+      @names = __getobj__.subject_names if __getobj__.respond_to?(:subject_names)
+    end
+
+    def geos
+      return @geos if defined?(@geos)
+
+      @geos = __getobj__.subject_geos if __getobj__.respond_to?(:subject_geos)
+    end
+
+    def other
+      return @other if defined?(@other)
+
+      @other = __getobj__.subject_other if __getobj__.respond_to?(:subject_other)
     end
 
     def titles
@@ -25,6 +36,20 @@ module Curator
 
     def dates
       other.dates if other
+    end
+
+    def attributes
+      {
+        'titles' => titles&.map(&:attributes) || [],
+        'temporals' => temporals,
+        'dates' => dates
+      }
+    end
+
+    def blank?
+      return true if __getobj__.blank?
+
+      topics.blank? && names.blank? && geos.blank? && other.blank?
     end
   end
 end
