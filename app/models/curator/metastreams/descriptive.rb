@@ -24,7 +24,6 @@ module Curator
 
     scope :for_serialization, -> { merge(with_physical_location).merge(with_license).merge(with_mappings).merge(with_desc_terms) }
 
-
     # NOTE: need to use attr json for array items
     # Identifier
     attr_json :identifier, DescriptiveFieldSets::Identifier.to_type, container_attribute: :identifier_json, array: true, default: []
@@ -94,7 +93,7 @@ module Curator
     def subject
       return @subject if defined?(@subject)
 
-       @subject = Metastreams::SubjectDecorator.new(self)
+      @subject = Metastreams::SubjectDecorator.new(self)
     end
   end
 end

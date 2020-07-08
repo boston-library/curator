@@ -8,7 +8,7 @@ module SerializerHelper
       {
         after_as_json: -> (json_record) { json_record['host_collections'] = json_record['host_collections'].flat_map(&:values) if json_record.key?('host_collections'); json_record },
         root: true,
-        only: [:abstract, :digital_origin, :origin_event, :text_direction, :resource_type_manuscript, :place_of_publication, :publisher, :issuance, :frequency, :extent, :physical_location_department, :physical_location_shelf_locator, :series, :subseries, :subsubseries, :rights, :access_restrictions, :toc, :toc_url],
+        only: [:abstract, :digital_origin, :origin_event, :text_direction, :resource_type_manuscript, :place_of_publication, :publisher, :issuance, :frequency, :extent, :physical_location_department, :physical_location_shelf_locator, :series, :subseries, :subsubseries, :rights, :access_restrictions, :toc, :toc_url, :title, :cartographic, :date, :related, :publication],
         include: {
           host_collections: { only: [:name] },
           physical_location: {
@@ -19,29 +19,9 @@ module SerializerHelper
             only: [:label, :type, :invalid],
             methods: [:label, :type, :invalid]
           },
-          title: {
-            only: [:primary, :other],
-            methods: [:primary, :other]
-          },
           note: {
             only: [:label, :type],
             methods: [:label, :type]
-          },
-          cartographic: {
-            only: [:scale, :projection],
-            methods: [:scale, :projection]
-          },
-          date: {
-            only: [:created, :issued, :copyright],
-            methods: [:created, :issued, :copyright]
-          },
-          related: {
-            only: [:constituent, :other_format, :referenced_by_url, :references_url, :review_url],
-            methods: [:constituent, :other_format, :referenced_by_url, :references_url, :review_url]
-          },
-          publication: {
-            only: [:edition_name, :edition_number, :volume, :issue_number],
-            methods: [:edition_name, :edition_number, :volume, :issue_number]
           },
           resource_types: {
             only: [:label, :id_from_auth, :authority_code],

@@ -57,7 +57,7 @@ module Curator
           else
             next out_hash
           end
-        end.deep_transform_keys! { |key| run_key_transform(key).to_s }
+        end.as_json
       end
     end
   end

@@ -31,8 +31,8 @@ RSpec.describe Curator::Serializers::Attribute, type: :lib_serializers do
   end
 
   describe 'serializing attributes for objects' do
-    let(:digital_object_json) { object_as_json(digital_object, { only: fields }) }
-    let(:arbitrary_proc) { ->(key) { ->(record, serializer_params) { "#{record.public_send(key).as_json} #{serializer_params[:arbitrary_value]}" } } }
+    let(:digital_object_json) { digital_object.attributes.slice(*fields.map(&:to_s)) }
+    let(:arbitrary_proc) { ->(key) { ->(record, serializer_params) { "#{record.public_send(key)} #{serializer_params[:arbitrary_value]}" } } }
     let(:arbitrary_params) { { arbitrary_value: 'Attribute' } }
 
     describe 'key based serializing' do
@@ -56,8 +56,6 @@ RSpec.describe Curator::Serializers::Attribute, type: :lib_serializers do
       end
 
       it 'is expected to serialize proc_attributes' do
-        awesome_print serialized_proc_attributes
-        awesome_print digital_object_json_proc
         expect(serialized_proc_attributes).to eq(digital_object_json_proc)
       end
     end

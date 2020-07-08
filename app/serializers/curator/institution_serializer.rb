@@ -7,7 +7,7 @@ module Curator
 
       belongs_to :location, serializer: Curator::ControlledTerms::GeographicSerializer
 
-      node :metastreams, target: :key do
+      node :metastreams do
         has_one :administrative, serializer: Curator::Metastreams::AdministrativeSerializer
         has_one :workflow, serializer: Curator::Metastreams::WorkflowSerializer
       end
