@@ -42,7 +42,6 @@ require 'solr_wrapper/rake_task'
 
 desc 'Lint, set up test app, spin up Solr, and run specs'
 task ci: [:rubocop] do
-  ENV['CI'] = true
   puts 'running continuous integration'
   Rails.env = 'test'
   Rake::Task['curator:setup'].invoke

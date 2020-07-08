@@ -22,5 +22,6 @@ rvm:
 env:
   global:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+    - CI=true
   matrix:
     - "RAILS_VERSION=6.0.3.2"
