@@ -21,7 +21,7 @@ RSpec.shared_examples 'model_error_wrapper' do
   let!(:model_error_instance) { described_const.new }
 
   describe 'inherited instance methods' do
-    subject { described_const.new }
+    subject { model_error_instance }
 
     it { is_expected.to respond_to(:model_errors) }
   end
