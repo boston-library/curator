@@ -158,6 +158,8 @@ module Curator
 
       private
 
+      # TODO: We may need to add the following methods or something like them to read attributes that come back as
+      # either arrays or hashes to strip nil or blank values within them
       # def parse_val(val)
       #   return if val.blank?
       #
