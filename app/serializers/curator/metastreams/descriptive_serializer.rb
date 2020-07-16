@@ -3,7 +3,7 @@
 module Curator
   class Metastreams::DescriptiveSerializer < Curator::Serializers::AbstractSerializer
     schema_as_json root: :descriptive do
-      attributes :abstract, :digital_origin, :origin_event, :text_direction, :resource_type_manuscript, :place_of_publication, :publisher, :issuance, :frequency, :extent, :physical_location_department, :physical_location_shelf_locator, :series, :subseries, :subsubseries, :rights, :access_restrictions, :toc, :toc_url
+      attributes :abstract, :digital_origin, :origin_event, :text_direction, :resource_type_manuscript, :place_of_publication, :publisher, :issuance, :frequency, :extent, :physical_location_department, :physical_location_shelf_locator, :series, :subseries, :subsubseries, :rights, :access_restrictions, :toc, :toc_url, :title, :note, :cartographic, :date, :related, :publication
 
       attribute(:host_collections) { |record| record.host_collections.names }
 
@@ -18,6 +18,10 @@ module Curator
         attributes :label, :type, :invalid
       end
 
+      node :note, target: :key do
+        attributes :label, :type
+      end
+
       node :title, target: :key do
         node :primary, target: :key do
           attributes :label, :subtitle, :display, :display_label, :usage, :supplied, :language, :type, :authority_code, :id_from_auth, :part_name, :part_number
@@ -26,10 +30,6 @@ module Curator
         node :other, target: :key do
           attributes :label, :subtitle, :display, :display_label, :usage, :supplied, :language, :type, :authority_code, :id_from_auth, :part_name, :part_number
         end
-      end
-
-      node :note, target: :key do
-        attributes :label, :type
       end
 
       node :cartographic, target: :key do

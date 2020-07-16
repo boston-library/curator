@@ -31,7 +31,7 @@ RSpec.describe Curator::Serializers::Attribute, type: :lib_serializers do
   end
 
   describe 'serializing attributes for objects' do
-    let(:digital_object_json) { object_as_json(digital_object, { only: fields }) }
+    let(:digital_object_json) { digital_object.attributes.slice(*fields.map(&:to_s)) }
     let(:arbitrary_proc) { ->(key) { ->(record, serializer_params) { "#{record.public_send(key)} #{serializer_params[:arbitrary_value]}" } } }
     let(:arbitrary_params) { { arbitrary_value: 'Attribute' } }
 

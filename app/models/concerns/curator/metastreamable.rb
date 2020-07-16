@@ -27,7 +27,9 @@ module Curator
 
     module InstanceMethods
       def metastreams
-        Curator::MetastreamDecorator.new(self)
+        return @metastreams if defined?(@metastreams)
+
+        @metastreams = Curator::MetastreamDecorator.new(self)
       end
     end
   end

@@ -24,7 +24,7 @@ RSpec.describe Curator::Serializers::Node, type: :lib_serializers do
 
   include_examples 'conditional_attributes' do
     let(:serializable_record) { descriptive.reload }
-    let(:key) { :title }
+    let(:key) { :subject }
     let(:if_facet) do
       build_facet_inst(klass: described_class, key: key, options: { target: :key }.merge(if_proc)) do
         attribute :primary do |target, _serializer_params|

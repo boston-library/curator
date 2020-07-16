@@ -139,7 +139,6 @@ module Curator
           next res unless facet.include_value?(record, serializer_params.dup)
 
           val = facet.serialize(record, serializer_params.dup)
-
           next res if val.blank?
 
           res.merge(facet.key => val)
@@ -158,6 +157,30 @@ module Curator
       end
 
       private
+
+      # TODO: We may need to add the following methods or something like them to read attributes that come back as
+      # either arrays or hashes to strip nil or blank values within them
+      # def parse_val(val)
+      #   return if val.blank?
+      #
+      #   return val if !val.is_a?(Array) && !val.is_a?(Hash)
+      #
+      #   return val.inject(Concurrent::Hash.new) do |ret, (key, val)|
+      #     pval = parse_val(val)
+      #
+      #     next ret if pval.blank?
+      #
+      #     ret.merge(key => pval)
+      #   end if val.is_a?(Hash)
+      #
+      #   val.inject(Concurrent::Array.new) do |ret, el|
+      #     pval = parse_val(el)
+      #
+      #     next ret if pval.blank?
+      #
+      #     ret << pval
+      #   end
+      # end
 
       def add_facet(type:, schema_attribute:)
         warn("#{schema_attribute.key} is already mapped to group #{type} using falling back to previous value") if key_in_group?(type, schema_attribute.key)

@@ -20,10 +20,5 @@ module Curator
         {}
       end
     end
-
-    eager_autoload do
-      autoload :MetastreamDecorator
-      autoload :DescSubjectDecorator
-    end
   end
 end

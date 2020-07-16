@@ -10,7 +10,6 @@ module Curator
 
   eager_autoload do
     autoload :Decorators
-    autoload :Descriptives
     autoload :Exceptions
     autoload :Middleware
     autoload :Services
@@ -20,7 +19,6 @@ module Curator
 
   def self.eager_load!
     super
-    Curator::Descriptives.eager_load!
     Curator::Decorators.eager_load!
     Curator::Exceptions.eager_load!
     Curator::Middleware.eager_load!

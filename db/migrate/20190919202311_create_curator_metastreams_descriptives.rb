@@ -6,14 +6,14 @@ class CreateCuratorMetastreamsDescriptives < ActiveRecord::Migration[5.2]
       t.belongs_to :descriptable, polymorphic: true, index: { unique: true, using: :btree, name: 'unique_idx_meta_desc_on_metastreamable_poly' }, null: false
       t.belongs_to :physical_location, index: { using: :btree }, foreign_key: { to_table: :curator_controlled_terms_nomenclatures, on_delete: :cascade }, null: false
       t.belongs_to :license, index: { using: :btree }, foreign_key: { to_table: :curator_controlled_terms_nomenclatures, on_delete: :cascade }, null: false
-      t.jsonb :identifier_json, index: { using: :gin, opclass: :jsonb_path_ops }, default: '{}'
-      t.jsonb :title_json, index: { using: :gin, opclass: :jsonb_path_ops }, default: '{}'
-      t.jsonb :date_json, index: { using: :gin, opclass: :jsonb_path_ops }, default: '{}' # created/issued/copyright
-      t.jsonb :note_json, index: { using: :gin, opclass: :jsonb_path_ops }, default: '{}'
-      t.jsonb :subject_json, index: { using: :gin, opclass: :jsonb_path_ops }, default: '{}' # uniform_title/temporal/date
-      t.jsonb :related_json, index: { using: :gin, opclass: :jsonb_path_ops }, default: '{}'
-      t.jsonb :cartographics_json, index: { using: :gin, opclass: :jsonb_path_ops }, default: '{}'
-      t.jsonb :publication_json, index: { using: :gin, opclass: :jsonb_path_ops }, default: '{}'
+      t.jsonb :identifier_json, index: { using: :gin, opclass: :jsonb_path_ops }, default: {}
+      t.jsonb :title, index: { using: :gin, opclass: :jsonb_path_ops }, default: {}
+      t.jsonb :date, index: { using: :gin, opclass: :jsonb_path_ops }, default: {} # created/issued/copyright
+      t.jsonb :note_json, index: { using: :gin, opclass: :jsonb_path_ops }, default: {}
+      t.jsonb :subject_other, index: { using: :gin, opclass: :jsonb_path_ops }, default: {} # uniform_title/temporal/date
+      t.jsonb :related, index: { using: :gin, opclass: :jsonb_path_ops }, default: {}
+      t.jsonb :cartographic, index: { using: :gin, opclass: :jsonb_path_ops }, default: {}
+      t.jsonb :publication, index: { using: :gin, opclass: :jsonb_path_ops }, default: {}
       t.integer :digital_origin, default: 1
       t.integer :text_direction
       t.boolean :resource_type_manuscript, default: false

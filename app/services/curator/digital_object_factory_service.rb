@@ -3,7 +3,7 @@
 module Curator
   class DigitalObjectFactoryService < Services::Base
     include Services::FactoryService
-    include Metastreams::DescriptiveComplexAttrs
+    include Metastreams::DescriptiveFieldSetAttrs
     include Mappings::TermMappable
     include Mappings::NameRolable
     include Mappings::FindOrCreateHostCollection

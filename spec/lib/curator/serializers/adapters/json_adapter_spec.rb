@@ -38,7 +38,7 @@ RSpec.describe Curator::Serializers::JSONAdapter, type: :lib_serializers do
           'collection_count' => record.collections.count,
           'abstract_character_count' => record.abstract.length
         }
-      }
+      }.as_json
     end
   end
 

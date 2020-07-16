@@ -6,10 +6,11 @@ RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: f
   specify { expect(serializer_class).to be_truthy.and be <= Curator::Serializers::AbstractSerializer }
   specify { expect(resource_key).to be_truthy.and be_a_kind_of(String) }
   specify { expect(format).to be_truthy.and be_a_kind_of(Symbol) }
+  specify { expect(charset).to be_truthy.and be_a_kind_of(String) }
   specify { expect(params).to be_truthy.and be_a_kind_of(Hash) }
   specify { expect(serialized_hash).to be_truthy.and be_a_kind_of(Hash) }
 
-  let(:expected_content_type) { Mime[format].to_str }
+  let(:expected_content_type) { "#{Mime[format].to_str}; #{charset}" }
 
   describe 'GET' do
     describe "#index", if: has_collection_methods do
@@ -86,11 +87,13 @@ RSpec.shared_examples 'shared_put_patch', type: :controller do |skip_put_patch: 
   routes { Curator::Engine.routes }
 
   describe 'PUT/PATCH', unless: skip_put_patch do
-    let(:expected_content_type) { Mime[:json].to_str }
+    let(:expected_content_type) { "#{Mime[format].to_str}; #{charset}" }
 
     specify { expect(params).to be_truthy.and be_a_kind_of(Hash) }
     specify { expect(valid_update_attributes).to be_truthy.and be_a_kind_of(Hash) }
     specify { expect(invalid_update_attributes).to be_truthy.and be_a_kind_of(Hash) }
+    specify { expect(format).to be_truthy.and be_a_kind_of(Symbol) }
+    specify { expect(charset).to be_truthy.and be_a_kind_of(String) }
     specify { expect(valid_session).to be_truthy.and be_a_kind_of(Hash) }
     specify { expect(resource).to be_truthy.and be_a_kind_of(ActiveRecord::Base) }
     specify { expect(resource_key).to be_truthy.and be_a_kind_of(String) }
@@ -141,11 +144,13 @@ RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true, reso
   routes { Curator::Engine.routes }
 
   describe 'POST', unless: skip_post do
-    let(:expected_content_type) { Mime[:json].to_str }
+    let(:expected_content_type) { "#{Mime[format].to_str}; #{charset}" }
 
     specify { expect(params).to be_truthy.and be_a_kind_of(Hash) }
     specify { expect(valid_attributes).to be_truthy.and be_a_kind_of(Hash) }
     specify { expect(invalid_attributes).to be_truthy.and be_a_kind_of(Hash) }
+    specify { expect(format).to be_truthy.and be_a_kind_of(Symbol) }
+    specify { expect(charset).to be_truthy.and be_a_kind_of(String) }
     specify { expect(valid_session).to be_truthy.and be_a_kind_of(Hash) }
     specify { expect(resource_class).to be_truthy.and be <= ActiveRecord::Base }
     specify { expect(resource_key).to be_truthy.and be_a_kind_of(String) }
@@ -196,6 +201,7 @@ RSpec.shared_examples "shared_formats", type: :controller do |include_ark_contex
 
   context 'JSON(Default)' do
     let!(:format) { :json }
+    let!(:charset) { 'charset=utf-8' }
     let!(:params) { base_params.dup.merge({ format: format }) }
     let(:serialized_hash) { serializer_class.new(resource, format).serializable_hash[resource_key].as_json }
     # NOTE: Have to add as_json so the dates match the serialized response

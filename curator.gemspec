@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.description = 'Description of Curator.'
   spec.license     = 'MIT'
 
-  spec.required_ruby_version = '>= 2.5.7'
+  spec.required_ruby_version = '>= 2.5.8'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
@@ -33,7 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'aasm', '~> 5.0.5' # Acts as a state machine. Useful for tracking states of objects and triggering call backs between state trasnistion
   spec.add_dependency 'acts_as_list', '~> 0.9'
   spec.add_dependency 'addressable', '2.7'
-  spec.add_dependency 'attr_json', '~> 1.0.0'
+  spec.add_dependency 'attr_json', '~> 1.2'
   spec.add_dependency 'faraday', '~> 0.17'
   spec.add_dependency 'faraday-http-cache', '~> 2.0'
   spec.add_dependency 'faraday_middleware', '~> 0.13'
@@ -42,7 +42,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'oj', '~> 3.10'
   spec.add_dependency 'ox', '~> 2.11'
   spec.add_dependency 'paper_trail', '~> 10.3' # have not implemented this yet but does version control
-  spec.add_dependency 'rails', '~> 5.2.4.1'
+  spec.add_dependency 'rails', '~> 6.0.3'
   spec.add_dependency 'rsolr', '~> 2.0.2'
   spec.add_dependency 'traject', '~> 3.3.0'
 
