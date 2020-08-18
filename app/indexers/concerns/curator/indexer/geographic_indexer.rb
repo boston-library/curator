@@ -26,8 +26,8 @@ module Curator
               context.output_hash['subject_geo_label_sim'] << geo_label if geo_auth
 
               if geo_auth == 'tgn' || geo_auth == 'geonames'
-                auth_url = "#{ENV['AUTHORITY_API_URL']}/geomash/#{geo_auth}/#{subject_geo.id_from_auth}"
-                auth_data = Curator::ControlledTerms::AuthorityService.call(url: auth_url)
+                auth_url = "/#{geo_auth}/#{subject_geo.id_from_auth}"
+                auth_data = Curator::ControlledTerms::AuthorityService.call(path: auth_url, endpoint_prefix: '/geomash')
                 if auth_data && auth_data[:hier_geo].present?
                   auth_data[:hier_geo] = Curator::Parsers::GeoParser.normalize_geonames_hgeo(auth_data[:hier_geo]) if geo_auth == 'geonames'
                   auth_data[:hier_geo].each do |k, v|

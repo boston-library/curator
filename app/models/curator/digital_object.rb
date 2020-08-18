@@ -58,6 +58,17 @@ module Curator
       has_many :video_file_set_members, source_type: 'Curator::Filestreams::Video'
     end
 
+    # TODO: need to dynamically switch he identifier_type/identifier fields
+    def ark_params
+      super.merge({
+          parent_pid: admin_set&.ark_id,
+          secondary_parent_pids: [],
+          local_original_identifier_type: 'placeholder: TODO',
+          local_original_identifier: 'placeholder: TODO',
+          model_type: self.class.name
+      })
+    end
+
     private
 
     def add_admin_set_to_members

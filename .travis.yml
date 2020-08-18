@@ -1,5 +1,5 @@
 language: ruby
-sudo: false
+os: linux
 dist: bionic
 
 services:
@@ -9,10 +9,13 @@ cache:
   bundler: true
 
 addons:
-  postgresql: "9.6"
+  postgresql: "11"
+  apt:
+    packages:
+      - postgresql-client-11
 
 before_install:
-  - gem update --system 3.1.2
+  - gem update --system 3.1.4
   - gem install bundler
 
 rvm:
@@ -21,7 +24,8 @@ rvm:
 
 env:
   global:
+    - PGHOST=127.0.0.1
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
     - CI=true
-  matrix:
+  jobs:
     - "RAILS_VERSION=6.0.3.2"

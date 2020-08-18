@@ -2,43 +2,37 @@
 
 module Curator
   class ControlledTerms::AuthorityService < Services::Base
-    def initialize(url:, json_path: nil)
-      @url = Addressable::URI.parse(url)
-      @json_path = json_path
+    include Curator::Services::RemoteService
+
+    self.base_url = "#{ENV['AUTHORITY_API_URL']}"
+    self.default_endpoint_prefix = '/bpldc'
+    self.default_headers = { accept: 'application/json', content_type: 'application/json'}
+
+    attr_reader :endpoint_path
+
+    def initialize(path:, endpoint_prefix: self.class.default_endpoint_prefix, query: nil)
+      @endpoint_path = "#{sendpoint_prefix}/#{path}#{query}".strip
     end
 
     def call
-      conn = set_connection
-      @url.path = "#{@url.path}#{@json_path}"
-      @url = @url.to_s
       begin
-        response = conn.get(@url)
-        json_response = Oj.load(response.body)
+        code, body = self.class.client_yielder do |client|
+          resp = client.headers(self.class.default_headers).
+                        get(endpoint_path)
+          [resp.code, resp.body]
+        end
+
+        json_response = (200..201).include?(code) ? Oj.load(body) : {}
+
         return block_given? ? yield(json_response) : json_response
-      rescue Faraday::ClientError => e
+      rescue HTTP::Error => e
         Rails.logger.error "Error Retreiving Json For Authority at #{@url}"
         Rails.logger.error "Reason #{e.message}"
-        nil
-      rescue JSON::ParserError => e
+      rescue Oj::Error => e
         Rails.logger.error "Error Parsing Json For Authority at #{@url}"
         Rails.logger.error "Reason #{e.message}"
-        nil
       end
       nil
-    end
-
-    protected
-
-    def set_connection
-      Faraday.new do |f|
-        f.use Faraday::Response::Logger, Rails.logger
-        # f.use :http_cache, store: Rails.cache #make this configurable
-        f.response :follow_redirects
-        f.adapter :net_http_persistent, pool_size: ENV.fetch('RAILS_MAX_THREADS') { 5 } do |http|
-          http.idle_timeout = 100
-          http.retry_change_requests = true
-        end
-      end
     end
   end
 end

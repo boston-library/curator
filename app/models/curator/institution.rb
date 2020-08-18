@@ -27,6 +27,16 @@ module Curator
 
     after_update_commit :reindex_associations
 
+    def ark_params
+      super.merge({
+          parent_pid: nil,
+          secondary_parent_pids: [],
+          local_original_identifier_type: 'Physical Location',
+          local_original_identifier: name,
+          model_type: self.class.name
+      })
+    end
+
     private
 
     def reindex_associations

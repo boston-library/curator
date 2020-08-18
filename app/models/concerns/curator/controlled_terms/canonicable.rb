@@ -27,8 +27,8 @@ module Curator
                                }
                              end
 
-          self.label = ControlledTerms::AuthorityService.call(url: value_uri,
-                                                              json_path: canonical_json_format,
+          self.label = ControlledTerms::AuthorityService.call(path: value_uri,
+                                                              query: canonical_json_format,
                                                               &label_json_block) if label_json_block.present?
         end
       end

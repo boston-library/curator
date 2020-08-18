@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
-# fetch data from source authority and seed database for input validation
-authority_api_url = "#{ENV['AUTHORITY_API_URL']}/bpldc"
-
 # ControlledTerms::Authority
-auth_data = Curator::ControlledTerms::AuthorityService.call(url: "#{authority_api_url}/authorities")
+auth_data = Curator::ControlledTerms::AuthorityService.call(path: "authorities")
 auth_data&.each do |auth_input|
   Curator.controlled_terms.authority_class.transaction do
     begin
@@ -20,7 +17,7 @@ end
 # ControlledTerms::Genre, ControlledTerms::ResourceType, ControlledTerms::Language, ControlledTerms::Role
 terms_for_seed = %w(basic_genres resource_types languages roles)
 terms_for_seed.each do |term_for_seed|
-  terms_data = Curator::ControlledTerms::AuthorityService.call(url: "#{authority_api_url}/#{term_for_seed}")
+  terms_data = Curator::ControlledTerms::AuthorityService.call(path: "#{term_for_seed}")
   terms_data&.each do |term_data|
     term_class_name = term_for_seed.gsub(/\Abasic_/, '').singularize
     term_class = Curator.controlled_terms.public_send("#{term_class_name}_class")
@@ -39,7 +36,7 @@ terms_for_seed.each do |term_for_seed|
 end
 
 # ControlledTerms::License
-licenses_data = Curator::ControlledTerms::AuthorityService.call(url: "#{authority_api_url}/licenses")
+licenses_data = Curator::ControlledTerms::AuthorityService.call(path: "licenses")
 licenses_data&.each do |license_input|
   Curator.controlled_terms.license_class.transaction do
     begin

@@ -5,22 +5,49 @@ module Curator
     module RemoteService
 
       extend ActiveSupport::Concern
-      #TODO Should be able to to set net_http_persistent and default connection options according to faraday docs
-      #TODO Make threadsafe class level instance variable for storing base uri for service
-      private
-      def client
-        return @client if defined?(@client)
-        @client = Faraday.new(url: @base_url.to_s) do |f|
-          f.use Faraday::Response::Logger, Rails.logger
-          f.use :http_cache, store: Rails.cache #make this configurable
-          f.adapter :net_http_persistent, pool_size: ENV.fetch('RAILS_MAX_THREADS', 5) do |http|
-            http.idle_timeout = 120
-            http.read_timeout = 120
-            http.open_timeout = 60
-            http.retry_change_requests = true
+
+      # NOTE: do not inherit sub classes from this
+
+      included do
+        include Client
+      end
+
+      module Client
+        extend ActiveSupport::Concern
+
+        #TODO will require Authorization options once login in sstem is set up
+        included do
+          class_attribute :base_url, instance_accessor: false
+          class_attribute :pool_options, instance_accessor: false, default: { size: ENV.fetch('RAILS_MAX_THREADS') { 5 }, timeout: 5 }
+          class_attribute :timeout_options, instance_accessor: false, default: { connect: 5, write: 5, read: 5 }
+          class_attribute :default_headers, instance_accessor: false, default: {}
+          class_attribute :default_endpoint_prefix, instance_accessor: false
+          class_attribute :ssl_context, instance_accessor: false
+        end
+
+        class_methods do
+          def base_uri
+            return @base_uri if defined?(@base_uri)
+
+            @base_uri = Addressable::URI.parse(base_url)
+          end
+
+          def client_yielder
+            client_pool.with { |conn| yield conn }
+          end
+
+          protected
+
+          def client_pool
+            return @client_pool if defined?(@client_pool)
+
+            @client_pool = ConnectionPool.new(pool_options) do
+              HTTP.timeout(timeout_options)
+                  .persistent(base_uri.normalize.to_s)
             end
           end
         end
       end
     end
   end
+end

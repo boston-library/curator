@@ -49,6 +49,16 @@ module Curator
 
     after_commit :reindex_digital_objects
 
+    def ark_params
+      super.merge({
+          parent_pid: file_set_of&.ark_id,
+          secondary_parent_pids: [],
+          local_original_identifier_type: 'filename',
+          local_original_identifier: file_name_base,
+          model_type: self.class.name
+      })
+    end
+
     private
 
     def add_file_set_of_to_members
