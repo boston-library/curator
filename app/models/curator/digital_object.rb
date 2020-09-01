@@ -63,13 +63,39 @@ module Curator
       super.merge({
           parent_pid: admin_set&.ark_id,
           secondary_parent_pids: [],
-          local_original_identifier_type: 'placeholder: TODO',
-          local_original_identifier: 'placeholder: TODO',
           model_type: self.class.name
-      })
+      }.merge(local_id_params))
     end
 
     private
+
+    def local_id_params
+      return {
+          local_original_identifier: nil,
+          local_original_identifier_type: nil
+          } if descriptive&.identifier.blank?
+
+      identifier_params = descriptive.identifier&.each do |ident|
+        case ident.type
+        when 'internet-archive', 'local-barcode'
+          return {
+              local_original_identifier: ident.label,
+              local_original_identifier_type: 'Barcode'
+              }
+        when 'local-accession'
+          return {
+              local_original_identifier: ident.label,
+              local_original_identifier_type: 'id_local-accession field'
+            }
+        when 'local-other'
+          return {
+              local_original_identifier: ident.label,
+              local_original_identifier_type: 'id_local-other field'
+            }
+        end
+      end
+      identifier_params
+    end
 
     def add_admin_set_to_members
       collection_members.build(collection: admin_set) if admin_set.present?

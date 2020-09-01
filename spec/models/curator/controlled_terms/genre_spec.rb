@@ -16,7 +16,7 @@ RSpec.describe Curator::ControlledTerms::Genre, type: :model do
     let!(:authority) { find_authority_by_code('gmgpc') }
     let!(:term_data) { { id_from_auth: 'tgm008084' } }
 
-    before(:each) { VCR.insert_cassette('controlled_terms/genre_canonicable', allow_playback_repeats: true) }
+    before(:each) { VCR.insert_cassette('controlled_terms/genre_canonicable', allow_playback_repeats: true, record: :new_episodes) }
 
     after(:each) { VCR.eject_cassette }
     # rubocop:enable RSpec/LetSetup

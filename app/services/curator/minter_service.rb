@@ -6,22 +6,26 @@ module Curator
 
     attr_reader :ark_create_params
 
-    def initialize(ark_manager_params = {})
-      @ark_manager_params = ark_manager_params
+    def initialize(ark_params = {})
+      @ark_create_params = ark_params
       @ark = nil
     end
 
     def call
       begin
-        ark_json = self.class.client_yielder do |client|
+        ark_json = self.class.with_client do |client|
           generate_ark(client)
         end
 
-        return ark_json['ark']['pid'] if ark_json.dig('ark', 'pid')
-
-        raise "Ark Create Response Contained Errors #{ark_json.inspect}" if ark_json.present?
-
-        raise 'Empty Response came back from ark manager check logs or if in active state.'
+        return ark_json.dig('ark', 'pid')
+      rescue HTTP::Error => e
+        Rails.logger.error 'HTTP Error Occured Generating Ark'
+        Rails.logger.error "Reason #{e.message}"
+        raise 'Error Generating Ark!'
+      rescue Oj::Error => e
+        Rails.logger.error "Invalid JSON From Ark Response"
+        Rails.logger.error "Reason #{e.message}"
+        raise 'Error Generating Ark!'
       rescue => e
         Rails.logger.error 'Error Occured Generating Ark'
         Rails.logger.error "Reason #{e.message}"
@@ -32,12 +36,14 @@ module Curator
     protected
 
     def generate_ark(client)
-      Concurrent::Promises.future do
-        client.headers(self.class.default_headers).
-               post("#{self.class.default_endpoint_prefix}/arks", json: ark_manager_params)
-      end.then do |resp|
-        Oj.load(resp.body) rescue {}
-      end.value!
+      resp = client.headers(self.class.default_headers).
+               post("#{self.class.default_path_prefix}/arks", json: ark_create_params)
+
+      json_response = Oj.load(resp.body.to_s)
+
+      raise json_response.inspect if !resp.status.success?
+
+      json_response
     end
   end
 end

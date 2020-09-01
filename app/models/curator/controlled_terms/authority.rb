@@ -17,14 +17,14 @@ module Curator
       has_many :subjects, class_name: 'Curator::ControlledTerms::Subject'
     end
 
-    def canonical_json_format
-      case code
-      when 'gmgpc', 'lctgm', 'naf', 'lcsh', 'lcgft', 'iso639-2', 'marcrelator', 'resourceTypes'
-        '.skos.json'
-      when 'aat', 'tgn', 'ulan'
-        '.jsonld'
-      end
-    end
+    # def canonical_json_format
+    #   case code
+    #   when 'gmgpc', 'lctgm', 'naf', 'lcsh', 'lcgft', 'iso639-2', 'marcrelator', 'resourceTypes'
+    #     '.skos.json'
+    #   when 'aat', 'tgn', 'ulan'
+    #     '.jsonld'
+    #   end
+    # end
 
     # code below for fetching canonical name is deprecated
     # authorities are pre-loaded using db/seeds.rb with data from BPLDC Authority API

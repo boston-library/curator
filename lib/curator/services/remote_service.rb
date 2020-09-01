@@ -15,14 +15,19 @@ module Curator
       module Client
         extend ActiveSupport::Concern
 
-        #TODO will require Authorization options once login in sstem is set up
+        #TODO will require Authorization options once login in system is set up
         included do
+
           class_attribute :base_url, instance_accessor: false
           class_attribute :pool_options, instance_accessor: false, default: { size: ENV.fetch('RAILS_MAX_THREADS') { 5 }, timeout: 5 }
           class_attribute :timeout_options, instance_accessor: false, default: { connect: 5, write: 5, read: 5 }
           class_attribute :default_headers, instance_accessor: false, default: {}
-          class_attribute :default_endpoint_prefix, instance_accessor: false
+          class_attribute :default_path_prefix, instance_accessor: false
           class_attribute :ssl_context, instance_accessor: false
+
+          private
+
+          thread_cattr_reader :_client_pool, instance_reader: false
         end
 
         class_methods do
@@ -32,16 +37,16 @@ module Curator
             @base_uri = Addressable::URI.parse(base_url)
           end
 
-          def client_yielder
-            client_pool.with { |conn| yield conn }
+          def with_client
+            current_client_pool.with { |conn| yield conn }
           end
 
           protected
 
-          def client_pool
-            return @client_pool if defined?(@client_pool)
+          def current_client_pool
+            return _client_pool if _client_pool.present?
 
-            @client_pool = ConnectionPool.new(pool_options) do
+            Thread.current["attr_#{name}__client_pool"] = ConnectionPool.new(pool_options) do
               HTTP.timeout(timeout_options)
                   .persistent(base_uri.normalize.to_s)
             end

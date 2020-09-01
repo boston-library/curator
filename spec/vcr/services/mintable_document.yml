@@ -1,0 +1,57 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://127.0.0.1:3002/api/v2/arks
+    body:
+      encoding: UTF-8
+      string: '{"namespace_ark":"50959","namespace_id":"commonwealth","url_base":"https://digitalcommonwealth.org","parent_pid":"commonwealth:b022b76865093005","secondary_parent_pids":[],"local_original_identifier_type":"filename","local_original_identifier":"Eltdown
+        Shards","model_type":"Curator::Filestreams::Document"}'
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3002
+      User-Agent:
+      - http.rb/4.4.1
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"2620a4869b8cba1b1e6cade51f7e53aa"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 51314850-778b-4517-b9e9-d74a8d625593
+      X-Runtime:
+      - '0.038467'
+      Vary:
+      - Origin
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"ark":{"id":11,"pid":"commonwealth:rv042t060","created_at":"2020-09-01T21:20:24.743Z","updated_at":"2020-09-01T21:20:24.743Z","parent_pid":"commonwealth:b022b76865093005","model_type":"Curator::Filestreams::Document","local_original_identifier":"Eltdown
+        Shards","local_original_identifier_type":"filename","namespace_ark":"50959","namespace_id":"commonwealth","secondary_parent_pids":[],"url_base":"https://digitalcommonwealth.org"}}'
+  recorded_at: Tue, 01 Sep 2020 21:20:24 GMT
+recorded_with: VCR 6.0.0

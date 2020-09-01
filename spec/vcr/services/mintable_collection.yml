@@ -1,0 +1,58 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://127.0.0.1:3002/api/v2/arks
+    body:
+      encoding: UTF-8
+      string: '{"namespace_ark":"50959","namespace_id":"commonwealth","url_base":"https://digitalcommonwealth.org","parent_pid":"commonwealth:4031512a29939c71104f00e1c1fc6f99af30c6a99a2c18de5dc1d6977ef3f7","secondary_parent_pids":[],"local_original_identifier_type":"Institution
+        Collection Name","local_original_identifier":"Harry R. M. Pitts Collection","model_type":"Curator::Collection"}'
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3002
+      User-Agent:
+      - http.rb/4.4.1
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"e23dae9837963a6a648fe7589a94c91b"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 36a71cd5-8902-4d0d-8bd1-7008ef3f0f1c
+      X-Runtime:
+      - '0.041700'
+      Vary:
+      - Origin
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"ark":{"id":8,"pid":"commonwealth:rv042t05q","created_at":"2020-09-01T21:20:08.650Z","updated_at":"2020-09-01T21:20:08.650Z","parent_pid":"commonwealth:4031512a29939c71104f00e1c1fc6f99af30c6a99a2c18de5dc1d6977ef3f7","model_type":"Curator::Collection","local_original_identifier":"Harry
+        R. M. Pitts Collection","local_original_identifier_type":"Institution Collection
+        Name","namespace_ark":"50959","namespace_id":"commonwealth","secondary_parent_pids":[],"url_base":"https://digitalcommonwealth.org"}}'
+  recorded_at: Tue, 01 Sep 2020 21:20:08 GMT
+recorded_with: VCR 6.0.0

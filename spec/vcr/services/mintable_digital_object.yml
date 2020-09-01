@@ -1,0 +1,57 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://127.0.0.1:3002/api/v2/arks
+    body:
+      encoding: UTF-8
+      string: '{"namespace_ark":"50959","namespace_id":"commonwealth","url_base":"https://digitalcommonwealth.org","parent_pid":"commonwealth:bd97ddbdabb5506c65d6c5a666f6b85734e73b1a2d6357e59d137ada829ae3","secondary_parent_pids":[],"model_type":"Curator::DigitalObject","local_original_identifier":"Natus
+        saepe aut.","local_original_identifier_type":"id_local-other field"}'
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3002
+      User-Agent:
+      - http.rb/4.4.1
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"cdd4c66d908d4527b332a0737e648068"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - da036d18-e683-44b1-9d8a-dc75fda768bf
+      X-Runtime:
+      - '0.048918'
+      Vary:
+      - Origin
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"ark":{"id":4,"pid":"commonwealth:sj1391935","created_at":"2020-09-01T21:19:43.011Z","updated_at":"2020-09-01T21:19:43.011Z","parent_pid":"commonwealth:bd97ddbdabb5506c65d6c5a666f6b85734e73b1a2d6357e59d137ada829ae3","model_type":"Curator::DigitalObject","local_original_identifier":"Natus
+        saepe aut.","local_original_identifier_type":"id_local-other field","namespace_ark":"50959","namespace_id":"commonwealth","secondary_parent_pids":[],"url_base":"https://digitalcommonwealth.org"}}'
+  recorded_at: Tue, 01 Sep 2020 21:19:43 GMT
+recorded_with: VCR 6.0.0

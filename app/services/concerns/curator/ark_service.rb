@@ -8,7 +8,7 @@ module Curator
       include Curator::Services::RemoteService
 
       self.base_url = "#{ENV['ARK_MANAGER_API_URL']}"
-      self.default_endpoint_prefix = '/api/v2'
+      self.default_path_prefix = '/api/v2'
       self.default_headers = { accept: 'application/json', content_type: 'application/json'}
     end
   end

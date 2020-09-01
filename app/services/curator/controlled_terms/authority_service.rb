@@ -5,22 +5,19 @@ module Curator
     include Curator::Services::RemoteService
 
     self.base_url = "#{ENV['AUTHORITY_API_URL']}"
-    self.default_endpoint_prefix = '/bpldc'
+    self.default_path_prefix = '/bpldc'
     self.default_headers = { accept: 'application/json', content_type: 'application/json'}
 
-    attr_reader :endpoint_path
+    attr_reader :url_path
 
-    def initialize(path:, endpoint_prefix: self.class.default_endpoint_prefix, query: nil)
-      @endpoint_path = "#{sendpoint_prefix}/#{path}#{query}".strip
+    def initialize(path:, path_prefix: self.class.default_path_prefix, query: nil)
+      @url_path = "#{path_prefix}/#{path}#{query}".strip
     end
 
     def call
       begin
-        code, body = self.class.client_yielder do |client|
-          resp = client.headers(self.class.default_headers).
-                        get(endpoint_path)
-          [resp.code, resp.body]
-        end
+        code, body = get_response
+
 
         json_response = (200..201).include?(code) ? Oj.load(body) : {}
 
@@ -33,6 +30,16 @@ module Curator
         Rails.logger.error "Reason #{e.message}"
       end
       nil
+    end
+
+    protected
+
+    def get_response
+      self.class.with_client do |client|
+        resp = client.headers(self.class.default_headers).
+                      get(url_path)
+        [resp.code, resp.body]
+      end
     end
   end
 end

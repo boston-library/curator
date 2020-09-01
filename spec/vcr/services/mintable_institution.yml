@@ -1,0 +1,57 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://127.0.0.1:3002/api/v2/arks
+    body:
+      encoding: UTF-8
+      string: '{"namespace_ark":"50959","namespace_id":"commonwealth","url_base":"https://digitalcommonwealth.org","secondary_parent_pids":[],"local_original_identifier_type":"Physical
+        Location","local_original_identifier":"The Treutel College","model_type":"Curator::Institution"}'
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3002
+      User-Agent:
+      - http.rb/4.4.1
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"8ebe52cff8c2738c2de6dcf274110ebe"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 932916c7-3c8a-4ebf-b239-aefb5689e946
+      X-Runtime:
+      - '0.152552'
+      Vary:
+      - Origin
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"ark":{"id":10,"pid":"commonwealth:bn999672v","created_at":"2020-09-01T21:20:17.683Z","updated_at":"2020-09-01T21:20:17.683Z","model_type":"Curator::Institution","local_original_identifier":"The
+        Treutel College","local_original_identifier_type":"Physical Location","namespace_ark":"50959","namespace_id":"commonwealth","secondary_parent_pids":[],"url_base":"https://digitalcommonwealth.org"}}'
+  recorded_at: Tue, 01 Sep 2020 21:20:17 GMT
+recorded_with: VCR 6.0.0
