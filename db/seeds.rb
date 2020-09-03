@@ -17,7 +17,6 @@ end
 # ControlledTerms::Genre, ControlledTerms::ResourceType, ControlledTerms::Language, ControlledTerms::Role
 terms_for_seed = %w(basic_genres resource_types languages roles)
 terms_for_seed.each do |term_for_seed|
-  puts "Seeding #{term_for_seed}"
   terms_data = Curator::ControlledTerms::AuthorityService.call(path: "#{term_for_seed}")
   terms_data&.each do |term_data|
     term_class_name = term_for_seed.gsub(/\Abasic_/, '').singularize

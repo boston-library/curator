@@ -7,7 +7,16 @@ module Curator
       extend ActiveSupport::Concern
 
       # NOTE: do not inherit sub classes from this
+      class RemoteServiceError < Curator::Exceptions::CuratorError
+        attr_reader :json_response, :code
 
+        def initialize(msg = 'Error Occured With RemoteService Client', json_response = {}, code = 500)
+          @json_response = JSON.pretty_generate(json_response)
+          @code = code
+          super(msg)
+        end
+      end
+      
       included do
         include Client
       end

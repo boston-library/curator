@@ -2,73 +2,6 @@
 http_interactions:
 - request:
     method: get
-    uri: http://id.loc.gov/authorities/subjects/sh2018001243.skos.json
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      User-Agent:
-      - Faraday v0.17.0
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      Connection:
-      - keep-alive
-      Keep-Alive:
-      - '30'
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Date:
-      - Thu, 07 Nov 2019 20:58:35 GMT
-      Content-Type:
-      - application/json; charset=UTF-8
-      Transfer-Encoding:
-      - chunked
-      Connection:
-      - keep-alive
-      Set-Cookie:
-      - __cfduid=d538c53cebca6af715e01d7eb5e0620011573160314; expires=Fri, 06-Nov-20
-        20:58:34 GMT; path=/; domain=.loc.gov; HttpOnly
-      X-Uri:
-      - http://id.loc.gov/authorities/subjects/sh2018001243
-      Cache-Control:
-      - public, max-age=2419200
-      X-Varnish:
-      - '25165201'
-      Age:
-      - '0'
-      Via:
-      - 1.1 varnish-v4
-      Access-Control-Allow-Origin:
-      - "*"
-      Access-Control-Allow-Methods:
-      - HEAD, POST, GET, OPTIONS
-      Access-Control-Allow-Headers:
-      - Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With
-      Cf-Cache-Status:
-      - DYNAMIC
-      Server:
-      - cloudflare
-      Cf-Ray:
-      - 532239ddba29923a-EWR
-    body:
-      encoding: ASCII-8BIT
-      string: |-
-        [  { "@id": "http://id.loc.gov/authorities/subjects/sh2018001243", "@type": [ "http://www.w3.org/2004/02/skos/core#Concept" ], "http://www.w3.org/2004/02/skos/core#prefLabel": [ { "@language": "en",
-        "@value": "Hurricane Maria, 2017" } ], "http://www.w3.org/2008/05/skos-xl#altLabel": [ { "@id": "_:b7idlocgovauthoritiessubjectssh2018001243" } ], "http://www.w3.org/2004/02/skos/core#broader": [ { "@id": "http://id.loc.gov/authorities/subjects/sh85063195" } ], "http://www.w3.org/2004/02/skos/core#closeMatch": [ { "@id": "http://www.wikidata.org/entity/Q40178187" }, { "@id": "http://id.worldcat.org/fast/2002745" } ], "http://www.w3.org/2004/02/skos/core#inScheme": [ { "@id": "http://id.loc.gov/authorities/subjects" } ], "http://www.w3.org/2004/02/skos/core#altLabel": [ { "@language": "en",
-        "@value": "Maria, Hurricane, 2017" } ], "http://www.w3.org/2004/02/skos/core#changeNote": [ { "@id": "_:b18idlocgovauthoritiessubjectssh2018001243" }, { "@id": "_:b26idlocgovauthoritiessubjectssh2018001243" } ] },  { "@id": "_:b7idlocgovauthoritiessubjectssh2018001243", "@type": [ "http://www.w3.org/2008/05/skos-xl#Label" ], "http://www.w3.org/2008/05/skos-xl#literalForm": [ { "@language": "en",
-        "@value": "Maria, Hurricane, 2017" } ] },  { "@id": "_:b18idlocgovauthoritiessubjectssh2018001243", "@type": [ "http://purl.org/vocab/changeset/schema#ChangeSet" ], "http://purl.org/vocab/changeset/schema#subjectOfChange": [ { "@id": "http://id.loc.gov/authorities/subjects/sh2018001243" } ], "http://purl.org/vocab/changeset/schema#creatorName": [ { "@id": "http://id.loc.gov/vocabulary/organizations/ncu" } ], "http://purl.org/vocab/changeset/schema#createdDate": [ { "@type": "http://www.w3.org/2001/XMLSchema#dateTime",
-        "@value": "2018-05-16T00:00:00" } ], "http://purl.org/vocab/changeset/schema#changeReason": [ { "@type": "http://www.w3.org/2001/XMLSchema#string",
-        "@value": "new" } ] },  { "@id": "_:b26idlocgovauthoritiessubjectssh2018001243", "@type": [ "http://purl.org/vocab/changeset/schema#ChangeSet" ], "http://purl.org/vocab/changeset/schema#subjectOfChange": [ { "@id": "http://id.loc.gov/authorities/subjects/sh2018001243" } ], "http://purl.org/vocab/changeset/schema#creatorName": [ { "@id": "http://id.loc.gov/vocabulary/organizations/dlc" } ], "http://purl.org/vocab/changeset/schema#createdDate": [ { "@type": "http://www.w3.org/2001/XMLSchema#dateTime",
-        "@value": "2018-08-03T13:39:28" } ], "http://purl.org/vocab/changeset/schema#changeReason": [ { "@type": "http://www.w3.org/2001/XMLSchema#string",
-        "@value": "revised" } ] } ]
-  recorded_at: Thu, 07 Nov 2019 20:58:35 GMT
-- request:
-    method: get
     uri: http://127.0.0.1:3001/show/linked_data/loc/subjects/sh2018001243
     body:
       encoding: UTF-8
@@ -92,9 +25,9 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       X-Request-Id:
-      - 69348288-d08c-4369-bdc3-be92e5a6c951
+      - efff1bc2-08df-43ae-a1c8-d5735aa0fc33
       X-Runtime:
-      - '0.065928'
+      - '0.013671'
       Content-Length:
       - '3915'
     body:
@@ -143,5 +76,49 @@ http_interactions:
         lib/puma/server.rb:472:in `process_client''"},{"id":19,"trace":"puma (4.3.3)
         lib/puma/server.rb:328:in `block in run''"},{"id":20,"trace":"puma (4.3.3)
         lib/puma/thread_pool.rb:134:in `block in spawn_thread''"}]}}'
-  recorded_at: Thu, 03 Sep 2020 18:33:13 GMT
+  recorded_at: Thu, 03 Sep 2020 18:56:01 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/qa//show/linked_data/loc/subjects/sh2018001243
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/4.4.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"5d9659f28f50880a75e462e5a59a456e"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 2288a087-c016-49b5-8f3f-f9728383b148
+      X-Runtime:
+      - '1.323171'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"uri":"http://id.loc.gov/authorities/subjects/sh2018001243","id":"sh2018001243","label":["Hurricane
+        Maria, 2017"],"altlabel":["Maria, Hurricane, 2017"],"broader":["http://id.loc.gov/authorities/subjects/sh85063195"],"sameas":["http://id.loc.gov/authorities/sh2018001243#concept","info:lc/authorities/sh2018001243"],"predicates":{"http://www.w3.org/1999/02/22-rdf-syntax-ns#type":["http://www.w3.org/2004/02/skos/core#Concept","http://www.loc.gov/mads/rdf/v1#Topic","http://www.loc.gov/mads/rdf/v1#Authority"],"http://www.loc.gov/mads/rdf/v1#hasCloseExternalAuthority":["http://www.wikidata.org/entity/Q40178187","http://id.worldcat.org/fast/2002745"],"http://www.w3.org/2004/02/skos/core#altLabel":["Maria,
+        Hurricane, 2017"],"http://www.loc.gov/mads/rdf/v1#authoritativeLabel":["Hurricane
+        Maria, 2017"],"http://www.w3.org/2002/07/owl#sameAs":["http://id.loc.gov/authorities/sh2018001243#concept","info:lc/authorities/sh2018001243"],"http://www.loc.gov/mads/rdf/v1#isMemberOfMADSCollection":["http://id.loc.gov/authorities/subjects/collection_LCSH_General","http://id.loc.gov/authorities/subjects/collection_LCSHAuthorizedHeadings"],"http://www.w3.org/2004/02/skos/core#inScheme":["http://id.loc.gov/authorities/subjects"],"http://www.w3.org/2004/02/skos/core#prefLabel":["Hurricane
+        Maria, 2017"],"http://www.w3.org/2004/02/skos/core#broader":["http://id.loc.gov/authorities/subjects/sh85063195"],"http://id.loc.gov/ontologies/bflc/subjectOf":["http://id.loc.gov/resources/works/21075387","http://id.loc.gov/resources/works/21431140","http://id.loc.gov/resources/works/21066972","http://id.loc.gov/resources/works/20855959","http://id.loc.gov/resources/works/20925565","http://id.loc.gov/resources/works/20665304","http://id.loc.gov/resources/works/21230274","http://id.loc.gov/resources/works/20887869","http://id.loc.gov/resources/works/20855950","http://id.loc.gov/resources/works/20989074","http://id.loc.gov/resources/works/21536217","http://id.loc.gov/resources/works/21294439","http://id.loc.gov/resources/works/21201503","http://id.loc.gov/resources/works/20797367"],"http://www.w3.org/2004/02/skos/core#closeMatch":["http://www.wikidata.org/entity/Q40178187","http://id.worldcat.org/fast/2002745"],"http://www.loc.gov/mads/rdf/v1#hasBroaderAuthority":["http://id.loc.gov/authorities/subjects/sh85063195"],"http://www.loc.gov/mads/rdf/v1#isMemberOfMADSScheme":["http://id.loc.gov/authorities/subjects"],"http://id.loc.gov/vocabulary/identifiers/lccn":["sh2018001243"]}}'
+  recorded_at: Thu, 03 Sep 2020 20:50:46 GMT
 recorded_with: VCR 6.0.0

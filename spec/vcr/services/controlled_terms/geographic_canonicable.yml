@@ -1,0 +1,122 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/fetch/linked_data/getty_tgn_ld4l_cache?uri=http://vocab.getty.edu/tgn/7004939
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/4.4.1
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      X-Request-Id:
+      - d97ee648-b8a8-43a7-849b-9e02490e432f
+      X-Runtime:
+      - '0.004135'
+      Content-Length:
+      - '3911'
+    body:
+      encoding: UTF-8
+      string: '{"status":404,"error":"Not Found","exception":"#\u003cActionController::RoutingError:
+        No route matches [GET] \"/fetch/linked_data/getty_tgn_ld4l_cache\"\u003e","traces":{"Application
+        Trace":[],"Framework Trace":[{"id":0,"trace":"actionpack (5.2.4.2) lib/action_dispatch/middleware/debug_exceptions.rb:65:in
+        `call''"},{"id":1,"trace":"actionpack (5.2.4.2) lib/action_dispatch/middleware/show_exceptions.rb:33:in
+        `call''"},{"id":2,"trace":"railties (5.2.4.2) lib/rails/rack/logger.rb:38:in
+        `call_app''"},{"id":3,"trace":"railties (5.2.4.2) lib/rails/rack/logger.rb:26:in
+        `block in call''"},{"id":4,"trace":"activesupport (5.2.4.2) lib/active_support/tagged_logging.rb:71:in
+        `block in tagged''"},{"id":5,"trace":"activesupport (5.2.4.2) lib/active_support/tagged_logging.rb:28:in
+        `tagged''"},{"id":6,"trace":"activesupport (5.2.4.2) lib/active_support/tagged_logging.rb:71:in
+        `tagged''"},{"id":7,"trace":"railties (5.2.4.2) lib/rails/rack/logger.rb:26:in
+        `call''"},{"id":8,"trace":"actionpack (5.2.4.2) lib/action_dispatch/middleware/remote_ip.rb:81:in
+        `call''"},{"id":9,"trace":"actionpack (5.2.4.2) lib/action_dispatch/middleware/request_id.rb:27:in
+        `call''"},{"id":10,"trace":"rack (2.2.2) lib/rack/runtime.rb:22:in `call''"},{"id":11,"trace":"activesupport
+        (5.2.4.2) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in
+        `call''"},{"id":12,"trace":"actionpack (5.2.4.2) lib/action_dispatch/middleware/executor.rb:14:in
+        `call''"},{"id":13,"trace":"actionpack (5.2.4.2) lib/action_dispatch/middleware/static.rb:127:in
+        `call''"},{"id":14,"trace":"rack (2.2.2) lib/rack/sendfile.rb:110:in `call''"},{"id":15,"trace":"railties
+        (5.2.4.2) lib/rails/engine.rb:524:in `call''"},{"id":16,"trace":"puma (4.3.3)
+        lib/puma/configuration.rb:228:in `call''"},{"id":17,"trace":"puma (4.3.3)
+        lib/puma/server.rb:682:in `handle_request''"},{"id":18,"trace":"puma (4.3.3)
+        lib/puma/server.rb:472:in `process_client''"},{"id":19,"trace":"puma (4.3.3)
+        lib/puma/server.rb:328:in `block in run''"},{"id":20,"trace":"puma (4.3.3)
+        lib/puma/thread_pool.rb:134:in `block in spawn_thread''"}],"Full Trace":[{"id":0,"trace":"actionpack
+        (5.2.4.2) lib/action_dispatch/middleware/debug_exceptions.rb:65:in `call''"},{"id":1,"trace":"actionpack
+        (5.2.4.2) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call''"},{"id":2,"trace":"railties
+        (5.2.4.2) lib/rails/rack/logger.rb:38:in `call_app''"},{"id":3,"trace":"railties
+        (5.2.4.2) lib/rails/rack/logger.rb:26:in `block in call''"},{"id":4,"trace":"activesupport
+        (5.2.4.2) lib/active_support/tagged_logging.rb:71:in `block in tagged''"},{"id":5,"trace":"activesupport
+        (5.2.4.2) lib/active_support/tagged_logging.rb:28:in `tagged''"},{"id":6,"trace":"activesupport
+        (5.2.4.2) lib/active_support/tagged_logging.rb:71:in `tagged''"},{"id":7,"trace":"railties
+        (5.2.4.2) lib/rails/rack/logger.rb:26:in `call''"},{"id":8,"trace":"actionpack
+        (5.2.4.2) lib/action_dispatch/middleware/remote_ip.rb:81:in `call''"},{"id":9,"trace":"actionpack
+        (5.2.4.2) lib/action_dispatch/middleware/request_id.rb:27:in `call''"},{"id":10,"trace":"rack
+        (2.2.2) lib/rack/runtime.rb:22:in `call''"},{"id":11,"trace":"activesupport
+        (5.2.4.2) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in
+        `call''"},{"id":12,"trace":"actionpack (5.2.4.2) lib/action_dispatch/middleware/executor.rb:14:in
+        `call''"},{"id":13,"trace":"actionpack (5.2.4.2) lib/action_dispatch/middleware/static.rb:127:in
+        `call''"},{"id":14,"trace":"rack (2.2.2) lib/rack/sendfile.rb:110:in `call''"},{"id":15,"trace":"railties
+        (5.2.4.2) lib/rails/engine.rb:524:in `call''"},{"id":16,"trace":"puma (4.3.3)
+        lib/puma/configuration.rb:228:in `call''"},{"id":17,"trace":"puma (4.3.3)
+        lib/puma/server.rb:682:in `handle_request''"},{"id":18,"trace":"puma (4.3.3)
+        lib/puma/server.rb:472:in `process_client''"},{"id":19,"trace":"puma (4.3.3)
+        lib/puma/server.rb:328:in `block in run''"},{"id":20,"trace":"puma (4.3.3)
+        lib/puma/thread_pool.rb:134:in `block in spawn_thread''"}]}}'
+  recorded_at: Thu, 03 Sep 2020 18:56:03 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/qa//fetch/linked_data/getty_tgn_ld4l_cache?uri=http://vocab.getty.edu/tgn/7004939
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/4.4.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"3142fb8fb5c09eb97528084211435a27"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 8d9be819-fcae-4886-bcc6-1f115d6b4991
+      X-Runtime:
+      - '0.495591'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"uri":"http://vocab.getty.edu/tgn/7004939","id":"7004939","label":["Piacenza"],"altlabel":["Placentia"],"broader":["http://vocab.getty.edu/tgn/7003132"],"predicates":{"http://www.w3.org/2004/02/skos/core#note":["http://vocab.getty.edu/tgn/scopeNote/41558","http://vocab.getty.edu/tgn/rev/5000761504","http://vocab.getty.edu/tgn/rev/5009361003","http://vocab.getty.edu/tgn/rev/5009361004","http://vocab.getty.edu/tgn/rev/5011268981"],"http://purl.org/dc/terms/contributor":["http://vocab.getty.edu/tgn/contrib/10000000","http://vocab.getty.edu/tgn/contrib/10000002","http://vocab.getty.edu/tgn/contrib/10000003","http://vocab.getty.edu/tgn/contrib/10000001"],"http://rdfs.org/ns/void#inDataset":["http://vocab.getty.edu/dataset/tgn"],"http://www.w3.org/ns/prov#wasGeneratedBy":["http://vocab.getty.edu/tgn/rev/5000761504"],"http://vocab.getty.edu/ontology#parentStringAbbrev":["Piacenza,
+        Emilia-Romagna, ... World"],"http://www.w3.org/2000/01/rdf-schema#seeAlso":["http://www.getty.edu/vow/TGNFullDisplay?find=\u0026place=\u0026nation=\u0026subjectid=7004939"],"http://vocab.getty.edu/ontology#placeTypeNonPreferred":["http://vocab.getty.edu/aat/300387223","http://vocab.getty.edu/aat/300008375"],"http://www.w3.org/2004/02/skos/core#altLabel":["Placentia"],"http://vocab.getty.edu/ontology#placeType":["http://vocab.getty.edu/aat/300387223","http://vocab.getty.edu/aat/300008375","http://vocab.getty.edu/aat/300008347"],"http://vocab.getty.edu/ontology#broader":["http://vocab.getty.edu/tgn/7003132"],"http://vocab.getty.edu/ontology#broaderExtended":["http://vocab.getty.edu/tgn/7029392","http://vocab.getty.edu/tgn/1000080","http://vocab.getty.edu/tgn/7008516","http://vocab.getty.edu/tgn/7003132","http://vocab.getty.edu/tgn/1000003"],"http://vocab.getty.edu/ontology#displayOrder":["157"],"http://purl.org/dc/terms/modified":["2009-01-09T15:39:43","2010-06-03T23:13:28"],"http://www.w3.org/2000/01/rdf-schema#label":["Placentia","Piacenza"],"http://www.w3.org/2004/02/skos/core#scopeNote":["http://vocab.getty.edu/tgn/scopeNote/41558"],"http://www.w3.org/2004/02/skos/core#broaderTransitive":["http://vocab.getty.edu/tgn/1000080","http://vocab.getty.edu/tgn/7008516","http://vocab.getty.edu/tgn/7003132","http://vocab.getty.edu/tgn/1000003"],"http://vocab.getty.edu/ontology#broaderPartitiveExtended":["http://vocab.getty.edu/tgn/7029392","http://vocab.getty.edu/tgn/1000080","http://vocab.getty.edu/tgn/7008516","http://vocab.getty.edu/tgn/7003132","http://vocab.getty.edu/tgn/1000003"],"http://purl.org/dc/elements/1.1/identifier":["7004939"],"http://www.w3.org/2008/05/skos-xl#altLabel":["http://vocab.getty.edu/tgn/term/170045"],"http://purl.org/dc/terms/source":["http://vocab.getty.edu/tgn/source/9006449","http://vocab.getty.edu/tgn/source/2009007144-subject-7004939","http://vocab.getty.edu/tgn/source/9006339-subject-7004939","http://vocab.getty.edu/tgn/source/2009007639","http://vocab.getty.edu/tgn/source/9006548-subject-7004939","http://vocab.getty.edu/tgn/source/9005498","http://vocab.getty.edu/tgn/source/9006567-subject-7004939"],"http://vocab.getty.edu/ontology#broaderPreferredExtended":["http://vocab.getty.edu/tgn/7029392","http://vocab.getty.edu/tgn/1000080","http://vocab.getty.edu/tgn/7008516","http://vocab.getty.edu/tgn/7003132","http://vocab.getty.edu/tgn/1000003"],"http://www.w3.org/2004/02/skos/core#changeNote":["http://vocab.getty.edu/tgn/rev/5000761504","http://vocab.getty.edu/tgn/rev/5009361003","http://vocab.getty.edu/tgn/rev/5009361004","http://vocab.getty.edu/tgn/rev/5011268981"],"http://www.w3.org/1999/02/22-rdf-syntax-ns#type":["http://www.w3.org/2004/02/skos/core#Concept","http://vocab.getty.edu/ontology#AdminPlaceConcept","http://vocab.getty.edu/ontology#Subject"],"http://vocab.getty.edu/ontology#parentString":["Piacenza,
+        Emilia-Romagna, Italia, Europe, World"],"http://purl.org/iso25964/skos-thes#broaderPartitive":["http://vocab.getty.edu/tgn/7003132"],"http://purl.org/dc/terms/created":["1991-09-13T03:13:00"],"http://www.w3.org/2004/02/skos/core#inScheme":["http://vocab.getty.edu/tgn/"],"http://vocab.getty.edu/ontology#prefLabelGVP":["http://vocab.getty.edu/tgn/term/46436"],"http://www.w3.org/2004/02/skos/core#prefLabel":["Piacenza"],"http://xmlns.com/foaf/0.1/focus":["http://vocab.getty.edu/tgn/7004939-place"],"http://www.w3.org/2004/02/skos/core#broader":["http://vocab.getty.edu/tgn/7003132"],"http://vocab.getty.edu/ontology#broaderPreferred":["http://vocab.getty.edu/tgn/7003132"],"http://purl.org/dc/terms/license":["http://opendatacommons.org/licenses/by/1.0/"],"http://creativecommons.org/ns#license":["http://opendatacommons.org/licenses/by/1.0/"],"http://vocab.getty.edu/ontology#broaderPartitive":["http://vocab.getty.edu/tgn/7003132"],"http://vocab.getty.edu/ontology#placeTypePreferred":["http://vocab.getty.edu/aat/300008347"],"http://www.w3.org/2008/05/skos-xl#prefLabel":["http://vocab.getty.edu/tgn/term/46436"]}}'
+  recorded_at: Thu, 03 Sep 2020 20:50:47 GMT
+recorded_with: VCR 6.0.0

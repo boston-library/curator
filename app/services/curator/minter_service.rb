@@ -26,7 +26,7 @@ module Curator
         Rails.logger.error "Invalid JSON From Ark Response"
         Rails.logger.error "Reason #{e.message}"
         raise 'Error Generating Ark!'
-      rescue => e
+      rescue RemoteServiceError => e
         Rails.logger.error 'Error Occured Generating Ark'
         Rails.logger.error "Reason #{e.message}"
         raise 'Error Generating Ark!'
@@ -41,7 +41,7 @@ module Curator
 
       json_response = Oj.load(resp.body.to_s)
 
-      raise json_response.inspect if !resp.status.success?
+      raise RemoteServiceError.new('Failed to mint ark from ark-manager-api!', json_response, resp.status) if !resp.status.success?
 
       json_response
     end

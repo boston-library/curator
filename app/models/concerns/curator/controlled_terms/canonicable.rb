@@ -16,46 +16,64 @@ module Curator
           new_record? && label.blank? && value_uri.present?
         end
 
+        def can_query_bpldc?
+          authority_code.present? && id_from_auth.present?
+        end
+
         private
 
-        def bpldc_path
-          return if authority.blank? || id_from_auth.blank?
+        def bpldc_query_path
+          return if !can_query_bpldc?
 
-          case self.class.name.demodulize
-          when 'Genre'
-            basic ? nil : 'basic_genres'
-          when 'ResourceType'
-            'resource_types'
-          when 'Geographic'
-            "geomash/#{authority_code}/#{id_from_auth}"
-          when 'Languages'
-            'languages'
-          when 'Roles'
-            'roles'
-          else
-            nil
+          case authority_code
+          when 'aat'
+            '/fetch/linked_data/getty_aat_ld4l_cache'
+          when 'lcgft'
+            '/fetch/linked_data/locgenres_ld4l_cache'
+          when 'lcsh'
+            "/show/linked_data/loc/subjects/#{id_from_auth}"
+          when 'lctgm', 'gmgpc'
+            '/search/loc/graphicMaterials'
+          when 'marcgt'
+            '/search/loc/genreFormSchemes/marcgt'
+          when 'naf'
+            '/fetch/linked_data/locnames_ld4l_cache'
+          when 'tgn'
+            '/fetch/linked_data/getty_tgn_ld4l_cache'
+          when 'geonames'
+            '/fetch/linked_data/geonames_direct'
+          when 'ulan'
+            '/fetch/linked_data/getty_ulan_ld4l_cache'
           end
         end
 
+        def bpldc_query
+          return {} if !can_query_bpldc?
+
+          case authority_code
+          when 'aat', 'lcgft', 'naf', 'ulan', 'tgn', 'geonames'
+            { uri: value_uri }
+          when 'marcgt', 'lctgm', 'gmgpc'
+            { q: id_from_auth }
+          else
+            {}
+          end
+        end
 
         def fetch_canonical_label
-          return if bpldc_path.blank?
+          return if bpldc_query_path.blank?
 
-          label_json_block =
-          case self.class.name.demodulize
-          when 'Geographic'
-            ->(json_body) { json_body['label'] if json_body.present? }
-          else
-            lambda do |json_body|
-              return if json_body.blank?
+          label_json_block = lambda do |json_body|
+            return if json_body.blank?
 
-              el = json_body.select { |nom| nom['id_from_auth'] == id_from_auth }
-              el['label']
-            end
+            el = json_body.is_a?(Array) ? json_body.first : json_body
+
+            return el['label'].join if el['label'].is_a?(Array)
+
+            el['label']
           end
 
-          self.label = ControlledTerms::AuthorityService.call(path: bpldc_path,
-                                                              &label_json_block)
+          self.label = ControlledTerms::AuthorityService.call(path: bpldc_query_path, path_prefix: '/qa', query: bpldc_query, &label_json_block)
         end
       end
     end

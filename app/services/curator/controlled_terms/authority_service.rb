@@ -8,25 +8,28 @@ module Curator
     self.default_path_prefix = '/bpldc'
     self.default_headers = { accept: 'application/json', content_type: 'application/json'}
 
-    attr_reader :url_path
+    attr_reader :request_uri
 
-    def initialize(path:, path_prefix: self.class.default_path_prefix, query: nil)
-      @url_path = "#{path_prefix}/#{path}#{query}".strip
+    def initialize(path:, path_prefix: self.class.default_path_prefix, query: {})
+      @request_uri =  Addressable::URI.parse("#{path_prefix}/#{path}")
+      @request_uri.query_values = query if query.present?
     end
 
     def call
       begin
-        code, body = get_response
+        bpldc_json = self.class.with_client do |client|
+          fetch_auth_data(client)
+        end
 
-
-        json_response = (200..201).include?(code) ? Oj.load(body) : {}
-
-        return block_given? ? yield(json_response) : json_response
+        return block_given? ? yield(bpldc_json) : bpldc_json
       rescue HTTP::Error => e
-        Rails.logger.error "Error Retreiving Json For Authority at #{@url}"
+        Rails.logger.error "Error Retreiving Json For Authority at #{@request_uri.to_s}"
         Rails.logger.error "Reason #{e.message}"
       rescue Oj::Error => e
-        Rails.logger.error "Error Parsing Json For Authority at #{@url}"
+        Rails.logger.error "Error Parsing Json For Authority at #{@request_uri.to_s}"
+        Rails.logger.error "Reason #{e.message}"
+      rescue RemoteServiceError => e
+        Rails.logger.error "Error Retreiving Json For Authority at #{@request_uri.to_s}"
         Rails.logger.error "Reason #{e.message}"
       end
       nil
@@ -34,12 +37,15 @@ module Curator
 
     protected
 
-    def get_response
-      self.class.with_client do |client|
-        resp = client.headers(self.class.default_headers).
-                      get(url_path)
-        [resp.code, resp.body]
-      end
+    def fetch_auth_data(client)
+      resp = client.headers(self.class.default_headers).
+                    get(request_uri.to_s)
+
+      json_response = Oj.load(resp.body.to_s)
+
+      raise RemoteServiceError.new('Failed to retreive data from bpldc_auth_api!', json_response, resp.status) if !resp.status.success?
+
+      json_response
     end
   end
 end

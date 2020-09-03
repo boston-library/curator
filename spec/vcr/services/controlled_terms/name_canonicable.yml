@@ -2,74 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: http://id.loc.gov/authorities/subjects/sh2018001243.skos.json
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      User-Agent:
-      - Faraday v0.17.0
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      Connection:
-      - keep-alive
-      Keep-Alive:
-      - '30'
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Date:
-      - Thu, 07 Nov 2019 20:58:35 GMT
-      Content-Type:
-      - application/json; charset=UTF-8
-      Transfer-Encoding:
-      - chunked
-      Connection:
-      - keep-alive
-      Set-Cookie:
-      - __cfduid=d538c53cebca6af715e01d7eb5e0620011573160314; expires=Fri, 06-Nov-20
-        20:58:34 GMT; path=/; domain=.loc.gov; HttpOnly
-      X-Uri:
-      - http://id.loc.gov/authorities/subjects/sh2018001243
-      Cache-Control:
-      - public, max-age=2419200
-      X-Varnish:
-      - '25165201'
-      Age:
-      - '0'
-      Via:
-      - 1.1 varnish-v4
-      Access-Control-Allow-Origin:
-      - "*"
-      Access-Control-Allow-Methods:
-      - HEAD, POST, GET, OPTIONS
-      Access-Control-Allow-Headers:
-      - Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With
-      Cf-Cache-Status:
-      - DYNAMIC
-      Server:
-      - cloudflare
-      Cf-Ray:
-      - 532239ddba29923a-EWR
-    body:
-      encoding: ASCII-8BIT
-      string: |-
-        [  { "@id": "http://id.loc.gov/authorities/subjects/sh2018001243", "@type": [ "http://www.w3.org/2004/02/skos/core#Concept" ], "http://www.w3.org/2004/02/skos/core#prefLabel": [ { "@language": "en",
-        "@value": "Hurricane Maria, 2017" } ], "http://www.w3.org/2008/05/skos-xl#altLabel": [ { "@id": "_:b7idlocgovauthoritiessubjectssh2018001243" } ], "http://www.w3.org/2004/02/skos/core#broader": [ { "@id": "http://id.loc.gov/authorities/subjects/sh85063195" } ], "http://www.w3.org/2004/02/skos/core#closeMatch": [ { "@id": "http://www.wikidata.org/entity/Q40178187" }, { "@id": "http://id.worldcat.org/fast/2002745" } ], "http://www.w3.org/2004/02/skos/core#inScheme": [ { "@id": "http://id.loc.gov/authorities/subjects" } ], "http://www.w3.org/2004/02/skos/core#altLabel": [ { "@language": "en",
-        "@value": "Maria, Hurricane, 2017" } ], "http://www.w3.org/2004/02/skos/core#changeNote": [ { "@id": "_:b18idlocgovauthoritiessubjectssh2018001243" }, { "@id": "_:b26idlocgovauthoritiessubjectssh2018001243" } ] },  { "@id": "_:b7idlocgovauthoritiessubjectssh2018001243", "@type": [ "http://www.w3.org/2008/05/skos-xl#Label" ], "http://www.w3.org/2008/05/skos-xl#literalForm": [ { "@language": "en",
-        "@value": "Maria, Hurricane, 2017" } ] },  { "@id": "_:b18idlocgovauthoritiessubjectssh2018001243", "@type": [ "http://purl.org/vocab/changeset/schema#ChangeSet" ], "http://purl.org/vocab/changeset/schema#subjectOfChange": [ { "@id": "http://id.loc.gov/authorities/subjects/sh2018001243" } ], "http://purl.org/vocab/changeset/schema#creatorName": [ { "@id": "http://id.loc.gov/vocabulary/organizations/ncu" } ], "http://purl.org/vocab/changeset/schema#createdDate": [ { "@type": "http://www.w3.org/2001/XMLSchema#dateTime",
-        "@value": "2018-05-16T00:00:00" } ], "http://purl.org/vocab/changeset/schema#changeReason": [ { "@type": "http://www.w3.org/2001/XMLSchema#string",
-        "@value": "new" } ] },  { "@id": "_:b26idlocgovauthoritiessubjectssh2018001243", "@type": [ "http://purl.org/vocab/changeset/schema#ChangeSet" ], "http://purl.org/vocab/changeset/schema#subjectOfChange": [ { "@id": "http://id.loc.gov/authorities/subjects/sh2018001243" } ], "http://purl.org/vocab/changeset/schema#creatorName": [ { "@id": "http://id.loc.gov/vocabulary/organizations/dlc" } ], "http://purl.org/vocab/changeset/schema#createdDate": [ { "@type": "http://www.w3.org/2001/XMLSchema#dateTime",
-        "@value": "2018-08-03T13:39:28" } ], "http://purl.org/vocab/changeset/schema#changeReason": [ { "@type": "http://www.w3.org/2001/XMLSchema#string",
-        "@value": "revised" } ] } ]
-  recorded_at: Thu, 07 Nov 2019 20:58:35 GMT
-- request:
-    method: get
-    uri: http://127.0.0.1:3001/show/linked_data/loc/subjects/sh2018001243
+    uri: http://127.0.0.1:3001/fetch/linked_data/locnames_ld4l_cache?uri=http://id.loc.gov/authorities/names/n97003077
     body:
       encoding: UTF-8
       string: ''
@@ -92,15 +25,15 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       X-Request-Id:
-      - 69348288-d08c-4369-bdc3-be92e5a6c951
+      - 82e4e2b7-ff2d-4aa5-afce-ec42be59ff24
       X-Runtime:
-      - '0.065928'
+      - '0.003555'
       Content-Length:
-      - '3915'
+      - '3910'
     body:
       encoding: UTF-8
       string: '{"status":404,"error":"Not Found","exception":"#\u003cActionController::RoutingError:
-        No route matches [GET] \"/show/linked_data/loc/subjects/sh2018001243\"\u003e","traces":{"Application
+        No route matches [GET] \"/fetch/linked_data/locnames_ld4l_cache\"\u003e","traces":{"Application
         Trace":[],"Framework Trace":[{"id":0,"trace":"actionpack (5.2.4.2) lib/action_dispatch/middleware/debug_exceptions.rb:65:in
         `call''"},{"id":1,"trace":"actionpack (5.2.4.2) lib/action_dispatch/middleware/show_exceptions.rb:33:in
         `call''"},{"id":2,"trace":"railties (5.2.4.2) lib/rails/rack/logger.rb:38:in
@@ -143,5 +76,49 @@ http_interactions:
         lib/puma/server.rb:472:in `process_client''"},{"id":19,"trace":"puma (4.3.3)
         lib/puma/server.rb:328:in `block in run''"},{"id":20,"trace":"puma (4.3.3)
         lib/puma/thread_pool.rb:134:in `block in spawn_thread''"}]}}'
-  recorded_at: Thu, 03 Sep 2020 18:33:13 GMT
+  recorded_at: Thu, 03 Sep 2020 18:56:04 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/qa//fetch/linked_data/locnames_ld4l_cache?uri=http://id.loc.gov/authorities/names/n97003077
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/4.4.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"e5e07d7995bfa36c7f97d4e1a4cb38ec"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 46e80da6-495b-437c-8eba-11e3dc70dc94
+      X-Runtime:
+      - '0.267661'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"uri":"http://id.loc.gov/authorities/names/n97003077","id":"n 97003077","label":["Reed,
+        Byron, 1829-1891"],"sameas":["http://viaf.org/viaf/sourceID/LC%7Cn+97003077#skos:Concept"],"predicates":{"http://www.loc.gov/mads/rdf/v1#hasExactExternalAuthority":["http://viaf.org/viaf/sourceID/LC%7Cn+97003077#skos:Concept"],"http://www.loc.gov/mads/rdf/v1#authoritativeLabel":["Reed,
+        Byron, 1829-1891"],"http://www.loc.gov/mads/rdf/v1#isMemberOfMADSCollection":["http://id.loc.gov/authorities/names/collection_LCNAF","http://id.loc.gov/authorities/names/collection_NamesAuthorizedHeadings"],"http://www.loc.gov/mads/rdf/v1#identifiesRWO":["http://id.loc.gov/rwo/agents/n97003077"],"http://www.w3.org/2004/02/skos/core#prefLabel":["Reed,
+        Byron, 1829-1891"],"http://www.loc.gov/mads/rdf/v1#isMemberOfMADSScheme":["http://id.loc.gov/authorities/names"],"http://www.w3.org/2004/02/skos/core#exactMatch":["http://viaf.org/viaf/sourceID/LC%7Cn+97003077#skos:Concept"],"http://id.loc.gov/vocabulary/identifiers/lccn":["n
+        97003077"],"http://www.w3.org/1999/02/22-rdf-syntax-ns#type":["http://www.w3.org/2004/02/skos/core#Concept","http://www.loc.gov/mads/rdf/v1#PersonalName","http://www.loc.gov/mads/rdf/v1#Authority"],"http://www.w3.org/2004/02/skos/core#inScheme":["http://id.loc.gov/authorities/names"]}}'
+  recorded_at: Thu, 03 Sep 2020 20:50:49 GMT
 recorded_with: VCR 6.0.0
