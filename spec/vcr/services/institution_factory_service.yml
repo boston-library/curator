@@ -38,7 +38,6 @@ http_interactions:
       encoding: UTF-8
       string: '{"coords":{"latitude":"42.35","longitude":"-71.05","combined":"42.35,-71.05"},"hier_geo":{"city":"Boston","continent":"North
         and Central America","county":"Suffolk","country":"United States","state":"Massachusetts"}}'
-    http_version: null
   recorded_at: Mon, 23 Mar 2020 18:57:07 GMT
 - request:
     method: get
@@ -116,6 +115,44 @@ http_interactions:
         lib/puma/server.rb:476:in `process_client''"},{"id":19,"trace":"puma (3.12.4)
         lib/puma/server.rb:334:in `block in run''"},{"id":20,"trace":"puma (3.12.4)
         lib/puma/thread_pool.rb:135:in `block in spawn_thread''"}]}}'
-    http_version: null
   recorded_at: Wed, 25 Mar 2020 20:10:14 GMT
-recorded_with: VCR 5.1.0
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash//tgn/7013445
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/4.4.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"6c257199b6a4422c8747c515bc1dc89e"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - cf960c0f-a456-4213-8acf-9d6dd6828286
+      X-Runtime:
+      - '1.098998'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"42.35","longitude":"-71.05","combined":"42.35,-71.05"},"hier_geo":{"city":"Boston","continent":"North
+        and Central America","county":"Suffolk","country":"United States","state":"Massachusetts"}}'
+  recorded_at: Fri, 04 Sep 2020 20:48:26 GMT
+recorded_with: VCR 6.0.0
