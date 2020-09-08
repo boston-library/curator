@@ -29,7 +29,7 @@ module Curator
 
     def ark_params
       super.merge({
-          parent_pid: nil,
+        parent_pid: nil,
           secondary_parent_pids: [],
           local_original_identifier_type: 'Physical Location',
           local_original_identifier: name,

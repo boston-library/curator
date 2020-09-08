@@ -25,7 +25,7 @@ RSpec.describe Curator::Indexer::GeographicIndexer do
     end
     let(:descriptable_object) { descriptive.descriptable }
     let(:indexed) do
-      VCR.use_cassette('indexers/geographic_indexer', record: :new_episodes) do
+      VCR.use_cassette('indexers/geographic_indexer') do
         indexer.map_record(descriptable_object)
       end
     end

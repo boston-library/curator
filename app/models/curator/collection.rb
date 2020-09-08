@@ -38,7 +38,7 @@ module Curator
 
     def ark_params
       super.merge({
-          parent_pid: institution&.ark_id,
+        parent_pid: institution&.ark_id,
           secondary_parent_pids: [],
           local_original_identifier_type: 'Institution Collection Name',
           local_original_identifier: name,

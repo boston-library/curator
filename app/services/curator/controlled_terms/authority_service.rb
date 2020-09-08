@@ -4,14 +4,14 @@ module Curator
   class ControlledTerms::AuthorityService < Services::Base
     include Curator::Services::RemoteService
 
-    self.base_url = "#{ENV['AUTHORITY_API_URL']}"
+    self.base_url = ENV['AUTHORITY_API_URL'].to_s
     self.default_path_prefix = '/bpldc'
-    self.default_headers = { accept: 'application/json', content_type: 'application/json'}
+    self.default_headers = { accept: 'application/json', content_type: 'application/json' }
 
     attr_reader :request_uri
 
     def initialize(path:, path_prefix: self.class.default_path_prefix, query: {})
-      @request_uri =  Addressable::URI.parse("#{path_prefix}/#{path}")
+      @request_uri = Addressable::URI.parse("#{path_prefix}/#{path}")
       @request_uri.query_values = query if query.present?
     end
 
@@ -23,13 +23,13 @@ module Curator
 
         return block_given? ? yield(bpldc_json) : bpldc_json
       rescue HTTP::Error => e
-        Rails.logger.error "Error Retreiving Json For Authority at #{@request_uri.to_s}"
+        Rails.logger.error "Error Retreiving Json For Authority at #{@request_uri}"
         Rails.logger.error "Reason #{e.message}"
       rescue Oj::Error => e
-        Rails.logger.error "Error Parsing Json For Authority at #{@request_uri.to_s}"
+        Rails.logger.error "Error Parsing Json For Authority at #{@request_uri}"
         Rails.logger.error "Reason #{e.message}"
       rescue RemoteServiceError => e
-        Rails.logger.error "Error Retreiving Json For Authority at #{@request_uri.to_s}"
+        Rails.logger.error "Error Retreiving Json For Authority at #{@request_uri}"
         Rails.logger.error "Reason #{e.message}"
       end
       nil

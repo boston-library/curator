@@ -7,7 +7,7 @@ RSpec.describe Curator::Metastreams::DescriptiveUpdaterService, type: :service d
     @digital_object ||= create(:curator_digital_object)
     @descriptable_updated_at = @digital_object.updated_at
     @update_attributes ||= load_json_fixture('digital_object_2', 'digital_object').dig('metastreams', 'descriptive')
-    VCR.use_cassette('services/metastreams/descriptive/update', record: :new_episodes) do
+    VCR.use_cassette('services/metastreams/descriptive/update') do
       @success, @result = described_class.call(@digital_object.descriptive, json_data: @update_attributes || {})
     end
   end

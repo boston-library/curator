@@ -2,8 +2,8 @@
 
 RSpec.shared_examples_for 'mintable', type: :model do
   describe 'Mintable' do
-    it { is_expected.to respond_to(:ark_id) }
-    it { is_expected.to respond_to(:ark_params) }
+    it { is_expected.to respond_to(:ark_id, :ark_params) }
+
     describe 'Database' do
       it { is_expected.to have_db_column(:ark_id).of_type(:string).with_options(null: false) }
       it { is_expected.to have_db_index(:ark_id).unique(true) }
@@ -23,7 +23,7 @@ RSpec.shared_examples_for 'mintable', type: :model do
 
       it 'generates an #ark_id #before_validation on create if there is none' do
         # valid? invokes the before_validation callback without saving
-        VCR.use_cassette("services/mintable_#{described_class.name.demodulize.underscore}", record: :new_episodes) do
+        VCR.use_cassette("services/mintable_#{described_class.name.demodulize.underscore}") do
           expect { subject.valid? }.to change(subject, :ark_id).
           from(nil).
           to(a_string_starting_with('commonwealth'))

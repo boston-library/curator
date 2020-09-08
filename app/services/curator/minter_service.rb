@@ -23,7 +23,7 @@ module Curator
         Rails.logger.error "Reason #{e.message}"
         raise 'Error Generating Ark!'
       rescue Oj::Error => e
-        Rails.logger.error "Invalid JSON From Ark Response"
+        Rails.logger.error 'Invalid JSON From Ark Response'
         Rails.logger.error "Reason #{e.message}"
         raise 'Error Generating Ark!'
       rescue RemoteServiceError => e

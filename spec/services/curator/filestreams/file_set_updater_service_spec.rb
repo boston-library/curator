@@ -16,7 +16,7 @@ RSpec.describe Curator::Filestreams::FileSetUpdaterService, type: :service do
       exemplary_image_of: [{ ark_id: @digital_object.ark_id }, { ark_id: @collection.ark_id, _destroy: '1' }]
 
     }
-    VCR.use_cassette('services/filestreams/file_set/update', record: :new_episodes) do
+    VCR.use_cassette('services/filestreams/file_set/update') do
       @success, @result = described_class.call(@file_set, json_data: @update_attributes)
     end
   end
