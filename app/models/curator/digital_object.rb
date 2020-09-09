@@ -49,13 +49,13 @@ module Curator
     has_many :file_set_member_mappings, -> { joins(:file_set).includes(:file_set) }, inverse_of: :digital_object, class_name: 'Curator::Mappings::FileSetMember', dependent: :destroy
     with_options through: :file_set_member_mappings, source: :file_set do
       has_many :file_set_members, class_name: 'Curator::Filestreams::FileSet'
-      has_many :audio_file_set_members, source_type: 'Curator::Filestreams::Audio'
-      has_many :image_file_set_members, source_type: 'Curator::Filestreams::Image'
-      has_many :document_file_set_members, source_type: 'Curator::Filestreams::Document'
-      has_many :ereader_file_set_members, source_type: 'Curator::Filestreams::Ereader'
-      has_many :metadata_file_set_members, source_type: 'Curator::Filestreams::Metadata'
-      has_many :text_file_set_members, source_type: 'Curator::Filestreams::Text'
-      has_many :video_file_set_members, source_type: 'Curator::Filestreams::Video'
+      has_many :audio_file_set_members, class_name: 'Curator::Filestreams::Audio'
+      has_many :image_file_set_members, class_name: 'Curator::Filestreams::Image'
+      has_many :document_file_set_members, class_name: 'Curator::Filestreams::Document'
+      has_many :ereader_file_set_members, class_name: 'Curator::Filestreams::Ereader'
+      has_many :metadata_file_set_members, class_name: 'Curator::Filestreams::Metadata'
+      has_many :text_file_set_members, class_name: 'Curator::Filestreams::Text'
+      has_many :video_file_set_members, class_name: 'Curator::Filestreams::Video'
     end
 
     # TODO: need to dynamically switch he identifier_type/identifier fields

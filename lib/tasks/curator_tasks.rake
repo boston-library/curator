@@ -55,15 +55,17 @@ namespace :curator do
       end
     end
 
-    puts '............'
-    if Rake::Task.task_defined?('app:curator:load_seed')
-      puts 'Invoking curator:load_seed...'
-      Rake::Task['app:curator:load_seed'].invoke
-    elsif Rake::Task.task_defined?('curator:load_seed')
-      puts 'Invoking curator:load_seed...'
-      Rake::Task['curator:load_seed'].invoke
-    else
-      raise 'app:curator:load_seed and curator:load_seed rake tasks are not available!'
+    if ENV['CI'].blank?
+      puts '............'
+      if Rake::Task.task_defined?('app:curator:load_seed')
+        puts 'Invoking curator:load_seed...'
+        Rake::Task['app:curator:load_seed'].invoke
+      elsif Rake::Task.task_defined?('curator:load_seed')
+        puts 'Invoking curator:load_seed...'
+        Rake::Task['curator:load_seed'].invoke
+      else
+        raise 'app:curator:load_seed and curator:load_seed rake tasks are not available!'
+      end
     end
     puts 'Curator Setup Task Complete!'
   end
