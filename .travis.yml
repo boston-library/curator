@@ -2,15 +2,13 @@ language: ruby
 os: linux
 dist: bionic
 
-services:
-  - postgresql
-
 cache:
   bundler: true
 
 addons:
   postgresql: "11.2"
   apt:
+    update: true
     packages:
       - postgresql-11
       - postgresql-client-11
@@ -18,6 +16,9 @@ addons:
 before_install:
   - gem update --system 3.1.4
   - gem install bundler
+  - sudo sed -i -e 's/^#listen_addresses.*/listen_addresses = "*"/' /etc/postgresql/11/main/postgresql.conf
+  - sudo sed -i -e 's/^port = 5433/port = 5432/' /etc/postgresql/11/main/postgresql.conf
+  - sudo service postgresql restart 11
 
 before_script:
   bundle exec rails curator:setup
@@ -29,6 +30,7 @@ rvm:
 env:
   global:
     - PGHOST=127.0.0.1
+    - PGPORT=5432
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
     - RAILS_ENV=test
     - RACK_ENV=test
