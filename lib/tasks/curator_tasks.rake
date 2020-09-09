@@ -43,16 +43,14 @@ namespace :curator do
       raise 'app:db:migrate and db:migrate rake tasks are not available!'
     end
 
-    if ENV['CI'].blank?
-      if Rake::Task.task_defined?('app:db:test:prepare')
-        puts 'Invoking app:db:test:prepare....'
-        Rake::Task['app:db:test:prepare'].invoke
-      elsif Rake::Task.task_defined?('db:test:prepare')
-        puts 'Invoking db:test:prepare....'
-        Rake::Task['db:test:prepare'].invoke
-      else
-        raise 'app:db:test:prepare and db:test:prepare rake tasks are not available!'
-      end
+    if Rake::Task.task_defined?('app:db:test:prepare')
+      puts 'Invoking app:db:test:prepare....'
+      Rake::Task['app:db:test:prepare'].invoke
+    elsif Rake::Task.task_defined?('db:test:prepare')
+      puts 'Invoking db:test:prepare....'
+      Rake::Task['db:test:prepare'].invoke
+    else
+      raise 'app:db:test:prepare and db:test:prepare rake tasks are not available!'
     end
 
     if ENV['CI'].blank?
