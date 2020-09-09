@@ -18,12 +18,14 @@ addons:
       - postgresql-server-dev-11
 
 before_install:
+  - ls /etc/postgresql
   - sudo cp /etc/postgresql/{9.6,11}/main/pg_hba.conf
   - sudo service postgresql restart 11
   - gem update --system 3.1.4
   - gem install bundler
 
 before_script:
+  - sudo cat /etc/postgresql/11/main/pg_hba.conf
   - sudo netstat -plunt | grep postgres
   - bundle exec rails curator:setup
 
@@ -35,7 +37,7 @@ env:
   global:
     - PGHOST=127.0.0.1
     - PGUSER=postgres
-    - PGPORT=5433
+    - PGPORT=5432
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
     - RAILS_ENV=test
     - RACK_ENV=test
