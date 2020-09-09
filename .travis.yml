@@ -5,22 +5,18 @@ dist: bionic
 cache:
   bundler: true
 
-addons:
-  postgresql: "11.2"
-  apt:
-    update: true
-    packages:
-      - postgresql-11
-      - postgresql-client-11
-
 before_install:
   - gem update --system 3.1.4
   - gem install bundler
-  - sudo sed -i -e 's/^#listen_addresses.*/listen_addresses = "*"/' /etc/postgresql/11/main/postgresql.conf
-  - sudo sed -i -e 's/^port = 5433/port = 5432/' /etc/postgresql/11/main/postgresql.conf
+  - sudo apt-get update
+  - sudo apt-get autoremove -y
+  - sudo apt-get --yes remove postgresql\*
+  - sudo apt-get install -y postgresql-11 postgresql-client-11
+  - sudo cp /etc/postgresql/{9.3,9.4,11}/main/pg_hba.conf
   - sudo service postgresql restart 11
 
 before_script:
+  psql --version
   bundle exec rails curator:setup
 
 rvm:
