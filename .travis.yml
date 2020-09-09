@@ -5,15 +5,23 @@ dist: bionic
 cache:
   bundler: true
 
+services:
+  - postgresql
+
+addons:
+  postgresql: "11"
+  apt:
+    update: true
+    packages:
+      - postgresql-11
+      - postgresql-client-11
+      - postgresql-server-dev-11
+
 before_install:
-  - gem update --system 3.1.4
-  - gem install bundler
   - sudo apt-get update
   - sudo apt-get autoremove -y
-  - sudo apt-get --yes remove postgresql\*
-  - sudo apt-get install -y postgresql-11 postgresql-client-11
-  - sudo cp /etc/postgresql/{9.3,9.4,11}/main/pg_hba.conf
-  - sudo service postgresql restart 11
+  - gem update --system 3.1.4
+  - gem install bundler
 
 before_script:
   psql --version
@@ -25,8 +33,9 @@ rvm:
 
 env:
   global:
-    - PGHOST=127.0.0.1
-    - PGPORT=5432
+    - PGHOST=localhost
+    - PGUSER=postgres
+    - PGPORT=5433
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
     - RAILS_ENV=test
     - RACK_ENV=test
