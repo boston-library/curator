@@ -24,8 +24,7 @@ before_install:
   - gem install bundler
 
 before_script:
-  psql --version
-  bundle exec rails curator:setup
+  - bundle exec rails curator:setup
 
 rvm:
   - 2.5.8
@@ -33,7 +32,7 @@ rvm:
 
 env:
   global:
-    - PGHOST=localhost
+    - PGHOST=127.0.0.1
     - PGUSER=postgres
     - PGPORT=5433
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
