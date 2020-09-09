@@ -18,14 +18,13 @@ addons:
       - postgresql-server-dev-11
 
 before_install:
-  - sudo apt-get update
-  - sudo apt-get autoremove -y
-  - sudo sed -i -e 's/^#listen_addresses.*/listen_addresses = "*"/' /etc/postgresql/11/main/postgresql.conf
+  - sudo cp /etc/postgresql/{9.6,11}/main/pg_hba.conf
   - sudo service postgresql restart 11
   - gem update --system 3.1.4
   - gem install bundler
 
 before_script:
+  - sudo netstat -plunt | grep postgres
   - bundle exec rails curator:setup
 
 rvm:
