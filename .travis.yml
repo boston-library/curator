@@ -28,7 +28,7 @@ before_script:
   - bin/rails app:db:create RAILS_ENV=test
   - bin/rails app:db:environment:set RAILS_ENV=test
   - bin/rails app:db:migrate RAILS_ENV=test
-  - bin/rails app:db:status RAILS_ENV=test
+  - bin/rails app:db:migrate:status RAILS_ENV=test
 
 rvm:
   - 2.5.8
