@@ -25,8 +25,10 @@ before_install:
 
 before_script:
   - psql --version
-  - bin/rails db:migrate:status
-  - bin/rails db:migrate:reset
+  - bin/rails app:db:environment:set RAILS_ENV=test
+  - bin/rails app:db:create RAILS_ENV=test
+  - bin/rails app:db:migrate RAILS_ENV=test
+  - bin/rails app:db:status RAILS_ENV=test
 
 rvm:
   - 2.5.8
