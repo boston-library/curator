@@ -18,16 +18,14 @@ addons:
       - postgresql-server-dev-11
 
 before_install:
-  - ls /etc/postgresql
   - sudo cp /etc/postgresql/{9.6,11}/main/pg_hba.conf
   - sudo service postgresql restart 11
   - gem update --system 3.1.4
-  - gem install bundler
+  - gem install bundler:2.1.4
 
 before_script:
-  - sudo cat /etc/postgresql/11/main/pg_hba.conf
-  - sudo netstat -plunt | grep postgres
-  - bundle exec rails curator:setup
+  - bin/rails db:create
+  - bin/rails db:migrate
 
 rvm:
   - 2.5.8
