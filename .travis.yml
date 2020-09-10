@@ -24,8 +24,9 @@ before_install:
   - gem install bundler:2.1.4
 
 before_script:
-  - bin/rails db:create
-  - bin/rails db:migrate
+  - psql --version
+  - bin/rails db:migrate:status
+  - bin/rails db:migrate:reset
 
 rvm:
   - 2.5.8
