@@ -49,7 +49,7 @@
             "id_from_auth": "car"
           },
           {
-            "label": "Still image",
+            "label": "Still Image",
             "authority_code": "resourceTypes",
             "id_from_auth": "img"
           }
