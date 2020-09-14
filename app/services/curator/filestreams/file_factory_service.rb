@@ -35,12 +35,10 @@ module Curator
 
         raise ActiveRecord::Error, "Could not get blob for #{attachment_type} for FileSet ark_id=#{file_set.ark_id}" if @record.blank?
 
-        @record.transaction(requires_new: true) do
-          @record.lock!
-          check_file_fixity(@record, byte_size, checksum_md5)
-          @record.created_at = @created if @created
-          @record.save!
-        end
+        @record.lock!
+        check_file_fixity(@record, byte_size, checksum_md5)
+        @record.created_at = @created if @created
+        @record.save!
       end
       return @success, @result
     end

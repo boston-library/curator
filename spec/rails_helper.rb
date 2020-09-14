@@ -90,8 +90,8 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = false
 
   config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
     DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
     DatabaseCleaner.cleaning do
       FactoryBot.lint
     end
@@ -101,14 +101,12 @@ RSpec.configure do |config|
     WebMock.reset!
   end
 
-  config.before(:each) do
-    DatabaseCleaner.strategy = :transaction
+  config.before(:each) do |spec|
+    DatabaseCleaner.start unless spec.metadata[:type] == :service
   end
 
-  config.around(:each) do |spec|
-    DatabaseCleaner.cleaning do
-      spec.run
-    end
+  config.append_after(:each) do |spec|
+    DatabaseCleaner.clean unless spec.metadata[:type] == :service
   end
 
   config.after(:suite) do
