@@ -4,9 +4,6 @@ module Curator
   module ControlledTerms
     module Canonicable
       extend ActiveSupport::Concern
-      # Key of the JSON Element where the canonical label resides in the remote service
-      # NOM_LABEL_KEY = 'http://www.w3.org/2004/02/skos/core#prefLabel'
-      # private_constant :NOM_LABEL_KEY
       included do
         before_validation :fetch_canonical_label, if: :should_fetch_canonical_label?, on: :create
 
@@ -27,23 +24,21 @@ module Curator
 
           case authority_code
           when 'aat'
-            '/fetch/linked_data/getty_aat_ld4l_cache'
+            'fetch/linked_data/getty_aat_ld4l_cache'
           when 'lcgft'
-            '/fetch/linked_data/locgenres_ld4l_cache'
+            "show/linked_data/loc/genre/#{id_from_auth}"
           when 'lcsh'
-            "/show/linked_data/loc/subjects/#{id_from_auth}"
+            "show/linked_data/loc/subjects/#{id_from_auth}"
           when 'lctgm', 'gmgpc'
-            '/search/loc/graphicMaterials'
-          when 'marcgt'
-            '/search/loc/genreFormSchemes/marcgt'
+            'search/loc/graphicMaterials'
           when 'naf'
-            '/fetch/linked_data/locnames_ld4l_cache'
+            "show/linked_data/loc/names/#{id_from_auth}"
           when 'tgn'
-            '/fetch/linked_data/getty_tgn_ld4l_cache'
+            'fetch/linked_data/getty_tgn_ld4l_cache'
           when 'geonames'
-            '/fetch/linked_data/geonames_direct'
+            'fetch/linked_data/geonames_direct'
           when 'ulan'
-            '/fetch/linked_data/getty_ulan_ld4l_cache'
+            'fetch/linked_data/getty_ulan_ld4l_cache'
           end
         end
 
@@ -51,9 +46,9 @@ module Curator
           return {} if !can_query_bpldc?
 
           case authority_code
-          when 'aat', 'lcgft', 'naf', 'ulan', 'tgn', 'geonames'
+          when 'aat', 'ulan', 'tgn', 'geonames'
             { uri: value_uri }
-          when 'marcgt', 'lctgm', 'gmgpc'
+          when 'lctgm', 'gmgpc'
             { q: id_from_auth }
           else
             {}

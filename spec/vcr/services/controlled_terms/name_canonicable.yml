@@ -2,84 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: http://127.0.0.1:3001/fetch/linked_data/locnames_ld4l_cache?uri=http://id.loc.gov/authorities/names/n97003077
-    body:
-      encoding: UTF-8
-      string: ''
-    headers:
-      Accept:
-      - application/json
-      Content-Type:
-      - application/json
-      Connection:
-      - Keep-Alive
-      Host:
-      - 127.0.0.1:3001
-      User-Agent:
-      - http.rb/4.4.1
-  response:
-    status:
-      code: 404
-      message: Not Found
-    headers:
-      Content-Type:
-      - application/json; charset=UTF-8
-      X-Request-Id:
-      - 82e4e2b7-ff2d-4aa5-afce-ec42be59ff24
-      X-Runtime:
-      - '0.003555'
-      Content-Length:
-      - '3910'
-    body:
-      encoding: UTF-8
-      string: '{"status":404,"error":"Not Found","exception":"#\u003cActionController::RoutingError:
-        No route matches [GET] \"/fetch/linked_data/locnames_ld4l_cache\"\u003e","traces":{"Application
-        Trace":[],"Framework Trace":[{"id":0,"trace":"actionpack (5.2.4.2) lib/action_dispatch/middleware/debug_exceptions.rb:65:in
-        `call''"},{"id":1,"trace":"actionpack (5.2.4.2) lib/action_dispatch/middleware/show_exceptions.rb:33:in
-        `call''"},{"id":2,"trace":"railties (5.2.4.2) lib/rails/rack/logger.rb:38:in
-        `call_app''"},{"id":3,"trace":"railties (5.2.4.2) lib/rails/rack/logger.rb:26:in
-        `block in call''"},{"id":4,"trace":"activesupport (5.2.4.2) lib/active_support/tagged_logging.rb:71:in
-        `block in tagged''"},{"id":5,"trace":"activesupport (5.2.4.2) lib/active_support/tagged_logging.rb:28:in
-        `tagged''"},{"id":6,"trace":"activesupport (5.2.4.2) lib/active_support/tagged_logging.rb:71:in
-        `tagged''"},{"id":7,"trace":"railties (5.2.4.2) lib/rails/rack/logger.rb:26:in
-        `call''"},{"id":8,"trace":"actionpack (5.2.4.2) lib/action_dispatch/middleware/remote_ip.rb:81:in
-        `call''"},{"id":9,"trace":"actionpack (5.2.4.2) lib/action_dispatch/middleware/request_id.rb:27:in
-        `call''"},{"id":10,"trace":"rack (2.2.2) lib/rack/runtime.rb:22:in `call''"},{"id":11,"trace":"activesupport
-        (5.2.4.2) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in
-        `call''"},{"id":12,"trace":"actionpack (5.2.4.2) lib/action_dispatch/middleware/executor.rb:14:in
-        `call''"},{"id":13,"trace":"actionpack (5.2.4.2) lib/action_dispatch/middleware/static.rb:127:in
-        `call''"},{"id":14,"trace":"rack (2.2.2) lib/rack/sendfile.rb:110:in `call''"},{"id":15,"trace":"railties
-        (5.2.4.2) lib/rails/engine.rb:524:in `call''"},{"id":16,"trace":"puma (4.3.3)
-        lib/puma/configuration.rb:228:in `call''"},{"id":17,"trace":"puma (4.3.3)
-        lib/puma/server.rb:682:in `handle_request''"},{"id":18,"trace":"puma (4.3.3)
-        lib/puma/server.rb:472:in `process_client''"},{"id":19,"trace":"puma (4.3.3)
-        lib/puma/server.rb:328:in `block in run''"},{"id":20,"trace":"puma (4.3.3)
-        lib/puma/thread_pool.rb:134:in `block in spawn_thread''"}],"Full Trace":[{"id":0,"trace":"actionpack
-        (5.2.4.2) lib/action_dispatch/middleware/debug_exceptions.rb:65:in `call''"},{"id":1,"trace":"actionpack
-        (5.2.4.2) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call''"},{"id":2,"trace":"railties
-        (5.2.4.2) lib/rails/rack/logger.rb:38:in `call_app''"},{"id":3,"trace":"railties
-        (5.2.4.2) lib/rails/rack/logger.rb:26:in `block in call''"},{"id":4,"trace":"activesupport
-        (5.2.4.2) lib/active_support/tagged_logging.rb:71:in `block in tagged''"},{"id":5,"trace":"activesupport
-        (5.2.4.2) lib/active_support/tagged_logging.rb:28:in `tagged''"},{"id":6,"trace":"activesupport
-        (5.2.4.2) lib/active_support/tagged_logging.rb:71:in `tagged''"},{"id":7,"trace":"railties
-        (5.2.4.2) lib/rails/rack/logger.rb:26:in `call''"},{"id":8,"trace":"actionpack
-        (5.2.4.2) lib/action_dispatch/middleware/remote_ip.rb:81:in `call''"},{"id":9,"trace":"actionpack
-        (5.2.4.2) lib/action_dispatch/middleware/request_id.rb:27:in `call''"},{"id":10,"trace":"rack
-        (2.2.2) lib/rack/runtime.rb:22:in `call''"},{"id":11,"trace":"activesupport
-        (5.2.4.2) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in
-        `call''"},{"id":12,"trace":"actionpack (5.2.4.2) lib/action_dispatch/middleware/executor.rb:14:in
-        `call''"},{"id":13,"trace":"actionpack (5.2.4.2) lib/action_dispatch/middleware/static.rb:127:in
-        `call''"},{"id":14,"trace":"rack (2.2.2) lib/rack/sendfile.rb:110:in `call''"},{"id":15,"trace":"railties
-        (5.2.4.2) lib/rails/engine.rb:524:in `call''"},{"id":16,"trace":"puma (4.3.3)
-        lib/puma/configuration.rb:228:in `call''"},{"id":17,"trace":"puma (4.3.3)
-        lib/puma/server.rb:682:in `handle_request''"},{"id":18,"trace":"puma (4.3.3)
-        lib/puma/server.rb:472:in `process_client''"},{"id":19,"trace":"puma (4.3.3)
-        lib/puma/server.rb:328:in `block in run''"},{"id":20,"trace":"puma (4.3.3)
-        lib/puma/thread_pool.rb:134:in `block in spawn_thread''"}]}}'
-  recorded_at: Thu, 03 Sep 2020 18:56:04 GMT
-- request:
-    method: get
-    uri: http://127.0.0.1:3001/qa//fetch/linked_data/locnames_ld4l_cache?uri=http://id.loc.gov/authorities/names/n97003077
+    uri: http://127.0.0.1:3001/qa/show/linked_data/loc/names/n97003077
     body:
       encoding: UTF-8
       string: ''
@@ -104,21 +27,20 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Etag:
-      - W/"e5e07d7995bfa36c7f97d4e1a4cb38ec"
+      - W/"588943d05318ccbff6aeda4b3be13c05"
       Cache-Control:
       - max-age=0, private, must-revalidate
       X-Request-Id:
-      - 46e80da6-495b-437c-8eba-11e3dc70dc94
+      - dd5df22b-4d61-4f3f-83ec-92476777cb9a
       X-Runtime:
-      - '0.267661'
+      - '0.608962'
       Transfer-Encoding:
       - chunked
     body:
       encoding: UTF-8
       string: '{"uri":"http://id.loc.gov/authorities/names/n97003077","id":"n 97003077","label":["Reed,
-        Byron, 1829-1891"],"sameas":["http://viaf.org/viaf/sourceID/LC%7Cn+97003077#skos:Concept"],"predicates":{"http://www.loc.gov/mads/rdf/v1#hasExactExternalAuthority":["http://viaf.org/viaf/sourceID/LC%7Cn+97003077#skos:Concept"],"http://www.loc.gov/mads/rdf/v1#authoritativeLabel":["Reed,
-        Byron, 1829-1891"],"http://www.loc.gov/mads/rdf/v1#isMemberOfMADSCollection":["http://id.loc.gov/authorities/names/collection_LCNAF","http://id.loc.gov/authorities/names/collection_NamesAuthorizedHeadings"],"http://www.loc.gov/mads/rdf/v1#identifiesRWO":["http://id.loc.gov/rwo/agents/n97003077"],"http://www.w3.org/2004/02/skos/core#prefLabel":["Reed,
-        Byron, 1829-1891"],"http://www.loc.gov/mads/rdf/v1#isMemberOfMADSScheme":["http://id.loc.gov/authorities/names"],"http://www.w3.org/2004/02/skos/core#exactMatch":["http://viaf.org/viaf/sourceID/LC%7Cn+97003077#skos:Concept"],"http://id.loc.gov/vocabulary/identifiers/lccn":["n
-        97003077"],"http://www.w3.org/1999/02/22-rdf-syntax-ns#type":["http://www.w3.org/2004/02/skos/core#Concept","http://www.loc.gov/mads/rdf/v1#PersonalName","http://www.loc.gov/mads/rdf/v1#Authority"],"http://www.w3.org/2004/02/skos/core#inScheme":["http://id.loc.gov/authorities/names"]}}'
-  recorded_at: Thu, 03 Sep 2020 20:50:49 GMT
+        Byron, 1829-1891"],"sameas":["http://viaf.org/viaf/sourceID/LC%7Cn++97003077#skos:Concept"],"predicates":{"http://www.w3.org/1999/02/22-rdf-syntax-ns#type":["http://www.loc.gov/mads/rdf/v1#Authority","http://www.w3.org/2004/02/skos/core#Concept","http://www.loc.gov/mads/rdf/v1#PersonalName"],"http://www.loc.gov/mads/rdf/v1#authoritativeLabel":["Reed,
+        Byron, 1829-1891"],"http://www.loc.gov/mads/rdf/v1#hasCloseExternalAuthority":["http://www.wikidata.org/entity/Q5004456","http://id.worldcat.org/fast/385888"],"http://www.loc.gov/mads/rdf/v1#hasExactExternalAuthority":["http://viaf.org/viaf/sourceID/LC%7Cn++97003077#skos:Concept"],"http://www.w3.org/2004/02/skos/core#inScheme":["http://id.loc.gov/authorities/names"],"http://www.loc.gov/mads/rdf/v1#identifiesRWO":["http://id.loc.gov/rwo/agents/n97003077"],"http://www.w3.org/2004/02/skos/core#closeMatch":["http://www.wikidata.org/entity/Q5004456","http://id.worldcat.org/fast/385888"],"http://www.w3.org/2004/02/skos/core#prefLabel":["Reed,
+        Byron, 1829-1891"],"http://id.loc.gov/vocabulary/identifiers/lccn":["n 97003077"],"http://www.loc.gov/mads/rdf/v1#isMemberOfMADSCollection":["http://id.loc.gov/authorities/names/collection_LCNAF","http://id.loc.gov/authorities/names/collection_NamesAuthorizedHeadings"],"http://www.w3.org/2004/02/skos/core#exactMatch":["http://viaf.org/viaf/sourceID/LC%7Cn++97003077#skos:Concept"],"http://www.loc.gov/mads/rdf/v1#isMemberOfMADSScheme":["http://id.loc.gov/authorities/names"]}}'
+  recorded_at: Wed, 16 Sep 2020 20:28:25 GMT
 recorded_with: VCR 6.0.0
