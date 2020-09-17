@@ -58,43 +58,60 @@ module Curator
       has_many :video_file_set_members, class_name: 'Curator::Filestreams::Video'
     end
 
-    # TODO: need to dynamically switch he identifier_type/identifier fields
     def ark_params
       super.merge({
         parent_pid: admin_set&.ark_id,
-          secondary_parent_pids: [],
-          model_type: self.class.name
+          secondary_parent_pids: []
       }.merge(local_id_params))
     end
 
     private
 
     def local_id_params
-      return {
-        local_original_identifier: nil,
-          local_original_identifier_type: nil
-      } if descriptive&.identifier.blank?
+      ident_params = { local_original_identifier: nil, local_original_identifier_type: nil }
 
-      identifier_params = descriptive.identifier&.each do |ident|
-        case ident.type
-        when 'internet-archive', 'local-barcode'
-          return {
-            local_original_identifier: ident.label,
-              local_original_identifier_type: 'Barcode'
-          }
-        when 'local-accession'
-          return {
-            local_original_identifier: ident.label,
-              local_original_identifier_type: 'id_local-accession field'
-          }
-        when 'local-other'
-          return {
-            local_original_identifier: ident.label,
-              local_original_identifier_type: 'id_local-other field'
-          }
-        end
+      return ident_params if descriptive&.identifier.blank?
+
+      local_id_precedent.each do |ident_precedent|
+        ident = descriptive.identifier.find { |i| ident_precedent.include?(i.type) }
+
+        next if ident.blank?
+
+        ident_params = { local_original_identifier: ident.label, local_original_identifier_type: ident.local_original_identifier_type }
+
+        break
       end
-      identifier_params
+
+      ident_params
+    end
+
+    # Sets an array of local_id_types by the same precendent the case/when was setting in the previous
+    # Chose this way because of a one off bug i noticed that return local_id_params as an array
+    # Version above works as intended with the right precendent being used and avoids returning an array
+    # Method below is a helper method that builds the constant into a 2d array. The constant is also ordered by precendent to ensure that the order is maintained.
+    # For reference here how the local id params were being set before.
+    #   case ident.type
+    # when 'internet-archive', 'local-barcode'
+    #   return {
+    #     local_original_identifier: ident.label,
+    #       local_original_identifier_type: 'Barcode'
+    #   }
+    # when 'local-accession'
+    #   return {
+    #     local_original_identifier: ident.label,
+    #       local_original_identifier_type: 'id_local-accession field'
+    #   }
+    # when 'local-other'
+    #   return {
+    #     local_original_identifier: ident.label,
+    #       local_original_identifier_type: 'id_local-other field'
+    #   }
+    def local_id_precedent
+      DescriptiveFieldSets::LOCAL_ORIGINAL_IDENTIFIER_TYPES.reduce({}) do |ret, (k, v)|
+        ret[v] ||= []
+        ret[v] << k
+        ret
+      end.values
     end
 
     def add_admin_set_to_members

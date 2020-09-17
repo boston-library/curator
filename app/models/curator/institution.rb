@@ -32,8 +32,7 @@ module Curator
         parent_pid: nil,
           secondary_parent_pids: [],
           local_original_identifier_type: 'Physical Location',
-          local_original_identifier: name,
-          model_type: self.class.name
+          local_original_identifier: name
       })
     end
 

@@ -54,8 +54,7 @@ module Curator
         parent_pid: file_set_of&.ark_id,
           secondary_parent_pids: [],
           local_original_identifier_type: 'filename',
-          local_original_identifier: file_name_base,
-          model_type: self.class.name
+          local_original_identifier: file_name_base
       })
     end
 

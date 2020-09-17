@@ -41,8 +41,7 @@ module Curator
         parent_pid: institution&.ark_id,
           secondary_parent_pids: [],
           local_original_identifier_type: 'Institution Collection Name',
-          local_original_identifier: name,
-          model_type: self.class.name
+          local_original_identifier: name
       })
     end
 

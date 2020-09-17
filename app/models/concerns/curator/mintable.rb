@@ -22,7 +22,7 @@ module Curator
 
     module InstanceMethods
       def ark_params
-        DEFAULT_ARK_PARAMS.dup
+        DEFAULT_ARK_PARAMS.merge({ model_type: self.class.name })
       end
 
       def generate_ark_id
