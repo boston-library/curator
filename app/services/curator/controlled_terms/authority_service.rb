@@ -2,43 +2,50 @@
 
 module Curator
   class ControlledTerms::AuthorityService < Services::Base
-    def initialize(url:, json_path: nil)
-      @url = Addressable::URI.parse(url)
-      @json_path = json_path
+    include Curator::Services::RemoteService
+
+    self.base_url = ENV['AUTHORITY_API_URL'].to_s
+    self.default_path_prefix = '/bpldc'
+    self.default_headers = { accept: 'application/json', content_type: 'application/json' }
+
+    attr_reader :request_uri
+
+    def initialize(path:, path_prefix: self.class.default_path_prefix, query: {})
+      @request_uri = Addressable::URI.parse("#{path_prefix}/#{path}")
+      @request_uri.query_values = query if query.present?
     end
 
     def call
-      conn = set_connection
-      @url.path = "#{@url.path}#{@json_path}"
-      @url = @url.to_s
       begin
-        response = conn.get(@url)
-        json_response = Oj.load(response.body)
-        return block_given? ? yield(json_response) : json_response
-      rescue Faraday::ClientError => e
-        Rails.logger.error "Error Retreiving Json For Authority at #{@url}"
+        bpldc_json = self.class.with_client do |client|
+          fetch_auth_data(client)
+        end
+
+        return block_given? ? yield(bpldc_json) : bpldc_json
+      rescue HTTP::Error => e
+        Rails.logger.error "Error Retreiving Json For Authority at #{@request_uri}"
         Rails.logger.error "Reason #{e.message}"
-        nil
-      rescue JSON::ParserError => e
-        Rails.logger.error "Error Parsing Json For Authority at #{@url}"
+      rescue Oj::Error => e
+        Rails.logger.error "Error Parsing Json For Authority at #{@request_uri}"
         Rails.logger.error "Reason #{e.message}"
-        nil
+      rescue RemoteServiceError => e
+        Rails.logger.error "Error Retreiving Json For Authority at #{@request_uri}"
+        Rails.logger.error "Reason #{e.message}"
       end
       nil
     end
 
     protected
 
-    def set_connection
-      Faraday.new do |f|
-        f.use Faraday::Response::Logger, Rails.logger
-        # f.use :http_cache, store: Rails.cache #make this configurable
-        f.response :follow_redirects
-        f.adapter :net_http_persistent, pool_size: ENV.fetch('RAILS_MAX_THREADS') { 5 } do |http|
-          http.idle_timeout = 100
-          http.retry_change_requests = true
-        end
-      end
+    def fetch_auth_data(client)
+      resp = client.headers(self.class.default_headers).
+                    get(request_uri.to_s)
+
+      json_response = Oj.load(resp.body.to_s)
+
+      raise RemoteServiceError.new('Failed to retreive data from bpldc_auth_api!', json_response, resp.status) if !resp.status.success?
+
+      json_response
     end
   end
 end

@@ -3,11 +3,13 @@
 module Curator
   class Engine < ::Rails::Engine
     require 'concurrent'
+    require 'connection_pool'
     require 'delegate'
     require 'forwardable'
-    require 'faraday'
-    require 'faraday_middleware'
-    require 'faraday-http-cache'
+    require 'http'
+    # require 'faraday'
+    # require 'faraday_middleware'
+    # require 'faraday-http-cache'
     require 'addressable'
     require 'acts_as_list'
     require 'attr_json'
@@ -56,14 +58,14 @@ module Curator
       Curator.setup!
     end
 
-    initializer 'inflections' do
+    initializer 'curator.inflections' do
       # NOTE: This is needed to prevent 'metadata'.classify from becomming Metadatum
       ActiveSupport::Inflector.inflections(:en) do |inflect|
         inflect.singular 'metadata', 'metadata'
       end
     end
 
-    initializer 'mime_types' do
+    initializer 'curator.mime_types' do
       Mime::Type.register 'application/marcxml+xml', :marc, %w(application/marc)
       Mime::Type.register 'application/mods+xml', :mods
     end

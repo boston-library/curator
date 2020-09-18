@@ -106,7 +106,7 @@ RSpec.shared_examples 'shared_put_patch', type: :controller do |skip_put_patch: 
       end
 
       it 'renders a 200 JSON response with the new resource' do
-        VCR.use_cassette("controllers/#{resource_key}_update", record: :new_episodes) do
+        VCR.use_cassette("controllers/#{resource_key}_update") do
           put :update, params: valid_update_params, session: valid_session
         end
         expect(response).to have_http_status(:ok)
@@ -127,7 +127,7 @@ RSpec.shared_examples 'shared_put_patch', type: :controller do |skip_put_patch: 
       end
 
       it 'returns a 422 JSON response with array of errors' do
-        VCR.use_cassette("controllers/#{resource_key}_invalid_update", record: :new_episodes) do
+        VCR.use_cassette("controllers/#{resource_key}_invalid_update") do
           put :update, params: invalid_update_params, session: valid_session
         end
 
@@ -167,7 +167,7 @@ RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true, reso
         end
 
         it 'renders a 201 JSON response with the new resource' do
-          VCR.use_cassette("controllers/#{resource_key}_create", record: :new_episodes) do
+          VCR.use_cassette("controllers/#{resource_key}_create") do
             post :create, params: valid_create_params, session: valid_session
           end
 
@@ -181,7 +181,7 @@ RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true, reso
       context 'with :invalid_params' do
         let(:invalid_create_params) { params.dup.merge({ resource_key => invalid_attributes }) }
         it 'returns a 422 JSON response with array of errors' do
-          VCR.use_cassette("controllers/#{resource_key}_invalid_create", record: :new_episodes) do
+          VCR.use_cassette("controllers/#{resource_key}_invalid_create") do
             post :create, params: invalid_create_params, session: valid_session
           end
 

@@ -9,6 +9,7 @@ module Curator
       autoload :FactoryService
       autoload :TransactionHandler
       autoload :UpdaterService
+      autoload :RemoteService
     end
   end
 end

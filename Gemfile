@@ -24,10 +24,10 @@ group :development, :test do
   gem 'awesome_print', '~> 1.8'
   gem 'dotenv-rails', '~> 2.7'
   gem 'factory_bot_rails', '~> 5.0'
-  gem 'faker', '~> 2.6.0'
-  gem 'pry', '~> 0.12'
-  gem 'pry-byebug', '~> 3.8'
-  gem 'pry-rails', '~> 0.3.9'
+  gem 'faker', '~> 2.13'
+  gem 'pry', '~> 0.13'
+  gem 'pry-byebug', '~> 3.9'
+  gem 'pry-rails', '~> 0.3'
   gem 'puma', '~> 4.3'
   gem 'rubocop', '~> 0.75.1', require: false
   gem 'rubocop-performance', '~> 1.5', require: false
@@ -41,6 +41,6 @@ group :test do
   gem 'database_cleaner-active_record'
   gem 'rspec-rails', '~> 4.0'
   gem 'shoulda-matchers', '~> 4.3'
-  gem 'vcr', '~> 5.1.0'
+  gem 'vcr', '~> 6.0'
   gem 'webmock', '~> 3.8'
 end

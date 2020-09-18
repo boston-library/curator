@@ -16,7 +16,7 @@ RSpec.describe Curator::ControlledTerms::Name, type: :model do
     let!(:authority) { find_authority_by_code('naf') }
     let!(:term_data) { { id_from_auth: 'n97003077' } }
 
-    before(:each) { VCR.insert_cassette('controlled_terms/name_canonicable', allow_playback_repeats: true) }
+    before(:each) { VCR.insert_cassette('services/controlled_terms/name_canonicable', allow_playback_repeats: true) }
 
     after(:each) { VCR.eject_cassette }
     # rubocop:enable RSpec/LetSetup

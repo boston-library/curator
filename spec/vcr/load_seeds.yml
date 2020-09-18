@@ -141,7 +141,7 @@ http_interactions:
         material","id_from_auth":"mix","authority_code":"resourceTypes"},{"label":"Moving
         image","id_from_auth":"mov","authority_code":"resourceTypes"},{"label":"Manuscript","id_from_auth":"man","authority_code":"resourceTypes"},{"label":"Multimedia","id_from_auth":"mul","authority_code":"resourceTypes"},{"label":"Text","id_from_auth":"txt","authority_code":"resourceTypes"},{"label":"Digital","id_from_auth":"dig","authority_code":"resourceTypes"},{"label":"Cartographic","id_from_auth":"car","authority_code":"resourceTypes"},{"label":"Notated
         music","id_from_auth":"not","authority_code":"resourceTypes"},{"label":"Audio","id_from_auth":"aud","authority_code":"resourceTypes"},{"label":"Collection","id_from_auth":"col","authority_code":"resourceTypes"},{"label":"Still
-        image","id_from_auth":"img","authority_code":"resourceTypes"},{"label":"Tactile","id_from_auth":"tac","authority_code":"resourceTypes"},{"label":"Dataset","id_from_auth":"dat","authority_code":"resourceTypes"}]'
+        Image","id_from_auth":"img","authority_code":"resourceTypes"},{"label":"Tactile","id_from_auth":"tac","authority_code":"resourceTypes"},{"label":"Dataset","id_from_auth":"dat","authority_code":"resourceTypes"}]'
     http_version: null
   recorded_at: Tue, 24 Mar 2020 20:27:03 GMT
 - request:

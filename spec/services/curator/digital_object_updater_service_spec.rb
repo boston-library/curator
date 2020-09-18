@@ -18,7 +18,7 @@ RSpec.describe Curator::DigitalObjectUpdaterService, type: :service do
         ark_id: @new_image_file_set.ark_id
       }
     }
-    VCR.use_cassette('services/digital_object/update', record: :new_episodes) do
+    VCR.use_cassette('services/digital_object/update') do
       @success, @result = described_class.call(@digital_object, json_data: @update_attributes)
     end
   end

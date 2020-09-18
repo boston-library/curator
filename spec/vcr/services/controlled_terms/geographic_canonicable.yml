@@ -1,0 +1,45 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/qa/fetch/linked_data/getty_tgn_ld4l_cache?uri=http://vocab.getty.edu/tgn/7004939
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/4.4.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"13a1b4a646f04da2d1ddeef1f1a3aa25"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 1ed17587-1601-4596-ac2c-2b1862229ffb
+      X-Runtime:
+      - '0.326787'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"uri":"http://vocab.getty.edu/tgn/7004939","id":"7004939","label":["Piacenza"],"altlabel":["Placentia"],"broader":["http://vocab.getty.edu/tgn/7003132"],"predicates":{"http://purl.org/dc/terms/source":["http://vocab.getty.edu/tgn/source/2009007639","http://vocab.getty.edu/tgn/source/9006449","http://vocab.getty.edu/tgn/source/9006567-subject-7004939","http://vocab.getty.edu/tgn/source/9006339-subject-7004939","http://vocab.getty.edu/tgn/source/9006548-subject-7004939","http://vocab.getty.edu/tgn/source/2009007144-subject-7004939","http://vocab.getty.edu/tgn/source/9005498"],"http://vocab.getty.edu/ontology#parentString":["Piacenza,
+        Emilia-Romagna, Italia, Europe, World"],"http://vocab.getty.edu/ontology#broaderPartitiveExtended":["http://vocab.getty.edu/tgn/7029392","http://vocab.getty.edu/tgn/7008516","http://vocab.getty.edu/tgn/7003132","http://vocab.getty.edu/tgn/1000080","http://vocab.getty.edu/tgn/1000003"],"http://purl.org/dc/elements/1.1/identifier":["7004939"],"http://www.w3.org/2008/05/skos-xl#prefLabel":["http://vocab.getty.edu/tgn/term/46436"],"http://www.w3.org/1999/02/22-rdf-syntax-ns#type":["http://vocab.getty.edu/ontology#AdminPlaceConcept","http://vocab.getty.edu/ontology#Subject","http://www.w3.org/2004/02/skos/core#Concept"],"http://www.w3.org/2004/02/skos/core#broader":["http://vocab.getty.edu/tgn/7003132"],"http://vocab.getty.edu/ontology#parentStringAbbrev":["Piacenza,
+        Emilia-Romagna, ... World"],"http://vocab.getty.edu/ontology#broaderPreferred":["http://vocab.getty.edu/tgn/7003132"],"http://vocab.getty.edu/ontology#broaderExtended":["http://vocab.getty.edu/tgn/7029392","http://vocab.getty.edu/tgn/7008516","http://vocab.getty.edu/tgn/7003132","http://vocab.getty.edu/tgn/1000080","http://vocab.getty.edu/tgn/1000003"],"http://www.w3.org/ns/prov#wasGeneratedBy":["http://vocab.getty.edu/tgn/rev/5000761504"],"http://www.w3.org/2004/02/skos/core#inScheme":["http://vocab.getty.edu/tgn/"],"http://vocab.getty.edu/ontology#displayOrder":["157"],"http://www.w3.org/2000/01/rdf-schema#label":["Piacenza","Placentia"],"http://vocab.getty.edu/ontology#broaderPreferredExtended":["http://vocab.getty.edu/tgn/7029392","http://vocab.getty.edu/tgn/7008516","http://vocab.getty.edu/tgn/7003132","http://vocab.getty.edu/tgn/1000080","http://vocab.getty.edu/tgn/1000003"],"http://www.w3.org/2004/02/skos/core#scopeNote":["http://vocab.getty.edu/tgn/scopeNote/41558"],"http://vocab.getty.edu/ontology#placeTypeNonPreferred":["http://vocab.getty.edu/aat/300008375","http://vocab.getty.edu/aat/300387223"],"http://www.w3.org/2004/02/skos/core#prefLabel":["Piacenza"],"http://purl.org/dc/terms/license":["http://opendatacommons.org/licenses/by/1.0/"],"http://rdfs.org/ns/void#inDataset":["http://vocab.getty.edu/dataset/tgn"],"http://www.w3.org/2000/01/rdf-schema#seeAlso":["http://www.getty.edu/vow/TGNFullDisplay?find=\u0026place=\u0026nation=\u0026subjectid=7004939"],"http://purl.org/dc/terms/contributor":["http://vocab.getty.edu/tgn/contrib/10000003","http://vocab.getty.edu/tgn/contrib/10000000","http://vocab.getty.edu/tgn/contrib/10000002","http://vocab.getty.edu/tgn/contrib/10000001"],"http://www.w3.org/2004/02/skos/core#note":["http://vocab.getty.edu/tgn/rev/5000761504","http://vocab.getty.edu/tgn/rev/5009361004","http://vocab.getty.edu/tgn/rev/5009361003","http://vocab.getty.edu/tgn/scopeNote/41558","http://vocab.getty.edu/tgn/rev/5011268981"],"http://vocab.getty.edu/ontology#broaderPartitive":["http://vocab.getty.edu/tgn/7003132"],"http://www.w3.org/2004/02/skos/core#broaderTransitive":["http://vocab.getty.edu/tgn/7008516","http://vocab.getty.edu/tgn/7003132","http://vocab.getty.edu/tgn/1000080","http://vocab.getty.edu/tgn/1000003"],"http://www.w3.org/2004/02/skos/core#changeNote":["http://vocab.getty.edu/tgn/rev/5000761504","http://vocab.getty.edu/tgn/rev/5009361004","http://vocab.getty.edu/tgn/rev/5009361003","http://vocab.getty.edu/tgn/rev/5011268981"],"http://vocab.getty.edu/ontology#broader":["http://vocab.getty.edu/tgn/7003132"],"http://purl.org/dc/terms/created":["1991-09-13T03:13:00"],"http://vocab.getty.edu/ontology#placeType":["http://vocab.getty.edu/aat/300008347","http://vocab.getty.edu/aat/300008375","http://vocab.getty.edu/aat/300387223"],"http://purl.org/iso25964/skos-thes#broaderPartitive":["http://vocab.getty.edu/tgn/7003132"],"http://www.w3.org/2008/05/skos-xl#altLabel":["http://vocab.getty.edu/tgn/term/170045"],"http://xmlns.com/foaf/0.1/focus":["http://vocab.getty.edu/tgn/7004939-place"],"http://vocab.getty.edu/ontology#prefLabelGVP":["http://vocab.getty.edu/tgn/term/46436"],"http://purl.org/dc/terms/modified":["2009-01-09T15:39:43","2010-06-03T23:13:28"],"http://creativecommons.org/ns#license":["http://opendatacommons.org/licenses/by/1.0/"],"http://vocab.getty.edu/ontology#placeTypePreferred":["http://vocab.getty.edu/aat/300008347"],"http://www.w3.org/2004/02/skos/core#altLabel":["Placentia"]}}'
+  recorded_at: Wed, 16 Sep 2020 20:31:50 GMT
+recorded_with: VCR 6.0.0

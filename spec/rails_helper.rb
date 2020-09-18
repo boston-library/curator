@@ -9,6 +9,10 @@ ENV['SOLR_URL'] = File.read(
   File.expand_path('internal/.env.test', __dir__)
 ).match(/SOLR_URL=[\w:\/\.]*/).to_s.split('SOLR_URL=').last if ENV['RAILS_ENV'] == 'test'
 
+# NOTE: These are needed for travis since the class_attribute in the remote service requires these to exist
+ENV['AUTHORITY_API_URL'] ||= 'http://127.0.0.1:3001'
+ENV['ARK_MANAGER_API_URL'] ||= 'http://127.0.0.1:3002'
+
 require File.expand_path('./internal/config/environment', __dir__)
 
 # Prevent database truncation if the environment is production
@@ -26,6 +30,9 @@ end
 require 'vcr'
 
 VCR.configure do |c|
+  # NOTE: uncomment this when creating or updating existing specs are wrapped in VCR.use_cassete
+  # This will update the yaml files for the specs.
+  # c.default_cassette_options = { record: :new_episodes }
   c.cassette_library_dir = 'spec/vcr'
   c.configure_rspec_metadata!
   c.hook_into :webmock
@@ -83,8 +90,8 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = false
 
   config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
     DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
     DatabaseCleaner.cleaning do
       FactoryBot.lint
     end
@@ -94,14 +101,12 @@ RSpec.configure do |config|
     WebMock.reset!
   end
 
-  config.before(:each) do
-    DatabaseCleaner.strategy = :transaction
+  config.before(:each) do |spec|
+    DatabaseCleaner.start unless spec.metadata[:type] == :service
   end
 
-  config.around(:each) do |spec|
-    DatabaseCleaner.cleaning do
-      spec.run
-    end
+  config.append_after(:each) do |spec|
+    DatabaseCleaner.clean unless spec.metadata[:type] == :service
   end
 
   config.after(:suite) do

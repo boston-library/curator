@@ -10,7 +10,7 @@ RSpec.describe Curator::Metastreams::WorkflowUpdaterService, type: :service do
     @update_attributes ||= {
       publishing_state: :review
     }
-    VCR.use_cassette('/services/metastreams/workflow/update', record: :new_episodes) do
+    VCR.use_cassette('/services/metastreams/workflow/update') do
       @success, @result = described_class.call(@digital_object.workflow, json_data: @update_attributes)
     end
   end

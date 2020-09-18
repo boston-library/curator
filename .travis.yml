@@ -1,19 +1,27 @@
 language: ruby
-sudo: false
+os: linux
 dist: bionic
-
-services:
-  - postgresql
 
 cache:
   bundler: true
 
 addons:
-  postgresql: "9.6"
+  postgresql: "11"
+  apt:
+    update: true
+    packages:
+      - postgresql-11
+      - postgresql-client-11
+      - postgresql-server-dev-11
 
 before_install:
-  - gem update --system 3.1.2
-  - gem install bundler
+  - sudo cp /etc/postgresql/{9.6,11}/main/pg_hba.conf
+  - sudo service postgresql restart 11
+  - gem update --system 3.1.4
+  - gem install bundler:2.1.4
+
+before_script:
+  - bundle exec rails app:db:create app:db:migrate app:db:schema:load
 
 rvm:
   - 2.5.8
@@ -21,7 +29,12 @@ rvm:
 
 env:
   global:
+    - PGHOST=127.0.0.1
+    - PGUSER=postgres
+    - PGPORT=5432
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+    - RAILS_ENV=test
+    - RACK_ENV=test
     - CI=true
-  matrix:
+  jobs:
     - "RAILS_VERSION=6.0.3.2"

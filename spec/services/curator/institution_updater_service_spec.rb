@@ -28,7 +28,7 @@ RSpec.describe Curator::InstitutionUpdaterService, type: :service do
         { id: @host_collection_to_remove.id, _destroy: '1' }
       ]
     }
-    VCR.use_cassette('services/institutions/update', record: :new_episodes) do
+    VCR.use_cassette('services/institutions/update') do
       @success, @result = described_class.call(@institution, json_data: @update_attributes)
     end
   end

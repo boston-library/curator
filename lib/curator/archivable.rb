@@ -23,6 +23,5 @@ module Curator
     def deleted?
       archived?
     end
-
   end
 end

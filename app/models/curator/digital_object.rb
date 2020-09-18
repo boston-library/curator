@@ -49,16 +49,70 @@ module Curator
     has_many :file_set_member_mappings, -> { joins(:file_set).includes(:file_set) }, inverse_of: :digital_object, class_name: 'Curator::Mappings::FileSetMember', dependent: :destroy
     with_options through: :file_set_member_mappings, source: :file_set do
       has_many :file_set_members, class_name: 'Curator::Filestreams::FileSet'
-      has_many :audio_file_set_members, source_type: 'Curator::Filestreams::Audio'
-      has_many :image_file_set_members, source_type: 'Curator::Filestreams::Image'
-      has_many :document_file_set_members, source_type: 'Curator::Filestreams::Document'
-      has_many :ereader_file_set_members, source_type: 'Curator::Filestreams::Ereader'
-      has_many :metadata_file_set_members, source_type: 'Curator::Filestreams::Metadata'
-      has_many :text_file_set_members, source_type: 'Curator::Filestreams::Text'
-      has_many :video_file_set_members, source_type: 'Curator::Filestreams::Video'
+      has_many :audio_file_set_members, class_name: 'Curator::Filestreams::Audio'
+      has_many :image_file_set_members, class_name: 'Curator::Filestreams::Image'
+      has_many :document_file_set_members, class_name: 'Curator::Filestreams::Document'
+      has_many :ereader_file_set_members, class_name: 'Curator::Filestreams::Ereader'
+      has_many :metadata_file_set_members, class_name: 'Curator::Filestreams::Metadata'
+      has_many :text_file_set_members, class_name: 'Curator::Filestreams::Text'
+      has_many :video_file_set_members, class_name: 'Curator::Filestreams::Video'
+    end
+
+    def ark_params
+      super.merge({
+        parent_pid: admin_set&.ark_id,
+          secondary_parent_pids: []
+      }.merge(local_id_params))
     end
 
     private
+
+    def local_id_params
+      ident_params = { local_original_identifier: nil, local_original_identifier_type: nil }
+
+      return ident_params if descriptive&.identifier.blank?
+
+      local_id_precedent.each do |ident_precedent|
+        ident = descriptive.identifier.find { |i| ident_precedent.include?(i.type) }
+
+        next if ident.blank?
+
+        ident_params = { local_original_identifier: ident.label, local_original_identifier_type: ident.local_original_identifier_type }
+
+        break
+      end
+
+      ident_params
+    end
+
+    # Sets an array of local_id_types by the same precendent the case/when was setting in the previous
+    # Chose this way because of a one off bug i noticed that return local_id_params as an array
+    # Version above works as intended with the right precendent being used and avoids returning an array
+    # Method below is a helper method that builds the constant into a 2d array. The constant is also ordered by precendent to ensure that the order is maintained.
+    # For reference here how the local id params were being set before.
+    #   case ident.type
+    # when 'internet-archive', 'local-barcode'
+    #   return {
+    #     local_original_identifier: ident.label,
+    #       local_original_identifier_type: 'Barcode'
+    #   }
+    # when 'local-accession'
+    #   return {
+    #     local_original_identifier: ident.label,
+    #       local_original_identifier_type: 'id_local-accession field'
+    #   }
+    # when 'local-other'
+    #   return {
+    #     local_original_identifier: ident.label,
+    #       local_original_identifier_type: 'id_local-other field'
+    #   }
+    def local_id_precedent
+      DescriptiveFieldSets::LOCAL_ORIGINAL_IDENTIFIER_TYPES.reduce({}) do |ret, (k, v)|
+        ret[v] ||= []
+        ret[v] << k
+        ret
+      end.values
+    end
 
     def add_admin_set_to_members
       collection_members.build(collection: admin_set) if admin_set.present?

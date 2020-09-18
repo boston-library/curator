@@ -5,22 +5,63 @@ module Curator
     module RemoteService
 
       extend ActiveSupport::Concern
-      #TODO Should be able to to set net_http_persistent and default connection options according to faraday docs
-      #TODO Make threadsafe class level instance variable for storing base uri for service
-      private
-      def client
-        return @client if defined?(@client)
-        @client = Faraday.new(url: @base_url.to_s) do |f|
-          f.use Faraday::Response::Logger, Rails.logger
-          f.use :http_cache, store: Rails.cache #make this configurable
-          f.adapter :net_http_persistent, pool_size: ENV.fetch('RAILS_MAX_THREADS', 5) do |http|
-            http.idle_timeout = 120
-            http.read_timeout = 120
-            http.open_timeout = 60
-            http.retry_change_requests = true
+
+      # NOTE: do not inherit sub classes from this
+      class RemoteServiceError < Curator::Exceptions::CuratorError
+        attr_reader :json_response, :code
+
+        def initialize(msg = 'Error Occured With RemoteService Client', json_response = {}, code = 500)
+          @json_response = JSON.pretty_generate(json_response)
+          @code = code
+          super(msg)
+        end
+      end
+      
+      included do
+        include Client
+      end
+
+      module Client
+        extend ActiveSupport::Concern
+
+        #TODO will require Authorization options once login in system is set up
+        included do
+
+          class_attribute :base_url, instance_accessor: false
+          class_attribute :pool_options, instance_accessor: false, default: { size: ENV.fetch('RAILS_MAX_THREADS') { 5 }, timeout: 5 }
+          class_attribute :timeout_options, instance_accessor: false, default: { connect: 5, write: 5, read: 5 }
+          class_attribute :default_headers, instance_accessor: false, default: {}
+          class_attribute :default_path_prefix, instance_accessor: false
+          class_attribute :ssl_context, instance_accessor: false
+
+          private
+
+          thread_cattr_reader :_client_pool, instance_reader: false
+        end
+
+        class_methods do
+          def base_uri
+            return @base_uri if defined?(@base_uri)
+
+            @base_uri = Addressable::URI.parse(base_url)
+          end
+
+          def with_client
+            current_client_pool.with { |conn| yield conn }
+          end
+
+          protected
+
+          def current_client_pool
+            return _client_pool if _client_pool.present?
+
+            Thread.current["attr_#{name}__client_pool"] = ConnectionPool.new(pool_options) do
+              HTTP.timeout(timeout_options)
+                  .persistent(base_uri.normalize.to_s)
             end
           end
         end
       end
     end
   end
+end
