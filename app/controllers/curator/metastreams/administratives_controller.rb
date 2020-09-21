@@ -34,7 +34,7 @@ module Curator
         when 'collection'
           params.require(:administrative).permit(:harvestable, destination_site: [], access_edit_group: [])
         when 'digital_object'
-          params.require(:administrative).permit(:description_standard, :flagged, :harvestable, destination_site: [], access_edit_group: [])
+          params.require(:administrative).permit(:description_standard, :oai_header_id, :flagged, :harvestable, destination_site: [], access_edit_group: [])
         when 'audio', 'document', 'ereader', 'image', 'metadata', 'text', 'video'
           params.require(:administrative).permit(access_edit_group: [])
         else

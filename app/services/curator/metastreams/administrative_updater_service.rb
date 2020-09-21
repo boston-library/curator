@@ -4,7 +4,7 @@ module Curator
   class Metastreams::AdministrativeUpdaterService < Services::Base
     include Services::UpdaterService
 
-    SIMPLE_ATTRIBUTES_LIST = %i(destination_site flagged description_standard harvestable).freeze
+    SIMPLE_ATTRIBUTES_LIST = %i(destination_site flagged description_standard harvestable oai_header_id).freeze
 
     def call
       access_edit_group_attrs = @json_attrs.fetch('access_edit_group', [])

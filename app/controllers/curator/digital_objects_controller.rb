@@ -46,7 +46,7 @@ module Curator
                                                contained_by: [:ark_id],
                                                metastreams: {
                                                  descriptive: descriptive_permitted_params,
-                                                 administrative: [:description_standard, :hosting_status, :harvestable, :flagged, destination_site: [], access_edit_group: []],
+                                                 administrative: [:description_standard, :oai_header_id, :hosting_status, :harvestable, :flagged, destination_site: [], access_edit_group: []],
                                                  workflow: [:ingest_origin, :publishing_state, :processing_state]
                                                })
       when 'update'
