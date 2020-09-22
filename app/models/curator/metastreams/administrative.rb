@@ -10,6 +10,7 @@ module Curator
     enum hosting_status: { hosted: 0, harvested: 1 }.freeze
 
     validates :hosting_status, presence: true
+    validates :oai_header_id, uniqueness: { allow_nil: true, allow_blank: true }
     validates :administratable_id, uniqueness: { scope: :administratable_type }
     validates :administratable_type, inclusion: { in: Metastreams.valid_base_types + Metastreams.valid_filestream_types }
 

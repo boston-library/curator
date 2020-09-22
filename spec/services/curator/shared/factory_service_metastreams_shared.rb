@@ -27,6 +27,7 @@ RSpec.shared_examples 'factory_administratable', type: :service do
     end
 
     it 'sets the correct administrative metadata' do
+      expect(administrative.oai_header_id).to eq(administrative_json['oai_header_id'])
       expect(administrative.harvestable).to eq true
       expect(administrative.destination_site).to eq administrative_json['destination_site']
     end

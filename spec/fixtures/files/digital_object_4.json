@@ -143,6 +143,7 @@
           "commonwealth"
         ],
         "harvestable": true,
+        "oai_header_id": "oai:bos:123456",
         "hosting_status": "harvested",
         "access_edit_group": [
           "superuser",

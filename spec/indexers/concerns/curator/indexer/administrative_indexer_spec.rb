@@ -13,6 +13,7 @@ RSpec.describe Curator::Indexer::AdministrativeIndexer do
       admin_obj = create(:curator_institution)
       admin_obj.administrative = create(:curator_metastreams_administrative)
       admin_obj.administrative.flagged = true # so we can test indexing
+      admin_obj.administrative.oai_header_id = 'test:1a234b5' # so we can test indexing
       admin_obj
     end
     let(:indexed) { indexer.map_record(administratable_object) }
@@ -20,6 +21,10 @@ RSpec.describe Curator::Indexer::AdministrativeIndexer do
 
     it 'sets the destination_site field' do
       expect(indexed['destination_site_ssim']).to eq administrative.destination_site
+    end
+
+    it 'sets the oai_header_id field' do
+      expect(indexed['oai_header_id_ss']).to eq [administrative.oai_header_id]
     end
 
     it 'sets the hosting_status field' do

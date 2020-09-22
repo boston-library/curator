@@ -40,11 +40,15 @@ RSpec.describe Curator::Metastreams::Administrative, type: :model do
                         of_type(:string).
                         with_options(default: ['commonwealth'], array: true) }
 
+    it { is_expected.to have_db_column(:oai_header_id).
+                        of_type(:string) }
+
     it { is_expected.to have_db_index([:administratable_type, :administratable_id]).unique(true) }
     it { is_expected.to have_db_index(:description_standard) }
     it { is_expected.to have_db_index(:hosting_status) }
     it { is_expected.to have_db_index(:destination_site) }
     it { is_expected.to have_db_index(:harvestable) }
+    it { is_expected.to have_db_index(:oai_header_id).unique(true) }
 
     it { is_expected.to define_enum_for(:description_standard).
                         with_values(aacr: 0, cco: 1, dacs: 2, gihc: 3, local: 4, rda: 5, dcrmg: 6, amremm: 7, dcrmb: 8, dcrmc: 9, dcrmmss: 10, appm: 11).

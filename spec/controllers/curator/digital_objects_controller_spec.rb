@@ -7,7 +7,7 @@ RSpec.describe Curator::DigitalObjectsController, type: :controller do
   let!(:resource) { create(:curator_digital_object) }
   let!(:valid_attributes) do
     attributes = attributes_for(:curator_digital_object).except(:administrative, :descriptive, :workflow)
-    relation_attributes = load_json_fixture('digital_object')
+    relation_attributes = load_json_fixture('digital_object_4', 'digital_object')
     parent = create(:curator_collection, institution: create(:curator_institution, :with_location))
 
     attributes.merge!({
