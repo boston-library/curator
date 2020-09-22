@@ -5,7 +5,7 @@ require_relative '../shared/json_serialization'
 
 RSpec.describe Curator::Metastreams::AdministrativeSerializer, type: :serializers do
   let!(:administrative_count) { 3 }
-  let!(:record_collection) { create_list(:curator_metastreams_administrative, administrative_count) }
+  let!(:record_collection) { create_list(:curator_metastreams_administrative, administrative_count, :for_oai_object) }
   let!(:record) { record_collection.last }
 
   describe 'Serialization' do
@@ -15,7 +15,7 @@ RSpec.describe Curator::Metastreams::AdministrativeSerializer, type: :serializer
       let(:expected_as_json_options) do
         {
           root: true,
-          only: [:description_standard, :flagged, :harvestable, :destination_site]
+          only: [:description_standard, :flagged, :harvestable, :destination_site, :oai_header_id]
         }
       end
     end

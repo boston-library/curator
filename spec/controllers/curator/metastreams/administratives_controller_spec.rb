@@ -29,6 +29,7 @@ RSpec.describe Curator::Metastreams::AdministrativesController, type: :controlle
           attributes[:description_standard] = 'cco'
           attributes[:flagged] = true
           attributes[:harvestable] = true
+          attributes[:oai_header_id] = "oai:test:#{SecureRandom.hex}"
         end
         attributes
       end

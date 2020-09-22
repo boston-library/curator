@@ -29,7 +29,7 @@ RSpec.describe Curator::Metastreams::AdministrativeUpdaterService, type: :servic
       specify { expect(subject.administratable.updated_at).not_to eq(@administratable_updated_at) }
 
       it 'expects the attributes to have been updated' do
-        [:flagged, :harvestable].each do |attr|
+        [:flagged, :harvestable, :oai_header_id].each do |attr|
           expect(subject.public_send(attr)).to eq(@update_attributes[attr])
         end
         expect(subject.description_standard).to eq(@update_attributes[:description_standard].to_s)

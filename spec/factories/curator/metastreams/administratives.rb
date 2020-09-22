@@ -32,6 +32,11 @@ FactoryBot.define do
       end
     end
 
+    trait :for_oai_object do
+      oai_header_id { "oai:test:#{SecureRandom.hex}" }
+      for_object
+    end
+
     trait :for_file_set do
       transient do
         file_type { Curator.filestreams.file_set_types.map { |type| "curator_filestreams_#{type}".to_sym }.sample }

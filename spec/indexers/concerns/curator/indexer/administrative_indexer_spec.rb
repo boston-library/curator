@@ -13,7 +13,7 @@ RSpec.describe Curator::Indexer::AdministrativeIndexer do
       admin_obj = create(:curator_institution)
       admin_obj.administrative = create(:curator_metastreams_administrative)
       admin_obj.administrative.flagged = true # so we can test indexing
-      admin_obj.administrative.oai_header_id = "test:1a234b5"
+      admin_obj.administrative.oai_header_id = 'test:1a234b5' # so we can test indexing
       admin_obj
     end
     let(:indexed) { indexer.map_record(administratable_object) }
