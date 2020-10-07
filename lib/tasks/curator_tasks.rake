@@ -43,27 +43,15 @@ namespace :curator do
       raise 'app:db:migrate and db:migrate rake tasks are not available!'
     end
 
-    if Rake::Task.task_defined?('app:db:test:prepare')
-      puts 'Invoking app:db:test:prepare....'
-      Rake::Task['app:db:test:prepare'].invoke
-    elsif Rake::Task.task_defined?('db:test:prepare')
-      puts 'Invoking db:test:prepare....'
-      Rake::Task['db:test:prepare'].invoke
+    puts '............'
+    if Rake::Task.task_defined?('app:curator:load_seed')
+      puts 'Invoking curator:load_seed...'
+      Rake::Task['app:curator:load_seed'].invoke
+    elsif Rake::Task.task_defined?('curator:load_seed')
+      puts 'Invoking curator:load_seed...'
+      Rake::Task['curator:load_seed'].invoke
     else
-      raise 'app:db:test:prepare and db:test:prepare rake tasks are not available!'
-    end
-
-    if ENV['CI'].blank?
-      puts '............'
-      if Rake::Task.task_defined?('app:curator:load_seed')
-        puts 'Invoking curator:load_seed...'
-        Rake::Task['app:curator:load_seed'].invoke
-      elsif Rake::Task.task_defined?('curator:load_seed')
-        puts 'Invoking curator:load_seed...'
-        Rake::Task['curator:load_seed'].invoke
-      else
-        raise 'app:curator:load_seed and curator:load_seed rake tasks are not available!'
-      end
+      raise 'app:curator:load_seed and curator:load_seed rake tasks are not available!'
     end
     puts 'Curator Setup Task Complete!'
   end

@@ -2,8 +2,7 @@
 
 FactoryBot.define do
   factory :curator_metastreams_descriptive, class: 'Curator::Metastreams::Descriptive' do
-    descriptable { nil }
-    for_digital_object
+    with_digital_object
     association :physical_location, factory: :curator_controlled_terms_name
     association :license, factory: :curator_controlled_terms_license
     identifier { create_list(:curator_descriptives_identifier, 3) }
@@ -38,9 +37,9 @@ FactoryBot.define do
       resource_type_manuscript { true }
     end
 
-    trait :for_digital_object do
+    trait :with_digital_object do
       after :build do |descriptive|
-        descriptive.descriptable = build(:curator_digital_object, descriptive: descriptive) if descriptive.descriptable.blank?
+        descriptive.digital_object = build(:curator_digital_object, descriptive: descriptive) if descriptive.digital_object.blank?
       end
     end
 

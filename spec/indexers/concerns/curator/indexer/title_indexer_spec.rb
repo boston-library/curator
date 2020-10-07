@@ -10,7 +10,7 @@ RSpec.describe Curator::Indexer::TitleIndexer do
     end
     let(:indexer) { indexer_test_class.new }
     let(:descriptive) { create(:curator_metastreams_descriptive) }
-    let(:descriptable_object) { descriptive.descriptable }
+    let(:descriptable_object) { descriptive.digital_object }
     let(:indexed) { indexer.map_record(descriptable_object) }
 
     describe 'primary title' do

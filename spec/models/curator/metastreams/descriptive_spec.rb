@@ -13,11 +13,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     it_behaves_like 'optimistic_lockable'
     it_behaves_like 'timestampable'
     it_behaves_like 'archivable'
-    it { is_expected.to have_db_column(:descriptable_type).
-                        of_type(:string).
-                        with_options(null: false) }
-
-    it { is_expected.to have_db_column(:descriptable_id).
+    it { is_expected.to have_db_column(:digital_object_id).
                         of_type(:integer).
                         with_options(null: false) }
 
@@ -116,7 +112,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
                         of_type(:text).
                         with_options(default: '') }
 
-    it { is_expected.to have_db_index([:descriptable_type, :descriptable_id]).unique(true) }
+    it { is_expected.to have_db_index(:digital_object_id).unique(true) }
     it { is_expected.to have_db_index(:physical_location_id) }
     it { is_expected.to have_db_index(:license_id) }
     it { is_expected.to have_db_index(:identifier_json) }
@@ -211,8 +207,10 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
         subject_geos: 'Curator::ControlledTerms::Geographic'
       }
     end
-    it { is_expected.to belong_to(:descriptable).
+    it { is_expected.to belong_to(:digital_object).
                         inverse_of(:descriptive).
+                        class_name('Curator::DigitalObject').
+                        touch(true).
                         required }
 
     it { is_expected.to belong_to(:physical_location).

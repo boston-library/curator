@@ -16,7 +16,7 @@ RSpec.describe Curator::Indexer::NameRoleIndexer do
       end
       descriptive_ms
     end
-    let(:descriptable_object) { descriptive.descriptable }
+    let(:descriptable_object) { descriptive.digital_object }
     let(:indexed) { indexer.map_record(descriptable_object) }
 
     it 'sets the name field' do

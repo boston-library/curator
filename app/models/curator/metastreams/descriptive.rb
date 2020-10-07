@@ -49,7 +49,7 @@ module Curator
 
     # RELS
     # PARENTS
-    belongs_to :descriptable, polymorphic: true, inverse_of: :descriptive, touch: true
+    belongs_to :digital_object, inverse_of: :descriptive, class_name: 'Curator::DigitalObject', touch: true
     belongs_to :license, inverse_of: :licensees, class_name: 'Curator::ControlledTerms::License'
     belongs_to :physical_location, inverse_of: :physical_locations_of, class_name: 'Curator::ControlledTerms::Name'
     # MAPPING OBJECTS
@@ -83,8 +83,7 @@ module Curator
     end
 
     # VALIDATIONS
-    validates :descriptable_id, uniqueness: { scope: :descriptable_type }
-    validates :descriptable_type, inclusion: { in: %w(Curator::DigitalObject) }
+    validates :digital_object_id, uniqueness: true
     validates :toc_url, format: { with: URI.regexp(%w(http https)), allow_blank: true }
 
     # DECORATOR METHODS

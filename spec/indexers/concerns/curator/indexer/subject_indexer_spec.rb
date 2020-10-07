@@ -19,7 +19,7 @@ RSpec.describe Curator::Indexer::SubjectIndexer do
       end
       descriptive_ms
     end
-    let(:descriptable_object) { descriptive.descriptable }
+    let(:descriptable_object) { descriptive.digital_object }
     let(:indexed) { indexer.map_record(descriptable_object) }
 
     it 'sets the subject_topic field' do
