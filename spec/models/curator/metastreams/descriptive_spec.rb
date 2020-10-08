@@ -136,12 +136,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
   end
 
   describe 'Validations' do
-    it { is_expected.to validate_uniqueness_of(:descriptable_id).
-                        scoped_to(:descriptable_type) }
-
-    it { is_expected.to allow_value('Curator::DigitalObject').
-                        for(:descriptable_type) }
-
+    it { is_expected.to validate_uniqueness_of(:digital_object_id) }
     it { is_expected.to allow_values('http://test.test.com', '', nil).for(:toc_url) }
   end
 

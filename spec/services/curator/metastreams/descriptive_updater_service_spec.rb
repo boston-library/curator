@@ -18,10 +18,6 @@ RSpec.describe Curator::Metastreams::DescriptiveUpdaterService, type: :service d
     describe ':result' do
       subject { @result }
 
-      before do
-        awesome_print @result
-      end
-
       let(:simple_attributes_list) { described_class.const_get(:SIMPLE_ATTRIBUTES_LIST) }
       let(:json_attributes_list) { described_class.const_get(:JSON_ATTRS) }
       let(:term_mappings_list) { described_class.const_get(:TERM_MAPPINGS) }
