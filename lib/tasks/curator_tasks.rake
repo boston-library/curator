@@ -30,17 +30,30 @@ namespace :curator do
       Rake::Task['app:db:migrate'].invoke
       if Rails.env.development?
         puts 'Invoking app:db:migrate with RAILS_ENV=test'
-        system('rails app:db:migrate RAILS_ENV=test')
+        system('bundle exec rails app:db:migrate RAILS_ENV=test')
       end
     elsif Rake::Task.task_defined?('db:migrate')
       puts 'Invoking db:migrate...'
       Rake::Task['db:migrate'].invoke
       if Rails.env.development?
-        puts 'Invoking app:db:migrate with RAILS_ENV=test'
-        system('rails db:migrate RAILS_ENV=test')
+        puts 'Invoking db:migrate with RAILS_ENV=test'
+        system('bundle exec rails db:migrate RAILS_ENV=test')
       end
     else
       raise 'app:db:migrate and db:migrate rake tasks are not available!'
+    end
+
+    puts '............'
+    if Rails.env.development?
+      if Rake::Task.task_defined?('app:db:schema:load')
+        puts 'Invoking app:db:schema:load with RAILS_ENV=test'
+        system('bundle exec rails app:db:schema:load RAILS_ENV=test')
+      elsif Rake::Task.task_defined('db:schema:load')
+        puts 'Invoking db:schema:load with RAILS_ENV=test'
+        system('bundle exec rails db:schema:load RAILS_ENV=test')
+      else
+        raise 'app:db:schema:load and db:schema:load rake tasks are not available!'
+      end
     end
 
     puts '............'
