@@ -18,7 +18,7 @@ RSpec.describe Curator::Indexer::RightsLicenseIndexer do
       license
     end
     let(:descriptive) { create(:curator_metastreams_descriptive, license: license) }
-    let(:descriptable_object) { descriptive.descriptable }
+    let(:descriptable_object) { descriptive.digital_object }
     let(:indexed) { indexer.map_record(descriptable_object) }
 
     it 'sets the rights field' do

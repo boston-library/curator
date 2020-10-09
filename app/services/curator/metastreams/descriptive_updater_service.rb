@@ -143,7 +143,7 @@ module Curator
 
       host_collection_names.each do |host_col_name|
         host_collection = find_or_create_host_collection(host_col_name,
-                                                         @record.descriptable.institution)
+                                                         @record.digital_object.institution)
 
         next if @record.desc_host_collections.exists?(host_collection: host_collection)
 

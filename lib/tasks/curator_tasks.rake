@@ -30,40 +30,41 @@ namespace :curator do
       Rake::Task['app:db:migrate'].invoke
       if Rails.env.development?
         puts 'Invoking app:db:migrate with RAILS_ENV=test'
-        system('rails app:db:migrate RAILS_ENV=test')
+        system('bundle exec rails app:db:migrate RAILS_ENV=test')
       end
     elsif Rake::Task.task_defined?('db:migrate')
       puts 'Invoking db:migrate...'
       Rake::Task['db:migrate'].invoke
       if Rails.env.development?
-        puts 'Invoking app:db:migrate with RAILS_ENV=test'
-        system('rails db:migrate RAILS_ENV=test')
+        puts 'Invoking db:migrate with RAILS_ENV=test'
+        system('bundle exec rails db:migrate RAILS_ENV=test')
       end
     else
       raise 'app:db:migrate and db:migrate rake tasks are not available!'
     end
 
-    if Rake::Task.task_defined?('app:db:test:prepare')
-      puts 'Invoking app:db:test:prepare....'
-      Rake::Task['app:db:test:prepare'].invoke
-    elsif Rake::Task.task_defined?('db:test:prepare')
-      puts 'Invoking db:test:prepare....'
-      Rake::Task['db:test:prepare'].invoke
-    else
-      raise 'app:db:test:prepare and db:test:prepare rake tasks are not available!'
+    puts '............'
+    if Rails.env.development?
+      if Rake::Task.task_defined?('app:db:schema:load')
+        puts 'Invoking app:db:schema:load with RAILS_ENV=test'
+        system('bundle exec rails app:db:schema:load RAILS_ENV=test')
+      elsif Rake::Task.task_defined('db:schema:load')
+        puts 'Invoking db:schema:load with RAILS_ENV=test'
+        system('bundle exec rails db:schema:load RAILS_ENV=test')
+      else
+        raise 'app:db:schema:load and db:schema:load rake tasks are not available!'
+      end
     end
 
-    if ENV['CI'].blank?
-      puts '............'
-      if Rake::Task.task_defined?('app:curator:load_seed')
-        puts 'Invoking curator:load_seed...'
-        Rake::Task['app:curator:load_seed'].invoke
-      elsif Rake::Task.task_defined?('curator:load_seed')
-        puts 'Invoking curator:load_seed...'
-        Rake::Task['curator:load_seed'].invoke
-      else
-        raise 'app:curator:load_seed and curator:load_seed rake tasks are not available!'
-      end
+    puts '............'
+    if Rake::Task.task_defined?('app:curator:load_seed')
+      puts 'Invoking curator:load_seed...'
+      Rake::Task['app:curator:load_seed'].invoke
+    elsif Rake::Task.task_defined?('curator:load_seed')
+      puts 'Invoking curator:load_seed...'
+      Rake::Task['curator:load_seed'].invoke
+    else
+      raise 'app:curator:load_seed and curator:load_seed rake tasks are not available!'
     end
     puts 'Curator Setup Task Complete!'
   end

@@ -23,8 +23,8 @@ RSpec.describe Curator::Metastreams::DescriptiveUpdaterService, type: :service d
       let(:term_mappings_list) { described_class.const_get(:TERM_MAPPINGS) }
 
       specify { expect(subject).to be_valid }
-      specify { expect(subject.descriptable.ark_id).to eq(@digital_object.ark_id) }
-      specify { expect(subject.descriptable.updated_at).not_to eq(@descriptable_updated_at) }
+      specify { expect(subject.digital_object.ark_id).to eq(@digital_object.ark_id) }
+      specify { expect(subject.digital_object.updated_at).not_to eq(@descriptable_updated_at) }
 
       it 'expects the simple attributes to have been updated' do
         simple_attributes_list.each do |simple_attr|

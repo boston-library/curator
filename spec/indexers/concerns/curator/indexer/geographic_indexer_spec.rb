@@ -23,7 +23,7 @@ RSpec.describe Curator::Indexer::GeographicIndexer do
       end
       descriptive_ms
     end
-    let(:descriptable_object) { descriptive.descriptable }
+    let(:descriptable_object) { descriptive.digital_object }
     let(:indexed) do
       VCR.use_cassette('indexers/geographic_indexer') do
         indexer.map_record(descriptable_object)

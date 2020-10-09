@@ -20,7 +20,7 @@ end
 
 RSpec.shared_examples 'descriptable', type: :model do
   it { is_expected.to have_one(:descriptive).
-                      inverse_of(:descriptable).
+                      inverse_of(:digital_object).
                       class_name('Curator::Metastreams::Descriptive').
                       dependent(:destroy).
                       autosave(true) }
