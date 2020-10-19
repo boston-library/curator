@@ -43,43 +43,6 @@ module Curator
       return @success, @result
     end
 
-    private
-
-    # format legacy datastream names as ActiveStorage Attachement types
-    def attachment_for_ds(datastream_name)
-      return if datastream_name.blank?
-      attachment_type = datastream_name.underscore
-      attachment_type.insert(-4, '_') if datastream_name.match? /(300|800|marcxml)\z/
-      attachment_type
-    end
-
-    # use fedora content URL if available, or local filepath
-    def io_for_file(fedora_content_location, ingest_filepath)
-      return if fedora_content_location.blank? && ingest_filepath.blank?
-
-      if fedora_content_location
-        opts = {}
-        opts[:http_basic_authentication] = [ENV['FEDORA_USERNAME'], ENV['FEDORA_PASSWORD']] if fedora_content_location =~ /FOXML/
-        open(fedora_content_location, opts)
-      elsif ingest_filepath
-        File.open(ingest_filepath, 'rb')
-      end
-    end
-
-    # check ActiveStorage blob attributes against Fedora-exported data, throw error if mismatch
-    # @param blob [ActiveStorage::Blob]
-    # @param byte_size [Integer] size from incoming file
-    # @param checksum_md5 [String] md5 checksum from incoming file
-    def check_file_fixity(blob, byte_size, checksum_md5)
-      return unless byte_size || checksum_md5
-
-      if byte_size
-        raise ActiveStorage::IntegrityError, "FILE SIZE MISMATCH FOR ActiveStorage::Blob: #{blob.id}" unless blob.byte_size == byte_size
-      end
-      if checksum_md5
-        formatted_checksum = Base64.encode64(["#{checksum_md5}"].pack('H*')).chomp
-        raise ActiveStorage::IntegrityError, "CHECKSUM MISMATCH FOR ActiveStorage::Blob: #{blob.id}" unless blob.checksum == formatted_checksum
-      end
-    end
+  
   end
 end
