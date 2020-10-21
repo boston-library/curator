@@ -3,11 +3,12 @@
 module Curator
   class Filestreams::FileSetFactoryService < Services::Base
     include Services::FactoryService
-
+    include Filestreams::Attacher
+    
     def initialize(json_data: {})
       super(json_data: json_data)
 
-      @file_set_type = @json_attrs.fetch('file_set_type', '')
+      @file_set_type = @json_attrs.fetch('file_set_type')
     end
 
     def call
@@ -45,6 +46,14 @@ module Curator
 
       end
       return @success, @result
+    end
+
+    protected
+
+    def file_set_class
+      return @file_set_class if defined?(@file_set_class)
+
+      @file_set_class = Curator.filestreams.public_send("#{@file_set_type}_class")
     end
 
     private

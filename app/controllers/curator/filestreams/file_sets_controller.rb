@@ -44,7 +44,7 @@ module Curator
                                             administrative: [:description_standard, :hosting_status, :harvestable, :flagged, destination_site: [], access_edit_group: []],
                                              workflow: [:ingest_origin, :publishing_state, :processing_state]
                                           },
-                                          files: [])
+                                          files: [:created_at, :updated_at, :file_name, :file_type, :content_type, :byte_size, :checksum, io: {}, metadata: {}])
       when 'update'
         params.require(:file_set).permit(:position, pagination: [:page_label, :page_type, :hand_side], exemplary_image_of: [:ark_id, :_destroy])
       else

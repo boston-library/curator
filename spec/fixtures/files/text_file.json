@@ -9,9 +9,6 @@
     "checksum": "db1a04a8c807c363814ed99f1364efb2",
     "metadata": {
       "ingest_filepath": "text_plain.txt"
-    },
-    "filestream_of": {
-      "ark_id": "commonwealth:111111111"
     }
   }
 }

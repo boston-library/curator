@@ -35,6 +35,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'addressable', '2.7'
   spec.add_dependency 'attr_json', '~> 1.2'
   spec.add_dependency 'concurrent-ruby-ext'
+  spec.add_dependency 'connection_pool', '~> 2.2'
   spec.add_dependency 'down', '~> 5.2'
   spec.add_dependency 'http', '~> 4.4'
   spec.add_dependency 'htmlentities', '~> 4.3'

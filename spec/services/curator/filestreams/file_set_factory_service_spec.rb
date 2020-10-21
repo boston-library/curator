@@ -2,10 +2,11 @@
 
 require 'rails_helper'
 require_relative '../shared/factory_service_metastreams_shared'
-
+require_relative '../shared/filestreams/attachable'
 RSpec.describe Curator::Filestreams::FileSetFactoryService, type: :service do
   before(:all) do
     @file_set_json = load_json_fixture('image_file_set', 'file_set')
+    @files_json = load_json_fixture('image_file', 'files')
     # create parent DigitalObject and Collection
     parent_col = create(:curator_collection)
     parent_obj = create(:curator_digital_object)
@@ -13,6 +14,7 @@ RSpec.describe Curator::Filestreams::FileSetFactoryService, type: :service do
     @file_set_json['exemplary_image_of'][0]['ark_id'] = parent_obj.ark_id
     @file_set_json['exemplary_image_of'][1]['ark_id'] = parent_col.ark_id
     @file_set_json['metastreams']['workflow']['publishing_state'] = parent_obj.workflow.publishing_state
+    @file_set_json['files'] = @files_json
     expect do
       @success, @file_set = handle_factory_result(described_class, @file_set_json)
     end.to change { Curator::Filestreams::FileSet.count }.by(1)
@@ -25,6 +27,8 @@ RSpec.describe Curator::Filestreams::FileSetFactoryService, type: :service do
     subject { @file_set.reload }
 
     let(:file_set_type) { @file_set_json['file_set_type'] }
+
+    it_behaves_like 'attachable'
 
     it 'has the correct properties' do
       %w(ark_id position file_name_base pagination).each do |attr|

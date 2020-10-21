@@ -1,5 +1,5 @@
 {
-  "file": {
+  "files": [{
     "created_at": "2019-05-20T14:46:08.240Z",
     "updated_at": "2019-05-20T14:51:03.796Z",
     "file_name": "image_thumbnail_300.jpg",
@@ -9,10 +9,6 @@
     "checksum": "466561a5c5080652b707bc44b4ea598c",
     "metadata": {
       "ingest_filepath": "curator/spec/fixtures/files/image_thumbnail_300.jpg"
-    },
-    "filestream_of": {
-      "ark_id": "commonwealth:1fda3335",
-      "file_set_type": "image"
     }
-  }
+  }]
 }
