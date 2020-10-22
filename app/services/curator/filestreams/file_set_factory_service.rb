@@ -4,7 +4,7 @@ module Curator
   class Filestreams::FileSetFactoryService < Services::Base
     include Services::FactoryService
     include Filestreams::Attacher
-    
+
     def initialize(json_data: {})
       super(json_data: json_data)
 
@@ -41,6 +41,7 @@ module Curator
             # access_edit_group = @admin_json_attrs.fetch(:access_edit_group, nil)
             administrative.send('access_edit_group=', access_edit_group) if access_edit_group
           end
+          attach_files!(file_set)
         end
 
 
@@ -58,8 +59,8 @@ module Curator
 
     private
 
-    def map_exemplary_objects!(file_set_type)
-      return if Curator::Mappings::ExemplaryImage::VALID_EXEMPLARY_FILE_SET_TYPES.include?(file_set_type.classify)
+    def map_exemplary_objects!
+      return if Curator::Mappings::ExemplaryImage::VALID_EXEMPLARY_FILE_SET_TYPES.include?(@file_set_type.camelize)
 
       exemplary_ids = @json_attrs.fetch('exemplary_image_of', []).pluck('ark_id')
 

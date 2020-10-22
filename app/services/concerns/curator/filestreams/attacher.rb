@@ -15,7 +15,7 @@ module Curator
         protected
 
         def attach_files!(file_set)
-          files = @json_data.fetch(:files, [])
+          files = @json_attrs.fetch('files', [])
 
           return if files.blank?
 
@@ -42,14 +42,16 @@ module Curator
                         end
 
 
-            @record.public_send(attachment_type).attach(attachable)
+            file_set.public_send(attachment_type).attach(attachable)
 
+            blob = file_set.public_send("#{attachment_type}_blob")
 
+            blob.update_columns(created_at: attributes['created_at']) if blob && attributes['created_at']
           end
         end
 
         def file_attributes(attachment = {})
-          attachment.slice('created_at', 'updated_at', 'file_name', 'content_type', 'byte_size', 'checksum_md5').merge('metadata' => attachment.fetch('metadata', {}))
+          attachment.slice('created_at', 'file_name', 'content_type', 'byte_size', 'checksum_md5').merge('metadata' => attachment.fetch('metadata', {}))
         end
 
         def fedora_content?(io = {})
@@ -82,7 +84,7 @@ module Curator
         end
 
         def file_set_attachments
-          file_set_class.attachment_refelctions.keys
+          file_set_class.attachment_reflections.keys
         end
       end
     end
