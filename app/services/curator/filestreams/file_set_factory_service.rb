@@ -15,16 +15,13 @@ module Curator
       with_transaction do
         object_ark_id = @json_attrs.dig('file_set_of', 'ark_id')
         obj = Curator.digital_object_class.find_by!(ark_id: object_ark_id)
-        @record = file_set_class.where(ark_id: @ark_id).first_or_create! do |file_set|
+        @record = file_set_class.default_scoped.where(ark_id: @ark_id).first_or_create! do |file_set|
           file_set.file_set_of = obj
           file_set.file_name_base = @json_attrs.fetch('file_name_base')
           file_set.position = @json_attrs.fetch('position', 0)
           file_set.pagination = @json_attrs.fetch('pagination', {})
           file_set.created_at = @created if @created
           file_set.updated_at = @updated if @updated
-
-          # set exemplary relationships
-          map_exemplary_objects!
 
           build_workflow(file_set) do |workflow|
             workflow.send('ingest_origin=', @workflow_json_attrs.fetch(:ingest_origin, ENV['HOME'].to_s))
@@ -41,11 +38,12 @@ module Curator
             # access_edit_group = @admin_json_attrs.fetch(:access_edit_group, nil)
             administrative.send('access_edit_group=', access_edit_group) if access_edit_group
           end
+
+          map_exemplary_objects!(file_set)
           attach_files!(file_set)
         end
-
-
       end
+      
       return @success, @result
     end
 
@@ -59,8 +57,8 @@ module Curator
 
     private
 
-    def map_exemplary_objects!
-      return if Curator::Mappings::ExemplaryImage::VALID_EXEMPLARY_FILE_SET_TYPES.include?(@file_set_type.camelize)
+    def map_exemplary_objects!(file_set)
+      return if !Curator::Mappings::ExemplaryImage::VALID_EXEMPLARY_FILE_SET_TYPES.include?(@file_set_type.camelize)
 
       exemplary_ids = @json_attrs.fetch('exemplary_image_of', []).pluck('ark_id')
 

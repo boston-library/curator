@@ -19,11 +19,22 @@ module Curator
 
           return if files.blank?
 
+          attachments = files.group_by { |file_hash| file_hash['file_type'].underscore }
+
+          awesome_print attachments
+
           file_set_attachments.each do |attachment_type|
-            attachment = files.detect { |file_hash| file_hash['file_type'].underscore == attachment_type }
 
-            next if attachment.blank?
+            next if !attachments.key?(attachment_type)
 
+            attach_group!(file_set, attachment_type, attachments[attachment_type])
+          end
+        end
+
+        def attach_group!(file_set, attachment_type, attachments = [])
+          return if attachments.blank?
+
+          attachments.each do |attachment|
             attributes = file_attributes(attachment)
 
             io_hash = attachment.fetch('io', {})
