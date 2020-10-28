@@ -46,7 +46,7 @@ module Curator
                                           },
                                           files: [:created_at, :file_name, :file_type, :content_type, :byte_size, :checksum, io: {}, metadata: {}])
       when 'update'
-        params.require(:file_set).permit(:position, pagination: [:page_label, :page_type, :hand_side], exemplary_image_of: [:ark_id, :_destroy])
+        params.require(:file_set).permit(:position, pagination: [:page_label, :page_type, :hand_side], exemplary_image_of: [:ark_id, :_destroy], files: [:file_name, :file_type, :content_type, :byte_size, :checksum, io: {}, metadata: {}])
       else
         params
       end

@@ -3,6 +3,7 @@
 require 'rails_helper'
 require_relative '../shared/factory_service_metastreams_shared'
 require_relative '../shared/filestreams/attachable'
+
 RSpec.describe Curator::Filestreams::FileSetFactoryService, type: :service do
   before(:all) do
     @file_set_json = load_json_fixture('image_file_set', 'file_set')

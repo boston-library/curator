@@ -6,6 +6,7 @@ module Curator
     PAGINATION_ATTRIBUTES_LIST = %i(page_label page_type hand_side).freeze
 
     include Services::UpdaterService
+    include Filestreams::Attacher
 
     def call
       exemplary_image_of_attrs = @json_attrs.fetch(:exemplary_image_of, [])
@@ -16,12 +17,19 @@ module Curator
         end
         update_pagination!(pagination_attrs)
         update_exemplary_image_of!(exemplary_image_of_attrs) if has_exemplary_image_of?
+        attach_files!(@record)
         @record.save!
       end
       return @success, @result
     end
 
     protected
+
+    def file_set_class
+      return @file_set_class if defined?(@file_set_class)
+
+      @file_set_class = @record.class
+    end
 
     def has_exemplary_image_of?
       Curator::Mappings::ExemplaryImage::VALID_EXEMPLARY_FILE_SET_TYPES.include?(@record.class.name.demodulize)

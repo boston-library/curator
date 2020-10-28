@@ -11,7 +11,6 @@ module Curator
       end
 
       module InstanceMethods
-
         protected
 
         def attach_files!(file_set)
@@ -21,10 +20,7 @@ module Curator
 
           attachments = files.group_by { |file_hash| file_hash['file_type'].underscore }
 
-          awesome_print attachments
-
           file_set_attachments.each do |attachment_type|
-
             next if !attachments.key?(attachment_type)
 
             attach_group!(file_set, attachment_type, attachments[attachment_type])
@@ -39,26 +35,23 @@ module Curator
 
             io_hash = attachment.fetch('io', {})
 
-            io_hash.merge!('ingest_filepath' => attributes['metadata']['ingest_filepath']) if attributes.dig('metadata', 'ingest_filepath').present?
+            io_hash['ingest_filepath'] = attributes['metadata']['ingest_filepath'] if attributes.dig('metadata', 'ingest_filepath').present?
 
-            attachable = if fedora_content?(io_hash)
-                          import_file_from_fedora(attributes, content_io(io_hash))
-                        else
-                          {
-                            io: content_io(io_hash),
-                            filename: attributes['file_name'],
-                            content_type: attributes['content_type'],
-                            metadata: attributes['metadata']
-                          }
-                        end
-
+            attachable = build_attachable(attributes, io_hash)
 
             file_set.public_send(attachment_type).attach(attachable)
-
-            blob = file_set.public_send("#{attachment_type}_blob")
-
-            blob.update_columns(created_at: attributes['created_at']) if blob && attributes['created_at']
           end
+        end
+
+        def build_attachable(attributes, io_hash)
+          return import_file_from_fedora(attributes, content_io(io_hash)) if fedora_content?(io_hash)
+
+          {
+            io: content_io(io_hash),
+            filename: attributes['file_name'],
+            content_type: attributes['content_type'],
+            metadata: attributes['metadata']
+          }
         end
 
         def file_attributes(attachment = {})
@@ -108,7 +101,6 @@ module Curator
       end
 
       module InstanceMethods
-
         protected
 
         # format legacy datastream names as ActiveStorage Attachement types
@@ -116,7 +108,7 @@ module Curator
           return if datastream_name.blank?
 
           attachment_type = datastream_name.underscore
-          attachment_type.insert(-4, '_') if datastream_name.match? /(300|800|marcxml)\z/
+          attachment_type.insert(-4, '_') if datastream_name.match?(/(300|800|marcxml)\z/)
           attachment_type
         end
 
@@ -124,15 +116,13 @@ module Curator
         def content_io(io_hash)
           return if io_hash.blank?
 
-          if fedora_content?(io_hash)
-            return fedora_io(io_hash['fedora_content_location'])
-          elsif base64_content?(io_hash)
-            return base64_io(io_hash['base64_content'])
-          elsif ingest_content?(io_hash)
-            return file_path_io(io_hash['ingest_filepath'])
-          else
-            raise ActiveRecord::RecordNotSaved, "Unknown content for io #{type}"
-          end
+          return fedora_io(io_hash['fedora_content_location']) if fedora_content?(io_hash)
+
+          return base64_io(io_hash['base64_content']) if base64_content?(io_hash)
+
+          return file_path_io(io_hash['ingest_filepath']) if ingest_content?(io_hash)
+
+          raise ActiveRecord::RecordNotSaved, "Unknown content for io #{type}"
         end
 
         # check ActiveStorage blob attributes against Fedora-exported data, throw error if mismatch
@@ -142,9 +132,9 @@ module Curator
         def check_file_fixity(blob, byte_size, checksum_md5)
           return if byte_size.blank? && checksum_md5.blank?
 
-          validate_byte_size! if byte_size
+          validate_byte_size!(blob, byte_size) if byte_size
 
-          validate_checksum_md5! if checksum_md5
+          validate_checksum_md5!(blob, checksum_md5) if checksum_md5
         end
 
         private
@@ -156,7 +146,7 @@ module Curator
         end
 
         def validate_checksum_md5!(blob, checksum_md5)
-          formatted_checksum = Base64.encode64(["#{checksum_md5}"].pack('H*')).chomp
+          formatted_checksum = Base64.encode64([checksum_md5].pack('H*')).chomp
 
           return if blob.checksum == formatted_checksum
 
@@ -174,7 +164,7 @@ module Curator
 
           http = Down::Http.new do |client|
             client.timeout(connect: 5, read: 10)
-            client.basic_auth(:user => ENV['FEDORA_USERNAME'], :pass =>  ENV['FEDORA_PASSWORD']) if fedora_content_location =~ /FOXML/
+            client.basic_auth(:user => ENV['FEDORA_USERNAME'], :pass => ENV['FEDORA_PASSWORD']) if fedora_content_location.match?(/FOXML/)
           end
           http.download(fedora_content_location)
         end

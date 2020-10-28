@@ -37,8 +37,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'concurrent-ruby-ext'
   spec.add_dependency 'connection_pool', '~> 2.2'
   spec.add_dependency 'down', '~> 5.2'
-  spec.add_dependency 'http', '~> 4.4'
   spec.add_dependency 'htmlentities', '~> 4.3'
+  spec.add_dependency 'http', '~> 4.4'
   spec.add_dependency 'oj', '~> 3.10'
   spec.add_dependency 'ox', '~> 2.13'
   spec.add_dependency 'paper_trail', '~> 10.3' # have not implemented this yet but does version control

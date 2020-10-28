@@ -15,7 +15,7 @@ module Curator
       with_transaction do
         object_ark_id = @json_attrs.dig('file_set_of', 'ark_id')
         obj = Curator.digital_object_class.find_by!(ark_id: object_ark_id)
-        @record = file_set_class.default_scoped.where(ark_id: @ark_id).first_or_create! do |file_set|
+        @record = file_set_class.where(ark_id: @ark_id).first_or_create! do |file_set|
           file_set.file_set_of = obj
           file_set.file_name_base = @json_attrs.fetch('file_name_base')
           file_set.position = @json_attrs.fetch('position', 0)
@@ -43,7 +43,7 @@ module Curator
           attach_files!(file_set)
         end
       end
-      
+
       return @success, @result
     end
 
@@ -52,7 +52,7 @@ module Curator
     def file_set_class
       return @file_set_class if defined?(@file_set_class)
 
-      @file_set_class = Curator.filestreams.public_send("#{@file_set_type}_class")
+      @file_set_class = Curator.filestreams.public_send("#{@file_set_type}_class").default_scoped
     end
 
     private

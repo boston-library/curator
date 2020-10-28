@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples 'attachable', type: :service do
-  specify { expect(@file_set).to be_a_kind_of(Curator::Filestreams::FileSet)  }
+  specify { expect(@file_set).to be_a_kind_of(Curator::Filestreams::FileSet) }
   specify { expect(@file_set.image_thumbnail_300).to be_attached }
 
   describe 'attached file' do
