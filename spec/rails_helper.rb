@@ -102,11 +102,15 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do |spec|
-    DatabaseCleaner.start unless spec.metadata[:type] == :service
+    unless spec.metadata[:type] == :service
+      DatabaseCleaner.start if !spec.metadata[:location].match?('descriptive_field_sets')
+    end
   end
 
   config.append_after(:each) do |spec|
-    DatabaseCleaner.clean unless spec.metadata[:type] == :service
+    unless spec.metadata[:type] == :service
+      DatabaseCleaner.clean if !spec.metadata[:location].match?('descriptive_field_sets')
+    end
   end
 
   config.after(:suite) do

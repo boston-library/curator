@@ -4,7 +4,11 @@ module Curator
   module Filestreams
     module Attacher
       extend ActiveSupport::Concern
-
+      # TODO: figure out a way to call attach without invoking ActiveStorage::AnalyzeJob
+      # We can invoke NullAnalyzer by setting below in config/application.rb:
+      #   config.active_storage.analyzers = []
+      #   config.active_storage.previewers = []
+      # However, even if we do above, ActiveStorage will compute byte_size, content_type, and checksum anyway
       included do
         include AttacherUtils
         include InstanceMethods
