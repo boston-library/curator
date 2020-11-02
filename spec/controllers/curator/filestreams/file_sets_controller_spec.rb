@@ -39,7 +39,9 @@ RSpec.describe Curator::Filestreams::FileSetsController, type: :controller do
         if has_image_thumbnail_300?(file_set_type)
           file_attributes = load_json_fixture('image_file', 'files')
           file_attributes[0]['metadata']['ingest_filepath'] = file_fixture('image_thumbnail_300.jpg').to_s
+          attributes[:files] = file_attributes
         end
+
         attributes
       end
 

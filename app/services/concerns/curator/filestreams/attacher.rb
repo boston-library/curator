@@ -42,20 +42,24 @@ module Curator
             io_hash['ingest_filepath'] = attributes['metadata']['ingest_filepath'] if attributes.dig('metadata', 'ingest_filepath').present?
 
             attachable = build_attachable(attributes, io_hash)
+            check_file_fixity!(attachable, attributes['byte_size'], attributes['checksum'])
 
             file_set.public_send(attachment_type).attach(attachable)
           end
         end
 
+        # @param attributes [Hash]
+        # @param io_hash [Hash
+        # @returns [ActiveStorage::Blob]
         def build_attachable(attributes, io_hash)
           return import_file_from_fedora(attributes, content_io(io_hash)) if fedora_content?(io_hash)
 
-          {
+          ActiveStorage::Blob.create_and_upload!(
             io: content_io(io_hash),
             filename: attributes['file_name'],
             content_type: attributes['content_type'],
             metadata: attributes['metadata']
-          }
+          )
         end
 
         def file_attributes(attachment = {})
@@ -76,19 +80,17 @@ module Curator
 
         private
 
-        # @param attachment [Hash]
+        # @param attachment_attributes [Hash]
         # @param io [Tempfile]
         # @returns [ActiveStorage::Blob]
         def import_file_from_fedora(attachment_attributes, io)
-          blob = ActiveStorage::Blob.create_before_direct_upload!(
+          ActiveStorage::Blob.create_before_direct_upload!(
             filename: attachment_attributes['file_name'],
             byte_size: attachment_attributes['byte_size'],
             checksum: attachment_attributes['checksum'],
             content_type: attachment_attributes['content_type'],
             metadata: attachment_attributes['metadata']
-          )
-          blob.upload_without_unfurling(io)
-          blob
+          ).tap { |blob| blob.upload_without_unfurling(io) }
         end
 
         def file_set_attachments
@@ -133,7 +135,7 @@ module Curator
         # @param blob [ActiveStorage::Blob]
         # @param byte_size [Integer] size from incoming file
         # @param checksum_md5 [String] md5 checksum from incoming file
-        def check_file_fixity(blob, byte_size, checksum_md5)
+        def check_file_fixity!(blob, byte_size, checksum_md5)
           return if byte_size.blank? && checksum_md5.blank?
 
           validate_byte_size!(blob, byte_size) if byte_size
@@ -144,17 +146,17 @@ module Curator
         private
 
         def validate_byte_size!(blob, byte_size)
-          return if blob.byte_size == byte_size
+          return if blob.byte_size == byte_size.to_i
 
-          raise ActiveStorage::IntegrityError, "FILE SIZE MISMATCH FOR ActiveStorage::Blob: #{blob.id}"
+          raise ActiveStorage::IntegrityError, "FILE SIZE MISMATCH FOR ActiveStorage::Blob: #{blob.id}, blob byte size is #{blob.byte_size} vs expected #{byte_size}"
         end
 
         def validate_checksum_md5!(blob, checksum_md5)
-          formatted_checksum = Base64.encode64([checksum_md5].pack('H*')).chomp
+          formatted_checksum = Base64.strict_encode64([checksum_md5].pack('H*'))
 
           return if blob.checksum == formatted_checksum
 
-          raise ActiveStorage::IntegrityError, "CHECKSUM MISMATCH FOR ActiveStorage::Blob: #{blob.id}"
+          raise ActiveStorage::IntegrityError, "CHECKSUM MISMATCH FOR ActiveStorage::Blob: #{blob.id}, blob checksum is #{blob.checksum} VS expected #{formatted_checksum}"
         end
 
         def file_path_io(ingest_filepath)

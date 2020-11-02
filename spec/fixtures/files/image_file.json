@@ -3,6 +3,8 @@
     "file_name": "image_thumbnail_300.jpg",
     "file_type": "ImageThumbnail300",
     "content_type": "image/jpeg",
+    "byte_size": 8977,
+    "checksum": "466561a5c5080652b707bc44b4ea598c",
     "metadata": {
       "ingest_filepath": "curator/spec/fixtures/files/image_thumbnail_300.jpg"
     }
