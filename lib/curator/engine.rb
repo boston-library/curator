@@ -7,9 +7,7 @@ module Curator
     require 'delegate'
     require 'forwardable'
     require 'http'
-    # require 'faraday'
-    # require 'faraday_middleware'
-    # require 'faraday-http-cache'
+    require 'down/http'
     require 'addressable'
     require 'acts_as_list'
     require 'attr_json'
@@ -60,8 +58,11 @@ module Curator
 
     initializer 'curator.inflections' do
       # NOTE: This is needed to prevent 'metadata'.classify from becomming Metadatum
+      # NOTE: Also needed for underscore method in the filestream Attacher concern
       ActiveSupport::Inflector.inflections(:en) do |inflect|
         inflect.singular 'metadata', 'metadata'
+        inflect.acronym '300'
+        inflect.acronym '800'
       end
     end
 

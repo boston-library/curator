@@ -37,4 +37,4 @@ env:
     - RACK_ENV=test
     - CI=true
   jobs:
-    - "RAILS_VERSION=6.0.3.2"
+    - "RAILS_VERSION=6.0.3.4"

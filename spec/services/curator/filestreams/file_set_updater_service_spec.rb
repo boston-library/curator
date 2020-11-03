@@ -1,21 +1,26 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../shared/filestreams/attachable'
 
 RSpec.describe Curator::Filestreams::FileSetUpdaterService, type: :service do
   before(:all) do
     @collection ||= create(:curator_collection)
     @digital_object ||= create(:curator_digital_object, admin_set: @collection)
     @file_set ||= create(:curator_filestreams_image, file_set_of: @digital_object)
+    @files_json ||= load_json_fixture('image_file', 'files')
+
+    @files_json[0]['metadata']['ingest_filepath'] = file_fixture('image_thumbnail_300.jpg').to_s
 
     create(:curator_mappings_exemplary_image, exemplary_object: @collection, exemplary_file_set: @file_set)
 
     @update_attributes ||= {
       position: 2,
       pagination: { page_label: '4', page_type: 'TOC', hand_side: 'left' },
-      exemplary_image_of: [{ ark_id: @digital_object.ark_id }, { ark_id: @collection.ark_id, _destroy: '1' }]
-
+      exemplary_image_of: [{ ark_id: @digital_object.ark_id }, { ark_id: @collection.ark_id, _destroy: '1' }],
+      files: @files_json
     }
+
     VCR.use_cassette('services/filestreams/file_set/update') do
       @success, @result = described_class.call(@file_set, json_data: @update_attributes)
     end

@@ -15,8 +15,14 @@ RSpec.describe Curator::Filestreams::FileSetsController, type: :controller do
       let(:valid_attributes) do
         attributes = attributes_for("curator_filestreams_#{file_set_type}").except(:administrative, :workflow)
         relation_attributes = load_json_fixture('image_file_set', 'file_set')
+
         attributes[:file_set_type] = file_set_type
         attributes[:exemplary_image_of] = [{ ark_id: parent_col.ark_id }] if can_be_exemplary?(file_set_type.camelize)
+        if has_image_thumbnail_300?(file_set_type)
+          file_attributes = load_json_fixture('image_file', 'files')
+          file_attributes[0]['metadata']['ingest_filepath'] = file_fixture('image_thumbnail_300.jpg').to_s
+        end
+        attributes[:files] = file_attributes
         attributes.merge!({
                    file_set_of: { ark_id: parent_obj.ark_id },
                    metastreams: relation_attributes.dup.delete('metastreams')
@@ -30,6 +36,12 @@ RSpec.describe Curator::Filestreams::FileSetsController, type: :controller do
         if can_be_exemplary?(file_set_type)
           attributes[:exemplary_image_of] = [{ ark_id: parent_obj.ark_id, _destroy: '1' }, { ark_id: parent_col.ark_id }]
         end
+        if has_image_thumbnail_300?(file_set_type)
+          file_attributes = load_json_fixture('image_file', 'files')
+          file_attributes[0]['metadata']['ingest_filepath'] = file_fixture('image_thumbnail_300.jpg').to_s
+          attributes[:files] = file_attributes
+        end
+
         attributes
       end
 
