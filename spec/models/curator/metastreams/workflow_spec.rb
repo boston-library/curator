@@ -22,11 +22,12 @@ RSpec.describe Curator::Metastreams::Workflow, type: :model do
                         with_options(null: false) }
 
     it { is_expected.to have_db_column(:publishing_state).
-                        of_type(:integer).
+                        of_type(:enum).
                         with_options(default: 'draft') }
 
     it { is_expected.to have_db_column(:processing_state).
-                       of_type(:integer) }
+                        of_type(:enum).
+                        with_options(default: 'initialized') }
 
     it { is_expected.to have_db_column(:ingest_origin).
                         of_type(:string).
