@@ -38,12 +38,12 @@ RSpec.describe Curator::Metastreams::Workflow, type: :model do
     it { is_expected.to have_db_index([:workflowable_type, :workflowable_id]).unique(true) }
 
     it { is_expected.to define_enum_for(:publishing_state).
-                        with_values(draft: 0, review: 1, published: 2).
-                        backed_by_column_of_type(:integer) }
+                        with_values(draft: 'draft', review: 'review', published: 'published').
+                        backed_by_column_of_type(:enum) }
 
     it { is_expected.to define_enum_for(:processing_state).
-                        with_values(derivatives: 0, complete: 1).
-                        backed_by_column_of_type(:integer) }
+                        with_values(initialized: 'initialized', derivatives: 'derivatives', complete: 'complete').
+                        backed_by_column_of_type(:enum) }
   end
 
   describe 'Validations' do

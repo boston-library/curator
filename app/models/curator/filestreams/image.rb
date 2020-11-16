@@ -16,5 +16,10 @@ module Curator
     has_one_attached :text_coordinates_access
 
     has_one_attached :text_plain
+
+    def derivatives_complete?
+      #All derivatives for this fileset type are attached?
+      true
+    end
   end
 end

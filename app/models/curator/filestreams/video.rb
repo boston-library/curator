@@ -12,5 +12,10 @@ module Curator
 
     has_one_attached :video_access
     has_one_attached :video_master
+
+    def derivatives_complete?
+      #All derivatives for this fileset type are attached?
+      true
+    end
   end
 end

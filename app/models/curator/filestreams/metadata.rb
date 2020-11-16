@@ -10,5 +10,10 @@ module Curator
     has_one_attached :metadata_marc_xml
     has_one_attached :metadata_mods
     has_one_attached :metadata_oai
+
+    def derivatives_complete?
+      #All derivatives for this fileset type are attached?
+      true
+    end
   end
 end

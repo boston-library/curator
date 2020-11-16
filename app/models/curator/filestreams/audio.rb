@@ -9,5 +9,10 @@ module Curator
     has_one_attached :document_access
     has_one_attached :document_master
     has_one_attached :text_plain
+
+    def derivatives_complete?
+      #All derivatives for this fileset type are attached?
+      true
+    end
   end
 end
