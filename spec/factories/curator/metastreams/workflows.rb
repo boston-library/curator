@@ -2,15 +2,8 @@
 
 FactoryBot.define do
   factory :curator_metastreams_workflow, class: 'Curator::Metastreams::Workflow' do
-    workflowable { nil }
     for_institution
-    publishing_state { Curator::Metastreams::Workflow.publishing_states.keys.sample }
-    processing_state { Curator::Metastreams::Workflow.processing_states.keys.sample }
     ingest_origin { Faker::Internet.uuid }
-
-    trait :draft do
-      publishing_state { :draft }
-    end
 
     trait :for_institution do
       after :build do |workflow|

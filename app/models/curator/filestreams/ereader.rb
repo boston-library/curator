@@ -9,8 +9,7 @@ module Curator
     has_many_attached :ebook_access
 
     def derivatives_complete?
-      #All derivatives for this fileset type are attached?
-      true
+      ebook_access.attached? && characterization.attached?
     end
   end
 end

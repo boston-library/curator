@@ -34,7 +34,7 @@ module Curator
         transitions from: :draft, to: :review
       end
 
-      event :publish do
+      event :publish, binding_event: :process_derivatives do
         transitions from: :draft, to: :published, guard: :is_publishable?
       end
     end
@@ -44,7 +44,7 @@ module Curator
       state :derivatives
       state :complete
 
-      event :process_derivatives, binding_event: :publish do
+      event :process_derivatives do
         transitions from: :initialized, to: :derivatives, guard: :is_processable?
         transitions from: :initialized, to: :initialized
       end

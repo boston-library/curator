@@ -11,6 +11,14 @@ module Curator
 
         validates :workflow, presence: true
         validates_associated :workflow, on: :create
+
+        after_create_commit do
+          workflow.publish! if workflow.may_publish?
+        end
+
+        after_update_commit do
+          workflow.mark_complete! if workflow.may_mark_complete?
+        end
       end
     end
   end

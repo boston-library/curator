@@ -12,8 +12,7 @@ module Curator
     has_one_attached :metadata_oai
 
     def derivatives_complete?
-      #All derivatives for this fileset type are attached?
-      true
+      %i(metadata_ia metadata_ia_scan metadata_marc_xml metadata_mods metadata_oai).any? { |attachment| public_send(attachment).attached? }
     end
   end
 end

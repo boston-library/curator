@@ -11,8 +11,7 @@ module Curator
     has_one_attached :text_plain
 
     def derivatives_complete?
-      #All derivatives for this fileset type are attached?
-      true
+      audio_access.attached? && characterization.attached?
     end
   end
 end

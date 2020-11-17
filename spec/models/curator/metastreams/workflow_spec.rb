@@ -51,8 +51,57 @@ RSpec.describe Curator::Metastreams::Workflow, type: :model do
 
     it { is_expected.to validate_uniqueness_of(:workflowable_id).
                         scoped_to(:workflowable_type) }
+    it { is_expected.to allow_values(*described_class.publishing_states.keys).for(:publishing_state) }
+
+    it { is_expected.to allow_values(*described_class.processing_states.keys).for(:processing_state) }
 
     it { is_expected.to allow_values(*(Curator::Metastreams.valid_base_types + Curator::Metastreams.valid_filestream_types)).for(:workflowable_type) }
+  end
+
+  describe 'State Transitions' do
+    let!(:institution) { build(:curator_institution) }
+    let!(:collection) { build(:curator_collection) }
+    let!(:digital_object) { build(:curator_digital_object) }
+    let!(:file_set) { build(:curator_filestreams_image, file_set_of: digital_object) }
+    let!(:publishable_object_workflows) do
+      [
+        institution.workflow,
+        collection.workflow,
+        digital_object.workflow
+      ]
+    end
+
+    let!(:processible_object_workflows) do
+      [
+        digital_object.workflow,
+        file_set.workflow
+      ]
+    end
+
+    describe '#publishing_state' do
+      subject { publishable_object_workflows }
+
+      it { is_expected.to all(have_state(:draft).on(:publishing_state)) }
+      it { is_expected.to all(transition_from(:draft).to(:published).on_event(:publish).on(:publishing_state)) }
+
+      it 'should not allow the #start_review event to be triggered' do
+        subject.each do |obj|
+          expect(obj).to_not allow_event(:start_review).on(:publishing_state)
+        end
+      end
+    end
+
+    describe '#processing_state' do
+      subject { processible_object_workflows }
+
+      it { is_expected.to all(have_state(:initialized).on(:processing_state)) }
+
+      it 'should not allow the transition to complete initially' do
+        subject.each do |obj|
+          expect(obj).to_not allow_event(:mark_complete).on(:processing_state)
+        end
+      end
+    end
   end
 
   describe 'Associations' do

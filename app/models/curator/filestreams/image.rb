@@ -18,8 +18,7 @@ module Curator
     has_one_attached :text_plain
 
     def derivatives_complete?
-      #All derivatives for this fileset type are attached?
-      true
+      image_service.attached? && characterization.attached? && image_thumbnail_300.attached?
     end
   end
 end

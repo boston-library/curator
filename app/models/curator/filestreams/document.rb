@@ -10,8 +10,7 @@ module Curator
     has_one_attached :document_access
 
     def derivatives_complete?
-      #All derivatives for this fileset type are attached?
-      true
+      document_access.attached? && characterization.attached? && image_thumbnail_300.attached?
     end
   end
 end
