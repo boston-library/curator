@@ -4,6 +4,10 @@ module Curator
   class Metastreams::Workflow < ApplicationRecord
     include AASM
 
+    PUBLISHABLE_CLASSES = ['Curator::Institution', 'Curator::Collection', 'Curator::DigitalObject'].freeze
+
+    PROCESSABLE_CLASSES = ['Curator::DigitalObject', 'Curator::Filestreams::FileSet'].freeze
+
     belongs_to :workflowable, polymorphic: true, inverse_of: :workflow, touch: true
 
     enum publishing_state: { draft: 'draft',
@@ -45,7 +49,8 @@ module Curator
       state :complete
 
       event :process_derivatives do
-        transitions from: :initialized, to: :derivatives, guard: :is_processable?
+        transitions from: :initialized, to: :complete, guard: :can_complete?
+        transitions from: :initialized, to: :derivatives, after_commit: :process_derivatives, guard: :is_processable?
         transitions from: :initialized, to: :initialized
       end
 
@@ -55,8 +60,15 @@ module Curator
     end
 
     protected
+    ## START GUARD CLAUSES
+    def is_processable?
+      PROCESSABLE_CLASSES.include?(workflowable_type)
+    end
 
-    # GUARD CLAUSES
+    def is_publishable?
+      PUBLISHABLE_CLASSES.include?(workflowable_type)
+    end
+
     def should_review?
       false
     end
@@ -71,23 +83,15 @@ module Curator
         false
       end
     end
+    ##End Guard Clauses
 
-    def is_processable?
-      case workflowable_type
-      when 'Curator::DigitalObject', 'Curator::Filestreams::FileSet'
-        true
-      else
-        false
-      end
+    private
+
+    def generate_derivatives
+      return if workflowable_type != 'Curator::Filestreams::FileSet'
+
+      Curator::Filestreams::DerivativesJob.perform_later(self.class.name, self.id)
     end
 
-    def is_publishable?
-      case workflowable_type
-      when 'Curator::Institution', 'Curator::Collection', 'Curator::DigitalObject'
-        true
-      else
-        false
-      end
-    end
   end
 end

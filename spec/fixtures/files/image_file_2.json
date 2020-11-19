@@ -1,0 +1,10 @@
+{
+  "files": [{
+    "file_name": "image_master.tiff",
+    "file_type": "ImageMaster",
+    "content_type": "image/tiff",
+    "metadata": {
+      "ingest_filepath": "curator/spec/fixtures/files/image_master.tiff"
+    }
+  }]
+}

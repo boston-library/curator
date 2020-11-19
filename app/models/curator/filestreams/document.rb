@@ -12,5 +12,32 @@ module Curator
     def derivatives_complete?
       document_access.attached? && characterization.attached? && image_thumbnail_300.attached?
     end
+
+    def derivatives_payload
+      derivatives_list = []
+
+      with_current_host do
+        if document_master.attached? && !document_access.attached?
+          instructions = {}
+          instuctions[:source_url] = doucment_master_blob.service_url(expires_in: nil, disposition: :attachment)
+          instructions[:types] = []
+          instuctions[:types] << :document_access
+          instructions[:types] += [:characterization, :image_thumbnail_300].map do |attachment_type|
+            attachment_type if !public_send(attachment_type).attached?
+          end
+          derivatives_list << instructions if instructions[:types].present?
+        elsif document_access.attached?
+          instructions = {}
+          instuctions[:source_url] = doucment_access_blob.service_url(expires_in: nil, disposition: :attachment)
+          instructions[:types] = []
+          instructions[:types] += [:characterization, :image_thumbnail_300].map do |attachment_type|
+            attachment_type if !public_send(attachment_type).attached?
+          end
+          derivatives_list << instructions if instructions[:types].present?
+        end
+      end
+
+      super.merge(derivatives: derivatives_list)
+    end
   end
 end
