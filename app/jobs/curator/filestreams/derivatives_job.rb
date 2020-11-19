@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Curator
   class Filestreams::DerivativesJob < ApplicationJob
     queue_as :filestream_derivatives

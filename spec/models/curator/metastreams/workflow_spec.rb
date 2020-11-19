@@ -51,6 +51,7 @@ RSpec.describe Curator::Metastreams::Workflow, type: :model do
 
     it { is_expected.to validate_uniqueness_of(:workflowable_id).
                         scoped_to(:workflowable_type) }
+
     it { is_expected.to allow_values(*described_class.publishing_states.keys).for(:publishing_state) }
 
     it { is_expected.to allow_values(*described_class.processing_states.keys).for(:processing_state) }

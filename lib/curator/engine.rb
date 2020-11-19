@@ -3,7 +3,7 @@
 module Curator
   class Engine < ::Rails::Engine
     require 'aasm'
-    require "activerecord/postgres_enum"
+    require 'activerecord/postgres_enum'
     require 'after_commit_everywhere'
     require 'concurrent'
     require 'connection_pool'

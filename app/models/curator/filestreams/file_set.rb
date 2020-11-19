@@ -69,11 +69,13 @@ module Curator
     end
 
     # NOTE: This is for setting ActiveStorage::Current so that the url can be generated for files using the DiskService this should NOT be used in production
-    def with_current_host(&block)
-      return block.call if Rails.env.production?
-
-      ActiveStorage::Current.set(host: 'http://localhost:3000') do
-        block.call
+    def with_current_host(&_block)
+      if Rails.env.production?
+        yield
+      else
+        ActiveStorage::Current.set(host: 'http://localhost:3000') do
+          yield
+        end
       end
     end
 

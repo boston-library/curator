@@ -60,6 +60,7 @@ module Curator
     end
 
     protected
+
     ## START GUARD CLAUSES
     def is_processable?
       PROCESSABLE_CLASSES.include?(workflowable_type)
@@ -83,15 +84,14 @@ module Curator
         false
       end
     end
-    ##End Guard Clauses
+    ## END GUARD CLAUSES
 
     private
 
     def generate_derivatives
       return if workflowable_type != 'Curator::Filestreams::FileSet'
 
-      Curator::Filestreams::DerivativesJob.perform_later(self.class.name, self.id)
+      Curator::Filestreams::DerivativesJob.perform_later(self.class.name, id)
     end
-
   end
 end

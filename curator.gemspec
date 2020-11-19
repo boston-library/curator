@@ -31,10 +31,10 @@ Gem::Specification.new do |spec|
   spec.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
 
   spec.add_dependency 'aasm', '~> 5.1' # Acts as a state machine. Useful for tracking states of objects and triggering call backs between state trasnistion
-  spec.add_dependency 'acts_as_list', '~> 1.0'
   spec.add_dependency 'activerecord-postgres_enum', '~> 1.4' # For using defined postgres enum types
-  spec.add_dependency 'after_commit_everywhere', '~> 0.1', '>= 0.1.5' # Required for using aasm with active record
+  spec.add_dependency 'acts_as_list', '~> 1.0'
   spec.add_dependency 'addressable', '2.7'
+  spec.add_dependency 'after_commit_everywhere', '~> 0.1', '>= 0.1.5' # Required for using aasm with active record
   spec.add_dependency 'attr_json', '~> 1.2'
   spec.add_dependency 'concurrent-ruby-ext', '~> 1.1'
   spec.add_dependency 'connection_pool', '~> 2.2'

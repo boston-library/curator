@@ -16,7 +16,7 @@ module Curator
     #   file_set_ark_id: ark_id,
     #   deriavatives: [
     #  { source_url: url to blob binary, types: [list of derviavtive types]  }
-  # ]
+    # ]
     def initialize(payload: {})
       @payload = payload
     end

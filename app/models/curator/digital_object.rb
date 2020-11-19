@@ -38,7 +38,7 @@ module Curator
 
     def all_file_sets_complete?
       return false if file_sets.blank?
-      
+
       Curator.metastreams.workflow_class.select(:workflowable_type, :workflowable_id, :processing_state).where(workflowable_type: 'Curator::Filestreams::FileSet', workflowable_id: file_set_ids).all?(&:complete?)
     end
 
