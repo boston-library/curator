@@ -16,7 +16,7 @@ module Curator
       with_current_host do
         if text_plain.attached?
           instructions = {}
-          instuctions[:source_url] = text_plain_blob.service_url(expires_in: nil, disposition: :attachment)
+          instructions[:source_url] = text_plain_blob.service_url(expires_in: nil, disposition: :attachment)
           instructions[:types] = []
           instructions[:types] << :characterization if !characterization.attached?
         end

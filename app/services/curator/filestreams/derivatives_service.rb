@@ -2,7 +2,7 @@
 
 module Curator
   class Filestreams::DerivativesService < Services::Base
-    # TODO: Set this up to be a remote service once the ark manager is refactored
+    # TODO: Set this up to be a remote service once the avi_processor is refactored
     # include Curator::Services::RemoteService
 
     # self.base_url = ENV['AVI_PROCESSOR_URL'].to_s

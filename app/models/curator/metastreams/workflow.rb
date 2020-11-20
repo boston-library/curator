@@ -40,6 +40,7 @@ module Curator
 
       event :publish, binding_event: :process_derivatives do
         transitions from: :draft, to: :published, guard: :is_publishable?
+        transitions from: :draft, to: :draft
       end
     end
 
