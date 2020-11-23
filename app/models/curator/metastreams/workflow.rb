@@ -80,7 +80,7 @@ module Curator
       when 'Curator::DigitalObject'
         workflowable.all_file_sets_complete?
       when 'Curator::Filestreams::FileSet'
-        workflowable.derivatives_complete?
+        workflowable.required_derivatives_complete?
       else
         false
       end

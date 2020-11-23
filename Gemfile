@@ -40,7 +40,7 @@ group :test do
   gem 'coveralls', require: false
   gem 'database_cleaner-active_record'
   gem 'rspec-rails', '~> 4.0'
-  gem 'shoulda-matchers', '~> 4.3'
+  gem 'shoulda-matchers', '~> 4.4'
   gem 'vcr', '~> 6.0'
   gem 'webmock', '~> 3.8'
 end

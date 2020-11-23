@@ -3,11 +3,13 @@
 require 'rails_helper'
 require_relative '../shared/filestreams/file_set'
 require_relative '../shared/filestreams/file_attachments'
+require_relative '../shared/filestreams/derivative_methods'
 
 RSpec.describe Curator::Filestreams::Audio, type: :model do
   subject { build(:curator_filestreams_audio) }
 
   it_behaves_like 'file_set'
+  include_examples 'derivative_methods'
 
   describe 'Audio Associations' do
     it { is_expected.to belong_to(:file_set_of).

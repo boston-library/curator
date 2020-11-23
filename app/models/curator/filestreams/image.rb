@@ -3,6 +3,9 @@
 module Curator
   class Filestreams::Image < Filestreams::FileSet
     include Filestreams::Thumbnailable
+
+    DEFAULT_REQUIRED_DERIVATIVES = %i(image_service characterization image_thumbnail_300).freeze
+
     belongs_to :file_set_of, inverse_of: :image_file_sets, class_name: 'Curator::DigitalObject'
 
     has_one_attached :document_access
@@ -17,8 +20,8 @@ module Curator
 
     has_one_attached :text_plain
 
-    def derivatives_complete?
-      image_service.attached? && characterization.attached? && image_thumbnail_300.attached?
+    def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
+      super(DEFAULT_REQUIRED_DERIVATIVES)
     end
 
     def derivatives_payload

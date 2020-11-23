@@ -24,10 +24,8 @@
         ]
       },
       "workflow": {
-        "ingest_origin": "AllSupportedMODS-TestForDev.xls",
-        "publishing_state": "published",
-        "processing_state": "complete"
-          }
+        "ingest_origin": "AllSupportedMODS-TestForDev.xls"
+      }
     }
   }
 }

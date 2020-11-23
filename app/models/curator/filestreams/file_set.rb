@@ -68,6 +68,10 @@ module Curator
       }
     end
 
+    def required_derivatives_complete?(required_derivatives = [])
+      required_derivatives.all? { |a| public_send(a).attached? }
+    end
+
     # NOTE: This is for setting ActiveStorage::Current so that the url can be generated for files using the DiskService this should NOT be used in production
     def with_current_host(&_block)
       if Rails.env.production?

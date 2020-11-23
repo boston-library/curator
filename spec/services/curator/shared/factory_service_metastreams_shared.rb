@@ -10,8 +10,8 @@ RSpec.shared_examples 'factory_workflowable', type: :service do
     end
 
     it 'sets the correct workflow metadata' do
-      expect(workflow.processing_state).to eq workflow_json['processing_state']
-      expect(workflow.publishing_state).to eq workflow_json['publishing_state']
+      expect(workflow.processing_state).to eq workflow_json.fetch('processing_state', 'initialized')
+      expect(workflow.publishing_state).to eq workflow_json.fetch('publishing_state', 'published')
       expect(workflow.ingest_origin).to eq workflow_json['ingest_origin']
     end
   end

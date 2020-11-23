@@ -2,6 +2,8 @@
 
 module Curator
   class Filestreams::Audio < Filestreams::FileSet
+    DEFAULT_REQUIRED_DERIVATIVES = %i(audio_access characterization).freeze
+
     belongs_to :file_set_of, inverse_of: :audio_file_sets, class_name: 'Curator::DigitalObject'
 
     has_one_attached :audio_access
@@ -10,8 +12,8 @@ module Curator
     has_one_attached :document_master
     has_one_attached :text_plain
 
-    def derivatives_complete?
-      audio_access.attached? && characterization.attached?
+    def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
+      super(required_derivatives)
     end
 
     def derivatives_payload

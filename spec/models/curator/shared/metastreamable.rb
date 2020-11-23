@@ -52,6 +52,26 @@ RSpec.shared_examples 'workflowable', type: :model do
       expect(subject).to respond_to(:with_workflow)
     end
   end
+
+  describe 'Callbacks' do
+    describe '.after_create_commit' do
+      subject { build(factory_key_for(described_class)) }
+
+      it 'runs #set_workflow_publish callback on create' do
+        expect(subject).to receive(:set_workflow_publish)
+        subject.save!
+      end
+    end
+
+    describe '.after_update_commit' do
+      subject { create(factory_key_for(described_class)) }
+
+      it 'runs the #set_workflow_complete callback on update' do
+        expect(subject).to receive(:set_workflow_complete)
+        subject.save!
+      end
+    end
+  end
 end
 
 RSpec.shared_examples 'metastreamable_all', type: :model do

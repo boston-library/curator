@@ -20,10 +20,7 @@
           "admin[bpl-test:d504rm34n]"
         ]
       },
-      "workflow": {
-        "publishing_state": "published",
-        "processing_state": "complete"
-      }
+      "workflow": {}
     }
   }
 }

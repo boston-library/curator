@@ -4,6 +4,7 @@ require_relative '../optimistic_lockable'
 require_relative '../timestampable'
 require_relative '../mintable'
 require_relative '../archivable'
+require_relative '../metastreamable'
 require_relative './characterizable'
 require_relative './metadata_foxable'
 
@@ -48,6 +49,8 @@ RSpec.shared_examples 'file_set', type: :model do
   end
 
   describe 'Base Associations' do
+    it_behaves_like 'metastreamable_basic'
+
     it { is_expected.to have_many(:file_set_member_of_mappings).
                         inverse_of(:file_set).
                         class_name('Curator::Mappings::FileSetMember').
