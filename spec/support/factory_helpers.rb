@@ -21,8 +21,6 @@ module FactoryHelpers
 
       raise result.class, result.record if result.kind_of?(ActiveRecord::RecordInvalid)
 
-      awesome_print result
-
       raise result.class, result.message if result.kind_of?(Exception)
 
       raise ActiveRecord::RecordInvalid, result

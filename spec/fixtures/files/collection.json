@@ -21,6 +21,7 @@
         ]
       },
       "workflow": {
+        "publishing_state": "published",
         "ingest_origin": "AllSupportedMODS-TestForDev.xls"
       }
     }
