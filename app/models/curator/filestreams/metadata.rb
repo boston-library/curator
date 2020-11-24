@@ -15,7 +15,7 @@ module Curator
     has_one_attached :metadata_oai
 
     def derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
-      required_derivatives.any? { |attachment| public_send(attachment).attached? }
+      required_derivatives.any? { |a| public_send(a).attached? }
     end
   end
 end

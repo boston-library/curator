@@ -69,6 +69,8 @@ module Curator
     end
 
     def required_derivatives_complete?(required_derivatives = [])
+      return false if required_derivatives.blank?
+
       required_derivatives.all? { |a| public_send(a).attached? }
     end
 

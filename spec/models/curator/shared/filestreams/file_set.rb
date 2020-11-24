@@ -69,7 +69,7 @@ RSpec.shared_examples 'file_set', type: :model do
   describe 'Callbacks' do
     describe 'reindex_digital_objects' do
       it 'runs the reindex_digital_objects callback' do
-        expect(subject).to receive(:reindex_digital_objects)
+        expect(subject).to receive(:reindex_digital_objects).at_least(:once)
         subject.save
       end
     end

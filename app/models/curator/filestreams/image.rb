@@ -21,7 +21,7 @@ module Curator
     has_one_attached :text_plain
 
     def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
-      super(DEFAULT_REQUIRED_DERIVATIVES)
+      super(required_derivatives)
     end
 
     def derivatives_payload

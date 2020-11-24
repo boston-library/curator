@@ -2,7 +2,6 @@
 
 module Curator
   class Filestreams::Text < Filestreams::FileSet
-
     DEFAULT_REQUIRED_DERIVATIVES = %i(text_plain text_coordinates_master).freeze
 
     belongs_to :file_set_of, inverse_of: :text_file_sets, class_name: 'Curator::DigitalObject'
@@ -10,7 +9,7 @@ module Curator
     has_one_attached :text_plain
     has_one_attached :text_coordinates_master
 
-    def derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
+    def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
       super(required_derivatives)
     end
 

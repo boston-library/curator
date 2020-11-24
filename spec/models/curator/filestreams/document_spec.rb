@@ -11,7 +11,7 @@ RSpec.describe Curator::Filestreams::Document, type: :model do
 
   it_behaves_like 'file_set'
   include_examples 'derivative_methods'
-  
+
   describe 'Document Associations' do
     it { is_expected.to belong_to(:file_set_of).
                         inverse_of(:document_file_sets).

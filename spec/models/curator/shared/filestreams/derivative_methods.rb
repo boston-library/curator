@@ -8,7 +8,7 @@ RSpec.shared_examples 'derivative_methods' do
 
     it 'expects to respond_to #required_derivatives_complete?' do
       expect(subject).to respond_to(:required_derivatives_complete?).with(1).argument
-      expect(subject.required_derivatives_complete?).to be_falsey
+      expect(subject).to_not be_required_derivatives_complete
     end
   end
 
