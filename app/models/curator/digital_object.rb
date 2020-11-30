@@ -36,6 +36,12 @@ module Curator
       has_many :video_file_sets, class_name: 'Curator::Filestreams::Video'
     end
 
+    def all_file_sets_complete?
+      return false if file_sets.blank?
+
+      Curator.metastreams.workflow_class.select(:workflowable_type, :workflowable_id, :processing_state).where(workflowable_type: 'Curator::Filestreams::FileSet', workflowable_id: file_set_ids).all?(&:complete?)
+    end
+
     has_many :container_for, inverse_of: :contained_by, class_name: 'Curator::DigitalObject', foreign_key: :contained_by_id, dependent: :nullify
 
     has_many :collection_members, -> { includes(:collection) }, inverse_of: :digital_object, autosave: true, class_name: 'Curator::Mappings::CollectionMember', dependent: :destroy do

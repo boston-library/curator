@@ -2,7 +2,11 @@
 
 RSpec.shared_examples 'has_one_attached', type: :model do
   describe '#has_one_attached' do
-    it { is_expected.to respond_to(*has_one_file_attachments) }
+    it 'is expected to have_one_attached for all :has_one_file_attachments' do
+      has_one_file_attachments.each do |attachment|
+        expect(subject).to have_one_attached(attachment)
+      end
+    end
 
     it 'expects each of the attachment types to be a kind of ActiveStorage::Attachment' do
       has_one_file_attachments.each do |attachment|
@@ -14,7 +18,11 @@ end
 
 RSpec.shared_examples 'has_many_attached', type: :model do
   describe '#has_many_attached' do
-    it { is_expected.to respond_to(*has_many_file_attachments) }
+    it 'is expected to have_many_attached for all :has_many_file_attachments' do
+      has_many_file_attachments.each do |attachment|
+        expect(subject).to have_many_attached(attachment)
+      end
+    end
 
     it 'expects each of the attachment types to be a kind of ActiveStorage::Attachment' do
       has_many_file_attachments.each do |attachment|

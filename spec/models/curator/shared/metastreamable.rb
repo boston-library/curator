@@ -52,6 +52,45 @@ RSpec.shared_examples 'workflowable', type: :model do
       expect(subject).to respond_to(:with_workflow)
     end
   end
+
+  describe 'Callbacks' do
+    let(:expected_publishing_state) do
+      case described_class.name
+      when *Curator::Metastreams::Workflow::PUBLISHABLE_CLASSES
+        'published'
+      else
+        'draft'
+      end
+    end
+
+    let(:expected_processing_state) do
+      described_class_name = described_class <= Curator::Filestreams::FileSet ? 'Curator::Filestreams::FileSet' : described_class.name
+      case described_class_name
+      when *Curator::Metastreams::Workflow::PROCESSABLE_CLASSES
+        'derivatives'
+      else
+        'initialized'
+      end
+    end
+    describe '.after_create_commit' do
+      subject { build(factory_key_for(described_class)) }
+
+      it 'runs #set_workflow_publish callback on :create' do
+        subject.save
+        expect(subject.workflow.publishing_state).to eq(expected_publishing_state)
+        expect(subject.workflow.processing_state).to eq(expected_processing_state)
+      end
+    end
+
+    describe '.after_update_commit' do
+      subject { create(factory_key_for(described_class)) }
+
+      it 'runs #set_workflow_complete callback on :update' do
+        expect(subject).to receive(:set_workflow_complete).at_least(:once)
+        subject.save
+      end
+    end
+  end
 end
 
 RSpec.shared_examples 'metastreamable_all', type: :model do

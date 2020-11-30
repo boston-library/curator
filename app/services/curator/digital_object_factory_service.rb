@@ -21,8 +21,9 @@ module Curator
           find_or_build_collection_members!(digital_object, admin_set_ark_id, collection_ark_ids)
 
           build_workflow(digital_object) do |workflow|
-            [:ingest_origin, :processing_state, :publishing_state].each do |attr|
-              workflow.send("#{attr}=", @workflow_json_attrs.fetch(attr, nil))
+            workflow.ingest_origin = @workflow_json_attrs.fetch(:ingest_origin, ENV['HOME'].to_s)
+            [:processing_state, :publishing_state].each do |attr|
+              workflow.send("#{attr}=", @workflow_json_attrs.fetch(attr)) if @workflow_json_attrs.fetch(attr, nil).present?
             end
           end
 

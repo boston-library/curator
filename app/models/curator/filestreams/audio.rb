@@ -2,6 +2,8 @@
 
 module Curator
   class Filestreams::Audio < Filestreams::FileSet
+    DEFAULT_REQUIRED_DERIVATIVES = %i(audio_access characterization).freeze
+
     belongs_to :file_set_of, inverse_of: :audio_file_sets, class_name: 'Curator::DigitalObject'
 
     has_one_attached :audio_access
@@ -9,5 +11,39 @@ module Curator
     has_one_attached :document_access
     has_one_attached :document_master
     has_one_attached :text_plain
+
+    def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
+      super(required_derivatives)
+    end
+
+    def derivatives_payload
+      derivatives_list = []
+      with_current_host do
+        if audio_master.attached? && !audio_access.attached?
+          instructions = {}
+          instructions[:source_url] = audio_master_blob.service_url(expires_in: nil, disposition: :attachment)
+          instructions[:types] = []
+          instructions[:types] << :audio_access
+          instructions[:types] << :characterization if !characterization.attached?
+          derivatives_list << instructions if instructions[:types].present?
+        elsif audio_access.attached?
+          instructions = {}
+          instructions[:source_url] = audio_access_blob.service_url(expires_in: nil, disposition: :attachment)
+          instructions[:types] = []
+          instructions[:types] << :characterization if !characterization.attached?
+          derivatives_list << instructions if instructions[:types].present?
+        end
+
+        if document_master.attached? && !document_access.attached?
+          instructions = {}
+          instructions[:source_url] = document_master_blob.service_url(expires_in: nil, disposition: :attachment)
+          instructions[:types] = []
+          instructions[:types] << :document_access if !document_access.attached?
+          derivatives_list << instructions if instructions[:types].present?
+        end
+      end
+
+      super.merge(derivatives: derivatives_list)
+    end
   end
 end

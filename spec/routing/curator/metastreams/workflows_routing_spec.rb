@@ -33,14 +33,14 @@ RSpec.describe Curator::Metastreams::WorkflowsController, type: :routing do
 
         Curator.filestreams.file_set_types.map(&:downcase).each do |file_set_type|
           context "#{file_set_type.classify}" do
-            include_examples 'member' do
+            include_examples 'member', read_only: true do
               subject { filestreams_file_set_workflow_path(default_id, type: file_set_type) }
               let(:expected_controller) { default_controller }
               let(:expected_kwargs) { { id: default_id, type: file_set_type, metastreamable_type: 'Filestreams::FileSet', format: default_format } }
             end
 
             context '#ark_id as :id' do
-              include_examples 'member' do
+              include_examples 'member', read_only: true do
                 subject { filestreams_file_set_workflow_path(ark_id, type: file_set_type) }
                 let(:expected_controller) { default_controller }
                 let(:expected_kwargs) { { id: ark_id, type: file_set_type, metastreamable_type: 'Filestreams::FileSet', format: default_format } }

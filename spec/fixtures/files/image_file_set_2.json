@@ -1,0 +1,26 @@
+{
+  "file_set": {
+    "file_set_of": {
+      "ark_id": "commonwealth:abcdefghi"
+    },
+    "position": 0,
+    "file_set_type": "image",
+    "file_name_base": "06_01_016692",
+    "pagination": {
+      "page_label": "1",
+      "page_type": "TOC",
+      "hand_side": "left"
+    },
+    "metastreams": {
+      "administrative": {
+        "access_edit_group": [
+          "superuser",
+          "admin[commonwealth:ijkl54321]"
+        ]
+      },
+      "workflow": {
+        "ingest_origin": "AllSupportedMODS-TestForDev.xls"
+      }
+    }
+  }
+}

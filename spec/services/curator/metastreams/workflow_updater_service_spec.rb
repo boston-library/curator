@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Curator::Metastreams::WorkflowUpdaterService, type: :service do
   before(:all) do
-    @workflow ||= build(:curator_metastreams_workflow, :draft)
+    @workflow ||= build(:curator_metastreams_workflow)
     @digital_object ||= create(:curator_digital_object, administrative: @administrative)
     @workflowable_updated_at = @digital_object.updated_at
     @update_attributes ||= {

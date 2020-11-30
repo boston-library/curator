@@ -91,7 +91,7 @@ Curator::Engine.routes.draw do
                     constraints: Curator::Middleware::ArkOrIdConstraint.new do
                       member do
                         concerns :administratable, only: [:show, :update], as: 'file_set_administrative', metastreamable_type: 'Filestreams::FileSet', controller: '/curator/metastreams/administratives'
-                        concerns :workflowable, only: [:show, :update], as: 'file_set_workflow', metastreamable_type: 'Filestreams::FileSet', controller: '/curator/metastreams/workflows'
+                        concerns :workflowable, only: [:show], as: 'file_set_workflow', metastreamable_type: 'Filestreams::FileSet', controller: '/curator/metastreams/workflows'
                       end
                     end
         end

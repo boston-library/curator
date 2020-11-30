@@ -9,11 +9,7 @@ RSpec.describe Curator::Indexer::WorkflowIndexer do
       end
     end
     let(:indexer) { indexer_test_class.new }
-    let(:workflowable_object) do
-      workflow_obj = create(:curator_institution)
-      workflow_obj.workflow = create(:curator_metastreams_workflow)
-      workflow_obj
-    end
+    let(:workflowable_object) { create(:curator_institution) }
     let(:indexed) { indexer.map_record(workflowable_object) }
     let(:workflow) { workflowable_object.workflow }
 
