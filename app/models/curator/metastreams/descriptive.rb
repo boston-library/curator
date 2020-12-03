@@ -14,6 +14,8 @@ module Curator
 
     scope :with_license, -> { includes(:license) }
 
+    scope :with_rights_statement, -> { includes(:rights_statement) }
+
     scope :with_desc_terms, lambda {
       includes(:genres, :resource_types, :languages, :subject_topics, :subject_names, :subject_geos)
     }
@@ -22,7 +24,7 @@ module Curator
       includes(:host_collections, :name_roles => [:name, :role])
     }
 
-    scope :for_serialization, -> { merge(with_physical_location).merge(with_license).merge(with_mappings).merge(with_desc_terms) }
+    scope :for_serialization, -> { merge(with_physical_location).merge(with_license).merge(with_mappings).merge(with_desc_terms).merge(with_rights_statement) }
 
     # NOTE: need to use attr json for array items
     # Identifier
@@ -52,6 +54,7 @@ module Curator
     belongs_to :digital_object, inverse_of: :descriptive, class_name: 'Curator::DigitalObject', touch: true
     belongs_to :license, inverse_of: :licensees, class_name: 'Curator::ControlledTerms::License'
     belongs_to :physical_location, inverse_of: :physical_locations_of, class_name: 'Curator::ControlledTerms::Name'
+    belongs_to :rights_statement, inverse_of: :rights_statement_of, class_name: 'Curator::ControlledTerms::RightsStatement'
     # MAPPING OBJECTS
     with_options inverse_of: :descriptive, dependent: :destroy do
       has_many :desc_terms, class_name: 'Curator::Mappings::DescTerm'

@@ -49,12 +49,10 @@ module Curator
 
         json_attr_update!
 
-        physical_location_from_json = physical_location(@json_attrs)
-        license_from_json = license(@json_attrs)
-
-        @record.physical_location = physical_location_from_json if physical_location_from_json && @record.physical_location_id != physical_location_from_json.id
-
-        @record.license = license_from_json if license_from_json && @record.license_id != license_from_json.id
+        %w(physical_location license rights_statement).each do |term|
+           term_json = send(term, @json_attrs)
+          @record.public_send("#{term}=", term_json) if term_json && @record.public_send("#{term}_id") != term_json.id
+        end
 
         host_collections_update!
         term_mappings_update!

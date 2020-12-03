@@ -17,6 +17,10 @@ module Curator
             licensees.find_each do |descriptive|
               descriptive.descriptable.update_index
             end
+          when 'RightsStatement'
+            rights_statement_of.find_each do |descriptive|
+              descriptive.descriptable.update_index
+            end
           when 'Name', 'Role'
             desc_name_roles.find_each do |desc_name_role|
               desc_name_role.descriptive.descriptable.update_index

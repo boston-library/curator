@@ -91,7 +91,8 @@ module Curator
                         when Curator.controlled_terms.resource_type_class,
                              Curator.controlled_terms.role_class,
                              Curator.controlled_terms.language_class,
-                             Curator.controlled_terms.license_class
+                             Curator.controlled_terms.license_class,
+                             Curator.controlled_terms.rights_statement_class
                           true
                         when Curator.controlled_terms.genre_class
                           true if term_data[:basic] == true

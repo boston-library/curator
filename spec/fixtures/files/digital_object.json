@@ -85,7 +85,7 @@
         ],
         "resource_types": [
           {
-            "label": "Still Image",
+            "label": "Still image",
             "authority_code": "resourceTypes",
             "id_from_auth": "img"
           },

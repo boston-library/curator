@@ -2,7 +2,9 @@
 
 module Curator
   class Mappings::DescTerm < ApplicationRecord
-    VALID_TERM_CLASSES = Curator::ControlledTerms.nomenclature_types.collect { |klass| "Curator::ControlledTerms::#{klass}" unless klass == 'License' }.compact.freeze
+    VALID_TERM_CLASSES = Curator::ControlledTerms.nomenclature_types.collect do |klass|
+      "Curator::ControlledTerms::#{klass}" unless klass == 'License' || klass == 'RightsStatement'
+    end.compact.freeze
 
     belongs_to :descriptive, inverse_of: :desc_terms, class_name: 'Curator::Metastreams::Descriptive'
 

@@ -13,6 +13,7 @@ module Curator
       has_many :licenses, class_name: 'Curator::ControlledTerms::License'
       has_many :names, class_name: 'Curator::ControlledTerms::Name'
       has_many :resource_types, class_name: 'Curator::ControlledTerms::ResourceType'
+      has_many :rights_statements, class_name: 'Curator::ControlledTerms::RightsStatement'
       has_many :roles, class_name: 'Curator::ControlledTerms::Role'
       has_many :subjects, class_name: 'Curator::ControlledTerms::Subject'
     end
