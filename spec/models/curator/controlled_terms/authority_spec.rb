@@ -111,6 +111,12 @@ RSpec.describe Curator::ControlledTerms::Authority, type: :model do
         with_foreign_key(assoc_options[:foreign_key]).
         dependent(assoc_options[:dependent]) }
 
+    it { is_expected.to have_many(:rights_statements).
+        inverse_of(assoc_options[:inverse_of]).
+        class_name('Curator::ControlledTerms::RightsStatement').
+        with_foreign_key(assoc_options[:foreign_key]).
+        dependent(assoc_options[:dependent]) }
+
     it { is_expected.to have_many(:roles).
         inverse_of(assoc_options[:inverse_of]).
         class_name('Curator::ControlledTerms::Role').

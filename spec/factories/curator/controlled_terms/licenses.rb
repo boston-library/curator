@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :curator_controlled_terms_license, class: 'Curator::ControlledTerms::License' do
-    label { Faker::Lorem.sentence }
+    label { ['public domain', 'creative commons', 'contact host'].sample }
     uri { Faker::Internet.url }
     type { 'Curator::ControlledTerms::License' }
     archived_at { nil }

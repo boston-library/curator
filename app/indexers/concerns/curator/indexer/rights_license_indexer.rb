@@ -9,8 +9,8 @@ module Curator
           to_field 'rights_ss', obj_extract('descriptive', 'rights')
           to_field 'restrictions_on_access_ss', obj_extract('descriptive', 'access_restrictions')
           each_record do |record, context|
-            if record.descriptive&.license
-              license = record.descriptive.license
+            license = record.descriptive&.license
+            if license
               license_text = license.label.downcase
               reuse = if license_text.include?('public domain') ||
                       license_text.include?('no known restrictions')
@@ -26,11 +26,12 @@ module Curator
               context.output_hash['reuse_allowed_ssi'] = reuse
               context.output_hash['license_uri_ss'] = license.uri
             end
-            if record.descriptive&.rights_statement
-              rs = record.descriptive.rights_statement
-              context.output_hash['rightsstatement_ss'] = rs.label
-              context.output_hash['rightsstatement_uri_ss'] = rs.uri
-            end
+
+            rs = record.descriptive&.rights_statement
+            next unless rs
+
+            context.output_hash['rightsstatement_ss'] = rs.label
+            context.output_hash['rightsstatement_uri_ss'] = rs.uri
           end
         end
       end

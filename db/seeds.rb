@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
+puts 'Seeding ControlledTerms values...'
 # ControlledTerms::Authority
-puts 'Seeding Authority values from bpldc_authority_api....'
+puts 'Fetching authority values from bpldc_authority_api....'
 auth_data = Curator::ControlledTerms::AuthorityService.call(path: 'authorities')
-puts "Seeding ControlledTerms::Authority values..."
+puts 'Seeding ControlledTerms::Authority values...'
 auth_data&.each do |auth_input|
   Curator.controlled_terms.authority_class.transaction do
     begin

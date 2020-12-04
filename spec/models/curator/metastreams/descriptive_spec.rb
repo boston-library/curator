@@ -25,6 +25,9 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
                        of_type(:integer).
                        with_options(null: false) }
 
+    it { is_expected.to have_db_column(:rights_statement_id).
+                        of_type(:integer) }
+
     it { is_expected.to have_db_column(:identifier_json).
                         of_type(:jsonb).
                         with_options(default: { 'identifier' => [] }) }
@@ -115,6 +118,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     it { is_expected.to have_db_index(:digital_object_id).unique(true) }
     it { is_expected.to have_db_index(:physical_location_id) }
     it { is_expected.to have_db_index(:license_id) }
+    it { is_expected.to have_db_index(:rights_statement_id) }
     it { is_expected.to have_db_index(:identifier_json) }
     it { is_expected.to have_db_index(:note_json) }
     it { is_expected.to have_db_index(:subject_other) }
@@ -218,6 +222,10 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
                        class_name('Curator::ControlledTerms::License').
                        required }
 
+    it { is_expected.to belong_to(:rights_statement).
+                        inverse_of(:rights_statement_of).
+                        class_name('Curator::ControlledTerms::RightsStatement') }
+
     it { is_expected.to have_many(:name_roles).
                         inverse_of(:descriptive).
                         class_name('Curator::Mappings::DescNameRole').
@@ -304,8 +312,22 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
       end
     end
 
+    describe '.with_rights_statement' do
+      subject { described_class }
+
+      let(:expected_scope_sql) { described_class.includes(:rights_statement).to_sql }
+
+      it { is_expected.to respond_to(:with_rights_statement) }
+
+      it 'expects the scope sql to match the :expected_scope_sql' do
+        expect(subject.with_rights_statement.to_sql).to eq(expected_scope_sql)
+      end
+    end
+
     it_behaves_like 'for_serialization' do
-      let(:expected_scope_sql) { described_class.merge(described_class.with_physical_location).merge(described_class.with_license).merge(described_class.with_mappings).merge(described_class.with_desc_terms).to_sql }
+      let(:expected_scope_sql) do
+        described_class.merge(described_class.with_physical_location).merge(described_class.with_license).merge(described_class.with_rights_statement).merge(described_class.with_mappings).merge(described_class.with_desc_terms).to_sql
+      end
     end
   end
 end
