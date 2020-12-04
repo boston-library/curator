@@ -9,6 +9,7 @@ module Curator
 
       belongs_to :physical_location, serializer: Curator::ControlledTerms::NameSerializer
       belongs_to :license, serializer: Curator::ControlledTerms::LicenseSerializer
+      belongs_to :rights_statement, serializer: Curator::ControlledTerms::RightsStatementSerializer
 
       has_many :resource_types, serializer: Curator::ControlledTerms::ResourceTypeSerializer
       has_many :genres, serializer: Curator::ControlledTerms::GenreSerializer

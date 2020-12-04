@@ -49,7 +49,7 @@
             "id_from_auth": "car"
           },
           {
-            "label": "Still Image",
+            "label": "Still image",
             "authority_code": "resourceTypes",
             "id_from_auth": "img"
           }
@@ -122,6 +122,10 @@
         "rights": "No known copyright restrictions.",
         "license": {
           "label": "No known restrictions on use."
+        },
+        "rights_statement": {
+          "label": "No Copyright - United States",
+          "uri": "http://rightsstatements.org/vocab/NoC-US/1.0/"
         }
       },
       "administrative": {

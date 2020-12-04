@@ -9,15 +9,7 @@ RSpec.describe Curator::Indexer::RightsLicenseIndexer do
       end
     end
     let(:indexer) { indexer_test_class.new }
-    let(:license) do
-      license = if Curator.controlled_terms.license_class.where(term_data: { label: 'No known restrictions on use' }).exists?
-                  Curator.controlled_terms.license_class.where(term_data: { label: 'No known restrictions on use' }).first
-                else
-                  create(:curator_controlled_terms_license, label: 'creative commons')
-                end
-      license
-    end
-    let(:descriptive) { create(:curator_metastreams_descriptive, license: license) }
+    let(:descriptive) { create(:curator_metastreams_descriptive) }
     let(:descriptable_object) { descriptive.digital_object }
     let(:indexed) { indexer.map_record(descriptable_object) }
 
@@ -35,6 +27,14 @@ RSpec.describe Curator::Indexer::RightsLicenseIndexer do
 
     it 'sets the license_uri field' do
       expect(indexed['license_uri_ss']).to eq descriptive.license.uri
+    end
+
+    it 'sets the rights_statement field' do
+      expect(indexed['rightsstatement_ss']).to eq descriptive.rights_statement.label
+    end
+
+    it 'sets the rights_statement_uri field' do
+      expect(indexed['rightsstatement_uri_ss']).to eq descriptive.rights_statement.uri
     end
 
     it 'sets the reuse_allowed field' do

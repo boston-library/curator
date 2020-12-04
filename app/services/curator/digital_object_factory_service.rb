@@ -46,6 +46,7 @@ module Curator
             descriptive.identifier = identifier(@desc_json_attrs)
             descriptive.physical_location = physical_location(@desc_json_attrs)
             descriptive.license = license(@desc_json_attrs)
+            descriptive.rights_statement = rights_statement(@desc_json_attrs)
             descriptive.date = date(@desc_json_attrs)
             descriptive.publication = publication(@desc_json_attrs)
             descriptive.title = title(@desc_json_attrs)

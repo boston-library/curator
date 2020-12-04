@@ -135,6 +135,10 @@
         "rights": "Rights status not evaluated.",
         "license": {
           "label": "Contact host institution for more information."
+        },
+        "rights_statement": {
+          "label": "Copyright Not Evaluated",
+          "uri": "http://rightsstatements.org/vocab/CNE/1.0/"
         }
       },
       "administrative": {

@@ -5,6 +5,7 @@ class CreateCuratorMetastreamsDescriptives < ActiveRecord::Migration[5.2]
     create_table :curator_metastreams_descriptives do |t|
       t.belongs_to :physical_location, index: { using: :btree }, foreign_key: { to_table: :curator_controlled_terms_nomenclatures, on_delete: :cascade }, null: false
       t.belongs_to :license, index: { using: :btree }, foreign_key: { to_table: :curator_controlled_terms_nomenclatures, on_delete: :cascade }, null: false
+      t.belongs_to :rights_statement, index: { using: :btree }, foreign_key: { to_table: :curator_controlled_terms_nomenclatures, on_delete: :cascade }
       t.jsonb :identifier_json, index: { using: :gin, opclass: :jsonb_path_ops }, default: {}
       t.jsonb :title, index: { using: :gin, opclass: :jsonb_path_ops }, default: {}
       t.jsonb :date, index: { using: :gin, opclass: :jsonb_path_ops }, default: {} # created/issued/copyright

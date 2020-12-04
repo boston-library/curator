@@ -2,7 +2,7 @@
 
 module SerializerHelper
   module AsJsonHelper
-    # NOTE: This method return the long list of options userf for when #as_json on a descriptive is called of the descriptive as json
+    # NOTE: This method return the long list of options used for when #as_json on a descriptive is called of the descriptive as json
     # This is only required when stubbing out an expected value for as json in the descriptive class
     def descriptive_as_json_options
       {
@@ -36,6 +36,10 @@ module SerializerHelper
             methods: [:label, :id_from_auth, :authority_code]
           },
           license: {
+            only: [:label, :uri],
+            methods: [:label, :uri]
+          },
+          rights_statement: {
             only: [:label, :uri],
             methods: [:label, :uri]
           },

@@ -8,7 +8,7 @@ module Curator
     end
 
     def self.nomenclature_types
-      %w(Genre Geographic Language License Name ResourceType Role Subject).freeze
+      %w(Genre Geographic Language License Name ResourceType RightsStatement Role Subject).freeze
     end
 
     namespace_klass_accessors(*nomenclature_types.map(&:underscore).map(&:to_sym).push(:authority))

@@ -94,6 +94,14 @@ module Curator
           projection: carto_attrs.fetch(:projection, nil)
         )
       end
+
+      def rights_statement(json_attrs = {})
+        rights_statement_term_data = json_attrs.fetch(:rights_statement)
+        find_or_create_nomenclature(
+          nomenclature_class: Curator.controlled_terms.rights_statement_class,
+          term_data: rights_statement_term_data
+        )
+      end
     end
   end
 end

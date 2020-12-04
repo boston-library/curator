@@ -5,6 +5,7 @@ FactoryBot.define do
     with_digital_object
     association :physical_location, factory: :curator_controlled_terms_name
     association :license, factory: :curator_controlled_terms_license
+    association :rights_statement, factory: :curator_controlled_terms_rights_statement
     identifier { create_list(:curator_descriptives_identifier, 3) }
     date { create(:curator_descriptives_date) }
     note { create_list(:curator_descriptives_note, 3) }

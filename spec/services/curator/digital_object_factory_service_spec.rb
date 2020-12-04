@@ -214,13 +214,14 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
           end
         end
 
-        describe 'license' do
-          let(:license) { descriptive.license }
-          let(:license_attrs) { %i(label uri) }
-          it 'sets the licenses data' do
-            expect(license).to be_an_instance_of(Curator::ControlledTerms::License)
-            license_attrs.each do |attr|
-              expect(license.send(attr)).to eq desc_json['license'][attr]
+        describe 'ControlledTerms::AccessCondition subclasses' do
+          %w(license rights_statement).each do |ac|
+            it 'sets the object data' do
+              ac_object = descriptive.send(ac)
+              expect(ac_object).to be_an_instance_of(Curator.controlled_terms.public_send("#{ac}_class"))
+              %i(label uri).each do |attr|
+                expect(ac_object.send(attr)).to eq desc_json[ac][attr]
+              end
             end
           end
         end

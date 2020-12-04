@@ -63,6 +63,7 @@ module Curator
                                    License
                                    Name
                                    ResourceType
+                                   RightsStatement
                                    Role
                                    Subject
                                    Audio
