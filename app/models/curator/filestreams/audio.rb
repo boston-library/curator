@@ -2,6 +2,8 @@
 
 module Curator
   class Filestreams::Audio < Filestreams::FileSet
+    include Filestreams::Thumbnailable
+
     DEFAULT_REQUIRED_DERIVATIVES = %i(audio_access characterization).freeze
 
     belongs_to :file_set_of, inverse_of: :audio_file_sets, class_name: 'Curator::DigitalObject'
