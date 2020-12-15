@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# has_many_attached not currently used in any model, keep in case needed in the future
 module Curator
   class Indexer < Traject::Indexer
     module AttachmentIndexer
@@ -9,11 +10,12 @@ module Curator
           each_record do |record, context|
             attachments = {}
             has_one_attachment_types = %i(audio_access audio_master document_access document_master
+                                          ebook_access_epub ebook_access_mobi ebook_access_daisy
                                           image_access_800 image_georectified_master image_master image_negative_master
                                           image_service image_thumbnail_300 metadata_foxml metadata_ia metadata_ia_scan
                                           metadata_marc_xml metadata_mods metadata_oai text_coordinates_access
                                           text_coordinates_master text_plain video_access video_master).freeze
-            has_many_attachment_types = %i(ebook_access).freeze
+            has_many_attachment_types = []
             attachment_fields = %i(byte_size content_type checksum).freeze
 
             has_one_attachment_types.each do |attachment_type|

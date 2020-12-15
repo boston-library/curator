@@ -16,6 +16,7 @@ RSpec.shared_examples 'has_one_attached', type: :model do
   end
 end
 
+# has_many_attached not currently used in any model, keep in case needed in the future
 RSpec.shared_examples 'has_many_attached', type: :model do
   describe '#has_many_attached' do
     it 'is expected to have_many_attached for all :has_many_file_attachments' do
