@@ -18,8 +18,8 @@ RSpec.describe Curator::Filestreams::Ereader, type: :model do
 
     it_behaves_like 'thumbnailable'
 
-    it_behaves_like 'has_many_attached' do
-      let(:has_many_file_attachments) { %i(ebook_access) }
+    it_behaves_like 'has_file_attachments' do
+      let(:has_one_file_attachments) { %i(ebook_access_epub ebook_access_mobi ebook_access_daisy) }
     end
   end
 end
