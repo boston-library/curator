@@ -133,8 +133,9 @@ RSpec.shared_examples 'shared_put_patch', type: :controller do |skip_put_patch: 
 
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq(expected_content_type)
+        awesome_print json_response['errors']
         expect(json_response).to be_a_kind_of(Hash).and have_key('errors')
-        expect(json_response['errors'][0]).to include('status' => 422, 'title' => a_kind_of(String), 'detail' => a_kind_of(String), 'source' => a_hash_including('pointer'))
+        expect(json_response['errors'][0]).to include('status' => 422, 'title' => 'Unprocessable Entity', 'detail' => a_kind_of(String), 'source' => a_hash_including('pointer'))
       end
     end
   end
@@ -188,7 +189,7 @@ RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true, reso
           expect(response).to have_http_status(:unprocessable_entity)
           expect(response.content_type).to eq(expected_content_type)
           expect(json_response).to be_a_kind_of(Hash).and have_key('errors')
-          expect(json_response['errors'][0]).to include('status' => 422, 'title' => a_kind_of(String), 'detail' => a_kind_of(String), 'source' => a_hash_including('pointer'))
+          expect(json_response['errors'][0]).to include('status' => 422, 'title' => 'Unprocessable Entity', 'detail' => a_kind_of(String), 'source' => a_hash_including('pointer'))
         end
       end
     end
