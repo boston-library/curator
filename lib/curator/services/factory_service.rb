@@ -56,16 +56,20 @@ module Curator
         private
 
         def find_or_create_nomenclature(nomenclature_class:, term_data: {}, authority_code: nil)
+          nomenclature = nil
           retries = 0
           term_data = term_data.dup.symbolize_keys
           begin
-            return nomenclature_class.transaction(requires_new: true) do
-              break find_nomenclature(nomenclature_class, term_data) || create_nomenclature!(nomenclature_class, term_data) if authority_code.blank?
+            nomenclature_class.transaction(requires_new: true) do
+              nomenclature = if authority_code.blank?
+                find_nomenclature(nomenclature_class, term_data) || create_nomenclature!(nomenclature_class, term_data)
+              else
+                authority = Curator.controlled_terms.authority_class.find_by!(code: authority_code)
 
-              authority = Curator.controlled_terms.authority_class.find_by!(code: authority_code)
-
-              find_nomenclature(nomenclature_class, term_data, authority) || create_nomenclature!(nomenclature_class, term_data, authority)
+                find_nomenclature(nomenclature_class, term_data, authority) || create_nomenclature!(nomenclature_class, term_data, authority)
+              end
             end
+            return nomenclature
           rescue ActiveRecord::StaleObjectError => e
             raise ActiveRecord::RecordNotSaved, "Max retries reached! caused by: #{e.message}", e.record unless (retries += 1) <= TransactionHandler::MAX_RETRIES
 
@@ -73,7 +77,11 @@ module Curator
             sleep(2)
             retry
           rescue *TransactionHandler::RESULT_ERRORS => e
+            Rails.logger.error '==============================================='
             Rails.logger.error "=================#{e.inspect}=================="
+            Rails.logger.error '==============================================='
+            Rails.logger.error e.backtrace.join("\n")
+            Rails.logger.error '==============================================='
             raise e
           end
         end

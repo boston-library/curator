@@ -19,8 +19,8 @@ class CreateCuratorMetastreamsWorkflows < ActiveRecord::Migration[5.2]
 
         dir.down do
           drop_table :curator_metastreams_workflows
-          drop_enum :publishing_state_type
-          drop_enum :processing_state_type
+          drop_enum :metastreams_workflow_publishing_state
+          drop_enum :metastreams_workflow_processing_state
         end
       end
     end

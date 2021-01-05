@@ -33,8 +33,6 @@ env:
     - PGUSER=postgres
     - PGPORT=5432
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
-    - RAILS_ENV=test
-    - RACK_ENV=test
     - CI=true
   jobs:
-    - "RAILS_VERSION=6.0.3.4"
+    - "RAILS_VERSION=6.1.0"

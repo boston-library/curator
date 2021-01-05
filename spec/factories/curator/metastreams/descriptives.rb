@@ -14,7 +14,6 @@ FactoryBot.define do
     related { create(:curator_descriptives_related) }
     title { create(:curator_descriptives_title_set) }
     subject_other { create(:curator_descriptives_subject) }
-    digital_origin { 1 }
     origin_event { 1 }
     text_direction { 1 }
     resource_type_manuscript { false }

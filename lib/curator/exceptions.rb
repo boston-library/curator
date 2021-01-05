@@ -65,7 +65,7 @@ module Curator
           r << SerializableError.new(
             title: 'Unprocessable Entity',
             status: status,
-            detail: msg,
+            detail: Array.wrap(msg).join('. '),
             source: { pointer: "/data/attributes/#{att}" }
           )
         end
