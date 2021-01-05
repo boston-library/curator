@@ -61,13 +61,14 @@ module Curator
           term_data = term_data.dup.symbolize_keys
           begin
             nomenclature_class.transaction(requires_new: true) do
-              nomenclature = if authority_code.blank?
-                find_nomenclature(nomenclature_class, term_data) || create_nomenclature!(nomenclature_class, term_data)
-              else
-                authority = Curator.controlled_terms.authority_class.find_by!(code: authority_code)
+              nomenclature =
+                if authority_code.blank?
+                  find_nomenclature(nomenclature_class, term_data) || create_nomenclature!(nomenclature_class, term_data)
+                else
+                  authority = Curator.controlled_terms.authority_class.find_by!(code: authority_code)
 
-                find_nomenclature(nomenclature_class, term_data, authority) || create_nomenclature!(nomenclature_class, term_data, authority)
-              end
+                  find_nomenclature(nomenclature_class, term_data, authority) || create_nomenclature!(nomenclature_class, term_data, authority)
+                end
             end
             return nomenclature
           rescue ActiveRecord::StaleObjectError => e
