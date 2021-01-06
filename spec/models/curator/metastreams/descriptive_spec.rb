@@ -55,8 +55,8 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
                         of_type(:jsonb) }
 
     it { is_expected.to have_db_column(:digital_origin).
-                        of_type(:integer).
-                        with_options(default: 'reformatted digital') }
+                        of_type(:enum).
+                        with_options(default: 'reformatted_digital') }
 
     it { is_expected.to have_db_column(:text_direction).
                         of_type(:integer) }
@@ -131,8 +131,8 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
 
   describe 'Enum attributes' do
     it { is_expected.to define_enum_for(:digital_origin).
-                     with_values(['born digital', 'reformatted digital', 'digitized microfilm', 'digitized other analog']).
-                     backed_by_column_of_type(:integer) }
+                     with_values(born_digital: 'born_digital', reformatted_digital: 'reformatted_digital', digitized_microfilm: 'digitized_microfilm', digitized_other_analog: 'digitized_other_analog').
+                     backed_by_column_of_type(:enum) }
 
     it { is_expected.to define_enum_for(:text_direction).
                         with_values(%w(ltr rtl)).
