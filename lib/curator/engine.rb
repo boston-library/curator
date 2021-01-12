@@ -17,6 +17,7 @@ module Curator
     require 'htmlentities'
     require 'ox'
     require 'oj'
+    require 'paper_trail'
     require 'rsolr'
     require 'singleton'
     require 'traject'

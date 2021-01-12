@@ -44,6 +44,7 @@ end
 require 'rspec/rails'
 require 'database_cleaner/active_record'
 require 'factory_bot_rails'
+require 'paper_trail/frameworks/rspec'
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|

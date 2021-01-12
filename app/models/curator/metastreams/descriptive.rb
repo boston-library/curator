@@ -7,6 +7,8 @@ module Curator
     include AttrJson::Record::Dirty
     include AttrJson::NestedAttributes
 
+    has_paper_trail
+
     enum digital_origin: {
       born_digital: 'born_digital',
                             reformatted_digital: 'reformatted_digital',

@@ -7,6 +7,8 @@ module Curator
     include Curator::Mappings::Exemplary::Object
     include Curator::Indexable
 
+    has_paper_trail
+
     self.curator_indexable_mapper = Curator::DigitalObjectIndexer.new
 
     scope :for_serialization, -> { merge(with_metastreams) }
