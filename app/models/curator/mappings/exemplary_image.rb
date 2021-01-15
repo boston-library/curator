@@ -15,6 +15,8 @@ module Curator
 
     validate :exemplary_file_set_class_name_validator, on: :create
 
+    has_paper_trail
+
     private
 
     def exemplary_file_set_class_name_validator

@@ -18,6 +18,7 @@ module Curator
     require 'ox'
     require 'oj'
     require 'paper_trail'
+    require 'paper_trail-association_tracking'
     require 'rsolr'
     require 'singleton'
     require 'traject'

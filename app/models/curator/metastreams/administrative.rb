@@ -16,6 +16,8 @@ module Curator
 
     validate :validate_destination_site
 
+    has_paper_trail if: Proc.new { |a| a.administratable_type == Curator.digital_object_class.name }
+
     private
 
     def validate_destination_site

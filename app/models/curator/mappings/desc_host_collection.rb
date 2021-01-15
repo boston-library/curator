@@ -6,5 +6,7 @@ module Curator
     belongs_to :descriptive, inverse_of: :desc_host_collections, class_name: 'Curator::Metastreams::Descriptive'
 
     validates :host_collection_id, uniqueness: { scope: :descriptive_id }
+
+    has_paper_trail
   end
 end

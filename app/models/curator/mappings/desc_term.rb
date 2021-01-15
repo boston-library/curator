@@ -14,6 +14,8 @@ module Curator
 
     validate :mapped_term_class_name_validator, on: :create
 
+    has_paper_trail
+
     private
 
     def mapped_term_class_name_validator

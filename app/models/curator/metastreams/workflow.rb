@@ -60,6 +60,8 @@ module Curator
       end
     end
 
+    has_paper_trail if: Proc.new { |w| w.workflowable_type == Curator.digital_object_class.name }
+
     protected
 
     ## START GUARD CLAUSES
