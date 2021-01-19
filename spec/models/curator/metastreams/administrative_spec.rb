@@ -38,7 +38,7 @@ RSpec.describe Curator::Metastreams::Administrative, type: :model do
 
     it { is_expected.to have_db_column(:destination_site).
                         of_type(:string).
-                        with_options(default: ['commonwealth'], array: true) }
+                        with_options(default: ['commonwealth']) }
 
     it { is_expected.to have_db_column(:oai_header_id).
                         of_type(:string) }
