@@ -58,6 +58,7 @@ RSpec.shared_examples 'json_serialization', type: :serializers do
         subject { serializer_for_one.render }
 
         let!(:expected_json) { Oj.dump(expected_json_hash) }
+
         let!(:expected_json_key_matchers) { recurse_keys_to_json_map.call(expected_json_hash[json_root_key]) }
         let!(:expected_json_val_matchers) { recurse_vals_to_json_map.call(expected_json_hash[json_root_key]) }
 

@@ -4,6 +4,28 @@ module SerializerHelper
   module AsJsonHelper
     # NOTE: This method return the long list of options used for when #as_json on a descriptive is called of the descriptive as json
     # This is only required when stubbing out an expected value for as json in the descriptive class
+    BLOB_KEY_TRANSFORMS = {
+      'filename' => 'file_name',
+      'content_type' => 'mime_type'
+    }.freeze
+
+    def normalize_blob_json(blob_json = {})
+      blob_json['id'] = blob_json.delete('key')
+      blob_json['metadata'] ||= {}
+
+      %w(byte_size checksum filename content_type).each do |blob_field|
+        next if !blob_json.key?(blob_field)
+
+        if BLOB_KEY_TRANSFORMS.key?(blob_field)
+          metadata_field = BLOB_KEY_TRANSFORMS[blob_field]
+        else
+          metadata_field = blob_field
+        end
+        blob_json['metadata'][metadata_field] = blob_json.delete(blob_field)
+      end
+      blob_json
+    end
+
     def descriptive_as_json_options
       {
         after_as_json: -> (json_record) { json_record['host_collections'] = json_record['host_collections'].flat_map(&:values) if json_record.key?('host_collections'); json_record },
