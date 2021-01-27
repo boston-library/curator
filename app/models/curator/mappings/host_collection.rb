@@ -13,6 +13,8 @@ module Curator
 
     after_update_commit :reindex_descriptable_objects
 
+    has_paper_trail
+
     private
 
     def reindex_descriptable_objects

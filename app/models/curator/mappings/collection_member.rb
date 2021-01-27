@@ -8,6 +8,6 @@ module Curator
 
     validates :collection_id, uniqueness: { scope: :digital_object_id }
 
-    has_paper_trail
+    has_paper_trail on: %i(create destroy update)
   end
 end

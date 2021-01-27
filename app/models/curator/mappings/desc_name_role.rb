@@ -9,7 +9,7 @@ module Curator
     validates :descriptive_id, uniqueness: { scope: [:name_id, :role_id] }
     validate :name_role_class_validator, on: :create
 
-    has_paper_trail
+    has_paper_trail on: %i(create destroy update)
 
     private
 
