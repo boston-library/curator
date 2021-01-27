@@ -11,9 +11,9 @@ module Curator
 
     enum digital_origin: {
       born_digital: 'born_digital',
-                            reformatted_digital: 'reformatted_digital',
-                            digitized_microfilm: 'digitized_microfilm',
-                            digitized_other_analog: 'digitized_other_analog'
+      reformatted_digital: 'reformatted_digital',
+      digitized_microfilm: 'digitized_microfilm',
+      digitized_other_analog: 'digitized_other_analog'
     }.freeze
 
     enum text_direction: %w(ltr rtl).freeze

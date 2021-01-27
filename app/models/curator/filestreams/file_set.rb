@@ -38,7 +38,7 @@ module Curator
 
     before_create :add_file_set_of_to_members, if: -> { file_set_of.present? }
 
-    belongs_to :file_set_of, inverse_of: :file_sets, class_name: 'Curator::DigitalObject', touch: true
+    belongs_to :file_set_of, inverse_of: :file_sets, class_name: 'Curator::DigitalObject'
 
     has_many :file_set_member_of_mappings, -> { includes(:digital_object) }, inverse_of: :file_set, class_name: 'Curator::Mappings::FileSetMember', dependent: :destroy
 

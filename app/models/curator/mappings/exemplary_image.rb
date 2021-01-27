@@ -9,13 +9,12 @@ module Curator
 
     belongs_to :exemplary_file_set, inverse_of: :exemplary_image_of_mappings, class_name: 'Curator::Filestreams::FileSet', touch: true
 
-    validates :exemplary_object_type, uniqueness: { scope: [:exemplary_object_id] }, inclusion: { in: VALID_EXEMPLARY_OBJECT_TYPES.collect { |obj_type| "Curator::#{obj_type}" } }, on: :create
+    validates :exemplary_object_type, uniqueness: { scope: [:exemplary_object_id] },
+              inclusion: { in: VALID_EXEMPLARY_OBJECT_TYPES.collect { |obj_type| "Curator::#{obj_type}" } }, on: :create
 
     validates :exemplary_file_set_id, uniqueness: { scope: [:exemplary_object_id, :exemplary_object_type] }
 
     validate :exemplary_file_set_class_name_validator, on: :create
-
-    has_paper_trail
 
     private
 

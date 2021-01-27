@@ -14,6 +14,8 @@ module Curator
     has_one_attached :metadata_mods
     has_one_attached :metadata_oai
 
+    has_paper_trail
+
     def derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
       required_derivatives.any? { |a| public_send(a).attached? }
     end

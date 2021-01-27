@@ -9,6 +9,8 @@ module Curator
     has_one_attached :text_plain
     has_one_attached :text_coordinates_master
 
+    has_paper_trail
+
     def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
       super(required_derivatives)
     end

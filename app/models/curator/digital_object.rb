@@ -13,7 +13,8 @@ module Curator
 
     scope :for_serialization, -> { merge(with_metastreams) }
 
-    validates :contained_by_id, exclusion: { in: -> (digital_object) { Array.wrap(digital_object.id) } }, uniqueness: { scope: :id }, unless: -> { contained_by.blank? }
+    validates :contained_by_id, exclusion: { in: -> (digital_object) { Array.wrap(digital_object.id) } },
+              uniqueness: { scope: :id }, unless: -> { contained_by.blank? }
 
     before_create :add_admin_set_to_members
 
@@ -22,7 +23,7 @@ module Curator
 
     has_one :institution, through: :admin_set, class_name: 'Curator::Institution'
 
-    with_options inverse_of: :file_set_of, foreign_key: :file_set_of_id, dependent: :destroy, autosave: true do
+    with_options inverse_of: :file_set_of, foreign_key: :file_set_of_id, dependent: :destroy do
       has_many :file_sets, class_name: 'Curator::Filestreams::FileSet' do
         def exemplaryable
           where(file_set_type: EXEMPLARYABLE_FILE_SETS)
@@ -44,9 +45,11 @@ module Curator
       Curator.metastreams.workflow_class.select(:workflowable_type, :workflowable_id, :processing_state).where(workflowable_type: 'Curator::Filestreams::FileSet', workflowable_id: file_set_ids).all?(&:complete?)
     end
 
-    has_many :container_for, inverse_of: :contained_by, class_name: 'Curator::DigitalObject', foreign_key: :contained_by_id, dependent: :nullify
+    has_many :container_for, inverse_of: :contained_by, class_name: 'Curator::DigitalObject',
+             foreign_key: :contained_by_id, dependent: :nullify
 
-    has_many :collection_members, -> { includes(:collection) }, inverse_of: :digital_object, autosave: true, class_name: 'Curator::Mappings::CollectionMember', dependent: :destroy do
+    has_many :collection_members, -> { includes(:collection) }, inverse_of: :digital_object, autosave: true,
+             class_name: 'Curator::Mappings::CollectionMember', dependent: :destroy do
       def can_remove
         where.not(collection_id: proxy_association.owner.admin_set_id)
       end
@@ -55,7 +58,7 @@ module Curator
     has_many :is_member_of_collection, through: :collection_members, source: :collection
 
     has_many :file_set_member_mappings, -> { joins(:file_set).includes(:file_set) }, inverse_of: :digital_object,
-             class_name: 'Curator::Mappings::FileSetMember', dependent: :destroy, autosave: true
+             class_name: 'Curator::Mappings::FileSetMember', dependent: :destroy
     with_options through: :file_set_member_mappings, source: :file_set do
       has_many :file_set_members, class_name: 'Curator::Filestreams::FileSet'
       has_many :audio_file_set_members, class_name: 'Curator::Filestreams::Audio'
@@ -70,7 +73,7 @@ module Curator
     def ark_params
       super.merge({
         parent_pid: admin_set&.ark_id,
-          secondary_parent_pids: []
+        secondary_parent_pids: []
       }.merge(local_id_params))
     end
 
@@ -94,10 +97,11 @@ module Curator
       ident_params
     end
 
-    # Sets an array of local_id_types by the same precendent the case/when was setting in the previous
+    # Sets an array of local_id_types by the same precedent the case/when was setting in the previous
     # Chose this way because of a one off bug i noticed that return local_id_params as an array
-    # Version above works as intended with the right precendent being used and avoids returning an array
-    # Method below is a helper method that builds the constant into a 2d array. The constant is also ordered by precendent to ensure that the order is maintained.
+    # Version above works as intended with the right precedent being used and avoids returning an array
+    # Method below is a helper method that builds the constant into a 2d array. The constant is also ordered
+    # by precedent to ensure that the order is maintained.
     # For reference here how the local id params were being set before.
     #   case ident.type
     # when 'internet-archive', 'local-barcode'
