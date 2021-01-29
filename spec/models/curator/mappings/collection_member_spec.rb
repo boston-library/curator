@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../shared/papertrailable'
 
 RSpec.describe Curator::Mappings::CollectionMember, type: :model do
   subject { build(:curator_mappings_collection_member) }
@@ -29,6 +30,9 @@ RSpec.describe Curator::Mappings::CollectionMember, type: :model do
     it { is_expected.to belong_to(:digital_object).
                         inverse_of(:is_member_of_collection).
                         class_name('Curator::DigitalObject').
+                        touch(true).
                         required }
   end
+
+  it_behaves_like 'papertrailable_mapping'
 end

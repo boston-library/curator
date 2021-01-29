@@ -8,11 +8,13 @@ require_relative './shared/timestampable'
 require_relative './shared/archivable'
 require_relative './shared/for_serialization'
 require_relative './shared/mappings/has_exemplary_file_set'
+require_relative './shared/papertrailable'
 
 RSpec.describe Curator::DigitalObject, type: :model do
   subject { build(:curator_digital_object) }
 
   it_behaves_like 'mintable'
+  it_behaves_like 'papertrailable'
 
   describe 'Database' do
     it_behaves_like 'optimistic_lockable'

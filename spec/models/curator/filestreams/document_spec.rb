@@ -5,12 +5,14 @@ require_relative '../shared/filestreams/file_set'
 require_relative '../shared/filestreams/file_attachments'
 require_relative '../shared/filestreams/derivative_methods'
 require_relative '../shared/filestreams/thumbnailable'
+require_relative '../shared/papertrailable'
 
 RSpec.describe Curator::Filestreams::Document, type: :model do
   subject { build(:curator_filestreams_document) }
 
   it_behaves_like 'file_set'
   include_examples 'derivative_methods'
+  it_behaves_like 'papertrailable'
 
   describe 'Document Associations' do
     it { is_expected.to belong_to(:file_set_of).

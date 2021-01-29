@@ -6,7 +6,7 @@ module Curator
       "Curator::ControlledTerms::#{klass}" unless klass == 'License' || klass == 'RightsStatement'
     end.compact.freeze
 
-    belongs_to :descriptive, inverse_of: :desc_terms, class_name: 'Curator::Metastreams::Descriptive'
+    belongs_to :descriptive, inverse_of: :desc_terms, class_name: 'Curator::Metastreams::Descriptive', touch: true
 
     belongs_to :mapped_term, inverse_of: :desc_terms, class_name: 'Curator::ControlledTerms::Nomenclature'
 
