@@ -5,7 +5,7 @@ require_relative '../shared/optimistic_lockable'
 require_relative '../shared/timestampable'
 require_relative '../shared/archivable'
 require_relative '../shared/for_serialization'
-require_relative '../shared/papertrailable'
+require_relative '../shared/versionable'
 
 RSpec.describe Curator::Metastreams::Descriptive, type: :model do
   subject { build(:curator_metastreams_descriptive) }
@@ -332,7 +332,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     end
   end
 
-  it_behaves_like 'papertrailable'
+  it_behaves_like 'versionable'
 
   describe 'Versioning', versioning: true do
     let(:desc_obj) { create(:curator_metastreams_descriptive, genre_count: 1) }

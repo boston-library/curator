@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require_relative '../shared/papertrailable'
+require_relative '../shared/versionable'
 
 RSpec.describe Curator::Mappings::DescTerm, type: :model do
   subject { build(:curator_mappings_desc_term) }
@@ -36,5 +36,5 @@ RSpec.describe Curator::Mappings::DescTerm, type: :model do
                         required }
   end
 
-  it_behaves_like 'papertrailable_mapping'
+  it_behaves_like 'versionable_mapping'
 end

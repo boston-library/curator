@@ -4,7 +4,7 @@ require 'rails_helper'
 require_relative '../shared/optimistic_lockable'
 require_relative '../shared/timestampable'
 require_relative '../shared/archivable'
-require_relative '../shared/papertrailable'
+require_relative '../shared/versionable'
 
 RSpec.describe Curator::Metastreams::Administrative, type: :model do
   subject { build(:curator_metastreams_administrative) }
@@ -84,5 +84,5 @@ RSpec.describe Curator::Metastreams::Administrative, type: :model do
                         required }
   end
 
-  it_behaves_like 'papertrailable'
+  it_behaves_like 'versionable'
 end
