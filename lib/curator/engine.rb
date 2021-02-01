@@ -58,6 +58,8 @@ module Curator
         hash_class: ActiveSupport::HashWithIndifferentAccess,
         omit_nil: true
       }
+      PaperTrail.config.track_associations = true
+      PaperTrail.config.has_paper_trail_defaults = { on: %i(update destroy touch) }
       Curator.setup!
     end
 
