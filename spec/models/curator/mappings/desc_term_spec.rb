@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../shared/versionable'
 
 RSpec.describe Curator::Mappings::DescTerm, type: :model do
   subject { build(:curator_mappings_desc_term) }
@@ -26,6 +27,7 @@ RSpec.describe Curator::Mappings::DescTerm, type: :model do
     it { is_expected.to belong_to(:descriptive).
                         inverse_of(:desc_terms).
                         class_name('Curator::Metastreams::Descriptive').
+                        touch(true).
                         required }
 
     it { is_expected.to belong_to(:mapped_term).
@@ -33,4 +35,6 @@ RSpec.describe Curator::Mappings::DescTerm, type: :model do
                         class_name('Curator::ControlledTerms::Nomenclature').
                         required }
   end
+
+  it_behaves_like 'versionable_mapping'
 end

@@ -16,6 +16,8 @@ module Curator
 
     validate :validate_destination_site
 
+    has_paper_trail if: proc { |a| [Curator.digital_object_class.name, Curator::Filestreams::FileSet.name].include?(a.administratable_type) }
+
     private
 
     def validate_destination_site

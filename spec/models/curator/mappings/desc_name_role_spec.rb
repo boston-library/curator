@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../shared/versionable'
 
 RSpec.describe Curator::Mappings::DescNameRole, type: :model do
   subject { build(:curator_mappings_desc_name_role) }
@@ -56,6 +57,7 @@ RSpec.describe Curator::Mappings::DescNameRole, type: :model do
     it { is_expected.to belong_to(:descriptive).
                         inverse_of(:name_roles).
                         class_name('Curator::Metastreams::Descriptive').
+                        touch(true).
                         required }
 
     it { is_expected.to belong_to(:name).
@@ -68,4 +70,6 @@ RSpec.describe Curator::Mappings::DescNameRole, type: :model do
                         class_name('Curator::ControlledTerms::Role').
                         required }
   end
+
+  it_behaves_like 'versionable_mapping'
 end

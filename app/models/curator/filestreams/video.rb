@@ -16,6 +16,8 @@ module Curator
     has_one_attached :video_access
     has_one_attached :video_master
 
+    has_paper_trail
+
     def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
       super(required_derivatives)
     end

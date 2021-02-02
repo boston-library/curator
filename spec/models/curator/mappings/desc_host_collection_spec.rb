@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../shared/versionable'
 
 RSpec.describe Curator::Mappings::DescHostCollection, type: :model do
   subject { build(:curator_mappings_desc_host_collection) }
@@ -24,6 +25,7 @@ RSpec.describe Curator::Mappings::DescHostCollection, type: :model do
     it { is_expected.to belong_to(:descriptive).
                         inverse_of(:desc_host_collections).
                         class_name('Curator::Metastreams::Descriptive').
+                        touch(true).
                         required }
 
     it { is_expected.to belong_to(:host_collection).
@@ -31,4 +33,6 @@ RSpec.describe Curator::Mappings::DescHostCollection, type: :model do
                         class_name('Curator::Mappings::HostCollection').
                         required }
   end
+
+  it_behaves_like 'versionable_mapping'
 end

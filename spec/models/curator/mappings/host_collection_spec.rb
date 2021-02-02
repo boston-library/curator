@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../shared/versionable'
 
 RSpec.describe Curator::Mappings::HostCollection, type: :model do
   subject { build(:curator_mappings_host_collection) }
@@ -59,4 +60,6 @@ RSpec.describe Curator::Mappings::HostCollection, type: :model do
       host_collection.save
     end
   end
+
+  it_behaves_like 'versionable'
 end

@@ -12,6 +12,8 @@ module Curator
     has_one_attached :ebook_access_mobi
     has_one_attached :ebook_access_daisy
 
+    has_paper_trail
+
     def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
       super(required_derivatives)
     end

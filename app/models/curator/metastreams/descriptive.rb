@@ -7,11 +7,13 @@ module Curator
     include AttrJson::Record::Dirty
     include AttrJson::NestedAttributes
 
+    has_paper_trail
+
     enum digital_origin: {
       born_digital: 'born_digital',
-                            reformatted_digital: 'reformatted_digital',
-                            digitized_microfilm: 'digitized_microfilm',
-                            digitized_other_analog: 'digitized_other_analog'
+      reformatted_digital: 'reformatted_digital',
+      digitized_microfilm: 'digitized_microfilm',
+      digitized_other_analog: 'digitized_other_analog'
     }.freeze
 
     enum text_direction: %w(ltr rtl).freeze
@@ -62,7 +64,7 @@ module Curator
     belongs_to :physical_location, inverse_of: :physical_locations_of, class_name: 'Curator::ControlledTerms::Name'
     belongs_to :rights_statement, inverse_of: :rights_statement_of, class_name: 'Curator::ControlledTerms::RightsStatement'
     # MAPPING OBJECTS
-    with_options inverse_of: :descriptive, dependent: :destroy do
+    with_options inverse_of: :descriptive, dependent: :destroy, autosave: true do
       has_many :desc_terms, class_name: 'Curator::Mappings::DescTerm'
       has_many :name_roles, class_name: 'Curator::Mappings::DescNameRole'
       has_many :desc_host_collections, class_name: 'Curator::Mappings::DescHostCollection'

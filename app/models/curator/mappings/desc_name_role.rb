@@ -2,12 +2,14 @@
 
 module Curator
   class Mappings::DescNameRole < ApplicationRecord
-    belongs_to :descriptive, inverse_of: :name_roles, class_name: 'Curator::Metastreams::Descriptive'
+    belongs_to :descriptive, inverse_of: :name_roles, class_name: 'Curator::Metastreams::Descriptive', touch: true
     belongs_to :name, -> { merge(with_authority) }, inverse_of: :desc_name_roles, class_name: 'Curator::ControlledTerms::Name'
     belongs_to :role, -> { merge(with_authority) }, inverse_of: :desc_name_roles, class_name: 'Curator::ControlledTerms::Role'
 
     validates :descriptive_id, uniqueness: { scope: [:name_id, :role_id] }
     validate :name_role_class_validator, on: :create
+
+    has_paper_trail on: %i(create destroy update)
 
     private
 

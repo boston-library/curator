@@ -5,6 +5,7 @@ require_relative '../shared/optimistic_lockable'
 require_relative '../shared/timestampable'
 require_relative '../shared/archivable'
 require_relative '../shared/for_serialization'
+require_relative '../shared/versionable'
 
 RSpec.describe Curator::Metastreams::Descriptive, type: :model do
   subject { build(:curator_metastreams_descriptive) }
@@ -327,6 +328,35 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     it_behaves_like 'for_serialization' do
       let(:expected_scope_sql) do
         described_class.merge(described_class.with_physical_location).merge(described_class.with_license).merge(described_class.with_rights_statement).merge(described_class.with_mappings).merge(described_class.with_desc_terms).to_sql
+      end
+    end
+  end
+
+  it_behaves_like 'versionable'
+
+  describe 'Versioning', versioning: true do
+    let(:desc_obj) { create(:curator_metastreams_descriptive, genre_count: 1) }
+    let(:new_publisher) { 'foo' }
+
+    before(:each) do
+      desc_obj.publisher = new_publisher
+      create(:curator_mappings_desc_term, :specific_genre, descriptive: desc_obj)
+      desc_obj.save!
+    end
+
+    describe 'update' do
+      it 'creates a new version' do
+        expect(desc_obj.versions.count).to eq 4
+        expect(desc_obj.versions.last.reify.publisher).to_not eq new_publisher
+      end
+    end
+
+    describe 'restoring previous version' do
+      it 'resets the object to previous state' do
+        desc_obj.versions[1].reify(has_many: true, has_one: true, belongs_to: true, mark_for_destruction: true).save!
+        desc_obj.reload
+        expect(desc_obj.publisher).to_not eq new_publisher
+        expect(desc_obj.genres.count).to eq 1
       end
     end
   end

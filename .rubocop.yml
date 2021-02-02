@@ -471,6 +471,7 @@ Rails/CreateTableWithTimestamps:
   Enabled: true
   Exclude:
     - 'db/migrate/*_mapping*.rb'
+    - 'db/migrate/20210112223214_create_version_associations.rb'
 
 Rails/ActiveSupportAliases:
   Enabled: true

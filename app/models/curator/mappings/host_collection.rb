@@ -13,11 +13,13 @@ module Curator
 
     after_update_commit :reindex_descriptable_objects
 
+    has_paper_trail
+
     private
 
     def reindex_descriptable_objects
       desc_host_collections.find_each do |desc_host_col|
-        desc_host_col.descriptive.descriptable.update_index
+        desc_host_col.descriptive.digital_object.update_index
       end
     end
   end

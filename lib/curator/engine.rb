@@ -17,6 +17,8 @@ module Curator
     require 'htmlentities'
     require 'ox'
     require 'oj'
+    require 'paper_trail'
+    require 'paper_trail-association_tracking'
     require 'rsolr'
     require 'singleton'
     require 'traject'
@@ -56,6 +58,8 @@ module Curator
         hash_class: ActiveSupport::HashWithIndifferentAccess,
         omit_nil: true
       }
+      PaperTrail.config.track_associations = true
+      PaperTrail.config.has_paper_trail_defaults = { on: %i(update destroy touch) }
       Curator.setup!
     end
 

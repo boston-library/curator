@@ -4,6 +4,7 @@ module Curator
   class ApplicationController < ActionController::API
     include ActionController::MimeResponds
     prepend_before_action :set_serializer_adapter_key
+    before_action :set_paper_trail_whodunnit, only: [:create, :update]
 
     ERROR_MAP = {
       'StandardError' => 'Curator::Exceptions::ServerError',
@@ -106,6 +107,11 @@ module Curator
       else
         return error_klass.new(e.message, request.env['PATH_INFO'])
       end
+    end
+
+    # placeholder until we implement user auth
+    def user_for_paper_trail
+      request.ip
     end
   end
 end
