@@ -60,7 +60,7 @@ module Curator
       # Could be an explicit writer passed into #initialize, or a current thread-settings
       # writer, or a new writer created from global settings.
       def writer
-        @writer ||= ThreadSettings.current.writer || Curator.indexable_settings.writer_instance!
+        @writer ||= ThreadSettings.current.writer || Curator.config.indexable_settings.writer_instance!
       end
 
       # Is this record supposed to be represented in the solr index?

@@ -31,12 +31,12 @@ module Curator
 
     # Are automatic after_commit callbacks currently enabled? Will check a number
     # of things to see, as we have a number of places these can be turned on/off.
-    # * Globally in `Curator.indexable_settings.disable_callback`
+    # * Globally in `Curator.config.indexable_settings.disable_callback`
     # * On class or instance using class_attribute `curator_indexable_auto_callbacks`
     # * If no curator_indexable_mapper is configured on record, then no callbacks.
     # * Using thread-current settings usually set by .index_with
     def self.auto_callbacks?(model)
-      !Curator.indexable_settings.disable_callbacks &&
+      !Curator.config.indexable_settings.disable_callbacks &&
           model.curator_indexable_auto_callbacks &&
           model.curator_indexable_mapper &&
           !ThreadSettings.current.disabled_callbacks?

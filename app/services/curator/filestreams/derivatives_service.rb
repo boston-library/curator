@@ -5,7 +5,7 @@ module Curator
     # TODO: Set this up to be a remote service once the avi_processor is refactored
     # include Curator::Services::RemoteService
 
-    # self.base_url = ENV['AVI_PROCESSOR_URL'].to_s
+    # self.base_url = Curator.config.avi_processor_url
     # self.default_path_prefix = 'avi processor path prefix'
     # self.default_headers = { accept: 'application/json', content_type: 'application/json' }
 

@@ -4,7 +4,7 @@ module Curator
   class ControlledTerms::AuthorityService < Services::Base
     include Curator::Services::RemoteService
 
-    self.base_url = ENV['AUTHORITY_API_URL'].to_s
+    self.base_url = Curator.config.authority_api_url
     self.default_path_prefix = '/bpldc'
     self.default_headers = { accept: 'application/json', content_type: 'application/json' }
 

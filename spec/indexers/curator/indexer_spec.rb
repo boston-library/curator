@@ -21,7 +21,7 @@ RSpec.describe Curator::Indexer do
     end
 
     it 'sets the model name fields correctly' do
-      expect(indexed[Curator.indexable_settings.model_name_solr_field]).to eq [institution.class.name]
+      expect(indexed[Curator.config.indexable_settings.model_name_solr_field]).to eq [institution.class.name]
       expect(indexed['curator_model_suffix_ssi']).to eq [institution.class.name.demodulize]
     end
 

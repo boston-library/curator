@@ -8,8 +8,8 @@ RSpec.describe Curator::MinterService, type: :service do
 
   it_behaves_like 'remote_service'
 
-  it 'expects the .base_url to eq the ARK_MANAGER_API_URL' do
-    expect(subject.base_url).to eq(ENV['ARK_MANAGER_API_URL'])
+  it 'expects the .base_url to eq the Curator.config.ark_manager_api_url' do
+    expect(subject.base_url).to eq(Curator.config.ark_manager_api_url)
   end
 
   describe 'Minting #ark_id' do

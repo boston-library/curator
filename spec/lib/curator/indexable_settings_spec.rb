@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 RSpec.describe Curator::IndexableSettings do
-  let(:solr_url) { ENV['SOLR_URL'] }
+  let(:solr_url) { Curator.config.solr_url }
   let(:writer_class_name) { 'Traject::SolrJsonWriter' }
   let(:writer_settings) { {} }
   let(:model_name_solr_field) { 'model_name_ssi' }
@@ -37,8 +37,8 @@ RSpec.describe Curator::IndexableSettings do
   end
 
   # this is set in lib/curator.rb, seems within scope to test here
-  describe 'Curator.indexable_settings' do
-    let(:curator_indexable_settings) { Curator.indexable_settings }
+  describe 'Curator.config.indexable_settings' do
+    let(:curator_indexable_settings) { Curator.config.indexable_settings }
 
     it 'returns an instance of Curator::IndexableSettings' do
       expect(curator_indexable_settings).to be_an_instance_of(described_class)
