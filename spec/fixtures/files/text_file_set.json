@@ -1,10 +1,10 @@
 {
   "file_set": {
-    "ark_id": "commonwealth:111111111",
+    "ark_id": "bpl-dev:111111111",
     "created_at": "2019-05-20T14:46:08.240Z",
     "updated_at": "2019-05-20T14:51:03.796Z",
     "file_set_of": {
-      "ark_id": "commonwealth:abcdefghi"
+      "ark_id": "bpl-dev:abcdefghi"
     },
     "position": 0,
     "file_set_type": "text",
@@ -13,7 +13,7 @@
       "administrative": {
         "access_edit_group": [
           "superuser",
-          "admin[commonwealth:ijkl54321]"
+          "admin[bpl-dev:ijkl54321]"
         ]
       },
       "workflow": {

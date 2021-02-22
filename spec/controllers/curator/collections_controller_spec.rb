@@ -28,7 +28,7 @@ RSpec.describe Curator::CollectionsController, type: :controller do
   let(:valid_session) { {} }
   let(:base_params) { {} }
   let(:invalid_attributes) { valid_attributes.dup.update(name: nil) }
-  let(:invalid_update_attributes) { valid_update_attributes.dup.update(exemplary_file_set: { ark_id: 'commonwealth:notavalidpid1' }) }
+  let(:invalid_update_attributes) { valid_update_attributes.dup.update(exemplary_file_set: { ark_id: 'bpl-dev:notavalidpid1' }) }
   let(:resource_class) { Curator::Collection }
   let(:serializer_class) { Curator::CollectionSerializer }
 

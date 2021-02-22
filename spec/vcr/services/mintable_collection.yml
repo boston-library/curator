@@ -5,7 +5,7 @@ http_interactions:
     uri: http://127.0.0.1:3002/api/v2/arks
     body:
       encoding: UTF-8
-      string: '{"namespace_ark":"50959","namespace_id":"commonwealth","url_base":"https://digitalcommonwealth.org","parent_pid":"commonwealth:4031512a29939c71104f00e1c1fc6f99af30c6a99a2c18de5dc1d6977ef3f7","secondary_parent_pids":[],"local_original_identifier_type":"Institution
+      string: '{"namespace_ark":"50959","namespace_id":"bpl-dev","url_base":"https://search-hydradev.bpl.org","parent_pid":"bpl-dev:4031512a29939c71104f00e1c1fc6f99af30c6a99a2c18de5dc1d6977ef3f7","secondary_parent_pids":[],"local_original_identifier_type":"Institution
         Collection Name","local_original_identifier":"Harry R. M. Pitts Collection","model_type":"Curator::Collection"}'
     headers:
       Accept:
@@ -51,8 +51,8 @@ http_interactions:
       - chunked
     body:
       encoding: UTF-8
-      string: '{"ark":{"id":8,"pid":"commonwealth:rv042t05q","created_at":"2020-09-01T21:20:08.650Z","updated_at":"2020-09-01T21:20:08.650Z","parent_pid":"commonwealth:4031512a29939c71104f00e1c1fc6f99af30c6a99a2c18de5dc1d6977ef3f7","model_type":"Curator::Collection","local_original_identifier":"Harry
+      string: '{"ark":{"id":8,"pid":"bpl-dev:rv042t05q","created_at":"2020-09-01T21:20:08.650Z","updated_at":"2020-09-01T21:20:08.650Z","parent_pid":"bpl-dev:4031512a29939c71104f00e1c1fc6f99af30c6a99a2c18de5dc1d6977ef3f7","model_type":"Curator::Collection","local_original_identifier":"Harry
         R. M. Pitts Collection","local_original_identifier_type":"Institution Collection
-        Name","namespace_ark":"50959","namespace_id":"commonwealth","secondary_parent_pids":[],"url_base":"https://digitalcommonwealth.org"}}'
+        Name","namespace_ark":"50959","namespace_id":"bpl-dev","secondary_parent_pids":[],"url_base":"https://search-hydradev.bpl.org"}}'
   recorded_at: Tue, 01 Sep 2020 21:20:08 GMT
 recorded_with: VCR 6.0.0

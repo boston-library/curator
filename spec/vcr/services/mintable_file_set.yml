@@ -5,7 +5,7 @@ http_interactions:
     uri: http://127.0.0.1:3002/api/v2/arks
     body:
       encoding: UTF-8
-      string: '{"namespace_ark":"50959","namespace_id":"commonwealth","url_base":"https://digitalcommonwealth.org","parent_pid":"commonwealth:6c17b95ba18d22e090017ab3c3870c4c86adde32332480487f01a4c9a9f4","secondary_parent_pids":[],"local_original_identifier_type":"filename","local_original_identifier":"Like
+      string: '{"namespace_ark":"50959","namespace_id":"bpl-dev","url_base":"https://search-hydradev.bpl.org","parent_pid":"bpl-dev:6c17b95ba18d22e090017ab3c3870c4c86adde32332480487f01a4c9a9f4","secondary_parent_pids":[],"local_original_identifier_type":"filename","local_original_identifier":"Like
         a Virgin","model_type":"Curator::Filestreams::FileSet"}'
     headers:
       Accept:
@@ -51,7 +51,7 @@ http_interactions:
       - chunked
     body:
       encoding: UTF-8
-      string: '{"ark":{"id":6,"pid":"commonwealth:3b591857h","created_at":"2020-09-01T21:19:58.080Z","updated_at":"2020-09-01T21:19:58.080Z","parent_pid":"commonwealth:6c17b95ba18d22e090017ab3c3870c4c86adde32332480487f01a4c9a9f4","model_type":"Curator::Filestreams::FileSet","local_original_identifier":"Like
-        a Virgin","local_original_identifier_type":"filename","namespace_ark":"50959","namespace_id":"commonwealth","secondary_parent_pids":[],"url_base":"https://digitalcommonwealth.org"}}'
+      string: '{"ark":{"id":6,"pid":"bpl-dev:3b591857h","created_at":"2020-09-01T21:19:58.080Z","updated_at":"2020-09-01T21:19:58.080Z","parent_pid":"bpl-dev:6c17b95ba18d22e090017ab3c3870c4c86adde32332480487f01a4c9a9f4","model_type":"Curator::Filestreams::FileSet","local_original_identifier":"Like
+        a Virgin","local_original_identifier_type":"filename","namespace_ark":"50959","namespace_id":"bpl-dev","secondary_parent_pids":[],"url_base":"https://search-hydradev.bpl.org"}}'
   recorded_at: Tue, 01 Sep 2020 21:19:58 GMT
 recorded_with: VCR 6.0.0

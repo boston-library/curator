@@ -1,15 +1,15 @@
 {
   "digital_object": {
-    "ark_id": "commonwealth:d504rm722",
+    "ark_id": "bpl-dev:d504rm722",
     "created_at": "2020-04-27T20:32:56.545Z",
     "updated_at": "2020-04-29T19:43:45.666Z",
     "admin_set": {
-      "ark_id": "commonwealth:453627189",
+      "ark_id": "bpl-dev:453627189",
       "name": "Tallulah Morgan v. James W. Hennigan Case File"
     },
     "is_member_of_collection": [
       {
-        "ark_id": "commonwealth:453627189",
+        "ark_id": "bpl-dev:453627189",
         "name": "Tallulah Morgan v. James W. Hennigan Case File"
       }
     ],

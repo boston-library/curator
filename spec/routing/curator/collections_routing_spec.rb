@@ -8,7 +8,7 @@ RSpec.describe Curator::CollectionsController, type: :routing do
 
   let!(:default_format) { :json }
   let!(:default_id) { '1' }
-  let!(:ark_id) { 'commonwealth:abcdef123' }
+  let!(:ark_id) { 'bpl-dev:abcdef123' }
   let!(:default_controller) { 'curator/collections' }
 
   describe 'default routing' do
