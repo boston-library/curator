@@ -338,13 +338,13 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
     let(:desc_obj) { create(:curator_metastreams_descriptive, genre_count: 1) }
     let(:new_publisher) { 'foo' }
 
-    describe 'update' do
-      before(:each) do
-        desc_obj.publisher = new_publisher
-        create(:curator_mappings_desc_term, :specific_genre, descriptive: desc_obj)
-        desc_obj.save!
-      end
+    before(:each) do
+      desc_obj.publisher = new_publisher
+      create(:curator_mappings_desc_term, :specific_genre, descriptive: desc_obj)
+      desc_obj.save!
+    end
 
+    describe 'update' do
       it 'creates a new version' do
         expect(desc_obj.versions.count).to eq 4
         expect(desc_obj.versions.last.reify.publisher).to_not eq new_publisher
@@ -353,15 +353,12 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
 
     describe 'restoring previous version' do
       it 'resets the object to previous state' do
-        @sdfsdfsdfsdf = create(:curator_metastreams_descriptive, genre_count: 1)
-        @sdfsdfsdfsdf.publisher = new_publisher
-        create(:curator_mappings_desc_term, :specific_genre, descriptive: @sdfsdfsdfsdf)
-        @sdfsdfsdfsdf.save!
-        version_to_restore = @sdfsdfsdfsdf.versions[1]
-        @sdfsdfsdfsdf = version_to_restore.reify(has_many: true, has_one: true, belongs_to: true, mark_for_destruction: true)
-        @sdfsdfsdfsdf.save!
-        expect(@sdfsdfsdfsdf.publisher).to_not eq new_publisher
-        expect(@sdfsdfsdfsdf.genres.count).to eq 1
+        version_to_restore = desc_obj.versions[1]
+        restored_obj = version_to_restore.reify(has_many: true, has_one: true, belongs_to: true, mark_for_destruction: true)
+        desc_obj.reload # avoid StaleObject error
+        restored_obj.save!
+        expect(restored_obj.publisher).to_not eq new_publisher
+        expect(restored_obj.genres.count).to eq 1
       end
     end
   end
