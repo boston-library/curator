@@ -335,30 +335,35 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
   it_behaves_like 'versionable'
 
   describe 'Versioning', versioning: true do
-    let(:desc_obj) { create(:curator_metastreams_descriptive, genre_count: 1) }
     let(:new_publisher) { 'foo' }
 
-    before(:each) do
-      desc_obj.publisher = new_publisher
-      create(:curator_mappings_desc_term, :specific_genre, descriptive: desc_obj)
-      desc_obj.save!
-    end
-
     describe 'update' do
+      let(:desc_obj) { create(:curator_metastreams_descriptive, genre_count: 1) }
+
+      before(:each) do
+        desc_obj.publisher = new_publisher
+        desc_obj.save!
+      end
+
       it 'creates a new version' do
-        expect(desc_obj.versions.count).to eq 4
+        expect(desc_obj.versions.count).to eq 3
         expect(desc_obj.versions.last.reify.publisher).to_not eq new_publisher
       end
     end
 
     describe 'restoring previous version' do
       it 'resets the object to previous state' do
-        version_to_restore = desc_obj.versions[1]
-        restored_obj = version_to_restore.reify(has_many: true, has_one: true, belongs_to: true, mark_for_destruction: true)
-        restored_obj.lock_version = desc_obj.lock_version # avoid StaleObject error
-        restored_obj.save!
-        expect(restored_obj.publisher).to_not eq new_publisher
-        expect(restored_obj.genres.count).to eq 1
+        # have to instantiate/modify unique objects here to avoid StaleObject error
+        new_desc_obj = create(:curator_metastreams_descriptive, genre_count: 1)
+        new_desc_obj.publisher = new_publisher
+        create(:curator_mappings_desc_term, :specific_genre, descriptive: new_desc_obj)
+        new_desc_obj.save!
+        current_lock = new_desc_obj.lock_version
+        new_desc_obj = new_desc_obj.versions[1].reify(has_many: true, has_one: true, belongs_to: true, mark_for_destruction: true)
+        new_desc_obj.lock_version = current_lock + 1
+        new_desc_obj.save!
+        expect(new_desc_obj.publisher).to_not eq new_publisher
+        expect(new_desc_obj.genres.count).to eq 1
       end
     end
   end
