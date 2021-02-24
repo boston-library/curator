@@ -355,7 +355,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
       it 'resets the object to previous state' do
         version_to_restore = desc_obj.versions[1]
         restored_obj = version_to_restore.reify(has_many: true, has_one: true, belongs_to: true, mark_for_destruction: true)
-        desc_obj.reload # avoid StaleObject error
+        restored_obj.lock_version = desc_obj.lock_version # avoid StaleObject error
         restored_obj.save!
         expect(restored_obj.publisher).to_not eq new_publisher
         expect(restored_obj.genres.count).to eq 1
