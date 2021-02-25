@@ -29,8 +29,11 @@ RSpec.describe Curator::Configuration do
     describe 'default_ark_params' do
       let(:ark_config) { subject.default_ark_params }
       it 'returns a hash of ark values' do
-        %i(namespace_ark namespace_id url_base).each do |k|
-          expect(ark_config[k]).to eq ENV[k.to_s.upcase]
+        { namespace_ark: 'ARK_NAMESPACE',
+          namespace_id: 'ARK_NAMESPACE_ID',
+          url_base: 'ARK_URL_BASE'
+        }.each do |k, v|
+          expect(ark_config[k]).to eq ENV[v]
         end
       end
     end
