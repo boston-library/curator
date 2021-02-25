@@ -26,7 +26,7 @@ RSpec.shared_examples_for 'mintable', type: :model do
         VCR.use_cassette("services/mintable_#{described_class.name.demodulize.underscore}") do
           expect { subject.valid? }.to change(subject, :ark_id).
           from(nil).
-          to(a_string_starting_with('commonwealth'))
+          to(a_string_starting_with('bpl-dev'))
         end
       end
     end

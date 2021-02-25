@@ -49,8 +49,9 @@ Currently all data models have been created with basic routes and json serialize
 
 4. Check `spec/internal/config/database.yml` and make sure your `postgres` credentials are correct.
 
-5. `cd` into the `spec/internal` directory and run `rails curator:setup` this will run the databse setup scripts for
- you and install active storage.
+5. `cd` into the `spec/internal` directory and:
+    * run `$ rails curator:setup` -- this will run the database setup scripts for you and install ActiveStorage.
+    * run `$ rails generate curator:install` (optional) -- this will add an initializer for customizing `Curator.config` settings
 
 ## Running (for development only)
 Curator requires several additional services:

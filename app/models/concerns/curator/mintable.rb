@@ -4,13 +4,6 @@ module Curator
   module Mintable
     extend ActiveSupport::Concern
 
-    # TODO: Make this configurable with yaml file or in encrypted secrets/envrionment variables
-    DEFAULT_ARK_PARAMS = {
-      namespace_ark: '50959',
-      namespace_id: 'commonwealth',
-      url_base: 'https://digitalcommonwealth.org'
-    }.freeze
-
     included do
       include InstanceMethods
 
@@ -22,7 +15,7 @@ module Curator
 
     module InstanceMethods
       def ark_params
-        DEFAULT_ARK_PARAMS.merge({ model_type: self.class.name })
+        Curator.config.default_ark_params.merge({ model_type: self.class.name })
       end
 
       def generate_ark_id

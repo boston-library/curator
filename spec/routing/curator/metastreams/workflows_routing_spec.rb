@@ -7,7 +7,7 @@ RSpec.describe Curator::Metastreams::WorkflowsController, type: :routing do
 
   let!(:default_format) { :json }
   let!(:default_id) { '1' }
-  let!(:ark_id) { 'commonwealth:abcdef123' }
+  let!(:ark_id) { 'bpl-dev:abcdef123' }
   let!(:default_controller) { 'curator/metastreams/workflows' }
 
   describe 'default routing' do

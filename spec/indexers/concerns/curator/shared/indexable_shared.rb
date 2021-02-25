@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.shared_context 'indexable_shared' do
-  let(:solr_update_url) { "#{ENV['SOLR_URL']}/update/json?softCommit=true" }
+  let(:solr_update_url) { "#{Curator.config.solr_url}/update/json?softCommit=true" }
 
   def body_for_update_request(model)
     [
