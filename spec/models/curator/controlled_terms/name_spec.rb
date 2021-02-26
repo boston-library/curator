@@ -28,6 +28,7 @@ RSpec.describe Curator::ControlledTerms::Name, type: :model do
 
     describe 'Validations' do
       it { is_expected.to validate_presence_of(:label) }
+      it { is_expected.to allow_values(*(Curator::ControlledTerms::Name::VALID_NAME_TYPES)).for(:name_type) }
     end
 
     it 'expects the attributes to have specific types' do
