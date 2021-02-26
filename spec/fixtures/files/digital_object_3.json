@@ -176,7 +176,6 @@
       },
       "administrative": {
         "description_standard": "rda",
-        "flagged": false,
         "destination_site": [
           "commonwealth",
           "bpl",

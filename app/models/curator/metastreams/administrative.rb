@@ -5,6 +5,7 @@ module Curator
     belongs_to :administratable, polymorphic: true, inverse_of: :administrative, touch: true
 
     VALID_DESTINATION_SITES = %w(bpl commonwealth nblmc).freeze
+    VALID_FLAGGED_VALUES = %w(explicit offensive).freeze
 
     enum description_standard: { aacr: 0, cco: 1, dacs: 2, gihc: 3, local: 4, rda: 5, dcrmg: 6, amremm: 7, dcrmb: 8, dcrmc: 9, dcrmmss: 10, appm: 11 }.freeze
     enum hosting_status: { hosted: 0, harvested: 1 }.freeze
@@ -13,6 +14,7 @@ module Curator
     validates :oai_header_id, uniqueness: { allow_nil: true, allow_blank: true }
     validates :administratable_id, uniqueness: { scope: :administratable_type }
     validates :administratable_type, inclusion: { in: Metastreams.valid_base_types + Metastreams.valid_filestream_types }
+    validates :flagged, inclusion: { in: VALID_FLAGGED_VALUES }, allow_nil: true
 
     validate :validate_destination_site
 
