@@ -10,7 +10,7 @@ module Curator
           to_field 'hosting_status_ssi', obj_extract('administrative', 'hosting_status')
           to_field 'harvesting_status_bsi', obj_extract('administrative', 'harvestable')
           to_field 'oai_header_id_ss', obj_extract('administrative', 'oai_header_id')
-          to_field('flagged_content_ssi') { |rec, acc| acc << true if rec.administrative&.flagged }
+          to_field 'flagged_content_ssi', obj_extract('administrative', 'flagged')
         end
       end
     end

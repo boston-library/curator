@@ -7,7 +7,7 @@ FactoryBot.define do
     for_institution
 
     trait :is_flagged do
-      flagged { true }
+      flagged { Curator::Metastreams::Administrative::VALID_FLAGGED_VALUES.sample }
     end
 
     trait :non_havestable do

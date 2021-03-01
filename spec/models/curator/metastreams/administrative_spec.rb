@@ -34,8 +34,7 @@ RSpec.describe Curator::Metastreams::Administrative, type: :model do
                         with_options(default: true) }
 
     it { is_expected.to have_db_column(:flagged).
-                        of_type(:boolean).
-                        with_options(default: false) }
+                        of_type(:string) }
 
     it { is_expected.to have_db_column(:destination_site).
                         of_type(:string).
@@ -65,6 +64,7 @@ RSpec.describe Curator::Metastreams::Administrative, type: :model do
                         scoped_to(:administratable_type) }
 
     it { is_expected.to allow_values(*(Curator::Metastreams.valid_base_types + Curator::Metastreams.valid_filestream_types)).for(:administratable_type) }
+    it { is_expected.to allow_values(*(Curator::Metastreams::Administrative::VALID_FLAGGED_VALUES)).for(:flagged) }
   end
 
   describe 'Default attributes' do
@@ -72,7 +72,6 @@ RSpec.describe Curator::Metastreams::Administrative, type: :model do
 
     it 'is expected to have the following defaults set' do
       expect(default_admin.harvestable).to be(true)
-      expect(default_admin.flagged).to be(false)
       expect(default_admin.destination_site).to be_a_kind_of(Array).and include('commonwealth')
       expect(default_admin.hosting_status).to eq('hosted')
     end

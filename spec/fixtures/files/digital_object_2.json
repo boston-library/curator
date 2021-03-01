@@ -130,7 +130,7 @@
       },
       "administrative": {
         "description_standard": "aacr",
-        "flagged": false,
+        "flagged": "offensive",
         "destination_site": [
           "commonwealth",
           "bpl",

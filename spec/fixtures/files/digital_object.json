@@ -298,7 +298,6 @@
 ,
       "administrative": {
         "description_standard": "amremm",
-        "flagged": false,
         "hosting_status": "hosted",
         "destination_site": [
           "commonwealth",
