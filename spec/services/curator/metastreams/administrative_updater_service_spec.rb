@@ -8,7 +8,7 @@ RSpec.describe Curator::Metastreams::AdministrativeUpdaterService, type: :servic
     @digital_object ||= create(:curator_digital_object, administrative: @administrative)
     @administratable_updated_at = @digital_object.updated_at
     @update_attributes ||= {
-      flagged: false,
+      flagged: 'offensive',
       description_standard: :local,
       harvestable: true,
       destination_site: ['commonwealth', 'bpl']
