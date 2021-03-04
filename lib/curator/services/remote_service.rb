@@ -3,19 +3,7 @@
 module Curator
   module Services
     module RemoteService
-
       extend ActiveSupport::Concern
-
-      # NOTE: do not inherit sub classes from this
-      class RemoteServiceError < Curator::Exceptions::CuratorError
-        attr_reader :json_response, :code
-
-        def initialize(msg = 'Error Occured With RemoteService Client', json_response = {}, code = 500)
-          @json_response = JSON.pretty_generate(json_response)
-          @code = code
-          super(msg)
-        end
-      end
       
       included do
         include Client
@@ -59,6 +47,23 @@ module Curator
               HTTP.timeout(timeout_options)
                   .persistent(base_uri.normalize.to_s)
             end
+          end
+        end
+      end
+
+      class_methods do
+        def ready?
+          # TODO: remove line below once remote services are containerized for CI builds
+          return true if ENV.fetch('RAILS_ENV', 'development') == 'test'
+
+          begin
+            with_client do |client|
+              resp = client.head(base_url)
+              resp.status == 200 ? true : false
+            end
+          rescue StandardError => e
+            Rails.logger.error "Error: BPLDC Authority API is not available: #{e}"
+            false
           end
         end
       end

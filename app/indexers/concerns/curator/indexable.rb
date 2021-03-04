@@ -63,13 +63,14 @@ module Curator
     # By default will use:
     #  - curator_indexable_mapper
     #  - a per-update writer, or thread/block-specific writer configured with `self.index_with`
-    def update_index(mapper: curator_indexable_mapper, writer:nil)
+    def update_index(mapper: curator_indexable_mapper, writer: nil)
       RecordIndexUpdater.new(self, mapper: mapper, writer: writer).update_index
     end
 
-    # make sure indexing service is ready before we commit transactions and :update_index
+    # make sure indexing and authority services are ready before we commit transactions and :update_index
     def indexer_health_check
-      raise Curator::Exceptions::CuratorError, 'Indexing service is not ready!' unless SolrUtil.solr_ready?
+      raise Curator::Exceptions::SolrUnavailable unless SolrUtil.ready?
+      raise Curator::Exceptions::AuthorityApiUnavailable unless Curator::ControlledTerms::AuthorityService.ready?
     end
   end
 end
