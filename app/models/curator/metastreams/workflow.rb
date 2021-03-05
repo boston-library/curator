@@ -94,7 +94,7 @@ module Curator
     def generate_derivatives
       return if workflowable_type != 'Curator::Filestreams::FileSet'
 
-      Curator::Filestreams::DerivativesJob.perform_later(self.class.name, id)
+      Curator::Filestreams::DerivativesJob.perform_later(self)
     end
   end
 end

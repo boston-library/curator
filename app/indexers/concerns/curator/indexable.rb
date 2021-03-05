@@ -54,9 +54,8 @@ module Curator
       class_attribute :curator_indexable_auto_callbacks, default: true
 
       after_save :indexer_health_check
-
-      # runs after new, update, destroy, etc.
-      after_commit :update_index, if: -> { Curator::Indexable.auto_callbacks?(self) }
+      after_save_commit :queue_indexing_job, if: -> { Curator::Indexable.auto_callbacks?(self) }
+      after_destroy_commit :queue_deletion_job, if: -> { Curator::Indexable.auto_callbacks?(self) }
     end
 
     # Update the Solr index for this object -- may add or remove from index depending on state.
@@ -71,6 +70,14 @@ module Curator
     def indexer_health_check
       raise Curator::Exceptions::SolrUnavailable unless SolrUtil.ready?
       raise Curator::Exceptions::AuthorityApiUnavailable unless Curator::ControlledTerms::AuthorityService.ready?
+    end
+
+    def queue_indexing_job
+      Curator::Indexer::IndexingJob.perform_later(self)
+    end
+
+    def queue_deletion_job
+      Curator::Indexer::DeletionJob.perform_later(self.ark_id)
     end
   end
 end
