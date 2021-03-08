@@ -54,6 +54,7 @@ module Curator
       class_methods do
         def ready?
           # TODO: remove line below once remote services are containerized for CI builds
+          # until then, we need this or tons of specs will fail, too many for VCR
           return true if ENV.fetch('RAILS_ENV', 'development') == 'test'
 
           begin

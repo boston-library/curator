@@ -77,7 +77,7 @@ module Curator
     end
 
     def queue_deletion_job
-      Curator::Indexer::DeletionJob.perform_later(self.ark_id)
+      Curator::Indexer::DeletionJob.perform_later(ark_id)
     end
   end
 end
