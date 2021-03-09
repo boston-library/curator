@@ -38,22 +38,13 @@ RSpec.describe Curator::Indexable do
   describe '#update_index' do
     before(:each) { stub_request(:post, solr_update_url) }
 
-    describe 'called on save' do
+    describe 'called directly on object' do
       it 'makes an update request to the solr_url' do
         inst_to_update = @indexable_object.clone
         inst_to_update.curator_indexable_mapper = Curator::Indexer.new
-        inst_to_update.save!
+        inst_to_update.update_index
         assert_requested :post, solr_update_url,
                          body: body_for_update_request(inst_to_update)
-      end
-    end
-
-    describe 'called on delete' do
-      it 'makes a delete request to the solr_url' do
-        inst_to_delete = create(:curator_institution)
-        inst_to_delete.destroy!
-        assert_requested :post, solr_update_url,
-                         body: { 'delete' => inst_to_delete.ark_id }.to_json
       end
     end
   end
@@ -65,11 +56,42 @@ RSpec.describe Curator::Indexable do
       end.not_to raise_error
     end
 
-    it 'throws a CuratorError if the indexing service is not available' do
+    it 'throws SolrUnavailable if the indexing service is not available' do
       ClimateControl.modify SOLR_URL: 'http://127.0.0.1:9999/solr/wrong' do
         expect do
           @indexable_object.indexer_health_check
-        end.to raise_error(Curator::Exceptions::CuratorError)
+        end.to raise_error(Curator::Exceptions::SolrUnavailable)
+      end
+    end
+
+    # TODO: change ClimateControl.modify to change AUTHORITY_API_URL
+    # once remote services are containerized for CI build
+    # Curator::Services::AuthorityService.ready? always returns true when RAILS_ENV = 'test'
+    it 'throws AuthorityApiUnavailable if the authority service is not available' do
+      ClimateControl.modify RAILS_ENV: 'development' do
+        expect do
+          @indexable_object.indexer_health_check
+        end.to raise_error(Curator::Exceptions::AuthorityApiUnavailable)
+      end
+    end
+  end
+
+  describe 'background jobs' do
+    before(:each) do
+      ActiveJob::Base.queue_adapter = :test
+    end
+
+    describe '#queue_indexing_job' do
+      it 'enqueues the IndexingJob' do
+        @indexable_object.queue_indexing_job
+        expect(Curator::Indexer::IndexingJob).to have_been_enqueued
+      end
+    end
+
+    describe '#queue_deletion_job' do
+      it 'enqueues the DeletionJob' do
+        @indexable_object.queue_deletion_job
+        expect(Curator::Indexer::DeletionJob).to have_been_enqueued
       end
     end
   end

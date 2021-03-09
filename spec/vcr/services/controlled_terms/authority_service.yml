@@ -1,0 +1,71 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/bpldc/authorities
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/4.4.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"4ec7f7e60a0f71681c0efa4ce7b45f1f"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 79a078bc-33ed-4b52-a8bb-d947f32202f5
+      X-Runtime:
+      - '0.706115'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '[{"name":"Art and Architecture Thesaurus","code":"aat","base_url":"http://vocab.getty.edu/aat"},{"name":"GeoNames","code":"geonames","base_url":"http://sws.geonames.org"},{"name":"Thesaurus
+        for Graphic Materials","code":"gmgpc","base_url":"http://id.loc.gov/vocabulary/graphicMaterials"},{"name":"ISO639-2
+        Languages","code":"iso639-2","base_url":"http://id.loc.gov/vocabulary/iso639-2"},{"name":"Library
+        of Congress Genre/Form Terms","code":"lcgft","base_url":"http://id.loc.gov/authorities/genreForms"},{"name":"Thesaurus
+        for Graphic Materials","code":"lctgm","base_url":"http://id.loc.gov/vocabulary/graphicMaterials"},{"name":"Library
+        of Congress Subject Headings","code":"lcsh","base_url":"http://id.loc.gov/authorities/subjects"},{"name":"local","code":"local"},{"name":"Library
+        of Congress Name Authority File","code":"naf","base_url":"http://id.loc.gov/authorities/names"},{"name":"MARC
+        genre terms","code":"marcgt","base_url":"http://id.loc.gov/vocabulary/genreFormSchemes/marcgt"},{"name":"MARC
+        Relators Scheme","code":"marcrelator","base_url":"http://id.loc.gov/vocabulary/relators"},{"name":"RBMS
+        Controlled Vocabularies: Binding Terms","code":"rbbin","base_url":"http://id.loc.gov/vocabulary/genreFormSchemes/rbbin"},{"name":"RBMS
+        Controlled Vocabularies: Genre Terms","code":"rbgenr","base_url":"http://id.loc.gov/vocabulary/genreFormSchemes/rbgenr"},{"name":"RBMS
+        Controlled Vocabularies: Paper Terms","code":"rbpap","base_url":"http://id.loc.gov/vocabulary/genreFormSchemes/rbpap"},{"name":"RBMS
+        Controlled Vocabularies: Printing \u0026 Publishing Evidence","code":"rbpri","base_url":"http://id.loc.gov/vocabulary/genreFormSchemes/rbpri"},{"name":"RBMS
+        Controlled Vocabularies: Provenance Evidence","code":"rbprov","base_url":"http://id.loc.gov/vocabulary/genreFormSchemes/rbprov"},{"name":"RBMS
+        Controlled Vocabularies: Printing \u0026 Publishing Evidence","code":"rbpub","base_url":"http://id.loc.gov/vocabulary/genreFormSchemes/rbpub"},{"name":"RBMS
+        Controlled Vocabularies: Type Evidence","code":"rbtyp","base_url":"http://id.loc.gov/vocabulary/genreFormSchemes/rbtyp"},{"name":"Resource
+        Types Scheme","code":"resourceTypes","base_url":"http://id.loc.gov/vocabulary/resourceTypes"},{"name":"Thesaurus
+        of Geographic Names","code":"tgn","base_url":"http://vocab.getty.edu/tgn"},{"name":"Getty
+        Union List of Artist Names","code":"ulan","base_url":"http://vocab.getty.edu/ulan"}]'
+  recorded_at: Fri, 05 Mar 2021 22:37:00 GMT
+recorded_with: VCR 6.0.0

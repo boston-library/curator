@@ -28,7 +28,7 @@ module Curator
       rescue Oj::Error => e
         Rails.logger.error "Error Parsing Json For Authority at #{@request_uri}"
         Rails.logger.error "Reason #{e.message}"
-      rescue RemoteServiceError => e
+      rescue Curator::Exceptions::RemoteServiceError => e
         Rails.logger.error "Error Retreiving Json For Authority at #{@request_uri}"
         Rails.logger.error "Reason #{e.message}"
       end
@@ -38,12 +38,10 @@ module Curator
     protected
 
     def fetch_auth_data(client)
-      resp = client.headers(self.class.default_headers).
-                    get(request_uri.to_s)
-
+      resp = client.headers(self.class.default_headers).get(request_uri.to_s)
       json_response = Oj.load(resp.body.to_s)
-
-      raise RemoteServiceError.new('Failed to retreive data from bpldc_auth_api!', json_response, resp.status) if !resp.status.success?
+      raise Curator::Exceptions::RemoteServiceError.new('Failed to retrieve data from bpldc_auth_api!',
+                                                        json_response, resp.status) if !resp.status.success?
 
       json_response
     end

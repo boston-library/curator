@@ -36,4 +36,22 @@ RSpec.describe Curator::Exceptions do
       end
     end
   end
+
+  describe 'remote_service_errors' do
+    %i(SolrUnavailable AuthorityApiUnavailable RemoteServiceError).each do |remote_error_const|
+      it { is_expected.to be_const_defined(remote_error_const) }
+
+      describe "Curator::Exception::#{remote_error_const}" do
+        subject { described_class.const_get(remote_error_const) }
+
+        specify { expect(subject).to be <= Curator::Exceptions::CuratorError }
+      end
+    end
+
+    describe 'Curator::Exceptions::RemoteServiceError' do
+      subject { Curator::Exceptions::RemoteServiceError.new }
+
+      it { is_expected.to respond_to(:json_response, :code) }
+    end
+  end
 end

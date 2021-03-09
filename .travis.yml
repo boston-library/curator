@@ -35,4 +35,4 @@ env:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
     - CI=true
   jobs:
-    - "RAILS_VERSION=6.1.1"
+    - "RAILS_VERSION=6.1.3"
