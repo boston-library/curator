@@ -26,10 +26,7 @@ module Curator
           build_workflow(file_set) do |workflow|
             workflow.send('ingest_origin=', @workflow_json_attrs.fetch(:ingest_origin, ENV['HOME'].to_s))
             processing_state = @workflow_json_attrs.fetch(:processing_state, nil)
-            publishing_state = obj&.workflow&.publishing_state
-            # set publishing state to same value as parent DigitalObject
             workflow.send('processing_state=', processing_state) if processing_state
-            workflow.send('publishing_state=', publishing_state) if publishing_state
           end
 
           # TODO: set access_edit_group permissions
