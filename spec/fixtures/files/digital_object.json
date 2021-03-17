@@ -4,15 +4,15 @@
     "created_at": "2019-05-20T14:46:08.240Z",
     "updated_at": "2019-05-20T14:51:03.796Z",
     "admin_set": {
-      "ark_id": "commonwealth:987654321"
+      "ark_id": "bpl-dev:987654321"
     },
     "is_member_of_collection": [
       {
-        "ark_id": "commonwealth:987654321"
+        "ark_id": "bpl-dev:987654321"
       }
     ],
     "contained_by": {
-      "ark_id": "commonwealth:zyxwvutsr"
+      "ark_id": "bpl-dev:zyxwvutsr"
     },
     "metastreams": {
       "descriptive": {
@@ -306,7 +306,7 @@
         "harvestable": true,
         "access_edit_group": [
           "superuser",
-          "admin[commonwealth:ijkl54321]"
+          "admin[bpl-dev:ijkl54321]"
         ]
       },
       "workflow": {

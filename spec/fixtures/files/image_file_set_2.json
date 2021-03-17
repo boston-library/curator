@@ -1,7 +1,7 @@
 {
   "file_set": {
     "file_set_of": {
-      "ark_id": "commonwealth:abcdefghi"
+      "ark_id": "bpl-dev:abcdefghi"
     },
     "position": 0,
     "file_set_type": "image",
@@ -15,7 +15,7 @@
       "administrative": {
         "access_edit_group": [
           "superuser",
-          "admin[commonwealth:ijkl54321]"
+          "admin[bpl-dev:ijkl54321]"
         ]
       },
       "workflow": {
