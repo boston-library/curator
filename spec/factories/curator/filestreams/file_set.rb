@@ -14,8 +14,13 @@ FactoryBot.define do
       workflow { nil }
 
       after :build do |file_set|
-        file_set.administrative = build(:curator_metastreams_administrative, administratable: file_set) if file_set.administrative.blank?
-        file_set.workflow = build(:curator_metastreams_workflow, workflowable: file_set) if file_set.workflow.blank?
+        file_set.administrative = build(:curator_metastreams_administrative,
+                                        :for_file_set,
+                                        administratable: file_set) if file_set.administrative.blank?
+
+        file_set.workflow = build(:curator_metastreams_workflow,
+                                  :for_file_set,
+                                  workflowable: file_set) if file_set.workflow.blank?
       end
     end
   end

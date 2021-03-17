@@ -27,7 +27,7 @@ RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: f
 
     describe "#show", if: has_member_methods do
       context 'with :id' do
-        it "returns a sucessful response" do
+        it "returns a successful response" do
           id_params = params.dup
           id_params[:id] ||= resource.to_param
 

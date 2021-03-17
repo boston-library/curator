@@ -13,8 +13,13 @@ FactoryBot.define do
       workflow { nil }
 
       after :build do |collection|
-        collection.administrative = build(:curator_metastreams_administrative, administratable: collection) if collection.administrative.blank?
-        collection.workflow = build(:curator_metastreams_workflow, workflowable: collection) if collection.workflow.blank?
+        collection.administrative = build(:curator_metastreams_administrative,
+                                          :for_collection,
+                                          administratable: collection) if collection.administrative.blank?
+
+        collection.workflow = build(:curator_metastreams_workflow,
+                                    :for_collection,
+                                    workflowable: collection) if collection.workflow.blank?
       end
     end
   end
