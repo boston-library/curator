@@ -18,7 +18,7 @@ RSpec.describe Curator::Indexer::WorkflowIndexer do
     end
 
     it 'sets the processing_state field' do
-      expect(indexed['processing_state_ssi']).to eq [workflow.processing_state]
+      expect(indexed['processing_state_ssi']).to eq workflow.processing_state
     end
   end
 end

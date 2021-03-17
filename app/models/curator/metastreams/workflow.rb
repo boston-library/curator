@@ -22,37 +22,39 @@ module Curator
 
     validates :ingest_origin, presence: true
 
-    validates :publishing_state, inclusion: { in: publishing_states.keys }
-    validates :processing_state, inclusion: { in: processing_states.keys }
+    validates :publishing_state, inclusion: { in: publishing_states.keys }, allow_nil: true, if: :is_publishable?
+    validates :processing_state, inclusion: { in: processing_states.keys }, allow_nil: true, if: :is_processable?
 
     validates :workflowable_id, uniqueness: { scope: :workflowable_type }, on: :create
 
     validates :workflowable_type, inclusion: { in: Metastreams.valid_base_types + Metastreams.valid_filestream_types }, on: :create
 
     aasm(:publishing_state, column: :publishing_state, enum: true) do
-      state :draft, initial: true
+      state :not_set # returns nil value
+      state :draft
       state :review
       state :published
+      initial_state proc { |w| w.is_publishable? ? :draft : :not_set }
 
       event :start_review, guard: :should_review? do
         transitions from: :draft, to: :review
       end
 
-      event :publish, binding_event: :process_derivatives do
+      event :publish do
         transitions from: :draft, to: :published, guard: :is_publishable?
-        transitions from: :draft, to: :draft
       end
     end
 
     aasm(:processing_state, column: :processing_state, enum: true) do
-      state :initialized, initial: true
+      state :not_set # returns nil value
+      state :initialized
       state :derivatives
       state :complete
+      initial_state proc { |w| w.is_processable? ? :initialized : :not_set }
 
-      event :process_derivatives do
-        transitions from: :initialized, to: :complete, guard: :can_complete?
-        transitions from: :initialized, to: :derivatives, after_commit: :process_derivatives, guard: :is_processable?
-        transitions from: :initialized, to: :initialized
+      event :process_derivatives, guards: [:is_processable?] do
+        transitions from: :derivatives, to: :complete, guards: [:can_complete?]
+        transitions from: :initialized, to: :derivatives, after_commit: :generate_derivatives
       end
 
       event :mark_complete, guard: :can_complete? do
@@ -60,9 +62,7 @@ module Curator
       end
     end
 
-    has_paper_trail if: proc { |w| [Curator.digital_object_class.name, Curator::Filestreams::FileSet.name].include?(w.workflowable_type) }
-
-    protected
+    has_paper_trail if: proc { |w| w.is_processable? }
 
     ## START GUARD CLAUSES
     def is_processable?
@@ -72,6 +72,8 @@ module Curator
     def is_publishable?
       PUBLISHABLE_CLASSES.include?(workflowable_type)
     end
+
+    protected
 
     def should_review?
       false

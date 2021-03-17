@@ -20,9 +20,18 @@ FactoryBot.define do
       workflow { nil }
 
       after :build do |digital_object, options|
-        digital_object.administrative = build(:curator_metastreams_administrative, administratable: digital_object) if digital_object.administrative.blank?
-        digital_object.descriptive = build(:curator_metastreams_descriptive, :with_all_desc_terms, desc_term_count: options.desc_term_count, digital_object: digital_object) if digital_object.descriptive.blank?
-        digital_object.workflow = build(:curator_metastreams_workflow, workflowable: digital_object) if digital_object.workflow.blank?
+        digital_object.administrative = build(:curator_metastreams_administrative,
+                                              :for_object,
+                                              administratable: digital_object) if digital_object.administrative.blank?
+
+        digital_object.descriptive = build(:curator_metastreams_descriptive,
+                                           :with_all_desc_terms,
+                                           desc_term_count: options.desc_term_count,
+                                           digital_object: digital_object) if digital_object.descriptive.blank?
+
+        digital_object.workflow = build(:curator_metastreams_workflow,
+                                        :for_digital_object,
+                                        workflowable: digital_object) if digital_object.workflow.blank?
       end
     end
   end

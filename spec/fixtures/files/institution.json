@@ -1,6 +1,6 @@
 {
   "institution": {
-    "ark_id": "commonwealth:123456789",
+    "ark_id": "bpl-dev:123456789",
     "created_at": "2019-05-20T14:46:08.240Z",
     "updated_at": "2019-05-20T14:51:03.796Z",
     "name": "Boston Public Library",
@@ -20,7 +20,7 @@
         ],
         "access_edit_group": [
           "superuser",
-          "admin[commonwealth:abcd12345]"
+          "admin[bpl-dev:abcd12345]"
         ]
       },
       "workflow": {

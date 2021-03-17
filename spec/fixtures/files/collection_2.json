@@ -23,8 +23,7 @@
         ]
       },
       "workflow": {
-        "publishing_state": "published",
-        "processing_state": "complete"
+        "publishing_state": "published"
       }
     }
   }

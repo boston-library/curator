@@ -14,7 +14,6 @@ RSpec.describe Curator::Filestreams::FileSetFactoryService, type: :service do
     @file_set_json['file_set_of']['ark_id'] = parent_obj.ark_id
     @file_set_json['exemplary_image_of'][0]['ark_id'] = parent_obj.ark_id
     @file_set_json['exemplary_image_of'][1]['ark_id'] = parent_col.ark_id
-    @file_set_json['metastreams']['workflow']['publishing_state'] = parent_obj.workflow.publishing_state
     @files_json[0]['metadata']['ingest_filepath'] = file_fixture('image_thumbnail_300.jpg').to_s
     @file_set_json['files'] = @files_json
     expect do

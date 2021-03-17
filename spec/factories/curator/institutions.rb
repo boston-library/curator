@@ -24,8 +24,13 @@ FactoryBot.define do
       workflow { nil }
 
       after :build do |institution|
-        institution.administrative = build(:curator_metastreams_administrative, administratable: institution) if institution.administrative.blank?
-        institution.workflow = build(:curator_metastreams_workflow, workflowable: institution) if institution.workflow.blank?
+        institution.administrative = build(:curator_metastreams_administrative,
+                                           :for_institution,
+                                           administratable: institution) if institution.administrative.blank?
+
+        institution.workflow = build(:curator_metastreams_workflow,
+                                     :for_institution,
+                                     workflowable: institution) if institution.workflow.blank?
       end
     end
 

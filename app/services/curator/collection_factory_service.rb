@@ -18,7 +18,7 @@ module Curator
             [:ingest_origin].each do |attr|
               workflow.send("#{attr}=", @workflow_json_attrs.fetch(attr, ENV['HOME'].to_s))
             end
-            [:processing_state, :publishing_state].each do |attr|
+            [:publishing_state].each do |attr|
               workflow.send("#{attr}=", @workflow_json_attrs.fetch(attr)) if @workflow_json_attrs.fetch(attr, nil).present?
             end
           end
