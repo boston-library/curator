@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :curator_descriptives_related, class: 'Curator::DescriptiveFieldSets::Related' do
     constituent { Faker::Name.name_with_middle }
     other_format { Array.new(2) { Faker::Lorem.word } }
-    referenced_by_url { Array.new(2) { Faker::Internet.url(host: 'nrs.harvard.edu') } }
+    referenced_by { create_list(:curator_descriptives_referenced_by, 2) }
     references_url { Array.new(2) { Faker::Internet.url } }
     review_url { Array.new(2) { Faker::Internet.url(host: 'bpl.org') } }
     skip_create

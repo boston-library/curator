@@ -8,11 +8,12 @@ RSpec.describe Curator::DescriptiveFieldSets::Related, type: :model do
   it_behaves_like 'field_set_base'
 
   describe 'attributes' do
-    it { is_expected.to respond_to(:constituent, :other_format, :referenced_by_url, :references_url, :review_url) }
+    it { is_expected.to respond_to(:constituent, :other_format, :referenced_by, :references_url, :review_url) }
 
     describe 'attr_json settings' do
-      let(:array_string_fields) { %i(other_format referenced_by_url references_url review_url) }
+      let(:array_string_fields) { %i(other_format references_url review_url) }
       let(:array_string_types) { array_string_fields.map { |str_type| described_class.attr_json_registry.fetch(str_type, nil)&.type } }
+      let(:referenced_by_type) { described_class.attr_json_registry.fetch(:referenced_by, nil)&.type }
 
       it 'expects the attributes to have the following types' do
         expect(described_class.attr_json_registry.fetch(:constituent, nil)&.type).to be_a_kind_of(ActiveModel::Type::String)
@@ -20,6 +21,8 @@ RSpec.describe Curator::DescriptiveFieldSets::Related, type: :model do
           expect(str_type).to be_a_kind_of(AttrJson::Type::Array)
           expect(str_type&.base_type).to be_a_kind_of(ActiveModel::Type::String)
         end
+        expect(referenced_by_type).to be_a_kind_of(AttrJson::Type::Array)
+        expect(referenced_by_type&.base_type&.model).to be(Curator::DescriptiveFieldSets::ReferencedBy)
       end
 
       it 'expects the attributes to have types that match values' do
@@ -27,6 +30,7 @@ RSpec.describe Curator::DescriptiveFieldSets::Related, type: :model do
         array_string_fields.each do |str_type|
           expect(subject.public_send(str_type)).to be_a_kind_of(Array).and all(be_an_instance_of(String))
         end
+        expect(subject.referenced_by).to be_a_kind_of(Array).and all(be_an_instance_of(Curator::DescriptiveFieldSets::ReferencedBy))
       end
     end
   end

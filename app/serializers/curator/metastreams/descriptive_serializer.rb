@@ -42,7 +42,11 @@ module Curator
       end
 
       node :related, target: :key do
-        attributes :constituent, :other_format, :referenced_by_url, :references_url, :review_url
+        attributes :constituent, :other_format, :references_url, :review_url
+
+        node :referenced_by, target: :key do
+          attributes :label, :url
+        end
       end
 
       node :publication, target: :key do

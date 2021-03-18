@@ -48,7 +48,7 @@ RSpec.describe Curator::Indexer::RelatedItemIndexer do
     end
 
     it 'sets the related_item_isreferencedby field' do
-      expect(indexed['related_item_isreferencedby_ssm']).to eq descriptive.related.referenced_by_url
+      expect(indexed['related_item_isreferencedby_ssm'].first).to eq descriptive.related.referenced_by.first.to_json
     end
   end
 end

@@ -141,7 +141,8 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
         let(:related_json) { desc_json['related'] }
         it 'sets related data' do
           expect(related).to be_an_instance_of(Curator::DescriptiveFieldSets::Related)
-          expect(related.referenced_by_url).to eq related_json['referenced_by_url']
+          expect(related.referenced_by.first).to be_an_instance_of(Curator::DescriptiveFieldSets::ReferencedBy)
+          expect(collection_as_json(related.referenced_by)).to eq related_json['referenced_by']
           expect(related.constituent).to eq related_json['constituent']
           expect(related.references_url).to eq related_json['references_url']
           expect(related.other_format).to eq related_json['other_format']
