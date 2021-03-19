@@ -58,9 +58,10 @@ module Curator
       def related(json_attrs = {})
         related_hash = {}
         related_attrs = json_attrs.fetch(:related, {})
-        %i(constituent referenced_by_url references_url other_format review_url).each do |k|
+        %i(constituent references_url other_format review_url).each do |k|
           related_hash[k] = related_attrs.fetch(k, nil)
         end
+        related_hash[:referenced_by] = related_attrs.fetch(:referenced_by, []).map { |rb_attrs| referenced_by_attr(rb_attrs) }
         DescriptiveFieldSets::Related.new(related_hash)
       end
 
@@ -101,6 +102,10 @@ module Curator
           nomenclature_class: Curator.controlled_terms.rights_statement_class,
           term_data: rights_statement_term_data
         )
+      end
+
+      def referenced_by_attr(json_attrs = {})
+        DescriptiveFieldSets::ReferencedBy.new(json_attrs)
       end
     end
   end

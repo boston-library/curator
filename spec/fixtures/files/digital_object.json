@@ -266,9 +266,14 @@
         "physical_location_department": "Rare Books Department",
         "physical_location_shelf_locator": "Box 27, Folder 3",
         "related": {
-          "referenced_by_url": [
-            "http://nrs.harvard.edu/urn-3:HLS.Libr:law00030",
-            "http://abcd.efg"
+          "referenced_by": [
+            {
+              "label": "Sacco-Vanzetti case records",
+              "url": "http://nrs.harvard.edu/urn-3:HLS.Libr:law00030"
+            },
+            {
+              "url": "http://abcd.efg"
+            }
           ],
           "constituent": "Constituency",
           "references_url": [

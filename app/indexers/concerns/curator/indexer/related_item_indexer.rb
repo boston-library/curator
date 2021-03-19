@@ -13,7 +13,7 @@ module Curator
           to_field %w(related_item_subseries_ti related_item_subseries_ssi), obj_extract('descriptive', 'subseries')
           to_field %w(related_item_subsubseries_ti related_item_subsubseries_ssi), obj_extract('descriptive', 'subsubseries')
           to_field 'related_item_constituent_tsim', obj_extract('descriptive', 'related', 'constituent')
-          to_field 'related_item_isreferencedby_ssm', obj_extract('descriptive', 'related', 'referenced_by_url')
+          to_field 'related_item_isreferencedby_ssm', obj_extract('descriptive', 'related', 'referenced_by', 'to_json')
         end
       end
     end

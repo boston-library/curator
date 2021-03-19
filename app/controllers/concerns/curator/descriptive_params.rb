@@ -46,7 +46,7 @@ module Curator
         note: [:label, :type],
         physical_location: [:authority_code, :id_from_auth, :label, :affiliation, :name_type],
         publication: [:edition_name, :edition_number, :volume, :issue_number],
-        related: [:constituent, referenced_by_url: [], references_url: [], other_format: [], review_url: []],
+        related: [:constituent, referenced_by: [:label, :url], references_url: [], other_format: [], review_url: []],
         resource_types: [:label, :authority_code, :id_from_auth],
         rights_statement: [:label, :uri],
         subject: [topics: [:label, :authority_code, :id_from_auth], names: [:label, :name_type, :authority_code, :id_from_auth, :affiliation], geos: [:label, :authority_code, :id_from_auth, :coordinates, :bounding_box, :area_type], titles: [:label, :id_from_auth, :subtitle, :authority_code, :display, :display_label, :usage, :supplied, :language, :type, :part_number, :part_name], temporals: [], dates: []],
