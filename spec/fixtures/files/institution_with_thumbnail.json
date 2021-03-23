@@ -1,0 +1,43 @@
+{
+  "institution": {
+    "ark_id": "bpl-dev:d5eg75hg0",
+    "created_at": "2020-06-22T14:46:08.240Z",
+    "updated_at": "2020-06-23T14:51:03.796Z",
+    "name": "Roslindale Community Library",
+    "abstract": "Lorem ipsum whatever.",
+    "url": "https://www.rcl.org",
+    "location": {
+      "label": "Roslindale",
+      "authority_code": "tgn",
+      "id_from_auth": "1005467",
+      "coordinates": "42.2833,-71.1167"
+    },
+    "metastreams": {
+      "administrative": {
+        "destination_site": [
+          "commonwealth"
+        ],
+        "access_edit_group": [
+          "superuser",
+          "admin[bpl-dev:d5eg75hg0]"
+        ]
+      },
+      "workflow": {
+        "ingest_origin": "RoslindaleCommunityLibrary_Batch1-MODS.xls",
+        "publishing_state": "published"
+      }
+    },
+    "files": [
+      {
+        "file_name": "image_thumbnail_300_institution.png",
+        "file_type": "ImageThumbnail300",
+        "content_type": "image/png",
+        "byte_size": 11475,
+        "checksum": "3ea351df3cb8b0ca4c5361727e191d0b",
+        "metadata": {
+          "ingest_filepath": "curator/spec/fixtures/files/image_thumbnail_300_institution.png"
+        }
+      }
+    ]
+  }
+}

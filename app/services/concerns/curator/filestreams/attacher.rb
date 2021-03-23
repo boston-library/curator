@@ -17,21 +17,21 @@ module Curator
       module InstanceMethods
         protected
 
-        def attach_files!(file_set)
+        def attach_files!(record)
           files = @json_attrs.fetch('files', [])
 
           return if files.blank?
 
           attachments = files.group_by { |file_hash| file_hash['file_type'].underscore }
 
-          file_set_attachments.each do |attachment_type|
+          record_attachments(record).each do |attachment_type|
             next if !attachments.key?(attachment_type)
 
-            attach_group!(file_set, attachment_type, attachments[attachment_type])
+            attach_group!(record, attachment_type, attachments[attachment_type])
           end
         end
 
-        def attach_group!(file_set, attachment_type, attachments = [])
+        def attach_group!(record, attachment_type, attachments = [])
           return if attachments.blank?
 
           attachments.each do |attachment|
@@ -44,7 +44,7 @@ module Curator
             attachable = build_attachable(attributes, io_hash)
             check_file_fixity!(attachable, attributes['byte_size'], attributes['checksum'])
 
-            file_set.public_send(attachment_type).attach(attachable)
+            record.public_send(attachment_type).attach(attachable)
           end
         end
 
@@ -93,8 +93,8 @@ module Curator
           ).tap { |blob| blob.upload_without_unfurling(io) }
         end
 
-        def file_set_attachments
-          file_set_class.attachment_reflections.keys
+        def record_attachments(record)
+          record.class.attachment_reflections.keys
         end
       end
     end
