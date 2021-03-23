@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 require_relative '../shared/factory_service_metastreams_shared'
-require_relative '../shared/filestreams/attachable'
+require_relative '../shared/attachable'
 
 RSpec.describe Curator::Filestreams::FileSetFactoryService, type: :service do
   before(:all) do
@@ -29,7 +29,10 @@ RSpec.describe Curator::Filestreams::FileSetFactoryService, type: :service do
 
     let(:file_set_type) { @file_set_json['file_set_type'] }
 
-    it_behaves_like 'attachable'
+    it_behaves_like 'attachable' do
+      let(:record) { @file_set }
+      let(:file_json) { @files_json.first }
+    end
 
     it 'has the correct properties' do
       %w(ark_id position file_name_base pagination).each do |attr|

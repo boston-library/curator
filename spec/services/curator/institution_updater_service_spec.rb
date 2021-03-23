@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative './shared/attachable'
 
 RSpec.describe Curator::InstitutionUpdaterService, type: :service do
   before(:all) do
     @institution ||= create(:curator_institution)
     @host_collection_to_remove ||= create(:curator_mappings_host_collection, institution: @institution)
     @location ||= create(:curator_controlled_terms_geographic)
+    @files_json ||= load_json_fixture('image_file_3', 'files')
+    @files_json[0]['metadata']['ingest_filepath'] = file_fixture('image_thumbnail_300_2.jpg').to_s
+
     @thumbnail_path ||= file_fixture('image_thumbnail_300.jpg')
     @update_attributes ||= {
       abstract: "#{@institution.abstract} [UPDATED]",
       url: Faker::Internet.unique.url(host: "#{@institution.name.downcase.split(' ').join('-')}-updated-institution.org"),
-      image_thumbnail_300: {
-        io: File.open(@thumbnail_path.to_s, 'rb'),
-        filename: @thumbnail_path.basename.to_s
-      },
       location: {
         label: @location.label,
         id_from_auth: @location.id_from_auth,
@@ -26,11 +26,11 @@ RSpec.describe Curator::InstitutionUpdaterService, type: :service do
         { name: 'Host Collection One' },
         { name: 'Host Collection Two' },
         { id: @host_collection_to_remove.id, _destroy: '1' }
-      ]
+      ],
+      files: @files_json
     }
-    VCR.use_cassette('services/institutions/update') do
-      @success, @result = described_class.call(@institution, json_data: @update_attributes)
-    end
+
+    @success, @result = described_class.call(@institution, json_data: @update_attributes)
   end
 
   describe '#call' do
@@ -48,12 +48,6 @@ RSpec.describe Curator::InstitutionUpdaterService, type: :service do
         end
       end
 
-      it 'expects there to be an updated #image_thumbnail_300' do
-        expect(subject.image_thumbnail_300).to be_valid.and be_attached
-        expect(subject.image_thumbnail_300.filename).to eq(@update_attributes[:image_thumbnail_300][:filename])
-        expect(subject.image_thumbnail_300.content_type).to eq('image/jpeg')
-      end
-
       it 'expects the #location to have been updated' do
         expect(subject.location).to be_valid
         [:label, :id_from_auth, :coordinates, :authority_code, :area_type].each do |loc_attr|
@@ -66,6 +60,11 @@ RSpec.describe Curator::InstitutionUpdaterService, type: :service do
         expect(subject.host_collections.pluck(:name)).to include('Host Collection One', 'Host Collection Two')
         expect(subject.host_collections.pluck(:name)).not_to include(@host_collection_to_remove.name)
       end
+    end
+
+    it_behaves_like 'attachable' do
+      let(:record) { @result }
+      let(:file_json) { @files_json.first }
     end
   end
 end
