@@ -1,13 +1,10 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples 'attachable', type: :service do
-  specify { expect(@file_set).to be_a_kind_of(Curator::Filestreams::FileSet) }
-  specify { expect(@file_set.image_thumbnail_300).to be_attached }
+  specify { expect(record.image_thumbnail_300).to be_attached }
 
   describe 'attached file' do
-    subject { @file_set.image_thumbnail_300_blob }
-
-    let(:file_json) { @files_json.first }
+    subject { record.image_thumbnail_300_blob }
 
     it 'sets the file info correctly' do
       expect(subject.filename.to_s).to eq(file_json['file_name'])

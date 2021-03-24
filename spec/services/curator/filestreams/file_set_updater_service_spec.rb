@@ -1,16 +1,15 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require_relative '../shared/filestreams/attachable'
+require_relative '../shared/attachable'
 
 RSpec.describe Curator::Filestreams::FileSetUpdaterService, type: :service do
   before(:all) do
     @collection ||= create(:curator_collection)
     @digital_object ||= create(:curator_digital_object, admin_set: @collection)
     @file_set ||= create(:curator_filestreams_image, file_set_of: @digital_object)
-    @files_json ||= load_json_fixture('image_file', 'files')
-
-    @files_json[0]['metadata']['ingest_filepath'] = file_fixture('image_thumbnail_300.jpg').to_s
+    @files_json ||= load_json_fixture('image_file_3', 'files')
+    @files_json[0]['metadata']['ingest_filepath'] = file_fixture('image_thumbnail_300_2.jpg').to_s
 
     create(:curator_mappings_exemplary_image, exemplary_object: @collection, exemplary_file_set: @file_set)
 
@@ -21,9 +20,7 @@ RSpec.describe Curator::Filestreams::FileSetUpdaterService, type: :service do
       files: @files_json
     }
 
-    VCR.use_cassette('services/filestreams/file_set/update') do
-      @success, @result = described_class.call(@file_set, json_data: @update_attributes)
-    end
+    @success, @result = described_class.call(@file_set, json_data: @update_attributes)
   end
 
   describe '#call' do
@@ -50,6 +47,11 @@ RSpec.describe Curator::Filestreams::FileSetUpdaterService, type: :service do
         expect(subject.exemplary_image_of.pluck('ark_id')).to include(@digital_object.ark_id)
         expect(subject.exemplary_image_of.pluck('ark_id')).not_to include(@collection.ark_id)
       end
+    end
+
+    it_behaves_like 'attachable' do
+      let(:record) { @result }
+      let(:file_json) { @files_json.first }
     end
   end
 end

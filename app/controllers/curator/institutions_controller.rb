@@ -41,7 +41,7 @@ module Curator
       when 'create'
         params.require(:institution).permit(
                     :ark_id, :created_at, :updated_at, :name, :abstract, :url,
-                    :image_thumbnail_300,
+                    files: [:created_at, :file_name, :file_type, :content_type, :byte_size, :checksum, io: {}, metadata: {}],
                     location: {},
                     metastreams: {
                       administrative: [:description_standard, :hosting_status, :harvestable, :flagged, destination_site: [], access_edit_group: []],
@@ -49,7 +49,9 @@ module Curator
                     }
                   )
       when 'update'
-        params.require(:institution).permit(:abstract, :url, :image_thumbnail_300, location: {}, host_collections_attributes: [:id, :name, :_destroy])
+        params.require(:institution).permit(:abstract, :url, location: {},
+                                            host_collections_attributes: [:id, :name, :_destroy],
+                                            files: [:file_name, :file_type, :content_type, :byte_size, :checksum, io: {}, metadata: {}])
       else
         params
       end
