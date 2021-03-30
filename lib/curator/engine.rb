@@ -15,6 +15,7 @@ module Curator
     require 'acts_as_list'
     require 'attr_json'
     require 'htmlentities'
+    require 'mimemagic'
     require 'ox'
     require 'oj'
     require 'paper_trail'

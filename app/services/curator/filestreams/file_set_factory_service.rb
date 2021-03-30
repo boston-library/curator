@@ -37,8 +37,10 @@ module Curator
           end
 
           map_exemplary_objects!(file_set)
-          attach_files!(file_set)
         end
+
+        #  NOTE We only want to attach the files once the object has persisted in the database
+        attach_files!(@record)
       end
 
       return @success, @result

@@ -22,6 +22,8 @@ end
 
 group :development, :test do
   gem 'awesome_print', '~> 1.8'
+  gem 'aws-sdk-s3', '~> 1.48', require: false
+  gem 'azure-storage-blob', '>= 1.1', require: false
   gem 'dotenv-rails', '~> 2.7'
   gem 'factory_bot_rails', '~> 5.0'
   gem 'faker', '~> 2.13'

@@ -41,6 +41,9 @@ module Curator
 
             io_hash['ingest_filepath'] = attributes['metadata']['ingest_filepath'] if attributes.dig('metadata', 'ingest_filepath').present?
 
+            attributes['key'] = file_key_for_service(record, attachment_type, attributes['file_name'], attributes['content_type'])
+            attributes['service_name'] = attachment_service(record, attachment_type)
+
             attachable = build_attachable(attributes, io_hash)
             check_file_fixity!(attachable, attributes['byte_size'], attributes['checksum'])
 
@@ -55,6 +58,7 @@ module Curator
           return import_file_from_fedora(attributes, content_io(io_hash)) if fedora_content?(io_hash)
 
           ActiveStorage::Blob.create_and_upload!(
+            key: attributes['key'],
             io: content_io(io_hash),
             filename: attributes['file_name'],
             content_type: attributes['content_type'],
@@ -85,6 +89,7 @@ module Curator
         # @returns [ActiveStorage::Blob]
         def import_file_from_fedora(attachment_attributes, io)
           ActiveStorage::Blob.create_before_direct_upload!(
+            key: attachment_attributes['key'],
             filename: attachment_attributes['file_name'],
             byte_size: attachment_attributes['byte_size'],
             checksum: attachment_attributes['checksum'],
@@ -95,6 +100,12 @@ module Curator
 
         def record_attachments(record)
           record.class.attachment_reflections.keys
+        end
+
+        def attachment_service(record, attachment_type)
+           attachment_options = record.class.attachment_reflections[attachment_type.to_s].options
+
+           attachment_options[:service_name] || Rails.application.config.active_storage.service
         end
       end
     end
@@ -108,6 +119,24 @@ module Curator
 
       module InstanceMethods
         protected
+
+        def file_key_for_service(record, attachment_type, file_name, content_type)
+          raise ActiveStorage::Error, "Record identifier not present!" if record&.ark_id.blank?
+
+          "#{record.ark_id}/#{attachment_type}#{file_extension(file_name, content_type)}"
+        end
+
+        def file_extension(file_name, content_type)
+          filename = ActiveStorage::Filename.wrap(file_name)
+
+          extension = filename.extension_with_delimiter
+
+          extension = MimeMagic.new(content_type)&.extensions&.first if extension.blank?
+
+          return extension if !extension.blank?
+
+          raise ActiveStorage::Error, 'Could not determine mime type for image!'
+        end
 
         # format legacy datastream names as ActiveStorage Attachement types
         def attachment_for_ds(datastream_name)

@@ -6,7 +6,7 @@ module Curator
       attributes :exemplary_image_of
 
       node :image_master_data, target: -> (record) { record.image_master_blob } do
-        attribute(:id) { |record| record.key }
+        attribute(:id) { |record| record.url }
         node :metadata do
           attributes :byte_size, :checksum
           attribute(:file_name) { |record| record.filename.to_s }
