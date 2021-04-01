@@ -41,17 +41,17 @@ module Curator
       when 'create'
         params.require(:institution).permit(
                     :ark_id, :created_at, :updated_at, :name, :abstract, :url,
-                    files: [:created_at, :file_name, :file_type, :content_type, :byte_size, :checksum, io: {}, metadata: {}],
+                    files: [:created_at, :file_name, :file_type, :content_type, :byte_size,
+                            :checksum_md5, io: [:fedora_content_location], metadata: {}],
                     location: {},
                     metastreams: {
                       administrative: [:description_standard, :hosting_status, :harvestable, :flagged, destination_site: [], access_edit_group: []],
-                                    workflow: [:ingest_origin, :publishing_state, :processing_state]
+                      workflow: [:ingest_origin, :publishing_state, :processing_state]
                     }
                   )
       when 'update'
-        params.require(:institution).permit(:abstract, :url, location: {},
-                                            host_collections_attributes: [:id, :name, :_destroy],
-                                            files: [:file_name, :file_type, :content_type, :byte_size, :checksum, io: {}, metadata: {}])
+        params.require(:institution).permit(:abstract, :url, location: {}, host_collections_attributes: [:id, :name, :_destroy],
+                                            files: [:file_name, :file_type, :content_type, :byte_size, :checksum_md5, io: {}, metadata: {}])
       else
         params
       end

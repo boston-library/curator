@@ -41,12 +41,16 @@ module Curator
                                           exemplary_image_of: [:ark_id],
                                           pagination: [:page_label, :page_type, :hand_side],
                                           metastreams: {
-                                            administrative: [:description_standard, :hosting_status, :harvestable, :flagged, destination_site: [], access_edit_group: []],
+                                            administrative: [:description_standard, :hosting_status, :harvestable,
+                                                             :flagged, destination_site: [], access_edit_group: []],
                                              workflow: [:ingest_origin, :publishing_state, :processing_state]
                                           },
-                                          files: [:key, :created_at, :file_name, :file_type, :content_type, :byte_size, :checksum, io: {}, metadata: {}])
+                                         files: [:key, :created_at, :file_name, :file_type, :content_type, :byte_size,
+                                                  :checksum_md5, io: {}, metadata: {}])
       when 'update'
-        params.require(:file_set).permit(:position, pagination: [:page_label, :page_type, :hand_side], exemplary_image_of: [:ark_id, :_destroy], files: [:key, :file_name, :file_type, :content_type, :byte_size, :checksum, io: {}, metadata: {}])
+        params.require(:file_set).permit(:position, pagination: [:page_label, :page_type, :hand_side],
+                                         exemplary_image_of: [:ark_id, :_destroy],
+                                         files: [:key, :file_name, :file_type, :content_type, :byte_size, :checksum_md5, io: {}, metadata: {}])
       else
         params
       end
