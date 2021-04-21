@@ -20,7 +20,7 @@ RSpec.describe Curator::Filestreams::Text, type: :model do
                         required }
 
     it_behaves_like 'has_file_attachments' do
-      let(:has_one_file_attachments) { %i(text_plain text_coordinates_master) }
+      let(:has_one_file_attachments) { %i(text_plain text_coordinates_primary) }
     end
   end
 end

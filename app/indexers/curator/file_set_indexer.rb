@@ -19,7 +19,7 @@ module Curator
       to_field('page_num_label_ssi') { |rec, acc| acc << rec.pagination['page_label'] }
       to_field('page_hand_side_ssi') { |rec, acc| acc << rec.pagination['hand_side'] }
       to_field 'georeferenced_bsi' do |rec, acc|
-        acc << true if rec.respond_to?(:image_georectified_master_attachment) && rec.image_georectified_master_attachment.present?
+        acc << true if rec.respond_to?(:image_georectified_primary_attachment) && rec.image_georectified_primary_attachment.present?
       end
       to_field 'has_wordcoords_json_bsi' do |rec, acc|
         acc << true if rec.respond_to?(:text_coordinates_access_attachment) && rec.text_coordinates_access_attachment.present?

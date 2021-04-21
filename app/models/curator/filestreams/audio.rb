@@ -8,10 +8,10 @@ module Curator
 
     belongs_to :file_set_of, inverse_of: :audio_file_sets, class_name: 'Curator::DigitalObject'
 
-    has_one_attached :audio_access
-    has_one_attached :audio_master
-    has_one_attached :document_access
-    has_one_attached :document_master
+    has_one_attached :audio_access, :derivatives
+    has_one_attached :audio_primary
+    has_one_attached :document_access, service: :derivatives
+    has_one_attached :document_primary
     has_one_attached :text_plain
 
     has_paper_trail

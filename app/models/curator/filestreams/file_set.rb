@@ -58,31 +58,31 @@ module Curator
       })
     end
 
-    # super method for setting up the payload to be sent to the avi_processor
-    # should use super.merge(derivatives: list_of_derivatives) in subclasses
-    def derivatives_payload
+    def avi_params
       {
-        file_set_class: self.class.name.demodulize,
-        ark_id: ark_id,
-        derivatives: []
+        avi_file_class => {
+          ark_id: ark_id
+        }
       }
+    end
+
+    def avi_file_class
+      case self.class.name.demodulize
+      when 'Image'
+        'image_stream'
+      when 'Document'
+        'document_stream'
+      when 'Audio'
+        'audio_stream'
+      when 'Video'
+        'video_stream'
+      end
     end
 
     def required_derivatives_complete?(required_derivatives = [])
       return false if required_derivatives.blank?
 
       required_derivatives.all? { |a| public_send(a).attached? }
-    end
-
-    # NOTE: This is for setting ActiveStorage::Current so that the url can be generated for files using the DiskService this should NOT be used in production
-    def with_current_host(&_block)
-      if Rails.env.production?
-        yield
-      else
-        ActiveStorage::Current.set(host: 'http://localhost:3000') do
-          yield
-        end
-      end
     end
 
     private

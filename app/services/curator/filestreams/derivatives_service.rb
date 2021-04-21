@@ -12,6 +12,14 @@ module Curator
     attr_reader :payload
 
     # Payload should be formatted as such
+    # { ark_id: ark_id,
+    #   "[image|audio|document|video]_source_data": {
+    #     id: [image|audio|document|video]_[master|source].key,
+    #     metadata: {
+    #          ...
+    #        }
+    #    }
+    # }
     # { file_set_class: demdodulized class name string,
     #   file_set_ark_id: ark_id,
     #   deriavatives: [

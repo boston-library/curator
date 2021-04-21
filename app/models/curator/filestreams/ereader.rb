@@ -8,9 +8,9 @@ module Curator
 
     belongs_to :file_set_of, inverse_of: :ereader_file_sets, class_name: 'Curator::DigitalObject'
 
-    has_one_attached :ebook_access_epub
-    has_one_attached :ebook_access_mobi
-    has_one_attached :ebook_access_daisy
+    has_one_attached :ebook_access_epub, service: :derivatives
+    has_one_attached :ebook_access_mobi, service: :derivatives
+    has_one_attached :ebook_access_daisy, service: :derivatives
 
     has_paper_trail
 

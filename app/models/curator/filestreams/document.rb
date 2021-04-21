@@ -8,8 +8,8 @@ module Curator
 
     belongs_to :file_set_of, inverse_of: :document_file_sets, class_name: 'Curator::DigitalObject'
 
-    has_one_attached :document_master
-    has_one_attached :document_access
+    has_one_attached :document_primary
+    has_one_attached :document_access, service: :derivatives
 
     has_paper_trail
 
@@ -17,31 +17,21 @@ module Curator
       super(required_derivatives)
     end
 
-    def derivatives_payload
-      derivatives_list = []
-
-      with_current_host do
-        if document_master.attached? && !document_access.attached?
-          instructions = {}
-          instructions[:source_url] = doucment_master_blob.service_url(expires_in: nil, disposition: :attachment)
-          instructions[:types] = []
-          instructions[:types] << :document_access
-          instructions[:types] += [:characterization, :image_thumbnail_300].map do |attachment_type|
-            attachment_type if !public_send(attachment_type).attached?
-          end
-          derivatives_list << instructions if instructions[:types].present?
-        elsif document_access.attached?
-          instructions = {}
-          instructions[:source_url] = doucment_access_blob.service_url(expires_in: nil, disposition: :attachment)
-          instructions[:types] = []
-          instructions[:types] += [:characterization, :image_thumbnail_300].map do |attachment_type|
-            attachment_type if !public_send(attachment_type).attached?
-          end
-          derivatives_list << instructions if instructions[:types].present?
-        end
-      end
-
-      super.merge(derivatives: derivatives_list)
+    def avi_params
+      return if !document_primary.attached?
+      
+      super[avi_file_class].merge({
+        document_primary_data: {
+          id: document_primary_blob.key,
+          metadata: {
+            byte_size: document_primary_blob.byte_size,
+            checksum: Base64.urlsafe_decode64(document_primary_blob.checksum),
+            file_name: document_primary_blob.filename.to_s,
+            byte_size: document_primary_blob.byte_size,
+            mime_type: document_primary_blob.content_type.to_s,
+          }
+        }
+      })
     end
   end
 end

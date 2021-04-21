@@ -1,7 +1,7 @@
 {
   "files": [{
-    "file_name": "image_master.tiff",
-    "file_type": "ImageMaster",
+    "file_name": "image_primary.tiff",
+    "file_type": "ImagePrimary",
     "content_type": "image/tiff",
     "metadata": {
       "ingest_filepath": "curator/spec/fixtures/files/image_master.tiff"

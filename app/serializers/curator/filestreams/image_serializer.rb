@@ -5,8 +5,8 @@ module Curator
     schema_as_json do
       attributes :exemplary_image_of
 
-      node :image_master_data, target: -> (record) { record.image_master_blob } do
-        attribute(:id) { |record| record.url }
+      node :image_source_data, target: -> (record) { record.image_master_blob } do
+        attribute(:id) { |record| record.key }
         node :metadata do
           attributes :byte_size, :checksum
           attribute(:file_name) { |record| record.filename.to_s }

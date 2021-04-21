@@ -9,16 +9,16 @@ module Curator
     belongs_to :file_set_of, inverse_of: :image_file_sets, class_name: 'Curator::DigitalObject'
 
     has_one_attached :document_access, service: :derivatives
-    has_one_attached :image_master
-    has_one_attached :image_negative_master
-    has_one_attached :image_georectified_master
-    has_one_attached :image_access_800
+    has_one_attached :image_primary
+    has_one_attached :image_negative_primary
+    has_one_attached :image_georectified_primary, :derivatives
+    has_one_attached :image_access_800, service: :derivatives
     has_one_attached :image_service, service: :derivatives
 
-    has_one_attached :text_coordinates_master
-    has_one_attached :text_coordinates_access
+    has_one_attached :text_coordinates_primary, service: :derivatives
+    has_one_attached :text_coordinates_access, service: :derivatives
 
-    has_one_attached :text_plain
+    has_one_attached :text_plain, service: :derivatives
 
     has_paper_trail
 
@@ -26,31 +26,21 @@ module Curator
       super(required_derivatives)
     end
 
-    def derivatives_payload
-      derivatives_list = []
-
-      with_current_host do
-        if image_master.attached? && !image_service.attached?
-          instructions = {}
-          instructions[:source_url] = image_master_blob.service_url(expires_in: nil, disposition: :attachment)
-          instructions[:types] = []
-          instructions[:types] << :image_service
-          instructions[:types] += [:characterization, :image_thumbnail_300].map do |attachment_type|
-            attachment_type if !public_send(attachment_type).attached?
-          end
-          derivatives_list << instructions if instructions[:types].present?
-        elsif image_service.attached?
-          instructions = {}
-          instructions[:source_url] = image_service_blob.service_url(expires_in: nil, disposition: :attachment)
-          instructions[:types] = []
-          instructions[:types] += [:characterization, :image_thumbnail_300].map do |attachment_type|
-            attachment_type if !public_send(attachment_type).attached?
-          end
-          derivatives_list << instructions if instructions[:types].present?
-        end
-      end
-
-      super.merge(derivatives: derivatives_list)
+    def avi_params
+      return if !image_primary.attached?
+      
+      super[avi_file_class].merge({
+        image_primary_data: {
+          id: image_primary_blob.key,
+          metadata: {
+            byte_size: image_primary_blob.byte_size,
+            checksum: Base64.urlsafe_decode64(image_primary_blob.checksum),
+            file_name: image_primary_blob.filename.to_s,
+            byte_size: image_primary_blob.byte_size,
+            mime_type: image_primary_blob.content_type.to_s,
+          }
+        }
+      })
     end
   end
 end

@@ -23,7 +23,7 @@ RSpec.describe Curator::Filestreams::Video, type: :model do
     it_behaves_like 'thumbnailable'
 
     it_behaves_like 'has_file_attachments' do
-      let(:has_one_file_attachments) { %i(document_master document_access text_plain video_master video_access) }
+      let(:has_one_file_attachments) { %i(document_primary document_access text_plain video_primary video_access) }
     end
   end
 end
