@@ -6,24 +6,7 @@ local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
 
-source:
-  service: S3
-  access_key_id: <%= ENV['MINIO_ACCESS_KEY'] %>
-  secret_access_key: <%= ENV['MINIO_SECRET_KEY'] %>
-  region: <%= ENV['MINIO_REGION_NAME'] %>
-  endpoint: <%= ENV['MINIO_URL'] %>
-  bucket: sourceimages
-  force_path_style: true
 
-derivatives:
-  service: S3
-  access_key_id: <%= ENV['MINIO_ACCESS_KEY'] %>
-  secret_access_key: <%= ENV['MINIO_SECRET_KEY'] %>
-  region: <%= ENV['MINIO_REGION_NAME'] %>
-  endpoint: <%= ENV['MINIO_URL'] %>
-  bucket: derivatives
-  force_path_style: true
-  public: true
 
 # Use rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 # amazon:

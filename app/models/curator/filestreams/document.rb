@@ -19,15 +19,14 @@ module Curator
 
     def avi_params
       return if !document_primary.attached?
-      
+
       super[avi_file_class].merge({
         document_primary_data: {
           id: document_primary_blob.key,
           metadata: {
             byte_size: document_primary_blob.byte_size,
-            checksum: Base64.urlsafe_decode64(document_primary_blob.checksum),
+            checksum: document_primary_blob.checksum,
             file_name: document_primary_blob.filename.to_s,
-            byte_size: document_primary_blob.byte_size,
             mime_type: document_primary_blob.content_type.to_s,
           }
         }

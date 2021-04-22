@@ -11,7 +11,7 @@ module Curator
     has_one_attached :document_access, service: :derivatives
     has_one_attached :image_primary
     has_one_attached :image_negative_primary
-    has_one_attached :image_georectified_primary, :derivatives
+    has_one_attached :image_georectified_primary, service: :derivatives
     has_one_attached :image_access_800, service: :derivatives
     has_one_attached :image_service, service: :derivatives
 
@@ -28,15 +28,14 @@ module Curator
 
     def avi_params
       return if !image_primary.attached?
-      
+
       super[avi_file_class].merge({
         image_primary_data: {
           id: image_primary_blob.key,
           metadata: {
             byte_size: image_primary_blob.byte_size,
-            checksum: Base64.urlsafe_decode64(image_primary_blob.checksum),
+            checksum: image_primary_blob.checksum,
             file_name: image_primary_blob.filename.to_s,
-            byte_size: image_primary_blob.byte_size,
             mime_type: image_primary_blob.content_type.to_s,
           }
         }

@@ -12,18 +12,10 @@ RSpec.shared_examples 'derivative_methods' do
     end
   end
 
-  describe '#derivatives_payload' do
-    it { is_expected.to respond_to(:derivatives_payload) }
-
-    describe 'expected results' do
-      let!(:expected_payload) { subject.derivatives_payload }
-      let!(:expected_hash_keys) { %i(file_set_class ark_id derivatives) }
-
-      it 'is expected to return a hash' do
-        expect(expected_payload).to be_a_kind_of(Hash)
-        expect(expected_payload).to include(*expected_hash_keys)
-        expect(expected_payload[:derivatives]).to be_a_kind_of(Array)
-      end
+  describe '#ark_params' do
+    it { is_expected.to respond_to(:ark_params) }
+    skip 'expected results' do
+      let!(:expected_payload) { subject.ark_params }
     end
   end
 end

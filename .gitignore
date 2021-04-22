@@ -3,7 +3,7 @@ log/*.log
 pkg/
 Gemfile.lock
 .ruby-version
-storage/
+spec/internal/storage/
 log/
 tmp/
 **/db/schema.rb

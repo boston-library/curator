@@ -26,7 +26,7 @@ module Curator
           has_searchable_pages, georeferenced = false, false
           record.image_file_sets.each do |image_file_set|
             has_searchable_pages = true if image_file_set.text_plain_attachment.present?
-            georeferenced = true if image_file_set.image_georectified_master_attachment.present?
+            georeferenced = true if image_file_set.image_georectified_primary_attachment.present?
           end
           context.output_hash['has_searchable_pages_bsi'] = has_searchable_pages.presence
           context.output_hash['georeferenced_bsi'] = georeferenced.presence

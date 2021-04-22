@@ -1,0 +1,11 @@
+local: &local
+  service: Disk
+
+source:
+  <<: *local
+  root: <%= Rails.root.join("storage/source") %>
+
+derivatives:
+  <<: *local
+  root: <%= Rails.root.join("storage/derivatives") %>
+  public: true

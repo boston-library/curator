@@ -4,7 +4,7 @@
     "file_type": "ImagePrimary",
     "content_type": "image/tiff",
     "metadata": {
-      "ingest_filepath": "curator/spec/fixtures/files/image_master.tiff"
+      "ingest_filepath": "curator/spec/fixtures/files/image_primary.tiff"
     }
   }]
 }

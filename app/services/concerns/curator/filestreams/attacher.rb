@@ -75,7 +75,7 @@ module Curator
         end
 
         def file_attributes(attachment = {})
-          attachment.slice('key', 'created_at', 'file_name', 'content_type', 'byte_size', 'checksum_md5').merge('metadata' => attachment.fetch('metadata', {}))
+          attachment.slice('key', 'created_at', 'file_name', 'content_type', 'byte_size', 'checksum').merge('metadata' => attachment.fetch('metadata', {}))
         end
 
         def fedora_content?(io = {})
@@ -216,6 +216,14 @@ module Curator
           return if blob.checksum == formatted_checksum
 
           raise ActiveStorage::IntegrityError, "CHECKSUM MISMATCH FOR ActiveStorage::Blob: #{blob.id}, blob checksum is #{blob.checksum} VS expected #{formatted_checksum}"
+        end
+
+        # Checksums need to be base64 encoded based on how activestorage works.
+        # The following method checks if the checksum doe not match the hex pattern[ Assuming imported files will be mostly hex values] and encodes it to base64
+        def checksum_base64(checksum_md5)
+          return checksum_md5 if !checksum_md5.match?(/^[[:xdigit:]]+$/)
+
+          Base64.strict_encode64(checksum_md5)
         end
 
         def file_path_io(ingest_filepath)
