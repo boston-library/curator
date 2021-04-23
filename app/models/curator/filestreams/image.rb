@@ -15,7 +15,7 @@ module Curator
     has_one_attached :image_access_800, service: :derivatives
     has_one_attached :image_service, service: :derivatives
 
-    has_one_attached :text_coordinates_primary, service: :derivatives
+    has_one_attached :text_coordinates_primary
     has_one_attached :text_coordinates_access, service: :derivatives
 
     has_one_attached :text_plain, service: :derivatives

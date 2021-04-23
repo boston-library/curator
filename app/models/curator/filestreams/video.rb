@@ -11,7 +11,7 @@ module Curator
     has_one_attached :document_access, service: :derivatives
     has_one_attached :document_primary
 
-    has_one_attached :text_plain
+    has_one_attached :text_plain, service: :derivatives
 
     has_one_attached :video_access, service: :derivatives
     has_one_attached :video_primary
