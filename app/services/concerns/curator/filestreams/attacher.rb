@@ -129,9 +129,9 @@ module Curator
         end
 
         def attachment_service(record, attachment_type)
-           attachment_options = record.class.attachment_reflections[attachment_type.to_s].options
+          attachment_options = record.class.attachment_reflections[attachment_type.to_s].options
 
-           attachment_options[:service_name] || Rails.application.config.active_storage.service
+          attachment_options[:service_name] || Rails.application.config.active_storage.service
         end
       end
     end
@@ -147,7 +147,7 @@ module Curator
         protected
 
         def file_key_for_service(record, attachment_type, file_name, content_type)
-          raise ActiveStorage::Error, "Record identifier not present!" if record&.ark_id.blank?
+          raise ActiveStorage::Error, 'Record identifier not present!' if record&.ark_id.blank?
 
           record_type = record.class.name.demodulize.downcase.pluralize
 
@@ -163,7 +163,7 @@ module Curator
 
           extension = MIME::Types[content_type]&.first&.preferred_extension if extension.blank?
 
-          return extension if !extension.blank?
+          return extension if extension.present?
 
           raise ActiveStorage::Error, 'Could not determine mime type for image!'
         end

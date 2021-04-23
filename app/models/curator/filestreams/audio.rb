@@ -35,6 +35,5 @@ module Curator
         }
       })
     end
-
   end
 end

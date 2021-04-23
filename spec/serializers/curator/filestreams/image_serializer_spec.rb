@@ -11,7 +11,7 @@ RSpec.describe Curator::Filestreams::ImageSerializer, type: :serializers do
     Curator.filestreams.image_class.where(id: images.pluck(:id)).for_serialization
   end
 
-  let!(:record) { record_collection.last  }
+  let!(:record) { record_collection.last }
 
   describe 'Base Behavior' do
     it_behaves_like 'file_set_serializer'
@@ -24,14 +24,12 @@ RSpec.describe Curator::Filestreams::ImageSerializer, type: :serializers do
 
       let(:expected_as_json_options) do
         {
+          after_as_json: -> (json_record) { json_record['file_set_type'] = json_record['file_set_type'].to_s.demodulize.downcase if json_record.key?('file_set_type'); json_record },
           root: true,
           only: [:ark_id, :created_at, :updated_at, :file_name_base, :file_set_type, :position, :pagination],
           include: {
             file_set_of: {
               only: [:ark_id]
-            },
-            image_master_blob: {
-              only: [:key, :byte_size, :checksum, :filename, :content_type]
             }
           },
           administrative: {

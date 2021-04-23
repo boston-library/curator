@@ -78,7 +78,7 @@ if Rails.env.development?
     obj_success, obj = Curator::DigitalObjectFactoryService.call(json_data: obj_json)
 
     raise "DigitalObject Errors occured; Details.. #{obj.errors.inspect}" if !obj_success
-  rescue => e
+  rescue RuntimeError =>  e
     puts 'errors occured seeding default development objects!'
     puts "Reason #{e.message}"
   end

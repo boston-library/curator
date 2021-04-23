@@ -6,7 +6,7 @@ minio: &minio
   endpoint: <%= ENV['MINIO_URL'] %>
   force_path_style: true
 
-source:
+primary:
   <<: *minio
   bucket: sourceimages
 

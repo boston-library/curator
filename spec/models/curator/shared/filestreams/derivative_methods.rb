@@ -14,6 +14,7 @@ RSpec.shared_examples 'derivative_methods' do
 
   describe '#ark_params' do
     it { is_expected.to respond_to(:ark_params) }
+
     skip 'expected results' do
       let!(:expected_payload) { subject.ark_params }
     end

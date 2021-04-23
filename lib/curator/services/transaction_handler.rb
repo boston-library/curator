@@ -67,7 +67,7 @@ module Curator
           @success = false
           @result = e
         ensure
-          purge_unattached_files! #NOTE Will call purge_later on unattached files if success == false
+          purge_unattached_files! # NOTE This Will call purge_later on unattached files if success == false
           handle_result!
         end
       end
