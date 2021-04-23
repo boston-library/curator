@@ -48,7 +48,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'paper_trail-association_tracking', '~> 2.1'
   spec.add_dependency 'rails', '~> 6.1.3', '< 6.2'
   spec.add_dependency 'rsolr', '~> 2.3'
-  spec.add_dependency 'traject', '~> 3.4'
+  spec.add_dependency 'traject', '~> 3.5'
 
   spec.add_development_dependency 'image_processing', '~> 1.11'
   spec.add_development_dependency 'mini_magick', '~> 4.10'
