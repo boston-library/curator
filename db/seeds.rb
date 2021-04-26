@@ -58,19 +58,28 @@ terms_for_seed.each do |term_for_seed|
 end
 
 if Rails.env.development?
-  puts 'Seeding development objects from spec/fixtures....'
+  begin
+    puts 'Seeding development objects from spec/fixtures....'
 
-  inst_json = Oj.load(File.read(Curator::Engine.root.join('spec', 'fixtures', 'files', 'institution.json'))).fetch('institution', {}).with_indifferent_access
+    inst_json = Oj.load(File.read(Curator::Engine.root.join('spec', 'fixtures', 'files', 'institution.json'))).fetch('institution', {}).with_indifferent_access
 
-  col_json = Oj.load(File.read(Curator::Engine.root.join('spec', 'fixtures', 'files', 'collection.json'))).fetch('collection', {}).with_indifferent_access
+    col_json = Oj.load(File.read(Curator::Engine.root.join('spec', 'fixtures', 'files', 'collection.json'))).fetch('collection', {}).with_indifferent_access
 
-  obj_json = Oj.load(File.read(Curator::Engine.root.join('spec', 'fixtures', 'files', 'digital_object.json'))).fetch('digital_object', {}).with_indifferent_access
+    obj_json = Oj.load(File.read(Curator::Engine.root.join('spec', 'fixtures', 'files', 'digital_object.json'))).fetch('digital_object', {}).with_indifferent_access
 
-  inst_success, inst = Curator::InstitutionFactoryService.call(json_data: inst_json)
+    inst_success, inst = Curator::InstitutionFactoryService.call(json_data: inst_json)
 
-  puts "Errors occured; Details.. #{inst.inspect}" if !inst_success
+    raise "Institution Errors occured; Details.. #{inst.errors.inspect}" if !inst_success
 
-  col_success, _col = Curator::CollectionFactoryService.call(json_data: col_json) if inst_success
+    col_success, _col = Curator::CollectionFactoryService.call(json_data: col_json)
 
-  _obj_success, _obj = Curator::DigitalObjectFactoryService.call(json_data: obj_json) if col_success
+    raise "Collection Errors occured; Details.. #{col.errors.inspect}" if !col_success
+
+    obj_success, obj = Curator::DigitalObjectFactoryService.call(json_data: obj_json)
+
+    raise "DigitalObject Errors occured; Details.. #{obj.errors.inspect}" if !obj_success
+  rescue RuntimeError =>  e
+    puts 'errors occured seeding default development objects!'
+    puts "Reason #{e.message}"
+  end
 end

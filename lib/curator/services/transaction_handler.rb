@@ -15,6 +15,9 @@ module Curator
                         ActiveRecord::RecordNotUnique,
                         ActiveRecord::RecordNotSaved,
                         ActiveRecord::ActiveRecordError,
+                        ActiveStorage::Error,
+                        ActiveStorage::IntegrityError,
+                        ActiveStorage::FileNotFoundError,
                         SystemCallError,
                         ArgumentError,
                         NameError,
@@ -32,6 +35,12 @@ module Curator
         return if @record.blank?
 
         @result = @record.class.respond_to?(:for_serialization) ? @record.class.for_serialization.find(@record.id) : @record
+      end
+
+      def purge_unattached_files!
+        return if @success == true
+
+        ActiveStorage::Blob.unattached.find_each(&:purge_later)
       end
 
       def with_transaction(&_block)
@@ -58,6 +67,7 @@ module Curator
           @success = false
           @result = e
         ensure
+          purge_unattached_files! # NOTE This Will call purge_later on unattached files if success == false
           handle_result!
         end
       end

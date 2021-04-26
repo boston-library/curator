@@ -23,7 +23,7 @@ RSpec.describe Curator::Filestreams::Image, type: :model do
     it_behaves_like 'thumbnailable'
 
     it_behaves_like 'has_file_attachments' do
-      let(:has_one_file_attachments) { %i(document_access image_master image_negative_master image_georectified_master image_access_800 image_service text_coordinates_master text_coordinates_access text_plain) }
+      let(:has_one_file_attachments) { %i(document_access image_primary image_negative_primary image_georectified_primary image_access_800 image_service text_coordinates_primary text_coordinates_access text_plain) }
     end
   end
 end

@@ -117,6 +117,8 @@ RSpec.configure do |config|
   config.after(:suite) do
     # Just in case sequences persist between tests reset them
     FactoryBot.rewind_sequences
+    FileUtils.rm_rf(Rails.root.join('tmp', 'storage', 'primary').to_s)
+    FileUtils.rm_rf(Rails.root.join('tmp', 'storage', 'derivatives').to_s)
   end
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and

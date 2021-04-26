@@ -6,8 +6,8 @@ module Curator
 
     belongs_to :file_set_of, inverse_of: :text_file_sets, class_name: 'Curator::DigitalObject'
 
-    has_one_attached :text_plain
-    has_one_attached :text_coordinates_master
+    has_one_attached :text_plain, service: :derivatives
+    has_one_attached :text_coordinates_primary
 
     has_paper_trail
 
@@ -15,17 +15,20 @@ module Curator
       super(required_derivatives)
     end
 
-    def derivatives_payload
-      derivatives_list = []
-      with_current_host do
-        if text_plain.attached?
-          instructions = {}
-          instructions[:source_url] = text_plain_blob.service_url(expires_in: nil, disposition: :attachment)
-          instructions[:types] = []
-          instructions[:types] << :characterization if !characterization.attached?
-        end
-      end
-      super.merge(derivatives: derivatives_list)
+    def avi_params
+      return if !text_plain.attached?
+
+      super[avi_file_class].merge({
+        text_plain_data: {
+          id: text_plain_blob.key,
+          metadata: {
+            byte_size: text_plain_blob.byte_size,
+            checksum: text_plain_blob.checksum,
+            file_name: text_plain_blob.filename.to_s,
+            mime_type: text_plain_blob.content_type.to_s,
+          }
+        }
+      })
     end
   end
 end

@@ -11,7 +11,7 @@ module FileAttachmentHelpers
   end
 
   def attach_georeferenced_file(file_set)
-    attach_fixture_file(:image_georectified_master, file_set, 'image_georectified_master.tif')
+    attach_fixture_file(:image_georectified_primary, file_set, 'image_georectified_primary.tif')
   end
 
   private

@@ -12,18 +12,12 @@ RSpec.shared_examples 'derivative_methods' do
     end
   end
 
-  describe '#derivatives_payload' do
-    it { is_expected.to respond_to(:derivatives_payload) }
+  describe '#avi_params' do
+    it { is_expected.to respond_to(:avi_params) }
 
-    describe 'expected results' do
-      let!(:expected_payload) { subject.derivatives_payload }
-      let!(:expected_hash_keys) { %i(file_set_class ark_id derivatives) }
-
-      it 'is expected to return a hash' do
-        expect(expected_payload).to be_a_kind_of(Hash)
-        expect(expected_payload).to include(*expected_hash_keys)
-        expect(expected_payload[:derivatives]).to be_a_kind_of(Array)
-      end
+    skip 'expected results' do
+      # TODO: Add fixtures for audio, video, text, document primary attachment_types
+      let!(:expected_payload) { subject.avi_params }
     end
   end
 end

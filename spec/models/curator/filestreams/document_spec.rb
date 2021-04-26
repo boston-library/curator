@@ -22,7 +22,7 @@ RSpec.describe Curator::Filestreams::Document, type: :model do
 
     it_behaves_like 'thumbnailable'
     it_behaves_like 'has_file_attachments' do
-      let(:has_one_file_attachments) { %i(document_master document_access image_thumbnail_300) }
+      let(:has_one_file_attachments) { %i(document_primary document_access image_thumbnail_300) }
     end
   end
 end

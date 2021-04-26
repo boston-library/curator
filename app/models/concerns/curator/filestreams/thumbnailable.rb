@@ -6,7 +6,7 @@ module Curator
       extend ActiveSupport::Concern
 
       included do
-        has_one_attached :image_thumbnail_300
+        has_one_attached :image_thumbnail_300, service: :derivatives
       end
     end
   end

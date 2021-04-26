@@ -5,7 +5,7 @@ module Curator
     module Characterizable
       extend ActiveSupport::Concern
       included do
-        has_one_attached :characterization
+        has_one_attached :characterization, service: :derivatives
       end
     end
   end

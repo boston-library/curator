@@ -41,7 +41,15 @@ module Curator
 
             io_hash['ingest_filepath'] = attributes['metadata']['ingest_filepath'] if attributes.dig('metadata', 'ingest_filepath').present?
 
-            attachable = build_attachable(attributes, io_hash)
+            attachment_file_key = file_key_for_service(record, attachment_type, attributes['file_name'], attributes['content_type'])
+
+            attributes['key'] = attachment_file_key if !attributes.key?('key')
+
+            raise ActiveStorage::Error, "improper format for key #{attributes['key']}" if attributes['key'] != attachment_file_key
+
+            attributes['service_name'] = attachment_service(record, attachment_type)
+
+            attachable = create_attachable(attributes, io_hash)
             check_file_fixity!(attachable, attributes['byte_size'], attributes['checksum'])
 
             record.public_send(attachment_type).attach(attachable)
@@ -51,11 +59,15 @@ module Curator
         # @param attributes [Hash]
         # @param io_hash [Hash
         # @returns [ActiveStorage::Blob]
-        def build_attachable(attributes, io_hash)
+        def create_attachable(attributes, io_hash = {})
+          return attach_existing_file(attributes) if io_hash.blank?
+
           return import_file_from_fedora(attributes, content_io(io_hash)) if fedora_content?(io_hash)
 
           ActiveStorage::Blob.create_and_upload!(
+            key: attributes['key'],
             io: content_io(io_hash),
+            service_name: attributes['service_name'],
             filename: attributes['file_name'],
             content_type: attributes['content_type'],
             metadata: attributes['metadata']
@@ -63,7 +75,7 @@ module Curator
         end
 
         def file_attributes(attachment = {})
-          attachment.slice('created_at', 'file_name', 'content_type', 'byte_size', 'checksum_md5').merge('metadata' => attachment.fetch('metadata', {}))
+          attachment.slice('key', 'created_at', 'file_name', 'content_type', 'byte_size', 'checksum').merge('metadata' => attachment.fetch('metadata', {}))
         end
 
         def fedora_content?(io = {})
@@ -84,17 +96,42 @@ module Curator
         # @param io [Tempfile]
         # @returns [ActiveStorage::Blob]
         def import_file_from_fedora(attachment_attributes, io)
-          ActiveStorage::Blob.create_before_direct_upload!(
+          ActiveStorage::Blob.create_after_unfurling!(
+            key: attachment_attributes['key'],
+            io: io,
             filename: attachment_attributes['file_name'],
             byte_size: attachment_attributes['byte_size'],
             checksum: attachment_attributes['checksum'],
             content_type: attachment_attributes['content_type'],
+            service_name: attachment_attributes['service_name'],
             metadata: attachment_attributes['metadata']
-          ).tap { |blob| blob.upload_without_unfurling(io) }
+          )
+        end
+
+        def attach_existing_file(attachment_attributes)
+          blob = ActiveStorage::Blob.create!(
+            key: attachment_attributes['key'],
+            filename: attachment_attributes['file_name'],
+            byte_size: attachment_attributes['byte_size'],
+            checksum: attachment_attributes['checksum'],
+            content_type: attachment_attributes['content_type'],
+            service_name: attachment_attributes['service_name'],
+            metadata: attachment_attributes['metadata']
+          )
+
+          return blob if blob.service.exist?(blob.key)
+
+          raise ActiveStorage::FileNotFoundError, "File at #{blob.key} in service #{blob.service_name} not found!"
         end
 
         def record_attachments(record)
           record.class.attachment_reflections.keys
+        end
+
+        def attachment_service(record, attachment_type)
+          attachment_options = record.class.attachment_reflections[attachment_type.to_s].options
+
+          attachment_options[:service_name] || Rails.application.config.active_storage.service
         end
       end
     end
@@ -108,6 +145,28 @@ module Curator
 
       module InstanceMethods
         protected
+
+        def file_key_for_service(record, attachment_type, file_name, content_type)
+          raise ActiveStorage::Error, 'Record identifier not present!' if record&.ark_id.blank?
+
+          record_type = record.class.name.demodulize.downcase.pluralize
+
+          raise ActiveStorage::Error, "Invalid Record Type #{record_type}" if !%w(institutions audios documents ereaders images metadata texts videos).include?(record_type)
+
+          "#{record_type}/#{record.ark_id}/#{attachment_type}#{file_extension(file_name, content_type)}"
+        end
+
+        def file_extension(file_name, content_type)
+          filename = ActiveStorage::Filename.wrap(file_name)
+
+          extension = filename.extension_with_delimiter
+
+          extension = MIME::Types[content_type]&.first&.preferred_extension if extension.blank?
+
+          return extension if extension.present?
+
+          raise ActiveStorage::Error, 'Could not determine mime type for image!'
+        end
 
         # format legacy datastream names as ActiveStorage Attachement types
         def attachment_for_ds(datastream_name)
@@ -157,6 +216,14 @@ module Curator
           return if blob.checksum == formatted_checksum
 
           raise ActiveStorage::IntegrityError, "CHECKSUM MISMATCH FOR ActiveStorage::Blob: #{blob.id}, blob checksum is #{blob.checksum} VS expected #{formatted_checksum}"
+        end
+
+        # Checksums need to be base64 encoded based on how activestorage works.
+        # The following method checks if the checksum doe not match the hex pattern[ Assuming imported files will be mostly hex values] and encodes it to base64
+        def checksum_base64(checksum_md5)
+          return checksum_md5 if !checksum_md5.match?(/^[[:xdigit:]]+$/)
+
+          Base64.strict_encode64(checksum_md5)
         end
 
         def file_path_io(ingest_filepath)

@@ -17,8 +17,10 @@ module Curator
     # index model name and id by default
     configure do
       to_field 'id', obj_extract('ark_id')
-      to_field 'system_create_dtsi', obj_extract('created_at')
-      to_field 'system_modified_dtsi', obj_extract('updated_at')
+      each_record do |record, context|
+        context.output_hash['system_create_dtsi'] = [record.created_at.to_s(:iso8601)]
+        context.output_hash['system_modified_dtsi'] = [record.updated_at.to_s(:iso8601)]
+      end
       to_field Curator.config.indexable_settings.model_name_solr_field, obj_extract('class', 'name')
       to_field 'curator_model_suffix_ssi', obj_extract('class', 'name', 'demodulize')
     end

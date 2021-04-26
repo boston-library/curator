@@ -22,7 +22,7 @@ RSpec.describe Curator::Filestreams::Audio, type: :model do
 
     it_behaves_like 'thumbnailable'
     it_behaves_like 'has_file_attachments' do
-      let(:has_one_file_attachments) { %i(audio_access audio_master document_access document_master text_plain) }
+      let(:has_one_file_attachments) { %i(audio_access audio_primary document_access document_primary text_plain) }
     end
   end
 end

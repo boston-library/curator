@@ -26,8 +26,8 @@ RSpec.describe Curator::Indexer do
     end
 
     it 'sets the timestamp fields correctly' do
-      expect(indexed['system_create_dtsi']).to eq [institution.created_at]
-      expect(indexed['system_modified_dtsi']).to eq [institution.updated_at]
+      expect(indexed['system_create_dtsi']).to eq [institution.created_at.to_s(:iso8601)]
+      expect(indexed['system_modified_dtsi']).to eq [institution.updated_at.to_s(:iso8601)]
     end
   end
 end
