@@ -12,11 +12,12 @@ RSpec.shared_examples 'derivative_methods' do
     end
   end
 
-  describe '#ark_params' do
-    it { is_expected.to respond_to(:ark_params) }
+  describe '#avi_params' do
+    it { is_expected.to respond_to(:avi_params) }
 
     skip 'expected results' do
-      let!(:expected_payload) { subject.ark_params }
+      # TODO: Add fixtures for audio, video, text, document primary attachment_types
+      let!(:expected_payload) { subject.avi_params }
     end
   end
 end
