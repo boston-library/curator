@@ -2,6 +2,8 @@
 
 module Curator
   class Institution < ApplicationRecord
+    self.table_name = 'curator.institutions'
+
     include Curator::Indexable
     include Curator::Mintable
     include Curator::Metastreamable::Basic

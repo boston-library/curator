@@ -5,6 +5,5 @@ FactoryBot.define do
     label { Faker::Lorem.sentence }
     uri { Faker::Internet.url }
     type { 'Curator::ControlledTerms::RightsStatement' }
-    archived_at { nil }
   end
 end

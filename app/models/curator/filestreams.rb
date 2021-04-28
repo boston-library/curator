@@ -5,7 +5,7 @@ module Curator
     extend Curator::NamespaceAccessor
 
     def self.table_name_prefix
-      'curator_filestreams_'
+      'curator.filestreams_'
     end
 
     def self.file_set_types

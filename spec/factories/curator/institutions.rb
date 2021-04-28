@@ -8,7 +8,6 @@ FactoryBot.define do
     name { Faker::University.name }
     abstract { Faker::Lorem.paragraph(sentence_count: 12) }
     url { Faker::Internet.unique.url(host: 'example-institution.org') }
-    archived_at { nil }
 
     transient do
       collection_count { nil }

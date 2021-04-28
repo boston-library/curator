@@ -24,6 +24,7 @@ default: &default
   password: postgres
   host: <%= ENV.fetch('PGHOST') { 'localhost' } %>
   port: <%= ENV.fetch('PGPORT') { 5432 } %>
+  schema_search_path: 'curator,public'
 
 development:
   <<: *default

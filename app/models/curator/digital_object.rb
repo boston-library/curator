@@ -2,6 +2,8 @@
 
 module Curator
   class DigitalObject < ApplicationRecord
+    self.table_name = 'curator.digital_objects'
+    
     include Curator::Mintable
     include Curator::Metastreamable::All
     include Curator::Mappings::Exemplary::Object

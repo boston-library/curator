@@ -8,6 +8,5 @@ FactoryBot.define do
     affiliation { Faker::University.name }
     name_type { Curator::ControlledTerms::Name::VALID_NAME_TYPES.sample }
     type { 'Curator::ControlledTerms::Name' }
-    archived_at { nil }
   end
 end

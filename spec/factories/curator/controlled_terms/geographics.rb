@@ -11,6 +11,5 @@ FactoryBot.define do
     end
     area_type { Faker::Address.city_prefix }
     type { 'Curator::ControlledTerms::Geographic' }
-    archived_at { nil }
   end
 end

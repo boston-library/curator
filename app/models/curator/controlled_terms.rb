@@ -4,7 +4,7 @@ module Curator
   module ControlledTerms
     extend Curator::NamespaceAccessor
     def self.table_name_prefix
-      'curator_controlled_terms_'
+      'curator.controlled_terms_'
     end
 
     def self.nomenclature_types

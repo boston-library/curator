@@ -71,7 +71,7 @@ if Rails.env.development?
 
     raise "Institution Errors occured; Details.. #{inst.errors.inspect}" if !inst_success
 
-    col_success, _col = Curator::CollectionFactoryService.call(json_data: col_json)
+    col_success, col = Curator::CollectionFactoryService.call(json_data: col_json)
 
     raise "Collection Errors occured; Details.. #{col.errors.inspect}" if !col_success
 
