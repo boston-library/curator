@@ -19,7 +19,7 @@ before_install:
   - sudo cp /etc/postgresql/{9.3,12}/main/pg_hba.conf
   - sudo pg_ctlcluster 12 main restart
   - gem update --system 3.2.16
-  - gem install bundler:2.1.4
+  - gem install bundler:2.2.16
 
 before_script:
   - bundle exec rails app:curator:setup
