@@ -3,7 +3,7 @@
 module Curator
   class Collection < ApplicationRecord
     self.table_name = 'curator.collections'
-    
+
     include Curator::Mintable
     include Curator::Metastreamable::Basic
     include Curator::Mappings::Exemplary::Object

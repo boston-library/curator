@@ -14,7 +14,7 @@ namespace :curator do
     else
       raise 'app:db:create and db:create rake tasks are not available!'
     end
-    
+
     puts '............'
     if Rake::Task.task_defined?('app:db:migrate')
       puts 'Invoking app:db:migrate...'
@@ -24,19 +24,6 @@ namespace :curator do
       Rake::Task['db:migrate'].invoke
     else
       raise 'app:db:migrate and db:migrate rake tasks are not available!'
-    end
-
-    puts '............'
-    if Rails.env.test?
-      if Rake::Task.task_defined?('app:db:schema:load')
-        puts 'Invoking app:db:schema:load'
-        Rake::Task['app:db:schema:load'].invoke
-      elsif Rake::Task.task_defined('db:schema:load')
-        puts 'Invoking db:schema:load'
-        Rake::Task['db:schema:load'].invoke
-      else
-        raise 'app:db:schema:load and db:schema:load rake tasks are not available!'
-      end
     end
 
     if Rails.env.development? || Rails.env.production?

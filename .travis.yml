@@ -4,6 +4,7 @@ dist: bionic
 
 cache:
   bundler: true
+  apt: true
 
 addons:
   postgresql: "12"
@@ -17,15 +18,15 @@ before_install:
   - sudo sed -i 's/port = 5433/port = 5432/' /etc/postgresql/12/main/postgresql.conf
   - sudo cp /etc/postgresql/{9.3,12}/main/pg_hba.conf
   - sudo pg_ctlcluster 12 main restart
-  - gem update --system 3.1.4
+  - gem update --system 3.2.16
   - gem install bundler:2.1.4
 
 before_script:
-  - bundle exec rails app:db:create app:db:migrate
+  - bundle exec rails app:curator:setup
 
 rvm:
-  - 2.5.8
-  - 2.6.6
+  - 2.5.9
+  - 2.6.7
 
 env:
   global:

@@ -82,14 +82,14 @@ module Curator
     end
 
     initializer 'curator.active_storage_table_names' do
-       ActiveSupport.on_load(:active_storage_blob) do
-         ActiveStorage::Blob.table_name = 'curator.active_storage_blobs'
-         ActiveStorage::VariantRecord.table_name = 'curator.active_storage_variant_records'
-       end
+      ActiveSupport.on_load(:active_storage_blob) do
+        ActiveStorage::Blob.table_name = 'curator.active_storage_blobs'
+        ActiveStorage::VariantRecord.table_name = 'curator.active_storage_variant_records'
+      end
 
-       ActiveSupport.on_load(:active_storage_attachment) do
-         ActiveStorage::Attachment.table_name = 'curator.active_storage_attachments'
-       end
+      ActiveSupport.on_load(:active_storage_attachment) do
+        ActiveStorage::Attachment.table_name = 'curator.active_storage_attachments'
+      end
     end
 
     initializer 'curator.append_migrations' do |app|
@@ -98,10 +98,6 @@ module Curator
           app.config.paths['db/migrate'].push(path)
         end
       end
-    end
-
-    rake_tasks do
-      load 'tasks/curator_tasks.rake'
     end
   end
 end
