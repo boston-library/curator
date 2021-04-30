@@ -5,6 +5,5 @@ FactoryBot.define do
     label { ['public domain', 'creative commons', 'contact host'].sample }
     uri { Faker::Internet.url }
     type { 'Curator::ControlledTerms::License' }
-    archived_at { nil }
   end
 end

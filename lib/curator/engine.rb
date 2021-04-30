@@ -39,6 +39,7 @@ module Curator
 
     isolate_namespace Curator
     engine_name 'curator'
+
     config.generators do |g|
       g.orm :active_record
       g.api_only = true
@@ -46,6 +47,7 @@ module Curator
       g.fixture_replacement :factory_bot
       g.factory_bot dir: 'spec/factories'
     end
+
     config.factory_bot.definition_file_paths << File.expand_path('../../spec/factories/curator', __dir__) if defined?(FactoryBotRails)
 
     config.eager_load_namespaces << Curator
@@ -77,6 +79,17 @@ module Curator
     initializer 'curator.mime_types' do
       Mime::Type.register 'application/marcxml+xml', :marc, %w(application/marc)
       Mime::Type.register 'application/mods+xml', :mods
+    end
+
+    initializer 'curator.active_storage_table_names' do
+      ActiveSupport.on_load(:active_storage_blob) do
+        ActiveStorage::Blob.table_name = 'curator.active_storage_blobs'
+        ActiveStorage::VariantRecord.table_name = 'curator.active_storage_variant_records'
+      end
+
+      ActiveSupport.on_load(:active_storage_attachment) do
+        ActiveStorage::Attachment.table_name = 'curator.active_storage_attachments'
+      end
     end
 
     initializer 'curator.append_migrations' do |app|

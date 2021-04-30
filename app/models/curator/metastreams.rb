@@ -5,7 +5,7 @@ module Curator
     extend Curator::NamespaceAccessor
 
     def self.table_name_prefix
-      'curator_metastreams_'
+      'curator.metastreams_'
     end
 
     def self.valid_base_types

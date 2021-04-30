@@ -6,6 +6,5 @@ FactoryBot.define do
     label { Faker::Lorem.sentence }
     id_from_auth { Faker::Alphanumeric.alphanumeric(number: 10) }
     type { 'Curator::ControlledTerms::ResourceType' }
-    archived_at { nil }
   end
 end

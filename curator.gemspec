@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.description = 'Description of Curator.'
   spec.license     = 'MIT'
 
-  spec.required_ruby_version = '>= 2.5.8'
+  spec.required_ruby_version = '>= 2.5.9'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
   spec.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
 
   spec.add_dependency 'aasm', '~> 5.1' # Acts as a state machine. Useful for tracking states of objects and triggering call backs between state trasnistion
-  spec.add_dependency 'activerecord-postgres_enum', '~> 1.4' # For using defined postgres enum types
+  spec.add_dependency 'activerecord-postgres_enum', '~> 1.6' # For using defined postgres enum types
   spec.add_dependency 'acts_as_list', '~> 1.0'
   spec.add_dependency 'addressable', '2.7'
   spec.add_dependency 'after_commit_everywhere', '~> 0.1', '>= 0.1.5' # Required for using aasm with active record
@@ -42,8 +42,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'htmlentities', '~> 4.3'
   spec.add_dependency 'http', '~> 4.4'
   spec.add_dependency 'mime-types', '~> 3.3'
-  spec.add_dependency 'oj', '~> 3.10'
-  spec.add_dependency 'ox', '~> 2.13'
+  spec.add_dependency 'oj', '~> 3.11'
+  spec.add_dependency 'ox', '~> 2.14'
   spec.add_dependency 'paper_trail', '~> 11.1'
   spec.add_dependency 'paper_trail-association_tracking', '~> 2.1'
   spec.add_dependency 'rails', '~> 6.1.3', '< 6.2'
@@ -51,7 +51,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'traject', '~> 3.5'
 
   spec.add_development_dependency 'image_processing', '~> 1.11'
-  spec.add_development_dependency 'mini_magick', '~> 4.10'
+  spec.add_development_dependency 'mini_magick', '~> 4.11'
   spec.add_development_dependency 'pg', '~> 1.2'
   spec.add_development_dependency 'redis', '~> 4.2'
   spec.add_development_dependency 'solr_wrapper', '>= 2.1', '< 3.0'

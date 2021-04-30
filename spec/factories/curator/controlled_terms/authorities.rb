@@ -13,6 +13,5 @@ FactoryBot.define do
     code { generate(:authority_code) }
     name { Faker::Book.genre }
     base_url { generate(:authority_base_url) }
-    archived_at { nil }
   end
 end

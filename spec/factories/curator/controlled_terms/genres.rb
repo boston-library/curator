@@ -7,6 +7,5 @@ FactoryBot.define do
     id_from_auth { Faker::Alphanumeric.alphanumeric(number: 10) }
     basic { [true, false].sample }
     type { 'Curator::ControlledTerms::Genre' }
-    archived_at { nil }
   end
 end

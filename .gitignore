@@ -8,6 +8,7 @@ log/
 tmp/
 **/db/schema.rb
 scratch.rb
+structure.sql
 .env
 # Ignore all RubyMine temp files
 .idea/
