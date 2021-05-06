@@ -8,17 +8,18 @@ module Curator
 
     belongs_to :file_set_of, inverse_of: :image_file_sets, class_name: 'Curator::DigitalObject'
 
-    has_one_attached :document_access, service: :derivatives
     has_one_attached :image_primary
     has_one_attached :image_negative_primary
-    has_one_attached :image_georectified_primary, service: :derivatives
-    has_one_attached :image_access_800, service: :derivatives
-    has_one_attached :image_service, service: :derivatives
-
     has_one_attached :text_coordinates_primary
-    has_one_attached :text_coordinates_access, service: :derivatives
 
-    has_one_attached :text_plain, service: :derivatives
+    with_options service: :derivatives do
+      has_one_attached :document_access
+      has_one_attached :image_georectified_primary
+      has_one_attached :image_access_800
+      has_one_attached :image_service
+      has_one_attached :text_plain
+      has_one_attached :text_coordinates_access
+    end
 
     has_paper_trail
 

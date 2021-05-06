@@ -1,16 +1,15 @@
-minio: &minio
-  service: S3
-  access_key_id: <%= ENV['MINIO_ACCESS_KEY'] %>
-  secret_access_key: <%= ENV['MINIO_SECRET_KEY'] %>
-  region: <%= ENV['MINIO_REGION_NAME'] %>
-  endpoint: <%= ENV['MINIO_URL'] %>
-  force_path_style: true
+azurite: &azurite
+  service: AzureStorage
+  storage_account_name: <%= ENV['AZURE_STORAGE_ACCOUNT_NAME'] %>
+  storage_access_key: <%= ENV['AZURE_STORAGE_ACCOUNT_KEY'] %>
+  storage_blob_host: 'http://127.0.0.1:10000/devstoreaccount1'
+  use_development_storage: true
 
 primary:
-  <<: *minio
-  bucket: sourceimages
+  <<: *azurite
+  bucket: primary
 
 derivatives:
-  <<: *minio
+  <<: *azurite
   bucket: derivatives
   public: true
