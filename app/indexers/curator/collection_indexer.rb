@@ -17,6 +17,7 @@ module Curator
       to_field 'institution_ark_id_ssi', obj_extract('institution', 'ark_id')
 
       to_field 'exemplary_image_ssi', obj_extract('exemplary_file_set', 'ark_id')
+      to_field 'exemplary_image_key_ss', obj_extract('exemplary_file_set', 'image_thumbnail_300_attachment', 'key')
       to_field 'exemplary_image_iiif_bsi' do |record, accumulator|
         exemplary_file_set_type = record.exemplary_file_set&.file_set_type
         accumulator << false unless exemplary_file_set_type == 'Curator::Filestreams::Image'

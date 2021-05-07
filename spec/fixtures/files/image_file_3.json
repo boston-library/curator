@@ -1,7 +1,7 @@
 {
   "files": [{
     "file_name": "image_thumbnail_300_2.jpg",
-    "file_type": "ImageThumbnail300",
+    "file_type": "image_thumbnail_300",
     "content_type": "image/jpeg",
     "byte_size": 38676,
     "checksum_md5": "5c0d4a83fbf0154f09491909f9840028",

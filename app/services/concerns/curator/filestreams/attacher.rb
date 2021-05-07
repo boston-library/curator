@@ -54,8 +54,10 @@ module Curator
             attributes['service_name'] = attachment_service(record, attachment_type)
 
             attachable = create_attachable(attributes, io_hash)
+            puts "CREATE ATTACHABLE SUCCESSFUL, MOVING TO check_file_fixity!"
             check_file_fixity!(attachable, attributes['byte_size'], attributes['checksum_md5'])
 
+            puts "check_file_fixity SUCCESSFUL, MOVING TO attach!"
             record.public_send(attachment_type).attach(attachable)
           end
         end
@@ -79,7 +81,7 @@ module Curator
         end
 
         def file_attributes(attachment = {})
-          attachment.slice('key', 'created_at', 'file_name', 'content_type', 'byte_size', 'checksum').merge('metadata' => attachment.fetch('metadata', {}))
+          attachment.slice('key', 'created_at', 'file_name', 'content_type', 'byte_size', 'checksum_md5').merge('metadata' => attachment.fetch('metadata', {}))
         end
 
         def fedora_content?(io = {})
@@ -106,8 +108,8 @@ module Curator
             key: attachment_attributes['key'],
             io: io,
             filename: attachment_attributes['file_name'],
-            byte_size: attachment_attributes['byte_size'],
-            checksum: checksum_to_base64(attachment_attributes['checksum_md5']),
+            #byte_size: attachment_attributes['byte_size'],
+            #checksum: checksum_to_base64(attachment_attributes['checksum_md5']),
             content_type: attachment_attributes['content_type'],
             service_name: attachment_attributes['service_name'],
             metadata: attachment_attributes['metadata']
@@ -174,7 +176,8 @@ module Curator
           raise ActiveStorage::Error, 'Could not determine mime type for image!'
         end
 
-        # format legacy datastream names as ActiveStorage Attachement types
+        # format legacy datastream names as ActiveStorage attachment types
+        # TODO: this method isn't called anywhere!
         def attachment_for_ds(datastream_name)
           return if datastream_name.blank?
 
@@ -202,6 +205,7 @@ module Curator
         # @param byte_size [Integer] size from incoming file
         # @param checksum_md5 [String] md5 checksum from incoming file
         def check_file_fixity!(blob, byte_size, checksum_md5)
+          puts "CHECK FILE FIXITY CALLED for #{blob.filename.to_s}"
           return if byte_size.blank? && checksum_md5.blank?
 
           validate_byte_size!(blob, byte_size) if byte_size
@@ -214,7 +218,8 @@ module Curator
         def validate_byte_size!(blob, byte_size)
           return if blob.byte_size == byte_size.to_i
 
-          raise ActiveStorage::IntegrityError, "FILE SIZE MISMATCH FOR ActiveStorage::Blob: #{blob.id}, blob byte size is #{blob.byte_size} vs expected #{byte_size}"
+          raise ActiveStorage::IntegrityError,
+                "FILE SIZE MISMATCH FOR ActiveStorage::Blob: #{blob.id}, blob byte size is #{blob.byte_size} vs expected #{byte_size}"
         end
 
         def validate_checksum_md5!(blob, checksum_md5)
@@ -222,11 +227,13 @@ module Curator
 
           return if blob.checksum == formatted_checksum
 
-          raise ActiveStorage::IntegrityError, "CHECKSUM MISMATCH FOR ActiveStorage::Blob: #{blob.id}, blob checksum is #{blob.checksum} VS expected #{formatted_checksum}"
+          raise ActiveStorage::IntegrityError,
+                "CHECKSUM MISMATCH FOR ActiveStorage::Blob: #{blob.id}, blob checksum is #{blob.checksum} VS expected #{formatted_checksum}"
         end
 
-        # Checksums need to be base64 encoded based on how activestorage works.
-        # The following method checks if the checksum doe not match the hex pattern[ Assuming imported files will be mostly hex values] and encodes it to base64
+        # Checksums need to be base64 encoded based on how ActiveStorage works.
+        # The following method checks if the checksum does not match the hex pattern
+        # (assuming imported files will be mostly hex values) and encodes it to base64
         def checksum_to_base64(checksum_md5)
           return checksum_md5 if !checksum_md5.match?(/^[[:xdigit:]]+$/)
 
@@ -240,12 +247,16 @@ module Curator
         end
 
         def fedora_io(fedora_content_location)
+          puts "CALLING FEDORA IO with #{fedora_content_location}"
           return if fedora_content_location.blank?
 
           http = Down::Http.new do |client|
-            client.basic_auth(user: ENV['FEDORA_USERNAME'], pass: ENV['FEDORA_PASSWORD']) if fedora_content_location.match?(/FOXML/)
             client.timeout(connect: 5, read: 10)
+            # adding conditionals on fedora_content_location.match?(/FOXML/)
+            # causes errors, so just use basic auth on everything
+            client.basic_auth(user: ENV['FEDORA_USERNAME'], pass: ENV['FEDORA_PASSWORD'])
           end
+          puts "ABOUT TO CALL DOWNLOAD!"
           http.download(fedora_content_location)
         end
 

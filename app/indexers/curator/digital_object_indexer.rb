@@ -20,6 +20,7 @@ module Curator
       end
       to_field 'contained_by_ssi', obj_extract('contained_by', 'ark_id')
       to_field 'exemplary_image_ssi', obj_extract('exemplary_file_set', 'ark_id')
+      to_field 'exemplary_image_key_ss', obj_extract('exemplary_file_set', 'image_thumbnail_300_attachment', 'key')
       to_field('filenames_ssim') { |rec, acc| acc.concat rec.file_sets.pluck(:file_name_base).uniq }
       each_record do |record, context|
         if record.image_file_sets.present?
