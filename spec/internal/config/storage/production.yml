@@ -2,14 +2,13 @@ azurite: &azurite
   service: AzureStorage
   storage_account_name: <%= ENV['AZURE_STORAGE_ACCOUNT_NAME'] %>
   storage_access_key: <%= ENV['AZURE_STORAGE_ACCOUNT_KEY'] %>
-  storage_blob_host: 'http://127.0.0.1:10000/devstoreaccount1'
-  use_development_storage: true
+  storage_blob_host: http://127.0.0.1:10000/<%= ENV['AZURE_STORAGE_ACCOUNT_NAME'] %>
 
 primary:
   <<: *azurite
-  bucket: primary
+  container: primary
 
 derivatives:
   <<: *azurite
-  bucket: derivatives
+  container: derivatives
   public: true

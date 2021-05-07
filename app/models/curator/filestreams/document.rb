@@ -18,7 +18,7 @@ module Curator
     has_paper_trail
 
     def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
-      return super(%i(characterization)) if text_plain.attached?
+      return super(%i(characterization)) if text_plain.attached? && %i(document_access document_primary).any? { |a| public_send(a).attached? }
 
       super(required_derivatives)
     end
