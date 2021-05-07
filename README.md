@@ -8,8 +8,8 @@ This Project is currently in the early stages of **development** and not recomme
 
 
 ## Description
-Rails(~> 5.2) engine that sets up the basic data elements and routes for a more data driven JSON API for digital repositories.
-Implements ActiveStorage for Cloud or local stoarge for files.
+Rails(~> 6.1) engine that sets up the basic data elements and routes for a more data driven JSON API for digital repositories.
+Implements ActiveStorage for Cloud or local storage for files.
 Currently all data models have been created with basic routes and json serializers
 
 ## Todo
@@ -22,12 +22,12 @@ Currently all data models have been created with basic routes and json serialize
   * ~~Setup FactoryBot~~
   * ~~Setup VCR~~
   * ~~Spec Unit~~
-  * Spec Functionality
-  * Spec Integration
+  * ~~Spec Functionality~~
+  * ~~Spec Integration~~
 2. Development
-  * Create Indexing Functionality (Solr)
+  * ~~Create Indexing Functionality (Solr)~~
   * Create Additional Seralizer Functionality (In priority)
-    - Build JSON/XML Serializer
+    - ~~Build JSON/XML Serializer~~
     - Use `AdapterBase` class to build extended functionality for the following
       * Mods XML
       * Dublic Core XML
@@ -37,20 +37,22 @@ Currently all data models have been created with basic routes and json serialize
 ## Installation (for development only)
 
 1. Ensure you have the following installed on your development machine
-    * `Postgresql ~9.6`
+    * `Postgresql ~9.6(v 12 stable is recommended)`
     * `Redis`
     * `Imagemagick`
-    * `Ruby  >= 2.5.7`
+    * `Ruby  >= 2.5.9`
     * [Docker](https://docs.docker.com/)
 
 2. Clone Project
 
 3. Run `bundle install`
 
-4. Check `spec/internal/config/database.yml` and make sure your `postgres` credentials are correct.
+4. Setup development dependencies(See the Running guide below)
 
-5. `cd` into the `spec/internal` directory and:
-    * run `$ rails curator:setup` -- this will run the database setup scripts for you and install ActiveStorage.
+5. Check `spec/internal/config/database.yml` and make sure your `postgres` credentials are correct.
+
+6. `cd` into the `spec/internal` directory and:
+    * run `$ rails curator:setup` -- this will run the database setup scripts for you
     * run `$ rails generate curator:install` (optional) -- this will add an initializer for customizing `Curator.config` settings
 
 ## Running (for development only)
@@ -58,15 +60,27 @@ Curator requires several additional services:
 * [Solr](https://lucene.apache.org/solr/) (for indexing records)
 * [BPLDC Authority API](https://github.com/boston-library/bpldc_authority_api) (for retrieving authority data for
  controlled vocabluaries)
+* [Ark Manager](https://github.com/boston-library/ark-manager) (for creating persistent identifiers and permalinks)
+* [Azurite](https://github.com/Azure/Azurite) (for testing azure cloud storage)
+* [Avi Processor](https://github.com/boston-library/avi_processor_v3) (for creating derivatives from primary files. NOTE this project is still in development and is not needed at the moment)
 
 To set up these services:
-1. Clone the BPLDC Authority API project and run the Docker container (see the project README for instructions). The
- application should be running on `127.0.0.1:3001`
-2. In the Curator project, start Solr using the following command (see [solr_wrapper](https://github.com/cbeer/solr_wrapper) for more documentation):
+1. Add Environment variables. Make sure the URLs for these services are set as `ENV` variables (`AUTHORITY_API_URL` and `SOLR_URL`). You can set
+ these using the `spec/internal/.env.#{RAILS_ENV}` files. You are also required to create an `.env` and set the variables listed in the `.env.docker.sample` file in the root of curator. These are required to start the docker containers
+2. Start the docker containers with `docker-compose up` This will run docker images of the `ark_manager`, `bpldc_authority_api`, `azurite` as well as internal shared `postgres` and `redis` containers. On start the `ark-manager` and `bpldc_authority_api` apps will run `bundle exec rails db:prepare` which will wither run pending migrations OR run `rails db:setup`. NOTE the postgres container is NOT exposed to the host machine so you will need to run a local instance of postgres for the curator app itself.
+3. Install the [Azure Cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) on your local machine for your given operating system. NOTE.If installing on linux apt/deb DO NOT use the install with one command option as it appears broken in Ubuntu 16.04. Follow the step by step guide instead.
+4. Setup azure containers on azurite instance.
+    - First check if the containers exist by running. This will help test if you are having issues with your `--connection-string` param. See the [Configure Connection String](https://docs.microsoft.com/en-us/azure/storage/common/storage-configure-connection-string) guide to troubleshoot problems you may have.:
+      - `az storage container exists --name 'primary' --connection-string 'UseDevelopmentStorage=true'`
+      - `az storage container exists --name 'derivatives' --connection-string 'UseDevelopmentStorage=true'`
+    - If both containers return `{exist: false}` run the following two commands:
+      - `az storage container create -n primary --connection-string "UseDevelopmentStorage=true" --public-access off`
+      - `az storage container create -n derivatives --connection-string "UseDevelopmentStorage=true" --public-access container`
+
+
+4 In the Curator project, start Solr using the following command (see [solr_wrapper](https://github.com/cbeer/solr_wrapper) for more documentation):
     * `$ cd ./spec/internal && solr_wrapper` (development)
     * `$ solr_wrapper` (test)
-3. Make sure the URLs for these services are set as `ENV` variables (`AUTHORITY_API_URL` and `SOLR_URL`). You can set
- these using the `spec/internal/.env.#{RAILS_ENV}` files.
 
 
 ## Contributing
