@@ -1,0 +1,58 @@
+version: "3"
+services:
+  pg:
+    container_name: curator_postgres
+    image: postgres:12
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+  cache:
+    image: redis:latest
+    sysctls:
+      net.core.somaxconn: 1024
+  azure:
+    container_name: curator_azure
+    image: mcr.microsoft.com/azure-storage/azurite:3.11.0
+    command: "azurite-blob --blobHost 0.0.0.0 --blobPort 10000 -l /var/lib/azurite/data -d /opt/azurite/debug.log --loose --skipApiVersionCheck"
+    restart: always
+    volumes:
+      - az_data:/var/lib/azurite/data
+    ports:
+      - "10000:10000"
+  bpldc_authority_api:
+    container_name: curator_bpldc_authority_api
+    image: bostonlibrary/bpldc_authority_api:dev-latest
+    entrypoint: /bpldc_authority_entry.sh
+    command: ["bundle", "exec", "puma", "-C", "config/puma.rb"]
+    volumes:
+      - ./docker/bpldc_authority_entry.sh:/bpldc_authority_entry.sh
+    environment:
+      - RAILS_ENV=development
+      - RAILS_LOG_TO_STDOUT=true
+      - POSTGRES_HOST=pg
+    ports:
+      - "3001:3000"
+    depends_on:
+      - pg
+  ark_manager:
+    container_name: curator_ark_manager
+    image: bostonlibrary/ark-manager:dev-latest
+    entrypoint: /ark_manager_entry.sh
+    command: ["bundle", "exec", "puma", "-C", "config/puma.rb"]
+    volumes:
+      - ./docker/ark_manager_entry.sh:/ark_manager_entry.sh
+    ports:
+      - "3002:3000"
+    env_file: .env
+    environment:
+      - RAILS_ENV=development
+      - RAILS_LOG_TO_STDOUT=true
+      - ARK_MANAGER_DATABASE_HOST=pg
+      - REDIS_DOCKER_URL=redis://cache:6379/0
+    depends_on:
+      - pg
+      - cache
+volumes:
+  az_data:
+  pg_data:

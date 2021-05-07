@@ -4,17 +4,19 @@ module Curator
   class Filestreams::Video < Filestreams::FileSet
     include Filestreams::Thumbnailable
 
-    DEFAULT_REQUIRED_DERIVATIVES = %i(video_access characterization).freeze
+    DEFAULT_REQUIRED_DERIVATIVES = %i(video_access_mp4 characterization).freeze
 
     belongs_to :file_set_of, inverse_of: :video_file_sets, class_name: 'Curator::DigitalObject'
 
-    has_one_attached :document_access, service: :derivatives
     has_one_attached :document_primary
-
-    has_one_attached :text_plain, service: :derivatives
-
-    has_one_attached :video_access, service: :derivatives
     has_one_attached :video_primary
+
+    with_options service: :derivatives do
+      has_one_attached :document_access
+      has_one_attached :text_plain
+      has_one_attached :video_access_mp4
+      has_one_attached :video_access_webm
+    end
 
     has_paper_trail
 

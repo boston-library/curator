@@ -9,11 +9,17 @@ module Curator
     belongs_to :file_set_of, inverse_of: :document_file_sets, class_name: 'Curator::DigitalObject'
 
     has_one_attached :document_primary
-    has_one_attached :document_access, service: :derivatives
+
+    with_options service: :derivatives do
+      has_one_attached :document_access
+      has_one_attached :text_plain
+    end
 
     has_paper_trail
 
     def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
+      return super(%i(characterization)) if text_plain.attached? && %i(document_access document_primary).any? { |a| public_send(a).attached? }
+
       super(required_derivatives)
     end
 
