@@ -18,7 +18,6 @@ module Curator
         protected
 
         def attach_files!(record)
-          puts "ATTACH FILES WORKING"
           files = @json_attrs.fetch('files', [])
 
           return if files.blank?
@@ -34,30 +33,23 @@ module Curator
 
         def attach_group!(record, attachment_type, attachments = [])
           return if attachments.blank?
-          puts "ATTACH GROUP! WORKING"
 
           attachments.each do |attachment|
             attributes = file_attributes(attachment)
-            puts "ATTRIBUTES (attach_group!) = #{attributes}"
 
             io_hash = attachment.fetch('io', {})
-            puts "IO HASH = #{io_hash}"
-
             io_hash['ingest_filepath'] = attributes['metadata']['ingest_filepath'] if attributes.dig('metadata', 'ingest_filepath').present?
 
             attachment_file_key = file_key_for_service(record, attachment_type, attributes['file_name'], attributes['content_type'])
-
             attributes['key'] = attachment_file_key if !attributes.key?('key')
-
             raise ActiveStorage::Error, "improper format for key #{attributes['key']}" if attributes['key'] != attachment_file_key
 
             attributes['service_name'] = attachment_service(record, attachment_type)
 
             attachable = create_attachable(attributes, io_hash)
-            puts "CREATE ATTACHABLE SUCCESSFUL, MOVING TO check_file_fixity!"
+
             check_file_fixity!(attachable, attributes['byte_size'], attributes['checksum_md5'])
 
-            puts "check_file_fixity SUCCESSFUL, MOVING TO attach!"
             record.public_send(attachment_type).attach(attachable)
           end
         end
@@ -85,8 +77,6 @@ module Curator
         end
 
         def fedora_content?(io = {})
-          puts "FEDORA CONTENT? CALLED"
-          puts "PUTPUT IS #{io.dig('fedora_content_location').present?}"
           io.dig('fedora_content_location').present?
         end
 
@@ -104,16 +94,17 @@ module Curator
         # @param io [Tempfile]
         # @returns [ActiveStorage::Blob]
         def import_file_from_fedora(attachment_attributes, io)
-          ActiveStorage::Blob.create_after_unfurling!(
+          ActiveStorage::Blob.create!(
             key: attachment_attributes['key'],
-            io: io,
             filename: attachment_attributes['file_name'],
-            #byte_size: attachment_attributes['byte_size'],
-            #checksum: checksum_to_base64(attachment_attributes['checksum_md5']),
+            byte_size: attachment_attributes['byte_size'],
+            checksum: checksum_to_base64(attachment_attributes['checksum_md5']),
             content_type: attachment_attributes['content_type'],
             service_name: attachment_attributes['service_name'],
             metadata: attachment_attributes['metadata']
-          )
+          ).tap do |blob|
+            blob.upload_without_unfurling(io)
+          end
         end
 
         def attach_existing_file(attachment_attributes)
@@ -176,19 +167,8 @@ module Curator
           raise ActiveStorage::Error, 'Could not determine mime type for image!'
         end
 
-        # format legacy datastream names as ActiveStorage attachment types
-        # TODO: this method isn't called anywhere!
-        def attachment_for_ds(datastream_name)
-          return if datastream_name.blank?
-
-          attachment_type = datastream_name.underscore
-          attachment_type.insert(-4, '_') if datastream_name.match?(/(300|800|marcxml)\z/)
-          attachment_type
-        end
-
         # use fedora content URL if available, or local filepath, or base64 string
         def content_io(io_hash)
-          puts "CONTENT IO CALLED"
           return if io_hash.blank?
 
           return fedora_io(io_hash['fedora_content_location']) if fedora_content?(io_hash)
@@ -205,7 +185,6 @@ module Curator
         # @param byte_size [Integer] size from incoming file
         # @param checksum_md5 [String] md5 checksum from incoming file
         def check_file_fixity!(blob, byte_size, checksum_md5)
-          puts "CHECK FILE FIXITY CALLED for #{blob.filename.to_s}"
           return if byte_size.blank? && checksum_md5.blank?
 
           validate_byte_size!(blob, byte_size) if byte_size
@@ -247,7 +226,6 @@ module Curator
         end
 
         def fedora_io(fedora_content_location)
-          puts "CALLING FEDORA IO with #{fedora_content_location}"
           return if fedora_content_location.blank?
 
           http = Down::Http.new do |client|
@@ -256,7 +234,6 @@ module Curator
             # causes errors, so just use basic auth on everything
             client.basic_auth(user: ENV['FEDORA_USERNAME'], pass: ENV['FEDORA_PASSWORD'])
           end
-          puts "ABOUT TO CALL DOWNLOAD!"
           http.download(fedora_content_location)
         end
 
