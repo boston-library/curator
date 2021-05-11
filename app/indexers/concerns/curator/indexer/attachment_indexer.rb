@@ -46,7 +46,7 @@ module Curator
             #   end
             #   attachments[attachment_type] = attachments_arr
             # end
-            next unless attachments.present?
+            next if attachments.blank?
 
             context.output_hash['attachments_ss'] = attachments.to_json
             key_base = attachments[attachments.keys.first][:key].gsub(/\/[^\/]*\z/, '')

@@ -19,6 +19,8 @@ RSpec.describe Curator::Indexer::AttachmentIndexer, type: :indexer do
       expect(field_value['text_plain']['content_type']).to eq 'text/plain'
       expect(field_value['text_plain']['filename']).to eq 'text_plain.txt'
       expect(field_value['text_plain']['checksum']).to be_an_instance_of(String)
+      expect(field_value['text_plain']['service_name']).to eq 'derivatives'
+      expect(field_value['text_plain']['key']).to be_an_instance_of(String)
     end
   end
 end

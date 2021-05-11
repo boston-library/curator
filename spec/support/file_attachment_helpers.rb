@@ -14,6 +14,10 @@ module FileAttachmentHelpers
     attach_fixture_file(:image_georectified_primary, file_set, 'image_georectified_primary.tif')
   end
 
+  def attach_thumbnail_file(file_set)
+    attach_fixture_file(:image_thumbnail_300, file_set, 'image_thumbnail_300.jpg')
+  end
+
   private
 
   def attach_fixture_file(attachment_type, file_set, file_fixture_name)

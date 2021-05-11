@@ -5,6 +5,7 @@ module Curator
     include Curator::Indexer::WorkflowIndexer
     include Curator::Indexer::AdministrativeIndexer
     include Curator::Indexer::GeographicIndexer
+    include Curator::Indexer::ExemplaryImageIndexer
 
     # TODO: add indexing for: edit_access_group_ssim
     configure do
@@ -15,7 +16,6 @@ module Curator
       to_field 'abstract_tsi', obj_extract('abstract')
       to_field 'institution_url_ss', obj_extract('url')
       to_field %w(genre_basic_ssim genre_basic_tsim), obj_extract('class', 'name', 'demodulize')
-      to_field 'exemplary_image_key_ss', obj_extract('image_thumbnail_300_attachment', 'key')
     end
   end
 end
