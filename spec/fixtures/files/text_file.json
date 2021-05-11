@@ -1,10 +1,10 @@
 {
   "files": [{
     "file_name": "text_plain.txt",
-    "file_type": "TextPlain",
+    "file_type": "text_plain",
     "content_type": "text/plain",
     "byte_size": 1125,
-    "checksum": "db1a04a8c807c363814ed99f1364efb2",
+    "checksum_md5": "db1a04a8c807c363814ed99f1364efb2",
     "metadata": {
       "ingest_filepath": "curator/spec/fixtures/files/text_plain.txt"
     }

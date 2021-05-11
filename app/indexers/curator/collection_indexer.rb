@@ -4,6 +4,7 @@ module Curator
   class CollectionIndexer < Curator::Indexer
     include Curator::Indexer::WorkflowIndexer
     include Curator::Indexer::AdministrativeIndexer
+    include Curator::Indexer::ExemplaryImageIndexer
 
     # TODO: add indexing for: edit_access_group_ssim
     configure do
@@ -15,12 +16,6 @@ module Curator
       to_field %w(physical_location_ssim physical_location_tim institution_name_ssi institution_name_ti),
                obj_extract('institution', 'name')
       to_field 'institution_ark_id_ssi', obj_extract('institution', 'ark_id')
-
-      to_field 'exemplary_image_ssi', obj_extract('exemplary_file_set', 'ark_id')
-      to_field 'exemplary_image_iiif_bsi' do |record, accumulator|
-        exemplary_file_set_type = record.exemplary_file_set&.file_set_type
-        accumulator << false unless exemplary_file_set_type == 'Curator::Filestreams::Image'
-      end
       to_field %w(genre_basic_ssim genre_basic_tim) do |record, accumulator|
         accumulator << 'Collections'
         # iterate over child DigitalObject and get genre values

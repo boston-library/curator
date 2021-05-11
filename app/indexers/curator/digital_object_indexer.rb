@@ -5,6 +5,7 @@ module Curator
     include Curator::Indexer::DescriptiveIndexer
     include Curator::Indexer::WorkflowIndexer
     include Curator::Indexer::AdministrativeIndexer
+    include Curator::Indexer::ExemplaryImageIndexer
 
     # TODO: add indexing for: contained_by_ark_id_ssi edit_access_group_ssim
     configure do
@@ -19,7 +20,6 @@ module Curator
         accumulator.concat record.is_member_of_collection.pluck(:ark_id)
       end
       to_field 'contained_by_ssi', obj_extract('contained_by', 'ark_id')
-      to_field 'exemplary_image_ssi', obj_extract('exemplary_file_set', 'ark_id')
       to_field('filenames_ssim') { |rec, acc| acc.concat rec.file_sets.pluck(:file_name_base).uniq }
       each_record do |record, context|
         if record.image_file_sets.present?

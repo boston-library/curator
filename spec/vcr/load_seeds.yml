@@ -49,11 +49,13 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '[{"name":"Art and Architecture Thesaurus","code":"aat","base_url":"http://vocab.getty.edu/aat"},{"name":"GeoNames","code":"geonames","base_url":"http://sws.geonames.org"},{"name":"Thesaurus
-        for Graphic Materials","code":"gmgpc","base_url":"http://id.loc.gov/vocabulary/graphicMaterials"},{"name":"ISO639-2
+        for Graphic Materials","code":"gmgpc","base_url":"http://id.loc.gov/vocabulary/graphicMaterials"},
+        {"name":"Homosaurus LGBTQ vocabulary","code":"homoit","base_url":"http://homosaurus.org/v2"},{"name":"ISO639-2
         Languages","code":"iso639-2","base_url":"http://id.loc.gov/vocabulary/iso639-2"},{"name":"Library
         of Congress Genre/Form Terms","code":"lcgft","base_url":"http://id.loc.gov/authorities/genreForms"},{"name":"Thesaurus
         for Graphic Materials","code":"lctgm","base_url":"http://id.loc.gov/vocabulary/graphicMaterials"},{"name":"Library
-        of Congress Subject Headings","code":"lcsh","base_url":"http://id.loc.gov/authorities/subjects"},{"name":"local","code":"local"},{"name":"Library
+        of Congress Subject Headings","code":"lcsh","base_url":"http://id.loc.gov/authorities/subjects"},{"name":"local","code":"local"},
+        {"name":"Medical Subject Headings","code":"mesh","base_url":"https://id.nlm.nih.gov/mesh"},{"name":"Library
         of Congress Name Authority File","code":"naf","base_url":"http://id.loc.gov/authorities/names"},{"name":"MARC
         genre terms","code":"marcgt","base_url":"http://id.loc.gov/vocabulary/genreFormSchemes/marcgt"},{"name":"MARC
         Relators Scheme","code":"marcrelator","base_url":"http://id.loc.gov/vocabulary/relators"},{"name":"RBMS
@@ -66,7 +68,8 @@ http_interactions:
         Controlled Vocabularies: Type Evidence","code":"rbtyp","base_url":"http://id.loc.gov/vocabulary/genreFormSchemes/rbtyp"},{"name":"Resource
         Types Scheme","code":"resourceTypes","base_url":"http://id.loc.gov/vocabulary/resourceTypes"},{"name":"Thesaurus
         of Geographic Names","code":"tgn","base_url":"http://vocab.getty.edu/tgn"},{"name":"Getty
-        Union List of Artist Names","code":"ulan","base_url":"http://vocab.getty.edu/ulan"}]'
+        Union List of Artist Names","code":"ulan","base_url":"http://vocab.getty.edu/ulan"},{"name":"Virtual
+        International Authority File","code":"viaf","base_url":"http://viaf.org/viaf"}]'
   recorded_at: Thu, 03 Dec 2020 22:50:44 GMT
 - request:
     method: get
@@ -589,17 +592,17 @@ http_interactions:
       string: '[{"label":"No known restrictions on use."},{"label":"This work is in
         the public domain under a Creative Commons No Rights Reserved License (CC0)."},{"label":"This
         work is licensed for use under a Creative Commons Attribution License (CC
-        BY).","uri":"https://creativecommons.org/licenses/by/4.0"},{"label":"This
+        BY).","uri":"https://creativecommons.org/licenses/by/4.0/"},{"label":"This
         work is licensed for use under a Creative Commons Attribution Share Alike
-        License (CC BY-SA).","uri":"https://creativecommons.org/licenses/by-sa/4.0"},{"label":"This
+        License (CC BY-SA).","uri":"https://creativecommons.org/licenses/by-sa/4.0/"},{"label":"This
         work is licensed for use under a Creative Commons Attribution No Derivatives
-        License (CC BY-ND).","uri":"https://creativecommons.org/licenses/by-nd/4.0"},{"label":"This
+        License (CC BY-ND).","uri":"https://creativecommons.org/licenses/by-nd/4.0/"},{"label":"This
         work is licensed for use under a Creative Commons Attribution Non-Commercial
-        License (CC BY-NC).","uri":"https://creativecommons.org/licenses/by-nc/4.0"},{"label":"This
+        License (CC BY-NC).","uri":"https://creativecommons.org/licenses/by-nc/4.0/"},{"label":"This
         work is licensed for use under a Creative Commons Attribution Non-Commercial
-        Share Alike License (CC BY-NC-SA).","uri":"https://creativecommons.org/licenses/by-nc-sa/4.0"},{"label":"This
+        Share Alike License (CC BY-NC-SA).","uri":"https://creativecommons.org/licenses/by-nc-sa/4.0/"},{"label":"This
         work is licensed for use under a Creative Commons Attribution Non-Commercial
-        No Derivatives License (CC BY-NC-ND).","uri":"https://creativecommons.org/licenses/by-nc-nd/4.0"},{"label":"All
+        No Derivatives License (CC BY-NC-ND).","uri":"https://creativecommons.org/licenses/by-nc-nd/4.0/"},{"label":"All
         rights reserved."},{"label":"Contact host institution for more information."}]'
   recorded_at: Thu, 03 Dec 2020 22:50:54 GMT
 - request:

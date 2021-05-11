@@ -24,7 +24,7 @@ module Curator
           end
 
           build_administrative(collection) do |administrative|
-            [:description_standard, :flagged, :destination_site, :harvestable].each do |attr|
+            [:description_standard, :flagged, :destination_site, :harvestable, :hosting_status].each do |attr|
               administrative.send("#{attr}=", @admin_json_attrs.fetch(attr)) if @admin_json_attrs.fetch(attr, nil).present?
             end
           end

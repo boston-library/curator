@@ -6,7 +6,7 @@ module Curator
     module AttachmentIndexer
       extend ActiveSupport::Concern
 
-      ATTACHMENT_FIELDS = %i(byte_size content_type checksum).freeze
+      ATTACHMENT_FIELDS = %i(byte_size content_type checksum key service_name).freeze
       HAS_ONE_ATTACHMENT_TYPES = %i(audio_access audio_primary document_access document_primary
                                     ebook_access_epub ebook_access_mobi ebook_access_daisy
                                     image_access_800 image_georectified_primary image_primary image_negative_master
@@ -46,7 +46,11 @@ module Curator
             #   end
             #   attachments[attachment_type] = attachments_arr
             # end
-            context.output_hash['attachments_ss'] = attachments.present? ? attachments.to_json : nil
+            next if attachments.blank?
+
+            context.output_hash['attachments_ss'] = attachments.to_json
+            key_base = attachments[attachments.keys.first][:key].gsub(/\/[^\/]*\z/, '')
+            context.output_hash['storage_key_base_ss'] = key_base
           end
         end
       end

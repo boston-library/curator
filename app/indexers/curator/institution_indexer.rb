@@ -5,6 +5,7 @@ module Curator
     include Curator::Indexer::WorkflowIndexer
     include Curator::Indexer::AdministrativeIndexer
     include Curator::Indexer::GeographicIndexer
+    include Curator::Indexer::ExemplaryImageIndexer
 
     # TODO: add indexing for: edit_access_group_ssim
     configure do

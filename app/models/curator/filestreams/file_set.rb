@@ -47,7 +47,7 @@ module Curator
     validates :file_name_base, presence: true
     validates :file_set_type, presence: true, inclusion: { in: Filestreams.file_set_types.collect { |type| "Curator::Filestreams::#{type}" } }
 
-    after_commit :reindex_digital_objects
+    after_commit :reindex_digital_objects, :reindex_collections
 
     def ark_params
       super.merge({
@@ -93,6 +93,10 @@ module Curator
 
     def reindex_digital_objects
       file_set_members_of.find_each { |digital_object| digital_object.update_index }
+    end
+
+    def reindex_collections
+      exemplary_image_of_collections.find_each { |collection| collection.update_index }
     end
   end
 end

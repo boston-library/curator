@@ -30,10 +30,10 @@
     "files": [
       {
         "file_name": "image_thumbnail_300_institution.png",
-        "file_type": "ImageThumbnail300",
+        "file_type": "image_thumbnail_300",
         "content_type": "image/png",
         "byte_size": 11475,
-        "checksum": "3ea351df3cb8b0ca4c5361727e191d0b",
+        "checksum_md5": "3ea351df3cb8b0ca4c5361727e191d0b",
         "metadata": {
           "ingest_filepath": "curator/spec/fixtures/files/image_thumbnail_300_institution.png"
         }
