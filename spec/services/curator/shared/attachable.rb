@@ -7,7 +7,7 @@ RSpec.shared_examples 'attachable', type: :service do
     subject { record.image_thumbnail_300_blob }
 
     it 'sets the file info correctly' do
-      expect(subject.key).to eq("#{record.class.name.demodulize.downcase.pluralize}/#{record.ark_id}/image_thumbnail_300.jpg")
+      expect(subject.key).to include("#{record.class.name.demodulize.downcase.pluralize}/#{record.ark_id}/image_thumbnail_300")
       expect(subject.filename.to_s).to eq(file_json['file_name'])
       expect(subject.metadata['ingest_filepath']).to eq(file_json['metadata']['ingest_filepath'])
       expect(subject.service_name).to eq('derivatives')
