@@ -73,16 +73,28 @@ module Curator
     end
 
     def ark_params
-      super.merge({
+      return super.except(:oai_namespace_id).merge({
+        parent_pid: admin_set&.ark_id,
+        secondary_parent_pids: []
+      }.merge(local_id_params)) if administrative&.oai_header_id.blank?
+
+      params = super.merge({
         parent_pid: admin_set&.ark_id,
         secondary_parent_pids: []
       }.merge(local_id_params))
+      params[:namespace_id] = params.delete(:oai_namespace_id)
+      params
     end
 
     private
 
     def local_id_params
       ident_params = { local_original_identifier: nil, local_original_identifier_type: nil }
+
+      return {
+        local_original_identifier: administrative.oai_header_id,
+              local_original_identifier_type: 'oai_header_id'
+      } if administrative&.oai_header_id.present?
 
       return ident_params if descriptive&.identifier.blank?
 

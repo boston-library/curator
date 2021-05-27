@@ -31,10 +31,10 @@ module Curator
     after_update_commit :reindex_associations
 
     def ark_params
-      super.merge({
+      super.except(:oai_namespace_id).merge({
         parent_pid: nil,
           secondary_parent_pids: [],
-          local_original_identifier_type: 'Physical Location',
+          local_original_identifier_type: 'physical_location',
           local_original_identifier: name
       })
     end

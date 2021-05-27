@@ -30,12 +30,10 @@ end
 require 'vcr'
 
 VCR.configure do |c|
-  # NOTE: uncomment this when creating or updating existing specs are wrapped in VCR.use_cassete
-  # This will update the yaml files for the specs.
-  # c.default_cassette_options = { record: :new_episodes }
   c.cassette_library_dir = 'spec/vcr'
   c.configure_rspec_metadata!
   c.hook_into :webmock
+  c.default_cassette_options = { record: ENV['CI'].present? ? :none : :new_episodes }
   c.ignore_request do |request|
     request.uri =~ /solr/
   end

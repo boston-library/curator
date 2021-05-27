@@ -11,11 +11,10 @@ module Curator
 
       validates :ark_id, presence: true, uniqueness: true, on: :create
     end
-    # Todo put a before validate callback here to the ark manager
 
     module InstanceMethods
       def ark_params
-        Curator.config.default_ark_params.merge({ model_type: self.class.name })
+        Curator.config.default_ark_params.dup.merge({ model_type: self.class.name })
       end
 
       def generate_ark_id

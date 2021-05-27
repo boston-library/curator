@@ -13,10 +13,10 @@ module Curator
                   'statement of responsibility'].freeze
 
     LOCAL_ORIGINAL_IDENTIFIER_TYPES = {
-      'internet-archive' => 'Barcode',
-      'local-barcode' => 'Barcode',
-      'local-accession' => 'id_local-accession field',
-      'local-other' => 'id_local-other field'
+      'internet-archive' => 'barcode',
+      'local-barcode' => 'barcode',
+      'local-accession' => 'id_local-accession',
+      'local-other' => 'id_local-other'
     }.freeze
 
     namespace_klass_accessors :cartographic, :date, :identifier, :note, :publication, :related, :subject, :title_set, :title
