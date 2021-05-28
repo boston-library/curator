@@ -50,7 +50,7 @@ module Curator
     after_commit :reindex_digital_objects, :reindex_collections
 
     def ark_params
-      super.merge({
+      super.except(:oai_namespace_id).merge({
         parent_pid: file_set_of&.ark_id,
           secondary_parent_pids: [],
           local_original_identifier_type: 'filename',

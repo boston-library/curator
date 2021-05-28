@@ -21,8 +21,9 @@ module Curator
     def default_ark_params
       @default_ark_params ||
       { namespace_ark: ENV['ARK_NAMESPACE'],
-        namespace_id: ENV['ARK_NAMESPACE_ID'],
-        url_base: ENV['ARK_URL_BASE']
+        namespace_id: ENV['ARK_MANAGER_DEFAULT_NAMESPACE'],
+        oai_namespace_id: ENV['ARK_MANAGER_OAI_NAMESPACE'],
+        url_base: ENV['ARK_MANAGER_DEFAULT_BASE_URL']
       }.freeze
     end
 

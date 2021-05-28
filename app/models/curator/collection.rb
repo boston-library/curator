@@ -39,10 +39,10 @@ module Curator
     after_update_commit :reindex_collection_members
 
     def ark_params
-      super.merge({
+      super.except(:oai_namespace_id).merge({
         parent_pid: institution&.ark_id,
           secondary_parent_pids: [],
-          local_original_identifier_type: 'Institution Collection Name',
+          local_original_identifier_type: 'institution_collection_name',
           local_original_identifier: name
       })
     end

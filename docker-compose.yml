@@ -8,18 +8,20 @@ services:
     environment:
       - POSTGRES_PASSWORD=postgres
   cache:
+    container_name: curator_shared_cache
     image: redis:latest
+    command: redis-server --databases 3 --maxmemory 32mb --maxmemory-policy allkeys-lfu
     sysctls:
       net.core.somaxconn: 1024
   azure:
     container_name: curator_azure
     image: mcr.microsoft.com/azure-storage/azurite:3.11.0
-    command: "azurite-blob --blobHost 0.0.0.0 --blobPort 10000 -l /var/lib/azurite/data -d /opt/azurite/debug.log --loose --skipApiVersionCheck"
+    command: "azurite-blob --blobHost 0.0.0.0 --blobPort 8888 -l /var/lib/azurite/data -d /opt/azurite/debug.log --loose --skipApiVersionCheck"
     restart: always
     volumes:
       - az_data:/var/lib/azurite/data
     ports:
-      - "10000:10000"
+      - "8888:8888"
   bpldc_authority_api:
     container_name: curator_bpldc_authority_api
     image: bostonlibrary/bpldc_authority_api:dev-latest
@@ -29,12 +31,15 @@ services:
       - ./docker/bpldc_authority_entry.sh:/bpldc_authority_entry.sh
     environment:
       - RAILS_ENV=development
+      - WEB_CONCURRENCY=0
       - RAILS_LOG_TO_STDOUT=true
       - POSTGRES_HOST=pg
+      - BPLDC_REDIS_CACHE_URL=redis://cache:6379/1
     ports:
       - "3001:3000"
     depends_on:
       - pg
+      - cache
   ark_manager:
     container_name: curator_ark_manager
     image: bostonlibrary/ark-manager:dev-latest
@@ -48,8 +53,9 @@ services:
     environment:
       - RAILS_ENV=development
       - RAILS_LOG_TO_STDOUT=true
+      - WEB_CONCURRENCY=0
       - ARK_MANAGER_DATABASE_HOST=pg
-      - REDIS_DOCKER_URL=redis://cache:6379/0
+      - ARK_MANAGER_REDIS_CACHE_URL=redis://cache:6379/0
     depends_on:
       - pg
       - cache
