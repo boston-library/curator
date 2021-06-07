@@ -66,4 +66,17 @@ RSpec.describe Curator::Parsers::GeoParser do
       )
     end
   end
+
+  describe 'normalize_tgn_hgeo' do
+    let(:tgn_hgeo) do
+      { city_section: 'Roslindale', country: 'United States', city: 'Boston',
+        state: 'Massachusetts', county: 'Suffolk' }
+    end
+    it 'puts the elements in the right order' do
+      expect(described_class.normalize_tgn_hgeo(tgn_hgeo)).to eq(
+        { country: 'United States', state: 'Massachusetts',
+          county: 'Suffolk', city: 'Boston', city_section: 'Roslindale' }
+      )
+    end
+  end
 end
