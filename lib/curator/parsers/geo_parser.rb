@@ -140,8 +140,8 @@ module Curator
       # @return [Hash]
       def self.normalize_tgn_hgeo(hgeo_hash)
         normalized = {}
-        %i[continent country region province state territory county island city
-           city_section area other].each do |k|
+        %i(continent country region province state territory county island city
+           city_section area other).each do |k|
           normalized[k] = hgeo_hash[k]
         end
         normalized.compact
