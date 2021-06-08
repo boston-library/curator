@@ -225,7 +225,8 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
 
     it { is_expected.to belong_to(:rights_statement).
                         inverse_of(:rights_statement_of).
-                        class_name('Curator::ControlledTerms::RightsStatement') }
+                        class_name('Curator::ControlledTerms::RightsStatement').
+                        optional(true) }
 
     it { is_expected.to have_many(:name_roles).
                         inverse_of(:descriptive).

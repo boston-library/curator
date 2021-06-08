@@ -56,6 +56,8 @@ module Curator
         private
 
         def find_or_create_nomenclature(nomenclature_class:, term_data: {}, authority_code: nil)
+          return if term_data.blank?
+
           nomenclature = nil
           retries = 0
           term_data = term_data.dup.symbolize_keys
