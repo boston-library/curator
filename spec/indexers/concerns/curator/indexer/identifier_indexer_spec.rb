@@ -18,6 +18,7 @@ RSpec.describe Curator::Indexer::IdentifierIndexer do
         identifier_field = identifier.type.underscore + (identifier.invalid ? '_invalid' : '')
         expect(indexed["identifier_#{identifier_field}_tsim"]).to include(identifier.label)
       end
+      expect(indexed['identifier_uri_ss'].first).to include(descriptable_object.ark_id.split(':').last)
     end
   end
 end

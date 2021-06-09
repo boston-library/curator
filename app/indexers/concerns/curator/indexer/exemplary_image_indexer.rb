@@ -8,7 +8,7 @@ module Curator
         configure do
           each_record do |record, context|
             exemplary = if record.is_a?(Curator::Institution)
-                          record
+                          record if record.image_thumbnail_300.attached?
                         else
                           record.exemplary_file_set
                         end

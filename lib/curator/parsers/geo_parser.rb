@@ -134,6 +134,19 @@ module Curator
         normalized.compact
       end
 
+      ##
+      # takes Geomash::TGN data and output in correct hierarchical order
+      # @param hgeo_hash [Hash] e.g.: { continent: '', country: '', ...}
+      # @return [Hash]
+      def self.normalize_tgn_hgeo(hgeo_hash)
+        normalized = {}
+        %i(continent country region province state territory county island city
+           city_section area other).each do |k|
+          normalized[k] = hgeo_hash[k]
+        end
+        normalized.compact
+      end
+
       private_class_method :coords_to_wkt_polygon, :normalize_bbox, :bbox_dateline_fix
     end
   end
