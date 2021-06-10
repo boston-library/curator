@@ -62,7 +62,7 @@ module Curator
     belongs_to :digital_object, inverse_of: :descriptive, class_name: 'Curator::DigitalObject', touch: true
     belongs_to :license, inverse_of: :licensees, class_name: 'Curator::ControlledTerms::License'
     belongs_to :physical_location, inverse_of: :physical_locations_of, class_name: 'Curator::ControlledTerms::Name'
-    belongs_to :rights_statement, inverse_of: :rights_statement_of, class_name: 'Curator::ControlledTerms::RightsStatement'
+    belongs_to :rights_statement, inverse_of: :rights_statement_of, class_name: 'Curator::ControlledTerms::RightsStatement', optional: true
     # MAPPING OBJECTS
     with_options inverse_of: :descriptive, dependent: :destroy, autosave: true do
       has_many :desc_terms, class_name: 'Curator::Mappings::DescTerm'
