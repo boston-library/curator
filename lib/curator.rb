@@ -4,6 +4,7 @@ require 'curator/engine'
 require 'curator/namespace_accessor'
 require 'curator/indexable_settings'
 require 'curator/configuration'
+require 'curator/version'
 
 module Curator
   extend ActiveSupport::Autoload
