@@ -27,6 +27,14 @@ module Curator
       }.freeze
     end
 
+    attr_writer :fedora_credentials
+    def fedora_credentials
+      @fedora_credentials ||
+      { fedora_username: ENV['FEDORA_USERNAME'],
+        fedora_password: ENV['FEDORA_PASSWORD']
+      }.freeze
+    end
+
     attr_writer :indexable_settings
     def indexable_settings
       @indexable_settings ||

@@ -232,7 +232,8 @@ module Curator
             client.timeout(connect: 5, read: 10)
             # adding conditionals on fedora_content_location.match?(/FOXML/)
             # causes errors, so just use basic auth on everything
-            client.basic_auth(user: ENV['FEDORA_USERNAME'], pass: ENV['FEDORA_PASSWORD'])
+            client.basic_auth(user: Curator.config.fedora_credentials[:fedora_username],
+                              pass: Curator.config.fedora_credentials[:fedora_password])
           end
           http.download(fedora_content_location)
         end
