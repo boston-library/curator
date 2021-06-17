@@ -26,7 +26,7 @@ namespace :curator do
       raise 'app:db:migrate and db:migrate rake tasks are not available!'
     end
 
-    if Rails.env.development? || Rails.env.production?
+    if %w(development staging production).member?(Rails.env)
       # NOTE: Don't seed values for test environment since the suite does that every run
       puts '............'
       if Rake::Task.task_defined?('app:curator:load_seed')
