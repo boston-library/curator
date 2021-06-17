@@ -8,7 +8,7 @@ RSpec.describe Curator::Configuration do
   subject { described_class.new }
 
   %i(ark_manager_api_url authority_api_url avi_processor_url solr_url
-     default_ark_params indexable_settings).each do |m|
+     default_ark_params indexable_settings fedora_credentials).each do |m|
     it { is_expected.to respond_to(m) }
     it { is_expected.to respond_to("#{m}=") }
   end
@@ -35,6 +35,17 @@ RSpec.describe Curator::Configuration do
           url_base: 'ARK_MANAGER_DEFAULT_BASE_URL'
         }.each do |k, v|
           expect(ark_config[k]).to eq ENV[v]
+        end
+      end
+    end
+
+    describe 'fedora_credentials' do
+      let(:fedora_config) { subject.fedora_credentials }
+      it 'returns a hash of values' do
+        { fedora_username: 'FEDORA_USERNAME',
+          fedora_password: 'FEDORA_PASSWORD'
+        }.each do |k, v|
+          expect(fedora_config[k]).to eq ENV[v]
         end
       end
     end
