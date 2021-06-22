@@ -12,7 +12,7 @@ module Curator
       with_transaction do
         admin_set_ark_id = @json_attrs.dig('admin_set', 'ark_id')
         collection_ark_ids = @json_attrs.fetch('is_member_of_collection', []).pluck('ark_id')
-        @record = Curator.digital_object_class.where(ark_id: @ark_id).first_or_create! do |digital_object|
+        @record = Curator.digital_object_class.find_or_initialize_by(ark_id: @ark_id).tap do |digital_object|
           admin_set = find_admin_set!(admin_set_ark_id, digital_object)
           digital_object.admin_set = admin_set
           digital_object.created_at = @created if @created
@@ -92,6 +92,7 @@ module Curator
               descriptive.name_roles.build(name_role_attrs)
             end
           end
+          digital_object.save!
         end
       end
       return @success, @result

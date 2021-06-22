@@ -28,9 +28,10 @@ RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: f
     describe "#show", if: has_member_methods do
       context 'with :id' do
         it "returns a successful response" do
+          resource.reload
+
           id_params = params.dup
           id_params[:id] ||= resource.to_param
-
           get :show, params: id_params
           expect(response).to have_http_status(:ok)
           expect(response.content_type).to eq(expected_content_type)
@@ -54,6 +55,8 @@ RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: f
 
       context 'with #ark_id as :id', if: include_ark_context do
         it "returns a successful response" do
+          resource.reload
+
           ark_params = params.dup
 
           ark_params[:id] = ark_params.delete(:ark_id) if ark_params.key?(:ark_id)
@@ -203,7 +206,7 @@ RSpec.shared_examples "shared_formats", type: :controller do |include_ark_contex
     let!(:format) { :json }
     let!(:charset) { 'charset=utf-8' }
     let!(:params) { base_params.dup.merge({ format: format }) }
-    let(:serialized_hash) { serializer_class.new(resource, format).serializable_hash[resource_key].as_json }
+    let(:serialized_hash) { serializer_class.new(resource.reload, format).serializable_hash[resource_key].as_json }
     # NOTE: Have to add as_json so the dates match the serialized response
 
     include_examples 'shared_get', include_ark_context: include_ark_context, has_collection_methods: has_collection_methods, has_member_methods: has_member_methods, resource_key: resource_key

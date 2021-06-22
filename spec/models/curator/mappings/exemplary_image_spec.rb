@@ -24,7 +24,7 @@ RSpec.describe Curator::Mappings::ExemplaryImage, type: :model do
   end
 
   describe 'Validations' do
-    it { is_expected.to validate_uniqueness_of(:exemplary_object_type).scoped_to([:exemplary_object_id]).on(:create).ignoring_case_sensitivity }
+    it { is_expected.to validate_uniqueness_of(:exemplary_object_id).scoped_to([:exemplary_object_type]).on(:create).ignoring_case_sensitivity }
 
     it { is_expected.to validate_uniqueness_of(:exemplary_file_set_id).
                         scoped_to([:exemplary_object_id, :exemplary_object_type]).

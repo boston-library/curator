@@ -85,7 +85,7 @@ module Curator
             Rails.logger.error '==============================================='
             Rails.logger.error e.backtrace.join("\n")
             Rails.logger.error '==============================================='
-            raise e
+            raise
           end
         end
 
