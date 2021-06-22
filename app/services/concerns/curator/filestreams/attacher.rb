@@ -59,7 +59,7 @@ module Curator
         # @param io_hash [Hash
         # @returns [ActiveStorage::Blob]
         def create_attachable(attributes, io_hash = {})
-          return attach_existing_file(attributes, record) if io_hash.blank?
+          return attach_existing_file(attributes) if io_hash.blank?
 
           return import_file_from_fedora(attributes, content_io(io_hash)) if fedora_content?(io_hash)
 
