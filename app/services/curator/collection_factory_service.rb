@@ -7,7 +7,7 @@ module Curator
     def call
       with_transaction do
         institution_ark_id = @json_attrs.dig('institution', 'ark_id')
-        @record = Curator.collection_class.where(ark_id: @ark_id).first_or_create! do |collection|
+        @record = Curator.collection_class.find_or_initialize_by(ark_id: @ark_id).tap do |collection|
           collection.name = @json_attrs.fetch(:name, nil)
           collection.abstract = @json_attrs.fetch(:abstract, '')
           collection.institution = Curator.institution_class.find_by(ark_id: institution_ark_id)
@@ -28,6 +28,7 @@ module Curator
               administrative.send("#{attr}=", @admin_json_attrs.fetch(attr)) if @admin_json_attrs.fetch(attr, nil).present?
             end
           end
+          collection.save!
         end
       end
       return @success, @result

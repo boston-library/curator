@@ -48,9 +48,10 @@ module Curator
 
             attachable = create_attachable(attributes, io_hash)
 
-            check_file_fixity!(attachable, attributes['byte_size'], attributes['checksum_md5'])
-
             record.public_send(attachment_type).attach(attachable)
+            record.save!
+
+            check_file_fixity!(record.public_send("#{attachment_type}_blob"), attributes['byte_size'], attributes['checksum_md5'])
           end
         end
 
@@ -62,14 +63,16 @@ module Curator
 
           return import_file_from_fedora(attributes, content_io(io_hash)) if fedora_content?(io_hash)
 
-          ActiveStorage::Blob.create_and_upload!(
+          # NOTE we should be passing a Hash to the attach method. This is more in line with what vanilla active storage does and will cut back on errors. See this file for more info https://github.com/rails/rails/blob/e3e3a97ada3f2b4c0c8d48f941c2ea05c859cdda/activestorage/lib/active_storage/attached/changes/create_one.rb#L52
+          {
             key: attributes['key'],
             io: content_io(io_hash),
             service_name: attributes['service_name'],
             filename: attributes['file_name'],
             content_type: attributes['content_type'],
-            metadata: attributes['metadata']
-          )
+            metadata: attributes['metadata'],
+            identify: attributes['content_type'].present? # This is specified here https://github.com/rails/rails/blob/8929f6f6e492c15a58ca13290f5ff44d00b37ccc/activestorage/app/models/active_storage/blob.rb#L110
+          }
         end
 
         def file_attributes(attachment = {})
@@ -94,22 +97,21 @@ module Curator
         # @param io [Tempfile]
         # @returns [ActiveStorage::Blob]
         def import_file_from_fedora(attachment_attributes, io)
-          ActiveStorage::Blob.create!(
-            key: attachment_attributes['key'],
-            filename: attachment_attributes['file_name'],
-            byte_size: attachment_attributes['byte_size'],
-            checksum: checksum_to_base64(attachment_attributes['checksum_md5']),
-            content_type: attachment_attributes['content_type'],
-            service_name: attachment_attributes['service_name'],
-            metadata: attachment_attributes['metadata']
-          ).tap do |blob|
+          ActiveStorage::Blob.find_or_initialize_by(key: attachment_attributes['key']).tap do |blob|
+            blob.filename =  attachment_attributes['file_name']
+            blob.byte_size = attachment_attributes['byte_size']
+            blob.checksum = checksum_to_base64(attachment_attributes['checksum_md5'])
+            blob.content_type = attachment_attributes['content_type']
+            blob.service_name = attachment_attributes['service_name']
+            blob.metadata = attachment_attributes['metadata']
+          end.tap(&:save!).tap do |blob|
             blob.upload_without_unfurling(io)
           end
         end
 
         def attach_existing_file(attachment_attributes)
-          blob = ActiveStorage::Blob.create!(
-            key: attachment_attributes['key'],
+          blob = ActiveStorage::Blob.find_or_initialize_by(key: attachment_attributes['key'])
+          blob.assign_attributes(
             filename: attachment_attributes['file_name'],
             byte_size: attachment_attributes['byte_size'],
             checksum: attachment_attributes['checksum'],
@@ -229,7 +231,7 @@ module Curator
           return if fedora_content_location.blank?
 
           http = Down::Http.new do |client|
-            client.timeout(connect: 5, read: 10)
+            client.timeout(connect: 100, read: 300)
             # adding conditionals on fedora_content_location.match?(/FOXML/)
             # causes errors, so just use basic auth on everything
             client.basic_auth(user: Curator.config.fedora_credentials[:fedora_username],

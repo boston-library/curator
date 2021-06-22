@@ -4,7 +4,9 @@ require 'rails_helper'
 require_relative '../shared/versionable'
 
 RSpec.describe Curator::Mappings::CollectionMember, type: :model do
-  subject { build(:curator_mappings_collection_member) }
+  subject { build(:curator_mappings_collection_member, digital_object: digital_object) }
+
+  let!(:digital_object) { create(:curator_digital_object) }
 
   it { is_expected.to have_db_column(:digital_object_id).
                       of_type(:integer).

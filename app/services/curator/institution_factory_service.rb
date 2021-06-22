@@ -9,7 +9,7 @@ module Curator
     def call
       location_json_attrs = @json_attrs.fetch('location', {}).with_indifferent_access
       with_transaction do
-        @record = Curator.institution_class.where(ark_id: @ark_id).first_or_create! do |institution|
+        @record = Curator.institution_class.find_or_initialize_by(ark_id: @ark_id).tap do |institution|
           institution.name = @json_attrs.fetch(:name, nil)
           institution.abstract = @json_attrs.fetch(:abstract, '')
           institution.url = @json_attrs.fetch(:url, nil)
@@ -27,7 +27,7 @@ module Curator
             destination_site = @admin_json_attrs.fetch(:destination_site, nil)
             administrative.destination_site = destination_site if destination_site
           end
-
+          institution.save!
           attach_files!(institution)
         end
       end
