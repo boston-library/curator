@@ -24,12 +24,11 @@ group :development, :test do
   gem 'awesome_print', '~> 1.8'
   gem 'azure-storage-blob', '>= 1.1', require: false
   gem 'dotenv-rails', '~> 2.7'
-  gem 'factory_bot_rails', '~> 5.0'
-  gem 'faker', '~> 2.13'
+  gem 'factory_bot_rails', '~> 6.2'
+  gem 'faker', '~> 2.18'
   gem 'pry', '~> 0.13'
   gem 'pry-byebug', '~> 3.9'
-  gem 'pry-rails', '~> 0.3'
-  gem 'puma', '~> 4.3'
+  gem 'puma', '~> 5.3'
   gem 'rubocop', '~> 0.75.1', require: false
   gem 'rubocop-performance', '~> 1.5', require: false
   gem 'rubocop-rails', '~> 2.4.2', require: false
@@ -37,11 +36,11 @@ group :development, :test do
 end
 
 group :test do
-  gem 'climate_control', '~> 0.1'
+  gem 'climate_control', '~> 1.0'
   gem 'coveralls', require: false
-  gem 'database_cleaner-active_record'
-  gem 'rspec-rails', '~> 4.0'
-  gem 'shoulda-matchers', '~> 4.4'
+  gem 'database_cleaner-active_record', '~> 2'
+  gem 'rspec-rails', '~> 5'
+  gem 'shoulda-matchers', '~> 4.5'
   gem 'vcr', '~> 6.0'
-  gem 'webmock', '~> 3.8'
+  gem 'webmock', '~> 3.13'
 end

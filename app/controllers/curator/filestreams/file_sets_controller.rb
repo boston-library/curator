@@ -11,7 +11,7 @@ module Curator
     end
 
     def show
-      multi_response(serialized_resource(@curator_resource))
+      multi_response(serialized_resource(@curator_resource, file_set_params))
     end
 
     def create
@@ -34,6 +34,8 @@ module Curator
 
     def file_set_params
       case params[:action]
+      when 'show'
+        params.permit(:show_primary_url)
       when 'create'
         params.require(:file_set).permit(:ark_id, :created_at, :updated_at,
                                          :file_set_type, :file_name_base, :position,
