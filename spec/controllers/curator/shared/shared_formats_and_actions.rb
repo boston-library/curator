@@ -51,7 +51,6 @@ RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: f
             end
             expect(response).to have_http_status(:ok)
             expect(json_response).to be_a_kind_of(Hash).and have_key(resource_key)
-            awesome_print json_response[resource_key]
             expect(json_response[resource_key]).to have_key(:image_primary_url)
           end
         end
