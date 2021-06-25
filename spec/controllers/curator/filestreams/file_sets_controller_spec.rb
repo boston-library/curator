@@ -10,7 +10,14 @@ RSpec.describe Curator::Filestreams::FileSetsController, type: :controller do
   Curator.filestreams.file_set_types.map(&:downcase).each do |file_set_type|
 
     describe "As #{file_set_type.camelize}" do
-      let(:resource) { create("curator_filestreams_#{file_set_type}", file_set_of: parent_obj) }
+      let(:resource) do
+        obj = create("curator_filestreams_#{file_set_type}", file_set_of: parent_obj)
+        if file_set_type == 'image'
+          obj.image_primary.attach(io: File.open(file_fixture('image_primary.tiff')), filename: 'image_primary.tiff')
+          obj.save!
+        end
+        obj
+      end
 
       let(:valid_attributes) do
         attributes = attributes_for("curator_filestreams_#{file_set_type}").except(:administrative, :workflow)
@@ -41,7 +48,6 @@ RSpec.describe Curator::Filestreams::FileSetsController, type: :controller do
           file_attributes[0]['metadata']['ingest_filepath'] = file_fixture('image_thumbnail_300.jpg').to_s
           attributes[:files] = file_attributes
         end
-
         attributes
       end
 
@@ -52,7 +58,7 @@ RSpec.describe Curator::Filestreams::FileSetsController, type: :controller do
       let(:resource_class) { "Curator::Filestreams::#{file_set_type.capitalize}".constantize }
       let(:serializer_class) { "Curator::Filestreams::#{file_set_type.capitalize}Serializer".constantize }
 
-      include_examples 'shared_formats', include_ark_context: true, skip_post: false, skip_put_patch: false, resource_key: 'file_set'
+      include_examples 'shared_formats', include_ark_context: true, skip_post: false, skip_put_patch: false, resource_key: 'file_set', file_set_type: file_set_type
     end
   end
 end

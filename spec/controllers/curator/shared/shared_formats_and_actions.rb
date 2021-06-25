@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: false, has_collection_methods: true, has_member_methods: true, resource_key: nil|
+RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: false, has_collection_methods: true, has_member_methods: true, resource_key: nil, file_set_type: nil|
   routes { Curator::Engine.routes }
 
   specify { expect(serializer_class).to be_truthy.and be <= Curator::Serializers::AbstractSerializer }
@@ -37,6 +37,22 @@ RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: f
           expect(response.content_type).to eq(expected_content_type)
           expect(json_response).to be_a_kind_of(Hash).and have_key(resource_key)
           expect(json_response[resource_key]).to eq(serialized_hash)
+        end
+
+        context 'with :show_primary_url param', if: file_set_type == 'image' do
+          it 'returns a response with the primary_url' do
+            resource.reload
+
+            with_show_primary_params = params.dup
+            with_show_primary_params[:id] ||= resource.to_param
+            with_show_primary_params[:show_primary_url] = true
+            ActiveStorage::Current.set(host: 'http://localhost:3000') do
+              get :show, params: with_show_primary_params
+            end
+            expect(response).to have_http_status(:ok)
+            expect(json_response).to be_a_kind_of(Hash).and have_key(resource_key)
+            expect(json_response[resource_key]).to have_key(:image_primary_url)
+          end
         end
       end
 
@@ -198,7 +214,7 @@ RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true, reso
   end
 end
 
-RSpec.shared_examples "shared_formats", type: :controller do |include_ark_context: false, has_collection_methods: true, has_member_methods: true, skip_put_patch: true, skip_post: true, resource_key: nil|
+RSpec.shared_examples "shared_formats", type: :controller do |include_ark_context: false, has_collection_methods: true, has_member_methods: true, skip_put_patch: true, skip_post: true, resource_key: nil, file_set_type: nil|
   specify { expect(base_params).to be_truthy.and be_a_kind_of(Hash) }
   specify { expect(resource).to be_truthy.and be_a_kind_of(ActiveRecord::Base) }
 
@@ -209,7 +225,7 @@ RSpec.shared_examples "shared_formats", type: :controller do |include_ark_contex
     let(:serialized_hash) { serializer_class.new(resource.reload, format).serializable_hash[resource_key].as_json }
     # NOTE: Have to add as_json so the dates match the serialized response
 
-    include_examples 'shared_get', include_ark_context: include_ark_context, has_collection_methods: has_collection_methods, has_member_methods: has_member_methods, resource_key: resource_key
+    include_examples 'shared_get', include_ark_context: include_ark_context, has_collection_methods: has_collection_methods, has_member_methods: has_member_methods, resource_key: resource_key, file_set_type: file_set_type
 
     include_examples 'shared_post', skip_post: skip_post, resource_key: resource_key
 
