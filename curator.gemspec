@@ -40,7 +40,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'connection_pool', '~> 2.2'
   spec.add_dependency 'down', '~> 5.2'
   spec.add_dependency 'htmlentities', '~> 4.3' # TODO: Look into replacing this since the last released in 2014. I recommend turning this into its own parser class.
-  spec.add_dependency 'http', '~> 4.4'
+  spec.add_dependency 'http', '~> 5.0'
   spec.add_dependency 'mime-types', '~> 3.3'
   spec.add_dependency 'oj', '~> 3.11'
   spec.add_dependency 'ox', '~> 2.14'

@@ -39,7 +39,7 @@ module Curator
 
     def generate_ark(client)
       resp = client.headers(self.class.default_headers).
-               post("#{self.class.default_path_prefix}/arks", json: ark_create_params)
+               post("#{self.class.default_path_prefix}/arks", json: ark_create_params).flush
 
       json_response = Oj.load(resp.body.to_s)
 

@@ -4,7 +4,7 @@ module Curator
   module Services
     module RemoteService
       extend ActiveSupport::Concern
-      
+
       included do
         include Client
       end
@@ -12,9 +12,46 @@ module Curator
       module Client
         extend ActiveSupport::Concern
 
+        module ClientPool
+          class Registry
+            include Singleton
+
+            def initialize
+              @_clients = Concurrent::Map.new
+            end
+
+            def pool_for(key, &block)
+              _clients.compute_if_absent(key) { block.call }
+            end
+
+            def reload_pool(key)
+              _clients.compute_if_present(key) do |pool|
+                pool.reload { |client| client.close if client }
+              end
+            end
+
+            def shutdown_pool(key)
+              _clients.compute_if_present(key) do |pool|
+                pool.shutdown { |client| client.close if client }
+              end
+            end
+
+            def shutdown_and_clear!
+              _clients.keys.each do |pool_key|
+                shutdown_pool(key)
+              end
+              _clients.clear
+            end
+
+            private
+
+            attr_reader :_clients
+          end
+        end
+
+
         #TODO will require Authorization options once login in system is set up
         included do
-
           class_attribute :base_url, instance_accessor: false
           class_attribute :pool_options, instance_accessor: false, default: { size: ENV.fetch('RAILS_MAX_THREADS') { 5 }, timeout: 5 }
           class_attribute :timeout_options, instance_accessor: false, default: { connect: 5, write: 5, read: 5 }
@@ -24,7 +61,7 @@ module Curator
 
           private
 
-          thread_cattr_reader :_client_pool, instance_reader: false
+          class_attribute :__client_pool, instance_accessor: false, default: ClientPool::Registry.instance
         end
 
         class_methods do
@@ -35,17 +72,21 @@ module Curator
           end
 
           def with_client
-            current_client_pool.with { |conn| yield conn }
+            current_client_pool.with  { |conn| yield conn }
           end
 
           protected
 
-          def current_client_pool
-            return _client_pool if _client_pool.present?
+          def pool_key
+            "#{base_uri.scheme}::#{base_uri.host}::#{base_uri.port}"
+          end
 
-            Thread.current["attr_#{name}__client_pool"] = ConnectionPool.new(pool_options) do
-              HTTP.timeout(timeout_options)
-                  .persistent(base_uri.normalize.to_s)
+          def current_client_pool
+            __client_pool.pool_for(pool_key) do
+              ConnectionPool.new(pool_options) do
+                HTTP.timeout(timeout_options)
+                    .persistent(base_uri.normalize.to_s, timeout: 120) # keep-alive timeout
+              end
             end
           end
         end
@@ -59,7 +100,7 @@ module Curator
 
           begin
             with_client do |client|
-              resp = client.head(base_url)
+              resp = client.head(base_url).flush
               resp.status == 200 ? true : false
             end
           rescue StandardError => e
