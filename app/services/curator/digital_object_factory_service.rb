@@ -63,7 +63,7 @@ module Curator
                 descriptive.desc_terms.build(mapped_term: mapped_term)
               end
             end
-            @desc_json_attrs.fetch(:host_collections, []).each do |host_col|
+            @desc_json_attrs.fetch(:host_collections, []).uniq.each do |host_col|
               next if admin_set.blank?
 
               host_col = find_or_create_host_collection(host_col,

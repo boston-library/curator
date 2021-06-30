@@ -22,8 +22,10 @@ module Curator::Middleware
           return json_response
         when /xml/
           return xml_response
+        when /plain/
+          text_response
         else
-          return text_response
+          return json_response
         end
       else
         case env['PATH_INFO']
@@ -31,8 +33,10 @@ module Curator::Middleware
           return json_response
         when /xml/
           return xml_resonse
-        else
+        when /plain/
           return text_response
+        else
+          return json_response
         end
       end
     end

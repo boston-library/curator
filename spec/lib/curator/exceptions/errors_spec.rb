@@ -38,7 +38,7 @@ RSpec.describe Curator::Exceptions do
   end
 
   describe 'remote_service_errors' do
-    %i(SolrUnavailable AuthorityApiUnavailable RemoteServiceError).each do |remote_error_const|
+    %i(SolrUnavailable AuthorityApiUnavailable ArkManagerApiUnavailable RemoteServiceError).each do |remote_error_const|
       it { is_expected.to be_const_defined(remote_error_const) }
 
       describe "Curator::Exception::#{remote_error_const}" do

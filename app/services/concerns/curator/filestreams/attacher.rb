@@ -231,7 +231,7 @@ module Curator
           return if fedora_content_location.blank?
 
           http = Down::Http.new do |client|
-            client.timeout(connect: 100, read: 300)
+            client.timeout(connect: 120, write: 240, read: 540)
             # adding conditionals on fedora_content_location.match?(/FOXML/)
             # causes errors, so just use basic auth on everything
             client.basic_auth(user: Curator.config.fedora_credentials[:fedora_username],

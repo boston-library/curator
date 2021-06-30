@@ -5,50 +5,18 @@ module Curator
     module RemoteService
       extend ActiveSupport::Concern
 
+      class << self
+        def client_pool_registry
+          ClientPool::Registry.instance
+        end
+      end
+
       included do
         include Client
       end
 
       module Client
         extend ActiveSupport::Concern
-
-        module ClientPool
-          class Registry
-            include Singleton
-
-            def initialize
-              @_clients = Concurrent::Map.new
-            end
-
-            def pool_for(key, &block)
-              _clients.compute_if_absent(key) { block.call }
-            end
-
-            def reload_pool(key)
-              _clients.compute_if_present(key) do |pool|
-                pool.reload { |client| client.close if client }
-              end
-            end
-
-            def shutdown_pool(key)
-              _clients.compute_if_present(key) do |pool|
-                pool.shutdown { |client| client.close if client }
-              end
-            end
-
-            def shutdown_and_clear!
-              _clients.keys.each do |pool_key|
-                shutdown_pool(key)
-              end
-              _clients.clear
-            end
-
-            private
-
-            attr_reader :_clients
-          end
-        end
-
 
         #TODO will require Authorization options once login in system is set up
         included do
@@ -61,7 +29,7 @@ module Curator
 
           private
 
-          class_attribute :__client_pool, instance_accessor: false, default: ClientPool::Registry.instance
+          class_attribute :__client_pool, instance_accessor: false, default: Services::RemoteService.client_pool_registry
         end
 
         class_methods do
@@ -78,7 +46,7 @@ module Curator
           protected
 
           def pool_key
-            "#{base_uri.scheme}::#{base_uri.host}::#{base_uri.port}"
+            Digest::MD5.hexdigest("#{base_uri.scheme}::#{base_uri.host}::#{base_uri.port}")
           end
 
           def current_client_pool
