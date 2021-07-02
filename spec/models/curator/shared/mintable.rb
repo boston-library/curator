@@ -23,7 +23,7 @@ RSpec.shared_examples_for 'mintable', type: :model do
 
       it 'generates an #ark_id #before_validation on create if there is none' do
         # valid? invokes the before_validation callback without saving
-        VCR.use_cassette("services/mintable_#{described_class.name.demodulize.underscore}") do
+        VCR.use_cassette("services/mintable_#{described_class.name.demodulize.underscore}", record: :new_episodes) do
           expect { subject.valid? }.to change(subject, :ark_id).
           from(nil).
           to(a_string_starting_with('bpl-dev'))

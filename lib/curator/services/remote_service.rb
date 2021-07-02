@@ -6,8 +6,29 @@ module Curator
       extend ActiveSupport::Concern
 
       class << self
-        def client_pool_registry
-          ClientPool::Registry.instance
+        def current_client_pool_for(key, &block)
+          previous_val = Thread.current[:current_client_pool_for]
+          Thread.current[:current_client_pool_for] = __client_pools.pool_for(key, &block)
+        ensure
+          Thread.current[:current_client_pool_for] = previous_val
+        end
+
+        def reload!
+          __client_pools.reload_all_pools!
+        ensure
+          Thread.current[:current_client_pool_for] = nil
+        end
+
+        def clear!
+          __client_pools.shutdown_and_clear_all_pools!
+        ensure
+          Thread.current[:client_pool_registry] = nil
+        end
+
+        private
+
+        def __client_pools
+          Thread.current[:client_pool_registry] ||= ClientPool::Registry.instance
         end
       end
 
@@ -26,10 +47,6 @@ module Curator
           class_attribute :default_headers, instance_accessor: false, default: {}
           class_attribute :default_path_prefix, instance_accessor: false
           class_attribute :ssl_context, instance_accessor: false
-
-          private
-
-          class_attribute :__client_pool, instance_accessor: false, default: Services::RemoteService.client_pool_registry
         end
 
         class_methods do
@@ -40,17 +57,19 @@ module Curator
           end
 
           def with_client
-            current_client_pool.with  { |conn| yield conn }
+            __current_client_pool.with { |conn| yield conn }
           end
 
           protected
 
           def pool_key
-            Digest::MD5.hexdigest("#{base_uri.scheme}::#{base_uri.host}::#{base_uri.port}")
+            return @pool_key if defined?(@pool_key)
+
+            @pool_key = Digest::MD5.hexdigest("#{base_uri.scheme}::#{base_uri.host}::#{base_uri.port}")
           end
 
-          def current_client_pool
-            __client_pool.pool_for(pool_key) do
+          def __current_client_pool
+            Services::RemoteService.current_client_pool_for(pool_key) do
               ConnectionPool.new(pool_options) do
                 HTTP.timeout(timeout_options)
                     .persistent(base_uri.normalize.to_s, timeout: 120) # keep-alive timeout
@@ -67,12 +86,13 @@ module Curator
           return true if ENV.fetch('RAILS_ENV', 'development') == 'test'
 
           begin
-            with_client do |client|
-              resp = client.head(base_url).flush
-              resp.status == 200 ? true : false
+            status = with_client do |client|
+              resp = client.headers(default_headers).head('/').flush
+              resp.status
             end
+            status == 200
           rescue StandardError => e
-            Rails.logger.error "Error: BPLDC Authority API is not available: #{e}"
+            Rails.logger.error "Error: #{name} is not available: #{e.message}"
             false
           end
         end

@@ -7,45 +7,45 @@ module Curator
         include Singleton
 
         def initialize
-          @_clients = Concurrent::Map.new
+          @__clients = Concurrent::Map.new
         end
 
-        def pool_for(key, &_block)
-          _clients.compute_if_absent(key) { yield }
+        def pool_for(key, &block)
+          __clients.compute_if_absent(key, &block)
         end
 
         def pool_keys
-          _clients.keys
+          __clients.keys
         end
 
         def reload_pool(key)
-          _clients.compute_if_present(key) do |pool|
+          __clients.compute_if_present(key) do |pool|
             pool.reload { |client| client.close if client }
           end
         end
 
         def shutdown_pool(key)
-          _clients.compute_if_present(key) do |pool|
+          __clients.compute_if_present(key) do |pool|
             pool.shutdown { |client| client.close if client }
           end
         end
 
         def reload_all_pools!
-          _clients.keys.each do |pool_key|
+          __clients.keys.each do |pool_key|
             reload_pool(pool_key)
           end
         end
 
         def shutdown_and_clear_all_pools!
-          _clients.keys.each do |pool_key|
+          __clients.keys.each do |pool_key|
             shutdown_pool(pool_key)
           end
-          _clients.clear
+          __clients.clear
         end
 
         private
 
-        attr_reader :_clients
+        attr_reader :__clients
       end
     end
   end

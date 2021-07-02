@@ -23,7 +23,9 @@ module Curator
       def generate_ark_id
         return if ark_id.present?
 
-        raise Curator::Exceptions::ArkManagerApiUnavailable if !Curator::MinterService.ready?
+        minter_service_available = Curator::MinterService.ready?
+
+        raise Curator::Exceptions::ArkManagerApiUnavailable if !minter_service_available
 
         self.ark_id = Curator::MinterService.call(ark_params)
       end
