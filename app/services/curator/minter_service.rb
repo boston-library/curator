@@ -7,8 +7,7 @@ module Curator
     attr_reader :ark_create_params
 
     def initialize(ark_params = {})
-      @ark_create_params = ark_params
-      @ark = nil
+      @ark_create_params = { 'ark' => ark_params }
     end
 
     def call
