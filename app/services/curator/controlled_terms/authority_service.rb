@@ -38,7 +38,7 @@ module Curator
     protected
 
     def fetch_auth_data(client)
-      resp = client.headers(self.class.default_headers).get(request_uri.to_s)
+      resp = client.headers(self.class.default_headers).get(request_uri.to_s).flush
       json_response = Oj.load(resp.body.to_s)
       raise Curator::Exceptions::RemoteServiceError.new('Failed to retrieve data from bpldc_auth_api!',
                                                         json_response, resp.status) if !resp.status.success?

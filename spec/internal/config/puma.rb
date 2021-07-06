@@ -24,7 +24,7 @@ worker_timeout 3600 if ENV.fetch('RAILS_ENV', 'development') == 'development'
 # Workers do not work on JRuby or Windows (both of which do not support
 # processes).
 #
-# workers ENV.fetch("WEB_CONCURRENCY") { 2 }
+ workers ENV.fetch("WEB_CONCURRENCY") { 2 }
 
 # Use the `preload_app!` method when specifying a `workers` number.
 # This directive tells Puma to first boot the application and load code
@@ -34,4 +34,18 @@ worker_timeout 3600 if ENV.fetch('RAILS_ENV', 'development') == 'development'
 # preload_app!
 
 # Allow puma to be restarted by `rails restart` command.
+
+# NOTE: These need to be added in the curator_app config/puma.rb
+on_worker_fork do
+  Curator::Services::RemoteService.clear!
+end
+
+on_worker_boot do
+  Curator::Services::RemoteService.reload!
+end
+
+on_worker_shutdown do
+  Curator::Services::RemoteService.clear!
+end
+
 plugin :tmp_restart

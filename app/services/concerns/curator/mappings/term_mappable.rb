@@ -34,7 +34,7 @@ module Curator
           end
         end
 
-        terms
+        terms.uniq(&:id)
       end
 
       private

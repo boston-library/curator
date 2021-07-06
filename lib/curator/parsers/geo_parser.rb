@@ -108,7 +108,7 @@ module Curator
         else
           placename[0] ||= hgeo_hash[:state] || hgeo_hash[:province] || hgeo_hash[:region] || hgeo_hash[:territory]
           placename[0] ||= "#{hgeo_hash[:county]} (county)" if hgeo_hash[:county]
-          placename[1] = hgeo_hash[:country]
+          placename[1] = hgeo_hash[:country] || hgeo_hash[:continent]
         end
         placename.present? ? placename.join(', ').gsub(/(\A,\s)|(,\s\z)/, '') : nil
       end
