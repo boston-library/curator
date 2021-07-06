@@ -5,7 +5,7 @@ module Curator
     extend Curator::NamespaceAccessor
 
     IDENTIFIER_TYPES = %w(local-accession local-other local-call local-barcode iiif-manifest internet-archive isbn ismn
-                          isrc issn issue-number lccn matrix-number music-plate music-publisher sici uri videorecording).freeze
+                          isrc issn issue-number lccn matrix-number music-plate music-publisher sici uri videorecording uri-preview).freeze
 
     NOTE_TYPES = ['date', 'language', 'acquisition', 'ownership', 'funding', 'biographical/historical',
                   'citation/reference', 'preferred citation', 'bibliography', 'exhibitions', 'publications',

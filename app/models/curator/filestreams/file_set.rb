@@ -26,6 +26,8 @@ module Curator
 
     scope :for_serialization, -> { merge(with_metastreams) }
 
+    scope :with_all_attachments, -> { includes(*attachment_reflections.keys.map { |a| { "#{a}_attachment".to_sym => :blob } }) }
+
     attr_json_config(default_container_attribute: :pagination)
 
     attr_json :page_label, :string
