@@ -35,7 +35,7 @@ module Curator
                            when 'uri'
                              id_uri_field
                            when 'uri_preview'
-                              'identifier_uri_preview_ss'
+                             'identifier_uri_preview_ss'
                            when 'iiif_manifest'
                              'identifier_iiif_manifest_ss'
                            else
