@@ -11,7 +11,8 @@ module Curator
 
     self.curator_indexable_mapper = Curator::CollectionIndexer.new
 
-    scope :for_serialization, -> { with_metastreams }
+    scope :for_serialization, -> { includes(exemplary_image_mapping: :exemplary_file_set).with_metastreams }
+    scope :for_reindex_all, -> { for_serialization.joins(:administrative, :workflow) }
 
     belongs_to :institution, inverse_of: :collections, class_name: 'Curator::Institution'
 

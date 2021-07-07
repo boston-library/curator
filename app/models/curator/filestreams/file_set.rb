@@ -24,9 +24,11 @@ module Curator
 
     self.curator_indexable_mapper = Curator::FileSetIndexer.new
 
-    scope :for_serialization, -> { merge(with_metastreams) }
+    scope :for_serialization, -> { with_metastreams }
 
     scope :with_all_attachments, -> { includes(*attachment_reflections.keys.map { |a| { "#{a}_attachment".to_sym => :blob } }) }
+
+    scope :for_reindex_all, -> { with_all_attachments.for_serialization.joins(:administrative, :workflow) }
 
     attr_json_config(default_container_attribute: :pagination)
 

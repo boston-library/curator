@@ -263,7 +263,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
 
       let(:expected_scope_sql) do
         described_class.
-        includes(:genres, :resource_types, :languages, :subject_topics, :subject_names, :subject_geos).
+        eager_load(:desc_terms).includes(:genres, :resource_types, :languages, :subject_topics, :subject_names, :subject_geos).
         to_sql
       end
 
@@ -328,7 +328,7 @@ RSpec.describe Curator::Metastreams::Descriptive, type: :model do
 
     it_behaves_like 'for_serialization' do
       let(:expected_scope_sql) do
-        described_class.merge(described_class.with_physical_location).merge(described_class.with_license).merge(described_class.with_rights_statement).merge(described_class.with_mappings).merge(described_class.with_desc_terms).to_sql
+        described_class.with_physical_location.with_license.with_mappings.with_desc_terms.with_rights_statement.to_sql
       end
     end
   end

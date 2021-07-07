@@ -11,7 +11,7 @@ FactoryBot.define do
     trait :with_primary_image do
       after :create do |image|
         file_name = 'image_primary.tiff'
-        image.image_primary.attach(io: File.open(file_fixture(file_name)), filename: file_name, content_type: 'image/tiff')
+        image.image_primary.attach(io: File.open(Curator::Engine.root.join('spec', 'fixtures', 'files', file_name).to_s), filename: file_name, content_type: 'image/tiff')
       end
     end
   end

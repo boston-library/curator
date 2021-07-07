@@ -5,10 +5,9 @@ module Curator
     module Descriptable
       extend ActiveSupport::Concern
       included do
-        scope :with_descriptive, -> { includes(:descriptive) }
+        scope :with_descriptive, -> { includes(descriptive: [{ physical_location: :authority }, { name_roles: [:name, :role] }, :license, :rights_statement, :genres, :resource_types, :languages, :subject_topics, :subject_names, :subject_geos, :host_collections]) }
 
-        has_one :descriptive, -> { merge(with_physical_location).merge(with_license).merge(with_desc_terms).merge(with_rights_statement) },
-                inverse_of: :digital_object, class_name: 'Curator::Metastreams::Descriptive', dependent: :destroy, autosave: true
+        has_one :descriptive, inverse_of: :digital_object, class_name: 'Curator::Metastreams::Descriptive', dependent: :destroy, autosave: true
 
         validates :descriptive, presence: true
         validates_associated :descriptive, on: :create

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/BlockLength
 namespace :curator do
   desc 'Setup and install database migrations/ run seeds'
   task setup: :environment do
@@ -52,14 +53,13 @@ namespace :curator do
   desc 'Reindex all objects'
   task reindex_all: :environment do
     puts 'Preparing to reindex all objects...'
-    #Order of reindex
     ActiveRecord::Base.connection_pool.with_connection do
       puts 'Reindexing institutions....'
-      Curator::Institution.includes(:workflow, :administrative, :host_collections, image_thumbnail_300_attachment: :blob, location: :authority).joins(:workflow, :administrative).find_each do |inst|
+      Curator::Institution.for_reindex_all.find_each do |inst|
         begin
           puts "Adding Institution-#{inst.ark_id} to reindex queue..."
           inst.queue_indexing_job
-        rescue Exception => e
+        rescue StandardError => e
           puts '==============================='
           puts "Failed To queue Institution-#{inst.ark_id}"
           puts "Reason given: #{e.message}"
@@ -68,11 +68,11 @@ namespace :curator do
       end
 
       puts 'Reindexing collections...'
-      Curator::Collection.includes(:workflow, :administrative, :exemplary_file_set).joins(:workflow, :administrative).find_each do |col|
+      Curator::Collection.for_reindex_all.find_each do |col|
         begin
           puts "Adding Collection-#{col.ark_id} to reindex queue..."
           col.queue_indexing_job
-        rescue Exception => e
+        rescue StandardError => e
           puts '==============================='
           puts "Failed To queue Institution-#{col.ark_id}"
           puts "Reason given: #{e.message}"
@@ -81,11 +81,11 @@ namespace :curator do
       end
 
       puts 'Reindexing digital objects...'
-      Curator::DigitalObject.includes(:workflow, :administrative, :file_sets, :exemplary_file_set, descriptive: [{ physical_location: :authority }, :license, :rights_statement, :genres, :resource_types, :languages, :subject_topics, :subject_names, :subject_geos, :host_collections, :name_roles]).joins(:workflow, :administrative, :descriptive).find_each do |obj|
+      Curator::DigitalObject.for_reindex_all.find_each do |obj|
         begin
           puts "Adding DigitalObject-#{obj.ark_id} to reindex queue..."
           obj.queue_indexing_job
-        rescue Exception => e
+        rescue StandardError => e
           puts '==============================='
           puts "Failed To queue DigitalObject-#{obj.ark_id}"
           puts "Reason given: #{e.message}"
@@ -94,14 +94,13 @@ namespace :curator do
       end
 
       puts 'Reindexing file sets...'
-      Curator::Filestreams::FileSet.includes(:administrative, :workflow).merge(Curator::Filestreams::FileSet.with_all_attachments).joins(:administrative, :workflow).find_each do |file_set|
+      Curator::Filestreams::FileSet.for_reindex_all.find_each do |file_set|
         begin
           puts "Adding FileSet-#{file_set.class.name}-#{file_set.ark_id} to reindex queue"
           file_set.queue_indexing_job
-        rescue Exception => e
+        rescue StandardError => e
           puts '==============================='
           puts "Failed To queue FileSet-#{file_set.ark_id}"
-          puts "#{e.backtrace}"
           puts "Reason given: #{e.message}"
           puts '==============================='
         end
@@ -110,3 +109,5 @@ namespace :curator do
     puts 'Reindex Complete!'
   end
 end
+
+# rubocop:enable Metrics/BlockLength

@@ -11,7 +11,7 @@ module Curator
         include Metastreams::Descriptable
         include Metastreamable::InstanceMethods
 
-        scope :with_metastreams, -> { includes(:administrative, :descriptive, :workflow) }
+        scope :with_metastreams, -> { with_administrative.with_workflow.with_descriptive }
       end
     end
 
@@ -21,7 +21,7 @@ module Curator
         include Metastreams::Administratable
         include Metastreams::Workflowable
         include Metastreamable::InstanceMethods
-        scope :with_metastreams, -> { includes(:administrative, :workflow) }
+        scope :with_metastreams, -> { with_administrative.with_workflow }
       end
     end
 

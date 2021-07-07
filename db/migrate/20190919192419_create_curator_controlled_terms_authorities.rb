@@ -2,9 +2,9 @@
 
 class CreateCuratorControlledTermsAuthorities < ActiveRecord::Migration[5.2]
   def change
-    enable_extension 'pg_trgm'
-    enable_extension 'pgcrypto'
-    enable_extension 'btree_gin'
+    enable_extension 'pg_trgm' if extensions.exclude?('pg_trgm')
+    enable_extension 'pgcrypto' if extensions.exclude?('pgcrypto')
+    enable_extension 'btree_gin' if extensions.exclude?('btree_gin')
 
     # NOTE we should create the schema in production as part of our ops procedure. So we can add the AUTHORIZATION options to the production user we are using. See https://www.postgresql.org/docs/12/ddl-schemas.html#DDL-SCHEMAS-PRIV
 

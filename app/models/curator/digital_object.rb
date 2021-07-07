@@ -13,7 +13,8 @@ module Curator
 
     self.curator_indexable_mapper = Curator::DigitalObjectIndexer.new
 
-    scope :for_serialization, -> { merge(with_metastreams) }
+    scope :for_serialization, -> { includes(:file_sets, exemplary_image_mapping: :exemplary_file_set).with_metastreams }
+    scope :for_reindex_all, -> { for_serialization.joins(:administrative, :descriptive, :workflow) }
 
     validates :contained_by_id, exclusion: { in: -> (digital_object) { Array.wrap(digital_object.id) } },
               uniqueness: { scope: :id }, unless: -> { contained_by.blank? }
@@ -59,7 +60,7 @@ module Curator
 
     has_many :is_member_of_collection, through: :collection_members, source: :collection
 
-    has_many :file_set_member_mappings, -> { joins(:file_set).includes(:file_set) }, inverse_of: :digital_object,
+    has_many :file_set_member_mappings, -> { includes(:file_set) }, inverse_of: :digital_object,
              class_name: 'Curator::Mappings::FileSetMember', dependent: :destroy
     with_options through: :file_set_member_mappings, source: :file_set do
       has_many :file_set_members, class_name: 'Curator::Filestreams::FileSet'
