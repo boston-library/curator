@@ -57,57 +57,52 @@ namespace :curator do
       puts 'Reindexing institutions....'
       Curator::Institution.for_reindex_all.find_each do |inst|
         begin
-          puts "Adding Institution-#{inst.ark_id} to reindex queue..."
           inst.queue_indexing_job
         rescue StandardError => e
-          puts '==============================='
-          puts "Failed To queue Institution-#{inst.ark_id}"
-          puts "Reason given: #{e.message}"
-          puts '==============================='
+          output_reindex_errors(e, inst)
+          next
         end
       end
 
       puts 'Reindexing collections...'
       Curator::Collection.for_reindex_all.find_each do |col|
         begin
-          puts "Adding Collection-#{col.ark_id} to reindex queue..."
           col.queue_indexing_job
         rescue StandardError => e
-          puts '==============================='
-          puts "Failed To queue Institution-#{col.ark_id}"
-          puts "Reason given: #{e.message}"
-          puts '==============================='
+          output_reindex_errors(e, col)
+          next
         end
       end
 
       puts 'Reindexing digital objects...'
       Curator::DigitalObject.for_reindex_all.find_each do |obj|
         begin
-          puts "Adding DigitalObject-#{obj.ark_id} to reindex queue..."
           obj.queue_indexing_job
         rescue StandardError => e
-          puts '==============================='
-          puts "Failed To queue DigitalObject-#{obj.ark_id}"
-          puts "Reason given: #{e.message}"
-          puts '==============================='
+          output_reindex_errors(e, obj)
+          next
         end
       end
 
       puts 'Reindexing file sets...'
       Curator::Filestreams::FileSet.for_reindex_all.find_each do |file_set|
         begin
-          puts "Adding FileSet-#{file_set.class.name}-#{file_set.ark_id} to reindex queue"
           file_set.queue_indexing_job
         rescue StandardError => e
-          puts '==============================='
-          puts "Failed To queue FileSet-#{file_set.ark_id}"
-          puts "Reason given: #{e.message}"
-          puts '==============================='
+          output_reindex_errors(e, file_set)
+          next
         end
       end
     end
     puts 'Reindex Complete!'
   end
+end
+
+def output_reindex_errors(e, item)
+  puts '==============================='
+  puts "Failed To queue #{item.class.name}-#{item.ark_id}"
+  puts "Reason given: #{e.message}"
+  puts '==============================='
 end
 
 # rubocop:enable Metrics/BlockLength
