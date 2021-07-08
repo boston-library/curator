@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/BlockLength
 namespace :curator do
   desc 'Setup and install database migrations/ run seeds'
   task setup: :environment do
@@ -48,4 +49,60 @@ namespace :curator do
     Curator::Engine.load_seed
     puts 'Default Seed Loaded. Task Complete!'
   end
+
+  desc 'Reindex all objects'
+  task reindex_all: :environment do
+    puts 'Preparing to reindex all objects...'
+    ActiveRecord::Base.connection_pool.with_connection do
+      puts 'Reindexing institutions....'
+      Curator::Institution.for_reindex_all.find_each do |inst|
+        begin
+          inst.queue_indexing_job
+        rescue StandardError => e
+          output_reindex_errors(e, inst)
+          next
+        end
+      end
+
+      puts 'Reindexing collections...'
+      Curator::Collection.for_reindex_all.find_each do |col|
+        begin
+          col.queue_indexing_job
+        rescue StandardError => e
+          output_reindex_errors(e, col)
+          next
+        end
+      end
+
+      puts 'Reindexing digital objects...'
+      Curator::DigitalObject.for_reindex_all.find_each do |obj|
+        begin
+          obj.queue_indexing_job
+        rescue StandardError => e
+          output_reindex_errors(e, obj)
+          next
+        end
+      end
+
+      puts 'Reindexing file sets...'
+      Curator::Filestreams::FileSet.for_reindex_all.find_each do |file_set|
+        begin
+          file_set.queue_indexing_job
+        rescue StandardError => e
+          output_reindex_errors(e, file_set)
+          next
+        end
+      end
+    end
+    puts 'Reindex Complete!'
+  end
 end
+
+def output_reindex_errors(e, item)
+  puts '==============================='
+  puts "Failed To queue #{item.class.name}-#{item.ark_id}"
+  puts "Reason given: #{e.message}"
+  puts '==============================='
+end
+
+# rubocop:enable Metrics/BlockLength

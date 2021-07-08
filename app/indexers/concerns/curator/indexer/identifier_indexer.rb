@@ -21,7 +21,7 @@ module Curator
                            identifier_local_call_tsim identifier_local_call_invalid_tsim
                            identifier_local_barcode_tsim identifier_local_barcode_invalid_tsim
                            identifier_local_accession_tsim identifier_isbn_tsim identifier_lccn_tsim
-                           identifier_ia_id_ssi identifier_uri_ss identifier_iiif_manifest_ss)
+                           identifier_ia_id_ssi identifier_uri_ss identifier_iiif_manifest_ss identifier_uri_preview_ss)
             id_fields.each { |field| context.output_hash[field] ||= [] }
             record.descriptive.identifier.each do |identifier|
               label = identifier.label
@@ -34,6 +34,8 @@ module Curator
                              'identifier_ia_id_ssi'
                            when 'uri'
                              id_uri_field
+                           when 'uri_preview'
+                             'identifier_uri_preview_ss'
                            when 'iiif_manifest'
                              'identifier_iiif_manifest_ss'
                            else

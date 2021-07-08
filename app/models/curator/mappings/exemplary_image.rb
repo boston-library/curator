@@ -5,7 +5,7 @@ module Curator
     VALID_EXEMPLARY_OBJECT_TYPES = %w(Collection DigitalObject).freeze
     VALID_EXEMPLARY_FILE_SET_TYPES = %w(Image Document Video Metadata).freeze
 
-    belongs_to :exemplary_object, inverse_of: :exemplary_image_mapping, polymorphic: true
+    delegated_type :exemplary_object, types: VALID_EXEMPLARY_OBJECT_TYPES.collect { |obj_type| "Curator::#{obj_type}" }, inverse_of: :exemplary_image_mapping
 
     belongs_to :exemplary_file_set, inverse_of: :exemplary_image_of_mappings, class_name: 'Curator::Filestreams::FileSet', touch: true
 

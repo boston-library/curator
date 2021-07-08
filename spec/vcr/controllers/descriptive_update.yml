@@ -1,0 +1,54 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash//tgn/2050042
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.0.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"47db2d414028f515f4fa550b66b1e696"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 186472a0-f127-40d4-911c-bed036e01c3b
+      X-Runtime:
+      - '1.092589'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"42.4667","longitude":"-70.95","combined":"42.4667,-70.95"},"hier_geo":{"city":"Lynn","continent":"North
+        and Central America","county":"Essex","country":"United States","state":"Massachusetts"}}'
+  recorded_at: Wed, 07 Jul 2021 16:40:25 GMT
+recorded_with: VCR 6.0.0

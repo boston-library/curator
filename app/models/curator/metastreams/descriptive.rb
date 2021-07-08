@@ -18,21 +18,21 @@ module Curator
 
     enum text_direction: %w(ltr rtl).freeze
     # JSON ATTRS
-    scope :with_physical_location, -> { includes(:physical_location => :authority) }
+    scope :with_physical_location, -> { includes(physical_location: :authority) }
 
     scope :with_license, -> { includes(:license) }
 
     scope :with_rights_statement, -> { includes(:rights_statement) }
 
     scope :with_desc_terms, lambda {
-      includes(:genres, :resource_types, :languages, :subject_topics, :subject_names, :subject_geos)
+      eager_load(:desc_terms).includes(:genres, :resource_types, :languages, :subject_topics, :subject_names, :subject_geos)
     }
 
     scope :with_mappings, lambda {
-      includes(:host_collections, :name_roles => [:name, :role])
+      includes(:host_collections, name_roles: [:name, :role])
     }
 
-    scope :for_serialization, -> { merge(with_physical_location).merge(with_license).merge(with_mappings).merge(with_desc_terms).merge(with_rights_statement) }
+    scope :for_serialization, -> { with_physical_location.with_license.with_mappings.with_desc_terms.with_rights_statement }
 
     # NOTE: need to use attr json for array items
     # Identifier

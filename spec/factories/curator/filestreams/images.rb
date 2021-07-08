@@ -7,5 +7,12 @@ FactoryBot.define do
     hand_side { 'left' }
     page_type { 'TOC' }
     page_label { '3' }
+
+    trait :with_primary_image do
+      after :create do |image|
+        file_name = 'image_primary.tiff'
+        image.image_primary.attach(io: File.open(Curator::Engine.root.join('spec', 'fixtures', 'files', file_name).to_s), filename: file_name, content_type: 'image/tiff')
+      end
+    end
   end
 end

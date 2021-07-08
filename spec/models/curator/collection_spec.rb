@@ -77,7 +77,19 @@ RSpec.describe Curator::Collection, type: :model do
 
   describe 'Scopes' do
     it_behaves_like 'for_serialization' do
-      let(:expected_scope_sql) { described_class.merge(described_class.with_metastreams).to_sql }
+      let(:expected_scope_sql) { described_class.includes(exemplary_image_mapping: :exemplary_file_set).with_metastreams.to_sql }
+    end
+
+    describe '.for_reindex_all' do
+      subject { described_class }
+
+      let(:expected_scope_sql) { described_class.for_serialization.joins(:administrative, :workflow).to_sql }
+
+      it { is_expected.to respond_to(:for_reindex_all) }
+
+      it 'expects the scope sql to match the :expected_scope_sql' do
+        expect(subject.for_reindex_all.to_sql).to eq(expected_scope_sql)
+      end
     end
 
     describe '#file_sets.exemplaryable' do

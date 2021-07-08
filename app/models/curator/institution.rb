@@ -11,13 +11,14 @@ module Curator
 
     self.curator_indexable_mapper = Curator::InstitutionIndexer.new
 
-    scope :with_location, -> { includes(:location) }
-    scope :for_serialization, -> { merge(with_location).merge(with_metastreams) }
+    scope :with_location, -> { includes(location: :authority) }
+    scope :for_serialization, -> { with_metastreams.with_location.with_attached_image_thumbnail_300.includes(:host_collections) }
+    scope :for_reindex_all, -> { for_serialization.joins(:administrative, :workflow) }
 
     validates :url, format: { with: URI.regexp(%w(http https)), allow_blank: true }
     validates :name, presence: true
 
-    belongs_to :location, -> { merge(with_authority) }, inverse_of: :institution_locations, class_name: 'Curator::ControlledTerms::Geographic', optional: true
+    belongs_to :location, inverse_of: :institution_locations, class_name: 'Curator::ControlledTerms::Geographic', optional: true
 
     # host_collections is a mapping object (metadata) not to be confused with collections (repository set)
     has_many :host_collections, inverse_of: :institution, class_name: 'Curator::Mappings::HostCollection', dependent: :destroy
