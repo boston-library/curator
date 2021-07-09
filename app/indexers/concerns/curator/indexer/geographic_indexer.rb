@@ -29,6 +29,11 @@ module Curator
                 auth_url = "/#{geo_auth}/#{subject_geo.id_from_auth}"
                 auth_data = Curator::ControlledTerms::AuthorityService.call(path: auth_url, path_prefix: '/geomash')
                 if auth_data && auth_data[:hier_geo].present?
+                  if auth_data[:non_hier_geo].present?
+                    other_geo_value = auth_data[:non_hier_geo][:value]
+                    other_geo_value << " (#{subject_geo.area_type})" if subject_geo.area_type.present?
+                    auth_data[:hier_geo][:other] = other_geo_value
+                  end
                   auth_data[:hier_geo] = if geo_auth == 'geonames'
                                            Curator::Parsers::GeoParser.normalize_geonames_hgeo(auth_data[:hier_geo])
                                          else
