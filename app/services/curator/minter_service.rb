@@ -20,18 +20,19 @@ module Curator
       rescue HTTP::Error => e
         Rails.logger.error 'HTTP Error Occured Generating Ark'
         Rails.logger.error "Reason #{e.message}"
-        raise 'Error Generating Ark!'
+        raise ActiveRecord::RecordNotSaved, 'Error Generating Ark!'
       rescue Oj::Error => e
         Rails.logger.error 'Invalid JSON From Ark Response'
         Rails.logger.error "Reason #{e.message}"
-        raise 'Error Generating Ark!'
+        raise ActiveRecord::RecordNotSaved, 'Error Generating Ark!'
       rescue Curator::Exceptions::RemoteServiceError => e
         Rails.logger.error 'Error Occured Generating Ark'
         Rails.logger.error "Reason #{e.message}"
         Rails.logger.error "Response code #{e.code}"
         Rails.logger.error "Response #{e.json_response}"
-        raise 'Error Generating Ark!'
+        raise ActiveRecord::RecordNotSaved, 'Error Generating Ark!'
       end
+      false
     end
 
     protected

@@ -62,12 +62,14 @@ module Curator
     def add_exemplary_image_of!(exemplary_object_ark_ids = [])
       return if exemplary_object_ark_ids.blank?
 
-      exemplary_object_ark_ids.each do |ex_obj_ark_id|
-        ex_obj = Curator.digital_object_class.find_by(ark_id: ex_obj_ark_id) ||
-                 Curator.collection_class.find_by!(ark_id: ex_obj_ark_id)
+      exemplary_objects = exemplary_object_ark_ids.map do |ex_obj_ark_id|
+        Curator.digital_object_class.select(:id, :ark_id).find_by(ark_id: ex_obj_ark_id) ||
+                 Curator.collection_class.select(:id, :ark_id).find_by!(ark_id: ex_obj_ark_id)
+      end.compact.delete_if { |eo| !@record.new_record? && @record.exemplary_image_of_mappings.exists?(exemplary_object: eo) }
 
-        @record.exemplary_image_of_mappings.build(exemplary_object: ex_obj)
-      end
+      return if exemplary_objects.blank?
+
+      exemplary_objects.each { |eo| @record.exemplary_image_of_mappings.build(exemplary_object: eo) }
     rescue ActiveRecord::RecordNotFound => e
       @record.errors.add(:exemplary_image_of_mappings, "#{e.message} with ark_id=#{admin_set_ark_id}")
       raise ActiveRecord::RecordInvalid, @record
@@ -76,11 +78,12 @@ module Curator
     def remove_exemplary_image_of!(exemplary_object_ark_ids = [])
       return if exemplary_object_ark_ids.blank?
 
-      exemplary_object_ark_ids.each do |ex_obj_ark_id|
-        ex_obj = Curator.digital_object_class.find_by(ark_id: ex_obj_ark_id) ||
-                 Curator.collection_class.find_by!(ark_id: ex_obj_ark_id)
-        @record.exemplary_image_of_mappings.where(exemplary_object: ex_obj).destroy_all
-      end
+      exemplary_objects = exemplary_object_ark_ids.map do |ex_obj_ark_id|
+        Curator.digital_object_class.select(:id, :ark_id).find_by(ark_id: ex_obj_ark_id) ||
+                 Curator.collection_class.select(:id, :ark_id).find_by!(ark_id: ex_obj_ark_id)
+      end.compact.delete_if { |eo| !@record.exemplary_image_of_mappings.exists?(exemplary_object: eo) }
+      
+      @record.exemplary_image_of_mappings.destroy_by(exemplary_object: exemplary_objects)
     rescue ActiveRecord::RecordNotFound => e
       @record.errors.add(:exemplary_image_of_mappings, "#{e.message} with ark_id=#{admin_set_ark_id}")
       raise ActiveRecord::RecordInvalid, @record

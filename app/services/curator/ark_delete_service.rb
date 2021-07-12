@@ -1,0 +1,47 @@
+# frozen_string_literal: true
+
+module Curator
+  class ArkDeleteService < Services::Base
+    include ArkService
+
+    attr_reader :ark_id
+
+    def initialize(ark_id)
+      @ark_id = ark_id
+    end
+
+    def call
+      begin
+        return self.class.with_client do |client|
+          delete_ark(client)
+        end
+      rescue HTTP::Error => e
+        Rails.logger.error 'HTTP Error Occured Generating Ark'
+        Rails.logger.error "Reason #{e.message}"
+        raise ActiveRecord::RecordNotDestroyed, 'Error Destroying Ark!'
+      rescue Oj::Error => e
+        Rails.logger.error 'Invalid JSON From Ark Response'
+        Rails.logger.error "Reason #{e.message}"
+        raise ActiveRecord::RecordNotDestroyed, 'Error Destroying Ark!'
+      rescue Curator::Exceptions::RemoteServiceError => e
+        puts 'Error Occured Generating Ark'
+        puts "Reason #{e.message}"
+        puts "Response code #{e.code}"
+        puts "Response #{e.json_response}"
+        raise ActiveRecord::RecordNotDestroyed, 'Error Destroying Ark!'
+      end
+      false
+    end
+
+    protected
+
+    def delete_ark(client)
+      resp = client.headers(self.class.default_headers).delete("#{self.class.default_path_prefix}/arks/#{ark_id}").flush
+
+      return true if resp.status.success?
+
+      json_response = Oj.safe_load(resp.body.to_s) || {}
+      raise Curator::Exceptions::RemoteServiceError.new('Failed to destroy ark in ark-manager-api!', json_response, resp.status)
+    end
+  end
+end

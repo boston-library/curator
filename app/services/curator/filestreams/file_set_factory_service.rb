@@ -63,12 +63,13 @@ module Curator
       return if exemplary_ids.blank?
 
       exemplary_ids.each do |ex_ark_id|
-        ex_obj = Curator.digital_object_class.find_by(ark_id: ex_ark_id) ||
-                 Curator.collection_class.find_by(ark_id: ex_ark_id)
+        ex_obj = Curator.digital_object_class.select(:id, :ark_id).find_by(ark_id: ex_ark_id) ||
+                 Curator.collection_class.select(:id, :ark_id).find_by(ark_id: ex_ark_id)
 
         raise ActiveRecord::RecordNotSaved, "Bad exemplary id! #{ex_ark_id} is either not in the repo or is not a DigitalObject or Collection" unless ex_obj
 
-        ex_obj.lock!
+        next if !file_set.new_record? && file_set.exemplary_image_of_mappings.exist?(exemplary_object: ex_object)
+
         build_exemplary(file_set) do |exemplary_img|
           exemplary_img.exemplary_object = ex_obj
         end

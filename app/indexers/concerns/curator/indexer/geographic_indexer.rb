@@ -26,7 +26,7 @@ module Curator
               context.output_hash['subject_geo_label_sim'] << geo_label if geo_auth
 
               if geo_auth == 'tgn' || geo_auth == 'geonames'
-                auth_url = "/#{geo_auth}/#{subject_geo.id_from_auth}"
+                auth_url = "#{geo_auth}/#{subject_geo.id_from_auth}"
                 auth_data = Curator::ControlledTerms::AuthorityService.call(path: auth_url, path_prefix: '/geomash')
                 if auth_data && auth_data[:hier_geo].present?
                   if auth_data[:non_hier_geo].present?

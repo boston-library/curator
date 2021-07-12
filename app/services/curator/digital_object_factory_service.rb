@@ -55,42 +55,31 @@ module Curator
             descriptive.cartographic = cartographic(@desc_json_attrs)
             descriptive.related = related(@desc_json_attrs)
             %w(genres resource_types languages).each do |map_type|
-              @desc_json_attrs.fetch(map_type, []).each do |map_attrs|
-                mapped_term = term_for_mapping(map_attrs,
-                                               nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
-                next if descriptive.desc_terms.exists?(mapped_term: mapped_term)
+              mapped_terms = @desc_json_attrs.fetch(map_type, []).map do |map_attrs|
+                term_for_mapping(map_attrs, nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
+              end.compact.delete_if { |mt| descriptive.desc_terms.exists?(mapped_term: mt) }
 
-                descriptive.desc_terms.build(mapped_term: mapped_term)
-              end
+              next if mapped_terms.blank?
+
+              mapped_terms.each { |mt| descriptive.desc_terms.build(mapped_term: mt) }
             end
-            @desc_json_attrs.fetch(:host_collections, []).uniq.each do |host_col|
+
+            host_collections = @desc_json_attrs.fetch(:host_collections, []).uniq.map do |host_col|
               next if admin_set.blank?
 
-              host_col = find_or_create_host_collection(host_col,
-                                                        admin_set.institution)
+              find_or_create_host_collection(host_col, admin_set.institution)
+            end.compact.delete_if { |hc| !descriptive.new_record? && descriptive.desc_host_collections.exists?(host_collection: hc) }
 
-              next if descriptive.desc_host_collections.exists?(host_collection: host_col)
+            host_collections.each { |hc| descriptive.desc_host_collections.build(host_collection: hc) }
 
-              descriptive.desc_host_collections.build(host_collection: host_col)
-            end
-
-            subject_mapped_terms = terms_for_subject(@desc_json_attrs.fetch(:subject, {}))
-
-            subject_mapped_terms.each do |mapped_term|
-              next if descriptive.desc_terms.exists?(mapped_term: mapped_term)
-
-              descriptive.desc_terms.build(mapped_term: mapped_term)
-            end
+            subject_mapped_terms = terms_for_subject(@desc_json_attrs.fetch(:subject, {})).delete_if { |st| !descriptive.new_record? && descriptive.desc_terms.exists?(mapped_term: st) }
+            subject_mapped_terms.each { |smt| descriptive.desc_terms.build(mapped_term: smt) }
 
             mapped_name_roles = @desc_json_attrs.fetch(:name_roles, []).map do |name_role_attrs|
               name_role(name_role_attrs.fetch(:name), name_role_attrs.fetch(:role))
-            end
+            end.compact.delete_if { |nr_attrs| !descriptive.new_record? && descriptive.name_roles.exists?(nr_attrs) }
 
-            mapped_name_roles.each do |name_role_attrs|
-              next if descriptive.name_roles.exists?(name_role_attrs)
-
-              descriptive.name_roles.build(name_role_attrs)
-            end
+            mapped_name_roles.each { |mnr| descriptive.name_roles.build(mnr) }
           end
           digital_object.save!
         end
@@ -120,7 +109,7 @@ module Curator
     end
 
     def find_admin_set!(admin_set_ark_id, digital_object)
-      return Curator.collection_class.find_by!(ark_id: admin_set_ark_id)
+      return Curator.collection_class.select(:id, :ark_id, :institution_id).find_by!(ark_id: admin_set_ark_id)
     rescue ActiveRecord::RecordNotFound => e
       digital_object.errors.add(:admin_set, "#{e.message} with ark_id=#{admin_set_ark_id}")
       nil

@@ -54,7 +54,7 @@ module Curator
       class_attribute :curator_indexable_auto_callbacks, default: true
 
       after_save_commit :queue_indexing_job, if: -> { Curator::Indexable.auto_callbacks?(self) }
-      after_destroy :indexer_health_check
+      # after_destroy :indexer_health_check
       after_destroy_commit :queue_deletion_job, if: -> { Curator::Indexable.auto_callbacks?(self) }
     end
 
