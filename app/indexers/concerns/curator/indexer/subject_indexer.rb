@@ -32,6 +32,7 @@ module Curator
           each_record do |record, context|
             next unless record.descriptive&.subject_other&.dates
 
+            context.output_hash['subject_facet_ssim'] ||= []
             context.output_hash['subject_date_tsim'] = []
             subject_dates = []
             record.descriptive.subject_other.dates.each do |subject_date|
