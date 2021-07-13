@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Curator
   class ArkDeleteJob < ApplicationJob
     queue_as :arks
@@ -9,7 +11,6 @@ module Curator
 
       raise Curator::Exceptions::ArkManagerApiUnavailable if !minter_service_available
     end
-
 
     def perform(ark_id)
       Curator::ArkDeleteService.call(ark_id)

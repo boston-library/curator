@@ -141,7 +141,7 @@ module Curator
 
       host_collections = host_collection_names.map do |host_col_name|
         find_or_create_host_collection(host_col_name, @record.digital_object.institution)
-      end.compact.delete_if { |hc|  @record.desc_host_collections.exists?(host_collection: hc) }
+      end.compact.delete_if { |hc| @record.desc_host_collections.exists?(host_collection: hc) }
 
       return if host_collections.blank?
 
@@ -153,7 +153,7 @@ module Curator
     def add_subject_terms!(subject_terms = [])
       return if subject_terms.blank?
 
-      terms_to_add = subject_terms.delete_if { |st|  @record.desc_terms.exists?(mapped_term: st) }
+      terms_to_add = subject_terms.delete_if { |st| @record.desc_terms.exists?(mapped_term: st) }
 
       return if terms_to_add.blank?
 
@@ -191,8 +191,8 @@ module Curator
         next if !map_attrs.key?(:_destroy)
 
         term_for_mapping(map_attrs.except(:_destroy),
-                                       nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
-      end.compact.delete_if { |mt|  !@record.desc_terms.exixts?(mapped_term: mt) }
+                         nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
+      end.compact.delete_if { |mt| !@record.desc_terms.exixts?(mapped_term: mt) }
 
       return if terms_to_destroy.blank?
 
@@ -216,7 +216,7 @@ module Curator
 
       mapped_name_roles = name_role_attrs.map do |nr_attrs|
         name_role(nr_attrs.fetch(:name), nr_attrs.fetch(:role))
-      end.compact.delete_if { |nr_attrs| !@record.name_roles.exists?(mnr_attrs) }
+      end.compact.delete_if { |mnr_attrs| !@record.name_roles.exists?(mnr_attrs) }
 
       return if mapped_name_roles.blank?
 

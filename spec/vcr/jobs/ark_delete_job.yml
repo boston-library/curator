@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: delete
-    uri: http://127.0.0.1:3002/api/v2/arks/bpl-dev:3n206530d
+    uri: http://127.0.0.1:3002/api/v2/arks/bpl-dev:987654321
     body:
       encoding: UTF-8
       string: ''
@@ -19,8 +19,8 @@ http_interactions:
       - http.rb/5.0.1
   response:
     status:
-      code: 204
-      message: No Content
+      code: 404
+      message: Not Found
     headers:
       X-Frame-Options:
       - SAMEORIGIN
@@ -34,14 +34,19 @@ http_interactions:
       - none
       Referrer-Policy:
       - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
       Cache-Control:
       - no-cache
       X-Request-Id:
-      - 2b285467-e259-48c8-900f-abe709c39664
+      - f4d61efa-7ccc-4a3c-9f2a-29748b062d54
       X-Runtime:
-      - '0.018241'
+      - '0.013180'
+      Transfer-Encoding:
+      - chunked
     body:
-      encoding: ASCII-8BIT
-      string: ''
-  recorded_at: Tue, 13 Jul 2021 17:17:20 GMT
+      encoding: UTF-8
+      string: '{"errors":[{"title":"Not found","status":404,"detail":"can''t find
+        record with friendly id: \"bpl-dev:987654321\"","source":{"pointer":"/api/v2/arks/bpl-dev:987654321"}}]}'
+  recorded_at: Tue, 13 Jul 2021 14:43:30 GMT
 recorded_with: VCR 6.0.0

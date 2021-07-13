@@ -1,4 +1,4 @@
-#frozen_string_literal: true
+# frozen_string_literal: true
 
 require 'rails_helper'
 require_relative './shared/remote_service'
@@ -13,23 +13,35 @@ RSpec.describe Curator::ArkDeleteService, type: :service do
   end
 
   describe '#call' do
-    before(:all) do
-      @mintable ||= build(:curator_institution, ark_id: nil)
-
+    subject do
       VCR.use_cassette('services/institutions/destroy_ark') do
-        @ark_id = Curator::MinterService.call(@mintable.ark_params)
+        described_class.call(ark_id)
       end
     end
 
-    let(:ark_url) { "#{Curator.config.ark_manager_api_url}/api/v2/#{@ark_id}" }
+    let(:ark_url) { "#{Curator.config.ark_manager_api_url}/api/v2/arks/#{ark_id}" }
+    let(:ark_id) { 'bpl-dev:3n206530d' }
 
-    it 'expects the ark to ark been successfully deleted' do
-      VCR.use_cassette('services/destroy_ark') do
-        result = described_class.call(@ark_id)
-        expect(result).to be_truthy
-        verify_result = HTTP.get(ark_url)
-        expect(verify_result.code).to be(404)
+    # NOTE: Uncomment the following to refresh the VCR cassete
+    # let(:mintable) { build(:curator_institution, ark_id: nil) }
+    # let(:ark_id) do
+    #   VCR.use_cassette('services/institutions/ark_for_destroy') do
+    #      Curator::MinterService.call(mintable.ark_params)
+    #   end
+    # end
+
+    let(:verify_result) do
+      VCR.use_cassette('services/institutions/verify_ark_destroyed') do
+        HTTP.get(ark_url)
       end
+    end
+
+    specify { expect(subject).to be_truthy }
+    specify { expect(ark_id).to be_truthy.and be_a_kind_of(String) }
+    specify { expect(verify_result).to be_truthy }
+
+    it 'expects the ark to have been destroyed in the ark manager' do
+      expect(verify_result.code).to eq(404)
     end
   end
 end

@@ -16,7 +16,7 @@ module Curator
           delete_ark(client)
         end
       rescue HTTP::Error => e
-        Rails.logger.error 'HTTP Error Occured Generating Ark'
+        Rails.logger.error 'HTTP Error Occured Destroying Ark'
         Rails.logger.error "Reason #{e.message}"
         raise ActiveRecord::RecordNotDestroyed, 'Error Destroying Ark!'
       rescue Oj::Error => e
@@ -24,10 +24,10 @@ module Curator
         Rails.logger.error "Reason #{e.message}"
         raise ActiveRecord::RecordNotDestroyed, 'Error Destroying Ark!'
       rescue Curator::Exceptions::RemoteServiceError => e
-        puts 'Error Occured Generating Ark'
-        puts "Reason #{e.message}"
-        puts "Response code #{e.code}"
-        puts "Response #{e.json_response}"
+        Rails.logger.error 'Error Occured Destroying Ark'
+        Rails.logger.error "Reason #{e.message}"
+        Rails.logger.error "Response code #{e.code}"
+        Rails.logger.error "Response #{e.json_response}"
         raise ActiveRecord::RecordNotDestroyed, 'Error Destroying Ark!'
       end
       false

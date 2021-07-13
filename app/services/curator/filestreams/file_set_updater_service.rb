@@ -82,7 +82,7 @@ module Curator
         Curator.digital_object_class.select(:id, :ark_id).find_by(ark_id: ex_obj_ark_id) ||
                  Curator.collection_class.select(:id, :ark_id).find_by!(ark_id: ex_obj_ark_id)
       end.compact.delete_if { |eo| !@record.exemplary_image_of_mappings.exists?(exemplary_object: eo) }
-      
+
       @record.exemplary_image_of_mappings.destroy_by(exemplary_object: exemplary_objects)
     rescue ActiveRecord::RecordNotFound => e
       @record.errors.add(:exemplary_image_of_mappings, "#{e.message} with ark_id=#{admin_set_ark_id}")

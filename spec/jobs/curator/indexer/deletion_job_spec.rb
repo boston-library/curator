@@ -12,17 +12,19 @@ RSpec.describe Curator::Indexer::DeletionJob, type: :job do
     let(:job_args) { 'bpl-dev:987654321' }
     let(:expected_queue) { 'indexing' }
 
-    before(:each) do
-      ActiveJob::Base.queue_adapter = :test
-    end
-
     it_behaves_like 'queueable'
 
-    it 'sends a delete request to the indexing service' do
-      ActiveJob::Base.queue_adapter.perform_enqueued_jobs = true
-      subject.perform_later(job_args)
-      assert_requested :post, solr_update_url,
-                       body: { 'delete' => job_args }.to_json
+    describe '#perform_later' do
+      around(:each) do |spec|
+        ActiveJob::Base.queue_adapter = :test
+        ActiveJob::Base.queue_adapter.perform_enqueued_jobs = true
+        spec.run
+      end
+
+      it 'sends a delete request to the indexing service' do
+        subject.perform_later(job_args)
+        expect(a_request(:post, solr_update_url).with(body: { 'delete' => job_args }.to_json)).to have_been_made.at_least_once
+      end
     end
   end
 end
