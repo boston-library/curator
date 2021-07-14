@@ -139,14 +139,13 @@ module Curator
 
       return if host_collection_names.blank?
 
-      host_collection_names.each do |host_col_name|
-        host_collection = find_or_create_host_collection(host_col_name,
-                                                         @record.digital_object.institution)
+      host_collections = host_collection_names.map do |host_col_name|
+        find_or_create_host_collection(host_col_name, @record.digital_object.institution)
+      end.compact.delete_if { |hc| @record.desc_host_collections.exists?(host_collection: hc) }
 
-        next if @record.desc_host_collections.exists?(host_collection: host_collection)
+      return if host_collections.blank?
 
-        @record.desc_host_collections.build(host_collection: host_collection)
-      end
+      host_collections.each { |hc| @record.desc_host_collections.build(host_collection: hc) }
     end
 
     private
@@ -154,51 +153,50 @@ module Curator
     def add_subject_terms!(subject_terms = [])
       return if subject_terms.blank?
 
-      subject_terms.each do |subject_term|
-        next if @record.desc_terms.exists?(mapped_term: subject_term)
+      terms_to_add = subject_terms.delete_if { |st| @record.desc_terms.exists?(mapped_term: st) }
 
-        @record.desc_terms.build(mapped_term: subject_term)
-      end
+      return if terms_to_add.blank?
+
+      terms_to_add.each { |term_to_add| @record.desc_terms.build(mapped_term: term_to_add) }
     end
 
     def remove_subject_terms!(subject_terms = [])
       return if subject_terms.blank?
 
-      subject_terms.each do |subject_term|
-        next if !@record.desc_terms.exists?(mapped_term: subject_term)
+      terms_to_destroy = subject_terms.delete_if { |st| !@record.desc_terms.exists?(mapped_term: st) }
 
-        @record.desc_terms.where(mapped_term: subject_term).destroy_all
-      end
+      return if terms_to_destroy.blank?
+
+      @record.desc_terms.destroy_by(mapped_term: terms_to_destroy)
     end
 
     def add_mapped_terms!(map_type, mapped_terms = [])
       return if mapped_terms.blank?
 
-      mapped_terms.each do |map_attrs|
+      terms_to_add = mapped_terms.map do |map_attrs|
         next if map_attrs.key?(:_destroy)
 
-        mapped_term = term_for_mapping(map_attrs,
-                                       nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
+        term_for_mapping(map_attrs, nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
+      end.compact.delete_if { |mt| @record.desc_terms.exists?(mapped_term: mt) }
 
-        next if @record.desc_terms.exists?(mapped_term: mapped_term)
+      return if terms_to_add.blank?
 
-        @record.desc_terms.build(mapped_term: mapped_term)
-      end
+      terms_to_add.each { |term_to_add| @record.desc_terms.build(mapped_term: term_to_add) }
     end
 
     def remove_mapped_terms!(map_type, mapped_terms = [])
       return if mapped_terms.blank?
 
-      mapped_terms.each do |map_attrs|
+      terms_to_destroy = mapped_terms.map do |map_attrs|
         next if !map_attrs.key?(:_destroy)
 
-        mapped_term = term_for_mapping(map_attrs.except(:_destroy),
-                                       nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
+        term_for_mapping(map_attrs.except(:_destroy),
+                         nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
+      end.compact.delete_if { |mt| !@record.desc_terms.exixts?(mapped_term: mt) }
 
-        next if !@record.desc_terms.exists?(mapped_term: mapped_term)
+      return if terms_to_destroy.blank?
 
-        @record.desc_terms.where(mapped_term: mapped_term).destroy_all
-      end
+      @record.desc_terms.destroy_by(mapped_term: terms_to_destroy)
     end
 
     def add_name_roles!(name_role_attrs = [])
@@ -206,13 +204,11 @@ module Curator
 
       mapped_name_roles = name_role_attrs.map do |nr_attrs|
         name_role(nr_attrs.fetch(:name), nr_attrs.fetch(:role))
-      end
+      end.compact.delete_if { |mnr_attrs| @record.name_roles.exists?(mnr_attrs) }
 
-      mapped_name_roles.each do |mnr_attrs|
-        next if @record.name_roles.exists?(mnr_attrs)
+      return if mapped_name_roles.blank?
 
-        @record.name_roles.build(mnr_attrs)
-      end
+      mapped_name_roles.each { |mnr| @record.name_roles.build(mnr) }
     end
 
     def remove_name_roles!(name_role_attrs = [])
@@ -220,13 +216,11 @@ module Curator
 
       mapped_name_roles = name_role_attrs.map do |nr_attrs|
         name_role(nr_attrs.fetch(:name), nr_attrs.fetch(:role))
-      end
+      end.compact.delete_if { |mnr_attrs| !@record.name_roles.exists?(mnr_attrs) }
 
-      mapped_name_roles.each do |mnr_attrs|
-        next if !@record.name_roles.exists?(mnr_attrs)
+      return if mapped_name_roles.blank?
 
-        @record.name_roles.where(mnr_attrs).destroy_all
-      end
+      @record.name_roles.destroy_by(mapped_name_roles)
     end
   end
 end

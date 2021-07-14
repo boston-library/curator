@@ -49,33 +49,6 @@ RSpec.describe Curator::Indexable do
     end
   end
 
-  describe '#indexer_health_check' do
-    it 'does not raise an error if the indexing service is available' do
-      expect do
-        @indexable_object.indexer_health_check
-      end.not_to raise_error
-    end
-
-    it 'throws SolrUnavailable if the indexing service is not available' do
-      ClimateControl.modify SOLR_URL: 'http://127.0.0.1:9999/solr/wrong' do
-        expect do
-          @indexable_object.indexer_health_check
-        end.to raise_error(Curator::Exceptions::SolrUnavailable)
-      end
-    end
-
-    # TODO: change ClimateControl.modify to change AUTHORITY_API_URL
-    # once remote services are containerized for CI build
-    # Curator::Services::AuthorityService.ready? always returns true when RAILS_ENV = 'test'
-    it 'throws AuthorityApiUnavailable if the authority service is not available' do
-      ClimateControl.modify RAILS_ENV: 'development' do
-        expect do
-          @indexable_object.indexer_health_check
-        end.to raise_error(Curator::Exceptions::AuthorityApiUnavailable)
-      end
-    end
-  end
-
   describe 'background jobs' do
     before(:each) do
       ActiveJob::Base.queue_adapter = :test

@@ -1,0 +1,50 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://127.0.0.1:3002/api/v2/arks/bpl-dev:3n206530d
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Connection:
+      - close
+      Host:
+      - 127.0.0.1:3002
+      User-Agent:
+      - http.rb/5.0.1
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Cache-Control:
+      - no-cache
+      X-Request-Id:
+      - 60ed4ac1-c873-448f-a679-220083ea4ba0
+      X-Runtime:
+      - '0.004498'
+      Connection:
+      - close
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"errors":[{"title":"Not found","status":404,"detail":"can''t find
+        record with friendly id: \"bpl-dev:3n206530d\"","source":{"pointer":"/api/v2/arks/bpl-dev:3n206530d"}}]}'
+  recorded_at: Tue, 13 Jul 2021 17:17:20 GMT
+recorded_with: VCR 6.0.0

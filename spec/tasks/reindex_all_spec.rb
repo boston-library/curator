@@ -22,7 +22,11 @@ RSpec.describe 'curator:reindex_all task', type: :task do
 
   it 'Updates the solr index for all the objects in the DB' do
     current_timestamp = Time.current
-    Rake::Task['curator:reindex_all'].invoke
+    VCR.use_cassette('tasks/reindex_all') do
+      Rails.logger.silence do
+        Rake::Task['curator:reindex_all'].invoke
+      end
+    end
     expect(record_timestamps.count).to eq(ark_ids.count)
     expect(record_timestamps).to all(be > current_timestamp)
   end

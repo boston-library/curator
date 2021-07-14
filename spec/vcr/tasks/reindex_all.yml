@@ -1,0 +1,309 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/tgn/1005467
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.0.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"db2b8ee073dfced7c5f6212cd98abdb2"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - f1531b35-f37f-45ab-b299-4d591ac4ceaa
+      X-Runtime:
+      - '0.801310'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"42.2833","longitude":"-71.1167","combined":"42.2833,-71.1167"},"hier_geo":{"city_section":"Roslindale","city":"Boston","continent":"North
+        and Central America","county":"Suffolk","country":"United States","state":"Massachusetts"}}'
+  recorded_at: Mon, 12 Jul 2021 19:17:39 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/tgn/2050042
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.0.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"47db2d414028f515f4fa550b66b1e696"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 260146d0-0088-45c3-ab67-f0237730c4b9
+      X-Runtime:
+      - '0.881636'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"42.4667","longitude":"-70.95","combined":"42.4667,-70.95"},"hier_geo":{"city":"Lynn","continent":"North
+        and Central America","county":"Essex","country":"United States","state":"Massachusetts"}}'
+  recorded_at: Mon, 12 Jul 2021 20:44:41 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/tgn/1004027
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.0.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"461a1cfe0d2c73952d6af55b76a37c47"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - c8c09f57-0a0b-4029-a8bd-4828264fd674
+      X-Runtime:
+      - '0.001807'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"42.35","longitude":"-71.0833","combined":"42.35,-71.0833"},"hier_geo":{"city_section":"Back
+        Bay","city":"Boston","continent":"North and Central America","county":"Suffolk","country":"United
+        States","state":"Massachusetts"}}'
+  recorded_at: Mon, 12 Jul 2021 20:44:41 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/tgn/2120926
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.0.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"fd77e23b4555c7045798e21df4331e8d"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - e41399de-3d32-4887-bc2e-4a995f230c51
+      X-Runtime:
+      - '0.001466'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"44.9333","longitude":"-91.3833","combined":"44.9333,-91.3833"},"hier_geo":{"city":"Chippewa
+        Falls","continent":"North and Central America","county":"Chippewa","country":"United
+        States","state":"Wisconsin"}}'
+  recorded_at: Mon, 12 Jul 2021 20:44:41 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/tgn/2362636
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.0.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"f9836fb9c94d119272fed2726ba18ad6"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - cf7a02c1-6ca9-46a9-a988-85eceadbe9ca
+      X-Runtime:
+      - '0.001593'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"43.7333","longitude":"-70.1167","combined":"43.7333,-70.1167"},"hier_geo":{"island":"Great
+        Chebeague Island","continent":"North and Central America","county":"Cumberland","country":"United
+        States","state":"Maine"}}'
+  recorded_at: Mon, 12 Jul 2021 20:44:41 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/geonames/4942742
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.0.1
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Cache-Control:
+      - no-cache
+      X-Request-Id:
+      - 41c70f5a-1aa8-4b75-aa85-c23490ec8e51
+      X-Runtime:
+      - '0.187347'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"error":"undefined method `geoname'' for #\u003cNokogiri::XML::Element:0x00007fac04131d40\u003e"}'
+  recorded_at: Mon, 12 Jul 2021 20:44:41 GMT
+recorded_with: VCR 6.0.0

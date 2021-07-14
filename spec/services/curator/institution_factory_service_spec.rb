@@ -8,9 +8,11 @@ RSpec.describe Curator::InstitutionFactoryService, type: :service do
   before(:all) do
     @object_json = load_json_fixture('institution_with_thumbnail', 'institution')
     @object_json['files'][0]['metadata']['ingest_filepath'] = file_fixture('image_thumbnail_300_institution.png').to_s
-    expect do
-      @success, @institution = handle_factory_result(described_class, @object_json)
-    end.to change { Curator::Institution.count }.by(1)
+    VCR.use_cassette('services/institution_factory_service') do
+      expect do
+        @success, @institution = handle_factory_result(described_class, @object_json)
+      end.to change { Curator::Institution.count }.by(1)
+    end
   end
 
   specify { expect(@success).to be_truthy }
