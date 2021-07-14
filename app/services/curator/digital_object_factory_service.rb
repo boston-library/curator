@@ -57,7 +57,7 @@ module Curator
             %w(genres resource_types languages).each do |map_type|
               mapped_terms = @desc_json_attrs.fetch(map_type, []).map do |map_attrs|
                 term_for_mapping(map_attrs, nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
-              end.compact.delete_if { |mt| descriptive.desc_terms.exists?(mapped_term: mt) }
+              end.compact.delete_if { |mt| !descriptive.new_record? && descriptive.desc_terms.exists?(mapped_term: mt) }
 
               next if mapped_terms.blank?
 

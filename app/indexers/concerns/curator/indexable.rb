@@ -54,7 +54,6 @@ module Curator
       class_attribute :curator_indexable_auto_callbacks, default: true
 
       after_save_commit :queue_indexing_job, if: -> { Curator::Indexable.auto_callbacks?(self) }
-      # after_destroy :indexer_health_check
       after_destroy_commit :queue_deletion_job, if: -> { Curator::Indexable.auto_callbacks?(self) }
     end
 
@@ -64,12 +63,6 @@ module Curator
     #  - a per-update writer, or thread/block-specific writer configured with `self.index_with`
     def update_index(mapper: curator_indexable_mapper, writer: nil)
       RecordIndexUpdater.new(self, mapper: mapper, writer: writer).update_index
-    end
-
-    # make sure indexing and authority services are ready before we commit transactions and :update_index
-    def indexer_health_check
-      raise Curator::Exceptions::SolrUnavailable unless SolrUtil.ready?
-      raise Curator::Exceptions::AuthorityApiUnavailable unless Curator::ControlledTerms::AuthorityService.ready?
     end
 
     def queue_indexing_job
