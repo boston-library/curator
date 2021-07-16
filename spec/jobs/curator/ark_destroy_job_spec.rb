@@ -3,7 +3,7 @@
 require 'rails_helper'
 require_relative './shared/jobs_shared'
 
-RSpec.describe Curator::ArkDeleteJob, type: :job do
+RSpec.describe Curator::ArkDestroyJob, type: :job do
   describe 'expected job behavior' do
     subject { described_class }
 

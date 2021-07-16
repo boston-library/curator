@@ -65,7 +65,7 @@ module Curator
           def pool_key
             return @pool_key if defined?(@pool_key)
 
-            @pool_key = Digest::MD5.hexdigest("#{base_uri.scheme}::#{base_uri.host}::#{base_uri.port}")
+            @pool_key = Digest::MD5.hexdigest("#{base_uri.scheme}::#{base_uri.host}::#{base_uri.port}-#{name})}")
           end
 
           def __current_client_pool

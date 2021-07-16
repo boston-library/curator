@@ -28,7 +28,10 @@ module Curator
               if geo_auth == 'tgn' || geo_auth == 'geonames'
                 auth_url = "#{geo_auth}/#{subject_geo.id_from_auth}"
                 auth_data = Curator::ControlledTerms::AuthorityService.call(path: auth_url, path_prefix: '/geomash')
-                if auth_data && auth_data[:hier_geo].present?
+
+                raise Curator::Exceptions::GeographicIndexerError.new('No data recieved from authorty service', auth_url) if auth_data.blank?
+
+                if auth_data[:hier_geo].present?
                   if auth_data[:non_hier_geo].present?
                     other_geo_value = auth_data[:non_hier_geo][:value]
                     other_geo_value << " (#{subject_geo.area_type})" if subject_geo.area_type.present?
