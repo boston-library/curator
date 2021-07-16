@@ -103,7 +103,7 @@ module Curator
             blob.checksum = checksum_to_base64(attachment_attributes['checksum_md5'])
             blob.content_type = attachment_attributes['content_type']
             blob.service_name = attachment_attributes['service_name']
-            blob.metadata = attachment_attributes['metadata']
+            blob.metadata = attachment_attributes['metadata']&.merge(analyzed: true)
           end.tap(&:save!).tap do |blob|
             blob.upload_without_unfurling(io)
           end

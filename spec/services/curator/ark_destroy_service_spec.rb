@@ -3,7 +3,7 @@
 require 'rails_helper'
 require_relative './shared/remote_service'
 
-RSpec.describe Curator::ArkDeleteService, type: :service do
+RSpec.describe Curator::ArkDestroyService, type: :service do
   subject { described_class }
 
   it_behaves_like 'remote_service'

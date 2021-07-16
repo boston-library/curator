@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Curator
-  class ArkDeleteService < Services::Base
+  class ArkDestroyService < Services::Base
     include ArkService
 
     attr_reader :ark_id
@@ -39,6 +39,11 @@ module Curator
       resp = client.headers(self.class.default_headers).delete("#{self.class.default_path_prefix}/arks/#{ark_id}").flush
 
       return true if resp.status.success?
+
+      if resp.code == 404
+        Rails.logger.warn "Ark #{ark_id} was not found on destroy! It may have been already destroyed previously"
+        return true
+      end
 
       json_response = Oj.safe_load(resp.body.to_s) || {}
       raise Curator::Exceptions::RemoteServiceError.new('Failed to destroy ark in ark-manager-api!', json_response, resp.status)

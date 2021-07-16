@@ -89,11 +89,15 @@ module Curator
       autoload :NotAcceptable, File.expand_path('./exceptions/controller_errors.rb', __dir__)
       # Serializable ModelError Subclasses
       autoload :InvalidRecord, File.expand_path('./exceptions/model_errors.rb', __dir__)
-      # remote services CuratorError Subclasses
+      # Remote services CuratorError Subclasses
       autoload :SolrUnavailable, File.expand_path('./exceptions/remote_service_errors.rb', __dir__)
       autoload :ArkManagerApiUnavailable, File.expand_path('./exceptions/remote_service_errors.rb', __dir__)
       autoload :AuthorityApiUnavailable, File.expand_path('./exceptions/remote_service_errors.rb', __dir__)
       autoload :RemoteServiceError, File.expand_path('./exceptions/remote_service_errors.rb', __dir__)
+      # Indexer Errors
+      autoload :IndexerError, File.expand_path('./exceptions/indexer_errors.rb', __dir__)
+      autoload :IndexerBadRequestError, File.expand_path('./exceptions/indexer_errors.rb', __dir__)
+      autoload :GeographicIndexerError, File.expand_path('./exceptions/indexer_errors.rb', __dir__)
     end
   end
 end
