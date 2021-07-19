@@ -7,6 +7,7 @@ require_relative './shared/optimistic_lockable'
 require_relative './shared/timestampable'
 require_relative './shared/archivable'
 require_relative './shared/for_serialization'
+require_relative './shared/local_id_finder'
 require_relative './shared/mappings/has_exemplary_file_set'
 require_relative './shared/versionable'
 
@@ -160,6 +161,23 @@ RSpec.describe Curator::DigitalObject, type: :model do
 
       it 'expects the scope sql to match the :expected_scope_sql' do
         expect(subject.for_reindex_all.to_sql).to eq(expected_scope_sql)
+      end
+    end
+
+    it_behaves_like 'local_id_finder' do
+      let(:admin_set_ark_id) { 'bpl-dev:123456789' }
+      let(:identifier) { create_list(:curator_descriptives_identifier, 3).as_json }
+      let(:expected_scope_sql) { described_class.joins(:admin_set, :descriptive).where(collections: { ark_id: admin_set_ark_id }).merge(Curator.metastreams.descriptive_class.local_id_finder(identifier)).limit(1).to_sql }
+      let(:scope_args) { [admin_set_ark_id, identifier] }
+    end
+
+    context 'with #oai_header_id' do
+      it_behaves_like 'local_id_finder' do
+        let(:admin_set_ark_id) { 'bpl-dev:123456789' }
+        let(:identifier_list) { [] }
+        let(:oai_header_id) { 'oai:abcd:12345' }
+        let(:expected_scope_sql) { described_class.joins(:admin_set, :administrative).where(collections: { ark_id: admin_set_ark_id }).merge(Curator.metastreams.administrative_class.local_id_finder(oai_header_id)).limit(1).to_sql }
+        let(:scope_args) { [admin_set_ark_id, identifier_list, oai_header_id] }
       end
     end
 

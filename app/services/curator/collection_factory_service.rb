@@ -6,6 +6,7 @@ module Curator
 
     def call
       with_transaction do
+        check_for_existing_ark!
         institution_ark_id = @json_attrs.dig('institution', 'ark_id')
         @record = Curator.collection_class.find_or_initialize_by(ark_id: @ark_id).tap do |collection|
           collection.name = @json_attrs.fetch(:name, nil)
@@ -32,6 +33,15 @@ module Curator
         end
       end
       return @success, @result
+    end
+
+    private
+
+    def local_id_finder_scope
+      institution_ark_id, name = @json_attrs.dig('institution', 'ark_id'), @json_attrs.fetch(:name, nil)
+      return if institution_ark_id.blank? || name.blank?
+
+      Curator.collection_class.local_id_finder(institution_ark_id, name)&.first
     end
   end
 end

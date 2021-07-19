@@ -13,6 +13,7 @@ module Curator
 
     def call
       with_transaction do
+        check_for_existing_ark!
         object_ark_id = @json_attrs.dig('file_set_of', 'ark_id')
         obj = Curator.digital_object_class.find_by!(ark_id: object_ark_id)
         @record = file_set_class.find_or_initialize_by(ark_id: @ark_id).tap do |file_set|
@@ -54,6 +55,13 @@ module Curator
     end
 
     private
+
+    def local_id_finder_scope
+      file_set_of_ark_id, file_name_base = @json_attrs.dig('file_set_of', 'ark_id'), @json_attrs.fetch('file_name_base', nil)
+      return if file_set_of_ark_id.blank? || file_name_base.blank?
+
+      file_set_class.local_id_finder(file_set_of_ark_id, file_name_base)&.first
+    end
 
     def map_exemplary_objects!(file_set)
       return if !Curator::Mappings::ExemplaryImage::VALID_EXEMPLARY_FILE_SET_TYPES.include?(@file_set_type.camelize)

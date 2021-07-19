@@ -10,6 +10,7 @@ module Curator
     # TODO: set relationships for contained_by values
     def call
       with_transaction do
+        check_for_existing_ark!
         admin_set_ark_id = @json_attrs.dig('admin_set', 'ark_id')
         collection_ark_ids = @json_attrs.fetch('is_member_of_collection', []).pluck('ark_id')
         @record = Curator.digital_object_class.find_or_initialize_by(ark_id: @ark_id).tap do |digital_object|
@@ -88,6 +89,16 @@ module Curator
     end
 
     private
+
+    def local_id_finder_scope
+      admin_set_ark_id = @json_attrs.dig('admin_set', 'ark_id')
+      identifier = @desc_json_attrs.fetch(:identifier, [])
+      oai_header_id = @admin_json_attrs.fetch(:oai_header_id, nil)
+
+      return if admin_set_ark_id.blank? || (identifier.blank? && oai_header_id.blank?)
+
+      Curator.digital_object_class.local_id_finder(admin_set_ark_id, identifier, oai_header_id)&.first
+    end
 
     def find_or_build_collection_members!(digital_object, admin_set_ark_id, collection_ark_ids = [])
       return if collection_ark_ids.blank?

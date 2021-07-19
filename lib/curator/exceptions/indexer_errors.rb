@@ -10,7 +10,7 @@ module Curator::Exceptions
   class IndexerBadRequestError < IndexerError
     attr_reader :response
 
-    def initialize(message, response = nil)
+    def initialize(message = 'Indexer returned 400 bad request!', response = nil)
       super(message)
       @response = response
     end
@@ -19,7 +19,7 @@ module Curator::Exceptions
   class GeographicIndexerError < IndexerError
     attr_reader :geo_auth_url
 
-    def initialize(message = 'Failed to retreive geograhic index data from authority api!', geo_auth_url)
+    def initialize(message = 'Failed to retreive geograhic index data from authority api!', geo_auth_url = nil)
       super(message)
       @geo_auth_url = geo_auth_url
     end

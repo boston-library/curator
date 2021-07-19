@@ -34,6 +34,8 @@ module Curator
 
     scope :for_serialization, -> { with_physical_location.with_license.with_mappings.with_desc_terms.with_rights_statement }
 
+    scope :local_id_finder, -> (identifier) { jsonb_contains(identifier: identifier) }
+
     # NOTE: need to use attr json for array items
     # Identifier
     attr_json :identifier, DescriptiveFieldSets::Identifier.to_type, container_attribute: :identifier_json, array: true, default: []

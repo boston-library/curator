@@ -15,6 +15,11 @@ module Curator
 
     scope :for_serialization, -> { includes(:file_sets, exemplary_image_mapping: :exemplary_file_set).with_metastreams }
     scope :for_reindex_all, -> { for_serialization.joins(:administrative, :descriptive, :workflow) }
+    scope :local_id_finder, lambda { |admin_set_ark_id, identifier, oai_header_id = nil|
+      return joins(:admin_set, :administrative).where(collections: { ark_id: admin_set_ark_id }).merge(Curator.metastreams.administrative_class.local_id_finder(oai_header_id)).limit(1) if oai_header_id
+
+      joins(:admin_set, :descriptive).where(collections: { ark_id: admin_set_ark_id }).merge(Curator.metastreams.descriptive_class.local_id_finder(identifier)).limit(1)
+    }
 
     validates :contained_by_id, exclusion: { in: -> (digital_object) { Array.wrap(digital_object.id) } },
               uniqueness: { scope: :id }, unless: -> { contained_by.blank? }

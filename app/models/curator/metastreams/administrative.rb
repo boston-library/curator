@@ -20,6 +20,8 @@ module Curator
 
     has_paper_trail if: proc { |a| [Curator.digital_object_class.name, Curator::Filestreams::FileSet.name].include?(a.administratable_type) }
 
+    scope :local_id_finder, -> (oai_header_id) { where.not(oai_header_id: nil).where(oai_header_id: oai_header_id) }
+
     private
 
     def validate_destination_site
