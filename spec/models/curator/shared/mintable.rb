@@ -10,15 +10,15 @@ RSpec.shared_examples_for 'mintable', type: :model do
     end
 
     describe 'Validations' do
-      before(:context) { described_class.skip_callback(:validation, :before, :generate_ark_id) }
+      before(:context) { described_class.skip_callback(:validation, :before, Curator::MintableCallbacks) }
 
-      after(:context) { described_class.set_callback(:validation, :before, :generate_ark_id) }
+      after(:context) { described_class.set_callback(:validation, :before, Curator::MintableCallbacks) }
 
       it { is_expected.to validate_presence_of(:ark_id).on(:create) }
       it { is_expected.to validate_uniqueness_of(:ark_id).on(:create) }
     end
 
-    describe '#generate_ark_id on create' do
+    describe '#Curator::MintableCallbacks.before_validation on create' do
       subject { build(factory_key_for(described_class), ark_id: nil) }
 
       it 'generates an #ark_id #before_validation on create if there is none' do

@@ -5,9 +5,11 @@ module Curator
     queue_as :indexing
 
     retry_on Curator::Exceptions::SolrUnavailable, Curator::Exceptions::AuthorityApiUnavailable, ActiveRecord::StaleObjectError, attempts: 3
-    retry_on Curator::Exceptions::GeographicIndexerError, attempts: 1
+    retry_on Curator::Exceptions::GeographicIndexerError, attempts: 1 do |_job, error|
+      logger.error "#{error.message}; URL PATH: #{error&.geo_auth_url}"
+    end
 
-    before_perform  { remote_service_healthcheck! }
+    before_perform { remote_service_healthcheck! }
 
     def perform(obj_to_index)
       obj_to_index.update_index

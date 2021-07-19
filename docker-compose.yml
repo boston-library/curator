@@ -8,9 +8,15 @@ services:
     environment:
       - POSTGRES_PASSWORD=postgres
   cache:
+    mem_reservation: 64mb
+    privileged: true
     container_name: curator_shared_cache
     image: redis:latest
-    command: redis-server --databases 3 --maxmemory 32mb --maxmemory-policy allkeys-lfu
+    command: >
+      bash -c "echo 1 > /proc/sys/vm/overcommit_memory &&
+      redis-server --databases 3 --maxmemory 32mb --maxmemory-policy allkeys-lfu"
+    ulimits:
+      nproc: 12388
     sysctls:
       net.core.somaxconn: 1024
   azure:
@@ -35,6 +41,7 @@ services:
       - RAILS_LOG_TO_STDOUT=true
       - POSTGRES_HOST=pg
       - BPLDC_REDIS_CACHE_URL=redis://cache:6379/1
+    env_file: .env
     ports:
       - "3001:3000"
     depends_on:

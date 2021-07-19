@@ -13,6 +13,7 @@ module Curator
 
     scope :for_serialization, -> { includes(exemplary_image_mapping: :exemplary_file_set).with_metastreams }
     scope :for_reindex_all, -> { for_serialization.joins(:administrative, :workflow) }
+    scope :local_id_finder, ->(institution_ark_id, name) { joins(:institution).where(institutions: { ark_id: institution_ark_id }, name: name).limit(1) }
 
     belongs_to :institution, inverse_of: :collections, class_name: 'Curator::Institution'
 

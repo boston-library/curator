@@ -5,6 +5,7 @@ require_relative '../timestampable'
 require_relative '../mintable'
 require_relative '../archivable'
 require_relative '../metastreamable'
+require_relative '../local_id_finder'
 require_relative './characterizable'
 require_relative './metadata_foxable'
 
@@ -63,6 +64,15 @@ RSpec.shared_examples 'file_set', type: :model do
     describe 'Base File Attachments' do
       it_behaves_like 'characterizable'
       it_behaves_like 'metadata_foxable'
+    end
+  end
+
+  describe 'Scopes' do
+    it_behaves_like 'local_id_finder' do
+      let(:file_set_of_ark_id) { 'bpl-dev:123456789' }
+      let(:file_name_base) { 'abc123.jpg' }
+      let(:expected_scope_sql) { described_class.joins(:file_set_of).where(digital_objects: { ark_id: file_set_of_ark_id }, file_name_base: file_name_base).limit(1).to_sql }
+      let(:scope_args) { [file_set_of_ark_id, file_name_base] }
     end
   end
 

@@ -52,6 +52,20 @@ module Curator
         @desc_json_attrs = metastream_json_attrs.fetch('descriptive', {}).with_indifferent_access
       end
 
+      # NOTE: This will check if there is an object present based on the field used for the local_original_identifier in ark_params
+      def check_for_existing_ark!
+        return if defined?(@ark_id) && @ark_id.present?
+
+        @ark_id = local_id_finder_scope&.ark_id
+      end
+
+      private
+
+      def local_id_finder_scope
+        Rails.logger.warn 'Override me in included classes!'
+        nil
+      end
+
       module NomenclatureHelpers
         private
 
