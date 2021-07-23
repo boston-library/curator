@@ -15,11 +15,6 @@ RSpec.describe 'curator:reindex_all task', type: :task do
   let(:solr_response_docs) { solr_client.get('get', params: solr_query).dig('response', 'docs') || [] }
   let(:record_timestamps) { solr_response_docs.pluck('timestamp') }
 
-  before(:each) do
-    ActiveJob::Base.queue_adapter = :test
-    ActiveJob::Base.queue_adapter.perform_enqueued_jobs = true
-  end
-
   it 'Updates the solr index for all the objects in the DB' do
     current_timestamp = Time.current
     VCR.use_cassette('tasks/reindex_all') do

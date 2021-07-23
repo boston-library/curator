@@ -52,7 +52,13 @@ module Curator
     private
 
     def reindex_collection_members
-      collection_members.find_each { |col_mem| col_mem.digital_object.update_index } if saved_change_to_name?
+      return if !saved_change_to_name?
+
+      Curator::Indexable.indexer_health_check!
+
+      Curator::Indexable.index_with(batching: true) do
+        Curator.digital_object_class.for_reindex_all.where(id: collection_members.pluck(:digital_object_id)).find_each(&:update_index)
+      end
     end
   end
 end

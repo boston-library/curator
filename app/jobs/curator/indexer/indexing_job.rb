@@ -18,18 +18,7 @@ module Curator
     protected
 
     def remote_service_healthcheck!
-      raise Curator::Exceptions::SolrUnavailable if !solr_service_ready?
-      raise Curator::Exceptions::AuthorityApiUnavailable if !authority_service_ready?
-    end
-
-    private
-
-    def authority_service_ready?
-      Curator::ControlledTerms::AuthorityService.ready?
-    end
-
-    def solr_service_ready?
-      Curator::SolrUtil.ready?
+      Curator::Indexable.indexer_health_check!
     end
   end
 end

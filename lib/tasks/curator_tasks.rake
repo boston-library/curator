@@ -52,47 +52,31 @@ namespace :curator do
 
   desc 'Reindex all objects'
   task reindex_all: :environment do
+    puts 'Doing health check...'
+    reindex_all_health_check!
+
     puts 'Preparing to reindex all objects...'
-    ActiveRecord::Base.connection_pool.with_connection do
-      puts 'Reindexing institutions....'
-      Curator::Institution.for_reindex_all.find_each do |inst|
-        begin
-          inst.queue_indexing_job
-        rescue StandardError => e
-          output_reindex_errors(e, inst)
-          next
-        end
-      end
 
-      puts 'Reindexing collections...'
-      Curator::Collection.for_reindex_all.find_each do |col|
-        begin
-          col.queue_indexing_job
-        rescue StandardError => e
-          output_reindex_errors(e, col)
-          next
-        end
+    reindex_record = lambda { |record|
+      begin
+        record.update_index
+      rescue StandardError => e
+        output_reindex_errors(e, record)
       end
+    }
 
-      puts 'Reindexing digital objects...'
-      Curator::DigitalObject.for_reindex_all.find_each do |obj|
-        begin
-          obj.queue_indexing_job
-        rescue StandardError => e
-          output_reindex_errors(e, obj)
-          next
-        end
-      end
+    reindex_all_with_batching do
+      puts "Reindexing #{Curator::Institution.count} institutions...."
+      Curator::Institution.for_reindex_all.find_each(&reindex_record)
 
-      puts 'Reindexing file sets...'
-      Curator::Filestreams::FileSet.for_reindex_all.find_each do |file_set|
-        begin
-          file_set.queue_indexing_job
-        rescue StandardError => e
-          output_reindex_errors(e, file_set)
-          next
-        end
-      end
+      puts "Reindexing #{Curator::Collection.count} collections..."
+      Curator::Collection.for_reindex_all.find_each(&reindex_record)
+
+      puts "Reindexing #{Curator::DigitalObject.count} digital_objects..."
+      Curator::DigitalObject.for_reindex_all.find_each(&reindex_record)
+
+      puts "Reindexing #{Curator::Filestreams::FileSet.count} file_sets..."
+      Curator::Filestreams::FileSet.for_reindex_all.find_each(&reindex_record)
     end
     puts 'Reindex Complete!'
   end
@@ -100,9 +84,23 @@ end
 
 def output_reindex_errors(e, item)
   puts '==============================='
-  puts "Failed To queue #{item.class.name}-#{item.ark_id}"
+  puts "Failed To reindex #{item.class.name}-#{item.ark_id}"
   puts "Reason given: #{e.message}"
   puts '==============================='
+end
+
+def reindex_all_health_check!
+  Curator::Indexable.indexer_health_check!
+rescue Curator::Exceptions::SolrUnavailable, Curator::Exceptions::AuthorityApiUnavailable => e
+  raise e.message
+end
+
+def reindex_all_with_batching
+  Curator::Indexable.index_with(batching: true) do
+    ActiveRecord::Base.connection_pool.with_connection do
+      yield
+    end
+  end
 end
 
 # rubocop:enable Metrics/BlockLength

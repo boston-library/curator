@@ -83,7 +83,7 @@ module Curator
         @writer ||= begin
           if @batching
             @local_writer = true
-            Curator.config.indexable_settings.writer_instance!('solr_writer.batch_size' => 100)
+            Curator.config.indexable_settings.writer_instance!('solr_writer.batch_size' => 100, 'solr_writer.thread_pool' => 1)
           end
         end
       end
