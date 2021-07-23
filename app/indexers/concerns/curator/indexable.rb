@@ -29,6 +29,14 @@ module Curator
       settings&.pop
     end
 
+    def self.indexer_health_check!(for_destroy = false)
+      raise Curator::Exceptions::SolrUnavailable if !solr_service_ready?
+
+      return if for_destroy
+
+      raise Curator::Exceptions::AuthorityApiUnavailable if !authority_service_ready?
+    end
+
     # Are automatic after_commit callbacks currently enabled? Will check a number
     # of things to see, as we have a number of places these can be turned on/off.
     # * Globally in `Curator.config.indexable_settings.disable_callback`
@@ -40,6 +48,18 @@ module Curator
           model.curator_indexable_auto_callbacks &&
           model.curator_indexable_mapper &&
           !ThreadSettings.current.disabled_callbacks?
+    end
+
+    class << self
+      protected
+
+      def authority_service_ready?
+        Curator::ControlledTerms::AuthorityService.ready?
+      end
+
+      def solr_service_ready?
+        Curator::SolrUtil.ready?
+      end
     end
 
     included do

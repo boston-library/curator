@@ -44,11 +44,15 @@ module Curator
     private
 
     def reindex_associations
-      return unless saved_change_to_name?
+      return if !saved_change_to_name?
 
-      collections.find_each do |col|
-        col.collection_members.find_each { |col_mem| col_mem.digital_object.update_index }
-        col.update_index
+      Curator::Indexable.indexer_health_check!
+
+      Curator::Indexable.index_with(batching: true) do
+        collections.eager_load(:collection_members).find_each do |col|
+          Curator.digital_object_class.where(id: col.collection_members.pluck(:digital_object_id)).find_each(&:update_index)
+          col.update_index
+        end
       end
     end
   end
