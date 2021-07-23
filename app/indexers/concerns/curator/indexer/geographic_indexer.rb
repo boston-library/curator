@@ -48,7 +48,6 @@ module Curator
                     context.output_hash['subject_geographic_sim'] << v
                     context.output_hash["subject_geo_#{k}_sim"] << v if context.output_hash["subject_geo_#{k}_sim"]
                   end
-                  context.output_hash['subject_geo_other_ssm'] << auth_data[:hier_geo][:other]
                   hiergeo_geojson = { type: 'Feature',
                                       geometry: { type: 'Point',
                                                   coordinates: coords&.split(',')&.reverse&.map(&:to_f) },

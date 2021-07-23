@@ -7,12 +7,12 @@ module Curator
       extend ActiveSupport::Concern
 
       ATTACHMENT_FIELDS = %i(byte_size content_type checksum key service_name).freeze
-      HAS_ONE_ATTACHMENT_TYPES = %i(audio_access audio_primary document_access document_primary
-                                    ebook_access_epub ebook_access_mobi ebook_access_daisy
-                                    image_access_800 image_georectified_primary image_primary image_negative_master
+      HAS_ONE_ATTACHMENT_TYPES = %i(audio_access audio_primary characterization document_access document_primary
+                                    ebook_access_daisy ebook_access_epub ebook_access_mobi
+                                    image_access_800 image_georectified_primary image_primary image_negative_primary
                                     image_service image_thumbnail_300 metadata_foxml metadata_ia metadata_ia_scan
                                     metadata_marc_xml metadata_mods metadata_oai text_coordinates_access
-                                    text_coordinates_primary text_plain video_access video_primary).freeze
+                                    text_coordinates_primary text_plain video_access_mp4 video_access_webm video_primary).freeze
       # HAS_MANY_ATTACHMENT_TYPES = %i().freeze
 
       included do
