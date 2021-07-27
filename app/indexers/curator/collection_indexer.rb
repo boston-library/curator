@@ -19,13 +19,6 @@ module Curator
       to_field %w(genre_basic_ssim genre_basic_tim) do |record, accumulator|
         accumulator << 'Collections'
         # iterate over child DigitalObject and get genre values
-        # TODO: find a better way? (query Solr?), this is probably pretty expensive
-        # UPDATE I Think I found the better way. Please Review on PR - Ben
-        # Curator.digital_object_class.with_metastreams.where(admin_set_id: record.id).find_each do |obj|
-        #   obj.descriptive.genres.basic_genres.find_each do |genre|
-        #     accumulator << genre.label unless accumulator.include?(genre.label)
-        #   end
-        # end
         genre_labels = []
         Curator.metastreams.descriptive_class.with_desc_terms.where(digital_object_id: record.admin_set_object_ids).find_each do |desc|
           genre_labels += desc.genres.basic_genres.collect(&:label)

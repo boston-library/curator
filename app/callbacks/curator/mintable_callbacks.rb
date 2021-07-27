@@ -3,6 +3,7 @@
 module Curator
   class MintableCallbacks
     # NOTE: This class is based off https://guides.rubyonrails.org/active_record_callbacks.html#callback-classes
+    # NOTE: per this answer https://github.com/rails/rails/issues/33192#issuecomment-399869375 throw(:abort) only works in before_* callbacks  after_* callbacks should raise ActiveRecord::RecordInvalid or some other ActiveRecord Error
     def self.before_validation(mintable)
       begin
         return if mintable.ark_id.present?
@@ -24,10 +25,10 @@ module Curator
         return if mintable.ark_id == mintable_ark
 
         mintable.errors.add(:ark_id, "Imported ark with #{mintable.ark_id}, Got #{mintable_ark} when attempting to re-mint with the following ark_params\n #{mintable.ark_params.inspect}")
-        throw(:abort)
+        raise ActiveRecord::RecordInvalid, mintable
       rescue Curator::Exceptions::ArkManagerApiUnavailable => e
         mintable.errors.add(:ark_id, e.message)
-        throw(:abort)
+        raise ActiveRecord::RecordInvalid, mintable
       end
     end
 
@@ -49,8 +50,6 @@ module Curator
       end
 
       def mint_new_ark(mintable)
-        return if mintable.ark_id.present?
-
         raise Curator::Exceptions::ArkManagerApiUnavailable if !minter_service_ready?
 
         Curator::MinterService.call(mintable.ark_params)
