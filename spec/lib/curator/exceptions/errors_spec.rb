@@ -54,4 +54,54 @@ RSpec.describe Curator::Exceptions do
       it { is_expected.to respond_to(:json_response, :code) }
     end
   end
+
+  describe 'indexer_errors' do
+    %i(IndexerError IndexerBadRequestError GeographicIndexerError).each do |indexer_error|
+      it { is_expected.to be_const_defined(indexer_error) }
+    end
+
+    describe 'Curator::Exceptions::IndexerError' do
+      subject { described_class.const_get(:IndexerError) }
+
+      specify { expect(subject).to be <= Curator::Exceptions::CuratorError }
+
+      it 'is expected to have a default message' do
+        expect(subject.new.message).to eq('An error occcured indexing a record!')
+      end
+    end
+
+    describe 'Curator::Exceptions::IndexerBadRequestError' do
+      subject { described_class.const_get(:IndexerBadRequestError) }
+
+      specify { expect(subject).to be <= Curator::Exceptions::IndexerError }
+
+      it 'is expected to have a default message' do
+        expect(subject.new.message).to eq('Indexer returned 400 bad request!')
+      end
+
+      it 'is expected to respond to response' do
+        expect(subject.new).to respond_to(:response)
+      end
+    end
+
+    describe 'Curator::Exceptions::IndexerBadRequestError' do
+      subject { described_class.const_get(:IndexerBadRequestError) }
+
+      specify { expect(subject).to be <= Curator::Exceptions::IndexerError }
+
+      it 'is expected to respond to #response' do
+        expect(subject.new).to respond_to(:response)
+      end
+    end
+
+    describe 'Curator::Exceptions::GeographicIndexerError' do
+      subject { described_class.const_get(:GeographicIndexerError) }
+
+      specify { expect(subject).to be <= Curator::Exceptions::IndexerError }
+
+      it 'is expected to respond to #geo_auth_url' do
+        expect(subject.new).to respond_to(:geo_auth_url)
+      end
+    end
+  end
 end

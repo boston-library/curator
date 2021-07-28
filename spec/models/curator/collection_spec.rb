@@ -8,6 +8,7 @@ require_relative './shared/timestampable'
 require_relative './shared/archivable'
 require_relative './shared/mappings/has_exemplary_file_set'
 require_relative './shared/for_serialization'
+require_relative './shared/local_id_finder'
 
 RSpec.describe Curator::Collection, type: :model do
   subject { build(:curator_collection) }
@@ -78,6 +79,13 @@ RSpec.describe Curator::Collection, type: :model do
   describe 'Scopes' do
     it_behaves_like 'for_serialization' do
       let(:expected_scope_sql) { described_class.includes(exemplary_image_mapping: :exemplary_file_set).with_metastreams.to_sql }
+    end
+
+    it_behaves_like 'local_id_finder' do
+      let(:collection_name) { "#{Faker::University.name} Collection" }
+      let(:institution_ark_id) { 'bpl-dev:12456789' }
+      let(:expected_scope_sql) { described_class.joins(:institution).where(institutions: { ark_id: institution_ark_id }, name: collection_name).limit(1).to_sql }
+      let(:scope_args) { [institution_ark_id, collection_name] }
     end
 
     describe '.for_reindex_all' do

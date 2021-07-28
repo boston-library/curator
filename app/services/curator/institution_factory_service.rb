@@ -9,6 +9,7 @@ module Curator
     def call
       location_json_attrs = @json_attrs.fetch('location', {}).with_indifferent_access
       with_transaction do
+        check_for_existing_ark!
         @record = Curator.institution_class.find_or_initialize_by(ark_id: @ark_id).tap do |institution|
           institution.name = @json_attrs.fetch(:name, nil)
           institution.abstract = @json_attrs.fetch(:abstract, '')
@@ -32,6 +33,16 @@ module Curator
         end
       end
       return @success, @result
+    end
+
+    private
+
+    def local_id_finder_scope
+      name = @json_attrs.fetch(:name, nil)
+
+      return if name.blank?
+
+      Curator.institution_class.local_id_finder(name)&.first
     end
   end
 end

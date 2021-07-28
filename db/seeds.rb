@@ -62,22 +62,34 @@ if Rails.env.development?
     puts 'Seeding development objects from spec/fixtures....'
 
     inst_json = Oj.load(File.read(Curator::Engine.root.join('spec', 'fixtures', 'files', 'institution.json'))).fetch('institution', {}).with_indifferent_access
+    inst_json.delete(:ark_id) if inst_json.key?(:ark_id)
 
     col_json = Oj.load(File.read(Curator::Engine.root.join('spec', 'fixtures', 'files', 'collection.json'))).fetch('collection', {}).with_indifferent_access
+    col_json.delete(:ark_id) if col_json.key?(:ark_id)
 
     obj_json = Oj.load(File.read(Curator::Engine.root.join('spec', 'fixtures', 'files', 'digital_object.json'))).fetch('digital_object', {}).with_indifferent_access
+    obj_json.delete(:ark_id) if obj_json.key?(:ark_id)
+    obj_json.delete(:contained_by) if obj_json.key?('contained_by')
 
     inst_success, inst = Curator::InstitutionFactoryService.call(json_data: inst_json)
 
-    raise "Institution Errors occured; Details.. #{inst.errors.inspect}" if !inst_success
+    raise "Institution Errors occured; Details.. #{inst.inspect}" if !inst_success
+
+    col_json[:institution] = { ark_id: inst.ark_id }
 
     col_success, col = Curator::CollectionFactoryService.call(json_data: col_json)
 
-    raise "Collection Errors occured; Details.. #{col.errors.inspect}" if !col_success
+    raise "Collection Errors occured; Details.. #{col.inspect}" if !col_success
+
+    obj_json[:admin_set] = { 'ark_id' => col.ark_id }
+    obj_json['is_member_of_collection'] = Array.wrap({ 'ark_id' => col.ark_id })
 
     obj_success, obj = Curator::DigitalObjectFactoryService.call(json_data: obj_json)
 
-    raise "DigitalObject Errors occured; Details.. #{obj.errors.inspect}" if !obj_success
+    if !obj_success
+      puts obj.message
+      raise "DigitalObject Errors occured; Details.. #{obj.inspect}"
+    end
   rescue RuntimeError =>  e
     puts 'errors occured seeding default development objects!'
     puts "Reason #{e.message}"

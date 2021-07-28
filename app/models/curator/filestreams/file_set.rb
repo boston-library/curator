@@ -30,6 +30,8 @@ module Curator
 
     scope :for_reindex_all, -> { with_all_attachments.for_serialization.joins(:administrative, :workflow) }
 
+    scope :local_id_finder, ->(file_set_of_ark_id, file_name_base) { joins(:file_set_of).where(digital_objects: { ark_id: file_set_of_ark_id }, file_name_base: file_name_base).limit(1) }
+
     attr_json_config(default_container_attribute: :pagination)
 
     attr_json :page_label, :string

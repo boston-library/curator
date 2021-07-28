@@ -7,6 +7,7 @@ require_relative './shared/optimistic_lockable'
 require_relative './shared/timestampable'
 require_relative './shared/archivable'
 require_relative './shared/for_serialization'
+require_relative './shared/local_id_finder'
 require_relative './shared/filestreams/thumbnailable'
 
 RSpec.describe Curator::Institution, type: :model do
@@ -75,6 +76,12 @@ RSpec.describe Curator::Institution, type: :model do
 
     it_behaves_like 'for_serialization' do
       let(:expected_scope_sql) { described_class.with_metastreams.with_location.with_attached_image_thumbnail_300.includes(:host_collections).to_sql }
+    end
+
+    it_behaves_like 'local_id_finder' do
+      let(:institution_name) { Faker::University.name }
+      let(:expected_scope_sql) { described_class.where(name: institution_name).limit(1).to_sql }
+      let(:scope_args) { Array.wrap(institution_name) }
     end
   end
 
