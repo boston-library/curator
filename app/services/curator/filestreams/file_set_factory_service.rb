@@ -76,7 +76,7 @@ module Curator
 
         raise ActiveRecord::RecordNotSaved, "Bad exemplary id! #{ex_ark_id} is either not in the repo or is not a DigitalObject or Collection" unless ex_obj
 
-        next if !file_set.new_record? && file_set.exemplary_image_of_mappings.exist?(exemplary_object: ex_obj)
+        next if !file_set.new_record? && file_set.exemplary_image_of_mappings.exists?(exemplary_object: ex_obj)
 
         build_exemplary(file_set) do |exemplary_img|
           exemplary_img.exemplary_object = ex_obj
