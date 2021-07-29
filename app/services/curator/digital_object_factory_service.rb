@@ -109,7 +109,7 @@ module Curator
 
           collection = Curator.collection_class.select(:id, :ark_id).find_by!(ark_id: collection_ark_id)
 
-          next if digital_object.new_record? || digital_object.collection_members.exists?(collection: collection)
+          next if !digital_object.new_record? && digital_object.collection_members.exists?(collection: collection)
 
           digital_object.collection_members.build(collection: collection)
         rescue ActiveRecord::RecordNotFound => e
