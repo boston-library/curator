@@ -8,6 +8,7 @@ RSpec.shared_examples 'administratable', type: :model do
                       autosave(true) }
 
   it { is_expected.to validate_presence_of(:administrative) }
+  it { is_expected.to delegate_method(:oai_object?).to(:administrative).allow_nil }
 
   describe '#with_administrative' do
     subject { described_class }

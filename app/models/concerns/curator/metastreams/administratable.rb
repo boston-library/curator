@@ -11,6 +11,8 @@ module Curator
 
         validates :administrative, presence: true
         validates_associated :administrative, on: :create
+
+        delegate :oai_object?, to: :administrative, allow_nil: true
       end
     end
   end

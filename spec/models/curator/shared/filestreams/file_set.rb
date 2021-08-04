@@ -15,7 +15,7 @@ RSpec.shared_examples 'file_set', type: :model do
   describe 'Database' do
     it_behaves_like 'optimistic_lockable'
     it_behaves_like 'timestampable'
-    it_behaves_like 'mintable'
+    it_behaves_like 'mintable', oai_specific: true, oai_parent: true
     it_behaves_like 'archivable'
 
     it { is_expected.to have_db_column(:file_set_type).

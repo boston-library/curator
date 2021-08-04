@@ -13,7 +13,7 @@ require_relative './shared/filestreams/thumbnailable'
 RSpec.describe Curator::Institution, type: :model do
   subject { build(:curator_institution) }
 
-  it_behaves_like 'mintable'
+  it_behaves_like 'mintable', oai_specific: false
 
   describe 'Database' do
     it_behaves_like 'optimistic_lockable'

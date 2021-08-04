@@ -22,6 +22,10 @@ module Curator
 
     scope :local_id_finder, -> (oai_header_id) { where.not(oai_header_id: nil).where(oai_header_id: oai_header_id) }
 
+    def oai_object?
+      oai_header_id?
+    end
+
     private
 
     def validate_destination_site

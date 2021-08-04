@@ -82,7 +82,7 @@ module Curator
       return super.except(:oai_namespace_id).merge({
         parent_pid: admin_set&.ark_id,
         secondary_parent_pids: []
-      }.merge(local_id_params)) if administrative&.oai_header_id.blank?
+      }.merge(local_id_params)) if !oai_object?
 
       params = super.merge({
         parent_pid: admin_set&.ark_id,
