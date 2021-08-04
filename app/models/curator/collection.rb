@@ -41,12 +41,21 @@ module Curator
     after_update_commit :reindex_collection_members
 
     def ark_params
-      super.except(:oai_namespace_id).merge({
+      return super.except(:oai_namespace_id).merge({
+        parent_pid: institution&.ark_id,
+          secondary_parent_pids: [],
+          local_original_identifier_type: 'institution_collection_name',
+          local_original_identifier: name
+      }) if !oai_object?
+
+      params = super.merge({
         parent_pid: institution&.ark_id,
           secondary_parent_pids: [],
           local_original_identifier_type: 'institution_collection_name',
           local_original_identifier: name
       })
+      params[:namespace_id] = params.delete(:oai_namespace_id)
+      params
     end
 
     private

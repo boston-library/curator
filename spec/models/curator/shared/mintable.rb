@@ -1,12 +1,63 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples_for 'mintable', type: :model do
+RSpec.shared_examples_for 'mintable', type: :model do |oai_specific: true, oai_parent: false|
   describe 'Mintable' do
     it { is_expected.to respond_to(:ark_id, :ark_params) }
 
     describe 'Database' do
       it { is_expected.to have_db_column(:ark_id).of_type(:string).with_options(null: false) }
       it { is_expected.to have_db_index(:ark_id).unique(true) }
+    end
+
+    describe '#ark_params' do
+      let!(:expected_ark_param_keys) { %i(namespace_ark namespace_id parent_pid secondary_parent_pids model_type local_original_identifier local_original_identifier_type) }
+
+      it 'expects ark_params to be a hash with specific keys' do
+        expect(subject.ark_params).to be_a_kind_of(Hash)
+
+        expected_ark_param_keys.each do |expected_key|
+          expect(subject.ark_params).to have_key(expected_key)
+        end
+      end
+
+      context 'Not an OAI object' do
+        specify { expect(subject).not_to be_oai_object }
+
+        it 'expects not to match /oai/ in the namespace_id val' do
+          expect(subject.ark_params[:namespace_id]).not_to match(/oai/)
+        end
+      end
+
+      context 'OAI Object', if: oai_specific do
+        context 'Checks #oai_object?', unless: oai_parent do
+          before(:each) do
+            subject.administrative.oai_header_id = 'someval'
+          end
+
+          after(:each) do
+            subject.administrative.oai_header_id = nil
+          end
+
+          it 'expects to match /oai/ in the namespace_id val' do
+            expect(subject.ark_params[:namespace_id]).to match(/oai/)
+          end
+        end
+
+        # For Curator::Filestreams::FileSet
+        context 'Checks parent#oai_object', if: oai_parent do
+          before(:each) do
+            subject.file_set_of.administrative.oai_header_id = 'someval'
+          end
+
+          after(:each) do
+            subject.file_set_of.administrative.oai_header_id = nil
+          end
+
+          it 'expects to match /oai/ in the namespace_id val' do
+            expect(subject.ark_params[:namespace_id]).to match(/oai/)
+          end
+        end
+      end
     end
 
     describe 'Validations' do

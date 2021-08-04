@@ -59,6 +59,10 @@ RSpec.describe Curator::Metastreams::Administrative, type: :model do
                         backed_by_column_of_type(:integer) }
   end
 
+  describe 'Instance Methods' do
+    it { is_expected.to respond_to(:oai_object?) }
+  end
+
   describe 'Validations' do
     it { is_expected.to validate_uniqueness_of(:administratable_id).
                         scoped_to(:administratable_type) }

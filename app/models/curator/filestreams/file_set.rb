@@ -56,12 +56,21 @@ module Curator
     after_commit :reindex_digital_objects, :reindex_collections
 
     def ark_params
-      super.except(:oai_namespace_id).merge({
+      return super.except(:oai_namespace_id).merge({
+        parent_pid: file_set_of&.ark_id,
+          secondary_parent_pids: [],
+          local_original_identifier_type: 'filename',
+          local_original_identifier: file_name_base
+      }) if !file_set_of&.oai_object?
+
+      params = super.merge({
         parent_pid: file_set_of&.ark_id,
           secondary_parent_pids: [],
           local_original_identifier_type: 'filename',
           local_original_identifier: file_name_base
       })
+      params[:namespace_id] = params.delete(:oai_namespace_id)
+      params
     end
 
     def avi_params
