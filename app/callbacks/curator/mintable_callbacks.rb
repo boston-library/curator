@@ -17,8 +17,19 @@ module Curator
 
     # TODO: Refactor factories and fixtures so we can actually test this
     def self.after_validation(mintable)
+      return if Rails.env.test?
+
       begin
-        return if Rails.env.test? || ark_exists?(mintable.ark_id)
+        # NOTE: The following block will cause validation on ark_id presence to fail normally
+        # but with addition of added logging.
+        if mintable.ark_id.blank?
+          Rails.logger.error '============================================================='
+          Rails.logger.error '====No ark response was received in previous callback!======='
+          Rails.logger.error '============================================================='
+          return
+        end
+
+        return if ark_exists?(mintable.ark_id)
 
         mintable_ark = mint_new_ark(mintable)
 

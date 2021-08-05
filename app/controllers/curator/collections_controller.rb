@@ -38,7 +38,7 @@ module Curator
         params.require(:collection).permit(:ark_id, :created_at, :updated_at, :name, :abstract,
                                            institution: [:ark_id],
                                            metastreams: {
-                                             administrative: [:description_standard, :hosting_status, :harvestable, :flagged, destination_site: [], access_edit_group: []],
+                                             administrative: [:oai_header_id, :description_standard, :hosting_status, :harvestable, :flagged, destination_site: [], access_edit_group: []],
                                                            workflow: [:ingest_origin, :publishing_state, :processing_state]
                                            })
       when 'update'
