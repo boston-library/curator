@@ -10,7 +10,7 @@ module Curator
       access_edit_group_attrs = @json_attrs.fetch('access_edit_group', [])
       with_transaction do
         simple_attributes_update(SIMPLE_ATTRIBUTES_LIST) do |simple_attr|
-          @record.public_send("#{simple_attr}=", @json_attrs.fetch(simple_attr))
+          @record.public_send("#{simple_attr}=", @json_attrs.fetch(simple_attr)) if @json_attrs[simple_attr].presence
         end
 
         access_edit_group_attrs.each do |access_edit_group_attr|
