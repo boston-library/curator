@@ -21,14 +21,14 @@ group :development do
 end
 
 group :development, :test do
-  gem 'awesome_print', '~> 1.8'
+  gem 'awesome_print', '~> 1.9'
   gem 'azure-storage-blob', '>= 1.1', require: false
   gem 'dotenv-rails', '~> 2.7'
   gem 'factory_bot_rails', '~> 6.2'
   gem 'faker', '~> 2.18'
-  gem 'pry', '~> 0.13'
+  gem 'pry', '~> 0.13.1'
   gem 'pry-byebug', '~> 3.9'
-  gem 'puma', '~> 5.3'
+  gem 'puma', '~> 5.4'
   gem 'rubocop', '~> 0.75.1', require: false
   gem 'rubocop-performance', '~> 1.5', require: false
   gem 'rubocop-rails', '~> 2.4.2', require: false
