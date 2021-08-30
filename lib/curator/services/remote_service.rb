@@ -42,8 +42,8 @@ module Curator
         #TODO will require Authorization options once login in system is set up
         included do
           class_attribute :base_url, instance_accessor: false
-          class_attribute :pool_options, instance_accessor: false, default: { size: ENV.fetch('RAILS_MAX_THREADS') { 5 }, timeout: 5 }
-          class_attribute :timeout_options, instance_accessor: false, default: { connect: 5, write: 5, read: 5 }
+          class_attribute :pool_options, instance_accessor: false, default: { size: ENV.fetch('RAILS_MAX_THREADS') { 5 }.to_i + 2, timeout: 60 }
+          class_attribute :timeout_options, instance_accessor: false, default: { connect: 10, write: 10, read: 10 }
           class_attribute :default_headers, instance_accessor: false, default: {}
           class_attribute :default_path_prefix, instance_accessor: false
           class_attribute :ssl_context, instance_accessor: false
