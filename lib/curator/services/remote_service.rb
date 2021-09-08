@@ -42,8 +42,8 @@ module Curator
         #TODO will require Authorization options once login in system is set up
         included do
           class_attribute :base_url, instance_accessor: false
-          class_attribute :pool_options, instance_accessor: false, default: { size: ENV.fetch('RAILS_MAX_THREADS') { 5 }.to_i + 2, timeout: 60 }
-          class_attribute :timeout_options, instance_accessor: false, default: { connect: 10, write: 10, read: 10 }
+          class_attribute :pool_options, instance_accessor: false, default: Curator.config.default_remote_service_pool_opts
+          class_attribute :timeout_options, instance_accessor: false, default: Curator.config.default_remote_service_timeout_opts
           class_attribute :default_headers, instance_accessor: false, default: {}
           class_attribute :default_path_prefix, instance_accessor: false
           class_attribute :ssl_context, instance_accessor: false
@@ -71,8 +71,8 @@ module Curator
           def __current_client_pool
             Services::RemoteService.current_client_pool_for(pool_key) do
               ConnectionPool.new(pool_options) do
-                HTTP.timeout(timeout_options)
-                    .persistent(base_uri.normalize.to_s, timeout: 120) # keep-alive timeout
+                HTTP.timeout(timeout_options.except(:keep_alive))
+                    .persistent(base_uri.normalize.to_s, timeout: timeout_options.fetch(:keep_alive, Curator.config.default_remote_service_timeout_opts[:keep_alive])) # keep-alive timeout
               end
             end
           end
