@@ -7,7 +7,6 @@ module Curator
     self.base_url = Curator.config.authority_api_url
     self.default_path_prefix = '/bpldc'
     self.default_headers = { accept: 'application/json', content_type: 'application/json' }
-    self.timeout_options = { connect: 120, write: 120, read: 120 }
 
     attr_reader :request_uri
 

@@ -17,6 +17,26 @@ module Curator
       @avi_processor_url || ENV['AVI_PROCESSOR_URL']
     end
 
+    attr_writer :default_remote_service_timeout_opts
+    def default_remote_service_timeout_opts
+      @default_remote_service_timeout_opts ||
+      {
+        connect: 120,
+        read: 240,
+        write: 120,
+        keep_alive: 120
+      }.freeze
+    end
+
+    attr_writer :default_remote_service_pool_opts
+    def default_remote_service_pool_opts
+      @default_remote_service_pool_opts ||
+      {
+        size: ENV.fetch('RAILS_MAX_THREADS') { 5 }.to_i + 2,
+        timeout: 15
+      }
+    end
+
     attr_writer :default_ark_params
     def default_ark_params
       @default_ark_params ||
