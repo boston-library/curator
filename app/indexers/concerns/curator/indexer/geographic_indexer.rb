@@ -29,7 +29,7 @@ module Curator
                 auth_url = "#{geo_auth}/#{subject_geo.id_from_auth}"
                 auth_data = Curator::ControlledTerms::AuthorityService.call(path: auth_url, path_prefix: '/geomash')
 
-                raise Curator::Exceptions::GeographicIndexerError.new('No data recieved from authorty service', auth_url) if auth_data.blank?
+                raise Curator::Exceptions::GeographicIndexerError.new('No data received from authority service', auth_url) if auth_data.blank?
 
                 if auth_data[:hier_geo].present?
                   if auth_data[:non_hier_geo].present?

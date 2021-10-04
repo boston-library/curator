@@ -192,7 +192,7 @@ module Curator
 
         term_for_mapping(map_attrs.except(:_destroy),
                          nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
-      end.compact.delete_if { |mt| !@record.desc_terms.exixts?(mapped_term: mt) }
+      end.compact.delete_if { |mt| !@record.desc_terms.exists?(mapped_term: mt) }
 
       return if terms_to_destroy.blank?
 
