@@ -94,7 +94,7 @@ Prior to starting Solr, create config directory (only needs to be run once):
 ```
 # populates spec/internal/solr/conf
 $ git submodule init
-$ git submodule update
+$ git submodule update --remote
 ```
 
 To start Solr in Test mode (use a separate console session):
