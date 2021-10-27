@@ -32,7 +32,6 @@ module Curator
     def derivative_source
       return if !text_plain.attached?
 
-
       text_plain
     end
   end
