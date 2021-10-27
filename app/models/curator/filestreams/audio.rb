@@ -24,19 +24,11 @@ module Curator
     end
 
     def avi_params
-      return if !audio_primary.attached?
+      return if !audio_primary.attached? && !audio_service.attached?
 
-      super[avi_file_class].merge({
-        audio_primary_data: {
-          id: audio_primary_blob.key,
-          metadata: {
-            byte_size: audio_primary_blob.byte_size,
-            checksum: audio_primary_blob.checksum,
-            file_name: audio_primary_blob.filename.to_s,
-            mime_type: audio_primary_blob.content_type.to_s,
-          }
-        }
-      })
+      return super[avi_file_class].merge({ original_ingest_file_path: audio_primary.metadata['ingest_filepath'] }) if audio_primary.attached?
+
+      super[avi_file_class].merge({ original_ingest_file_path: audio_service.metadata['ingest_filepath'] })
     end
   end
 end

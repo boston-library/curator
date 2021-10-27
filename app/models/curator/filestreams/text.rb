@@ -18,17 +18,7 @@ module Curator
     def avi_params
       return if !text_plain.attached?
 
-      super[avi_file_class].merge({
-        text_plain_data: {
-          id: text_plain_blob.key,
-          metadata: {
-            byte_size: text_plain_blob.byte_size,
-            checksum: text_plain_blob.checksum,
-            file_name: text_plain_blob.filename.to_s,
-            mime_type: text_plain_blob.content_type.to_s,
-          }
-        }
-      })
+      super[avi_file_class].merge({ original_ingest_filepath: text_plain.metadata['ingest_filepath'] })
     end
   end
 end

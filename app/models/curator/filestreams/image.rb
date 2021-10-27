@@ -28,19 +28,11 @@ module Curator
     end
 
     def avi_params
-      return if !image_primary.attached?
+      return if !image_primary.attached? && !image_service.attached?
 
-      super[avi_file_class].merge({
-        image_primary_data: {
-          id: image_primary_blob.key,
-          metadata: {
-            byte_size: image_primary_blob.byte_size,
-            checksum: image_primary_blob.checksum,
-            file_name: image_primary_blob.filename.to_s,
-            mime_type: image_primary_blob.content_type.to_s,
-          }
-        }
-      })
+      return super[avi_file_class].merge({ original_ingest_filepath: image_primary.metadata['ingest_filepath'] }) if image_primary.attached?
+
+      super[avi_file_class].merge({ original_ingest_filepath: image_service.metadata['ingest_filepath'] })
     end
   end
 end

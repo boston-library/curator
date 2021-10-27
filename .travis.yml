@@ -19,13 +19,12 @@ before_install:
   - sudo cp /etc/postgresql/{9.3,12}/main/pg_hba.conf
   - sudo pg_ctlcluster 12 main restart
   - gem update --system --no-document
-  - gem install bundler:2.2.24 --no-document
+  - gem install bundler:2.2.27 --no-document
 
 before_script:
   - bundle exec rails app:curator:setup
 
 rvm:
-  - 2.5.9
   - 2.6.8
 
 env:
@@ -36,4 +35,4 @@ env:
     - PGPORT=5432
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
   jobs:
-    - "RAILS_VERSION=6.1.4"
+    - "RAILS_VERSION=6.1.4.1"

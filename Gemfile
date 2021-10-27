@@ -25,10 +25,10 @@ group :development, :test do
   gem 'azure-storage-blob', '>= 1.1', require: false
   gem 'dotenv-rails', '~> 2.7'
   gem 'factory_bot_rails', '~> 6.2'
-  gem 'faker', '~> 2.18'
+  gem 'faker', '~> 2.19'
   gem 'pry', '~> 0.13.1'
-  gem 'pry-byebug', '~> 3.9'
-  gem 'puma', '~> 5.4'
+  gem 'pry-rails'
+  gem 'puma', '~> 5.5'
   gem 'rubocop', '~> 0.75.1', require: false
   gem 'rubocop-performance', '~> 1.5', require: false
   gem 'rubocop-rails', '~> 2.4.2', require: false
@@ -42,5 +42,5 @@ group :test do
   gem 'rspec-rails', '~> 5'
   gem 'shoulda-matchers', '~> 4.5'
   gem 'vcr', '~> 6.0'
-  gem 'webmock', '~> 3.13'
+  gem 'webmock', '~> 3.14'
 end
