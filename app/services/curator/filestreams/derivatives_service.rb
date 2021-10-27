@@ -13,6 +13,7 @@ module Curator
     # Payload should be formatted as such
     # {
     #   file_stream: {
+    #   "[image|audio|document|video]_stream": {
     #     ark_id: ark_id,
     #     original_ingest_filepath: attachment.metatdata['ingest_filepath']
     #    }
