@@ -17,12 +17,10 @@ module Curator
               context.output_hash[id_uri_field] = [id_uri_value]
             end
 
-            id_fields = %w(identifier_local_other_tsim identifier_local_other_invalid_tsim
-                           identifier_local_call_tsim identifier_local_call_invalid_tsim
-                           identifier_local_barcode_tsim identifier_local_barcode_invalid_tsim
-                           identifier_local_accession_tsim identifier_isbn_tsim identifier_lccn_tsim
-                           identifier_ia_id_ssi identifier_uri_ss identifier_iiif_manifest_ss identifier_uri_preview_ss)
-            id_fields.each { |field| context.output_hash[field] ||= [] }
+            id_fields = %w(local_other_tsim local_other_invalid_tsim local_call_tsim local_call_invalid_tsim
+                           local_barcode_tsim local_barcode_invalid_tsim local_accession_tsim isbn_tsim
+                           lccn_tsim ia_id_ssi uri_ss iiif_manifest_ss uri_preview_ss issn_tsim)
+            id_fields.each { |field| context.output_hash["identifier_#{field}"] ||= [] }
             record.descriptive.identifier.each do |identifier|
               label = identifier.label
               id_type = identifier.type.underscore
