@@ -18,7 +18,7 @@ module Curator
     def avi_params
       return if !text_plain.attached?
 
-      super[avi_file_class].merge({ original_ingest_filepath: text_plain.metadata['ingest_filepath'] })
+      super[:file_stream].merge({ original_ingest_filepath: text_plain.metadata['ingest_filepath'] })
     end
   end
 end

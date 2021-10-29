@@ -75,7 +75,7 @@ module Curator
 
     def avi_params
       {
-        avi_file_class => {
+         file_stream: {
           ark_id: ark_id
         }
       }
@@ -84,17 +84,19 @@ module Curator
     def avi_file_class
       case self.class.name.demodulize
       when 'Image'
-        :image_stream
+        'image_stream'
       when 'Document'
-        :document_stream
+        'document_stream'
       when 'Audio'
-        :audio_stream
+        'audio_stream'
       when 'Video'
-        :video_stream
+        'video_stream'
       when 'Text'
-        :text_stream
+        'text_stream'
+      when 'Ereader'
+        'ereader_stream'
       when 'Metadata'
-        :oai_metadata_stream
+        'oai_metadata_stream'
       end
     end
 

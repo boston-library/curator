@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-Curator::Engine.routes.draw do
-  JSON_CONSTRAINT = ->(request) { request.format.symbol == :json }
-  NOMENCLATURE_TYPES = Curator.controlled_terms.nomenclature_types.map(&:underscore)
-  FILE_SET_TYPES = Curator.filestreams.file_set_types.map(&:downcase)
+JSON_CONSTRAINT = ->(request) { request.format.symbol == :json }
+NOMENCLATURE_TYPES = Curator.controlled_terms.nomenclature_types.map(&:underscore)
+FILE_SET_TYPES = Curator.filestreams.file_set_types.map(&:downcase)
 
+Curator::Engine.routes.draw do
   concern :administratable do |options|
     resource :administrative, options
   end

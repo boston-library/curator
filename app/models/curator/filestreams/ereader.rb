@@ -19,5 +19,22 @@ module Curator
     def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
       super(required_derivatives)
     end
+
+    def avi_params
+      return if !ebook_access_epub.attached?
+
+      super[:file_stream].merge({
+        ebook_access_epub_data: {
+          id: ebook_access_epub_blob.key,
+          storage: ebook_access_epub_blob.service_name,
+          metadata: {
+            filename: ebook_access_epub_blob.filename.to_s,
+            md5: ebook_access_epub.checksum,
+            size: ebook_access_epub_blob.byte_size,
+            mime_type: ebook_access_epub.content_type
+          }
+        }
+      })
+    end
   end
 end

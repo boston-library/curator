@@ -27,9 +27,9 @@ module Curator
     def avi_params
       return if !video_primary.attached? && !video_access_mp4.attached?
 
-      return super[avi_file_class].merge({ original_ingest_file_path: video_primary.metadata['ingest_filepath'] }) if video_primary.attached?
+      return super[:file_stream].merge({ original_ingest_file_path: video_primary.metadata['ingest_filepath'] }) if video_primary.attached?
 
-      super[avi_file_class].merge({ original_ingest_file_path: video_access_mp4.metadata['ingest_filepath'] })
+      super[:file_stream].merge({ original_ingest_file_path: video_access_mp4.metadata['ingest_filepath'] })
     end
   end
 end
