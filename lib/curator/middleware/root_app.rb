@@ -20,10 +20,8 @@ module Curator::Middleware
         case env['HTTP_ACCEPT']
         when 'application/json'
           return json_response
-        when /xml/
-          return xml_response
         when /plain/
-          text_response
+          return text_response
         else
           return json_response
         end
@@ -32,7 +30,7 @@ module Curator::Middleware
         when /json/
           return json_response
         when /xml/
-          return xml_resonse
+          return xml_response
         when /plain/
           return text_response
         else

@@ -4,7 +4,7 @@ module Curator
   class Filestreams::Image < Filestreams::FileSet
     include Filestreams::Thumbnailable
 
-    DEFAULT_REQUIRED_DERIVATIVES = %i(image_service characterization image_thumbnail_300).freeze
+    DEFAULT_REQUIRED_DERIVATIVES = %i(image_service characterization image_access_800 image_thumbnail_300).freeze
 
     belongs_to :file_set_of, inverse_of: :image_file_sets, class_name: 'Curator::DigitalObject'
 
@@ -24,7 +24,9 @@ module Curator
     has_paper_trail
 
     def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
-      super(required_derivatives)
+      return super(required_derivatives) if image_primary.attached?
+
+      super(%i(characterization image_access_800 image_thumbnail_300))
     end
 
     def avi_params

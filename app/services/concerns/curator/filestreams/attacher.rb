@@ -83,8 +83,8 @@ module Curator
           io.dig('fedora_content_location').present?
         end
 
-        def base64_content?(io = {})
-          io.dig('base64_content').present?
+        def uploaded_file_content?(io = {})
+          io.dig('uploaded_file').present?
         end
 
         def ingest_content?(io = {})
@@ -110,15 +110,15 @@ module Curator
         end
 
         def attach_existing_file(attachment_attributes)
-          blob = ActiveStorage::Blob.find_or_initialize_by(key: attachment_attributes['key'])
-          blob.assign_attributes(
-            filename: attachment_attributes['file_name'],
-            byte_size: attachment_attributes['byte_size'],
-            checksum: attachment_attributes['checksum'],
-            content_type: attachment_attributes['content_type'],
-            service_name: attachment_attributes['service_name'],
-            metadata: attachment_attributes['metadata']
-          )
+          blob = ActiveStorage::Blob.find_or_initialize_by(key: attachment_attributes['key']).tap do |b|
+            b.filename = attachment_attributes['file_name']
+            b.byte_size = attachment_attributes['byte_size']
+            b.checksum = attachment_attributes['checksum']
+            b.content_type = attachment_attributes['content_type']
+            b.service_name = attachment_attributes['service_name']
+            b.metadata = attachment_attributes['metadata']
+            b.save!
+          end
 
           return blob if blob.service.exist?(blob.key)
 
@@ -175,7 +175,7 @@ module Curator
 
           return fedora_io(io_hash['fedora_content_location']) if fedora_content?(io_hash)
 
-          return base64_io(io_hash['base64_content']) if base64_content?(io_hash)
+          return uploaded_file_io(io_hash['uploaded_file']) if uploaded_file_content?(io_hash)
 
           return file_path_io(io_hash['ingest_filepath']) if ingest_content?(io_hash)
 
@@ -240,12 +240,15 @@ module Curator
           http.download(fedora_content_location)
         end
 
-        def base64_io(base64_content)
-          return if base64_content.blank?
+        def uploaded_file_io(uploaded_file)
+          return if uploaded_file.blank?
 
-          io = StringIO.new(Base64.strict_decode64(base64_content))
-          io.rewind
-          io
+          case uploaded_file
+          when ActionDispatch::Http::UploadedFile, Rack::Test::UploadedFile
+            uploaded_file
+          else
+            raise ActiveStorage::Error, "Unknown object class for uploaded file: #{uploaded_file.class}"
+          end
         end
       end
     end

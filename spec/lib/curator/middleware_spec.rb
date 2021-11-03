@@ -9,4 +9,5 @@ RSpec.describe Curator::Middleware do
   it { is_expected.to be_const_defined(:ArkOrIdConstraint) }
   it { is_expected.to be_const_defined(:StiTypesConstraint) }
   it { is_expected.to be_const_defined(:RootApp) }
+  it { is_expected.to be_const_defined(:RouteConsts) }
 end

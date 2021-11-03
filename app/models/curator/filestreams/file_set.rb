@@ -75,9 +75,10 @@ module Curator
 
     def avi_params
       {
-         file_stream: {
-          ark_id: ark_id
-        }
+        file_stream:
+          {
+            ark_id: ark_id
+          }
       }
     end
 

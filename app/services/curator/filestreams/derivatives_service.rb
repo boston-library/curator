@@ -4,22 +4,23 @@ module Curator
   class Filestreams::DerivativesService < Services::Base
     include Curator::Services::RemoteService
 
-    self.base_url = Curator.config.avi_processor_url
+    self.base_url = Curator.config.avi_processor_api_url
     self.default_path_prefix = '/api'
     self.default_headers = { accept: 'application/json', content_type: 'application/json' }
 
     attr_reader :avi_file_class, :avi_payload
 
     # Payload should be formatted as such
-    #   "[image|audio|document|video]_stream": {
+    # {
+    #   file_stream: {
     #     ark_id: ark_id,
     #     original_ingest_filepath: attachment.metatdata['ingest_filepath']
     #    }
     # }
 
-    def initialize(avi_file_class, payload: {})
+    def initialize(avi_file_class, avi_payload: {})
       @avi_file_class = avi_file_class
-      @avi_payload = payload
+      @avi_payload = avi_payload
     end
 
     def call
@@ -43,7 +44,6 @@ module Curator
       end
       nil
     end
-
 
     protected
 

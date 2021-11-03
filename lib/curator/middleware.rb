@@ -8,6 +8,7 @@ module Curator
       autoload :ArkOrIdConstraint
       autoload :StiTypesConstraint
       autoload :RootApp
+      autoload :RouteConsts
     end
   end
 end

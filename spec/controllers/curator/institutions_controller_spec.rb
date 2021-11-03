@@ -18,10 +18,17 @@ RSpec.describe Curator::InstitutionsController, type: :controller do
     attributes = resource.attributes.slice('abstract', 'url').symbolize_keys
     thumbnail_path = file_fixture('image_thumbnail_300.jpg')
     location = create(:curator_controlled_terms_geographic)
-    attributes[:image_thumbnail_300] = {
-      io: File.open(thumbnail_path.to_s, 'rb'),
-      filename: thumbnail_path.basename.to_s
-    }
+
+    file_attributes = [{
+      file_name: thumbnail_path.basename.to_s,
+      file_type: 'image_thumbnail_300',
+      content_type: 'image/jpeg',
+      io: {
+        uploaded_file: Rack::Test::UploadedFile.new(thumbnail_path, content_type = 'image/jpeg')
+      }
+    }]
+    attributes[:files] = file_attributes
+
     attributes[:location] = {
       label: location.label,
       id_from_auth: location.id_from_auth,
