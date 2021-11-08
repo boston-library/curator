@@ -8,14 +8,14 @@ RSpec.describe Curator::Configuration do
   subject { described_class.new }
 
   %i(ark_manager_api_url authority_api_url avi_processor_api_url solr_url
-     default_ark_params indexable_settings fedora_credentials default_remote_service_timeout_opts default_remote_service_pool_opts).each do |m|
+     default_ark_params indexable_settings fedora_credentials ingest_source_directory default_remote_service_timeout_opts default_remote_service_pool_opts).each do |m|
     it { is_expected.to respond_to(m) }
     it { is_expected.to respond_to("#{m}=") }
   end
 
   describe 'default values' do
     it 'uses ENV vars' do
-      %i(ark_manager_api_url authority_api_url avi_processor_api_url solr_url).each do |m|
+      %i(ark_manager_api_url authority_api_url avi_processor_api_url solr_url ingest_source_directory).each do |m|
         expect(subject.public_send(m)).to eq ENV[m.to_s.upcase]
       end
     end

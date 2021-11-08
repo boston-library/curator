@@ -97,7 +97,7 @@ module Curator
       when 'Ereader'
         'ereader_stream'
       when 'Metadata'
-        'oai_metadata_stream'
+        'metadata_oai_stream'
       end
     end
 

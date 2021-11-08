@@ -17,9 +17,9 @@ module Curator
       @avi_processor_url || ENV['AVI_PROCESSOR_API_URL']
     end
 
-    attr_writer :ingest_root_directory
-    def ingest_root_directory
-      @ingest_file_root_directory || ENV.fetch('INGEST_ROOT_DIRECTORY') { Rails.root.to_s }
+    attr_writer :ingest_source_directory
+    def ingest_source_directory
+      @ingest_file_root_directory || ENV.fetch('INGEST_SOURCE_DIRECTORY') { Rails.root.to_s }
     end
 
     attr_writer :default_remote_service_timeout_opts

@@ -224,7 +224,11 @@ module Curator
         def file_path_io(ingest_filepath)
           return if ingest_filepath.blank?
 
-          File.open(ingest_filepath, 'rb')
+          full_ingest_file_path = File.join(Curator.config.ingest_source_directory, ingest_filepath)
+
+          raise ActiveStorage::Error, "Could not find file at #{full_ingest_file_path}" if !File.file?(full_ingest_file_path)
+
+          File.open(full_ingest_file_path, 'rb')
         end
 
         def fedora_io(fedora_content_location)
