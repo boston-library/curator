@@ -51,7 +51,7 @@ RSpec.describe Curator::Metastreams::Administrative, type: :model do
     it { is_expected.to have_db_index(:oai_header_id).unique(true) }
 
     it { is_expected.to define_enum_for(:description_standard).
-                        with_values(aacr: 0, cco: 1, dacs: 2, gihc: 3, local: 4, rda: 5, dcrmg: 6, amremm: 7, dcrmb: 8, dcrmc: 9, dcrmmss: 10, appm: 11).
+                        with_values(aacr: 0, cco: 1, dacs: 2, gihc: 3, local: 4, rda: 5, dcrmg: 6, amremm: 7, dcrmb: 8, dcrmc: 9, dcrmmss: 10, appm: 11, dcrmm: 12).
                         backed_by_column_of_type(:integer) }
 
     it { is_expected.to define_enum_for(:hosting_status).
