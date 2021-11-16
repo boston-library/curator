@@ -16,9 +16,23 @@ module Curator
     end
 
     def avi_params
+      return if derivative_source.blank?
+
+      super[:file_stream].merge({ original_ingest_filepath: derivative_source.metadata['ingest_filepath'] })
+    end
+
+    def derivative_source_changed?
+      return false if derivative_source.blank?
+
+      text_plain_blob.changed?
+    end
+
+    protected
+
+    def derivative_source
       return if !text_plain.attached?
 
-      super[:file_stream].merge({ original_ingest_filepath: text_plain.metadata['ingest_filepath'] })
+      text_plain
     end
   end
 end

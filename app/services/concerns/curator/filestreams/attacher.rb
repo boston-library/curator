@@ -46,14 +46,19 @@ module Curator
 
             attributes['service_name'] = attachment_service(record, attachment_type)
 
-            attachable = create_attachable(attributes, io_hash)
+            attachable = if record.public_send(attachment_type).attached?
+                           update_attachable(record.public_send("#{attachment_type}_blob"), attributes, io_hash)
+                         else
+                           create_attachable(attributes, io_hash)
+                         end
 
             record.public_send(attachment_type).attach(attachable)
-            record.save!
+            record.save
 
             check_file_fixity!(record.public_send("#{attachment_type}_blob"), attributes['byte_size'], attributes['checksum_md5'])
           end
         end
+
 
         # @param attributes [Hash]
         # @param io_hash [Hash
@@ -73,6 +78,20 @@ module Curator
             metadata: attributes['metadata'],
             identify: attributes['content_type'].present? # This is specified here https://github.com/rails/rails/blob/8929f6f6e492c15a58ca13290f5ff44d00b37ccc/activestorage/app/models/active_storage/blob.rb#L110
           }
+        end
+
+        def update_attachable(blob, attributes, io_hash = {})
+          return attach_existing_file(attributes) if io_hash.blank?
+
+          return import_file_from_fedora(attributes, content_io(io_hash)) if fedora_content?(io_hash)
+
+          attachment_attributes = attributes.slice('file_name', 'byte_size', 'content_type', 'metadata')
+          attachment_attributes['filename'] = attachment_attributes.delete('file_name') if attachment_attributes['file_name']
+          attachment_attributes['checksum_md5'] = checksum_to_base64(attributes['checksum_md5']) if attributes['checksum_md5']
+
+          blob.upload(content_io(io_hash), identify: false) if blob.update!(attachment_attributes)
+
+          blob
         end
 
         def file_attributes(attachment = {})
@@ -113,7 +132,7 @@ module Curator
           blob = ActiveStorage::Blob.find_or_initialize_by(key: attachment_attributes['key']).tap do |b|
             b.filename = attachment_attributes['file_name']
             b.byte_size = attachment_attributes['byte_size']
-            b.checksum = attachment_attributes['checksum']
+            b.checksum = attachment_attributes['checksum_md5']
             b.content_type = attachment_attributes['content_type']
             b.service_name = attachment_attributes['service_name']
             b.metadata = attachment_attributes['metadata']
@@ -124,6 +143,8 @@ module Curator
 
           raise ActiveStorage::FileNotFoundError, "File at #{blob.key} in service #{blob.service_name} not found!"
         end
+
+
 
         def record_attachments(record)
           record.class.attachment_reflections.keys

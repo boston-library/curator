@@ -18,17 +18,36 @@ module Curator
     has_paper_trail
 
     def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
-      return super(%i(characterization image_thumbnail_300)) if text_plain.attached? && %i(document_access document_primary).any? { |a| public_send(a).attached? }
+      return super(required_derivatives.dup.delete(:document_access)) if derivative_source.present? && text_plain.attached?
+
+      return super(required_derivatives.dup.delete(derivative_source.name.to_sym)) if required_derivatives.include?(derivative_source&.name&.to_sym)
 
       super(required_derivatives)
     end
 
     def avi_params
+      return if derivative_source.blank?
+
+      super[avi_file_class].merge({ original_ingest_filepath: derivative_source.metadata['ingest_filepath'] })
+    end
+
+
+    def derivative_source_changed?
+      return false if derivative_source.blank?
+
+      return document_primary_blob.changed? if derivative_source.name == 'document_primary'
+
+      document_access_blob.changed?
+    end
+
+    protected
+
+    def derivative_source
       return if !document_primary.attached? && !document_access.attached?
 
-      return super[avi_file_class].merge({ original_ingest_filepath: document_primary.metadata['ingest_filepath'] }) if document_primary.attached?
+      return document_primary if document_primary.attached?
 
-      super[avi_file_class].merge({ original_ingest_filepath: document_access.metadata['ingest_filepath'] })
+      document_access
     end
   end
 end

@@ -60,6 +60,10 @@ module Curator
       event :mark_complete, guard: :can_complete? do
         transitions from: :derivatives, to: :complete
       end
+
+      event :regenerate_derivatives, guards: [:should_regenerate_derivatives?] do
+        transitions from: :complete, to: :derivatives, after_commit: :regenerate_derivatives
+      end
     end
 
     has_paper_trail if: proc { |w| w.is_processable? }
@@ -77,6 +81,12 @@ module Curator
 
     def should_review?
       false
+    end
+
+    def should_regenerate_derivatives?
+      return false if workflowable_type != 'Curator::Filestreams::FileSet'
+
+      workflowable.respond_to?(:derivative_source_changed?) && workflowable.derivative_source_changed?
     end
 
     def can_complete?
@@ -98,5 +108,7 @@ module Curator
 
       Curator::Filestreams::DerivativesJob.perform_later(workflowable_type, workflowable_id)
     end
+
+    alias regenerate_derivatives generate_derivatives
   end
 end

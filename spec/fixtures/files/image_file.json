@@ -6,7 +6,7 @@
     "byte_size": 8977,
     "checksum_md5": "466561a5c5080652b707bc44b4ea598c",
     "metadata": {
-      "ingest_filepath": "curator/spec/fixtures/files/image_thumbnail_300.jpg"
+      "ingest_filepath": "BPLDC/curator_fixtures/files/image_thumbnail_300.jpg"
     }
   }]
 }

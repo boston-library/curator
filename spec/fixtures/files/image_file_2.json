@@ -4,7 +4,7 @@
     "file_type": "image_primary",
     "content_type": "image/tiff",
     "metadata": {
-      "ingest_filepath": "curator/spec/fixtures/files/image_primary.tiff"
+      "ingest_filepath": "BPLDC/curator_fixtures/files/image_primary.tiff"
     }
   }]
 }

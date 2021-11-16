@@ -21,20 +21,34 @@ module Curator
     end
 
     def avi_params
-      return if !ebook_access_epub.attached?
+      return if derivative_source.blank?
 
       super[:file_stream].merge({
         ebook_access_epub_data: {
-          id: ebook_access_epub_blob.key,
-          storage: ebook_access_epub_blob.service_name,
+          id: derivative_source.key,
+          storage: derivative_source.service_name,
           metadata: {
-            filename: ebook_access_epub_blob.filename.to_s,
-            md5: ebook_access_epub.checksum,
-            size: ebook_access_epub_blob.byte_size,
-            mime_type: ebook_access_epub.content_type
+            filename: derivative_source.filename.to_s,
+            md5: derivative_source.checksum,
+            size: derivative_source.byte_size,
+            mime_type: derivative_source.content_type
           }
         }
       })
+    end
+
+    def derivative_source_changed?
+      return false if derivative_source.blank?
+
+      ebook_access_epub_blob.changed?
+    end
+
+    protected
+
+    def derivative_source
+      return if !ebook_access_epub.attached?
+
+      ebook_access_epub
     end
   end
 end
