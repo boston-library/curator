@@ -66,7 +66,7 @@ RSpec.describe Curator::Exceptions do
       specify { expect(subject).to be <= Curator::Exceptions::CuratorError }
 
       it 'is expected to have a default message' do
-        expect(subject.new.message).to eq('An error occcured indexing a record!')
+        expect(subject.new.message).to eq('An error occurred indexing a record!')
       end
     end
 
