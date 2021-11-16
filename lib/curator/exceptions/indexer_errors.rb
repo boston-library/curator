@@ -2,7 +2,7 @@
 
 module Curator::Exceptions
   class IndexerError < CuratorError
-    def initialize(message = 'An error occcured indexing a record!')
+    def initialize(message = 'An error occurred indexing a record!')
       super(message)
     end
   end
@@ -19,7 +19,7 @@ module Curator::Exceptions
   class GeographicIndexerError < IndexerError
     attr_reader :geo_auth_url
 
-    def initialize(message = 'Failed to retreive geograhic index data from authority api!', geo_auth_url = nil)
+    def initialize(message = 'Failed to retrieve geographic index data from authority api!', geo_auth_url = nil)
       super(message)
       @geo_auth_url = geo_auth_url
     end
