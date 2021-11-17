@@ -36,6 +36,6 @@ env:
     - PGUSER=postgres
     - PGPORT=5432
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
-    - INGEST_SOURCE_DIRECTORY=/mnt/ingest_source
+    - INGEST_SOURCE_DIRECTORY=/opt/ingest_source
   jobs:
     - "RAILS_VERSION=6.1.4.1"
