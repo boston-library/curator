@@ -59,7 +59,6 @@ module Curator
           end
         end
 
-
         # @param attributes [Hash]
         # @param io_hash [Hash
         # @returns [ActiveStorage::Blob]
@@ -80,6 +79,10 @@ module Curator
           }
         end
 
+        # @param blob [ActiveStorage::Blob]
+        # @param attributes [Hash]
+        # @param io_hash [Hash]
+        # @returns [ActiveStorage::Blob]
         def update_attachable(blob, attributes, io_hash = {})
           return attach_existing_file(attributes) if io_hash.blank?
 
@@ -128,6 +131,8 @@ module Curator
           end
         end
 
+        # @param attachment_attributes [Hash]]
+        # @returns [ActiveStorage::Blob]
         def attach_existing_file(attachment_attributes)
           blob = ActiveStorage::Blob.find_or_initialize_by(key: attachment_attributes['key']).tap do |b|
             b.filename = attachment_attributes['file_name']
@@ -143,8 +148,6 @@ module Curator
 
           raise ActiveStorage::FileNotFoundError, "File at #{blob.key} in service #{blob.service_name} not found!"
         end
-
-
 
         def record_attachments(record)
           record.class.attachment_reflections.keys

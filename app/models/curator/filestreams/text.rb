@@ -15,10 +15,12 @@ module Curator
       super(required_derivatives)
     end
 
-    def avi_params
+    def avi_payload
       return if derivative_source.blank?
 
-      super[:file_stream].merge({ original_ingest_filepath: derivative_source.metadata['ingest_filepath'] })
+      payload = super
+      payload[:file_stream][:original_ingest_file_path] = derivative_source.metadata['ingest_filepath']
+      payload
     end
 
     def derivative_source_changed?

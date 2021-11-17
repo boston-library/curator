@@ -19,7 +19,7 @@ module Curator
 
     attr_writer :ingest_source_directory
     def ingest_source_directory
-      @ingest_file_root_directory || ENV.fetch('INGEST_SOURCE_DIRECTORY') { Rails.root.to_s }
+      @ingest_file_root_directory || ENV['INGEST_SOURCE_DIRECTORY']
     end
 
     attr_writer :default_remote_service_timeout_opts

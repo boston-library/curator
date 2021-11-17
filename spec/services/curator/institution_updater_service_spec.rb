@@ -9,9 +9,7 @@ RSpec.describe Curator::InstitutionUpdaterService, type: :service do
     @host_collection_to_remove ||= create(:curator_mappings_host_collection, institution: @institution)
     @location ||= create(:curator_controlled_terms_geographic)
     @files_json ||= load_json_fixture('image_file_3', 'files')
-    @files_json[0]['metadata']['ingest_filepath'] = file_fixture('image_thumbnail_300_2.jpg').to_s
 
-    @thumbnail_path ||= file_fixture('image_thumbnail_300.jpg')
     @update_attributes ||= {
       abstract: "#{@institution.abstract} [UPDATED]",
       url: Faker::Internet.unique.url(host: "#{@institution.name.downcase.split(' ').join('-')}-updated-institution.org"),

@@ -6,18 +6,18 @@ RSpec.shared_examples 'derivative_methods' do
       expect(described_class).to be_const_defined(:DEFAULT_REQUIRED_DERIVATIVES)
     end
 
-    it 'expects to respond_to #required_derivatives_complete?' do
+    it 'is expected to respond_to #required_derivatives_complete?' do
       expect(subject).to respond_to(:required_derivatives_complete?).with(1).argument
       expect(subject).to_not be_required_derivatives_complete
     end
-  end
 
-  describe '#avi_params' do
-    it { is_expected.to respond_to(:avi_params) }
+    it 'is expected to respond_to #avi_payload' do
+      expect(subject).to respond_to(:avi_payload)
+    end
 
-    skip 'expected results' do
-      # TODO: Add fixtures for audio, video, text, document primary attachment_types
-      let!(:expected_payload) { subject.avi_params }
+    it 'is expected to respond_to #derivative_source_changed?' do
+      expect(subject).to respond_to(:derivative_source_changed?)
+      expect(subject).to_not be_derivative_source_changed
     end
   end
 end

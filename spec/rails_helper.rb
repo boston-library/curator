@@ -12,6 +12,8 @@ ENV['SOLR_URL'] = File.read(
 # NOTE: These are needed for travis since the class_attribute in the remote service requires these to exist
 ENV['AUTHORITY_API_URL'] ||= 'http://127.0.0.1:3001'
 ENV['ARK_MANAGER_API_URL'] ||= 'http://127.0.0.1:3002'
+# NOTE: See readme to see how to set this path up locally
+ENV['INGEST_SOURCE_DIRECTORY'] ||= "#{ENV['HOME']}/mock_shares"
 
 require File.expand_path('./internal/config/environment', __dir__)
 

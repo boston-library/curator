@@ -9,7 +9,7 @@ RSpec.describe Curator::Filestreams::FileSetUpdaterService, type: :service do
     @digital_object ||= create(:curator_digital_object, admin_set: @collection)
     @file_set ||= create(:curator_filestreams_image, file_set_of: @digital_object)
     @files_json ||= load_json_fixture('image_file_3', 'files')
-    @files_json[0]['metadata']['ingest_filepath'] = file_fixture('image_thumbnail_300_2.jpg').to_s
+    # @files_json[0]['metadata']['ingest_filepath'] = file_fixture('image_thumbnail_300_2.jpg').to_s
 
     create(:curator_mappings_exemplary_image, exemplary_object: @collection, exemplary_file_set: @file_set)
 

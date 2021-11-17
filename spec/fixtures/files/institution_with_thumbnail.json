@@ -35,7 +35,7 @@
         "byte_size": 11475,
         "checksum_md5": "3ea351df3cb8b0ca4c5361727e191d0b",
         "metadata": {
-          "ingest_filepath": "curator/spec/fixtures/files/image_thumbnail_300_institution.png"
+          "ingest_filepath": "BPLDC/curator_fixtures/files/image_thumbnail_300_institution.png"
         }
       }
     ]

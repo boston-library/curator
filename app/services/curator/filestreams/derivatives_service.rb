@@ -10,12 +10,18 @@ module Curator
 
     attr_reader :avi_file_class, :avi_payload
 
-    # Payload should be formatted as such
+    # Payload should be formatted as such (use deriavtive_source helper method to get the blob)
     # {
     #   file_stream: {
     #   "[image|audio|document|video]_stream": {
     #     ark_id: ark_id,
-    #     original_ingest_filepath: attachment.metatdata['ingest_filepath']
+    #     if file set type is (image|document|audio|video|text)
+    #       original_ingest_filepath: derivative_source.metatdata['ingest_filepath']
+    #     elsif file set type is ereader
+    #       ebook_access_epub_data: {
+    #         id: derivative_source.key
+    #         storage:
+    #       }
     #    }
     # }
 
@@ -38,6 +44,9 @@ module Curator
         Rails.logger.error 'Invalid JSON From Ark Response'
         Rails.logger.error "Reason #{e.message}"
       rescue Curator::Exceptions::RemoteServiceError => e
+        awesome_print e.message
+        awesome_print e.code
+        awesome_print e.json_response
         Rails.logger.error 'Error Occured Generating Ark'
         Rails.logger.error "Reason #{e.message}"
         Rails.logger.error "Response code #{e.code}"

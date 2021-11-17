@@ -61,7 +61,7 @@ module Curator
         transitions from: :derivatives, to: :complete
       end
 
-      event :regenerate_derivatives, guards: [:should_regenerate_derivatives?] do
+      event :regenerate_derivatives, guard: :should_regenerate_derivatives? do
         transitions from: :complete, to: :derivatives, after_commit: :regenerate_derivatives
       end
     end

@@ -11,7 +11,7 @@ module Curator
     def perform(file_set_class_name, file_set_id)
       file_set = Object.const_get(file_set_class_name).find(file_set_id)
       avi_file_class = file_set.avi_file_class
-      avi_payload = file_set.avi_params
+      avi_payload = file_set.avi_payload
 
       raise "No source file for derivatives file not attached! for #{file_set.class.name}-#{file_set.ark_id}" if avi_payload.blank?
 

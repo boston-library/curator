@@ -73,7 +73,7 @@ module Curator
       params
     end
 
-    def avi_params
+    def avi_payload
       {
         file_stream:
           {
