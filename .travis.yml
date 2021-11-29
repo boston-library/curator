@@ -19,7 +19,7 @@ before_install:
   - sudo cp /etc/postgresql/{9.3,12}/main/pg_hba.conf
   - sudo pg_ctlcluster 12 main restart
   - gem update --system --no-document
-  - gem install bundler:2.2.27 --no-document
+  - gem install bundler:2.2.32 --no-document
 
 before_script:
   - mkdir -p $INGEST_SOURCE_DIRECTORY/BPLDC
@@ -27,7 +27,7 @@ before_script:
   - bundle exec rails app:curator:setup
 
 rvm:
-  - 2.6.8
+  - 2.6.9
 
 env:
   global:
