@@ -4,7 +4,7 @@ module Curator
   module DescriptiveFieldSets
     extend Curator::NamespaceAccessor
 
-    IDENTIFIER_TYPES = %w(local-accession local-other local-call local-barcode iiif-manifest internet-archive isbn ismn
+    IDENTIFIER_TYPES = %w(local-accession local-other local-call local-barcode local-filename iiif-manifest internet-archive isbn ismn
                           isrc issn issue-number lccn matrix-number music-plate music-publisher sici uri videorecording uri-preview).freeze
 
     NOTE_TYPES = ['date', 'language', 'acquisition', 'ownership', 'funding', 'biographical/historical',
@@ -13,6 +13,7 @@ module Curator
                   'statement of responsibility'].freeze
 
     LOCAL_ORIGINAL_IDENTIFIER_TYPES = {
+      'local-filename' => 'filename',
       'internet-archive' => 'barcode',
       'local-barcode' => 'barcode',
       'local-accession' => 'id_local-accession',
