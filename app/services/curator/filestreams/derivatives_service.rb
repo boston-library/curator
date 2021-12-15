@@ -38,19 +38,16 @@ module Curator
 
         return avi_json
       rescue HTTP::Error => e
-        Rails.logger.error 'HTTP Error Occured Generating Ark'
-        Rails.logger.error "Reason #{e.message}"
+        Rails.logger.error 'HTTP Error Occurred Calling Derivatives API'
+        Rails.logger.error "Reason: #{e.message}"
       rescue Oj::Error => e
-        Rails.logger.error 'Invalid JSON From Ark Response'
-        Rails.logger.error "Reason #{e.message}"
+        Rails.logger.error 'Invalid JSON Response From AVI Processor'
+        Rails.logger.error "Reason: #{e.message}"
       rescue Curator::Exceptions::RemoteServiceError => e
-        awesome_print e.message
-        awesome_print e.code
-        awesome_print e.json_response
-        Rails.logger.error 'Error Occured Generating Ark'
-        Rails.logger.error "Reason #{e.message}"
-        Rails.logger.error "Response code #{e.code}"
-        Rails.logger.error "Response #{e.json_response}"
+        Rails.logger.error 'Error Occurred Generating Derivatives'
+        Rails.logger.error "Reason: #{e.message}"
+        Rails.logger.error "Response code: #{e.code}"
+        Rails.logger.error "Response: #{e.json_response}"
       end
       nil
     end
