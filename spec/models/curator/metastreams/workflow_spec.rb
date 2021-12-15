@@ -97,6 +97,7 @@ RSpec.describe Curator::Metastreams::Workflow, type: :model do
       subject { processible_object_workflows }
 
       it { is_expected.to all(have_state(:initialized).on(:processing_state)) }
+      it { is_expected.to all(allow_event(:process_derivatives).on(:processing_state)) }
 
       it 'should not allow the transition to complete initially' do
         subject.each do |obj|

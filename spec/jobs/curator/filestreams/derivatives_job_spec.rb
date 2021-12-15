@@ -6,7 +6,9 @@ RSpec.describe Curator::Filestreams::DerivativesJob, type: :job do
   describe 'expected job behavior' do
     subject { described_class }
 
-    let(:job_args) { create(:curator_filestreams_image) }
+    let!(:file_stream) { create(:curator_filestreams_image) }
+
+    let(:job_args) { [file_stream.class.name, file_stream.id] }
     let(:expected_queue) { 'filestream_derivatives' }
 
     before(:each) do

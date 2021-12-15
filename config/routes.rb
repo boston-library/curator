@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 Curator::Engine.routes.draw do
-  JSON_CONSTRAINT = ->(request) { request.format.symbol == :json }
-  NOMENCLATURE_TYPES = Curator.controlled_terms.nomenclature_types.map(&:underscore)
-  FILE_SET_TYPES = Curator.filestreams.file_set_types.map(&:downcase)
-
   concern :administratable do |options|
     resource :administrative, options
   end
@@ -22,7 +18,7 @@ Curator::Engine.routes.draw do
 
     match '*path' => 'application#method_not_allowed', via: [:delete]
 
-    constraints(JSON_CONSTRAINT) do
+    constraints(Curator::Middleware::RouteConsts::JSON_CONSTRAINT) do
       resources :institutions, :collections, :digital_objects, only: [:index, :create]
 
       resources :institutions, :collections, :digital_objects,
@@ -71,12 +67,12 @@ Curator::Engine.routes.draw do
 
         resources :nomenclatures,
                   only: [:show, :update],
-                  constraints: Curator::Middleware::StiTypesConstraint.new(NOMENCLATURE_TYPES),
+                  constraints: Curator::Middleware::StiTypesConstraint.new(Curator::Middleware::RouteConsts::NOMENCLATURE_TYPES),
                   path: '/:type'
       end
 
-      namespace :filestreams, constraints: JSON_CONSTRAINT do
-        constraints(Curator::Middleware::StiTypesConstraint.new(FILE_SET_TYPES)) do
+      namespace :filestreams, constraints: Curator::Middleware::RouteConsts::JSON_CONSTRAINT do
+        constraints(Curator::Middleware::StiTypesConstraint.new(Curator::Middleware::RouteConsts::FILE_SET_TYPES)) do
           resources :file_sets, only: [:index, :create], path: '/:type'
 
           resources :file_sets,

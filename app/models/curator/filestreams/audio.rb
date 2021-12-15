@@ -20,23 +20,35 @@ module Curator
     has_paper_trail
 
     def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
+      return super(required_derivatives.dup.delete(derivative_source.name.to_sym)) if required_derivatives.include?(derivative_source&.name&.to_sym)
+
       super(required_derivatives)
     end
 
-    def avi_params
-      return if !audio_primary.attached?
+    def avi_payload
+      return if derivative_source.blank?
 
-      super[avi_file_class].merge({
-        audio_primary_data: {
-          id: audio_primary_blob.key,
-          metadata: {
-            byte_size: audio_primary_blob.byte_size,
-            checksum: audio_primary_blob.checksum,
-            file_name: audio_primary_blob.filename.to_s,
-            mime_type: audio_primary_blob.content_type.to_s,
-          }
-        }
-      })
+      payload = super
+      payload[:file_stream][:original_ingest_file_path] = derivative_source.metadata['ingest_filepath']
+      payload
+    end
+
+    def derivative_source_changed?
+      return false if derivative_source.blank?
+
+      return audio_primary_blob.changed? if derivative_source.name == 'audio_primary'
+
+      audio_access_blob.changed?
+    end
+
+    protected
+
+    def derivative_source
+      return if !audio_primary.attached? && !audio_access.attached?
+
+      return audio_primary if audio_primary.attached?
+
+      audio_access
     end
   end
 end

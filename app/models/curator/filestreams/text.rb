@@ -15,20 +15,26 @@ module Curator
       super(required_derivatives)
     end
 
-    def avi_params
+    def avi_payload
+      return if derivative_source.blank?
+
+      payload = super
+      payload[:file_stream][:original_ingest_file_path] = derivative_source.metadata['ingest_filepath']
+      payload
+    end
+
+    def derivative_source_changed?
+      return false if derivative_source.blank?
+
+      text_plain_blob.changed?
+    end
+
+    protected
+
+    def derivative_source
       return if !text_plain.attached?
 
-      super[avi_file_class].merge({
-        text_plain_data: {
-          id: text_plain_blob.key,
-          metadata: {
-            byte_size: text_plain_blob.byte_size,
-            checksum: text_plain_blob.checksum,
-            file_name: text_plain_blob.filename.to_s,
-            mime_type: text_plain_blob.content_type.to_s,
-          }
-        }
-      })
+      text_plain
     end
   end
 end

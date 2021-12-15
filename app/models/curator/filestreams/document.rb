@@ -18,25 +18,37 @@ module Curator
     has_paper_trail
 
     def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
-      return super(%i(characterization)) if text_plain.attached? && %i(document_access document_primary).any? { |a| public_send(a).attached? }
+      return super(required_derivatives.dup.delete(:document_access)) if derivative_source.present? && text_plain.attached?
+
+      return super(required_derivatives.dup.delete(derivative_source.name.to_sym)) if required_derivatives.include?(derivative_source&.name&.to_sym)
 
       super(required_derivatives)
     end
 
-    def avi_params
-      return if !document_primary.attached?
+    def avi_payload
+      return if derivative_source.blank?
 
-      super[avi_file_class].merge({
-        document_primary_data: {
-          id: document_primary_blob.key,
-          metadata: {
-            byte_size: document_primary_blob.byte_size,
-            checksum: document_primary_blob.checksum,
-            file_name: document_primary_blob.filename.to_s,
-            mime_type: document_primary_blob.content_type.to_s,
-          }
-        }
-      })
+      payload = super
+      payload[:file_stream][:original_ingest_file_path] = derivative_source.metadata['ingest_filepath']
+      payload
+    end
+
+    def derivative_source_changed?
+      return false if derivative_source.blank?
+
+      return document_primary_blob.changed? if derivative_source.name == 'document_primary'
+
+      document_access_blob.changed?
+    end
+
+    protected
+
+    def derivative_source
+      return if !document_primary.attached? && !document_access.attached?
+
+      return document_primary if document_primary.attached?
+
+      document_access
     end
   end
 end

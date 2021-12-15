@@ -21,23 +21,35 @@ module Curator
     has_paper_trail
 
     def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
+      return super(required_derivatives.dup.delete(derivative_source.name.to_sym)) if required_derivatives.include?(derivative_source&.name&.to_sym)
+
       super(required_derivatives)
     end
 
-    def avi_params
-      return if !video_primary.attached?
+    def avi_payload
+      return if derivative_source.blank?
 
-      super[avi_file_class].merge({
-        video_primary_data: {
-          id: video_primary_blob.key,
-          metadata: {
-            byte_size: video_primary_blob.byte_size,
-            checksum: video_primary_blob.checksum,
-            file_name: video_primary_blob.filename.to_s,
-            mime_type: video_primary_blob.content_type.to_s,
-          }
-        }
-      })
+      payload = super
+      payload[:file_stream][:original_ingest_file_path] = derivative_source.metadata['ingest_filepath']
+      payload
+    end
+
+    def derivative_source_changed?
+      return false if derivative_source.blank?
+
+      return video_primary_blob.changed? if derivative_source.name == 'video_primary'
+
+      video_access_mp4.changed?
+    end
+
+    protected
+
+    def derivative_source
+      return if !video_primary.attached? && !video_access_mp4.attached?
+
+      return video_primary if video_primary.attached?
+
+      video_access_mp4
     end
   end
 end

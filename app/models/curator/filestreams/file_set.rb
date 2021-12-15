@@ -73,11 +73,12 @@ module Curator
       params
     end
 
-    def avi_params
+    def avi_payload
       {
-        avi_file_class => {
-          ark_id: ark_id
-        }
+        file_stream:
+          {
+            ark_id: ark_id
+          }
       }
     end
 
@@ -91,6 +92,12 @@ module Curator
         'audio_stream'
       when 'Video'
         'video_stream'
+      when 'Text'
+        'text_stream'
+      when 'Ereader'
+        'ereader_stream'
+      when 'Metadata'
+        'metadata_oai_stream'
       end
     end
 

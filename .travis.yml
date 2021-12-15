@@ -19,14 +19,15 @@ before_install:
   - sudo cp /etc/postgresql/{9.3,12}/main/pg_hba.conf
   - sudo pg_ctlcluster 12 main restart
   - gem update --system --no-document
-  - gem install bundler:2.2.24 --no-document
+  - gem install bundler:2.2.32 --no-document
 
 before_script:
+  - mkdir -p $INGEST_SOURCE_DIRECTORY/BPLDC
+  - ln -s $TRAVIS_BUILD_DIR/spec/fixtures $INGEST_SOURCE_DIRECTORY/BPLDC/curator_fixtures
   - bundle exec rails app:curator:setup
 
 rvm:
-  - 2.5.9
-  - 2.6.8
+  - 2.6.9
 
 env:
   global:
@@ -35,5 +36,6 @@ env:
     - PGUSER=postgres
     - PGPORT=5432
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+    - INGEST_SOURCE_DIRECTORY=/opt/ingest_source
   jobs:
-    - "RAILS_VERSION=6.1.4"
+    - "RAILS_VERSION=6.1.4.1"

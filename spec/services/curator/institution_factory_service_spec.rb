@@ -7,8 +7,8 @@ require_relative './shared/attachable'
 RSpec.describe Curator::InstitutionFactoryService, type: :service do
   before(:all) do
     @object_json = load_json_fixture('institution_with_thumbnail', 'institution')
-    @object_json['files'][0]['metadata']['ingest_filepath'] = file_fixture('image_thumbnail_300_institution.png').to_s
-    VCR.use_cassette('services/institution_factory_service') do
+    @object_json['files'][0]['io'] = { uploaded_file: Rack::Test::UploadedFile.new(file_fixture('image_thumbnail_300_institution.png').to_s, 'image/png') }
+    VCR.use_cassette('services/institution_factory_service', record: :new_episodes) do
       expect do
         @success, @institution = handle_factory_result(described_class, @object_json)
       end.to change { Curator::Institution.count }.by(1)

@@ -93,6 +93,7 @@ module Curator
       autoload :SolrUnavailable, File.expand_path('./exceptions/remote_service_errors.rb', __dir__)
       autoload :ArkManagerApiUnavailable, File.expand_path('./exceptions/remote_service_errors.rb', __dir__)
       autoload :AuthorityApiUnavailable, File.expand_path('./exceptions/remote_service_errors.rb', __dir__)
+      autoload :AviProcessorApiUnavailable, File.expand_path('./exceptions/remote_service_errors.rb', __dir__)
       autoload :RemoteServiceError, File.expand_path('./exceptions/remote_service_errors.rb', __dir__)
       # Indexer Errors
       autoload :IndexerError, File.expand_path('./exceptions/indexer_errors.rb', __dir__)

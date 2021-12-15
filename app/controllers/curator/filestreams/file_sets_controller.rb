@@ -48,11 +48,11 @@ module Curator
                                              workflow: [:ingest_origin, :publishing_state, :processing_state]
                                           },
                                          files: [:key, :created_at, :file_name, :file_type, :content_type, :byte_size,
-                                                 :checksum_md5, io: {}, metadata: {}])
+                                                 :checksum_md5, io: [:ingest_filepath, :fedora_content_location], metadata: {}])
       when 'update'
         params.require(:file_set).permit(:position, pagination: [:page_label, :page_type, :hand_side],
                                          exemplary_image_of: [:ark_id, :_destroy],
-                                         files: [:key, :file_name, :file_type, :content_type, :byte_size, :checksum_md5, io: {}, metadata: {}])
+                                         files: [:key, :file_name, :file_type, :content_type, :byte_size, :checksum_md5, io: [:ingest_filepath, :fedora_content_location], metadata: {}])
       else
         params
       end

@@ -13,7 +13,7 @@ RSpec.describe Curator::Middleware::RootApp do
     subject { root_app }
 
     let(:mock_json_req) { Rack::MockRequest.env_for('/', 'HTTP_ACCEPT' => 'application/json') }
-    let(:mock_xml_req) { Rack::MockRequest.env_for('/', 'HTTP_ACCEPT' => 'application/xml') }
+    let(:mock_xml_req) { Rack::MockRequest.env_for('/', 'HTTP_ACCEPT' => '*/*', 'PATH_INFO' => '/api.xml') }
     let(:mock_plain_text_req) { Rack::MockRequest.env_for('/', 'HTTP_ACCEPT' => 'text/plain') }
     let(:mock_other_req) { Rack::MockRequest.env_for('/', 'HTTP_ACCEPT' => 'application/rdf') }
 
