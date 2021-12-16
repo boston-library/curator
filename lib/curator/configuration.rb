@@ -14,7 +14,7 @@ module Curator
 
     attr_writer :avi_processor_api_url
     def avi_processor_api_url
-      @avi_processor_url || ENV['AVI_PROCESSOR_API_URL']
+      @avi_processor_api_url || ENV['AVI_PROCESSOR_API_URL']
     end
 
     attr_writer :ingest_source_directory
