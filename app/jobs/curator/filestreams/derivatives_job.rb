@@ -15,7 +15,7 @@ module Curator
 
       raise "No source file for derivatives file not attached! for #{file_set.class.name}-#{file_set.ark_id}" if avi_payload.blank?
 
-      service = Curator::Filestreams::DerivativesService.call(avi_file_class, payload: avi_payload)
+      service = Curator::Filestreams::DerivativesService.call(avi_file_class, avi_payload: avi_payload)
 
       logger.info "Derivatives starting processing for #{service.result}"
     end
