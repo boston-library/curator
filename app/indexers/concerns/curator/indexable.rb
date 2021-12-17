@@ -86,11 +86,19 @@ module Curator
     end
 
     def queue_indexing_job
-      Curator::Indexer::IndexingJob.perform_later(self)
+      if %i(inline test).member?(Rails.application.config.active_job[:queue_adapter])
+        Curator::Indexer::IndexingJob.perform_later(self.class.name, id)
+      else
+        Curator::Indexer::IndexingJob.set(wait: 2.seconds).perform_later(self.class.name, id)
+      end
     end
 
     def queue_deletion_job
-      Curator::Indexer::DeletionJob.perform_later(ark_id)
+      if %i(inline test).member?(Rails.application.config.active_job[:queue_adapter])
+        Curator::Indexer::DeletionJob.perform_later(ark_id)
+      else
+        Curator::Indexer::DeletionJob.set(wait: 2.seconds).perform_later(ark_id)
+      end
     end
   end
 end

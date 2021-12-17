@@ -6,7 +6,9 @@ RSpec.describe Curator::Indexer::IndexingJob, type: :job do
   describe 'expected job behavior' do
     subject { described_class }
 
-    let(:job_args) { create(:curator_institution) }
+    let!(:institution) { create(:curator_institution) }
+
+    let(:job_args) { [institution.class.name, institution.id] }
     let(:expected_queue) { 'indexing' }
 
     it_behaves_like 'queueable'
@@ -22,11 +24,11 @@ RSpec.describe Curator::Indexer::IndexingJob, type: :job do
 
       it 'sends an update request to the indexing service' do
         timestamp = Time.current
-        subject.perform_later(job_args)
+        subject.perform_later(*job_args)
 
         # NOTE: don't use assert_requested here, too hard to match body, check solr timestamp instead
 
-        solr_resp = solr_client.get 'select', params: { q: "id:\"#{job_args.ark_id}\"" }
+        solr_resp = solr_client.get 'select', params: { q: "id:\"#{institution.ark_id}\"" }
         solr_rec = solr_resp.dig('response', 'docs')&.first
         expect(solr_rec).to be_a_kind_of(Hash).and have_key('timestamp')
         expect(solr_rec['timestamp']).to be > timestamp

@@ -11,8 +11,9 @@ module Curator
 
     before_perform { remote_service_healthcheck! }
 
-    def perform(obj_to_index)
-      obj_to_index.update_index
+    def perform(obj_class, obj_id)
+      indexable_object = Object.const_get(obj_class).for_reindex_all.find(obj_id)
+      indexable_object.update_index
     end
 
     protected

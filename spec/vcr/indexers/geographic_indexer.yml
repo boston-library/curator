@@ -320,4 +320,56 @@ http_interactions:
         America","pcli":"United States","adm1":"Massachusetts","adm2":"Dukes County","adm3":"Town
         of Chilmark","bch":"Lucy Vincent Beach"}}'
   recorded_at: Wed, 26 Aug 2020 19:40:47 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/tgn/2120926
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.0.4
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"c129836d4e6eb7932603b6ce55c28aa8"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - c78bc50b-3a2b-487a-93b9-f92313917566
+      X-Runtime:
+      - '0.003612'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"44.9333","longitude":"-91.3833","combined":"44.9333,-91.3833"},"hier_geo":{"city":"Chippewa
+        Falls","continent":"North and Central America","county":"Chippewa","country":"United
+        States","state":"Wisconsin"},"non_hier_geo":null}'
+  recorded_at: Fri, 17 Dec 2021 21:23:54 GMT
 recorded_with: VCR 6.0.0

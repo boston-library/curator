@@ -666,4 +666,60 @@ http_interactions:
         Undetermined","uri":"http://rightsstatements.org/vocab/UND/1.0/"},{"label":"No
         Known Copyright","uri":"http://rightsstatements.org/vocab/NKC/1.0/"}]'
   recorded_at: Thu, 03 Dec 2020 22:50:54 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/bpldc/basic_genres
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.0.4
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Etag:
+      - '"c965e9e24525fe81fe4fabea920499f7"'
+      Last-Modified:
+      - Thu, 27 May 2021 20:36:22 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - cb5dd52c-8bf0-4ed6-af50-7e01d9c77434
+      X-Runtime:
+      - '0.120747'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '[{"label":"Serial publications","id_from_auth":"gf2014026174","authority_code":"lcgft"},{"label":"Music","id_from_auth":"tgm006906","authority_code":"lctgm"},{"label":"Musical
+        notation","id_from_auth":"tgm006926","authority_code":"lctgm"},{"label":"Motion
+        pictures","id_from_auth":"tgm006804","authority_code":"lctgm"},{"label":"Sound
+        recordings","id_from_auth":"tgm009874","authority_code":"lctgm"},{"label":"Newspapers","id_from_auth":"tgm007068","authority_code":"lctgm"},{"label":"Objects","id_from_auth":"tgm007159","authority_code":"lctgm"},{"label":"Correspondence","id_from_auth":"tgm002590","authority_code":"lctgm"},{"label":"Albums
+        (Books)","id_from_auth":"tgm000229","authority_code":"gmgpc"},{"label":"Books","id_from_auth":"tgm001221","authority_code":"gmgpc"},{"label":"Periodicals","id_from_auth":"tgm007641","authority_code":"gmgpc"},{"label":"Prints","id_from_auth":"tgm008237","authority_code":"gmgpc"},{"label":"Posters","id_from_auth":"tgm008104","authority_code":"gmgpc"},{"label":"Photographs","id_from_auth":"tgm007721","authority_code":"gmgpc"},{"label":"Paintings","id_from_auth":"tgm007393","authority_code":"gmgpc"},{"label":"Maps","id_from_auth":"tgm006261","authority_code":"gmgpc"},{"label":"Manuscripts","id_from_auth":"tgm012286","authority_code":"gmgpc"},{"label":"Ephemera","id_from_auth":"tgm003634","authority_code":"gmgpc"},{"label":"Drawings","id_from_auth":"tgm003279","authority_code":"gmgpc"},{"label":"Documents","id_from_auth":"tgm003185","authority_code":"gmgpc"},{"label":"Cards","id_from_auth":"tgm001686","authority_code":"gmgpc"}]'
+  recorded_at: Fri, 17 Dec 2021 20:55:35 GMT
 recorded_with: VCR 6.0.0
