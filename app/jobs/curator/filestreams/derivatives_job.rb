@@ -17,7 +17,7 @@ module Curator
 
       service = Curator::Filestreams::DerivativesService.call(avi_file_class, avi_payload: avi_payload)
 
-      logger.info "Derivatives starting processing for #{service.result}"
+      logger.info "Derivatives starting processing for #{service}"
     end
 
     protected
