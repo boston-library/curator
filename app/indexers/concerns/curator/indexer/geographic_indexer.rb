@@ -65,6 +65,7 @@ module Curator
               context.output_hash['subject_coordinates_geospatial'] << coords
 
               bbox = subject_geo.bounding_box
+              bbox = nil if bbox == '-180.0 -90.0 180.0 90.0' # don't want 'whole world' bboxes
               bbox_to_env = bbox ? Curator::Parsers::GeoParser.bbox_formatter(bbox, 'wkt_envelope') : nil
               context.output_hash['subject_bbox_geospatial'] << bbox_to_env
               context.output_hash['subject_coordinates_geospatial'] << bbox_to_env
@@ -73,13 +74,11 @@ module Curator
 
               geojson_hash = { type: 'Feature', geometry: {} }
               if bbox
-                unless bbox == '-180.0 -90.0 180.0 90.0' # don't want 'whole world' bboxes
-                  geojson_hash[:bbox] = bbox.split(' ').map(&:to_f)
-                  geojson_hash[:geometry][:type] = 'Polygon'
-                  geojson_hash[:geometry][:coordinates] = [
-                      Curator::Parsers::GeoParser.bbox_formatter(bbox, 'wkt_array')
-                  ]
-                end
+                geojson_hash[:bbox] = bbox.split(' ').map(&:to_f)
+                geojson_hash[:geometry][:type] = 'Polygon'
+                geojson_hash[:geometry][:coordinates] = [
+                  Curator::Parsers::GeoParser.bbox_formatter(bbox, 'wkt_array')
+                ]
               elsif coords
                 geojson_hash[:geometry][:type] = 'Point'
                 geojson_hash[:geometry][:coordinates] = coords.split(',').reverse.map(&:to_f)
