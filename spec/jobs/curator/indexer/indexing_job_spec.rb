@@ -17,9 +17,11 @@ RSpec.describe Curator::Indexer::IndexingJob, type: :job do
       let!(:solr_client) { RSolr.connect(url: Curator.config.solr_url) }
 
       around(:each) do |spec|
-        ActiveJob::Base.queue_adapter = :test
+        ActiveJob::Base.queue_adapter.perform_enqueued_at_jobs = true
         ActiveJob::Base.queue_adapter.perform_enqueued_jobs = true
         spec.run
+        ActiveJob::Base.queue_adapter.perform_enqueued_at_jobs = false
+        ActiveJob::Base.queue_adapter.perform_enqueued_jobs = false
       end
 
       it 'sends an update request to the indexing service' do

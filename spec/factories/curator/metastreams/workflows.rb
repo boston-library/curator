@@ -39,6 +39,8 @@ FactoryBot.define do
 
       after :build do |workflow|
         workflow.workflowable = build(file_type, workflow: workflow) if workflow.workflowable.blank?
+
+        workflow.processing_state = 'complete' if %w(Audio Metadata Video).map { |fcls| "Curator::Filestreams::#{fcls}" }.include?(workflow.workflowable.class.name)
       end
     end
   end

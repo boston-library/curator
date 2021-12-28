@@ -4,8 +4,8 @@ module Curator
   class Indexer::IndexingJob < ApplicationJob
     queue_as :indexing
 
-    retry_on Curator::Exceptions::SolrUnavailable, Curator::Exceptions::AuthorityApiUnavailable, ActiveRecord::StaleObjectError, attempts: 3
-    retry_on Curator::Exceptions::GeographicIndexerError, attempts: 1 do |_job, error|
+    retry_on Curator::Exceptions::SolrUnavailable, Curator::Exceptions::AuthorityApiUnavailable, ActiveRecord::StaleObjectError, attempts: 3, wait: 5.seconds
+    retry_on Curator::Exceptions::GeographicIndexerError, wait: 5.seconds, attempts: 1 do |_job, error|
       logger.error "#{error.message}; URL PATH: #{error&.geo_auth_url}"
     end
 

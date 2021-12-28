@@ -26,7 +26,7 @@ module Curator
       payload = super
       payload[:file_stream][:ebook_access_epub_data] = {
         id: derivative_source.key,
-        storage: derivative_source.service_name,
+        storage: "#{derivative_source.service_name}_store", # Should be 'derivatives_store'
         metadata: {
           filename: derivative_source.filename.to_s,
           md5: derivative_source.checksum,

@@ -2,12 +2,6 @@
 
 RSpec.shared_examples 'queueable', type: :job do
   describe 'expected job enqueued' do
-    around(:each) do |spec|
-      ActiveJob::Base.queue_adapter = :test
-      ActiveJob::Base.queue_adapter.perform_enqueued_jobs = false
-      spec.run
-    end
-
     it 'enqueues the job' do
       expect do
         subject.perform_later(job_args)

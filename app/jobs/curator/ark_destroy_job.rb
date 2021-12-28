@@ -4,7 +4,7 @@ module Curator
   class ArkDestroyJob < ApplicationJob
     queue_as :arks
 
-    retry_on Curator::Exceptions::ArkManagerApiUnavailable, ActiveRecord::RecordNotDestroyed, attempts: 3
+    retry_on Curator::Exceptions::ArkManagerApiUnavailable, ActiveRecord::RecordNotDestroyed, wait: 5.seconds, attempts: 3
 
     before_perform { remote_service_healthcheck! }
 
