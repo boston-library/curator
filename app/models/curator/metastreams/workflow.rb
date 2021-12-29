@@ -52,17 +52,16 @@ module Curator
       state :complete
       initial_state proc { |w| w.is_processable? ? :initialized : :not_set }
 
-      event :process_derivatives, guards: [:is_processable?] do
-        transitions from: :derivatives, to: :complete, guards: [:can_complete?]
-        transitions from: :initialized, to: :derivatives, after_commit: :generate_derivatives
+      event :process_derivatives, guard: :is_processable?, after_commit: :generate_derivatives do
+        transitions from: :initialized, to: :derivatives
       end
 
-      event :mark_complete, guard: :can_complete? do
+      event :mark_complete, guards: [:is_processable?, :can_complete?] do
         transitions from: :derivatives, to: :complete
       end
 
-      event :regenerate_derivatives, guard: :should_regenerate_derivatives? do
-        transitions from: :complete, to: :derivatives, after_commit: :regenerate_derivatives
+      event :regenerate_derivatives, guards: [:is_processable?, :should_regenerate_derivatives?], after_commit: :regenerate_derivatives do
+        transitions from: :complete, to: :derivatives
       end
     end
 
@@ -106,7 +105,10 @@ module Curator
     def generate_derivatives
       return if workflowable_type != 'Curator::Filestreams::FileSet'
 
-      Curator::Filestreams::DerivativesJob.perform_later(workflowable_type, workflowable_id)
+      # Skip Audio Metadata and Video File Set types as they are not set up on the avi processor yet
+      return if %w(Audio Metadata Video).map { |fsc| "Curator::Filestreams::#{fsc}" }.include?(workflowable.class.name)
+
+      Curator::Filestreams::DerivativesJob.set(wait: 2.seconds).perform_later(workflowable_type, workflowable_id)
     end
 
     alias regenerate_derivatives generate_derivatives

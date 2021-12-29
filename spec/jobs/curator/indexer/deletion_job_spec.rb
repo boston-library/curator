@@ -16,9 +16,11 @@ RSpec.describe Curator::Indexer::DeletionJob, type: :job do
 
     describe '#perform_later' do
       around(:each) do |spec|
-        ActiveJob::Base.queue_adapter = :test
+        ActiveJob::Base.queue_adapter.perform_enqueued_at_jobs = true
         ActiveJob::Base.queue_adapter.perform_enqueued_jobs = true
         spec.run
+        ActiveJob::Base.queue_adapter.perform_enqueued_at_jobs = false
+        ActiveJob::Base.queue_adapter.perform_enqueued_jobs = false
       end
 
       it 'sends a delete request to the indexing service' do

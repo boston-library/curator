@@ -46,7 +46,7 @@ module Curator
     # NOTE: only use for after_destroy_commit
 
     def self.after_commit(mintable)
-      Curator::ArkDestroyJob.perform_later(mintable.ark_id)
+      Curator::ArkDestroyJob.set(wait: 2.seconds).perform_later(mintable.ark_id)
     end
 
     class << self

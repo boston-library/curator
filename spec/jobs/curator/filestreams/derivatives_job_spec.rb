@@ -11,10 +11,6 @@ RSpec.describe Curator::Filestreams::DerivativesJob, type: :job do
     let(:job_args) { [file_stream.class.name, file_stream.id] }
     let(:expected_queue) { 'filestream_derivatives' }
 
-    before(:each) do
-      ActiveJob::Base.queue_adapter = :test
-    end
-
     it_behaves_like 'queueable'
   end
 end

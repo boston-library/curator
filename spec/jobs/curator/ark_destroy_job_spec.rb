@@ -16,11 +16,13 @@ RSpec.describe Curator::ArkDestroyJob, type: :job do
       let(:ark_manager_destroy_url) { "#{Curator.config.ark_manager_api_url}/api/v2/arks/#{job_args}" }
 
       around(:each) do |spec|
-        ActiveJob::Base.queue_adapter = :test
+        ActiveJob::Base.queue_adapter.perform_enqueued_at_jobs = true
         ActiveJob::Base.queue_adapter.perform_enqueued_jobs = true
         VCR.use_cassette('jobs/ark_delete_job') do
           spec.run
         end
+        ActiveJob::Base.queue_adapter.perform_enqueued_at_jobs = false
+        ActiveJob::Base.queue_adapter.perform_enqueued_jobs = false
       end
 
       it 'sends a delete request to the indexing service' do

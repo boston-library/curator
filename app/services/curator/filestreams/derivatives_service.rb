@@ -13,16 +13,22 @@ module Curator
     # Payload should be formatted as such (use deriavtive_source helper method to get the blob)
     # {
     #   file_stream: {
-    #   "[image|audio|document|video]_stream": {
     #     ark_id: ark_id,
-    #     if file set type is (image|document|audio|video|text)
+    #     if file set type is (Image|Document|Audio|Video|Text)
     #       original_ingest_filepath: derivative_source.metatdata['ingest_filepath']
-    #     elsif file set type is ereader
+    #     elsif file set type is Ereader
     #       ebook_access_epub_data: {
     #         id: derivative_source.key
-    #         storage:
-    #       }
-    #    }
+    #         storage: "#{derivative_source.service_name}_store", # Should be 'derivatives_store'
+    #         metadata: {
+    #              filename: derivative_source.filename.to_s,
+    #              md5: derivative_source.checksum,
+    #              size: derivative_source.byte_size,
+    #              mime_type: derivative_source.content_type
+    #         }
+    #     elsif file set type is Metadata
+    #        oai_thumbnail_url: # List thumbnail url(s) here
+    #   }
     # }
 
     def initialize(avi_file_class, avi_payload: {})
@@ -38,16 +44,23 @@ module Curator
 
         return avi_json
       rescue HTTP::Error => e
-        Rails.logger.error 'HTTP Error Occurred Calling Derivatives API'
+        base_message = 'HTTP Error Occurred Calling Derivatives API'
+        json_reason = { 'reason' => e.message }.as_json
+        Rails.logger.error base_message
         Rails.logger.error "Reason: #{e.message}"
+        raise Curator::Exceptions::RemoteServiceError(base_message, json_reason, 500)
       rescue Oj::Error => e
-        Rails.logger.error 'Invalid JSON Response From AVI Processor'
+        base_message = 'Invalid JSON Response From AVI Processor'
+        json_reason = { 'reason' => e.message }.as_json
+        Rails.logger.error base_message
         Rails.logger.error "Reason: #{e.message}"
+        raise Curator::Exceptions::RemoteServiceError(base_message, json_reason, 500)
       rescue Curator::Exceptions::RemoteServiceError => e
         Rails.logger.error 'Error Occurred Generating Derivatives'
         Rails.logger.error "Reason: #{e.message}"
         Rails.logger.error "Response code: #{e.code}"
         Rails.logger.error "Response: #{e.json_response}"
+        raise
       end
       nil
     end

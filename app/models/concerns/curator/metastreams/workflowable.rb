@@ -20,6 +20,7 @@ module Curator
 
         def begin_workflow
           workflow.publish! if workflow.may_publish?
+          workflow.mark_complete! if workflow.may_mark_complete?
           workflow.process_derivatives! if workflow.may_process_derivatives?
         end
 

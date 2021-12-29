@@ -4,7 +4,9 @@ module Curator
   class Filestreams::DerivativesJob < ApplicationJob
     queue_as :filestream_derivatives
 
-    retry_on Curator::Exceptions::AviProcessorApiUnavailable, ActiveRecord::StaleObjectError, attempts: 3
+    retry_on Curator::Exceptions::AviProcessorApiUnavailable, ActiveRecord::StaleObjectError, wait: 5.seconds, attempts: 5
+    retry_on Curator::Exceptions::RemoteServiceError, wait: 5.seconds, attempts: 2
+    retry_on Curator::Exceptions::CuratorError, attempts: 1, wait: 5.seconds
 
     before_perform { remote_service_healthcheck! }
 
@@ -13,11 +15,11 @@ module Curator
       avi_file_class = file_set.avi_file_class
       avi_payload = file_set.avi_payload
 
-      raise "No source file for derivatives file not attached! for #{file_set.class.name}-#{file_set.ark_id}" if avi_payload.blank?
+      raise Curator::Exceptions::CuratorError, "No source file for derivatives file not attached! for #{file_set.class.name}-#{file_set.ark_id}" if avi_payload.blank?
 
       service = Curator::Filestreams::DerivativesService.call(avi_file_class, avi_payload: avi_payload)
 
-      logger.info "Derivatives starting processing for #{service}"
+      logger.info "AVI Processor returned response: #{service}"
     end
 
     protected
