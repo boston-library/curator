@@ -83,5 +83,12 @@ RSpec.shared_examples 'file_set', type: :model do
         subject.save
       end
     end
+
+    describe 'reindex_collections' do
+      it 'runs the reindex_collections callback' do
+        expect(subject).to receive(:reindex_collections).at_least(:once)
+        subject.save
+      end
+    end
   end
 end

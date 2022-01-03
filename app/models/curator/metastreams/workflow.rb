@@ -56,7 +56,7 @@ module Curator
         transitions from: :initialized, to: :derivatives
       end
 
-      event :mark_complete, guards: [:is_processable?, :can_complete?] do
+      event :mark_complete, guards: [:is_processable?, :can_complete?], after_commit: :touch_parent do
         transitions from: :derivatives, to: :complete
       end
 
@@ -112,5 +112,9 @@ module Curator
     end
 
     alias regenerate_derivatives generate_derivatives
+
+    def touch_parent
+      workflowable.file_set_of.touch if workflowable_type == 'Curator::Filestreams::FileSet'
+    end
   end
 end
