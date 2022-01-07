@@ -59,14 +59,14 @@ module Curator
       return super.except(:oai_namespace_id).merge({
         parent_pid: file_set_of&.ark_id,
           secondary_parent_pids: [],
-          local_original_identifier_type: 'filename',
+          local_original_identifier_type: Curator::DescriptiveFieldSets::LOCAL_ORIGINAL_IDENTIFIER_TYPES['local-filename'],
           local_original_identifier: file_name_base
       }) if !file_set_of&.oai_object?
 
       params = super.merge({
         parent_pid: file_set_of&.ark_id,
           secondary_parent_pids: [],
-          local_original_identifier_type: 'filename',
+          local_original_identifier_type: Curator::DescriptiveFieldSets::LOCAL_ORIGINAL_IDENTIFIER_TYPES['local-filename'],
           local_original_identifier: file_name_base
       })
       params[:namespace_id] = params.delete(:oai_namespace_id)

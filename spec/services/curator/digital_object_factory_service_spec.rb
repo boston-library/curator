@@ -69,7 +69,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
       describe 'json fields' do
         let(:identifiers) { descriptive.identifier }
         it 'sets identifiers' do
-          expect(identifiers.count).to eq 2
+          expect(identifiers.count).to eq 3
           expect(identifiers).to all(be_an_instance_of(Curator::DescriptiveFieldSets::Identifier))
           desc_json['identifier'].each do |identifier_json|
             expect(collection_as_json(identifiers, { only: %i(label type) })).to include(identifier_json.except('invalid'))

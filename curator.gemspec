@@ -35,7 +35,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'acts_as_list', '~> 1.0'
   spec.add_dependency 'addressable', '>= 2.8.0'
   spec.add_dependency 'after_commit_everywhere', '~> 1.1' # Required for using aasm with active record
-  spec.add_dependency 'attr_json', '~> 1.3'
+  spec.add_dependency 'attr_json', '~> 1.4.0'
   spec.add_dependency 'concurrent-ruby-ext', '~> 1.1'
   spec.add_dependency 'connection_pool', '~> 2.2'
   spec.add_dependency 'down', '~> 5.2'
@@ -46,8 +46,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'ox', '~> 2.14'
   spec.add_dependency 'paper_trail', '~> 11.1'
   spec.add_dependency 'paper_trail-association_tracking', '~> 2.1'
-  spec.add_dependency 'rails', '~> 6.1.4', '< 6.2'
-  spec.add_dependency 'rsolr', '~> 2.3'
+  spec.add_dependency 'rails', '~> 6.1.4', '< 7'
+  spec.add_dependency 'rsolr', '~> 2.4'
   spec.add_dependency 'traject', '~> 3.6'
 
   spec.add_development_dependency 'image_processing', '~> 1.12'
