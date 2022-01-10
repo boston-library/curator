@@ -15,8 +15,11 @@ RSpec.describe Curator::Indexer::IdentifierIndexer do
 
     it 'sets the identifier fields' do
       descriptive.identifier.each do |identifier|
-        identifier_field = identifier.type.underscore + (identifier.invalid ? '_invalid' : '')
-        expect(indexed["identifier_#{identifier_field}_tsim"]).to include(identifier.label)
+        id_type = identifier.type.underscore
+        next if id_type == 'local_filename'
+
+        identifier_field = "#{id_type}#{identifier.invalid? ? '_invalid' : ''}"
+        expect(indexed["identifier_#{identifier_field}_tsim"]).to include(identifier.label), "failed on #{identifier_field}"
       end
       expect(indexed['identifier_uri_ss'].first).to include(descriptable_object.ark_id.split(':').last)
     end
