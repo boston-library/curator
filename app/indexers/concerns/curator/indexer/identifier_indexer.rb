@@ -28,7 +28,7 @@ module Curator
               id_type = identifier.type.underscore
               next if id_type == 'local_filename'
 
-              if identifier.invalid
+              if identifier.invalid?
                 context.output_hash["identifier_#{id_type}_invalid_tsim"] << label
               else
                 id_field = case id_type
