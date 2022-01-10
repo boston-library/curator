@@ -15,7 +15,7 @@ RSpec.describe Curator::Metastreams::AdministrativeSerializer, type: :serializer
       let(:expected_as_json_options) do
         {
           root: true,
-          only: [:description_standard, :flagged, :harvestable, :destination_site, :oai_header_id]
+          only: [:description_standard, :flagged, :harvestable, :destination_site, :oai_header_id, :hosting_status]
         }
       end
     end

@@ -3,7 +3,7 @@
 module Curator
   class Metastreams::AdministrativeSerializer < Curator::Serializers::AbstractSerializer
     schema_as_json root: :administrative do
-      attributes :description_standard, :flagged, :harvestable, :destination_site, :oai_header_id
+      attributes :description_standard, :flagged, :harvestable, :destination_site, :oai_header_id, :hosting_status
     end
   end
 end

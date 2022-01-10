@@ -39,7 +39,7 @@ RSpec.describe Curator::DigitalObjectSerializer, type: :serializers do
           },
           administrative: {
             root: true,
-            only: [:description_standard, :harvestable, :flagged, :destination_site, :oai_header_id]
+            only: [:description_standard, :harvestable, :flagged, :destination_site, :oai_header_id, :hosting_status]
           },
           descriptive: descriptive_as_json_options,
           workflow: {

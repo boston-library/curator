@@ -19,6 +19,10 @@
           {
             "label": "39999065696625",
             "type": "local-barcode"
+          },
+          {
+            "label": "06_01_012256",
+            "type": "local-filename"
           }
         ],
         "title": {

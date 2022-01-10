@@ -33,7 +33,7 @@ RSpec.describe Curator::Filestreams::DocumentSerializer, type: :serializers do
           },
           administrative: {
             root: true,
-            only: [:description_standard, :harvestable, :flagged, :destination_site]
+            only: [:description_standard, :harvestable, :flagged, :destination_site, :hosting_status]
           },
           workflow: {
             root: true,

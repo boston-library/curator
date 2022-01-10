@@ -27,6 +27,10 @@
           {
             "label": "G1234.B6 B7 1898.2 v.5",
             "type": "local-call"
+          },
+          {
+            "label": "G1234_B6_B7_1898_2v5_0008",
+            "type": "local-filename"
           }
         ],
         "title": {

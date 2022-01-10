@@ -22,6 +22,10 @@
             "type": "local-accession"
           },
           {
+            "label": "08_06_037108",
+            "type": "local-filename"
+          },
+          {
             "label": "Cab 2020",
             "type": "local-other",
             "invalid": true
