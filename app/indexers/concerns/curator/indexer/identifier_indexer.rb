@@ -6,8 +6,8 @@ module Curator
       extend ActiveSupport::Concern
 
       ID_FIELDS = %w(local_other_tsim local_other_invalid_tsim local_call_tsim local_call_invalid_tsim
-                     local_barcode_tsim local_barcode_invalid_tsim local_accession_tsim isbn_tsim
-                     lccn_tsim ia_id_ssi uri_ss iiif_manifest_ss uri_preview_ss issn_ssim ismn_ssim
+                     local_barcode_tsim local_barcode_invalid_tsim local_accession_tsim isbn_ssim
+                     lccn_ssim ia_id_ssi uri_ss iiif_manifest_ss uri_preview_ss issn_ssim ismn_ssim
                      isrc_ssim issue_number_ssim matrix_number_ssim music_plate_ssim music_publisher_ssim
                      sici_ssim videorecording_ssim).freeze
       ID_URI_FIELD = 'identifier_uri_ss'
@@ -28,7 +28,7 @@ module Curator
               id_type = identifier.type.underscore
               next if id_type == 'local_filename'
 
-              if identifier.invalid?
+              if identifier.invalid
                 context.output_hash["identifier_#{id_type}_invalid_tsim"] << label
               else
                 id_field = case id_type
