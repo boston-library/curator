@@ -14,6 +14,9 @@ module Curator
           to_field %w(related_item_subsubseries_ti related_item_subsubseries_ssi), obj_extract('descriptive', 'subsubseries')
           to_field 'related_item_constituent_tsim', obj_extract('descriptive', 'related', 'constituent')
           to_field 'related_item_isreferencedby_ssm', obj_extract('descriptive', 'related', 'referenced_by', 'to_json')
+          to_field 'related_item_other_format_tsim', obj_extract('descriptive', 'related', 'other_format')
+          to_field 'related_item_references_ssm', obj_extract('descriptive', 'related', 'references_url')
+          to_field 'related_item_review_ssm', obj_extract('descriptive', 'related', 'review_url')
         end
       end
     end

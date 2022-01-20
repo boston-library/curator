@@ -40,7 +40,8 @@ module Curator
                              'identifier_uri_preview_ss'
                            when 'iiif_manifest'
                              'identifier_iiif_manifest_ss'
-                           when 'issn', 'ismn', 'isrc', 'issue_number', 'matrix_number', 'music_plate', 'music_publisher', 'sici', 'videorecording'
+                           when 'lccn', 'isbn', 'issn', 'ismn', 'isrc', 'issue_number', 'matrix_number', 'music_plate',
+                                'music_publisher', 'sici', 'videorecording'
                              "identifier_#{id_type}_ssim"
                            else
                              "identifier_#{id_type}_tsim"
