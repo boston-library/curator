@@ -11,6 +11,7 @@ RSpec.describe Curator::Parsers::EdtfDateParser do
       expect(described_class.date_for_display(date: '1925', type: 'copyrightDate')).to eq '(c) 1925'
       expect(described_class.date_for_display(date: '-1925')).to eq '1925 B.C.'
       expect(described_class.date_for_display(date: '-605~/-562~')).to eq '[ca. 605 B.C.–562 B.C.]'
+      expect(described_class.date_for_display(date: '1925', type: 'dateCreated', inferred: true)).to eq '[1925]'
     end
   end
 
@@ -55,6 +56,9 @@ RSpec.describe Curator::Parsers::EdtfDateParser do
       )
       expect(described_class.edtf_date_parser(date: '-2350')).to eq(
         { static: '-2350', start: nil, end: nil, qualifier: nil, type: nil }
+      )
+      expect(described_class.edtf_date_parser(date: '1925', type: nil, inferred: true)).to eq(
+        { static: '1925', start: nil, end: nil, qualifier: 'inferred', type: nil }
       )
     end
   end

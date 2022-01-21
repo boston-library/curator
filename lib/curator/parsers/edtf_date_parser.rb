@@ -7,10 +7,11 @@ module Curator
       ##
       # @param date [String] EDTF date
       # @param type [String] the type of MODS date (dateCreated, dateIssued, etc.)
+      # @param inferred [Boolean]
       # @return [String] date formatted for display
-      def self.date_for_display(date: '', type: nil)
+      def self.date_for_display(date: '', type: nil, inferred: false)
         prefix, suffix, date_start_suffix = '', '', ''
-        edtf_date_hash = edtf_date_parser(date: date, type: type)
+        edtf_date_hash = edtf_date_parser(date: date, type: type, inferred: inferred)
         if edtf_date_hash[:qualifier]
           prefix = edtf_date_hash[:qualifier] == 'approximate' ? '[ca. ' : '['
           suffix = edtf_date_hash[:qualifier] == 'questionable' ? '?]' : ']'
@@ -49,18 +50,23 @@ module Curator
       end
 
       ##
-      # TODO: deal with inferred dates
       # takes an EDTF-formatted date string and returns a hash of MODS-y date values
       # we support "/1945" (unknown start) and "1945/.." (open end)
       # @param date [String] EDTF date
       # @param type [String] the type of MODS date (dateCreated, dateIssued, etc.)
+      # @param inferred [Boolean]
       # @return [Hash] { static: , start: , end: , qualifier: , type: }
-      def self.edtf_date_parser(date: '', type: nil)
+      def self.edtf_date_parser(date: '', type: nil, inferred: false)
         date_hash = { static: nil, start: nil, end: nil, qualifier: nil, type: type }
         range = date.match?(/\//) ? true : false
         split_range = date.split('/')
-        date_hash[:qualifier] = 'questionable' if split_range[0].match?(/\?/)
-        date_hash[:qualifier] = 'approximate' if split_range[0].match?(/~/)
+        date_hash[:qualifier] = if split_range[0].match?(/\?/)
+                                  'questionable'
+                                elsif split_range[0].match?(/~/)
+                                  'approximate'
+                                elsif inferred
+                                  'inferred'
+                                end
         if range
           date_hash[:start] = remove_edtf_qualifier(split_range[0]).presence
           date_hash[:end] = remove_edtf_qualifier(split_range[1]).presence
