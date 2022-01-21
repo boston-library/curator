@@ -23,7 +23,7 @@ module Curator
 
               context.output_hash['date_type_ssm'] << v
               edtf_date = record.descriptive.date.send(k)
-              inferred = record.descriptive&.note&.map(&:label)&.any? { |v| v.include?('date is inferred') }
+              inferred = record.descriptive&.note&.map(&:label)&.any? { |nv| nv.include?('date is inferred') }
               context.output_hash['date_edtf_ssm'] << edtf_date
               context.output_hash['date_tsim'] << Curator::Parsers::EdtfDateParser.date_for_display(date: edtf_date,
                                                                                                     type: v,
