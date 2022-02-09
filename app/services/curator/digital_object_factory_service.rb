@@ -30,7 +30,7 @@ module Curator
 
           build_administrative(digital_object) do |admin|
             [:description_standard, :flagged, :destination_site, :hosting_status, :harvestable, :oai_header_id].each do |attr|
-              admin.send("#{attr}=", @admin_json_attrs.fetch(attr)) if  @admin_json_attrs.fetch(attr, nil).present?
+              admin.send("#{attr}=", @admin_json_attrs.fetch(attr)) if @admin_json_attrs.fetch(attr, nil).present?
             end
           end
 
