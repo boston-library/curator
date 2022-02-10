@@ -53,7 +53,7 @@ module Curator
 
       raise ActiveRecord::RecordInvalid.new(result) if result.class <= ActiveRecord::Base
 
-      raise result if result.kind_of?(Exception)
+      raise result if result.class <= Exception
     end
 
     def json_response(rendered_object, status = :ok)
@@ -95,7 +95,9 @@ module Curator
     end
 
     def set_error(error_klass, e)
-      return e if e.kind_of?(error_klass)
+      error_klass = error_klass.safe_constantize if error_klass.is_a?(String)
+
+      return e if e.is_a?(error_klass)
 
       case error_klass.to_s
       when 'Curator::Execptions::ServerError'
