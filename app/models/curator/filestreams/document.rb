@@ -30,6 +30,22 @@ module Curator
 
       payload = super
       payload[:file_stream][:original_ingest_file_path] = derivative_source.metadata['ingest_filepath']
+      if derivative_source == 'document_primary' && document_access.attached?
+        payload[:file_stream][:document_primary_data] = {
+          derivatives: {
+            document_access: {
+              id: document_access.key,
+              storage: "#{document_access.service_name}_store",
+              metadata: {
+                filename: derivative_source.filename.to_s,
+                md5: derivative_source.checksum,
+                size: derivative_source.byte_size,
+                mime_type: derivative_source.content_type
+              }
+            }
+          }
+        }
+      end
       payload
     end
 

@@ -31,6 +31,22 @@ module Curator
 
       payload = super
       payload[:file_stream][:original_ingest_file_path] = derivative_source.metadata['ingest_filepath']
+      if derivative_source.name == 'video_primary' && video_access_mp4.attached?
+        payload[:file_stream][:video_primary_data] = {
+          derivatives: {
+            video_access_mp4: {
+              id: video_access_mp4.key,
+              storage: "#{video_access_mp4.service_name}_store",
+              metadata: {
+                filename: derivative_source.filename.to_s,
+                md5: derivative_source.checksum,
+                size: derivative_source.byte_size,
+                mime_type: derivative_source.content_type
+              }
+            }
+          }
+        }
+      end
       payload
     end
 
