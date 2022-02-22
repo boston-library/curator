@@ -30,6 +30,22 @@ module Curator
 
       payload = super
       payload[:file_stream][:original_ingest_file_path] = derivative_source.metadata['ingest_filepath']
+      if derivative_source.name == 'audio_primary' && audio_access.attached?
+        payload[:file_stream][:audio_primary_data] = {
+          derivatives: {
+            audio_access: {
+              id: audio_access.key,
+              storage: "#{audio_access.service_name}_store",
+              metadata: {
+                filename: audio_access.filename.to_s,
+                md5: audio_access.checksum,
+                size: audio_access.byte_size,
+                mime_type: audio_access.content_type
+              }
+            }
+          }
+        }
+      end
       payload
     end
 
