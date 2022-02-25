@@ -1,0 +1,53 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://127.0.0.1:3003/api/image_stream
+    body:
+      encoding: UTF-8
+      string: '{"file_stream":{"ark_id":"bpl-dev:x920fw84d","original_ingest_file_path":"BPLDC/curator_fixtures/files/image_primary.tiff"}}'
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3003
+      User-Agent:
+      - http.rb/5.0.4
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"5637bea32ac1c76a9027f52f0f662a95"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 94439053-9aeb-4c68-8cc9-ce6f22323130
+      X-Runtime:
+      - '0.072530'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"image_stream":{"id":"03a15362-d798-49a2-b8d3-cf99e65a95be","ark_id":"bpl-dev:x920fw84d","created_at":"2022-02-25T21:37:50.141Z","updated_at":"2022-02-25T21:37:50.141Z","original_ingest_file_path":"BPLDC/curator_fixtures/files/image_primary.tiff"}}'
+  recorded_at: Fri, 25 Feb 2022 21:37:50 GMT
+recorded_with: VCR 6.0.0

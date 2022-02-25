@@ -1,0 +1,55 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://127.0.0.1:3002/api/v2/arks
+    body:
+      encoding: UTF-8
+      string: '{"ark":{"namespace_ark":"50959","namespace_id":"bpl-dev","url_base":"https://search-dc3dev.bpl.org","model_type":"Curator::Filestreams::Video","parent_pid":"commonwealth:3172223ecb57c96124bbb2a947d57834e844984624b7c0915f60c2253f","secondary_parent_pids":[],"local_original_identifier_type":"filename","local_original_identifier":"06_01_016692"}}'
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3002
+      User-Agent:
+      - http.rb/5.0.4
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      X-Frame-Options:
+      - DENY
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"3262f22d3175189affb92be14e4052cf"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 88e01229-9505-48ef-8e9c-9c2ea2b70112
+      X-Runtime:
+      - '0.052639'
+      Vary:
+      - Origin
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"ark":{"id":235090,"pid":"bpl-dev:v405s9361","created_at":"2022-02-25T21:37:50.739Z","updated_at":"2022-02-25T21:37:50.739Z","parent_pid":"commonwealth:3172223ecb57c96124bbb2a947d57834e844984624b7c0915f60c2253f","model_type":"Curator::Filestreams::Video","local_original_identifier":"06_01_016692","local_original_identifier_type":"filename","namespace_ark":"50959","namespace_id":"bpl-dev","secondary_parent_pids":[],"url_base":"https://search-dc3dev.bpl.org"}}'
+  recorded_at: Fri, 25 Feb 2022 21:37:50 GMT
+recorded_with: VCR 6.0.0

@@ -1,0 +1,10 @@
+{
+  "files": [{
+    "file_name": "video_primary.mov",
+    "file_type": "video_primary",
+    "content_type": "video/quicktime",
+    "metadata": {
+      "ingest_filepath": "BPLDC/curator_fixtures/files/video_primary.mov"
+    }
+  }]
+}

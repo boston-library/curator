@@ -38,7 +38,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'attr_json', '~> 1.4.0'
   spec.add_dependency 'concurrent-ruby-ext', '~> 1.1'
   spec.add_dependency 'connection_pool', '~> 2.2'
-  spec.add_dependency 'down', '~> 5.2'
+  spec.add_dependency 'down', '~> 5.3'
   spec.add_dependency 'htmlentities', '~> 4.3' # TODO: Look into replacing this since the last released in 2014. I recommend turning this into its own parser class.
   spec.add_dependency 'http', '~> 5.0'
   spec.add_dependency 'mime-types', '~> 3.3'
@@ -52,7 +52,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'image_processing', '~> 1.12'
   spec.add_development_dependency 'mini_magick', '~> 4.11'
-  spec.add_development_dependency 'pg', '~> 1.2'
+  spec.add_development_dependency 'pg', '~> 1.3'
   spec.add_development_dependency 'redis', '~> 4.5'
   spec.add_development_dependency 'solr_wrapper', '~> 3.1'
 end

@@ -1,0 +1,10 @@
+{
+  "files": [{
+    "file_name": "video_access_mp4.mp4",
+    "file_type": "video_access_mp4",
+    "content_type": "video/mp4",
+    "metadata": {
+      "ingest_filepath": "BPLDC/curator_fixtures/files/video_access_mp4.mp4"
+    }
+  }]
+}
