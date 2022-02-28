@@ -1,0 +1,53 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://127.0.0.1:3003/api/video_stream
+    body:
+      encoding: UTF-8
+      string: '{"file_stream":{"ark_id":"bpl-dev:hd76s004z","original_ingest_file_path":"BPLDC/curator_fixtures/files/video_primary.mov","video_primary_data":{"derivatives":{"video_access_mp4":{"id":"videos/bpl-dev:hd76s004z/video_access_mp4.mp4","storage":"derivatives_store","metadata":{"filename":"video_access_mp4.mp4","md5":"XGYNQp0y0EyrEfDTYKv9eA==","size":7550273,"mime_type":"video/mp4"}}}}}}'
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3003
+      User-Agent:
+      - http.rb/5.0.4
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"492ee87dd9e276d73cc7e414fa3c79fd"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - fb57a4b1-5932-40dd-9da1-15ff756e35d2
+      X-Runtime:
+      - '0.085641'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"video_stream":{"id":"e85abfb8-584f-4534-bb24-7bf134680825","ark_id":"bpl-dev:hd76s004z","created_at":"2022-02-28T16:43:04.907Z","updated_at":"2022-02-28T16:43:04.907Z","original_ingest_file_path":"BPLDC/curator_fixtures/files/video_primary.mov"}}'
+  recorded_at: Mon, 28 Feb 2022 16:43:04 GMT
+recorded_with: VCR 6.0.0

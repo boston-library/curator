@@ -1,0 +1,20 @@
+{
+  "file_set": {
+    "file_set_of": {
+      "ark_id": "bpl-dev:abcdefghi"
+    },
+    "file_set_type": "video",
+    "file_name_base": "06_01_016692",
+    "metastreams": {
+      "administrative": {
+        "access_edit_group": [
+          "superuser",
+          "admin[bpl-dev:ijkl54321]"
+        ]
+      },
+      "workflow": {
+        "ingest_origin": "AllSupportedMODS-TestForDev.xls"
+      }
+    }
+  }
+}

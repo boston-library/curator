@@ -5,8 +5,8 @@ http_interactions:
     uri: http://127.0.0.1:3002/api/v2/arks
     body:
       encoding: UTF-8
-      string: '{"namespace_ark":"50959","namespace_id":"bpl-dev","url_base":"https://search-hydradev.bpl.org","parent_pid":"bpl-dev:bd97ddbdabb5506c65d6c5a666f6b85734e73b1a2d6357e59d137ada829ae3","secondary_parent_pids":[],"model_type":"Curator::DigitalObject","local_original_identifier":"Natus
-        saepe aut.","local_original_identifier_type":"id_local-other field"}'
+      string: '{"ark":{"namespace_ark":"50959","namespace_id":"bpl-dev","url_base":"https://search-dc3dev.bpl.org","model_type":"Curator::DigitalObject","parent_pid":"commonwealth:8e8bac06e1b25ac5a2fdf448e6740da7bdc4cd2358b5f7bf5cc1d4b1da14d868","secondary_parent_pids":[],"local_original_identifier":"Quaerat
+        quia asperiores.","local_original_identifier_type":"filename"}}'
     headers:
       Accept:
       - application/json
@@ -17,14 +17,14 @@ http_interactions:
       Host:
       - 127.0.0.1:3002
       User-Agent:
-      - http.rb/4.4.1
+      - http.rb/5.0.4
   response:
     status:
       code: 201
       message: Created
     headers:
       X-Frame-Options:
-      - SAMEORIGIN
+      - DENY
       X-Xss-Protection:
       - 1; mode=block
       X-Content-Type-Options:
@@ -38,20 +38,20 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Etag:
-      - W/"cdd4c66d908d4527b332a0737e648068"
+      - W/"11dbcd258c0bd870c41ba3fc84724d44"
       Cache-Control:
       - max-age=0, private, must-revalidate
       X-Request-Id:
-      - da036d18-e683-44b1-9d8a-dc75fda768bf
+      - 7792516b-4541-4b5b-9c10-9dcbfc46d045
       X-Runtime:
-      - '0.048918'
+      - '0.047134'
       Vary:
       - Origin
       Transfer-Encoding:
       - chunked
     body:
       encoding: UTF-8
-      string: '{"ark":{"id":4,"pid":"bpl-dev:sj1391935","created_at":"2020-09-01T21:19:43.011Z","updated_at":"2020-09-01T21:19:43.011Z","parent_pid":"bpl-dev:bd97ddbdabb5506c65d6c5a666f6b85734e73b1a2d6357e59d137ada829ae3","model_type":"Curator::DigitalObject","local_original_identifier":"Natus
-        saepe aut.","local_original_identifier_type":"id_local-other field","namespace_ark":"50959","namespace_id":"bpl-dev","secondary_parent_pids":[],"url_base":"https://search-hydradev.bpl.org"}}'
-  recorded_at: Tue, 01 Sep 2020 21:19:43 GMT
+      string: '{"ark":{"id":235102,"pid":"bpl-dev:cc08hf60z","created_at":"2022-02-28T15:49:56.037Z","updated_at":"2022-02-28T15:49:56.037Z","parent_pid":"commonwealth:8e8bac06e1b25ac5a2fdf448e6740da7bdc4cd2358b5f7bf5cc1d4b1da14d868","model_type":"Curator::DigitalObject","local_original_identifier":"Quaerat
+        quia asperiores.","local_original_identifier_type":"filename","namespace_ark":"50959","namespace_id":"bpl-dev","secondary_parent_pids":[],"url_base":"https://search-dc3dev.bpl.org"}}'
+  recorded_at: Mon, 28 Feb 2022 15:49:56 GMT
 recorded_with: VCR 6.0.0

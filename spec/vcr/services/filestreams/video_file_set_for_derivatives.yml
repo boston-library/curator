@@ -1,0 +1,55 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://127.0.0.1:3002/api/v2/arks
+    body:
+      encoding: UTF-8
+      string: '{"ark":{"namespace_ark":"50959","namespace_id":"bpl-dev","url_base":"https://search-dc3dev.bpl.org","model_type":"Curator::Filestreams::Video","parent_pid":"commonwealth:2847e4dd593f0d1d15d193d52928b332f4609e43ac7ec4","secondary_parent_pids":[],"local_original_identifier_type":"filename","local_original_identifier":"06_01_016692"}}'
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3002
+      User-Agent:
+      - http.rb/5.0.4
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      X-Frame-Options:
+      - DENY
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"2ebd4c03bec22140d3e2495abfb4820c"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 4a5e2931-ac64-4c3a-a719-11df84a45728
+      X-Runtime:
+      - '0.060690'
+      Vary:
+      - Origin
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"ark":{"id":235092,"pid":"bpl-dev:hd76s004z","created_at":"2022-02-28T15:37:23.273Z","updated_at":"2022-02-28T15:37:23.273Z","parent_pid":"commonwealth:2847e4dd593f0d1d15d193d52928b332f4609e43ac7ec4","model_type":"Curator::Filestreams::Video","local_original_identifier":"06_01_016692","local_original_identifier_type":"filename","namespace_ark":"50959","namespace_id":"bpl-dev","secondary_parent_pids":[],"url_base":"https://search-dc3dev.bpl.org"}}'
+  recorded_at: Mon, 28 Feb 2022 15:37:23 GMT
+recorded_with: VCR 6.0.0

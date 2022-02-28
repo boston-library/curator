@@ -5,8 +5,8 @@ http_interactions:
     uri: http://127.0.0.1:3002/api/v2/arks
     body:
       encoding: UTF-8
-      string: '{"namespace_ark":"50959","namespace_id":"bpl-dev","url_base":"https://search-hydradev.bpl.org","parent_pid":"bpl-dev:b022b76865093005","secondary_parent_pids":[],"local_original_identifier_type":"filename","local_original_identifier":"Eltdown
-        Shards","model_type":"Curator::Filestreams::Document"}'
+      string: '{"ark":{"namespace_ark":"50959","namespace_id":"bpl-dev","url_base":"https://search-dc3dev.bpl.org","model_type":"Curator::Filestreams::Document","parent_pid":"commonwealth:211d4ff4c91625f2a1578b","secondary_parent_pids":[],"local_original_identifier_type":"filename","local_original_identifier":"Eltdown
+        Shards"}}'
     headers:
       Accept:
       - application/json
@@ -17,14 +17,14 @@ http_interactions:
       Host:
       - 127.0.0.1:3002
       User-Agent:
-      - http.rb/4.4.1
+      - http.rb/5.0.4
   response:
     status:
       code: 201
       message: Created
     headers:
       X-Frame-Options:
-      - SAMEORIGIN
+      - DENY
       X-Xss-Protection:
       - 1; mode=block
       X-Content-Type-Options:
@@ -38,20 +38,20 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Etag:
-      - W/"2620a4869b8cba1b1e6cade51f7e53aa"
+      - W/"bae192e9607e66efd6f197d6da212264"
       Cache-Control:
       - max-age=0, private, must-revalidate
       X-Request-Id:
-      - 51314850-778b-4517-b9e9-d74a8d625593
+      - '018f6781-8f97-4b37-b68d-42305af7588f'
       X-Runtime:
-      - '0.038467'
+      - '0.083375'
       Vary:
       - Origin
       Transfer-Encoding:
       - chunked
     body:
       encoding: UTF-8
-      string: '{"ark":{"id":11,"pid":"bpl-dev:rv042t060","created_at":"2020-09-01T21:20:24.743Z","updated_at":"2020-09-01T21:20:24.743Z","parent_pid":"bpl-dev:b022b76865093005","model_type":"Curator::Filestreams::Document","local_original_identifier":"Eltdown
-        Shards","local_original_identifier_type":"filename","namespace_ark":"50959","namespace_id":"bpl-dev","secondary_parent_pids":[],"url_base":"https://search-hydradev.bpl.org"}}'
-  recorded_at: Tue, 01 Sep 2020 21:20:24 GMT
+      string: '{"ark":{"id":235099,"pid":"bpl-dev:2514nk481","created_at":"2022-02-28T15:45:32.641Z","updated_at":"2022-02-28T15:45:32.641Z","parent_pid":"commonwealth:211d4ff4c91625f2a1578b","model_type":"Curator::Filestreams::Document","local_original_identifier":"Eltdown
+        Shards","local_original_identifier_type":"filename","namespace_ark":"50959","namespace_id":"bpl-dev","secondary_parent_pids":[],"url_base":"https://search-dc3dev.bpl.org"}}'
+  recorded_at: Mon, 28 Feb 2022 15:45:32 GMT
 recorded_with: VCR 6.0.0
