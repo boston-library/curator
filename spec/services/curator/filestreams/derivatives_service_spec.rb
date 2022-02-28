@@ -53,6 +53,7 @@ RSpec.describe Curator::Filestreams::DerivativesService, type: :service do
         fs = nil
         json_data = video_file_set_json.dup
         json_data['files'] = video_files_json
+        awesome_print video_files_json
         json_data['file_set_of']['ark_id'] = parent_obj.ark_id
         VCR.use_cassette('services/filestreams/video_file_set_for_derivatives') do
           _, fs = handle_factory_result(Curator::Filestreams::FileSetFactoryService, json_data)
@@ -76,8 +77,8 @@ RSpec.describe Curator::Filestreams::DerivativesService, type: :service do
       let!(:video_file_set_json) { load_json_fixture('video_file_set', 'file_set') }
       let!(:video_files_json) do
         files = []
-        files << load_json_fixture('video_file', 'files')
-        files << load_json_fixture('video_file_2', 'files')
+        files += load_json_fixture('video_file', 'files')
+        files += load_json_fixture('video_file_2', 'files')
         files
       end
     end

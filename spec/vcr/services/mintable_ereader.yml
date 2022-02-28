@@ -5,8 +5,8 @@ http_interactions:
     uri: http://127.0.0.1:3002/api/v2/arks
     body:
       encoding: UTF-8
-      string: '{"namespace_ark":"50959","namespace_id":"bpl-dev","url_base":"https://search-hydradev.bpl.org","parent_pid":"bpl-dev:36e5ceffadf9572f65fd732b0fc4dcc3fb96021a68a009","secondary_parent_pids":[],"local_original_identifier_type":"filename","local_original_identifier":"New
-        Holland Publishers","model_type":"Curator::Filestreams::Ereader"}'
+      string: '{"ark":{"namespace_ark":"50959","namespace_id":"bpl-dev","url_base":"https://search-dc3dev.bpl.org","model_type":"Curator::Filestreams::Ereader","parent_pid":"commonwealth:b06142d297138754442efe724a0cbe49b203533cb752","secondary_parent_pids":[],"local_original_identifier_type":"filename","local_original_identifier":"Left
+        Book Club"}}'
     headers:
       Accept:
       - application/json
@@ -17,14 +17,14 @@ http_interactions:
       Host:
       - 127.0.0.1:3002
       User-Agent:
-      - http.rb/4.4.1
+      - http.rb/5.0.4
   response:
     status:
       code: 201
       message: Created
     headers:
       X-Frame-Options:
-      - SAMEORIGIN
+      - DENY
       X-Xss-Protection:
       - 1; mode=block
       X-Content-Type-Options:
@@ -38,20 +38,20 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Etag:
-      - W/"af82a0841618787678220e9c629492e9"
+      - W/"31a702cac94eeb09f9a1dc8a18632b2c"
       Cache-Control:
       - max-age=0, private, must-revalidate
       X-Request-Id:
-      - 823faad8-e2c6-4c15-b5bc-d3a2a39e2f7b
+      - 2454ea15-0b03-4fcb-8a6f-673e6e3e65d0
       X-Runtime:
-      - '0.047044'
+      - '0.049313'
       Vary:
       - Origin
       Transfer-Encoding:
       - chunked
     body:
       encoding: UTF-8
-      string: '{"ark":{"id":12,"pid":"bpl-dev:rv042t078","created_at":"2020-09-01T21:20:34.809Z","updated_at":"2020-09-01T21:20:34.809Z","parent_pid":"bpl-dev:36e5ceffadf9572f65fd732b0fc4dcc3fb96021a68a009","model_type":"Curator::Filestreams::Ereader","local_original_identifier":"New
-        Holland Publishers","local_original_identifier_type":"filename","namespace_ark":"50959","namespace_id":"bpl-dev","secondary_parent_pids":[],"url_base":"https://search-hydradev.bpl.org"}}'
-  recorded_at: Tue, 01 Sep 2020 21:20:34 GMT
+      string: '{"ark":{"id":235098,"pid":"bpl-dev:fx719m44h","created_at":"2022-02-28T15:43:17.807Z","updated_at":"2022-02-28T15:43:17.807Z","parent_pid":"commonwealth:b06142d297138754442efe724a0cbe49b203533cb752","model_type":"Curator::Filestreams::Ereader","local_original_identifier":"Left
+        Book Club","local_original_identifier_type":"filename","namespace_ark":"50959","namespace_id":"bpl-dev","secondary_parent_pids":[],"url_base":"https://search-dc3dev.bpl.org"}}'
+  recorded_at: Mon, 28 Feb 2022 15:43:17 GMT
 recorded_with: VCR 6.0.0

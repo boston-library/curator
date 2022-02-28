@@ -34,29 +34,30 @@ module Curator
       if derivative_source.name == 'video_primary' && (video_access_mp4.attached? || video_access_webm.attached?)
         video_primary_data = { derivatives: {} }
         if video_access_mp4.attached?
-            video_primary_data[:derivatives][:video_access_mp4] = {
-                id: video_access_mp4.key,
-                storage: "#{video_access_mp4.service_name}_store",
-                metadata: {
-                  filename: video_access_mp4.filename.to_s,
-                  md5: video_access_mp4.checksum,
-                  size: video_access_mp4.byte_size,
-                  mime_type: video_access_mp4.content_type
-                }
-            }
+          video_primary_data[:derivatives][:video_access_mp4] = {
+            id: video_access_mp4.key,
+              storage: "#{video_access_mp4.service_name}_store",
+              metadata: {
+                filename: video_access_mp4.filename.to_s,
+                md5: video_access_mp4.checksum,
+                size: video_access_mp4.byte_size,
+                mime_type: video_access_mp4.content_type
+              }
+          }
         end
         if video_access_webm.attached?
-            video_primary_data[:derivatives][:video_access_webm] = {
-              id: video_access_webm.key,
-              storage: "#{video_access_webm.service_name}_store",
-              metadata: {
-                filename: video_access_webm.filename.to_s,
-                md5: video_access_webm.checksum,
-                size: video_access_webm.byte_size,
-                mime_type: video_access_webm.content_type
-              }
+          video_primary_data[:derivatives][:video_access_webm] = {
+            id: video_access_webm.key,
+            storage: "#{video_access_webm.service_name}_store",
+            metadata: {
+              filename: video_access_webm.filename.to_s,
+              md5: video_access_webm.checksum,
+              size: video_access_webm.byte_size,
+              mime_type: video_access_webm.content_type
             }
+          }
         end
+        payload[:file_stream][:video_primary_data] = video_primary_data if video_primary_data[:derivatives].present?
       end
       payload
     end

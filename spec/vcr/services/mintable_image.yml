@@ -5,8 +5,7 @@ http_interactions:
     uri: http://127.0.0.1:3002/api/v2/arks
     body:
       encoding: UTF-8
-      string: '{"namespace_ark":"50959","namespace_id":"bpl-dev","url_base":"https://search-hydradev.bpl.org","parent_pid":"bpl-dev:73baaa54a29f814e9326a196822c70e07cebadc80884e0df5f297b73da2cdf91","secondary_parent_pids":[],"local_original_identifier_type":"filename","local_original_identifier":"Ansel
-        Adams","model_type":"Curator::Filestreams::Image"}'
+      string: '{"ark":{"namespace_ark":"50959","namespace_id":"bpl-dev","url_base":"https://search-dc3dev.bpl.org","model_type":"Curator::Filestreams::Image","parent_pid":"commonwealth:96c4d50b40b9956cfd663d16466dea7b4a20","secondary_parent_pids":[],"local_original_identifier_type":"filename","local_original_identifier":"Donatello"}}'
     headers:
       Accept:
       - application/json
@@ -17,14 +16,14 @@ http_interactions:
       Host:
       - 127.0.0.1:3002
       User-Agent:
-      - http.rb/4.4.1
+      - http.rb/5.0.4
   response:
     status:
       code: 201
       message: Created
     headers:
       X-Frame-Options:
-      - SAMEORIGIN
+      - DENY
       X-Xss-Protection:
       - 1; mode=block
       X-Content-Type-Options:
@@ -38,20 +37,19 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Etag:
-      - W/"93988fca67dda96934e2aa9a2e4db8bb"
+      - W/"0a38abcd3cd76c099a5872e8af4ce723"
       Cache-Control:
       - max-age=0, private, must-revalidate
       X-Request-Id:
-      - 7e1596f5-b4f9-43ca-93c9-cf595d5adc3a
+      - ecbfa00b-3d59-427a-8137-d0ff8ef446c5
       X-Runtime:
-      - '0.146391'
+      - '0.050871'
       Vary:
       - Origin
       Transfer-Encoding:
       - chunked
     body:
       encoding: UTF-8
-      string: '{"ark":{"id":9,"pid":"bpl-dev:t148fh12j","created_at":"2020-09-01T21:20:13.694Z","updated_at":"2020-09-01T21:20:13.694Z","parent_pid":"bpl-dev:73baaa54a29f814e9326a196822c70e07cebadc80884e0df5f297b73da2cdf91","model_type":"Curator::Filestreams::Image","local_original_identifier":"Ansel
-        Adams","local_original_identifier_type":"filename","namespace_ark":"50959","namespace_id":"bpl-dev","secondary_parent_pids":[],"url_base":"https://search-hydradev.bpl.org"}}'
-  recorded_at: Tue, 01 Sep 2020 21:20:13 GMT
+      string: '{"ark":{"id":235100,"pid":"bpl-dev:02870v844","created_at":"2022-02-28T15:48:49.799Z","updated_at":"2022-02-28T15:48:49.799Z","parent_pid":"commonwealth:96c4d50b40b9956cfd663d16466dea7b4a20","model_type":"Curator::Filestreams::Image","local_original_identifier":"Donatello","local_original_identifier_type":"filename","namespace_ark":"50959","namespace_id":"bpl-dev","secondary_parent_pids":[],"url_base":"https://search-dc3dev.bpl.org"}}'
+  recorded_at: Mon, 28 Feb 2022 15:48:49 GMT
 recorded_with: VCR 6.0.0
