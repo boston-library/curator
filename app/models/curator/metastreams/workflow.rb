@@ -105,8 +105,8 @@ module Curator
     def generate_derivatives
       return if workflowable_type != 'Curator::Filestreams::FileSet'
 
-      # Skip Audio Metadata and Video File Set types as they are not set up on the avi processor yet
-      return if %w(Audio Metadata Video).map { |fsc| "Curator::Filestreams::#{fsc}" }.include?(workflowable.class.name)
+      # Skip Audio and Metadata File Set types as they are not set up on the avi processor yet
+      return if %w(Audio Metadata).map { |fsc| "Curator::Filestreams::#{fsc}" }.include?(workflowable.class.name)
 
       Curator::Filestreams::DerivativesJob.set(wait: 2.seconds).perform_later(workflowable_type, workflowable_id)
     end
