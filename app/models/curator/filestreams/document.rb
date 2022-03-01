@@ -18,9 +18,9 @@ module Curator
     has_paper_trail
 
     def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
-      return super(required_derivatives.dup.delete(:document_access)) if derivative_source.present? && text_plain.attached?
+      return super(required_derivatives.dup.delete_if { |el| el == :document_access }) if derivative_source.present? && text_plain.attached?
 
-      return super(required_derivatives.dup.delete(derivative_source.name.to_sym)) if required_derivatives.include?(derivative_source&.name&.to_sym)
+      return super(required_derivatives.dup.delete_if { |el| el == derivative_source.name.to_sym }) if required_derivatives.include?(derivative_source&.name&.to_sym)
 
       super(required_derivatives)
     end
