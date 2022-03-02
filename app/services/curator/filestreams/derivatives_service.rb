@@ -7,6 +7,7 @@ module Curator
     self.base_url = Curator.config.avi_processor_api_url
     self.default_path_prefix = '/api'
     self.default_headers = { accept: 'application/json', content_type: 'application/json' }
+    self.timeout_options = Curator.config.default_remote_service_timeout_opts.merge({ connect: 120, read: 1800 })
 
     attr_reader :avi_file_class, :avi_payload
 
@@ -48,13 +49,13 @@ module Curator
         json_reason = { 'reason' => e.message }.as_json
         Rails.logger.error base_message
         Rails.logger.error "Reason: #{e.message}"
-        raise Curator::Exceptions::RemoteServiceError(base_message, json_reason, 500)
+        raise Curator::Exceptions::RemoteServiceError.new(base_message, json_reason, 500)
       rescue Oj::Error => e
         base_message = 'Invalid JSON Response From AVI Processor'
         json_reason = { 'reason' => e.message }.as_json
         Rails.logger.error base_message
         Rails.logger.error "Reason: #{e.message}"
-        raise Curator::Exceptions::RemoteServiceError(base_message, json_reason, 500)
+        raise Curator::Exceptions::RemoteServiceError.new(base_message, json_reason, 500)
       rescue Curator::Exceptions::RemoteServiceError => e
         Rails.logger.error 'Error Occurred Generating Derivatives'
         Rails.logger.error "Reason: #{e.message}"
