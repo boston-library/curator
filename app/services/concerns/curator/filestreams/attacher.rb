@@ -53,7 +53,7 @@ module Curator
                          end
 
             record.public_send(attachment_type).attach(attachable)
-            record.save
+            record.save!
 
             check_file_fixity!(record.public_send("#{attachment_type}_blob"), attributes['byte_size'], attributes['checksum_md5'])
           end

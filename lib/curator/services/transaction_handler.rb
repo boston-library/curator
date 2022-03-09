@@ -48,19 +48,21 @@ module Curator
         begin
           Curator::ApplicationRecord.connection_pool.with_connection do
             Curator::ApplicationRecord.transaction do
-              yield
+              begin
+                yield
+              rescue ActiveRecord::StaleObjectError => e
+                if (retries += 1) <= MAX_RETRIES
+                  Rails.logger.info 'Record is stale retrying in 3 seconds...'
+                  sleep(3)
+                  retry
+                else
+                  Rails.logger.error '===============MAX RETRIES REACHED!============'
+                  Rails.logger.error "=================#{e.inspect}=================="
+
+                  raise ActiveRecord::RecordNotSaved.new("Max retries reached! caused by: #{e.message}", e.record)
+                end
+              end
             end
-          end
-        rescue ActiveRecord::StaleObjectError => e
-          if (retries += 1) <= MAX_RETRIES
-            Rails.logger.info '====Record is stale retrying in 2 seconds...==='
-            sleep(2)
-            retry
-          else
-            Rails.logger.error '===============MAX RETRIES REACHED!============'
-            Rails.logger.error "=================#{e.inspect}=================="
-            @success = false
-            @result = ActiveRecord::RecordNotSaved, "Max retries reached! caused by: #{e.message}", e.record
           end
         rescue *RESULT_ERRORS => e
           Rails.logger.error "=================#{e.inspect}=================="
