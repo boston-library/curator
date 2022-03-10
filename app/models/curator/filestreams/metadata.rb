@@ -17,7 +17,7 @@ module Curator
     has_paper_trail
 
     def derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
-      required_derivatives.any? { |a| public_send(a).attached? }
+      required_derivatives.any? { |a| derivative_attachment_uploaded?(a) }
     end
   end
 end

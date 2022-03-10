@@ -38,8 +38,8 @@ module Curator
           end
 
           map_exemplary_objects!(file_set)
+          attach_files!(file_set) if file_set.valid?
           file_set.save!
-          attach_files!(file_set)
         end
       end
 

@@ -104,10 +104,20 @@ module Curator
     def required_derivatives_complete?(required_derivatives = [])
       return false if required_derivatives.blank?
 
-      required_derivatives.all? { |a| public_send(a).attached? }
+      required_derivatives.all? { |a| derivative_attachment_uploaded?(a) }
     end
 
     private
+
+    def derivative_attachment_uploaded?(attachment_name = nil)
+      return false if attachment_name.blank?
+
+      attachment = public_send(attachment_name)
+
+      return false if !attachment.attached?
+
+      attachment.uploaded?
+    end
 
     def add_file_set_of_to_members
       file_set_member_of_mappings.build(digital_object: file_set_of)

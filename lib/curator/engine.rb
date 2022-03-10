@@ -85,6 +85,7 @@ module Curator
       ActiveSupport.on_load(:active_storage_blob) do
         ActiveStorage::Blob.table_name = 'curator.active_storage_blobs'
         ActiveStorage::VariantRecord.table_name = 'curator.active_storage_variant_records'
+        include Curator::ActiveStorageExtensions::Blob
       end
 
       ActiveSupport.on_load(:active_storage_attachment) do

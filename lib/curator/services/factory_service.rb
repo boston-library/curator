@@ -90,7 +90,7 @@ module Curator
         # raise error if term is from pre-seeded class and not found (new values are not allowed)
         def create_nomenclature!(nomenclature_class, term_data = {}, authority = nil)
           nomenclature = nomenclature_class.new
-          raise_error = case nomenclature
+          raise_error = case nomenclaturepublic_send(a).attached?
                         when Curator.controlled_terms.resource_type_class,
                              Curator.controlled_terms.role_class,
                              Curator.controlled_terms.language_class,

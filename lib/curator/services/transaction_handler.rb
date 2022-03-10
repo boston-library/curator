@@ -46,7 +46,7 @@ module Curator
       def with_transaction(&_block)
         retries = 0
         begin
-          Curator::ApplicationRecord.connection_pool.with_connection do
+          Rails.application.executor.wrap do
             Curator::ApplicationRecord.transaction do
               begin
                 yield
