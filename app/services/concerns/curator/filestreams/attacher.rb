@@ -24,10 +24,19 @@ module Curator
 
           attachments = files.group_by { |file_hash| file_hash['file_type'].underscore }
 
-          record_attachments(record).each do |attachment_type|
-            next if !attachments.key?(attachment_type)
+          attachment_types_for_blob = record_attachments(record).select { |at| attachments.key?(at) }
 
-            attach_group!(record, attachment_type, attachments[attachment_type])
+          attachment_types_for_blob.each_slice(ENV.fetch('RAILS_MAX_THREADS', 5)) do |attachment_types|
+            attachment_futures = attachment_types.map do |attachment_type|
+              Concurrent::Promises.future(record, attachment_type, attachments) do |rec, attch_type, attchmnts|
+                Rails.application.executor.wrap do
+                  attach_group!(rec, attch_type, attchmnts[attch_type])
+                end
+              end
+            end
+            ActiveSupport::Dependencies.interlock.permit_concurrent_loads do
+              attachment_futures.each(&:value!)
+            end
           end
         end
 
@@ -35,7 +44,6 @@ module Curator
           return if attachments.blank?
 
           attachments.each do |attachment|
-
             attributes = file_attributes(attachment)
 
             io_hash = attachment.fetch('io', {})
@@ -55,7 +63,7 @@ module Curator
 
             record.public_send(attachment_type).attach(attachable)
 
-            check_file_fixity!(record.public_send("#{attachment_type}_blob"), attributes['byte_size'], attributes['checksum_md5'])
+            check_file_fixity!(record.public_send(attachment_type), attributes['byte_size'], attributes['checksum_md5'])
           end
         end
 
@@ -144,7 +152,7 @@ module Curator
             b.save!
           end
 
-          return blob if blob.service.exist?(blob.key)
+          return blob if blob.uploaded?
 
           raise ActiveStorage::FileNotFoundError, "File at #{blob.key} in service #{blob.service_name} not found!"
         end

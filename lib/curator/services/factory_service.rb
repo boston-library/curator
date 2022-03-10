@@ -67,48 +67,55 @@ module Curator
       end
 
       module NomenclatureHelpers
+        READONLY_NOMENCLATURE_CLASSES = [
+          'Curator::ControlledTerms::Role',
+          'Curator::ControlledTerms::ResourceType',
+          'Curator::ControlledTerms::Language',
+          'Curator::ControlledTerms::License',
+          'Curator::ControlledTerms::RightsStatement'
+        ].freeze
+
         private
 
+        # raise error if term is from pre-seeded class and not found (new values are not allowed)
         def find_or_create_nomenclature(nomenclature_class:, term_data: {}, authority_code: nil)
           return if term_data.blank?
 
           term_data = term_data.dup.symbolize_keys
 
-          return find_nomenclature(nomenclature_class, term_data) || create_nomenclature!(nomenclature_class, term_data) if authority_code.blank?
+          authority = Curator.controlled_terms.authority_class.find_by!(code: authority_code) if authority_code.present?
 
-          authority = Curator.controlled_terms.authority_class.find_by!(code: authority_code)
+          case nomenclature_class.name
+          when 'Curator::ControlledTerms::Genre'
+            return find_nomenclature!(nomenclature_class, term_data, authority) if term_data[:basic].present?
 
-          find_nomenclature(nomenclature_class, term_data, authority) || create_nomenclature!(nomenclature_class, term_data, authority)
-        end
-
-        def find_nomenclature(nomenclature_class, term_data = {}, authority = nil)
-          return nomenclature_class.jsonb_contains(**term_data).first if authority.blank?
-
-          nomenclature_class.where(authority: authority).jsonb_contains(**term_data).first
-        end
-
-        # raise error if term is from pre-seeded class and not found (new values are not allowed)
-        def create_nomenclature!(nomenclature_class, term_data = {}, authority = nil)
-          nomenclature = nomenclature_class.new
-          raise_error = case nomenclaturepublic_send(a).attached?
-                        when Curator.controlled_terms.resource_type_class,
-                             Curator.controlled_terms.role_class,
-                             Curator.controlled_terms.language_class,
-                             Curator.controlled_terms.license_class,
-                             Curator.controlled_terms.rights_statement_class
-                          true
-                        when Curator.controlled_terms.genre_class
-                          true if term_data[:basic] == true
-                        else
-                          false
-                        end
-          if raise_error
-            nomenclature_type = nomenclature_class.name.demodulize
-            nomenclature.errors.add(nomenclature_type.downcase.to_sym,
-                                    "Invalid data submitted for #{nomenclature_type}: #{term_data} is not allowed.")
-            raise ActiveRecord::RecordInvalid, nomenclature
+            return find_nomenclature(nomenclature_class, term_data, authority) || create_nomenclature!(nomenclature_class, term_data, authority)
+          when *READONLY_NOMENCLATURE_CLASSES
+            return find_nomenclature!(nomenclature_class, term_data, authority)
+          else
+            return find_nomenclature(nomenclature_class, term_data, authority) || create_nomenclature!(nomenclature_class, term_data, authority)
           end
+        rescue ActiveRecord::RecordNotFound
+          nomenclature_type = nomenclature_class.name.demodulize
+          raise ActiveRecord::RecordNotSaved, "Invalid data submitted for #{nomenclature_type}: #{term_data} is not allowed."
+        rescue ActiveRecordError => e
+          raise ActiveRecord::RecordNotSaved, "Could not save record due to an error creating nomenclature! Reason #{e.message}"
+        end
 
+        # Tries to find nomenclature but silently fails.
+        def find_nomenclature(nomenclature_class, term_data = {}, authority = nil)
+          find_nomenclature!(nomenclature_class, term_data, authority)
+        rescue ActiveRecord::RecordNotFound
+          nil
+        end
+
+        def find_nomenclature!(nomenclature_class, term_data = {}, authority = nil)
+          return nomenclature_class.jsonb_contains(**term_data).first! if authority.blank?
+
+          nomenclature_class.where(authority: authority).jsonb_contains(**term_data).first!
+        end
+
+        def create_nomenclature!(nomenclature_class, term_data = {}, authority = nil)
           return nomenclature_class.create!(term_data: term_data) if authority.blank?
 
           nomenclature_class.create!(authority: authority, term_data: term_data)

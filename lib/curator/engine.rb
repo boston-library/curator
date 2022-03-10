@@ -82,14 +82,17 @@ module Curator
     end
 
     initializer 'curator.active_storage_table_names' do
-      ActiveSupport.on_load(:active_storage_blob) do
-        ActiveStorage::Blob.table_name = 'curator.active_storage_blobs'
+      ActiveSupport.on_load(:active_storage_record) do
         ActiveStorage::VariantRecord.table_name = 'curator.active_storage_variant_records'
+      end
+
+      ActiveSupport.on_load(:active_storage_blob) do
+        self.table_name = 'curator.active_storage_blobs'
         include Curator::ActiveStorageExtensions::Blob
       end
 
       ActiveSupport.on_load(:active_storage_attachment) do
-        ActiveStorage::Attachment.table_name = 'curator.active_storage_attachments'
+        self.table_name = 'curator.active_storage_attachments'
       end
     end
 

@@ -54,12 +54,13 @@ module Curator
                 if (retries += 1) <= MAX_RETRIES
                   Rails.logger.info 'Record is stale retrying in 3 seconds...'
                   sleep(3)
+                  e.record.reload if e.record && !e.record.new_record?
                   retry
                 else
                   Rails.logger.error '===============MAX RETRIES REACHED!============'
                   Rails.logger.error "=================#{e.inspect}=================="
 
-                  raise ActiveRecord::RecordNotSaved.new("Max retries reached! caused by: #{e.message}", e.record)
+                  raise ActiveRecord::RecordNotSaved.new("Max retries reached on stale object! Caused by: #{e.message}", e.record)
                 end
               end
             end

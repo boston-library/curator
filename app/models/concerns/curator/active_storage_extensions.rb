@@ -6,6 +6,8 @@ module Curator
       extend ActiveSupport::Concern
 
       def uploaded?
+        return false if new_record? || key.blank?
+
         service.exist?(key)
       end
     end
