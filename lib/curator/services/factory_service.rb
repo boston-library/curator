@@ -98,7 +98,7 @@ module Curator
         rescue ActiveRecord::RecordNotFound
           nomenclature_type = nomenclature_class.name.demodulize
           raise ActiveRecord::RecordNotSaved, "Invalid data submitted for #{nomenclature_type}: #{term_data} is not allowed."
-        rescue ActiveRecordError => e
+        rescue ActiveRecord::ActiveRecordError => e
           raise ActiveRecord::RecordNotSaved, "Could not save record due to an error creating nomenclature! Reason #{e.message}"
         end
 
@@ -109,6 +109,7 @@ module Curator
           nil
         end
 
+        # Explicitly raises error if the nomenclature is not found
         def find_nomenclature!(nomenclature_class, term_data = {}, authority = nil)
           return nomenclature_class.jsonb_contains(**term_data).first! if authority.blank?
 

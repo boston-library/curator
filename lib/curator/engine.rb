@@ -93,6 +93,7 @@ module Curator
 
       ActiveSupport.on_load(:active_storage_attachment) do
         self.table_name = 'curator.active_storage_attachments'
+        include Curator::ActiveStorageExtensions::Attachment
       end
     end
 

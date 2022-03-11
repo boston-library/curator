@@ -25,18 +25,23 @@ module Curator
           attachments = files.group_by { |file_hash| file_hash['file_type'].underscore }
 
           attachment_types_for_blob = record_attachments(record).select { |at| attachments.key?(at) }
-
-          attachment_types_for_blob.each_slice(ENV.fetch('RAILS_MAX_THREADS', 5)) do |attachment_types|
-            attachment_futures = attachment_types.map do |attachment_type|
-              Concurrent::Promises.future(record, attachment_type, attachments) do |rec, attch_type, attchmnts|
-                Rails.application.executor.wrap do
-                  attach_group!(rec, attch_type, attchmnts[attch_type])
+          begin
+            attachment_types_for_blob.each_slice(ENV.fetch('RAILS_MAX_THREADS', 5)) do |attachment_types|
+              attachment_futures = attachment_types.map do |attachment_type|
+                Concurrent::Promises.future(record, attachment_type, attachments) do |rec, attch_type, attchmnts|
+                  Rails.application.executor.wrap do
+                    attach_group!(rec, attch_type, attchmnts[attch_type])
+                  end
                 end
               end
+              ActiveSupport::Dependencies.interlock.permit_concurrent_loads do
+                attachment_futures.each(&:value!)
+              end
             end
-            ActiveSupport::Dependencies.interlock.permit_concurrent_loads do
-              attachment_futures.each(&:value!)
-            end
+          rescue Azure::Core::Http::HTTPError => e
+            raise ActiveRecord::RecordNotSaved, "Could not attach files due to an Azure Http Error. Reason: #{e.message}"
+          rescue ActiveStorage::Error, ActiveRecord::RecordNotSaved
+            raise
           end
         end
 

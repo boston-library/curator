@@ -2,6 +2,16 @@
 
 module Curator
   module ActiveStorageExtensions
+    module Attachment
+      extend ActiveSupport::Concern
+
+      def uploaded?
+        return false if blob.blank?
+
+        blob.uploaded?
+      end
+    end
+
     module Blob
       extend ActiveSupport::Concern
 
