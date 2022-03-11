@@ -35,7 +35,7 @@ module Curator
               end
             end
             ActiveSupport::Dependencies.interlock.permit_concurrent_loads do
-              Concurrent::Promises.zip(*attachment_futures).value!
+              Concurrent::Promises.zip(*attachment_futures).wait!
             end
           end
         end
