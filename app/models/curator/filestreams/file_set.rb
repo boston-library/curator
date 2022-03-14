@@ -53,7 +53,7 @@ module Curator
     validates :file_name_base, presence: true
     validates :file_set_type, presence: true, inclusion: { in: Filestreams.file_set_types.collect { |type| "Curator::Filestreams::#{type}" } }
 
-    after_commit :reindex_digital_objects, :reindex_collections
+    after_commit :reindex_associations
 
     def ark_params
       return super.except(:oai_namespace_id).merge({
@@ -104,21 +104,40 @@ module Curator
     def required_derivatives_complete?(required_derivatives = [])
       return false if required_derivatives.blank?
 
-      required_derivatives.all? { |a| public_send(a).attached? }
+      required_derivatives.all? { |a| derivative_attachment_uploaded?(a) }
     end
 
     private
+
+    def derivative_attachment_uploaded?(attachment_name = nil)
+      return false if attachment_name.blank?
+
+      attachment = public_send(attachment_name)
+
+      return false if !attachment.attached?
+
+      attachment.uploaded?
+    end
 
     def add_file_set_of_to_members
       file_set_member_of_mappings.build(digital_object: file_set_of)
     end
 
+    def reindex_associations
+      Curator::Indexable.indexer_health_check!
+
+      Curator::Indexable.index_with(batching: true) do
+        reindex_digital_objects
+        reindex_collections
+      end
+    end
+
     def reindex_digital_objects
-      file_set_members_of.find_each { |digital_object| digital_object.update_index }
+      file_set_members_of.find_each(&:update_index)
     end
 
     def reindex_collections
-      exemplary_image_of_collections.find_each { |collection| collection.update_index }
+      exemplary_image_of_collections.find_each(&:update_index)
     end
   end
 end

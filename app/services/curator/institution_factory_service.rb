@@ -28,8 +28,8 @@ module Curator
             destination_site = @admin_json_attrs.fetch(:destination_site, nil)
             administrative.destination_site = destination_site if destination_site
           end
+          attach_files!(institution) if institution.valid?
           institution.save!
-          attach_files!(institution)
         end
       end
       return @success, @result

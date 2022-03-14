@@ -24,10 +24,19 @@ module Curator
 
           attachments = files.group_by { |file_hash| file_hash['file_type'].underscore }
 
-          record_attachments(record).each do |attachment_type|
-            next if !attachments.key?(attachment_type)
+          attachment_types_for_blob = record_attachments(record).select { |at| attachments.key?(at) }
 
-            attach_group!(record, attachment_type, attachments[attachment_type])
+          attachment_types_for_blob.each_slice(ENV.fetch('RAILS_MAX_THREADS', 5)) do |attachment_types|
+            attachment_futures = attachment_types.map do |attachment_type|
+              Concurrent::Promises.future(record, attachment_type, attachments) do |rec, attch_type, attchmnts|
+                Rails.application.executor.wrap do
+                  attach_group!(rec, attch_type, attchmnts[attch_type])
+                end
+              end
+            end
+            ActiveSupport::Dependencies.interlock.permit_concurrent_loads do
+              Concurrent::Promises.zip(*attachment_futures).wait!
+            end
           end
         end
 
@@ -46,16 +55,19 @@ module Curator
 
             attributes['service_name'] = attachment_service(record, attachment_type)
 
-            attachable = if record.public_send(attachment_type).attached?
-                           update_attachable(record.public_send("#{attachment_type}_blob"), attributes, io_hash)
-                         else
-                           create_attachable(attributes, io_hash)
-                         end
+            begin
+              attachable = if record.public_send(attachment_type).attached?
+                             update_attachable(record.public_send("#{attachment_type}_blob"), attributes, io_hash)
+                           else
+                             create_attachable(attributes, io_hash)
+                           end
 
-            record.public_send(attachment_type).attach(attachable)
-            record.save
+              record.public_send(attachment_type).attach(attachable)
+            rescue Azure::Core::Http::HTTPError, Faraday::Error => e
+              raise ActiveRecord::RecordNotSaved, "Could not attach files due to an Azure Http Error. Reason: #{e.message}"
+            end
 
-            check_file_fixity!(record.public_send("#{attachment_type}_blob"), attributes['byte_size'], attributes['checksum_md5'])
+            check_file_fixity!(record.public_send(attachment_type), attributes['byte_size'], attributes['checksum_md5'])
           end
         end
 
@@ -68,7 +80,8 @@ module Curator
           return import_file_from_fedora(attributes, content_io(io_hash)) if fedora_content?(io_hash)
 
           # NOTE we should be passing a Hash to the attach method. This is more in line with what vanilla active storage does and will cut back on errors. See this file for more info https://github.com/rails/rails/blob/e3e3a97ada3f2b4c0c8d48f941c2ea05c859cdda/activestorage/lib/active_storage/attached/changes/create_one.rb#L52
-          {
+          # UPDATE: This is wrong since according to some answes online the upload ONLY happens once the object is comitted. So we should pass this into a new method I created that uses the create_after_unfurling method
+          ingest_attributes = {
             key: attributes['key'],
             io: content_io(io_hash),
             service_name: attributes['service_name'],
@@ -77,6 +90,7 @@ module Curator
             metadata: attributes['metadata'],
             identify: attributes['content_type'].present? # This is specified here https://github.com/rails/rails/blob/8929f6f6e492c15a58ca13290f5ff44d00b37ccc/activestorage/app/models/active_storage/blob.rb#L110
           }
+          attach_file_via_ingest(ingest_attributes)
         end
 
         # @param blob [ActiveStorage::Blob]
@@ -144,9 +158,13 @@ module Curator
             b.save!
           end
 
-          return blob if blob.service.exist?(blob.key)
+          return blob if blob.uploaded?
 
           raise ActiveStorage::FileNotFoundError, "File at #{blob.key} in service #{blob.service_name} not found!"
+        end
+
+        def attach_file_via_ingest(attachment_attributes = {})
+          ActiveStorage::Blob.create_and_upload!(attachment_attributes)
         end
 
         def record_attachments(record)

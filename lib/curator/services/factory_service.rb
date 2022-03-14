@@ -67,70 +67,56 @@ module Curator
       end
 
       module NomenclatureHelpers
+        READONLY_NOMENCLATURE_CLASSES = [
+          'Curator::ControlledTerms::Role',
+          'Curator::ControlledTerms::ResourceType',
+          'Curator::ControlledTerms::Language',
+          'Curator::ControlledTerms::License',
+          'Curator::ControlledTerms::RightsStatement'
+        ].freeze
+
         private
 
+        # raise error if term is from pre-seeded class and not found (new values are not allowed)
         def find_or_create_nomenclature(nomenclature_class:, term_data: {}, authority_code: nil)
           return if term_data.blank?
 
-          nomenclature = nil
-          retries = 0
           term_data = term_data.dup.symbolize_keys
-          begin
-            nomenclature_class.transaction(requires_new: true) do
-              nomenclature =
-                if authority_code.blank?
-                  find_nomenclature(nomenclature_class, term_data) || create_nomenclature!(nomenclature_class, term_data)
-                else
-                  authority = Curator.controlled_terms.authority_class.find_by!(code: authority_code)
 
-                  find_nomenclature(nomenclature_class, term_data, authority) || create_nomenclature!(nomenclature_class, term_data, authority)
-                end
-            end
-            return nomenclature
-          rescue ActiveRecord::StaleObjectError => e
-            raise ActiveRecord::RecordNotSaved, "Max retries reached! caused by: #{e.message}", e.record unless (retries += 1) <= TransactionHandler::MAX_RETRIES
+          authority = Curator.controlled_terms.authority_class.find_by!(code: authority_code) if authority_code.present?
 
-            Rails.logger.info 'Record is stale retrying in 2 seconds..'
-            sleep(2)
-            retry
-          rescue *TransactionHandler::RESULT_ERRORS => e
-            Rails.logger.error '==============================================='
-            Rails.logger.error "=================#{e.inspect}=================="
-            Rails.logger.error '==============================================='
-            Rails.logger.error e.backtrace.join("\n")
-            Rails.logger.error '==============================================='
-            raise
+          case nomenclature_class.name
+          when 'Curator::ControlledTerms::Genre'
+            return find_nomenclature!(nomenclature_class, term_data, authority) if term_data[:basic].present?
+
+            return find_nomenclature(nomenclature_class, term_data, authority) || create_nomenclature!(nomenclature_class, term_data, authority)
+          when *READONLY_NOMENCLATURE_CLASSES
+            return find_nomenclature!(nomenclature_class, term_data, authority)
+          else
+            return find_nomenclature(nomenclature_class, term_data, authority) || create_nomenclature!(nomenclature_class, term_data, authority)
           end
+        rescue ActiveRecord::RecordNotFound
+          nomenclature_type = nomenclature_class.name.demodulize
+          raise ActiveRecord::RecordNotSaved, "Invalid data submitted for #{nomenclature_type}: #{term_data} is not allowed."
+        rescue ActiveRecord::ActiveRecordError => e
+          raise ActiveRecord::RecordNotSaved, "Could not save record due to an error creating nomenclature! Reason #{e.message}"
         end
 
+        # Tries to find nomenclature but silently fails.
         def find_nomenclature(nomenclature_class, term_data = {}, authority = nil)
-          return nomenclature_class.jsonb_contains(**term_data).first if authority.blank?
-
-          nomenclature_class.where(authority: authority).jsonb_contains(**term_data).first
+          find_nomenclature!(nomenclature_class, term_data, authority)
+        rescue ActiveRecord::RecordNotFound
+          nil
         end
 
-        # raise error if term is from pre-seeded class and not found (new values are not allowed)
-        def create_nomenclature!(nomenclature_class, term_data = {}, authority = nil)
-          nomenclature = nomenclature_class.new
-          raise_error = case nomenclature
-                        when Curator.controlled_terms.resource_type_class,
-                             Curator.controlled_terms.role_class,
-                             Curator.controlled_terms.language_class,
-                             Curator.controlled_terms.license_class,
-                             Curator.controlled_terms.rights_statement_class
-                          true
-                        when Curator.controlled_terms.genre_class
-                          true if term_data[:basic] == true
-                        else
-                          false
-                        end
-          if raise_error
-            nomenclature_type = nomenclature_class.name.demodulize
-            nomenclature.errors.add(nomenclature_type.downcase.to_sym,
-                                    "Invalid data submitted for #{nomenclature_type}: #{term_data} is not allowed.")
-            raise ActiveRecord::RecordInvalid, nomenclature
-          end
+        # Explicitly raises error if the nomenclature is not found
+        def find_nomenclature!(nomenclature_class, term_data = {}, authority = nil)
+          return nomenclature_class.jsonb_contains(**term_data).first! if authority.blank?
 
+          nomenclature_class.where(authority: authority).jsonb_contains(**term_data).first!
+        end
+
+        def create_nomenclature!(nomenclature_class, term_data = {}, authority = nil)
           return nomenclature_class.create!(term_data: term_data) if authority.blank?
 
           nomenclature_class.create!(authority: authority, term_data: term_data)

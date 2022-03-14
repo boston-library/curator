@@ -50,7 +50,7 @@ module Curator
 
       Curator::Indexable.index_with(batching: true) do
         collections.eager_load(:collection_members).find_each do |col|
-          Curator.digital_object_class.where(id: col.collection_members.pluck(:digital_object_id)).find_each(&:update_index)
+          Curator.digital_object_class.for_reindex_all.where(id: col.collection_members.pluck(:digital_object_id)).find_each(&:update_index)
           col.update_index
         end
       end
