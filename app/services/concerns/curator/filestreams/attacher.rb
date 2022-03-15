@@ -26,7 +26,7 @@ module Curator
 
           attachment_types_for_blob = record_attachments(record).select { |at| attachments.key?(at) }
 
-          attachment_types_for_blob.each_slice(ENV.fetch('RAILS_MAX_THREADS', 5)) do |attachment_types|
+          attachment_types_for_blob.each_slice(ENV.fetch('RAILS_MAX_THREADS', 5).to_i) do |attachment_types|
             attachment_futures = attachment_types.map do |attachment_type|
               Concurrent::Promises.future(record, attachment_type, attachments) do |rec, attch_type, attchmnts|
                 Rails.application.executor.wrap do
