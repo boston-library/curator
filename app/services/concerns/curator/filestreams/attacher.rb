@@ -35,7 +35,7 @@ module Curator
               end
             end
             ActiveSupport::Dependencies.interlock.permit_concurrent_loads do
-              Concurrent::Promises.zip(*attachment_futures).wait!
+              Concurrent::Promises.zip(*attachment_futures).value! # NOTE: value! will propogate any errors raised to main thread
             end
           end
         end
@@ -65,6 +65,8 @@ module Curator
               record.public_send(attachment_type).attach(attachable)
             rescue Azure::Core::Http::HTTPError, Faraday::Error => e
               raise ActiveRecord::RecordNotSaved, "Could not attach files due to an Azure Http Error. Reason: #{e.message}"
+            rescue StandardError
+              raise
             end
 
             check_file_fixity!(record.public_send(attachment_type), attributes['byte_size'], attributes['checksum_md5'])

@@ -6,6 +6,12 @@ module Curator
     include ControlledTerms::Locateable
     include Filestreams::Attacher
 
+    def initialize(json_data: {})
+      super(json_data: json_data)
+
+      @purge_blobs_on_fail = true
+    end
+
     def call
       location_json_attrs = @json_attrs.fetch('location', {}).with_indifferent_access
       with_transaction do

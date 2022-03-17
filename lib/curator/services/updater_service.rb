@@ -24,6 +24,7 @@ module Curator
           # NOTE: Had to add #to_h for when :json_data is received through the controller as ActionController::Parameters
           @json_attrs = json_data.to_h.with_indifferent_access
           @ark_id = @json_attrs.fetch('ark_id', nil)
+          @purge_blobs_on_fail = false
         end
 
         private
