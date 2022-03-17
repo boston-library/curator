@@ -9,6 +9,7 @@ module Curator
       super(json_data: json_data)
 
       @file_set_type = @json_attrs.fetch('file_set_type')
+      @purge_blobs_on_fail = true
     end
 
     def call

@@ -5,7 +5,7 @@ module Curator
     module TransactionHandler
       extend ActiveSupport::Concern
 
-      MAX_RETRIES = 2
+      MAX_RETRIES = 3
 
       # These are errors that will be passed to the @result variable. That way these can be raised on failure up the chain
       RESULT_ERRORS = [
@@ -27,6 +27,14 @@ module Curator
 
       private
 
+      def purge_blobs_on_fail?
+        return false if !defined?(@purge_blobs_on_fail)
+
+        return false if @success.present?
+
+        @purge_blobs_on_fail
+      end
+
       def handle_result!
         @success = false if @record.blank?
 
@@ -38,7 +46,7 @@ module Curator
       end
 
       def purge_unattached_files!
-        return if @success == true
+        return if @success.present?
 
         ActiveStorage::Blob.unattached.find_each(&:purge_later)
       end
@@ -53,8 +61,8 @@ module Curator
               rescue ActiveRecord::StaleObjectError => e
                 if (retries += 1) <= MAX_RETRIES
                   Rails.logger.info 'Record is stale retrying in 3 seconds...'
-                  sleep(3)
-                  e.record.reload if e.record && !e.record.new_record?
+                  sleep(5)
+                  @record.reload if @record.present? && !@record.new_record?
                   retry
                 else
                   Rails.logger.error '===============MAX RETRIES REACHED!============'
@@ -71,7 +79,7 @@ module Curator
           @result = e
         ensure
           handle_result!
-          purge_unattached_files! # NOTE This Will call purge_later on unattached files if success == false
+          purge_unattached_files! if purge_blobs_on_fail? # NOTE This Will call purge_later on unattached files if success is false
         end
       end
     end
