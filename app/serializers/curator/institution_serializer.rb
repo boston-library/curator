@@ -2,14 +2,22 @@
 
 module Curator
   class InstitutionSerializer < CuratorSerializer
-    schema_as_json root: :institution do
+    build_schema_as_json do
+      root_key :institution, :institutions
+
       attributes :abstract, :name, :url
 
-      belongs_to :location, serializer: Curator::ControlledTerms::GeographicSerializer
+      one :location do
+        include Curator::ControlledTerms::JsonName
+      end
 
-      node :metastreams do
-        has_one :administrative, serializer: Curator::Metastreams::AdministrativeSerializer
-        has_one :workflow, serializer: Curator::Metastreams::WorkflowSerializer
+      one :metastreams do
+        one :administrative do
+          include Curator::Metastreams::JsonAdministratable
+        end
+        one :workflow do
+          include Curator::Metastreams::JsonWorkflowable
+        end
       end
     end
   end

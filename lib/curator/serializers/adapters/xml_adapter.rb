@@ -4,14 +4,13 @@ module Curator
   module Serializers
     class XMLAdapter < AdapterBase
       # NOTE XML Adapters don't include meta/link facets
-      def_delegators :@schema, :root, :attribute, :attributes, :node, :has_one, :belongs_to, :has_many
-
-      def serializable_hash(record, serializer_params = {})
-        schema.serialize(record, serializer_params.dup.reverse_merge!(adapter_key: :xml))
+      def initializer(base_builder_klass:, &block)
+        super(base_builder_klass: base_builder_klass)
+        @schema_builder_class = Class.new(base_builder_class, &block)
       end
 
-      def render(record, serializer_params = {})
-        Ox.dump(serializable_hash(record, serializer_params.dup))
+      def serialize(record, serializer_params = {})
+        schema_builder_class.new(record, serializer_params).serialize
       end
     end
   end

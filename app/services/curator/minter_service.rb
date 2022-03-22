@@ -38,7 +38,7 @@ module Curator
       resp = client.headers(self.class.default_headers).
                post("#{self.class.default_path_prefix}/arks", json: ark_create_params).flush
 
-      json_response = Oj.load(resp.body.to_s)
+      json_response = normalize_response!(resp.body.to_s)
 
       raise Curator::Exceptions::RemoteServiceError.new('Failed to mint ark from ark-manager-api!', json_response, resp.status) if !resp.status.success?
 

@@ -5,6 +5,7 @@ module Curator
     require 'aasm'
     require 'activerecord/postgres_enum'
     require 'after_commit_everywhere'
+    require 'alba'
     require 'concurrent'
     require 'connection_pool'
     require 'delegate'
@@ -53,14 +54,7 @@ module Curator
     config.eager_load_namespaces << Curator
 
     config.before_initialize do
-      Oj.optimize_rails
-      Oj.default_options =
-      {
-        mode: :rails,
-        time_format: :ruby,
-        hash_class: ActiveSupport::HashWithIndifferentAccess,
-        omit_nil: true
-      }
+      Alba.backend = :oj_rails
       PaperTrail.config.track_associations = true
       PaperTrail.config.has_paper_trail_defaults = { on: %i(update destroy touch) }
       Curator.setup!

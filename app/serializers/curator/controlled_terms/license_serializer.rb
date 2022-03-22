@@ -2,8 +2,10 @@
 
 module Curator
   class ControlledTerms::LicenseSerializer < ControlledTerms::NomenclatureSerializer
-    schema_as_json root: :license do
-      attributes :uri
+    build_schema_as_json do
+      root_key :license, :licenses
+
+      include Curator::ControlledTerms::JsonLicense
     end
   end
 end

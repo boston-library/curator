@@ -2,23 +2,31 @@
 
 module Curator
   class DigitalObjectSerializer < CuratorSerializer
-    schema_as_json root: :digital_object do
-      node :admin_set, target: :key do
+    build_schema_as_json do
+      root_key :digital_object, :digital_objects
+
+      one :admin_set do
         attribute :ark_id
       end
 
-      node :contained_by, target: :key do
+      one :contained_by do
         attribute :ark_id
       end
 
-      node :is_member_of_collection, target: :key do
+      many :is_member_of_collection do
         attribute :ark_id
       end
 
-      node :metastreams, target: :key do
-        has_one :administrative, serializer: Curator::Metastreams::AdministrativeSerializer
-        has_one :descriptive, serializer: Curator::Metastreams::DescriptiveSerializer
-        has_one :workflow, serializer: Curator::Metastreams::WorkflowSerializer
+      one :metastreams do
+        has_one :administrative do
+          include Curator::Metastreams::JsonAdministratable
+        end
+        has_one :descriptive do
+          include Curator::Metastreams::JsonDescriptable
+        end
+        has_one :workflow do
+          include Curator::Metastreams::JsonWorkflowable
+        end
       end
     end
   end

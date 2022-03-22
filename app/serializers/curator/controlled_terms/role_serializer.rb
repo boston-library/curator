@@ -2,8 +2,10 @@
 
 module Curator
   class ControlledTerms::RoleSerializer < ControlledTerms::NomenclatureSerializer
-    schema_as_json root: :role do
-      attributes :authority_code
+    build_schema_as_json do
+      root_key :role, :roles
+
+      include Curator::ControlledTerms::JsonRole
     end
   end
 end

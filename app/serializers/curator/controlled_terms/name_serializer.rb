@@ -2,8 +2,10 @@
 
 module Curator
   class ControlledTerms::NameSerializer < ControlledTerms::NomenclatureSerializer
-    schema_as_json root: :name do
-      attributes :affiliation, :authority_code, :name_type
+    build_schema_as_json do
+      root_key :name, :names
+
+      include Curator::ControlledTerms::JsonName
     end
   end
 end

@@ -34,6 +34,23 @@ module Curator
 
       included do
         include Client
+        include ResponseNormalizer
+      end
+
+      module ResponseNormalizer
+        extend ActiveSupport::Concern
+
+        private
+
+        def normalize_response(json_response_body)
+          normalize_response!(json_response_body)
+        rescue
+          {}
+        end
+
+        def normalize_response!(json_response_body)
+          Oj.load(json_response_body, mode: :rails, time_format: :ruby, hash_class: ActiveSupport::HashWithIndifferentAccess, omit_nil: true)
+        end
       end
 
       module Client

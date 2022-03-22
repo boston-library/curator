@@ -2,7 +2,9 @@
 
 module Curator
   class ErrorSerializer < Curator::Serializers::AbstractSerializer
-    schema_as_json root: :error do
+    build_schema_as_json do
+      root_key :error, :errors
+
       attributes :status, :title, :detail, :source
     end
 

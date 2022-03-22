@@ -2,7 +2,9 @@
 
 module Curator
   class CollectionSerializer < CuratorSerializer
-    schema_as_json root: :collection do
+    build_schema_as_json do
+      root_key :collection, :collections
+      
       attributes :abstract, :name
 
       # TODO: Add ability to configure fields for relationships whne defining schema rathe than passing them in as #serializer_params

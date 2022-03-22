@@ -2,7 +2,9 @@
 
 module Curator
   class Metastreams::DescriptiveSerializer < Curator::Serializers::AbstractSerializer
-    schema_as_json root: :descriptive do
+    build_schema_as_json do
+      root_key :descriptive, :descriptives
+
       attributes :abstract, :digital_origin, :origin_event, :text_direction, :resource_type_manuscript, :place_of_publication, :publisher, :issuance, :frequency, :extent, :physical_location_department, :physical_location_shelf_locator, :series, :subseries, :subsubseries, :rights, :access_restrictions, :toc, :toc_url, :title, :note, :cartographic, :date, :related, :publication
 
       attribute(:host_collections) { |record| record.host_collections.names }

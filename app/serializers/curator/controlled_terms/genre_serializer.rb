@@ -2,8 +2,10 @@
 
 module Curator
   class ControlledTerms::GenreSerializer < ControlledTerms::NomenclatureSerializer
-    schema_as_json root: :genre do
-      attributes :basic, :authority_code
+    build_schema_as_json do
+      root_key :genre, :genres
+
+      include Curator::ControlledTerms::JsonGenre
     end
   end
 end

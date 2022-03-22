@@ -2,8 +2,10 @@
 
 module Curator
   class ControlledTerms::RightsStatementSerializer < ControlledTerms::NomenclatureSerializer
-    schema_as_json root: :rights_statement do
-      attributes :uri
+    build_schema_as_json do
+      root_key :rights_statement, :rights_statements
+
+      include Curator::ControlledTerms::JsonRightsStatement
     end
   end
 end

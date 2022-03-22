@@ -2,7 +2,9 @@
 
 module Curator
   class ControlledTerms::AuthoritySerializer < Curator::Serializers::AbstractSerializer
-    schema_as_json root: :authority do
+    build_schema_as_json do
+      root_key :authority, :authorities
+
       attributes :name, :code, :base_url
     end
   end

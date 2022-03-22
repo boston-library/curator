@@ -45,7 +45,7 @@ module Curator
         return true
       end
 
-      json_response = Oj.safe_load(resp.body.to_s) || {}
+      json_response = normalize_response(resp.body.to_s)
       raise Curator::Exceptions::RemoteServiceError.new('Failed to destroy ark in ark-manager-api!', json_response, resp.status)
     end
   end

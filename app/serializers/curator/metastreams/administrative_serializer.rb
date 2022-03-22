@@ -2,8 +2,10 @@
 
 module Curator
   class Metastreams::AdministrativeSerializer < Curator::Serializers::AbstractSerializer
-    schema_as_json root: :administrative do
-      attributes :description_standard, :flagged, :harvestable, :destination_site, :oai_header_id, :hosting_status
+    build_schema_as_json do
+      root_key :administrative, :administratives
+
+      include Curator::Metastreams::JsonAdministratable
     end
   end
 end

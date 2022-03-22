@@ -2,8 +2,10 @@
 
 module Curator
   class Metastreams::WorkflowSerializer < Curator::Serializers::AbstractSerializer
-    schema_as_json root: :workflow do
-      attributes :publishing_state, :processing_state, :ingest_origin
+    schema_as_json do
+      root_key :workflow, :workflows
+
+      include Curator::Metastreams::JSONWorkflowable
     end
   end
 end
