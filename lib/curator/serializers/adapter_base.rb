@@ -5,8 +5,8 @@ module Curator
     class AdapterBase
       attr_reader :base_builder_class, :schema_builder_class
 
-      def initialize(base_builder_klass:)
-        @base_builder_class = base_builder_klass
+      def initialize(base_builder_class:)
+        @base_builder_class = base_builder_class
       end
 
       # NOTE: Once the relevant schema is collected you can update the hash output to any format you want

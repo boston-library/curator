@@ -40,7 +40,7 @@ module Curator
     eager_autoload do
       autoload :AdapterBase
       autoload :AdapterRegistry
-      autoload :Schema
+      autoload :SchemaBuilders
       autoload :AbstractSerializer
       autoload :SerializationDSL
       autoload_under 'adapters' do
@@ -48,13 +48,13 @@ module Curator
         autoload :JSONAdapter
         autoload :XMLAdapter
       end
-      autoload_under 'schema' do
-        autoload :Attribute
-        autoload :Link
-        autoload :Meta
-        autoload :Node
-        autoload :Relation
-      end
+      # autoload_under 'schema' do
+      #   autoload :Attribute
+      #   autoload :Link
+      #   autoload :Meta
+      #   autoload :Node
+      #   autoload :Relation
+      # end
     end
   end
 end

@@ -9,10 +9,10 @@ module Curator
         raise "#{self} is not Curator::Serializers::AbstractSerializer" unless Rails.env.test? || _is_serializer?(self)
 
         class << self
-          attr_reader :__adapter_schemas
+          attr_reader :_adapter_schemas
         end
         _reset_adapter_schemas!
-        _inject_schema_adapter_methods!
+        _inject_adapter_schema_builder_methods!
       end
 
       class_methods do
@@ -26,7 +26,7 @@ module Curator
 
         protected
 
-        def _inject_schema_builder_methods!
+        def _inject_adapter_schema_builder_methods!
           Curator::Serializers.registered_adapter_keys.each { |key| _define_schema_builder_method_for_adapter(key) }
         end
 

@@ -37,6 +37,18 @@ module Curator
           include Curator::ControlledTerms::JsonGenre
         end
 
+        has_many :name_roles do
+          one :name do
+            include Curator::ControlledTerms::JsonNomenclature
+            include Curator::ControlledTerms::JsonName
+          end
+
+          one :role do
+            include Curator::ControlledTerms::JsonNomenclature
+            include Curator::ControlledTerms::JsonRole
+          end
+        end
+
         many :identifier do
           attributes :label, :type, :invalid
         end
@@ -47,11 +59,11 @@ module Curator
 
         one :title do
           one :primary do
-            attributes :label, :subtitle, :display, :display_label, :usage, :supplied, :language, :type, :authority_code, :id_from_auth, :part_name, :part_number
+            include Curator::DescriptiveFieldSets::JsonTitle
           end
 
           many :other do
-            attributes :label, :subtitle, :display, :display_label, :usage, :supplied, :language, :type, :authority_code, :id_from_auth, :part_name, :part_number
+            include Curator::DescriptiveFieldSets::JsonTitle
           end
         end
 
@@ -62,6 +74,19 @@ module Curator
         one :date do
           attributes :created, :issued, :copyright
         end
+
+        one :related do
+          attributes :constituent, :other_format, :references_url, :review_url
+
+          many :referenced_by do
+            attributes :label, :url
+          end
+        end
+
+        one :publication do
+            attributes :edition_name, :edition_number, :volume, :issue_number
+        end
+
       end
     end
   end

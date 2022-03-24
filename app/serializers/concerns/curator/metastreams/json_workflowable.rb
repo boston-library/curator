@@ -3,7 +3,7 @@
 module Curator
   module Metastreams
     module JsonWorkflowable
-      exetnd ActiveSupport::Concern
+      extend ActiveSupport::Concern
 
       # NOTE these need to be included WITHIN a build_schema_as_json block
       # ex. build_schema_as_json do

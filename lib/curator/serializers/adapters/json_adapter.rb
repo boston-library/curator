@@ -3,8 +3,8 @@
 module Curator
   module Serializers
     class JSONAdapter < AdapterBase
-      def initializer(base_builder_klass: Curator::Serializers::SchemaBuilders::JSON, &block)
-        super(base_builder_klass: base_builder_klass)
+      def initialize(base_builder_class: Curator::Serializers::SchemaBuilders::JSON, &block)
+        super(base_builder_class: base_builder_class)
         @schema_builder_class = Class.new(base_builder_class, &block)
       end
 

@@ -11,7 +11,7 @@ module Curator
         @record = record
         adapter_key = :null if record.blank?
         @params = params
-        @adapter = self.class.send(:_schema_for_adapter, adapter_key)
+        @adapter = self.class.send(:_schema_builder_for_adapter, adapter_key)
       end
 
       def serializable_hash
