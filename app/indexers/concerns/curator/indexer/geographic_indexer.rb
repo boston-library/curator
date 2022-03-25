@@ -25,7 +25,7 @@ module Curator
               coords = subject_geo.coordinates
               context.output_hash['subject_geo_label_sim'] << geo_label if geo_auth
 
-              if geo_auth == 'tgn' || geo_auth == 'geonames'
+              if geo_auth == 'tgn'
                 auth_url = "#{geo_auth}/#{subject_geo.id_from_auth}"
                 auth_data = Curator::ControlledTerms::AuthorityService.call(path: auth_url, path_prefix: '/geomash')
 
@@ -37,13 +37,10 @@ module Curator
                     other_geo_value << " (#{subject_geo.area_type})" if subject_geo.area_type.present?
                     auth_data[:hier_geo][:other] = other_geo_value
                   end
-                  auth_data[:hier_geo] = if geo_auth == 'geonames'
-                                           Curator::Parsers::GeoParser.normalize_geonames_hgeo(auth_data[:hier_geo])
-                                         else
-                                           Curator::Parsers::GeoParser.normalize_tgn_hgeo(auth_data[:hier_geo])
-                                         end
+                  auth_data[:hier_geo] = Curator::Parsers::GeoParser.normalize_tgn_hgeo(auth_data[:hier_geo])
                   auth_data[:hier_geo].each do |k, v|
                     context.output_hash['subject_geographic_tim'] << v
+                    v = v.gsub(/\s\([\s\w]*\)\z/, '') if k == 'other'
                     v += ' (county)' if k == 'county'
                     context.output_hash['subject_geographic_sim'] << v
                     context.output_hash["subject_geo_#{k}_sim"] << v if context.output_hash["subject_geo_#{k}_sim"]
