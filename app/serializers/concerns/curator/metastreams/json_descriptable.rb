@@ -13,40 +13,27 @@ module Curator
         end
 
         one :physical_location do
-          include Curator::ControlledTerms::JsonNomenclature
           include Curator::ControlledTerms::JsonName
         end
 
         one :license do
-          include Curator::ControlledTerms::JsonNomenclature
           include Curator::ControlledTerms::JsonLicense
         end
 
         one :rights_statement do
-          include Curator::ControlledTerms::JsonNomenclature
           include Curator::ControlledTerms::JsonRightsStatement
         end
 
         has_many :resource_types do
-          include Curator::ControlledTerms::JsonNomenclature
           include Curator::ControlledTerms::JsonReso
         end
 
         has_many :genres do
-          include Curator::ControlledTerms::JsonNomenclature
           include Curator::ControlledTerms::JsonGenre
         end
 
-        has_many :name_roles do
-          one :name do
-            include Curator::ControlledTerms::JsonNomenclature
-            include Curator::ControlledTerms::JsonName
-          end
-
-          one :role do
-            include Curator::ControlledTerms::JsonNomenclature
-            include Curator::ControlledTerms::JsonRole
-          end
+        has_many :languages do
+          include Curator::ControlledTerms::JsonLanguage
         end
 
         many :identifier do
@@ -84,9 +71,25 @@ module Curator
         end
 
         one :publication do
-            attributes :edition_name, :edition_number, :volume, :issue_number
+          attributes :edition_name, :edition_number, :volume, :issue_number
         end
 
+        has_many :name_roles do
+          one :name do
+            include Curator::ControlledTerms::JsonName
+          end
+
+          one :role do
+            include Curator::ControlledTerms::JsonRole
+          end
+        end
+
+        one :subject do
+          attributes :dates, :temporals
+          many :topics do
+            include Curator::ControlledTerms::JsonSubject
+          end
+        end
       end
     end
   end

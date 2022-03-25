@@ -14,12 +14,20 @@ module Curator
           super >> proc { |hash| deep_compact(hash) }
         end
 
+        #Removes blank values
         def deep_compact(hash)
-          hash.map do |key,value|
-            value = deep_compact(value) if value.is_a?(Hash)
-
-            [key, value]
-          end.to_h.compact_blank
+          hash.reduce({}) do |ret, (key, value)|
+            new_val = case value
+                      when Hash
+                        deep_compact(value)
+                      when Array
+                        value.map { |v| v.is_a?(Hash) ? deep_compact(v) : v }
+                      else
+                        value
+                      end
+            ret[key] = new_val
+            ret
+          end.compact_blank
         end
       end
     end

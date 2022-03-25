@@ -6,6 +6,7 @@ module Curator
       extend ActiveSupport::Concern
 
       included do
+        include Curator::ControlledTerms::JsonNomenclature
         attributes :area_type, :coordinates, :bounding_box, :authority_code
       end
     end

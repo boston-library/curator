@@ -6,6 +6,7 @@ module Curator
       extend ActiveSupport::Concern
 
       included do
+        include Curator::ControlledTerms::JsonNomenclature
         attributes :basic, :authority_code
       end
     end
