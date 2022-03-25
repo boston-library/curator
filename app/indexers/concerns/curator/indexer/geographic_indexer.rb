@@ -44,6 +44,7 @@ module Curator
                                          end
                   auth_data[:hier_geo].each do |k, v|
                     context.output_hash['subject_geographic_tim'] << v
+                    v = v.gsub(/\s\([\s\w]*\)\z/, '') if k == 'other'
                     v += ' (county)' if k == 'county'
                     context.output_hash['subject_geographic_sim'] << v
                     context.output_hash["subject_geo_#{k}_sim"] << v if context.output_hash["subject_geo_#{k}_sim"]
