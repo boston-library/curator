@@ -34,7 +34,7 @@ module Curator
             acc.concat rec.descriptive.resource_types.map(&:label) if rec.descriptive&.resource_types
           end
           to_field 'lang_term_ssim' do |rec, acc|
-            acc.concat rec.descriptive.languages.map(&:label) if rec.descriptive&.languages
+            acc.concat rec.descriptive.languages.map(&:label).map { |l| l.split('|').first.strip } if rec.descriptive&.languages
           end
         end
       end
