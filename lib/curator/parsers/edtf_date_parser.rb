@@ -10,7 +10,7 @@ module Curator
       # @param inferred [Boolean]
       # @return [String] date formatted for display
       def self.date_for_display(date: '', type: nil, inferred: false)
-        prefix, suffix, date_start_suffix = '', '', ''
+        prefix, suffix, date_start_suffix, date_end_suffix = '', '', '', ''
         edtf_date_hash = edtf_date_parser(date: date, type: type, inferred: inferred)
         if edtf_date_hash[:qualifier]
           prefix = edtf_date_hash[:qualifier] == 'approximate' ? '[ca. ' : '['
@@ -19,7 +19,10 @@ module Curator
         prefix = '(c) ' if edtf_date_hash[:type] == 'copyrightDate'
         if edtf_date_hash[:start] || edtf_date_hash[:end]
           date_start_suffix = '?' if edtf_date_hash[:qualifier] == 'questionable'
-          date_value = "#{normalize_date(edtf_date_hash[:start])}#{date_start_suffix}–#{normalize_date(edtf_date_hash[:end])}"
+          date_end_suffix = ' C.E.' if edtf_date_hash[:start] =~ /\A-/ && edtf_date_hash[:end] !~ /\A-/
+          start_value = "#{normalize_date(edtf_date_hash[:start])}#{date_start_suffix}"
+          end_value = "#{normalize_date(edtf_date_hash[:end])}#{date_end_suffix}"
+          date_value = [start_value, end_value].join('–')
         else
           date_value = normalize_date(edtf_date_hash[:static])
         end
@@ -111,7 +114,7 @@ module Curator
                       end
         return date_string unless date_string.match?(/\A-\d/) # deal with BC dates ("-2350")
 
-        "#{date_string[1..-1]} B.C."
+        "#{date_string[1..-1]} B.C.E."
       end
 
       ##
