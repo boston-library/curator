@@ -19,7 +19,7 @@ module Curator
         prefix = '(c) ' if edtf_date_hash[:type] == 'copyrightDate'
         if edtf_date_hash[:start] || edtf_date_hash[:end]
           date_start_suffix = '?' if edtf_date_hash[:qualifier] == 'questionable'
-          date_end_suffix = ' C.E.' if edtf_date_hash[:start] =~ /\A-/ && edtf_date_hash[:end] !~ /\A-/
+          date_end_suffix = ' C.E.' if edtf_date_hash[:start] =~ /\A-\d/ && edtf_date_hash[:end] !~ /\A-\d/
           start_value = "#{normalize_date(edtf_date_hash[:start])}#{date_start_suffix}"
           end_value = "#{normalize_date(edtf_date_hash[:end])}#{date_end_suffix}"
           date_value = [start_value, end_value].join('–')
