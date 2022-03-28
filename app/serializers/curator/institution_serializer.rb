@@ -7,15 +7,16 @@ module Curator
 
       attributes :abstract, :name, :url
 
-      one :location do
+      has_one :location do
         include Curator::ControlledTerms::JsonName
       end
 
       one :metastreams do
-        one :administrative do
+        has_one :administrative do
           include Curator::Metastreams::JsonAdministratable
         end
-        one :workflow do
+
+        has_one :workflow do
           include Curator::Metastreams::JsonWorkflowable
         end
       end

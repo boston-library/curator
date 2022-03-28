@@ -104,11 +104,11 @@ module SerializerHelper
     end
   end
 
-  module SchemaHelper
-    def schema_attribute_keys(schema = nil)
-      return [] if schema.blank?
+  module SchemaBuilderHelper
+    def schema_attribute_keys(schema_builder_class = nil)
+      return [] if schema_builder_class.blank?
 
-      schema.facets.map { |f| f.schema_attribute.key.to_s }
+      schema_builder_class._attributes.keys
     end
 
     def schema_attribute_group_keys(schema = nil, facet_group_key = nil)
@@ -121,7 +121,7 @@ module SerializerHelper
   end
 
   module FacetHelper
-    include SchemaHelper
+    include SchemaBuilderHelper
     def build_facet_inst(klass:, **kwargs, &block)
       klass.new(**kwargs, &block)
     end
@@ -151,7 +151,7 @@ module SerializerHelper
   end
 
   module IntegrationHelper
-    include SchemaHelper
+    include SchemaBuilderHelper
     include AsJsonHelper
     def record_as_json(record, options = {})
       rec_root_key = record_root_key(record)
@@ -216,7 +216,7 @@ module SerializerHelper
     def serializer_adapter_schema_attributes(serializer_class, adapter_key, facet_group_key)
       return [] if adapter_key == :null
 
-      schema = serializer_class.send(:_schema_for_adapter, adapter_key)&.schema
+      schema = serializer_class.send(:_schema_builder_for_adapter, adapter_key)&.schema
 
       schema_attribute_group_keys(schema, facet_group_key)
     end

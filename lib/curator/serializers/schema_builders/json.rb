@@ -11,17 +11,19 @@ module Curator
         private
 
         def converter
-          super >> proc { |hash| deep_compact(hash) }
+          super >> proc { |hash| deep_format_and_compact(hash) }
         end
 
-        #Removes blank values
-        def deep_compact(hash)
+        #Removes blank values and formats time ActiveSupport::TimeWithZone values to iso8601
+        def deep_format_and_compact(hash)
           hash.reduce({}) do |ret, (key, value)|
             new_val = case value
                       when Hash
-                        deep_compact(value)
+                        deep_format_and_compact(value)
                       when Array
-                        value.map { |v| v.is_a?(Hash) ? deep_compact(v) : v }
+                        value.map { |v| v.is_a?(Hash) ? deep_format_and_compact(v) : v }
+                      when ActiveSupport::TimeWithZone
+                        value.iso8601
                       else
                         value
                       end

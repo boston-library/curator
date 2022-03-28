@@ -4,13 +4,14 @@ RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: f
   routes { Curator::Engine.routes }
 
   specify { expect(serializer_class).to be_truthy.and be <= Curator::Serializers::AbstractSerializer }
-  specify { expect(resource_key).to be_truthy.and be_a_kind_of(String) }
+  specify { expect(resource_key).to be_truthy.and be_a_kind_of(Symbol) }
   specify { expect(format).to be_truthy.and be_a_kind_of(Symbol) }
   specify { expect(charset).to be_truthy.and be_a_kind_of(String) }
   specify { expect(params).to be_truthy.and be_a_kind_of(Hash) }
   specify { expect(serialized_hash).to be_truthy.and be_a_kind_of(Hash) }
 
   let(:expected_content_type) { "#{Mime[format].to_str}; #{charset}" }
+  let(:pluralized_resource_key) { resource_key.to_s.pluralize.to_sym }
 
   describe 'GET' do
     describe "#index", if: has_collection_methods do
@@ -20,8 +21,8 @@ RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: f
         get :index, params: params
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq(expected_content_type)
-        expect(json_response).to be_a_kind_of(Hash).and have_key(resource_key.pluralize)
-        expect(json_response).to include(resource_key.pluralize => include(a_hash_including(serialized_hash)))
+        expect(json_response).to be_a_kind_of(Hash).and have_key(pluralized_resource_key)
+        expect(json_response).to include(pluralized_resource_key => include(a_hash_including(serialized_hash)))
       end
     end
 
@@ -64,8 +65,8 @@ RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: f
           get :show, params: invalid_id_params
           expect(response).to have_http_status(:not_found)
           expect(response.content_type).to eq(expected_content_type)
-          expect(json_response).to be_a_kind_of(Hash).and have_key('errors')
-          expect(json_response['errors'][0]).to include('status' => 404, 'title' => 'Record Not Found', 'detail' => a_kind_of(String), 'source' => a_hash_including('pointer'))
+          expect(json_response).to be_a_kind_of(Hash).and have_key(:errors)
+          expect(json_response[:errors][0]).to include(:status => 404, :title => 'Record Not Found', :detail => a_kind_of(String), :source => a_hash_including(:pointer))
         end
       end
 
@@ -94,8 +95,8 @@ RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: f
           get :show, params: invalid_ark_params
           expect(response).to have_http_status(:not_found)
           expect(response.content_type).to eq(expected_content_type)
-          expect(json_response).to be_a_kind_of(Hash).and have_key('errors')
-          expect(json_response['errors'][0]).to include('status' => 404, 'title' => 'Record Not Found', 'detail' => a_kind_of(String), 'source' => a_hash_including('pointer'))
+          expect(json_response).to be_a_kind_of(Hash).and have_key(:errors)
+          expect(json_response[:errors][0]).to include(:status => 404, :title => 'Record Not Found', :detail => a_kind_of(String), :source => a_hash_including(:pointer))
         end
       end
     end
@@ -115,7 +116,7 @@ RSpec.shared_examples 'shared_put_patch', type: :controller do |skip_put_patch: 
     specify { expect(charset).to be_truthy.and be_a_kind_of(String) }
     specify { expect(valid_session).to be_truthy.and be_a_kind_of(Hash) }
     specify { expect(resource).to be_truthy.and be_a_kind_of(ActiveRecord::Base) }
-    specify { expect(resource_key).to be_truthy.and be_a_kind_of(String) }
+    specify { expect(resource_key).to be_truthy.and be_a_kind_of(Symbol) }
 
     context 'with :valid_params' do
       let(:valid_update_params) do
@@ -152,8 +153,8 @@ RSpec.shared_examples 'shared_put_patch', type: :controller do |skip_put_patch: 
 
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq(expected_content_type)
-        expect(json_response).to be_a_kind_of(Hash).and have_key('errors')
-        expect(json_response['errors'][0]).to include('status' => 422, 'title' => 'Unprocessable Entity', 'detail' => a_kind_of(String), 'source' => a_hash_including('pointer'))
+        expect(json_response).to be_a_kind_of(Hash).and have_key(:errors)
+        expect(json_response[:errors][0]).to include(:status => 422, :title => 'Unprocessable Entity', :detail => a_kind_of(String), :source => a_hash_including(:pointer))
       end
     end
   end
@@ -172,7 +173,7 @@ RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true, reso
     specify { expect(charset).to be_truthy.and be_a_kind_of(String) }
     specify { expect(valid_session).to be_truthy.and be_a_kind_of(Hash) }
     specify { expect(resource_class).to be_truthy.and be <= ActiveRecord::Base }
-    specify { expect(resource_key).to be_truthy.and be_a_kind_of(String) }
+    specify { expect(resource_key).to be_truthy.and be_a_kind_of(Symbol) }
 
     describe '#create' do
       context 'with :valid_params' do
@@ -206,8 +207,8 @@ RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true, reso
 
           expect(response).to have_http_status(:unprocessable_entity)
           expect(response.content_type).to eq(expected_content_type)
-          expect(json_response).to be_a_kind_of(Hash).and have_key('errors')
-          expect(json_response['errors'][0]).to include('status' => 422, 'title' => 'Unprocessable Entity', 'detail' => a_kind_of(String), 'source' => a_hash_including('pointer'))
+          expect(json_response).to be_a_kind_of(Hash).and have_key(:errors)
+          expect(json_response[:errors][0]).to include(:status => 422, :title => 'Unprocessable Entity', :detail => a_kind_of(String), :source => a_hash_including(:pointer))
         end
       end
     end
@@ -222,14 +223,14 @@ RSpec.shared_examples "shared_formats", type: :controller do |include_ark_contex
     let!(:format) { :json }
     let!(:charset) { 'charset=utf-8' }
     let!(:params) { base_params.dup.merge({ format: format }) }
-    let(:serialized_hash) { serializer_class.new(resource.reload, format).serializable_hash[resource_key].as_json }
+    let(:serialized_hash) { serializer_class.new(resource.reload, adapter_key: format).serializable_hash }
     # NOTE: Have to add as_json so the dates match the serialized response
 
-    include_examples 'shared_get', include_ark_context: include_ark_context, has_collection_methods: has_collection_methods, has_member_methods: has_member_methods, resource_key: resource_key, file_set_type: file_set_type
+    include_examples 'shared_get', include_ark_context: include_ark_context, has_collection_methods: has_collection_methods, has_member_methods: has_member_methods, resource_key: resource_key.to_sym, file_set_type: file_set_type
 
-    include_examples 'shared_post', skip_post: skip_post, resource_key: resource_key
+    include_examples 'shared_post', skip_post: skip_post, resource_key: resource_key.to_sym
 
-    include_examples 'shared_put_patch', skip_put_patch: skip_put_patch, resource_key: resource_key
+    include_examples 'shared_put_patch', skip_put_patch: skip_put_patch, resource_key: resource_key.to_sym
   end
 
   # context 'XML' do

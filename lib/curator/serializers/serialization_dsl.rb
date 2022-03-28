@@ -44,7 +44,7 @@ module Curator
         def _define_adapter_schema_builder(adapter_key:, &block)
           raise 'NullAdapter cant be used this way' if adapter_key.to_sym == :null
 
-          if superclass._has_adapter_schema?(adapter_key.to_sym)
+          if superclass.respond_to?(:_has_adapter_schema?, true) && superclass._has_adapter_schema?(adapter_key.to_sym)
             parent_adapter = superclass._schema_builder_for_adapter(adapter_key)
             adapter_klass = parent_adapter.class
             adapter_instance = adapter_klass.new(base_builder_class: parent_adapter.schema_builder_class, &block)

@@ -12,20 +12,20 @@ module Curator
           descriptable.host_collections.names
         end
 
-        one :physical_location do
+        has_one :physical_location do
           include Curator::ControlledTerms::JsonName
         end
 
-        one :license do
+        has_one :license do
           include Curator::ControlledTerms::JsonLicense
         end
 
-        one :rights_statement do
+        has_one :rights_statement do
           include Curator::ControlledTerms::JsonRightsStatement
         end
 
         has_many :resource_types do
-          include Curator::ControlledTerms::JsonReso
+          include Curator::ControlledTerms::JsonResourceType
         end
 
         has_many :genres do
@@ -75,19 +75,32 @@ module Curator
         end
 
         has_many :name_roles do
-          one :name do
+          has_one :name do
             include Curator::ControlledTerms::JsonName
           end
 
-          one :role do
+          has_one :role do
             include Curator::ControlledTerms::JsonRole
           end
         end
 
         one :subject do
           attributes :dates, :temporals
-          many :topics do
+
+          has_many :topics do
             include Curator::ControlledTerms::JsonSubject
+          end
+
+          has_many :names do
+            include Curator::ControlledTerms::JsonName
+          end
+
+          has_many :geos do
+            include Curator::ControlledTerms::JsonGeographic
+          end
+
+          many :titles do
+            include Curator::DescriptiveFieldSets::JsonTitle
           end
         end
       end

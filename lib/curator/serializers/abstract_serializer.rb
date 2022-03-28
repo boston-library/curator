@@ -15,11 +15,11 @@ module Curator
       end
 
       def serializable_hash
-        adapter.serializable_hash(record, params)
+        adapter.serializable_hash(record, params.dup)
       end
 
       def serialize
-        adapter.serialize(record, params)
+        adapter.serialize(record, params.dup)
       end
 
       alias render serialize

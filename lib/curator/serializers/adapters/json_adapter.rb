@@ -9,13 +9,13 @@ module Curator
       end
 
       def serializable_hash(resource, params = {})
-        @schema_builder_class.new(resource, params).serializable_hash
+        schema_builder_class.new(resource, params: params).serializable_hash
       end
 
       def serialize(resource, params = {})
         root_key = params.delete(:root_key)
         meta = params.delete(:meta) || {}
-        @schema_builder_class.new(resource, params).serialize(root_key: root_key, meta: meta)
+        schema_builder_class.new(resource, params: params).serialize(root_key: root_key, meta: meta)
       end
     end
   end

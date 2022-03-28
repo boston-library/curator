@@ -15,7 +15,7 @@ module Curator
         attributes :ark_id
       end
 
-      one :pagination, if: ->(record) { record.pagination.present? } do
+      one :pagination do
         attributes :page_label, :page_type, :hand_side
       end
 
@@ -23,6 +23,7 @@ module Curator
         has_one :administrative do
           include Curator::Metastreams::JsonAdministratable
         end
+
         has_one :workflow do
           include Curator::Metastreams::JsonWorkflowable
         end

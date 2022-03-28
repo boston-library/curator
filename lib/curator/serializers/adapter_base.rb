@@ -11,11 +11,11 @@ module Curator
 
       # NOTE: Once the relevant schema is collected you can update the hash output to any format you want
       def serializable_hash(_resource = nil, _params = {})
-        raise Curator::Exception::CuratorError, 'Not Implemented'
+        raise Curator::Exceptions::CuratorError, 'Not Implemented'
       end
 
       def serialize(_resource= nil, _params = {})
-        raise Curator::Exception::CuratorError, 'Not Implemented'
+        raise Curator::Exceptions::CuratorError, 'Not Implemented'
       end
     end
   end

@@ -57,7 +57,7 @@ module Curator::Exceptions
   class UnprocessableEntity < SerializableError
     def initialize(message = 'Unable to process entity', pointer = '/request/:params')
       super(
-        title: 'Record Not Found',
+        title: 'Unprocessable Entity',
         status: :unprocessable_entity,
         detail: message,
         source: { pointer: pointer }
