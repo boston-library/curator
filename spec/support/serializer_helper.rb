@@ -110,49 +110,13 @@ module SerializerHelper
 
       schema_builder_class._attributes.keys
     end
-
-    def schema_attribute_group_keys(schema = nil, facet_group_key = nil)
-      return {} if schema.blank?
-
-      return [] if facet_group_key.blank?
-
-      schema.facet_groups.fetch(facet_group_key, []).map { |f| f.key.to_s }
-    end
   end
 
-  module FacetHelper
-    include SchemaBuilderHelper
-    def build_facet_inst(klass:, **kwargs, &block)
-      klass.new(**kwargs, &block)
-    end
-
-    def build_facet_inst_list(*facet_fields, klass:, method: nil, options: {})
-      facet_fields.map do |field|
-        build_facet_inst(klass: klass, key: field, method: method.blank? ? nil : method.call(field), options: options.dup)
-      end
-    end
-
-    def serialize_facet_inst(facet_inst, record, options = {})
-      return { facet_inst.key => facet_inst.serialize(record, options.dup) } if facet_inst.include_value?(record, options.dup)
-
-      # NOTE: This method simulates how the schema builds the resulting serialized hash.
-      nil
-    end
-
-    def serialize_facet_inst_collection(*facet_inst_list, record:, options: {})
-      facet_inst_list.inject({}) do |ret, facet|
-        ret.merge(serialize_facet_inst(facet, record, options.dup))
-      end.stringify_keys
-    end
-
-    def object_as_json(record, opts = {})
-      record.as_json(opts.dup.slice(:only, :include))
-    end
-  end
 
   module IntegrationHelper
     include SchemaBuilderHelper
     include AsJsonHelper
+
     def record_as_json(record, options = {})
       rec_root_key = record_root_key(record)
       as_json_opts = options.dup.slice(:root, :include, :only, :methods)
@@ -255,6 +219,6 @@ module SerializerHelper
 end
 
 RSpec.configure do |config|
-  config.include SerializerHelper::FacetHelper, type: :lib_serializers
+  config.include SerializerHelper::SchemaBuilderHelper, type: :lib_serializers
   config.include SerializerHelper::IntegrationHelper, type: :serializers
 end

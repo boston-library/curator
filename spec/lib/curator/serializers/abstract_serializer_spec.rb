@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 require_relative './shared/shared_dsl'
+
 RSpec.describe Curator::Serializers::AbstractSerializer, type: :lib_serializers do
   let!(:serializer_class) do
     Class.new(described_class) do

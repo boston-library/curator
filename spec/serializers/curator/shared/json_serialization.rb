@@ -62,7 +62,7 @@ RSpec.shared_examples 'json_serialization', type: :serializers do
         let!(:expected_json_key_matchers) { recurse_keys_to_json_map.call(expected_json_hash[json_root_key]) }
         let!(:expected_json_val_matchers) { recurse_vals_to_json_map.call(expected_json_hash[json_root_key]) }
 
-        it { is_expected.to be_a_kind_of(String).and match(json_regex).and match(json_root_key) }
+        it { is_expected.to be_a_kind_of(String).and match(json_root_key) }
 
         it 'expects the length of the subject to match the :expected_json' do
           expect(subject.length).to eq(expected_json.length)
@@ -79,7 +79,7 @@ RSpec.shared_examples 'json_serialization', type: :serializers do
     end
 
     describe 'For collection of records' do
-      let!(:serializer_for_many) { described_class.new(json_array, adapter_key) }
+      let!(:serializer_for_many) { described_class.new(json_array, adapter_key: adapter_key) }
       let!(:expected_json_array) { json_array.map { |json_record| record_as_json(json_record, expected_as_json_options.merge(root: false)) } }
 
       describe '#serializable_hash' do
@@ -121,7 +121,7 @@ RSpec.shared_examples 'json_serialization', type: :serializers do
           end.reject { |key, _v| expected_json_key_matchers.flatten.uniq.include?(key) || key.to_i != 0 }
         end
 
-        it { is_expected.to be_a_kind_of(String).and match(json_regex).and match(json_root_key) }
+        it { is_expected.to be_a_kind_of(String).and match(json_root_key) }
 
         it 'expects the length of the subject to match the :expected_json' do
           expect(subject.length).to eq(expected_json.length)

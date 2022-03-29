@@ -17,7 +17,7 @@ module Curator
     require 'attr_json'
     require 'htmlentities'
     require 'mime/types'
-    require 'ox'
+    require 'nokogiri'
     require 'oj'
     require 'paper_trail'
     require 'paper_trail-association_tracking'
