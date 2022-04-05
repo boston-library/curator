@@ -180,9 +180,7 @@ module SerializerHelper
     def serializer_adapter_schema_attributes(serializer_class, adapter_key, facet_group_key)
       return [] if adapter_key == :null
 
-      schema = serializer_class.send(:_schema_builder_for_adapter, adapter_key)&.schema
-
-      schema_attribute_group_keys(schema, facet_group_key)
+      serializer_class.send(:_schema_builder_for_adapter, adapter_key)&.schema_builder_class&._attributes || []
     end
 
     protected

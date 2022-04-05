@@ -7,6 +7,7 @@ module Curator
 
       eager_autoload do
         autoload :JSON
+        autoload :XML
       end
     end
   end

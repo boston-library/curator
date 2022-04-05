@@ -19,6 +19,7 @@ module Curator
     require 'mime/types'
     require 'nokogiri'
     require 'oj'
+    require 'ox'
     require 'paper_trail'
     require 'paper_trail-association_tracking'
     require 'rsolr'

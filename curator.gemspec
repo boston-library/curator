@@ -45,6 +45,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'mime-types', '~> 3.3'
   spec.add_dependency 'nokogiri', '~> 1.13.3'
   spec.add_dependency 'oj', '~> 3.13'
+  spec.add_dependency 'ox', '2.14.11'
   spec.add_dependency 'paper_trail', '~> 11.1'
   spec.add_dependency 'paper_trail-association_tracking', '~> 2.1'
   spec.add_dependency 'rails', '~> 6.1.5', '< 7'
