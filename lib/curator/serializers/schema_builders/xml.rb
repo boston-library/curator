@@ -7,8 +7,6 @@ module Curator
     module SchemaBuilders
       class XML
         include BuilderHelpers::XMLBuilder
-
-        alias to_h serializable_hash
       end
       #
       # module XmlResource

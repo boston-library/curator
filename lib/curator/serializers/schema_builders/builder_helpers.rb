@@ -21,12 +21,11 @@ module Curator
 
         # NOTE: target_value can be a string,symbol or lambda for an Element / Node
 
-        def initialize(name, target_value: nil, &block)
+        def initialize(name, target_val: nil, &block)
           @name = name
-          @xml_label = xml_label.present? ? xml_label : name
-          @target_value = target_value.present? ? target_value : name.to_sym
           @attributes = []
           instance_exec(&block) if block_given?
+          @target_value ||= target_val.present? ? target_val : name.to_sym
         end
 
         def attribute(attr_name, xml_label: nil, &block)
@@ -36,24 +35,30 @@ module Curator
       end
 
       class RelationalNode < Element
-        attr_reader :elements, :multi_root
+        attr_reader :elements, :multi_valued, :target_obj
 
         # Note target value is the method or relation we will be passing as the target object
-        def initialize(name, target_value: nil, multi_root: false, &block)
+        def initialize(name, target_obj: nil, multi_valued: false, &block)
           @elements = []
-          @multi_root = multi_root
-          super
+          @target_obj = target_obj.present? ? target_obj : name.to_sym
+          super(name, target_val: nil, &block)
         end
 
-        def element(el_name, target_value: nil, &block)
-          el = block_given? ? Element.new(el_name, target_value: target_value, &block) : Element.new(el_name, target_value: target_value)
-          @elements << el
+        def target_value_as(val = nil, &block)
+          @target_value = block if block_given?
+
+          @target_value ||= val
         end
 
-        def node(node_name, target_value: nil, multi: false, &block)
+        def element(el_name, target_val: nil, multi_valued: false, &block)
+          el = block_given? ? Element.new(el_name, target_val: target_value, multi_valued: multi_valued, &block) : Element.new(el_name, target_value: target_value, multi_valued: multi_valued)
+          elements << el
+        end
+
+        def node(node_name, target_obj: nil, multi_valued: false, &block)
           raise ArgumentError, 'No block given in node method' if block.blank?
 
-          @elements << self.class.new(node_name, target_value: target_value, mutli_root: multi, &block)
+          elements << self.class.new(node_name, target_obj: target_obj, mutli_valued: multi_valued, &block)
         end
       end
 
@@ -91,6 +96,10 @@ module Curator
             document
           end
 
+          def serializable_hash
+            serializable_document.root.nodes.reduce({}, &build_hash)
+          end
+
           protected
 
           def root_element
@@ -98,7 +107,7 @@ module Curator
 
             @_root_element = Ox::Element.new(fetch_root_element_name)
 
-            root_attributes.each_pair { |attr_name, attr_value| _@root_element[attr_name] = attr_value }
+            root_attributes.each_pair { |attr_name, attr_value| @_root_element[attr_name] = attr_value }
 
             @_root_element
           end
@@ -108,7 +117,7 @@ module Curator
 
             @document = Ox::Document.new(version: '1.0', encoding: 'UTF-8')
 
-            if collection?
+            if object_is_collection?
               object.each { |obj| build_elements(root_element, object, xml_elements) }
             else
               build_elements(root_element, object, xml_elements)
@@ -125,18 +134,37 @@ module Curator
             end
           end
 
+          def build_hash
+            lambda do |hash, element|
+              hash[element.name] ||= []
+              element.attributes.each_pair { |k,v| hash[element.name] << {k => v} }if element.attributes.present?
+              element.each do |el_value|
+                case el_value
+                when Ox::Element
+                  el_hash = build_hash.call(el_value, {})
+                  hash[element.name] << el_hash
+                else
+                  hash[element.name] << el_value
+                end
+              end
+              hash
+            end
+          end
+
           def build_elements(root, target_object, elements)
+            return root if elements.blank?
+
             elements.each_pair do |element_name, element|
               begin
                 el = case element
                     when Array
                       build_conditional(target_object, element_name, element)
                     when BuilderHelpers::Element
-                      build_element(target_obj, element_name, element)
+                      build_element(target_object, element_name, element)
                     when BuilderHelpers::RelationalNode
-                      build_node(target_obj, element_name, element)
+                      build_node(target_object, element_name, element)
                     end
-                next if el == CONDITION_UMNET
+                next if el == CONDITION_UMNET || el.blank?
 
                 if el.is_a?(Array)
                   el.each {|el| add_to_root.call(root, el) }
@@ -170,48 +198,77 @@ module Curator
           end
 
           def build_element(target_object, element_name, builder_element)
+            el_value = fetch_element_value(target_object, builder_element)
+
+            return if el_value.blank?
+
             return_element = Ox::Element.new(element_name)
 
-            el_attrs = fetch_element_attributes(target_object, builder_element.attributes)
-            el_attrs.each_pair { |attr_name, attr_value| return_element[attr_name] = attr_value }
+            build_element_attributes(target_object, return_element, builder_element.attributes)
 
-            el_value = fetch_element_value(target_object, builder_element)
-            return_element << el_value if el_value.present?
+            return_element << el_value
+
             return_element
           end
 
-          def build_node(target_obj, node_name, node)
-            node_target_obj = fetch_value(target_obj, node.target_value)
+          def build_node(target_object, node_name, node)
+            node_target_obj = fetch_node_value(target_object, node.target_obj)
+
+            return if node_target_obj.blank?
 
             node_elements = node.elements.inject({}) do |ret, ne|
               k = self.class.send(:transformed_key, ne.name)
               ret[k] = ne
             end
 
-            if node_target_obj.is_a?(Enumerable) && !node_target_obj.is_a?(Struct)
-              return build_node_multi_root(node_target_obj, node_name, node) if node.multi_root
+            if target_is_collection?(node_target_obj)
+              return build_node_multi(node_target_obj, node_name, node_elements, node.attributes) if node.multi_valued
 
               node_root = Ox::Element.new(node_name)
-              node_attributes = fetch_node_attributes(node_target_obj, node.attributes)
+              build_node_attributes(node_target_obj, node_root, node.attributes)
+              node_target_obj.each { |nt_obj| build_elements(node_root, nt_obj, node_elements) } if node_elements.present?
 
-              node_target_obj.each { |nt_obj| build_elements(node_root, nt_obj, node_elements) }
-            else
-              node_root = Ox::Element.new(node_name)
-              node_attributes = fetch_node_attributes(node_target_obj, node.attributes)
-              node_attributes.each_pair { |attr_name, attr_value| node_root[attr_name] = attr_value }
-              build_elements(node_root, node_target_obj, node_elements)
+              return if node_is_blank?(node_root)
+
+              return node_root
             end
+
+            node_root = Ox::Element.new(node_name)
+            build_node_attributes(node_target_obj, node_root, node.attributes)
+            build_elements(node_root, node_target_obj, node_elements) if node_elements.present?
+
+            node_value = fetch_node_value(node_target_obj, node.target_value)
+            node_root << node_value if node_value.present?
+
+            return if node_is_blank?(node_root)
+
             node_root
           end
 
-          def build_node_multi_root(node_target_objects, node_name, node_elements, node_attributes)
-            node_target_objects.map do |node_target_obj|
-              node_root = Ox::Element.new(node_name)
-              node_attributes = fetch_node_attributes(node_target_obj, node_attributes)
-              node_attributes.each_pair { |attr_name, attr_value| node_root[attr_name] = attr_value }
-              build_elements(node_root, node_target_obj, node_elements)
-              node_root
-            end
+          def build_node_multi(node_target_objects, node_name, node)
+            node_target_objects.map { |nto| build_node(nto, node_name, node) }.compact
+          end
+
+          def build_element_attributes(target_object, return_element, attributes_list = [])
+            return if attributes_list.blank?
+
+            attrs = fetch_element_attributes(target_object, attributes_list)
+
+            return if attrs.blank?
+
+            attrs.each_pair { |attr_name, attr_value| return_element[attr_name] = attr_value if attr_value }
+          end
+          alias build_node_attributes build_element_attributes
+
+          def fetch_element_value(target_obj, element)
+            return if element.target_value.blank?
+
+            fetch_value(target_obj, element.target_value)
+          end
+          alias fetch_node_value fetch_element_value
+
+          def node_is_blank?(node)
+            node.attributes.blank? && node.nodes.blank?
           end
 
           def fetch_element_attributes(target_obj, element_attributes = [])
@@ -221,11 +278,6 @@ module Curator
               ret[el_attr.xml_label] = fetch_value(target_obj, el_attr.target_value)
               ret
             end
-          end
-          alias fetch_node_attributes fetch_element_attributes
-
-          def fetch_element_value(target_obj, element)
-            fetch_value(target_obj, element.target_value)
           end
 
           def fetch_value(target_obj, obj_attribute)
@@ -240,7 +292,7 @@ module Curator
           def fetch_attribute_from_object_or_serializer(target_obj, obj_attribute)
             has_method = @method_existence[obj_attribute.to_sym]
             has_method = @method_existence[obj_attribute.to_sym] = target_obj.respond_to?(obj_attribute) if has_method.nil?
-            has_method ? target_obj.__send__(obj_attribute) : __send__(obj_attribute, target_object)
+            has_method ? target_obj.__send__(obj_attribute) : __send__(obj_attribute, target_obj)
           end
 
           def fetch_root_element_name
@@ -258,7 +310,11 @@ module Curator
             end
           end
 
-          def collection?
+          def target_is_collection?(target_object)
+            target_object.is_a?(Enumerable) && !target_object.is_a?(Struct)
+          end
+
+          def object_is_collection?
             @object.is_a?(Enumerable) && !@object.is_a?(Struct)
           end
 
@@ -320,8 +376,8 @@ module Curator
             raise ArgumentError, 'No block given in node method' if block.blank?
 
             if_block = options.delete(:if)
-            n = BuilderHelpers::Node.new(node_name.to_sym, **options, &block)
-            @_xml_elements[transformed_key(el_name)] = if_block.blank? ?  n : [n, if_block]
+            n = BuilderHelpers::RelationalNode.new(node_name.to_sym, **options, &block)
+            @_xml_elements[transformed_key(node_name)] = if_block.blank? ?  n : [n, if_block]
           end
 
           protected
