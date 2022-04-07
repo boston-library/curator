@@ -35,6 +35,7 @@ module Curator
       register_adapter(key: :null, adapter: NullAdapter)
       register_adapter(key: :json, adapter: JSONAdapter)
       register_adapter(key: :xml,  adapter: XMLAdapter)
+      register_adapter(key: :mods, adapter: ModsAdapter)
     end
 
     eager_autoload do
@@ -47,14 +48,8 @@ module Curator
         autoload :NullAdapter
         autoload :JSONAdapter
         autoload :XMLAdapter
+        autoload :ModsAdapter
       end
-      # autoload_under 'schema' do
-      #   autoload :Attribute
-      #   autoload :Link
-      #   autoload :Meta
-      #   autoload :Node
-      #   autoload :Relation
-      # end
     end
   end
 end

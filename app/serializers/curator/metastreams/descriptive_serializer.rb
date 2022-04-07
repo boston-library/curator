@@ -73,5 +73,9 @@ module Curator
       #   end
       # end
     end
+
+    build_schema_as_mods do
+      include Curator::Metastreams::ModsDescriptable
+    end
   end
 end

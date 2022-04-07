@@ -6,8 +6,10 @@ module Curator
       extend ActiveSupport::Autoload
 
       eager_autoload do
+        autoload :BuilderHelpers
         autoload :JSON
         autoload :XML
+        autoload :Mods
       end
     end
   end
