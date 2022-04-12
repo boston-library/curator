@@ -5,24 +5,108 @@ module Curator
     module ModsDescriptable
       extend ActiveSupport::Concern
 
+      ACCESS_CONDITION_TYPE='use and reproduction'
+      DATE_ENCODING='w3cdtf'
+
       ResourceTypeWrapper = Struct.new(:resource_type_manuscript, :resource_type)
+      RecordInfoWrapper = Struct.new(:record_content_source, :record_origin, :language_of_cataloging, :description_standard)
 
       included do
-        multi_node :title_info, target_obj: ->(obj) { Array.wrap(obj.title.primary) + obj.title.other } do
+        multi_node :title_info, target_obj: :title_info_list do
+          target_value_blank!
+
           attribute :usage
           attribute :type
           attribute :supplied
+          attribute :language, xml_label: :lang
+          attribute :format_title_display_label, xml_label: :displayLabel
+
+          attribute :authority_code, xml_label: :authority
 
           element :title, target_val: :label
+          element :subTitle, target_val: :subtitle
         end
 
-        multi_node :type_of_resource, target_obj: :map_resource_type_wrappers do
-          attribute :manuscript do |obj|
-            obj.resource_type_manuscript == true ? 'yes' : nil
+        multi_node :name, target_obj: :name_role_list do
+          target_value_blank!
+
+          attribute :type do |name_role|
+            name_role.name_type
           end
 
-          target_value_as do |obj|
-            obj.resource_type.label
+          attribute :authority do |name_role|
+            name_role.name_authority
+          end
+
+          attribute :authorityURI do |name_role|
+            name_role.name_authority_uri
+          end
+
+          attribute :valueURI do |name_role|
+            name_role.name_value_uri
+          end
+
+          node :role, target_obj: :role_term do
+            target_value_blank!
+
+            node :roleTerm, target_obj: ->(rt) { rt } do
+              target_value_as :label
+
+              attribute :authority_code, xml_label: :authority
+
+              attribute :authority_base_url, xml_label: :authorityURI
+
+              attribute :value_uri, xml_label: :valueURI
+            end
+          end
+
+          element :namePart, target_val: :name_part
+        end
+
+        multi_node :type_of_resource, target_obj: :resource_type_wrappers do
+          attribute :manuscript do |tor|
+            tor.resource_type_manuscript == true ? 'yes' : nil
+          end
+
+          target_value_as do |tor|
+            tor.resource_type&.label
+          end
+        end
+
+        # multi_node :subject_geos, xml_label: :subject do
+        # end
+
+        #multi_node
+
+
+        multi_node :subject_topics, xml_label: :subject do
+          target_value_blank!
+
+          attribute :authority_code, xml_label: :authority
+
+          attribute :authority_base_url, xml_label: :authorityURI
+
+          attribute :value_uri, xml_label: :valueURI
+
+          element :topic, target_val: :label
+        end
+
+        multi_node :access_condition, target_obj: :access_condition_list do
+          target_value_as :label
+
+          attribute :uri
+
+          attribute :type do |_access_condition|
+            ACCESS_CONDITION_TYPE
+          end
+
+          attribute :displayLabel do |access_condition|
+            case access_condition
+            when Curator::ControlledTerms::RightsStatement
+              'rights'
+            when Curator::ControlledTerms::License
+              'license'
+            end
           end
         end
 
@@ -34,16 +118,87 @@ module Curator
           attribute :authority_base_url, xml_label: :authorityURI
 
           attribute :value_uri, xml_label: :valueURI
+
+          attribute :displayLabel do |obj|
+            obj.basic? ? 'general' : 'specific'
+          end
         end
 
-        multi_node :note do
+        node :physical_description do
+          target_value_blank!
+
+          element :digital_origin
+          element :extent
+
+          node :note, multi_valued: true, target_obj: :physical_description_note_list do
+            target_value_as :label
+          end
+
+          node :internet_media_type, multi_valued: true, target_obj: :internet_media_type_list do
+            target_value_as do |imt|
+              imt
+            end
+          end
+        end
+
+        multi_node :language, target_obj: :languages do
+          target_value_blank!
+
+          element :languageTerm, target_val: :label do
+            attribute :authority_code, xml_label: :authority
+
+            attribute :authority_base_url, xml_label: :authorityURI
+
+            attribute :value_uri, xml_label: :valueURI
+          end
+        end
+
+        multi_node :note, target_obj: :note_list do
           attribute :type
+          target_value_as :label
+        end
+
+        multi_node :identifier, target_obj: :identifier_list do
+          attribute :type
+          attribute :invalid
+
           target_value_as :label
         end
       end
 
-      def map_resource_type_wrappers(obj)
-        obj.resource_types.map { |rt| ResourceTypeWrapper.new(obj.resource_type_manuscript, rt) }
+      def format_title_display_label(title_info)
+        title_info.display == 'primary' ? 'primary_display' : title_info.display
+      end
+
+      def title_info_list(obj)
+        Array.wrap(obj.title.primary) + obj.title.other
+      end
+
+      def name_role_list(obj)
+        obj.name_roles.map { |nr| Curator::Mappings::NameRoleModsDecorator.new(nr) }
+      end
+
+      def note_list(obj)
+        obj.note.select { |n| n.type != 'physical description'}
+      end
+
+      def access_condition_list(obj)
+        [obj.rights_statement, obj.license]
+      end
+
+      def identifier_list(obj)
+        ark_identifier = Curator::DescriptiveFieldSets::Identifier.new(type: 'uri', label: obj.digital_object.ark_uri)
+        return Array.wrap(ark_identifier) + obj.identifier if ark_identifier.valid?
+
+        obj.identifier
+      end
+
+      def physical_description(desc)
+        Curator::Metastreams::PhysicalDescriptionModsDecorator.new(desc)
+      end
+
+      def resource_type_wrappers(desc)
+        desc.resource_types.map { |rt| ResourceTypeWrapper.new(desc.resource_type_manuscript, rt) }
       end
     end
   end

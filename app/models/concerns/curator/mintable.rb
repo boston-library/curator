@@ -16,6 +16,21 @@ module Curator
     end
 
     module InstanceMethods
+
+      def ark_uri
+        return if ark_noid.blank?
+
+        base_uri = Addressable::URI.parse(Curator.config.ark_manager_api_url)
+        base_uri.path = "ark:/#{Curator.config.default_ark_params[:namespace_ark]}/#{ark_noid}"
+        base_uri.to_s
+      end
+
+      def ark_noid
+        return if ark_id.blank?
+
+        ark_id.split(':').last
+      end
+
       def ark_params
         Curator.config.default_ark_params.dup.merge({ model_type: self.class.name })
       end

@@ -36,14 +36,25 @@ module Curator
         end
 
         class RelationalNode < Element
-          attr_reader :elements, :multi_valued, :target_obj
+          attr_reader :elements, :multi_valued, :target_object, :target_value_blank, :xml_label
 
-          # Note target value is the method or relation we will be passing as the target object
-          def initialize(name, target_obj: nil, multi_valued: false, &block)
+          # Note target_obj is different than target value.
+          def initialize(name, target_obj: nil, multi_valued: false, xml_label: nil, &block)
             @elements = []
             @multi_valued = multi_valued
-            @target_obj = target_obj.present? ? target_obj : name.to_sym
-            super(name, target_val: nil, &block)
+            @target_object = target_obj.present? ? target_obj : name.to_sym
+            @target_value_blank = false
+            @xml_label = xml_label
+            super(name, &block)
+            @target_value = target_value_blank ? nil : @target_value
+          end
+
+          def target_value_blank!
+            @target_value_blank = true
+          end
+
+          def target_value_blank?
+            @target_value_blank
           end
 
           def target_value_as(val = nil, &block)
@@ -52,15 +63,15 @@ module Curator
             @target_value ||= val
           end
 
-          def element(el_name, target_val: nil, multi_valued: false, &block)
-            el = block_given? ? Element.new(el_name, target_val: target_value, &block) : Element.new(el_name, target_val: target_val)
+          def element(el_name, target_val: nil, &block)
+            el = block_given? ? Element.new(el_name, target_val: target_val, &block) : Element.new(el_name, target_val: target_val)
             elements << el
           end
 
-          def node(node_name, target_obj: nil, multi_valued: false, &block)
+          def node(node_name, target_obj: nil, multi_valued: false, label: nil ,&block)
             raise ArgumentError, 'No block given in node method' if block.blank?
 
-            elements << self.class.new(node_name, target_obj: target_obj, mutli_valued: multi_valued, &block)
+            elements << self.class.new(node_name, target_obj: target_obj, multi_valued: multi_valued, xml_label: label, &block)
           end
         end
 
@@ -178,8 +189,8 @@ module Curator
 
                   add_to_root.call(root, el)
                 rescue StandardError => e
-                  Rails.logger.error e.message
-                  Rails.logger.info e.backtrace.first(10)
+                  @document = nil
+                  raise
                 end
               end
               root
@@ -218,7 +229,7 @@ module Curator
             end
 
             def build_node(target_object, node_name, node, use_target_object: false)
-              node_target_obj = use_target_object ? target_object : fetch_node_value(target_object, node.target_obj)
+              node_target_obj = use_target_object ? target_object : fetch_node_value(target_object, node.target_object)
 
               return if node_target_obj.blank?
 
@@ -233,6 +244,7 @@ module Curator
                 Rails.logger.info "The result of node.multi_valued IS #{node.multi_valued}"
                 return build_node_multi(node_target_obj, node_name, node) if node.multi_valued
 
+                node_name = self.class.send(:transformed_key, node.xml_label) if node.xml_label.present?
                 node_root = Ox::Element.new(node_name)
                 build_node_attributes(node_target_obj, node_root, node.attributes)
                 node_target_obj.each { |nt_obj| build_elements(node_root, nt_obj, node_elements) } if node_elements.present?
@@ -241,12 +253,13 @@ module Curator
 
                 return node_root
               end
-
+              
+              node_name = self.class.send(:transformed_key, node.xml_label) if node.xml_label.present?
               node_root = Ox::Element.new(node_name)
               build_node_attributes(node_target_obj, node_root, node.attributes)
               build_elements(node_root, node_target_obj, node_elements) if node_elements.present?
 
-              node_value = fetch_node_value(node_target_obj, node.target_value)
+              node_value = fetch_node_value(node_target_obj, node.target_value) if node.target_value.present?
               node_root << node_value if node_value.present?
 
               return if node_is_blank?(node_root)
