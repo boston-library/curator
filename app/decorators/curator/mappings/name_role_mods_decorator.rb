@@ -3,13 +3,7 @@
 module Curator
   class Mappings::NameRoleModsDecorator < Decorators::BaseDecorator
     class RoleTerm
-      attr_reader :role
 
-      def initialize(role)
-        @role = role
-      end
-
-      delegate :label, :authority_code, :authority_base_url, :value_uri, to: :role, allow_nil: true
     end
 
     def name
@@ -20,8 +14,24 @@ module Curator
       super if __getobj__.respond_to?(:role)
     end
 
-    def name_part
-      name&.label
+    def name_parts
+      return [] if name.blank?
+
+      case name_type
+      when 'corporate'
+        Curator::Parsers::InputParser.corp_name_part_splitter(name.label).map { |np| NamePart.new(np) }
+      when 'personal'
+        names_hash = Curator::Parsers::InputParser.pers_name_part_splitter(name.label)
+        names_hash.reduce([]) do |ret, (key, val)|
+          next ret if val.blank?
+
+          is_date = key == :date_part
+          ret << Mappings::NamePartModsPresenter.new(val, is_date)
+          ret
+        end
+      else
+        [Mappings::NamePartModsPresenter.new(name.label)]
+      end
     end
 
     def name_type
@@ -41,7 +51,7 @@ module Curator
     end
 
     def role_term
-      RoleTerm.new(role)
+      Mappings::RoleTermModsPresenter.new(role) if role.present?
     end
 
     def blank?

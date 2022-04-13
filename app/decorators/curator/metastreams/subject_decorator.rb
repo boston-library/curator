@@ -18,6 +18,10 @@ module Curator
       __getobj__.subject_other if __getobj__.respond_to?(:subject_other)
     end
 
+    def cartographics
+      __getobj__.cartographics if __getobj__.respond_to(:cartographic)
+    end
+
     def titles
       other&.titles
     end
@@ -28,6 +32,10 @@ module Curator
 
     def dates
       other&.dates
+    end
+
+    def to_a
+      Array.wrap(topics) + Array.wrap(geos) + Array.wrap(names) + Array.wrap(titles) + Array.wrap(temporals) + Array.wrap(dates)
     end
 
     def blank?

@@ -6,7 +6,6 @@ module Curator
       extend ActiveSupport::Concern
 
       ACCESS_CONDITION_TYPE='use and reproduction'
-      DATE_ENCODING='w3cdtf'
 
       ResourceTypeWrapper = Struct.new(:resource_type_manuscript, :resource_type)
       RecordInfoWrapper = Struct.new(:record_content_source, :record_origin, :language_of_cataloging, :description_standard)
@@ -17,13 +16,16 @@ module Curator
 
           attribute :usage
           attribute :type
-          attribute :supplied
+          attribute :supplied do |title_info|
+            title_info.supplied == true ? 'yes' : nil
+          end
           attribute :language, xml_label: :lang
           attribute :format_title_display_label, xml_label: :displayLabel
 
           attribute :authority_code, xml_label: :authority
 
-          element :title, target_val: :label
+          element :non_sort
+          element :title, target_val: :formatted_title_name
           element :subTitle, target_val: :subtitle
         end
 
@@ -46,6 +48,14 @@ module Curator
             name_role.name_value_uri
           end
 
+          node :namePart, multi_valued: true, target_obj: :name_parts do
+            target_value_as :label
+
+            attribute :type do |np|
+              np.is_date ? 'date' : nil
+            end
+          end
+
           node :role, target_obj: :role_term do
             target_value_blank!
 
@@ -59,8 +69,6 @@ module Curator
               attribute :value_uri, xml_label: :valueURI
             end
           end
-
-          element :namePart, target_val: :name_part
         end
 
         multi_node :type_of_resource, target_obj: :resource_type_wrappers do
@@ -166,31 +174,35 @@ module Curator
         end
       end
 
+      def formatted_title_name(title_info)
+        title_info.non_sort.blank? ? title_info.label : title_info.label.gsub(title_info.non_sort, '')
+      end
+
       def format_title_display_label(title_info)
         title_info.display == 'primary' ? 'primary_display' : title_info.display
       end
 
-      def title_info_list(obj)
-        Array.wrap(obj.title.primary) + obj.title.other
+      def title_info_list(desc)
+        Array.wrap(desc.title.primary) + desc.title.other
       end
 
-      def name_role_list(obj)
-        obj.name_roles.map { |nr| Curator::Mappings::NameRoleModsDecorator.new(nr) }
+      def name_role_list(desc)
+        desc.name_roles.map { |nr| Curator::Mappings::NameRoleModsDecorator.new(nr) }
       end
 
-      def note_list(obj)
-        obj.note.select { |n| n.type != 'physical description'}
+      def note_list(desc)
+        desc.note.select { |n| n.type != 'physical description'}
       end
 
-      def access_condition_list(obj)
-        [obj.rights_statement, obj.license]
+      def access_condition_list(desc)
+        [desc.rights_statement, desc.license]
       end
 
-      def identifier_list(obj)
-        ark_identifier = Curator::DescriptiveFieldSets::Identifier.new(type: 'uri', label: obj.digital_object.ark_uri)
-        return Array.wrap(ark_identifier) + obj.identifier if ark_identifier.valid?
+      def identifier_list(desc)
+        ark_identifier = Curator::DescriptiveFieldSets::Identifier.new(type: 'uri', label: desc.digital_object.ark_uri)
+        return Array.wrap(ark_identifier) + desc.identifier if ark_identifier.valid?
 
-        obj.identifier
+        desc.identifier
       end
 
       def physical_description(desc)

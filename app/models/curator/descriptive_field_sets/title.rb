@@ -14,5 +14,9 @@ module Curator
     attr_json :id_from_auth, :string
     attr_json :part_number, :string
     attr_json :part_name, :string
+
+    def non_sort
+      Curator::Parsers::InputParser.get_proper_title(label).first if label.present?
+    end
   end
 end

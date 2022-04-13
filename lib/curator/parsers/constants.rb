@@ -11,6 +11,9 @@ module Curator
       #  'o', 'to', 'ton', 'us']
       # since these are tougher to deal with (or non-English specific),
       # and unlikely to be used
+
+      CORP_NAME_INPUT_MATCHER =  /[\S]{5}\.(?!\))/.freeze
+
       NONSORT_ARTICLES = %w(
         a a' al al- an ane ang az bir d' da das de dei dem den der des det di
         die dos e 'e een eene egy ei ein eine einem einen einer eines eit el el-
