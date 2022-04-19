@@ -20,6 +20,9 @@ module Curator
       'local-other' => 'id_local-other'
     }.freeze
 
+
+    NOTE_IS_INFERRED_DATE='date is inferred'
+
     namespace_klass_accessors :cartographic, :date, :identifier, :note, :publication, :related, :subject, :title_set, :title
   end
 end

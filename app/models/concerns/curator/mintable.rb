@@ -17,6 +17,16 @@ module Curator
 
     module InstanceMethods
 
+      def ark_identifier
+        return if ark_uri.blank?
+
+        ark_ident = Curator::DescriptiveFieldSets::Identifier.new(type: 'uri', label: ark_uri)
+        return if !ark_ident.valid?
+
+        ark_ident
+      end
+
+
       def ark_uri
         return if ark_noid.blank?
 

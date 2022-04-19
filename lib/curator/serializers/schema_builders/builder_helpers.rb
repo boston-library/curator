@@ -253,7 +253,7 @@ module Curator
 
                 return node_root
               end
-              
+
               node_name = self.class.send(:transformed_key, node.xml_label) if node.xml_label.present?
               node_root = Ox::Element.new(node_name)
               build_node_attributes(node_target_obj, node_root, node.attributes)

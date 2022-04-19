@@ -2,8 +2,9 @@
 
 module Curator
   class Mappings::NameRoleModsDecorator < Decorators::BaseDecorator
-    class RoleTerm
 
+    def self.wrap_multiple(name_roles = [])
+      name_roles.map { |nr| new(nr) }
     end
 
     def name
@@ -19,7 +20,7 @@ module Curator
 
       case name_type
       when 'corporate'
-        Curator::Parsers::InputParser.corp_name_part_splitter(name.label).map { |np| NamePart.new(np) }
+        Curator::Parsers::InputParser.corp_name_part_splitter(name.label).map { |np| Mappings::NamePartModsPresenter.new(np) }
       when 'personal'
         names_hash = Curator::Parsers::InputParser.pers_name_part_splitter(name.label)
         names_hash.reduce([]) do |ret, (key, val)|
@@ -35,19 +36,27 @@ module Curator
     end
 
     def name_type
-      name&.name_type
+      return if name.blank?
+
+      name.name_type
     end
 
     def name_authority
-      name&.authority_code
+      return if name.blank?
+
+      name.authority_code
     end
 
     def name_authority_uri
-      name&.authority_base_url
+      return if name.blank?
+
+      name.authority_base_url
     end
 
     def name_value_uri
-      name&.value_uri
+      return if name.blank?
+
+      name.value_uri
     end
 
     def role_term
