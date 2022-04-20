@@ -23,15 +23,21 @@ module Curator
     end
 
     def titles
-      other&.titles
+      return [] if other.blank?
+
+      other.titles
     end
 
     def temporals
-      other&.temporals
+      return [] if other.blank?
+
+      other.temporals
     end
 
     def dates
-      other&.dates
+      return [] if other.blank?
+
+      other.dates
     end
 
     def to_a

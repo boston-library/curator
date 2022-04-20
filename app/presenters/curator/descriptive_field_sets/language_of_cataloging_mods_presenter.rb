@@ -2,9 +2,6 @@
 
 module Curator
   class DescriptiveFieldSets::LanguageOfCatalogingModsPresenter
-
-    LanguageTerm = Struct.new(:label, :type, :authority, :authority_uri, :value_uri, keyword_init: true)
-
     DEFAULT_USAGE='primary'
     DEFAULT_LANG_TERM_ATTRS={
       label: 'eng',
@@ -13,6 +10,8 @@ module Curator
       authority_uri: 'http://id.loc.gov/vocabulary/iso639-2',
       value_uri: 'http://id.loc.gov/vocabulary/iso639-2/eng'
     }.freeze
+
+    LanguageTerm = Struct.new(:label, :type, :authority, :authority_uri, :value_uri, keyword_init: true)
 
     attr_reader :language_term, :usage
 

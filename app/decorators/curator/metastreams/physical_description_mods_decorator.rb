@@ -40,7 +40,7 @@ module Curator
 
       return @internet_media_type_list = [] if file_sets.blank?
 
-      @internet_media_type_list = ActiveStorage::Attachment.includes(:blob).where(record: file_sets).map(&:content_type).uniq.select { |imt| EXCLUDED_MEDIA_TYPES.all? { |mt| imt.exlcude?(mt) } }
+      @internet_media_type_list = ActiveStorage::Attachment.includes(:blob).where(record: file_sets).pluck(Arel.sql('curator.active_storage_blobs.content_type')).uniq.select { |imt| EXCLUDED_MEDIA_TYPES.any? { |mt| imt.include?(mt) } }
     end
 
     def blank?

@@ -99,10 +99,6 @@ module Curator
     validates :digital_object_id, uniqueness: true
     validates :toc_url, format: { with: URI.regexp(%w(http https)), allow_blank: true }
 
-    # HELPER METHODS
-    def dates_inferred?
-      note.map(&:to_h).pluck('label').any? { |note_text| note_text.include?(Curator::DescriptiveFieldSets::NOTE_FOR_INFERRED_DATE)}
-    end
     # DECORATOR METHODS
     # Subject Node in Serialzer using decorator
 

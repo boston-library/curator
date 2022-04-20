@@ -3,12 +3,11 @@
 module Curator
   class ControlledTerms::AccessConditionModsDecorator < Decorators::BaseDecorator
     ACCESS_CONDITION_TYPE='use and reproduction'
-
     #
     # @param access_conditions Array[Curator::ControlledTerms::AccessCondition]
     # @return Array[Curator::ControlledTerms::AccessConditionModsDecorator]
     def self.wrap_multiple(access_conditions = [])
-      access_conditions.map { |ac| new(ac) }
+      access_conditions.map(&method(:new))
     end
 
     def label

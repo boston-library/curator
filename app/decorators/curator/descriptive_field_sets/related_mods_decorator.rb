@@ -2,6 +2,7 @@
 
 module Curator
   class DescriptiveFieldSets::RelatedModsDecorator < Decorators::BaseDecorator
+
     def related
       super if __getobj__.respond_to?(:related)
     end
@@ -97,8 +98,6 @@ module Curator
     private
 
     def build_related_series(type, title_label)
-      Rails.logger.info type.awesome_inspect
-      Rails.logger.info title_label.awesome_inspect
       DescriptiveFieldSets::RelatedSeriesModsPresenter.new(DescriptiveFieldSets::RelatedItemModsPresenter.new(type, title_label: title_label))
     end
   end

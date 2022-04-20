@@ -3,16 +3,20 @@
 module Curator
   class Metastreams::SubjectModsDecorator < Decorators::BaseDecorator
 
+    def self.wrap_multiple(subjects = [])
+      subjects.map(&:new)
+    end
+
     def label
       case __getobj__
       when Curator::ControlledTerms::Subject
-        topic_label
+        topic.label
       when Curator::ControlledTerms::Name
-        name_label
+        name.label
       when Curator::ControlledTerms::Geographic
-        geographic_label
+        geographic.label
       when Curator::DescriptiveFieldSets::Title
-        title_label
+        title.label
       when String
         __getobj__
       end
@@ -30,6 +34,37 @@ module Curator
       super if __getobj__.respond_to?(:value_uri)
     end
 
+    def name
+      return if __getobj__.blank?
+
+      __getobj__ if __getobj__.is_a?(Curator::ControlledTerms::Name)
+    end
+
+    def topic
+      return if __getobj__.blank?
+
+      __getobj__ if __getobj__.is_a?(Curator::ControlledTerms::Subject)
+    end
+
+    def geographic
+      return if __getobj__.blank?
+
+      __getobj__ if __getobj__.is_a?(Curator::ControlledTerms::Geographic)
+    end
+
+    def title
+      return if __getobj__.blank?
+
+      __getobj__ if __getobj__.is_a?(Curator::DescriptiveFieldSets::Title)
+    end
+
+    def cartographic
+      return if __getobj__.blank?
+
+      __getobj__ if __getobj__.is_a?(Curator::DescriptiveFieldSets::Cartographic)
+    end
+
+
     def topic_label
       __getobj__.label if __getobj__.is_a?(Curator::ControlledTerms::Subject)
     end
@@ -43,11 +78,11 @@ module Curator
     end
 
     def title_label
-      __getobj__.label if __getobj__.is_a?(Curator::DescriptiveFieldSets::Title)
+      __getobj__.label
     end
 
     def blank?
-      return false if __getobj__.blank?
+      return true if __getobj__.blank?
 
       label.blank? && authority_code.blank? && authority_base_url.blank? && value_uri.blank?
     end

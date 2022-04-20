@@ -11,12 +11,13 @@ module Curator
 
           attribute :usage
           attribute :type
+
           attribute :supplied do |title_info|
             title_info.supplied == true ? 'yes' : nil
           end
+
           attribute :language, xml_label: :lang
           attribute :formatted_title_display_label, xml_label: :displayLabel
-
           attribute :authority_code, xml_label: :authority
 
           element :non_sort
@@ -58,9 +59,7 @@ module Curator
               target_value_as :label
 
               attribute :authority_code, xml_label: :authority
-
               attribute :authority_base_url, xml_label: :authorityURI
-
               attribute :value_uri, xml_label: :valueURI
             end
           end
@@ -83,14 +82,56 @@ module Curator
           attribute :display_label
         end
 
+        node :origin_info do
+          target_value_blank!
+
+          node :place do
+            target_value_blank!
+
+            node :place_term do
+              target_value_as :label
+
+              attribute :type
+            end
+          end
+
+          element :publisher
+          element :edition
+
+          node :date_created, multi_valued: true do
+            target_value_as :label
+
+            attribute :encoding
+            attribute :key_date, xml_label: :keyDate
+            attribute :point
+            attribute :qualifier
+          end
+
+          node :date_issued, multi_valued: true do
+            target_value_as :label
+
+            attribute :encoding
+            attribute :key_date, xml_label: :keyDate
+            attribute :point
+            attribute :qualifier
+          end
+
+          node :copyright_date, multi_valued: true do
+            target_value_as :label
+
+            attribute :encoding
+            attribute :key_date, xml_label: :keyDate
+            attribute :point
+            attribute :qualifier
+          end
+        end
+
         multi_node :language, target_obj: :languages do
           target_value_blank!
 
-          element :languageTerm, target_val: :label do
+          element :language_term, target_val: :label do
             attribute :authority_code, xml_label: :authority
-
             attribute :authority_base_url, xml_label: :authorityURI
-
             attribute :value_uri, xml_label: :valueURI
           end
         end
@@ -111,22 +152,18 @@ module Curator
             end
           end
         end
-        # multi_node :subject_geos, xml_label: :subject do
-        # end
 
-        #multi_node
         multi_node :note, target_obj: :note_list do
-          attribute :type
           target_value_as :label
+
+          attribute :type
         end
 
         multi_node :subject_topics, xml_label: :subject do
           target_value_blank!
 
           attribute :authority_code, xml_label: :authority
-
           attribute :authority_base_url, xml_label: :authorityURI
-
           attribute :value_uri, xml_label: :valueURI
 
           element :topic, target_val: :label
@@ -138,7 +175,7 @@ module Curator
           attribute :type
           attribute :xlink, xml_label: 'xlink:href'
           attribute :display_label, xml_label: :displayLabel
-          
+
           node :title_info do
             target_value_as :label
           end
@@ -164,10 +201,10 @@ module Curator
         end
 
         multi_node :identifier, target_obj: :identifier_list do
+          target_value_as :label
+
           attribute :type
           attribute :invalid
-
-          target_value_as :label
         end
 
         multi_node :access_condition, target_obj: :access_condition_list do
@@ -209,9 +246,7 @@ module Curator
           end
 
           element :description_standard do
-            attribute :authority do |_ds|
-              'marcdescription'
-            end
+            attribute :description_standard_authority, xml_label: :authority
           end
         end
       end
@@ -249,6 +284,10 @@ module Curator
         return Array.wrap(ark_identifier) + desc.identifier if ark_identifier.present?
 
         desc.identifier
+      end
+
+      def origin_info(desc)
+        Curator::Metastreams::OriginInfoModsDecorator.new(desc)
       end
 
       def physical_description(desc)

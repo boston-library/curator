@@ -3,6 +3,7 @@
 module Curator
   class Metastreams::RecordInfoModsDecorator < Decorators::BaseDecorator
     DEFAULT_RECORD_ORIGIN='human prepared'
+    DEFAULT_DESC_STANDARD_AUTH='marcdescription'
 
     def record_origin
       return if __getobj__.blank?
@@ -13,7 +14,7 @@ module Curator
     def date_encoding
       return if __getobj__.blank?
 
-      Curator::DescriptiveFieldSets::DateModsDecorator::DATE_ENCODING
+      Curator::Parsers::EdtfDateParser::DATE_ENCODING
     end
 
     def record_content_source
@@ -81,6 +82,12 @@ module Curator
       return @description_standard = nil if digital_object.blank? || digital_object.administrative.blank?
 
       @description_standard = digital_object.administrative.description_standard
+    end
+
+    def description_standard_authority
+      return if __getobj__.blank?
+
+      DEFAULT_DESC_STANDARD_AUTH
     end
 
     def blank?

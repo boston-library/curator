@@ -4,7 +4,7 @@ module Curator
   class ControlledTerms::GenreModsDecorator < Decorators::BaseDecorator
 
     def self.wrap_multiple(genres = [])
-      genres.map { |g| new(g) }
+      genres.map(&method(:new))
     end
 
     def label
