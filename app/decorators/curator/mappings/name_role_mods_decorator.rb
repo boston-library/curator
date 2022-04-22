@@ -2,37 +2,18 @@
 
 module Curator
   class Mappings::NameRoleModsDecorator < Decorators::BaseDecorator
+    include Curator::ControlledTerms::NamePartableMods
 
     def self.wrap_multiple(name_roles = [])
-      name_roles.map { |nr| new(nr) }
+      name_roles.map(&method(:new))
     end
 
     def name
-      super if __getobj__.respond_to?(:name)
+      __getobj__.name if __getobj__.respond_to?(:name)
     end
 
     def role
-      super if __getobj__.respond_to?(:role)
-    end
-
-    def name_parts
-      return [] if name.blank?
-
-      case name_type
-      when 'corporate'
-        Curator::Parsers::InputParser.corp_name_part_splitter(name.label).map { |np| Mappings::NamePartModsPresenter.new(np) }
-      when 'personal'
-        names_hash = Curator::Parsers::InputParser.pers_name_part_splitter(name.label)
-        names_hash.reduce([]) do |ret, (key, val)|
-          next ret if val.blank?
-
-          is_date = key == :date_part
-          ret << Mappings::NamePartModsPresenter.new(val, is_date)
-          ret
-        end
-      else
-        [Mappings::NamePartModsPresenter.new(name.label)]
-      end
+      __getobj__.role if __getobj__.respond_to?(:role)
     end
 
     def name_type

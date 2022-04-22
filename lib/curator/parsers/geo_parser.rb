@@ -4,6 +4,7 @@ module Curator
   module Parsers
     # methods for working with geographic data
     class GeoParser
+      TGN_HIER_GEO_ATTRS=%i(continent country region province state territory county island city city_section area other).freeze
       ##
       # take a bounding box and return in various WKT type syntax
       # @param bbox [String] bbox string: minX minY maxX maxY ("-87.6 41.7 -87.5 41.8")
@@ -140,8 +141,7 @@ module Curator
       # @return [Hash]
       def self.normalize_tgn_hgeo(hgeo_hash)
         normalized = {}
-        %i(continent country region province state territory county island city
-           city_section area other).each do |k|
+        TGN_HIER_GEO_ATTRS.each do |k|
           normalized[k] = hgeo_hash[k]
         end
         normalized.compact

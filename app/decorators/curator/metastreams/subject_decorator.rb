@@ -41,7 +41,7 @@ module Curator
     end
 
     def to_a
-      Array.wrap(topics) + Array.wrap(geos) + Array.wrap(names) + Array.wrap(titles) + Array.wrap(temporals) + Array.wrap(dates)
+      Array.wrap(topics) + Array.wrap(geos) + Array.wrap(names) + Array.wrap(titles) + Array.wrap(other)
     end
 
     def blank?

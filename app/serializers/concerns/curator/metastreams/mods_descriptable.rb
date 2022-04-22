@@ -44,7 +44,7 @@ module Curator
             name_role.name_value_uri
           end
 
-          node :namePart, multi_valued: true, target_obj: :name_parts do
+          node :name_part, multi_valued: true, target_obj: :name_parts do
             target_value_as :label
 
             attribute :type do |np|
@@ -153,20 +153,105 @@ module Curator
           end
         end
 
+        multi_node :table_of_contents, target_obj: :toc_mods do
+          target_value_as :label
+
+          attribute :xlink, xml_label: 'xlink:href'
+        end
+
         multi_node :note, target_obj: :note_list do
           target_value_as :label
 
           attribute :type
         end
 
-        multi_node :subject_topics, xml_label: :subject do
+        multi_node :subject, target_obj: :subject_mods do
           target_value_blank!
 
           attribute :authority_code, xml_label: :authority
           attribute :authority_base_url, xml_label: :authorityURI
           attribute :value_uri, xml_label: :valueURI
 
-          element :topic, target_val: :label
+          element :topic, target_val: :topic_label
+          element :geographic, target_val: :geographic_label
+
+          node :hierachical_geographic do
+            target_value_blank!
+
+            element :other
+            element :area
+            element :province
+            element :region
+            element :country
+            element :continent
+            element :island
+            element :state
+            element :city
+            element :city_section
+          end
+
+          node :cartographics, target_obj: :cartographic_subject do
+            target_value_blank!
+
+            element :projection
+            element :coordinates
+
+            node :scale, multi_valued: true do
+              target_value_as do |s|
+                s
+              end
+            end
+          end
+
+          # node :temporal, multi_valued: true, target_obj: :temporals do
+          #   target_value_as do |temporal|
+          #     case temporal
+          #     when String
+          #       temporal
+          #     when Curator::DescriptiveFieldSets::DateModsPresenter
+          #       temporal.label
+          #     end
+          #   end
+          #
+          #   attribute :encoding do |temporal|
+          #     case temporal
+          #     when Curator::DescriptiveFieldSets::DateModsPresenter
+          #       temporal.encoding
+          #     end
+          #   end
+          #
+          #   attribute :point do |temporal|
+          #     temporal.point if temporal.respond_to?(:point)
+          #   end
+          # end
+
+          node :name, target_obj: :name_subject do
+            target_value_blank!
+
+            attribute :type do |name_subject|
+              name_subject.name_type
+            end
+
+            attribute :authority do |name_subject|
+              name_subject.authority_code
+            end
+
+            attribute :authorityURI do |name_subject|
+              name_subject.authority_base_url
+            end
+
+            attribute :valueURI do |name_subject|
+              name_subject.value_uri
+            end
+
+            node :name_part, multi_valued: true, target_obj: :name_parts do
+              target_value_as :label
+
+              attribute :type do |np|
+                np.is_date ? 'date' : nil
+              end
+            end
+          end
         end
 
         multi_node :related_item, target_obj: :related_items do
@@ -182,6 +267,7 @@ module Curator
 
           node :related_item, target_obj: -> (ri_sub) { ri_sub.respond_to?(:sub_series) ? ri_sub.sub_series : nil } do
             target_value_blank!
+
             attribute :type
 
             node :title_info do
@@ -284,6 +370,20 @@ module Curator
         return Array.wrap(ark_identifier) + desc.identifier if ark_identifier.present?
 
         desc.identifier
+      end
+
+      def subject_mods(desc)
+        Curator::Metastreams::SubjectModsDecorator.wrap_multiple(desc.subject.to_a)
+      end
+
+      def toc_mods(desc)
+        return [] if desc.toc.blank? && desc.toc_url.blank?
+
+        toc_attrs = {}
+        toc_attrs[:label] = desc.toc if desc.toc.present?
+        toc_attrs[:xlink] = desc.toc_url if desc.toc_url.present?
+
+        toc_attrs.keys.map { |k| Curator::Metastreams::TocModsPresenter.new(k => toc_attrs[k]) }
       end
 
       def origin_info(desc)
