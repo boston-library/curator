@@ -8,5 +8,13 @@ module Curator
       @label = label
       @is_date = is_date
     end
+
+    def name_part_type
+      is_date? ? 'date' : nil
+    end
+
+    def is_date?
+      @is_date == true
+    end
   end
 end

@@ -239,9 +239,7 @@ module Curator
                 ret
               end
 
-              Rails.logger.info node_elements.awesome_inspect
               if target_is_collection?(node_target_obj)
-                Rails.logger.info "The result of node.multi_valued IS #{node.multi_valued}"
                 return build_node_multi(node_target_obj, node_name, node) if node.multi_valued
 
                 node_name = self.class.send(:transformed_key, node.xml_label) if node.xml_label.present?
@@ -296,7 +294,6 @@ module Curator
             def fetch_element_attributes(target_obj, element_attributes = [])
               return {} if element_attributes.blank?
 
-              Rails.logger.info target_obj.awesome_inspect
               element_attributes.reduce({}) do |ret, el_attr|
                 ret[el_attr.xml_label] = fetch_value(target_obj, el_attr.target_value)
                 ret

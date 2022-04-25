@@ -19,37 +19,26 @@ module Curator
           attribute :language, xml_label: :lang
           attribute :formatted_title_display_label, xml_label: :displayLabel
           attribute :authority_code, xml_label: :authority
+          attribute :authority_uri, xml_label: :authorityURI
+          attribute :value_uri, xml_label: :valueURI
 
           element :non_sort
           element :title, target_val: :formatted_title_name
-          element :subTitle, target_val: :subtitle
+          element :sub_title, target_val: :subtitle
         end
 
         multi_node :name, target_obj: :name_role_list do
           target_value_blank!
 
-          attribute :type do |name_role|
-            name_role.name_type
-          end
-
-          attribute :authority do |name_role|
-            name_role.name_authority
-          end
-
-          attribute :authorityURI do |name_role|
-            name_role.name_authority_uri
-          end
-
-          attribute :valueURI do |name_role|
-            name_role.name_value_uri
-          end
+          attribute :name_type, xml_label: :type
+          attribute :name_authority, xml_label: :authority
+          attribute :name_authority_uri, xml_label: :authorityURI
+          attribute :name_value_uri, xml_label: :valueURI
 
           node :name_part, multi_valued: true, target_obj: :name_parts do
             target_value_as :label
 
-            attribute :type do |np|
-              np.is_date ? 'date' : nil
-            end
+            attribute :name_part_type, xml_label: :type
           end
 
           node :role, target_obj: :role_term do
@@ -68,9 +57,7 @@ module Curator
         multi_node :type_of_resource, target_obj: :resource_type_presenters do
           target_value_as :label
 
-          attribute :manuscript do |tor|
-            tor.manuscript_label
-          end
+          attribute :manuscript_label, xml_label: :manuscript
         end
 
         multi_node :genre, target_obj: :genre_list do
@@ -102,7 +89,7 @@ module Curator
             target_value_as :label
 
             attribute :encoding
-            attribute :key_date, xml_label: :keyDate
+            attribute :key_date
             attribute :point
             attribute :qualifier
           end
@@ -111,7 +98,7 @@ module Curator
             target_value_as :label
 
             attribute :encoding
-            attribute :key_date, xml_label: :keyDate
+            attribute :key_date
             attribute :point
             attribute :qualifier
           end
@@ -120,7 +107,7 @@ module Curator
             target_value_as :label
 
             attribute :encoding
-            attribute :key_date, xml_label: :keyDate
+            attribute :key_date
             attribute :point
             attribute :qualifier
           end
@@ -147,11 +134,11 @@ module Curator
           end
 
           node :internet_media_type, multi_valued: true, target_obj: :internet_media_type_list do
-            target_value_as do |imt|
-              imt
-            end
+            target_value_as :to_s
           end
         end
+
+        elements :abstract
 
         multi_node :table_of_contents, target_obj: :toc_mods do
           target_value_as :label
@@ -178,7 +165,7 @@ module Curator
           node :hierachical_geographic do
             target_value_blank!
 
-            element :other
+            element :extraterrestrial_area
             element :area
             element :province
             element :region
@@ -194,62 +181,46 @@ module Curator
             target_value_blank!
 
             element :projection
-            element :coordinates
+
+            node :coordinates, multi_valued: true do
+              target_value_as :to_s
+            end
 
             node :scale, multi_valued: true do
-              target_value_as do |s|
-                s
-              end
+              target_value_as :to_s
             end
           end
 
-          # node :temporal, multi_valued: true, target_obj: :temporals do
-          #   target_value_as do |temporal|
-          #     case temporal
-          #     when String
-          #       temporal
-          #     when Curator::DescriptiveFieldSets::DateModsPresenter
-          #       temporal.label
-          #     end
-          #   end
-          #
-          #   attribute :encoding do |temporal|
-          #     case temporal
-          #     when Curator::DescriptiveFieldSets::DateModsPresenter
-          #       temporal.encoding
-          #     end
-          #   end
-          #
-          #   attribute :point do |temporal|
-          #     temporal.point if temporal.respond_to?(:point)
-          #   end
-          # end
+          node :temporal, multi_valued: true, target_obj: :temporal_subjects do
+            target_value_as :label
+
+            attribute :encoding
+            attribute :point
+          end
+
+          node :title_info do
+            target_value_blank!
+
+            attribute :type
+            attribute :authority_code, xml_label: :authority
+            attribute :authority_uri, xml_label: :authorityURI
+            attribute :value_uri, xml_label: :valueURI
+
+            element :title, target_val: :label
+          end
 
           node :name, target_obj: :name_subject do
             target_value_blank!
 
-            attribute :type do |name_subject|
-              name_subject.name_type
-            end
-
-            attribute :authority do |name_subject|
-              name_subject.authority_code
-            end
-
-            attribute :authorityURI do |name_subject|
-              name_subject.authority_base_url
-            end
-
-            attribute :valueURI do |name_subject|
-              name_subject.value_uri
-            end
+            attribute :name_type, xml_label: :type
+            attribute :authority_code, xml_label: :authority
+            attribute :authority_base_url, xml_label: :authorityURI
+            attribute :value_uri, xml_label: :valueURI
 
             node :name_part, multi_valued: true, target_obj: :name_parts do
               target_value_as :label
 
-              attribute :type do |np|
-                np.is_date ? 'date' : nil
-              end
+              attribute :name_part_type, xml_label: :type
             end
           end
         end
@@ -259,7 +230,7 @@ module Curator
 
           attribute :type
           attribute :xlink, xml_label: 'xlink:href'
-          attribute :display_label, xml_label: :displayLabel
+          attribute :display_label
 
           node :title_info do
             target_value_as :label
@@ -272,6 +243,11 @@ module Curator
 
             node :title_info do
               target_value_as :label
+
+              attribute :type
+              attribute :authority_code, xml_label: :authority
+              attribute :authority_uri, xml_label: :authorityURI
+              attribute :value_uri, xml_label: :valueURI
             end
 
             node :related_item, target_obj: ->(ri_sub_sub) { ri_sub_sub.respond_to?(:sub_series) ? ri_sub_sub.sub_series : nil } do
@@ -291,6 +267,23 @@ module Curator
 
           attribute :type
           attribute :invalid
+        end
+
+        node :location, target_obj: :location_mods do
+          target_value_blank!
+
+          element :physical_location, target_val: :physical_location_name
+
+          node :holding_simple do
+            target_value_blank!
+
+            node :copy_information do
+              target_value_blank!
+              
+              element :sub_location
+              element :shelf_locator
+            end
+          end
         end
 
         multi_node :access_condition, target_obj: :access_condition_list do
@@ -366,10 +359,15 @@ module Curator
       end
 
       def identifier_list(desc)
-        ark_identifier =  desc.digital_object.ark_identifier
-        return Array.wrap(ark_identifier) + desc.identifier if ark_identifier.present?
+        # ark_identifier =  desc.digital_object.ark_identifier
+        # return Array.wrap(ark_identifier) + desc.identifier if ark_identifier.present?
+        #
+        # desc.identifier
+        Curator::DescriptiveFieldSets::IdentifierModsDecorator.new(desc).to_a
+      end
 
-        desc.identifier
+      def location_mods(desc)
+        Curator::Metastreams::LocationModsDecorator.new(desc)
       end
 
       def subject_mods(desc)
@@ -377,13 +375,7 @@ module Curator
       end
 
       def toc_mods(desc)
-        return [] if desc.toc.blank? && desc.toc_url.blank?
-
-        toc_attrs = {}
-        toc_attrs[:label] = desc.toc if desc.toc.present?
-        toc_attrs[:xlink] = desc.toc_url if desc.toc_url.present?
-
-        toc_attrs.keys.map { |k| Curator::Metastreams::TocModsPresenter.new(k => toc_attrs[k]) }
+        Curator::Metastreams::TocModsPresenter.wrap_multiple(label: desc.toc, xlink: desc.toc_url)
       end
 
       def origin_info(desc)

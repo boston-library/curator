@@ -26,7 +26,7 @@ module Curator
       __getobj__ if __getobj__.is_a?(Curator::ControlledTerms::Subject)
     end
 
-    def title
+    def title_info
       return if __getobj__.blank?
 
       __getobj__ if __getobj__.is_a?(Curator::DescriptiveFieldSets::Title)
@@ -36,6 +36,12 @@ module Curator
       return if __getobj__.blank?
 
       __getobj__ if __getobj__.is_a?(Curator::DescriptiveFieldSets::Cartographic)
+    end
+
+    def temporal_subjects
+      return [] if __getobj__.blank?
+
+      __getobj__ if __getobj__.is_a?(Array)
     end
 
     def other
@@ -55,9 +61,9 @@ module Curator
     def cartographic_subject
       return @cartographic_subject if defined?(@cartographic_subject)
 
-      return @cartographic_subject = nil if cartographic.blank? || geographic.blank?
+      return @cartographic_subject = nil if cartographic.blank? && geographic_subject.blank?
 
-      return @cartographic_subject = geographic.cartographic if geographic.present?
+      return @cartographic_subject = geographic_subject.cartographic if geographic_subject.present?
 
       @cartographic_subject = Curator::DescriptiveFieldSets::CartographicModsPresenter.new(scale: cartographic.scale, projection: cartographic.projection)
     end
@@ -83,19 +89,19 @@ module Curator
     end
 
     def authority_code
-      return if __getobj__.is_a?(Curator::ControlledTerms::Name)
+      return if __getobj__.is_a?(Curator::ControlledTerms::Name) || __getobj__.is_a?(Curator::DescriptiveFieldSets::Title)
 
       super if __getobj__.respond_to?(:authority_code)
     end
 
     def authority_base_url
-      return if __getobj__.is_a?(Curator::ControlledTerms::Name)
+      return if __getobj__.is_a?(Curator::ControlledTerms::Name) || __getobj__.is_a?(Curator::DescriptiveFieldSets::Title)
 
       super if __getobj__.respond_to?(:authority_base_url)
     end
 
     def value_uri
-      return if __getobj__.is_a?(Curator::ControlledTerms::Name)
+      return if __getobj__.is_a?(Curator::ControlledTerms::Name) || __getobj__.is_a?(Curator::DescriptiveFieldSets::Title) 
 
       super if __getobj__.respond_to?(:value_uri)
     end
@@ -112,48 +118,10 @@ module Curator
       geographic_subject.hierarchical_geographic
     end
 
-    def temporals
-      other_temporals + date_temporal
-    end
-
-    def other_temporals
-      return [] if other.blank?
-
-      other.temporals
-    end
-
-    def date_temporal
-      return @dates if defined?(@dates)
-
-      return @dates = [] if other_dates.blank?
-
-      @dates = other_dates.inject([]) do |ret, date|
-        ret += map_date_presenters(date)
-        ret
-      end
-    end
-
-    def other_dates
-      return [] if other.blank?
-
-      other.dates
-    end
-
     def blank?
       return true if __getobj__.blank?
 
-      name.blank? && topic.blank? && geographic.blank? && cartographic.blank?
-    end
-
-    private
-
-    def map_date_presenters(date)
-      date_hash = Curator::Parsers::EdtfDateParser.edtf_date_parser(date: date)
-      date_hash = date_hash.except(:type)
-
-      return Array.wrap(Curator::DescriptiveFieldSets::DateModsPresenter.new(**date_hash)) if date_hash[:start].blank? || date_hash[:end].blank?
-
-      [date_hash.dup.except(:end), date_hash.dup.except(:start)].map { |date_attrs| Curator::DescriptiveFieldSets::DateModsPresenter.new(**date_attrs) }
+      name.blank? && topic.blank? && geographic.blank? && cartographic.blank? && other.blank? && temporal_subjects.blank? && title_info.blank?
     end
   end
 end

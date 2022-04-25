@@ -12,7 +12,7 @@ module Curator
     end
 
     def blank?
-      @name.blank? && @name_parts.blank?
+      name.blank? && name_parts.blank?
     end
   end
 end

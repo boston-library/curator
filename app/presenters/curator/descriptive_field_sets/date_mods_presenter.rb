@@ -17,7 +17,7 @@ module Curator
     end
 
     def blank?
-      static.blank? && start.blank? && end_date.blank?
+      %i(static start end_date).all? { |attr| public_send(attr).blank? }
     end
 
     def encoding
@@ -25,7 +25,7 @@ module Curator
     end
 
     def point
-      return if start.blank? && @end.blank?
+      return if start.blank? && end_date.blank?
 
       return 'start' if start.present? && end_date.blank?
 

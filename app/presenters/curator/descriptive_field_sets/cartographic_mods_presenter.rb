@@ -2,11 +2,12 @@
 
 module Curator
   class DescriptiveFieldSets::CartographicModsPresenter
-    attr_reader :scale, :projection, :bounding_box, :coordinates, :area_type
+    attr_reader :scale, :projection, :bounding_box, :cartesian_coords, :area_type
 
     # @param[optional] scale [Array[String]]
     # @param[optional] projection [String]
     # @param[optional] bounding_box [String]
+    # @param[optional] coordinates [String]
     # @param[optional] area_type []
     # @return [Curator::DescriptiveFieldSets::CartographicModsPresenter] instance
 
@@ -15,11 +16,17 @@ module Curator
       @projection = projection
       @bounding_box = bounding_box
       @area_type = area_type
-      @coordinates = coordinates
+      @cartesian_coords = coordinates
+    end
+
+    def coordinates
+      return [] if bounding_box.blank? && cartesian_coords.blank?
+      
+      Array.wrap(bounding_box) + Array.wrap(cartesian_coords)
     end
 
     def blank?
-      scale.blank && projection.blank? && bounding_box.blank? && area_type.blank? && coordinates.blank?
+      %i(scale projection bounding_box area_type cartesian_coords).all? { |attr| public_send(attr).blank? }
     end
   end
 end
