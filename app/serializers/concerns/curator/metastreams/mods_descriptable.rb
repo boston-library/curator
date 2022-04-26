@@ -158,6 +158,7 @@ module Curator
           attribute :authority_code, xml_label: :authority
           attribute :authority_base_url, xml_label: :authorityURI
           attribute :value_uri, xml_label: :valueURI
+          attribute :geographic_display_label, xml_label: :displayLabel
 
           element :topic, target_val: :topic_label
           element :geographic, target_val: :geographic_label
@@ -269,8 +270,16 @@ module Curator
           attribute :invalid
         end
 
-        node :location, target_obj: :location_mods do
+        multi_node :location, target_obj: :location_mods do
           target_value_blank!
+
+          node :url, multi_valued: true, target_obj: :uri_list do
+            target_value_as :url
+
+            attribute :usage
+            attribute :access
+            attribute :note
+          end
 
           element :physical_location, target_val: :physical_location_name
 
@@ -279,7 +288,7 @@ module Curator
 
             node :copy_information do
               target_value_blank!
-              
+
               element :sub_location
               element :shelf_locator
             end
@@ -291,7 +300,7 @@ module Curator
 
           attribute :uri
           attribute :type
-          attribute :display_label
+          attribute :display_label, xml_label: :displayLabel
         end
 
         node :record_info do
@@ -359,15 +368,11 @@ module Curator
       end
 
       def identifier_list(desc)
-        # ark_identifier =  desc.digital_object.ark_identifier
-        # return Array.wrap(ark_identifier) + desc.identifier if ark_identifier.present?
-        #
-        # desc.identifier
         Curator::DescriptiveFieldSets::IdentifierModsDecorator.new(desc).to_a
       end
 
       def location_mods(desc)
-        Curator::Metastreams::LocationModsDecorator.new(desc)
+        Curator::Metastreams::LocationModsDecorator.new(desc).to_a
       end
 
       def subject_mods(desc)

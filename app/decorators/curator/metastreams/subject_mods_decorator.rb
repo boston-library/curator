@@ -85,7 +85,13 @@ module Curator
     def geographic_label
       return if geographic_subject.blank?
 
-      geographic_subject.has_hier_geo? ? nil : geographic_subject.label
+      geographic_subject.label
+    end
+
+    def geographic_display_label
+      return if geographic_subject.blank?
+
+      geographic_subject.display_label
     end
 
     def authority_code
@@ -101,7 +107,7 @@ module Curator
     end
 
     def value_uri
-      return if __getobj__.is_a?(Curator::ControlledTerms::Name) || __getobj__.is_a?(Curator::DescriptiveFieldSets::Title) 
+      return if __getobj__.is_a?(Curator::ControlledTerms::Name) || __getobj__.is_a?(Curator::DescriptiveFieldSets::Title)
 
       super if __getobj__.respond_to?(:value_uri)
     end

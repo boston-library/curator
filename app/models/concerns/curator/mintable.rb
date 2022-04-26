@@ -16,16 +16,41 @@ module Curator
     end
 
     module InstanceMethods
-
       def ark_identifier
-        return if ark_uri.blank?
+        return @ark_identifier if defined?(@ark_identifier)
+
+        return @ark_identifier = nil if self.class.name != 'Curator::DigitalObject' || ark_uri.blank?
 
         ark_ident = Curator::DescriptiveFieldSets::Identifier.new(type: 'uri', label: ark_uri)
-        return if !ark_ident.valid?
 
-        ark_ident
+        return @ark_identifier = nil if !ark_ident.valid?
+
+        @ark_identifier = ark_ident
       end
 
+      def ark_iiif_manifest_identifier
+        return @ark_iiif_manifest_identifier if defined?(@ark_iiif_manifest_identifier)
+
+        return @ark_iiif_manifest_identifier = nil if self.class.name != 'Curator::DigitalObject' || ark_uri.blank? || is_harvested?
+
+        ark_iiif_ident = Curator::DescriptiveFieldSets::Identifier.new(type: 'iiif-manifest', label: "#{ark_uri}/manifest")
+
+        return @ark_iiif_manifest_identifier = nil if !ark_iiif_ident.valid?
+
+        @ark_iiif_manifest_identifier = ark_iiif_ident
+      end
+
+      def ark_preview_identifier
+        return @ark_preview_identifier if defined?(@ark_preview_identifier)
+
+        return @ark_preview_identifier = nil if self.class.name != 'Curator::DigitalObject' || ark_uri.blank?
+
+        ark_preview_ident = Curator::DescriptiveFieldSets::Identifier.new(type: 'uri-preview', label: "#{ark_uri}/thumbnail")
+
+        return @ark_preview_identifier = nil if !ark_preview_ident.valid?
+
+        @ark_preview_identifier = ark_preview_ident
+      end
 
       def ark_uri
         return if ark_noid.blank?

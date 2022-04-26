@@ -16,13 +16,19 @@ module Curator
       def blank?
         Curator::Parsers::GeoParser::TGN_HIER_GEO_ATTRS.all? { |attr| public_send(attr).blank? }
       end
+
+      def values
+        return [] if blank?
+
+        Curator::Parsers::GeoParser::TGN_HIER_GEO_ATTRS.map { |attr| public_send(attr) }.compact
+      end
     end
 
     attr_reader :geographic, :cartographic, :hierarchical_geographic
 
-    delegate :label, :id_from_auth, :authority_code, to: :geographic, allow_nil: true
+    delegate :id_from_auth, :authority_code, to: :geographic, allow_nil: true
 
-    # @param geographic_subject [Curator::ControlledTerms::Geographic || Curator::DescriptiveFieldSets::Cartographic]
+    # @param geographic_subject [Curator::ControlledTerms::Geographic]
     # @return [Curator::ControlledTerms::GeographicModsPresenter] instance
 
     def initialize(geographic_subject)
@@ -33,6 +39,22 @@ module Curator
 
     def has_hier_geo?
       hierarchical_geographic.present?
+    end
+
+    def label
+      return geographic.label if !has_hier_geo?
+
+      return if hierarchical_geographic.values.include?(geographic.label)
+
+      geographic.label
+    end
+
+    def display_label
+      return if geographic.area_type.blank? || !has_hier_geo?
+
+      return if hierarchical_geographic.respond_to?(geographic.area_type.to_sym) && hierarchical_geographic.public_send(geographic.area_type.to_sym).present?
+
+      geographic.area_type
     end
 
     protected
