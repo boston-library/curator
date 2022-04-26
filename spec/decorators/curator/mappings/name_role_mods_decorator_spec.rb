@@ -1,0 +1,8 @@
+# frozen_string_literal: true
+
+require 'rails_helper'
+require_relative '../shared/curator_decorator'
+
+RSpec.describe Curator::Mappings::NameRoleModsDecorator, type: :decorators do
+  pending 'Need to implement..'
+end

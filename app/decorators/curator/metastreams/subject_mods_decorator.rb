@@ -118,7 +118,7 @@ module Curator
       name.name_type
     end
 
-    def hierachical_geographic
+    def hierarchical_geographic
       return if geographic_subject.blank?
 
       geographic_subject.hierarchical_geographic

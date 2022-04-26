@@ -66,7 +66,7 @@ module Curator
           attribute :authority
           attribute :authority_uri, xml_label: :authorityURI
           attribute :value_uri, xml_label: :valueURI
-          attribute :display_label
+          attribute :display_label, xml_label: :displayLabel
         end
 
         node :origin_info do
@@ -89,7 +89,7 @@ module Curator
             target_value_as :label
 
             attribute :encoding
-            attribute :key_date
+            attribute :key_date, xml_label: :keyDate
             attribute :point
             attribute :qualifier
           end
@@ -98,7 +98,7 @@ module Curator
             target_value_as :label
 
             attribute :encoding
-            attribute :key_date
+            attribute :key_date, xml_label: :keyDate
             attribute :point
             attribute :qualifier
           end
@@ -107,7 +107,7 @@ module Curator
             target_value_as :label
 
             attribute :encoding
-            attribute :key_date
+            attribute :key_date, xml_label: :keyDate
             attribute :point
             attribute :qualifier
           end
@@ -117,6 +117,10 @@ module Curator
           target_value_blank!
 
           element :language_term, target_val: :label do
+            attribute :type do |_lt|
+              'text'
+            end
+
             attribute :authority_code, xml_label: :authority
             attribute :authority_base_url, xml_label: :authorityURI
             attribute :value_uri, xml_label: :valueURI
@@ -163,7 +167,7 @@ module Curator
           element :topic, target_val: :topic_label
           element :geographic, target_val: :geographic_label
 
-          node :hierachical_geographic do
+          node :hierarchical_geographic do
             target_value_blank!
 
             element :extraterrestrial_area
@@ -231,10 +235,12 @@ module Curator
 
           attribute :type
           attribute :xlink, xml_label: 'xlink:href'
-          attribute :display_label
+          attribute :display_label, xml_label: :displayLabel
 
           node :title_info do
-            target_value_as :label
+            target_value_blank!
+
+            element :title, target_val: :label
           end
 
           node :related_item, target_obj: -> (ri_sub) { ri_sub.respond_to?(:sub_series) ? ri_sub.sub_series : nil } do
@@ -243,12 +249,11 @@ module Curator
             attribute :type
 
             node :title_info do
-              target_value_as :label
+              target_value_blank!
+
+              element :title, target_val: :label
 
               attribute :type
-              attribute :authority_code, xml_label: :authority
-              attribute :authority_uri, xml_label: :authorityURI
-              attribute :value_uri, xml_label: :valueURI
             end
 
             node :related_item, target_obj: ->(ri_sub_sub) { ri_sub_sub.respond_to?(:sub_series) ? ri_sub_sub.sub_series : nil } do
@@ -257,7 +262,9 @@ module Curator
               attribute :type
 
               node :title_info do
-                target_value_as :label
+                target_value_blank!
+
+                element :title, target_val: :label
               end
             end
           end
@@ -267,7 +274,9 @@ module Curator
           target_value_as :label
 
           attribute :type
-          attribute :invalid
+          attribute :invalid do |ident|
+            ident.invalid == true ? 'yes' : nil
+          end
         end
 
         multi_node :location, target_obj: :location_mods do
@@ -298,7 +307,7 @@ module Curator
         multi_node :access_condition, target_obj: :access_condition_list do
           target_value_as :label
 
-          attribute :uri
+          attribute :uri, xml_label: 'xlink:href'
           attribute :type
           attribute :display_label, xml_label: :displayLabel
         end

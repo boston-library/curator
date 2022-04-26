@@ -2,7 +2,7 @@
 
 RSpec.shared_examples_for 'mintable', type: :model do |oai_specific: true, oai_parent: false|
   describe 'Mintable' do
-    it { is_expected.to respond_to(:ark_id, :ark_params) }
+    it { is_expected.to respond_to(:ark_id, :ark_params, :ark_noid, :ark_identifier, :ark_preview_identifier, :ark_iiif_manifest_identifier) }
 
     describe 'Database' do
       it { is_expected.to have_db_column(:ark_id).of_type(:string).with_options(null: false) }
