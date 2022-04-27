@@ -16,3 +16,8 @@ RSpec.shared_examples 'curator_decorator', type: :decorators do
     end
   end
 end
+
+
+RSpec.shared_examples 'curator_multi_decorator', type: :decorators do
+  pending
+end

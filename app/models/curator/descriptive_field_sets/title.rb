@@ -34,7 +34,7 @@ module Curator
     end
 
     def value_uri
-      return if authority_uri.blank? && id_from_auth.blank?
+      return if authority_uri.blank? || id_from_auth.blank?
 
       Addressable::URI.join("#{authority_uri}/", id_from_auth).to_s
     end

@@ -3,6 +3,6 @@
 require 'rails_helper'
 require_relative '../shared/curator_decorator'
 
-RSpec.describe Curator::Mappings::NameRoleModsDecorator, type: :decorators do
+RSpec.describe Curator::Metastreams::PhysicalDescriptionModsDecorator, type: :decorators do
   pending
 end

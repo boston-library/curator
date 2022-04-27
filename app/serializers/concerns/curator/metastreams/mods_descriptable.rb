@@ -121,7 +121,10 @@ module Curator
               'text'
             end
 
-            attribute :authority_code, xml_label: :authority
+            attribute :authority_code, xml_label: :authority do |lt|
+              lt.authority_code == 'iso639-2' ? 'iso639-2b' : lt.authority_code
+            end
+
             attribute :authority_base_url, xml_label: :authorityURI
             attribute :value_uri, xml_label: :valueURI
           end

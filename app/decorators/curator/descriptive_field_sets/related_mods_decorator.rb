@@ -3,6 +3,8 @@
 module Curator
   class DescriptiveFieldSets::RelatedModsDecorator < Decorators::BaseDecorator
 
+    # NOTE: The base object for this decorator class is Curator::Metastreams::Descriptive
+
     def related
       super if __getobj__.respond_to?(:related)
     end

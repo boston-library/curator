@@ -134,14 +134,13 @@ module Curator
                     ark_uri_finder.call(ident_type)
                   end
 
-      Rails.logger.info ident.awesome_inspect
       return if ident.blank?
 
       case ident_type
       when 'uri'
         Curator::DescriptiveFieldSets::LocationUrlModsPresenter.new(ident.label, usage: 'primary', access: 'object in context')
       when 'uri-preview'
-        Curator::DescriptiveFieldSets::LocationUrlModsPresenter.new(ident.label, usage: 'preview')
+        Curator::DescriptiveFieldSets::LocationUrlModsPresenter.new(ident.label, access: 'preview')
       when 'iiif-manifest'
         Curator::DescriptiveFieldSets::LocationUrlModsPresenter.new(ident.label, note: ident_type)
       end
