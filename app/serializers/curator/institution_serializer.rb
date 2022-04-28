@@ -8,7 +8,7 @@ module Curator
       attributes :abstract, :name, :url
 
       has_one :location do
-        include Curator::ControlledTerms::JsonName
+        include Curator::ControlledTerms::JsonGeographic
       end
 
       one :metastreams do

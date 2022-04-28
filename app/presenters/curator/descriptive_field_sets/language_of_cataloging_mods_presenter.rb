@@ -2,8 +2,8 @@
 
 module Curator
   class DescriptiveFieldSets::LanguageOfCatalogingModsPresenter
-    DEFAULT_USAGE='primary'
-    DEFAULT_LANG_TERM_ATTRS={
+    DEFAULT_USAGE = 'primary'
+    DEFAULT_LANG_TERM_ATTRS = {
       label: 'eng',
       type: 'code',
       authority: 'iso639-2b',

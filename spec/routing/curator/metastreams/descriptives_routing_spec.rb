@@ -31,4 +31,26 @@ RSpec.describe Curator::Metastreams::DescriptivesController, type: :routing do
       end
     end
   end
+
+  describe 'xml routing' do
+    describe 'member routes' do
+      context '#descriptable' do
+        context 'DigitalObject' do
+          include_examples 'member', read_only: true do
+            subject { digital_object_descriptive_path(default_id, format: :xml) }
+            let(:expected_controller) { default_controller }
+            let(:expected_kwargs) { { id: default_id, metastreamable_type: 'DigitalObject', format: 'xml' } }
+          end
+
+          context '#ark_id as :id' do
+            include_examples 'member', read_only: true do
+              subject { digital_object_descriptive_path(ark_id, format: :xml) }
+              let(:expected_controller) { default_controller }
+              let(:expected_kwargs) { { id: ark_id, metastreamable_type: 'DigitalObject', format: 'xml' } }
+            end
+          end
+        end
+      end
+    end
+  end
 end

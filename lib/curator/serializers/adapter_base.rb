@@ -4,7 +4,9 @@ module Curator
   module Serializers
     class AdapterBase
       attr_reader :base_builder_class, :schema_builder_class
-
+      # Base class for Adapters
+      # @param :base_builder_class [Class defined in SchemaBuilders module] class to inherit from. NOTE: this should have a builder DSL defined
+      # @return [Curator::Serializers::AdapterBase] instance - WARNING: This is an abstract class and should not be used directly
       def initialize(base_builder_class:)
         @base_builder_class = base_builder_class
       end

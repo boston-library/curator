@@ -18,6 +18,19 @@ Curator::Engine.routes.draw do
 
     match '*path' => 'application#method_not_allowed', via: [:delete]
 
+    constraints(Curator::Middleware::RouteConsts::XML_CONSTRAINT) do
+      resources :digital_objects,
+                param: :id,
+                only: [:show],
+                constraints: Curator::Middleware::ArkOrIdConstraint.new do
+                  member do
+                    scope module: :metastreams do
+                      concerns :descriptable, only: [:show], as: 'digital_object_descriptive', metastreamable_type: 'DigitalObject'
+                    end
+                  end
+                end
+    end
+
     constraints(Curator::Middleware::RouteConsts::JSON_CONSTRAINT) do
       resources :institutions, :collections, :digital_objects, only: [:index, :create]
 
@@ -62,7 +75,7 @@ Curator::Engine.routes.draw do
                   end
                 end
 
-      namespace :controlled_terms do
+      namespace :controlled_terms, constraints: Curator::Middleware::RouteConsts::JSON_CONSTRAINT do
         resources :authorities, only: [:index]
 
         resources :nomenclatures,

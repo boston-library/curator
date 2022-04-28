@@ -83,7 +83,7 @@ module Curator
                         Array.wrap(error)
                       end
 
-      serialized_error = Curator::ErrorSerializer.new(wrapped_error, adapter_key: :json).render
+      serialized_error = Curator::ErrorSerializer.new(wrapped_error, adapter_key: :json).serialize
       json_response(serialized_error, status)
     end
 

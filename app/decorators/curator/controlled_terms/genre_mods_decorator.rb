@@ -2,7 +2,6 @@
 
 module Curator
   class ControlledTerms::GenreModsDecorator < Decorators::BaseDecorator
-
     def self.wrap_multiple(genres = [])
       genres.map(&method(:new))
     end

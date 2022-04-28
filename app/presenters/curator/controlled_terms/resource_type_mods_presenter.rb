@@ -2,6 +2,7 @@
 
 module Curator
   class ControlledTerms::ResourceTypeModsPresenter
+    # For serializing <mods:typeOfResource> nodes
     attr_reader :resource_type_manuscript, :resource_type
 
     delegate :label, to: :resource_type, allow_nil: true
@@ -23,6 +24,7 @@ module Curator
       @resource_type_manuscript = resource_type_manuscript
     end
 
+    # @return [String | nil] used for determining displayLabel value in
     def manuscript_label
       resource_type_manuscript? ? 'yes' : nil
     end

@@ -3,46 +3,17 @@
 RSpec.shared_examples 'json_serialization', type: :serializers do
   let!(:adapter_key) { :json }
   let!(:json_regex) { /[{\[]{1}([,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]|".*?")+[}\]]{1}/.freeze }
-  let!(:recurse_keys_to_json_map) do
-    proc do |val|
-      case val
-      when Hash
-        val.keys.map(&:to_json).concat(recurse_keys_to_json_map.call(val.values.select { |v| v.is_a?(Hash) || v.is_a?(Array) }))
-      when Array
-        val.flat_map { |v| recurse_keys_to_json_map.call(v) if v.is_a?(Hash) || v.is_a?(Array) }.compact
-      end
-    end
-  end
-
-  let!(:recurse_vals_to_json_map) do
-    proc do |val|
-      case val
-      when Hash
-        val.values.inject([]) do |ret, v|
-          case v
-          when Array, Hash
-            ret << recurse_vals_to_json_map.call(v)
-          else
-            ret << v.to_json
-          end
-        end.flatten
-      when Array
-        val.flat_map { |v| recurse_vals_to_json_map.call(v) }
-      else
-        val.to_json
-      end
-    end
-  end
 
   describe 'JSON serialization behavior' do
     specify { expect(json_record).to be_truthy }
     specify { expect(json_array).to be_truthy.and respond_to(:each, :map) }
-    specify { expect(expected_as_json_options).to be_a_kind_of(Hash) }
+    specify { expect(expected_json).to be_a_kind_of(Proc) }
+    specify { expect(record_root_key).to be_a_kind_of(Symbol) }
 
     describe 'For single record' do
       let!(:serializer_for_one) { described_class.new(json_record, adapter_key) }
-      let!(:expected_json_hash) { record_as_json(json_record, expected_as_json_options) }
-      let!(:json_root_key) { record_root_key(json_record) }
+      let!(:expected_json_hash) { Oj.load(expected_json.call(json_record)) }
+      let!(:expected_json_root_key) { record_root_key }
 
       describe '#serializable_hash' do
         subject { serializer_for_one.serializable_hash }
@@ -50,7 +21,7 @@ RSpec.shared_examples 'json_serialization', type: :serializers do
         it { is_expected.to be_a_kind_of(Hash).and have_key(json_root_key) }
 
         it 'expects subject to match :expected_json_hash' do
-          expect(subject).to match(json_root_key => a_hash_including(expected_json_hash[json_root_key]))
+          expect(subject).to match(json_root_key => a_hash_including(expected_json_hash[expected_json_root_key]))
         end
       end
 
@@ -58,9 +29,6 @@ RSpec.shared_examples 'json_serialization', type: :serializers do
         subject { serializer_for_one.render }
 
         let!(:expected_json) { Oj.dump(expected_json_hash) }
-
-        let!(:expected_json_key_matchers) { recurse_keys_to_json_map.call(expected_json_hash[json_root_key]) }
-        let!(:expected_json_val_matchers) { recurse_vals_to_json_map.call(expected_json_hash[json_root_key]) }
 
         it { is_expected.to be_a_kind_of(String).and match(json_root_key) }
 

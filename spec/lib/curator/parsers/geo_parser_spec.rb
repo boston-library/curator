@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+
 RSpec.describe Curator::Parsers::GeoParser do
+  subject { described_class }
+
   describe '#bbox_formatter' do
     let(:valid_bbox) { '-87.6 41.7 -87.5 41.8' }
     let(:invalid_bbox) { '179.0, 89.0, 178.0, 88.0' }

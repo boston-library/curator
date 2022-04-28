@@ -2,7 +2,6 @@
 
 module Curator
   class DescriptiveFieldSets::RelatedModsDecorator < Decorators::BaseDecorator
-
     # NOTE: The base object for this decorator class is Curator::Metastreams::Descriptive
 
     def related
@@ -70,7 +69,7 @@ module Curator
 
       return @related_other_format = [] if related.blank?
 
-      @related_other_format = related.other_format.map { |other_format| DescriptiveFieldSets::RelatedItemModsPresenter.new(fetch_related_type(:other_format), title_label: review_of_url) }
+      @related_other_format = related.other_format.map { |other_format| DescriptiveFieldSets::RelatedItemModsPresenter.new(fetch_related_type(:other_format), title_label: other_format) }
     end
 
     def host_collection_names

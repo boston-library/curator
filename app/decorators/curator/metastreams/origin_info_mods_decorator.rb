@@ -2,7 +2,6 @@
 
 module Curator
   class Metastreams::OriginInfoModsDecorator < Decorators::BaseDecorator
-
     def publication
       return @publication if defined?(@publication)
 
@@ -34,7 +33,7 @@ module Curator
     end
 
     def dates_inferred?
-      return false if !__getobj__.respond_to?(:note) ||  __getobj__.note.blank?
+      return false if !__getobj__.respond_to?(:note) || __getobj__.note.blank?
 
       __getobj__.note.any? { |n| n.inferred_date? }
     end
@@ -46,7 +45,6 @@ module Curator
 
       @date_created = map_date_presenters(date.created, 'dateCreated')
     end
-
 
     def date_issued
       return @date_issued if defined?(@date_issued)
@@ -69,7 +67,6 @@ module Curator
 
       publisher.blank? && publication.blank? && place.blank? && date.blank?
     end
-
 
     private
 

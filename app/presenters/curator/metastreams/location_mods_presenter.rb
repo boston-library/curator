@@ -2,6 +2,7 @@
 
 module Curator
   class Metastreams::LocationModsPresenter
+    # For serializing <mods:location> elements
     attr_reader :physical_location_name, :holding_simple, :uri_list
 
     def initialize(physical_location_name: nil, holding_simple: nil, uri_list: [])

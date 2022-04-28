@@ -233,7 +233,9 @@ RSpec.shared_examples "shared_formats", type: :controller do |include_ark_contex
     include_examples 'shared_put_patch', skip_put_patch: skip_put_patch, resource_key: resource_key.to_sym
   end
 
-  # context 'XML' do
-  #   pending 'Context is pending until serializers are built'
-  # end
+  context 'XML' do
+    let(:format) { :xml }
+
+    
+  end
 end

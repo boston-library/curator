@@ -14,7 +14,7 @@ module Curator
     end
 
     def serialized_resource(resource, serializer_params = {})
-      serializer_class.new(resource, serializer_params, adapter_key: @serializer_adapter_key || :json).render
+      serializer_class.new(resource, serializer_params, adapter_key: @serializer_adapter_key || :json).serialize
     rescue StandardError => e
       Rails.logger.error "=======#{e.inspect}======"
       raise Curator::Exceptions::ServerError, "Failed to render serialized resource as #{@serializer_adapter_key}"

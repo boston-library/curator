@@ -22,24 +22,28 @@ RSpec.describe Curator::CollectionSerializer, type: :serializers do
     it_behaves_like 'json_serialization' do
       let(:json_record) { record }
       let(:json_array) { record_collection }
-      let(:expected_as_json_options) do
-        {
-          root: true,
-          only: [:ark_id, :created_at, :updated_at, :abstract, :name],
-          include: {
-            institution: {
-              only: [:ark_id]
-            }
-          },
-          administrative: {
-            root: true,
-            only: [:description_standard, :harvestable, :flagged, :destination_site, :hosting_status]
-          },
-          workflow: {
-            root: true,
-            only: [:publishing_state, :processing_state, :ingest_origin]
-          }
-        }
+      let(:expected_json) do
+        proc do |resource|
+          Alba.serialize(resource) do
+            root_key :collection, :collections
+
+            attributes :ark_id, :created_at, :updated_at, :abstract, :name
+
+            has_one :institution do
+              attributes :ark_id
+            end
+
+            has_one :metastreams do
+              has_one :administrative do
+                attributes :description_standard, :harvestable, :flagged, :destination_site, :hosting_status
+              end
+
+              has_one :workflow do
+                attributes :publishing_state, :processing_state, :ingest_origin
+              end
+            end
+          end
+        end
       end
     end
   end

@@ -11,8 +11,9 @@ module Curator
       #  'o', 'to', 'ton', 'us']
       # since these are tougher to deal with (or non-English specific),
       # and unlikely to be used
-
-      CORP_NAME_INPUT_MATCHER =  /[\S]{5}\.(?!\))/.freeze
+      DATE_ENCODING = 'w3cdtf'
+      CORP_NAME_INPUT_MATCHER = /[\S]{5}\.(?!\))/.freeze
+      TGN_HIER_GEO_ATTRS=%i(continent country region province state territory county island city city_section area extraterrestrial_area).freeze
 
       NONSORT_ARTICLES = %w(
         a a' al al- an ane ang az bir d' da das de dei dem den der des det di

@@ -4,6 +4,9 @@ module Curator
   class DescriptiveFieldSets::DateModsPresenter
     attr_reader :start, :end_date, :static, :qualifier, :key_date
 
+    # For <mods:originInfo><mods:dateCreated>,<mods:dateIssued><mods:copyrightDate></mods:originInfo> and <mods:subject><mods:temporal> elements 
+    # @param role [Curator::ControlledTerms::Role]
+    # @return [Curator::Mappings::RoleTermModsPresenter] instance
     def initialize(key_date: false, static: nil, start: nil, end: nil, qualifier: nil)
       @static = static
       @start = start

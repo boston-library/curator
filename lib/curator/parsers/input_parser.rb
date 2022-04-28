@@ -54,7 +54,7 @@ module Curator
         while in_str =~ Curator::Parsers::Constants::CORP_NAME_INPUT_MATCHER
           snip = Curator::Parsers::Constants::CORP_NAME_INPUT_MATCHER.match(in_str).post_match
           sub_part = in_str.gsub(snip, '')
-          name_parts_array << sub_part.gsub(/\.\z/,"").strip
+          name_parts_array << sub_part.gsub(/\.\z/, '').strip
           in_str = snip
         end
 

@@ -9,7 +9,6 @@ module Curator
     end
 
     module InstanceMethods
-
       def name
         return super if defined?(super)
 

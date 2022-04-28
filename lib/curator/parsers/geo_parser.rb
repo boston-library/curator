@@ -4,7 +4,6 @@ module Curator
   module Parsers
     # methods for working with geographic data
     class GeoParser
-      TGN_HIER_GEO_ATTRS=%i(continent country region province state territory county island city city_section area extraterrestrial_area).freeze
       ##
       # take a bounding box and return in various WKT type syntax
       # @param bbox [String] bbox string: minX minY maxX maxY ("-87.6 41.7 -87.5 41.8")

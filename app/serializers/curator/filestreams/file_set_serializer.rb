@@ -7,7 +7,7 @@ module Curator
 
       attributes :file_name_base, :position
 
-      attribute :file_set_type do |file_set|
+      attribute :file_set_type do
         record.file_set_type.demodulize.downcase
       end
 

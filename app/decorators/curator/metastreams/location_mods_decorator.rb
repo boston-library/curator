@@ -97,10 +97,7 @@ module Curator
     # NOTE: the to_a method needs to include the uri elments spearate from the other based on how the mods is displayed
     def to_a
       ret_array = []
-
-      if physical_location_name.present? || holding_simple.present?
-        ret_array << Curator::Metastreams::LocationModsPresenter.new(physical_location_name: physical_location_name, holding_simple: holding_simple)
-      end
+      ret_array << Curator::Metastreams::LocationModsPresenter.new(physical_location_name: physical_location_name, holding_simple: holding_simple) if physical_location_name.present? || holding_simple.present?
       ret_array << Curator::Metastreams::LocationModsPresenter.new(uri_list: location_uri_list) if location_uri_list.present?
       ret_array
     end
@@ -129,10 +126,10 @@ module Curator
       return if !has_ark_identifier?(ident_type) && !has_uri_identifier?(ident_type)
 
       ident = if has_uri_identifier?(ident_type)
-                    uri_finder.call(ident_type)
-                  elsif has_ark_identifier?(ident_type)
-                    ark_uri_finder.call(ident_type)
-                  end
+                uri_finder.call(ident_type)
+              elsif has_ark_identifier?(ident_type)
+                ark_uri_finder.call(ident_type)
+              end
 
       return if ident.blank?
 

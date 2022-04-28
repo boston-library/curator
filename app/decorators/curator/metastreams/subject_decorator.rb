@@ -46,7 +46,7 @@ module Curator
       tmporals = Curator::DescriptiveFieldSets::TemporalSubjectModsPresenter.wrap_multiple(temporals)
 
       temporal_presenters = tmporals.inject([]) do |ret, el|
-        ret <<  Array.wrap(el)
+        ret << Array.wrap(el)
         ret
       end
 

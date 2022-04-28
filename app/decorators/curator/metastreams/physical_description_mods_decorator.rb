@@ -5,7 +5,7 @@ module Curator
     EXCLUDED_MEDIA_TYPES = %w(xml txt).freeze
 
     def digital_origin
-      super.gsub('_', ' ') if __getobj__.respond_to?(:digital_origin)
+      super.tr('_', ' ') if __getobj__.respond_to?(:digital_origin)
     end
 
     def extent
@@ -33,7 +33,6 @@ module Curator
 
       @physical_description_note_list = note.select { |n| n.type == 'physical description' }
     end
-
 
     def internet_media_type_list
       return @internet_media_type_list if defined?(@internet_media_type_list)

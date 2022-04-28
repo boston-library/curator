@@ -2,10 +2,10 @@
 
 module Curator
   class DescriptiveFieldSets::IdentifierModsDecorator < Decorators::BaseDecorator
-    EXCLUDED_IDENTIFIER_TYPES=%w(iiif-manifest uri-preview).freeze
+    EXCLUDED_IDENTIFIER_TYPES = %w(iiif-manifest uri-preview).freeze
 
     # NOTE: The base object for this decorator class is Curator::Metastreams::Descriptive
-    
+
     def digital_object
       super if __getobj__.respond_to?(:digital_object)
     end

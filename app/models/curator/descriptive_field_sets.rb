@@ -12,7 +12,7 @@ module Curator
                   'creation/production credits', 'performers', 'physical description', 'venue', 'arrangement',
                   'statement of responsibility'].freeze
 
-    INFERRED_DATE_NOTE='date is inferred'              
+    INFERRED_DATE_NOTE = 'date is inferred'
 
     LOCAL_ORIGINAL_IDENTIFIER_TYPES = {
       'local-filename' => 'filename',
@@ -21,9 +21,6 @@ module Curator
       'local-accession' => 'id_local-accession',
       'local-other' => 'id_local-other'
     }.freeze
-
-
-
 
     namespace_klass_accessors :cartographic, :date, :identifier, :note, :publication, :related, :subject, :title_set, :title
   end

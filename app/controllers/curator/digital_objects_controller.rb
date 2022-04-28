@@ -9,7 +9,7 @@ module Curator
     # GET /digital_objects
     def index
       digital_objects = resource_scope.order(created_at: :desc).limit(25)
-      multi_response(serialized_resource(digital_objects))
+      json_response(serialized_resource(digital_objects))
     end
 
     # GET /digital_objects/1
@@ -33,6 +33,14 @@ module Curator
       raise_failure(result) unless success
 
       json_response(serialized_resource(result), :ok)
+    end
+
+    def serialized_resource(resource, serializer_params = {})
+      adapter_key = @serializer_adapter_key == :xml ? :mods : @serializer_adapter_key
+      serializer_class.new(resource, serializer_params, adapter_key: adapter_key || :json).serialize
+    rescue StandardError => e
+      Rails.logger.error "=======#{e.inspect}======"
+      raise Curator::Exceptions::ServerError, "Failed to render serialized resource as #{@serializer_adapter_key}"
     end
 
     private

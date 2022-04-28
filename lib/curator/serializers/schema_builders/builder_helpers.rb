@@ -4,10 +4,17 @@ module Curator
   module Serializers
     module SchemaBuilders
       module BuilderHelpers
+        # Module for defining custom SchemaBuilder Classes
         class Element
           class Attribute
             attr_reader :name, :target_value, :xml_label
 
+            # Class for storing methods/lambdas required to retrieve XML attributes for Elements/Nodes
+            #
+            # @param[required] attr_name [String | Symbol] - The name of the attribute we are fetching from the object or the instance method we have defined with the build_schema_as_ block
+            # @param[optional] :xml_label [String | Symbol] - Serializes the xml attribute with this value instead of the attr_name
+            # @param[optional] &block. [Proc] retreives the value of the object inline with what returns in the block.
+            # @return [Curator::Serializers::SchemaBuilders::Element::Attribute]
             def initialize(attr_name, xml_label: nil, &block)
               @name = attr_name
 
@@ -20,7 +27,6 @@ module Curator
 
           attr_reader :attributes, :name, :target_value
 
-          # NOTE: target_value can be a string,symbol or lambda for an Element / Node
 
           def initialize(name, target_val: nil, &block)
             @name = name
@@ -36,9 +42,11 @@ module Curator
         end
 
         class RelationalNode < Element
+          # Class for defining relational object values. These objects are usually chainable with/ without an explict value defined
+          # They can be both single and multi valued
           attr_reader :elements, :multi_valued, :target_object, :target_value_blank, :xml_label
 
-          # Note target_obj is different than target value.
+          # Note #target_obj is different than target value.
           def initialize(name, target_obj: nil, multi_valued: false, xml_label: nil, &block)
             @elements = []
             @multi_valued = multi_valued
@@ -76,6 +84,7 @@ module Curator
         end
 
         module XMLBuilder
+          # Module for defining DSL methods to build serializable data from Curator Models
           extend ActiveSupport::Concern
 
           SCHEMA_BUILDER_DSL = { _xml_elements: {}, _root_name: nil, _root_namespace: nil, _namespace_separator: ':', _root_attributes: {} , _root_element: nil, _xml_key_transform: :camelize_lower }.freeze
@@ -131,10 +140,16 @@ module Curator
             def document
               return @document if defined?(@document) && !@document.nil?
 
-              @document = Ox::Document.new(version: '1.0', encoding: 'UTF-8')
+              @document = Ox::Document.new
+
+              xml_instruct = Ox::Instruct.new(:xml)
+              xml_instruct[:version] = '1.0'
+              xml_instruct[:encoding] = 'UTF-8'
+
+              @document << xml_instruct
 
               if object_is_collection?
-                object.each { |obj| build_elements(root_element, object, xml_elements) }
+                object.each { |obj| build_elements(root_element, obj, xml_elements) }
               else
                 build_elements(root_element, object, xml_elements)
               end
@@ -153,7 +168,7 @@ module Curator
             def build_hash
               lambda do |hash, element|
                 hash[element.name] ||= []
-                element.attributes.each_pair { |k,v| hash[element.name] << {k => v} } if element.attributes.present?
+                element.attributes.each_pair { |k,v| hash[element.name] << { k => v } } if element.attributes.present?
                 element.each do |el_value|
                   case el_value
                   when Ox::Element
@@ -173,22 +188,22 @@ module Curator
               elements.each_pair do |element_name, element|
                 begin
                   el = case element
-                      when Array
-                        build_conditional(target_object, element_name, element)
-                      when BuilderHelpers::RelationalNode
-                        build_node(target_object, element_name, element)
-                      when BuilderHelpers::Element
-                        build_element(target_object, element_name, element)
-                      end
+                       when Array
+                         build_conditional(target_object, element_name, element)
+                       when BuilderHelpers::RelationalNode
+                         build_node(target_object, element_name, element)
+                       when BuilderHelpers::Element
+                         build_element(target_object, element_name, element)
+                       end
                   next if el == CONDITION_UNMET || el.blank?
 
                   if el.is_a?(Array)
-                    el.each {|el| add_to_root.call(root, el) }
+                    el.each { |el| add_to_root.call(root, el) }
                     next
                   end
 
                   add_to_root.call(root, el)
-                rescue StandardError => e
+                rescue StandardError
                   @document = nil
                   raise
                 end

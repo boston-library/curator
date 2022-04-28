@@ -4,7 +4,7 @@ module Curator
   module Parsers
     # methods for working with EDTF dates, serializing for Solr, MODS XML, etc
     class EdtfDateParser
-      DATE_ENCODING='w3cdtf'
+      
       ##
       # @param date [String] EDTF date
       # @param type [String] the type of MODS date (dateCreated, dateIssued, etc.)

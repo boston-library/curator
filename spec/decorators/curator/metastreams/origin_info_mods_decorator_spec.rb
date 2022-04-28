@@ -3,6 +3,6 @@
 require 'rails_helper'
 require_relative '../shared/curator_decorator'
 
-RSpec.decribe Curator::Metastreams::OriginInfoModsDecorator, type: :decorators do
+RSpec.describe Curator::Metastreams::OriginInfoModsDecorator, type: :decorators do
   pending
 end

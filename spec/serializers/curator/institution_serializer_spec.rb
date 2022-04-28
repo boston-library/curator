@@ -21,25 +21,27 @@ RSpec.describe Curator::InstitutionSerializer, type: :serializers do
     it_behaves_like 'json_serialization' do
       let(:json_record) { record }
       let(:json_array) { record_collection }
-      let(:expected_as_json_options) do
-        {
-          root: true,
-          only: [:ark_id, :created_at, :updated_at, :name, :abstract, :url],
-          include: {
-            location: {
-              methods: [:area_type, :coordinates, :bounding_box, :authority_code, :label, :id_from_auth],
-              only: [:area_type, :coordinates, :bounding_box, :authority_code, :label, :id_from_auth]
-            }
-          },
-          administrative: {
-            root: true,
-            only: [:description_standard, :harvestable, :flagged, :destination_site, :hosting_status]
-          },
-          workflow: {
-            root: true,
-            only: [:publishing_state, :processing_state, :ingest_origin]
-          }
-        }
+      let(:record_root_key) { :institution }
+      let(:expected_json) do
+        proc do |resource|
+          Alba.serialize(resource) do
+            root_key :institution, :institutions
+
+            attributes :ark_id, :created_at, :updated_at, :name, :abstract, :url
+
+            has_one :location do
+              attributes :area_type, :coordinates, :bounding_box, :authority_code, :label, :id_from_auth
+            end
+
+            has_one :administrative do
+              attributes :description_standard, :harvestable, :flagged, :destination_site, :hosting_status
+            end
+
+            has_one :workflow do
+              attributes :publishing_state, :processing_state, :ingest_origin
+            end
+          end
+        end
       end
     end
   end

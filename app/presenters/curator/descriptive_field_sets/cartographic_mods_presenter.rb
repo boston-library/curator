@@ -4,6 +4,7 @@ module Curator
   class DescriptiveFieldSets::CartographicModsPresenter
     attr_reader :scale, :projection, :bounding_box, :cartesian_coords, :area_type
 
+    # For <mods:cartographics> elements
     # @param[optional] scale [Array[String]]
     # @param[optional] projection [String]
     # @param[optional] bounding_box [String]
@@ -21,7 +22,7 @@ module Curator
 
     def coordinates
       return [] if bounding_box.blank? && cartesian_coords.blank?
-      
+
       Array.wrap(bounding_box) + Array.wrap(cartesian_coords)
     end
 

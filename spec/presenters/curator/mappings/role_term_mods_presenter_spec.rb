@@ -2,6 +2,6 @@
 
 require 'rails_helper'
 
-RSpec.describe Curator::Mappings::NameRoleModsPresenter, type: :presnters do
+RSpec.describe Curator::Mappings::RoleTermModsPresenter, type: :presnters do
   pending
 end

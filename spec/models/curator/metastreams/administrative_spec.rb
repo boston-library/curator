@@ -60,7 +60,7 @@ RSpec.describe Curator::Metastreams::Administrative, type: :model do
   end
 
   describe 'Instance Methods' do
-    it { is_expected.to respond_to(:oai_object?, :is_hosted?, :is_harvested?) }
+    it { is_expected.to respond_to(:oai_object?) }
   end
 
   describe 'Validations' do

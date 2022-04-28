@@ -9,7 +9,7 @@ module Curator
     before_action :set_descriptive, only: [:show, :update]
 
     def show
-      json_response(serialized_resource(@descriptive))
+      multi_response(serialized_resource(@descriptive))
     end
 
     def update
@@ -18,6 +18,14 @@ module Curator
       raise_failure(result) unless success
 
       json_response(serialized_resource(result), :ok)
+    end
+
+    def serialized_resource(resource, serializer_params = {})
+      adapter_key = @serializer_adapter_key == :xml ? :mods : @serializer_adapter_key
+      serializer_class.new(resource, serializer_params, adapter_key: adapter_key || :json).serialize
+    rescue StandardError => e
+      Rails.logger.error "=======#{e.inspect}======"
+      raise Curator::Exceptions::ServerError, "Failed to render serialized resource as #{@serializer_adapter_key}"
     end
 
     private

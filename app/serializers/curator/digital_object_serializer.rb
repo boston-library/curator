@@ -2,6 +2,13 @@
 
 module Curator
   class DigitalObjectSerializer < CuratorSerializer
+
+    # Overloaded initializer so the record is always set as DigitalObject#descriptive if the adapter_key is :mods
+    def initialize(record, params = {}, adapter_key: :json)
+      super
+      @record = @record.descriptive if adapter_key == :mods
+    end
+
     build_schema_as_json do
       root_key :digital_object, :digital_objects
 
@@ -30,6 +37,10 @@ module Curator
           include Curator::Metastreams::JsonWorkflowable
         end
       end
+    end
+
+    build_schema_as_mods do
+      include Curator::Metastreams::ModsDescriptable
     end
   end
 end

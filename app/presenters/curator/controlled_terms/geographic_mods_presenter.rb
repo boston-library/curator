@@ -3,9 +3,10 @@
 module Curator
   class ControlledTerms::GeographicModsPresenter
     class TgnHierGeo
+      # For serializing <mods:subject><mods:hierarchicalGeographic> elements
       attr_reader(*Curator::Parsers::GeoParser::TGN_HIER_GEO_ATTRS)
-      # @param city [String]
-      # @param
+      # @param[optional] city [String]
+      # @param[optional] city_section [String]
       # @return [Curator::ControlledTerms::GeographicModsPresenter::HierGeo] instance
       def initialize(**hier_geo_attrs)
         hier_geo_attrs.each do |k, v|
@@ -13,11 +14,13 @@ module Curator
         end
       end
 
+      # @return [Boolean] for checking if all attributes in element are blank?
       def blank?
         Curator::Parsers::GeoParser::TGN_HIER_GEO_ATTRS.all? { |attr| public_send(attr).blank? }
       end
 
-      def values
+      # @return Array[string] for checking if a value is present. Used to check if it should show a displayLabel attr in the subject
+      def hier_values
         return [] if blank?
 
         Curator::Parsers::GeoParser::TGN_HIER_GEO_ATTRS.map { |attr| public_send(attr) }.compact
@@ -30,7 +33,6 @@ module Curator
 
     # @param geographic_subject [Curator::ControlledTerms::Geographic]
     # @return [Curator::ControlledTerms::GeographicModsPresenter] instance
-
     def initialize(geographic_subject)
       @geographic = geographic_subject
       @cartographic = create_cartographic
@@ -44,7 +46,7 @@ module Curator
     def label
       return geographic.label if !has_hier_geo?
 
-      return if hierarchical_geographic.values.include?(geographic.label)
+      return if hierarchical_geographic.hier_values.include?(geographic.label)
 
       geographic.label
     end

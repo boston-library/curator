@@ -2,7 +2,7 @@
 
 module Curator
   class ControlledTerms::AccessConditionModsDecorator < Decorators::BaseDecorator
-    ACCESS_CONDITION_TYPE='use and reproduction'
+    ACCESS_CONDITION_TYPE = 'use and reproduction'
     #
     # @param access_conditions Array[Curator::ControlledTerms::AccessCondition]
     # @return Array[Curator::ControlledTerms::AccessConditionModsDecorator]

@@ -4,17 +4,20 @@ module Curator
   module Serializers
     module SchemaBuilders
       class JSON
+        # Base builder class for serializing data to JSON.
+        # See https://github.com/okuramasafumi/alba/blob/v1.6.0/README.md for information on DSL methods and class functionality
         include Alba::Resource
 
         on_error :ignore
 
         private
 
+        # @returns [Hash] Overrides Alba::Resource#converter
         def converter
           super >> proc { |hash| deep_format_and_compact(hash) }
         end
 
-        #Removes blank values and formats time ActiveSupport::TimeWithZone values to iso8601
+        # @return [Hash] - Removes blank values and formats time ActiveSupport::TimeWithZone values to iso8601
         def deep_format_and_compact(hash)
           hash.reduce({}) do |ret, (key, value)|
             new_val = case value

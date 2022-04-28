@@ -3,6 +3,12 @@
 module Curator
   module Serializers
     class JSONAdapter < AdapterBase
+      # @param :base_builder_class [Class[default = Curator::Serializers::SchemaBuilders::JSON]] class to inherit from. NOTE: this should have a builder DSL defined
+      # @param &block, block for configuring the class with dsl or instance related methods
+      # ie JSONAdapter.new do
+      #     attributes :some_attr1, :some_attr2
+      # See Curator::Serializers::SchemaBuilders::JSON defined in ../schema_builders/json.rb for link to reference documentation
+      # @return [Curator::Serializers::JSONAdapter instance]
       def initialize(base_builder_class: Curator::Serializers::SchemaBuilders::JSON, &block)
         super(base_builder_class: base_builder_class)
         @schema_builder_class = Class.new(base_builder_class, &block)
