@@ -3,6 +3,8 @@
 module Curator
   module ControlledTerms
     extend Curator::NamespaceAccessor
+    ACCESS_CONDITION_TYPE = 'use and reproduction'
+
     def self.table_name_prefix
       'curator.controlled_terms_'
     end

@@ -5,12 +5,8 @@ require_relative '../shared/inherited_serializers'
 require_relative '../shared/json_serialization'
 
 RSpec.describe Curator::Filestreams::TextSerializer, type: :serializers do
-  let!(:text_file_set_count) { 3 }
-
-  let!(:record_collection) do
-    texts = create_list(:curator_filestreams_text, text_file_set_count)
-    Curator.filestreams.text_class.where(id: texts.pluck(:id)).for_serialization
-  end
+  let!(:text_file_set_count) { 2 }
+  let!(:record_collection) { create_list(:curator_filestreams_text, text_file_set_count) }
   let!(:record) { create(:curator_filestreams_text) }
 
   describe 'Base Behavior' do
@@ -21,25 +17,64 @@ RSpec.describe Curator::Filestreams::TextSerializer, type: :serializers do
     it_behaves_like 'json_serialization' do
       let(:json_record) { record }
       let(:json_array) { record_collection }
-      let(:expected_as_json_options) do
-        {
-          after_as_json: -> (json_record) { json_record['file_set_type'] = json_record['file_set_type'].to_s.demodulize.downcase if json_record.key?('file_set_type'); json_record },
-          root: true,
-          only: [:ark_id, :created_at, :updated_at, :file_name_base, :file_set_type, :position, :pagination],
-          include: {
-            file_set_of: {
-              only: [:ark_id]
-            }
-          },
-          administrative: {
-            root: true,
-            only: [:description_standard, :harvestable, :flagged, :destination_site, :hosting_status]
-          },
-          workflow: {
-            root: true,
-            only: [:publishing_state, :processing_state, :ingest_origin]
-          }
-        }
+
+      let(:expected_json) do
+        proc do |file_set|
+          Alba.serialize(file_set) do
+            include Module.new do
+              private
+
+              # @returns [Hash] Overrides Alba::Resource#converter
+              def converter
+                super >> proc { |hash| deep_format_and_compact(hash) }
+              end
+
+              # @return [Hash] - Removes blank values and formats time ActiveSupport::TimeWithZone values to iso8601
+              def deep_format_and_compact(hash)
+                hash.reduce({}) do |ret, (key, value)|
+                  new_val = case value
+                            when Hash
+                              deep_format_and_compact(value)
+                            when Array
+                              value.map { |v| v.is_a?(Hash) ? deep_format_and_compact(v) : v }
+                            when ActiveSupport::TimeWithZone
+                              value.iso8601
+                            else
+                              value
+                            end
+                  ret[key] = new_val
+                  ret
+                end.compact_blank
+              end
+            end
+
+            root_key :file_set, :file_sets
+
+            attributes :ark_id, :created_at, :updated_at, :file_name_base, :position
+
+            attribute :file_set_type do |resource|
+              resource.file_set_type.demodulize.downcase
+            end
+
+            has_one :file_set_of do
+              attributes :ark_id
+            end
+
+            one :pagination do
+              attributes :page_label, :page_type, :hand_side
+            end
+
+            has_one :metastreams do
+              has_one :administrative do
+                attributes :description_standard, :harvestable, :flagged, :destination_site, :hosting_status
+              end
+
+              has_one :workflow do
+                attributes :publishing_state, :processing_state, :ingest_origin
+              end
+            end
+          end
+        end
       end
     end
   end

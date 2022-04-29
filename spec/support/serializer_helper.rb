@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module SerializerHelper
-  module AsJsonHelper
+  module JsonHelper
     # NOTE: This method return the long list of options used for when #as_json on a descriptive is called of the descriptive as json
     # This is only required when stubbing out an expected value for as json in the descriptive class
     BLOB_KEY_TRANSFORMS = {
@@ -130,7 +130,7 @@ module SerializerHelper
   end
 
   module SchemaBuilderHelper
-    def schema_attribute_keys(schema_builder_class = nil)
+    def json_schema_attribute_keys(schema_builder_class = nil)
       return [] if schema_builder_class.blank?
 
       schema_builder_class._attributes.keys
@@ -140,12 +140,31 @@ module SerializerHelper
 
   module IntegrationHelper
     include SchemaBuilderHelper
-    include AsJsonHelper
+    include JsonHelper
 
-    def serializer_adapter_schema_attributes(serializer_class, adapter_key, facet_group_key)
+    def record_root_key(record)
+      for_collection = record.is_a?(Enumerable)
+      element_name = for_collection && record.first.present? ? record_element_name(record.first) : record_element_name(record)
+
+      return element_name.to_s.pluralize if for_collection
+
+      element_name
+    end
+
+    def record_element_name(record)
+      return 'error' if record.kind_of?(Curator::Exceptions::SerializableError)
+
+      record.model_name.singular.include?('filestreams') ? 'file_set' : record.model_name.element
+    end
+
+    def serializer_adapter_schema_attributes(serializer_class, adapter_key)
       return [] if adapter_key == :null
 
-      serializer_class.send(:_schema_builder_for_adapter, adapter_key)&.schema_builder_class&._attributes || []
+      attributes = serializer_class.send(:_schema_builder_for_adapter, adapter_key)&.schema_builder_class&._attributes
+
+      return [] if attributes.blank?
+
+      attributes.keys
     end
   end
 end

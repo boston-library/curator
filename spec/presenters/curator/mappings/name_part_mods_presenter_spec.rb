@@ -3,5 +3,5 @@
 require 'rails_helper'
 
 RSpec.describe Curator::Mappings::NamePartModsPresenter, type: :presenters do
-  pending
+  pending 'pending'
 end

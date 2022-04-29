@@ -93,7 +93,7 @@ module Curator
     protected
 
     def fetch_related_type(type_key)
-      DescriptiveFieldSets::RelatedItemModsPresenter::RELATED_TYPES.fetch(type_key)
+      DescriptiveFieldSets::RELATED_TYPES.fetch(type_key)
     end
 
     private

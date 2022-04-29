@@ -2,7 +2,6 @@
 
 module Curator
   class ControlledTerms::AccessConditionModsDecorator < Decorators::BaseDecorator
-    ACCESS_CONDITION_TYPE = 'use and reproduction'
     #
     # @param access_conditions Array[Curator::ControlledTerms::AccessCondition]
     # @return Array[Curator::ControlledTerms::AccessConditionModsDecorator]
@@ -21,7 +20,7 @@ module Curator
     def type
       return if __getobj__.blank?
 
-      ACCESS_CONDITION_TYPE
+      ControlledTerms::ACCESS_CONDITION_TYPE
     end
 
     def display_label

@@ -4,13 +4,8 @@ require 'rails_helper'
 require_relative './shared/inherited_serializers'
 require_relative './shared/json_serialization'
 RSpec.describe Curator::InstitutionSerializer, type: :serializers do
-  let!(:institution_count) { 3 }
-
-  let!(:record_collection) do
-    insts = create_list(:curator_institution, institution_count, :with_location)
-    Curator.institution_class.where(id: insts.pluck(:id)).for_serialization
-  end
-
+  let!(:institution_count) { 2 }
+  let!(:record_collection) { create_list(:curator_institution, institution_count, :with_location) }
   let!(:record)  { record_collection.last }
 
   describe 'Base Behavior' do
@@ -21,10 +16,36 @@ RSpec.describe Curator::InstitutionSerializer, type: :serializers do
     it_behaves_like 'json_serialization' do
       let(:json_record) { record }
       let(:json_array) { record_collection }
-      let(:record_root_key) { :institution }
       let(:expected_json) do
-        proc do |resource|
-          Alba.serialize(resource) do
+        proc do |institution|
+          Alba.serialize(institution) do
+            include Module.new do
+              private
+
+              # @returns [Hash] Overrides Alba::Resource#converter
+              def converter
+                super >> proc { |hash| deep_format_and_compact(hash) }
+              end
+
+              # @return [Hash] - Removes blank values and formats time ActiveSupport::TimeWithZone values to iso8601
+              def deep_format_and_compact(hash)
+                hash.reduce({}) do |ret, (key, value)|
+                  new_val = case value
+                            when Hash
+                              deep_format_and_compact(value)
+                            when Array
+                              value.map { |v| v.is_a?(Hash) ? deep_format_and_compact(v) : v }
+                            when ActiveSupport::TimeWithZone
+                              value.iso8601
+                            else
+                              value
+                            end
+                  ret[key] = new_val
+                  ret
+                end.compact_blank
+              end
+            end
+
             root_key :institution, :institutions
 
             attributes :ark_id, :created_at, :updated_at, :name, :abstract, :url

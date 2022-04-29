@@ -2,8 +2,6 @@
 
 module Curator
   class DescriptiveFieldSets::IdentifierModsDecorator < Decorators::BaseDecorator
-    EXCLUDED_IDENTIFIER_TYPES = %w(iiif-manifest uri-preview).freeze
-
     # NOTE: The base object for this decorator class is Curator::Metastreams::Descriptive
 
     def digital_object
@@ -34,7 +32,7 @@ module Curator
 
       return @filtered_identifiers = [] if identifiers.blank?
 
-      @filtered_identifiers = identifiers.select { |ident| EXCLUDED_IDENTIFIER_TYPES.exclude?(ident.type) }
+      @filtered_identifiers = identifiers.select { |ident| DescriptiveFieldSets::EXCLUDED_MODS_IDENTIFIER_TYPES.exclude?(ident.type) }
     end
 
     # Only return the ark identifer if there is NO uri identifer present in the filtered list

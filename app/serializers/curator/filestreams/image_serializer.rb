@@ -5,8 +5,8 @@ module Curator
     build_schema_as_json do
       attributes :exemplary_image_of
 
-      attribute :image_primary_url do |record|
-        params[:show_primary_url].presence ? record.image_primary&.url : nil
+      attribute :image_primary_url do |resource|
+        params[:show_primary_url].presence ? resource.image_primary&.url : nil
       end
     end
   end

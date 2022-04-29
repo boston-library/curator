@@ -7,19 +7,19 @@ module Curator
 
       attributes :file_name_base, :position
 
-      attribute :file_set_type do
-        record.file_set_type.demodulize.downcase
-      end
-
-      one :file_set_of do
-        attributes :ark_id
+      attribute :file_set_type do |resource|
+        resource.file_set_type.demodulize.downcase
       end
 
       one :pagination do
         attributes :page_label, :page_type, :hand_side
       end
 
-      one :metastreams do
+      has_one :file_set_of do
+        attributes :ark_id
+      end
+
+      has_one :metastreams do
         has_one :administrative do
           include Curator::Metastreams::JsonAdministratable
         end

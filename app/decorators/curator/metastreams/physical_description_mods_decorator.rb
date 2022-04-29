@@ -2,8 +2,6 @@
 
 module Curator
   class Metastreams::PhysicalDescriptionModsDecorator < Decorators::BaseDecorator
-    EXCLUDED_MEDIA_TYPES = %w(xml txt).freeze
-
     def digital_origin
       super.tr('_', ' ') if __getobj__.respond_to?(:digital_origin)
     end
@@ -39,7 +37,7 @@ module Curator
 
       return @internet_media_type_list = [] if file_sets.blank?
 
-      @internet_media_type_list = ActiveStorage::Attachment.includes(:blob).where(record: file_sets).pluck(Arel.sql('curator.active_storage_blobs.content_type')).uniq.select { |imt| EXCLUDED_MEDIA_TYPES.any? { |mt| imt.include?(mt) } }
+      @internet_media_type_list = ActiveStorage::Attachment.includes(:blob).where(record: file_sets).pluck(Arel.sql('curator.active_storage_blobs.content_type')).uniq.select { |imt| Metastreams::EXCLUDED_PD_MODS_MEDIA_TYPES.any? { |mt| imt.include?(mt) } }
     end
 
     def blank?
