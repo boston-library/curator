@@ -50,18 +50,18 @@ RSpec.describe Curator::Filestreams::ImageSerializer, type: :serializers do
 
             root_key :file_set, :file_sets
 
-            attributes :ark_id, :created_at, :updated_at, :file_name_base, :position
+            attributes :ark_id, :created_at, :updated_at, :file_name_base, :position, :exemplary_image_of
 
             attribute :file_set_type do |resource|
               resource.file_set_type.demodulize.downcase
             end
 
-            has_one :file_set_of do
-              attributes :ark_id
+            one :pagination, if: proc { |_fs, relation| relation.present? } do
+              attributes :page_label, :page_type, :hand_side
             end
 
-            one :pagination do
-              attributes :page_label, :page_type, :hand_side
+            has_one :file_set_of do
+              attributes :ark_id
             end
 
             has_one :metastreams do

@@ -10,7 +10,7 @@ RSpec.describe Curator::ControlledTerms::LicenseSerializer, type: :serializers d
   let!(:record_collection) { create_list(:curator_controlled_terms_license, license_count) }
 
   describe 'Base Behavior' do
-    it_behaves_like 'nomenclature_serializer', has_id_from_auth: false
+    it_behaves_like 'access_condition_serializer'
   end
 
   describe 'Serialization' do

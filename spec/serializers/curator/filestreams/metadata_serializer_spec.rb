@@ -56,12 +56,12 @@ RSpec.describe Curator::Filestreams::MetadataSerializer, type: :serializers do
               resource.file_set_type.demodulize.downcase
             end
 
-            has_one :file_set_of do
-              attributes :ark_id
+            one :pagination, if: proc { |_fs, relation| relation.present? } do
+              attributes :page_label, :page_type, :hand_side
             end
 
-            one :pagination do
-              attributes :page_label, :page_type, :hand_side
+            has_one :file_set_of do
+              attributes :ark_id
             end
 
             has_one :metastreams do

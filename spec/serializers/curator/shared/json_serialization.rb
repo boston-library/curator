@@ -54,8 +54,9 @@ RSpec.shared_examples 'json_serialization', type: :serializers do |include_colle
         end
 
         it 'expects each element of the hash to match the :expected_json_array' do
+          awesome_print expected_json_array
           expect(subject[expected_json_root_key].count).to eql(expected_json_array[expected_json_root_key].count)
-          expect(subject).to include(expected_json_root_key => array_including(expected_json_array.map { |json_record| a_hash_including(json_record) }))
+          expect(subject).to include(expected_json_root_key => array_including(expected_json_array[expected_json_root_key].map { |json_record| a_hash_including(json_record) }))
         end
       end
 

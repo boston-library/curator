@@ -2,11 +2,11 @@
 
 module Curator
   module ControlledTerms
-    module JsonLicense
+    module JsonAccessCondition
       extend ActiveSupport::Concern
 
       included do
-        include ControlledTerms::JsonAccessCondition
+        attributes :label, :uri
       end
     end
   end

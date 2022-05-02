@@ -60,7 +60,7 @@ RSpec.describe Curator::Filestreams::AudioSerializer, type: :serializers do
               attributes :ark_id
             end
 
-            one :pagination do
+            one :pagination, if: proc { |_fs, relation| relation.present? } do
               attributes :page_label, :page_type, :hand_side
             end
 

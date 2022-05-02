@@ -6,8 +6,7 @@ module Curator
       extend ActiveSupport::Concern
 
       included do
-        include Curator::ControlledTerms::JsonNomenclature
-        attributes :uri
+        include ControlledTerms::JsonAccessCondition
       end
     end
   end

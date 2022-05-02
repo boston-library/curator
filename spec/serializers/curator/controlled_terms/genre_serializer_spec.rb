@@ -49,7 +49,9 @@ RSpec.describe Curator::ControlledTerms::GenreSerializer, type: :serializers do
 
             root_key :genre, :genres
 
-            attributes :label, :id_from_auth, :basic, :authority_code
+            attributes :label, :id_from_auth, :authority_code
+
+            attributes :basic, if: proc { |_resource, attribute|  attribute.present? }
           end
         end
       end
