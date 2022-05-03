@@ -4,5 +4,5 @@ require 'rails_helper'
 require_relative '../shared/curator_decorator'
 
 RSpec.describe Curator::Mappings::NameRoleModsDecorator, type: :decorators do
-  pending
+  pending 'pending'
 end

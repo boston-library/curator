@@ -140,7 +140,7 @@ module Curator
       # @return [Hash]
       def self.normalize_tgn_hgeo(hgeo_hash)
         normalized = {}
-        TGN_HIER_GEO_ATTRS.each do |k|
+        Parsers::Constants::TGN_HIER_GEO_ATTRS.each do |k|
           normalized[k] = hgeo_hash[k]
         end
         normalized.compact

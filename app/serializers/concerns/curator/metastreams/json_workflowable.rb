@@ -4,7 +4,6 @@ module Curator
   module Metastreams
     module JsonWorkflowable
       extend ActiveSupport::Concern
-
       # NOTE these need to be included WITHIN a build_schema_as_json block
       # ex. build_schema_as_json do
       #       include Curator::Metastreams::JsonWorkflowable
@@ -15,8 +14,6 @@ module Curator
       #      include Curator::Metastreams::JsonWorkflowable
       #   end
       # end
-
-
       included do
         attributes :publishing_state, :processing_state, :ingest_origin
       end

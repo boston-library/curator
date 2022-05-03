@@ -18,7 +18,7 @@ module Curator
             def initialize(attr_name, xml_label: nil, &block)
               @name = attr_name
 
-              @xml_label = xml_label.present? ? xml_label : attr_name
+              @xml_label = xml_label.presence || attr_name
               @target_value = block if block_given?
 
               @target_value = attr_name.to_sym if @target_value.blank?
@@ -27,12 +27,11 @@ module Curator
 
           attr_reader :attributes, :name, :target_value
 
-
           def initialize(name, target_val: nil, &block)
             @name = name
             @attributes = []
             instance_exec(&block) if block_given?
-            @target_value ||= target_val.present? ? target_val : name.to_sym
+            @target_value ||= target_val.presence || name.to_sym
           end
 
           def attribute(attr_name, xml_label: nil, &block)
@@ -50,7 +49,7 @@ module Curator
           def initialize(name, target_obj: nil, multi_valued: false, xml_label: nil, &block)
             @elements = []
             @multi_valued = multi_valued
-            @target_object = target_obj.present? ? target_obj : name.to_sym
+            @target_object = target_obj.presence || name.to_sym
             @target_value_blank = false
             @xml_label = xml_label
             super(name, &block)
@@ -76,7 +75,7 @@ module Curator
             elements << el
           end
 
-          def node(node_name, target_obj: nil, multi_valued: false, label: nil ,&block)
+          def node(node_name, target_obj: nil, multi_valued: false, label: nil, &block)
             raise ArgumentError, 'No block given in node method' if block.blank?
 
             elements << self.class.new(node_name, target_obj: target_obj, multi_valued: multi_valued, xml_label: label, &block)
@@ -87,7 +86,7 @@ module Curator
           # Module for defining DSL methods to build serializable data from Curator Models
           extend ActiveSupport::Concern
 
-          SCHEMA_BUILDER_DSL = { _xml_elements: {}, _root_name: nil, _root_namespace: nil, _namespace_separator: ':', _root_attributes: {} , _root_element: nil, _xml_key_transform: :camelize_lower }.freeze
+          SCHEMA_BUILDER_DSL = { _xml_elements: {}, _root_name: nil, _root_namespace: nil, _namespace_separator: ':', _root_attributes: {}, _root_element: nil, _xml_key_transform: :camelize_lower }.freeze
           private_constant :SCHEMA_BUILDER_DSL
 
           CONDITION_UNMET = Object.new.freeze
@@ -168,7 +167,7 @@ module Curator
             def build_hash
               lambda do |hash, element|
                 hash[element.name] ||= []
-                element.attributes.each_pair { |k,v| hash[element.name] << { k => v } } if element.attributes.present?
+                element.attributes.each_pair { |k, v| hash[element.name] << { k => v } } if element.attributes.present?
                 element.each do |el_value|
                   case el_value
                   when Ox::Element
@@ -198,7 +197,7 @@ module Curator
                   next if el == CONDITION_UNMET || el.blank?
 
                   if el.is_a?(Array)
-                    el.each { |el| add_to_root.call(root, el) }
+                    el.each { |i| add_to_root.call(root, i) }
                     next
                   end
 
@@ -427,7 +426,7 @@ module Curator
             def assign_elements(els, if_block = nil)
               els.each do |el_name|
                 el = BuilderHelpers::Element.new(el_name.to_sym)
-                @_xml_elements[transformed_key(el_name)] = if_block.blank? ?  el : [el, if_block]
+                @_xml_elements[transformed_key(el_name)] = if_block.blank? ? el : [el, if_block]
               end
             end
 

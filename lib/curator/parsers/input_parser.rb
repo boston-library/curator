@@ -46,7 +46,7 @@ module Curator
       def self.corp_name_part_splitter(input_string)
         return [] if input_string.blank?
 
-        return [input_string] if input_string !~ Curator::Parsers::Constants::CORP_NAME_INPUT_MATCHER
+        return [input_string] if !input_string.match?(Curator::Parsers::Constants::CORP_NAME_INPUT_MATCHER)
 
         name_parts_array = []
         in_str = input_string

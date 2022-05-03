@@ -372,7 +372,7 @@ module Curator
       end
 
       def note_list(desc)
-        desc.note.select { |n| n.type != 'physical description'}
+        desc.note.select { |n| n.type != 'physical description' }
       end
 
       def access_condition_list(desc)

@@ -23,7 +23,7 @@ module Curator
       'local-other' => 'id_local-other'
     }.freeze
 
-    RELATED_TYPES={
+    RELATED_TYPES = {
       host: 'host',
       constituent: 'constituent',
       series: 'series',

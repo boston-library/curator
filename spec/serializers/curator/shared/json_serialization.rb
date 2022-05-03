@@ -6,7 +6,9 @@ RSpec.shared_examples 'json_serialization', type: :serializers do |include_colle
 
   describe 'JSON serialization behavior' do
     specify { expect(json_record).to be_truthy }
+    specify { expect(expected_json_serializer_class).to be_truthy.and be <= Alba::Resource }
     specify { expect(expected_json).to be_a_kind_of(Proc) }
+
     specify if: include_collections do
       expect(json_array).to be_truthy.and respond_to(:each, :map)
     end
@@ -54,7 +56,6 @@ RSpec.shared_examples 'json_serialization', type: :serializers do |include_colle
         end
 
         it 'expects each element of the hash to match the :expected_json_array' do
-          awesome_print expected_json_array
           expect(subject[expected_json_root_key].count).to eql(expected_json_array[expected_json_root_key].count)
           expect(subject).to include(expected_json_root_key => array_including(expected_json_array[expected_json_root_key].map { |json_record| a_hash_including(json_record) }))
         end

@@ -11,40 +11,14 @@ RSpec.describe Curator::Metastreams::DescriptiveSerializer, type: :serializers d
     it_behaves_like 'json_serialization', include_collections: false do
       let(:json_record) { record }
       let(:json_array) { [] }
-      let(:serializer_class_block) do
-        proc do
-          include Module.new do
-            private
 
-            # @returns [Hash] Overrides Alba::Resource#converter
-            def converter
-              super >> proc { |hash| deep_format_and_compact(hash) }
-            end
-
-            # @return [Hash] - Removes blank values and formats time ActiveSupport::TimeWithZone values to iso8601
-            def deep_format_and_compact(hash)
-              hash.reduce({}) do |ret, (key, value)|
-                new_val = case value
-                          when Hash
-                            deep_format_and_compact(value)
-                          when Array
-                            value.map { |v| v.is_a?(Hash) ? deep_format_and_compact(v) : v }
-                          when ActiveSupport::TimeWithZone
-                            value.iso8601
-                          else
-                            value
-                          end
-                ret[key] = new_val
-                ret
-              end.compact_blank
-            end
-          end
-        end.compose(descriptive_json_block)
+      let(:expected_json_serializer_class) do
+        serializer_test_class(&descriptive_json_block)
       end
-      
+
       let(:expected_json) do
-        proc do |descriptive|
-          Alba.serialize(descriptive, root_key: :descriptive, &serializer_class_block)
+        lambda do |descriptive|
+          expected_json_serializer_class.new(descriptive).serialize(root_key: :descriptive)
         end
       end
     end

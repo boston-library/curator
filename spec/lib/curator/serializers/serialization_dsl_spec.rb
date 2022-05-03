@@ -34,27 +34,18 @@ RSpec.describe Curator::Serializers::SerializationDSL, type: :lib_serializer do
       describe 'with custom adapter registered' do
         subject { Class.new { include Curator::Serializers::SerializationDSL } }
 
-        let(:custom_builder_class) do
-          Class.new do
-            class_attribute :_attributes, instance_accessor: false, default: []
-
-            def self.attributes(*attrs)
-              attrs.each { |attr|  _attributes << attr }
-            end
-          end
-        end
-
         let!(:custom_adapter) do
           Class.new(Curator::Serializers::AdapterBase) do
-            def initialize(base_builder_class: custom_builder_class, &_block)
+            def initialize(base_builder_class: Class.new, &_block)
               super(base_builder_class: base_builder_class)
               @schema_builder_class = Class.new(base_builder_class)
             end
+
             def serializable_hash(_record = nil, _params = {})
               puts 'I can Serialize A Hash'
             end
 
-            def render(record, _params = {})
+            def serialize(record, _params = {})
               serializable_hash(record, serializer_params)
               puts 'I can render a serialized hash!'
             end
@@ -75,9 +66,7 @@ RSpec.describe Curator::Serializers::SerializationDSL, type: :lib_serializer do
 
         it 'expects the adapter will get added' do
           expect do
-            subject.build_schema_as_custom do
-              attributes :id
-            end
+            subject.build_schema_as_custom {}
           end.to change { subject.send(:_adapter_schemas).keys.count }.by(1)
           expect(subject.send(:_schema_builder_for_adapter, :custom)).to be_an_instance_of(custom_adapter)
         end

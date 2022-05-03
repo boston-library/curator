@@ -16,7 +16,7 @@ module Curator
         raise Curator::Exceptions::CuratorError, 'Not Implemented'
       end
 
-      def serialize(_resource= nil, _params = {})
+      def serialize(_resource = nil, _params = {})
         raise Curator::Exceptions::CuratorError, 'Not Implemented'
       end
     end

@@ -97,12 +97,13 @@ RSpec.shared_examples_for 'file_set_serializer', type: :serializers do
     end
 
     describe 'inherited serializer attributes' do
-      subject { described_class_instance.serializable_hash }
+      subject { base_attribute_keys }
 
-      let(:attribute_keys) { base_attribute_keys }
+      let(:serialized_hash) { described_class_instance.serializable_hash }
+      let(:attribute_keys) { serialized_hash.keys }
 
       it 'is expected to have base attributes in serializable_hash' do
-        expect(subject.keys).to include(*attribute_keys)
+        expect(subject).to include(*attribute_keys)
       end
     end
   end

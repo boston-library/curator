@@ -2,7 +2,6 @@
 
 module Curator
   class DigitalObjectSerializer < CuratorSerializer
-
     # Overloaded initializer so the record is always set as DigitalObject#descriptive if the adapter_key is :mods
     def initialize(record, params = {}, adapter_key: :json)
       super

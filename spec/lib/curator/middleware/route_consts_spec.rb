@@ -6,7 +6,7 @@ RSpec.describe Curator::Middleware::RouteConsts do
   subject { described_class }
 
   it { is_expected.to be_const_defined(:JSON_CONSTRAINT) }
-  it { is_expected.to be_const_defined(:XML_CONSTRAINT)}
+  it { is_expected.to be_const_defined(:XML_CONSTRAINT) }
   it { is_expected.to be_const_defined(:NOMENCLATURE_TYPES) }
   it { is_expected.to be_const_defined(:FILE_SET_TYPES) }
 

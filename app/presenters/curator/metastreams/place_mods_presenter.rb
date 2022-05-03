@@ -2,7 +2,6 @@
 
 module Curator
   class Metastreams::PlaceModsPresenter
-
     PlaceTerm = Struct.new(:label, :type, keyword_init: true)
 
     attr_reader :place_term

@@ -24,7 +24,7 @@ module Curator
       protected
 
       def builder(record, params = {})
-        return @builder_instance if defined?(@builder_instance) && !@builder_instance.blank?
+        return @builder_instance if defined?(@builder_instance) && @builder_instance.present?
 
         @builder_instance = schema_builder_class.new(record, params)
       end
