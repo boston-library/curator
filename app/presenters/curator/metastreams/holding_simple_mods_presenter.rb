@@ -21,7 +21,7 @@ module Curator
       @copy_information = CopyInformation.new(sub_location: sub_location, shelf_locator: shelf_locator)
     end
 
-    # @return [Boolean]
+    # @return [Boolean] - Needed for serializer
     def blank?
       copy_information.sub_location.blank? && copy_information.shelf_locator.blank?
     end

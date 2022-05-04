@@ -2,7 +2,7 @@
 
 module Curator
   class Metastreams::LocationModsPresenter
-    # For serializing <mods:location> elements
+    # This class acts as a wrapper for serializing <mods:location> sub elements/attributes
     attr_reader :physical_location_name, :holding_simple, :uri_list
 
     # @param[optional] :physical_location_name [String]
@@ -18,8 +18,7 @@ module Curator
       @uri_list = uri_list
     end
 
-    # @return [Boolean]
-
+    # @return [Boolean] - Needed for serializer
     def blank?
       physical_location_name.blank? && holding_simple.blank? && uri_list.blank?
     end

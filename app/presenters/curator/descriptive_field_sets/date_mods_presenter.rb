@@ -2,11 +2,14 @@
 
 module Curator
   class DescriptiveFieldSets::DateModsPresenter
+    # For <mods:originInfo><mods:dateCreated>,<mods:dateIssued><mods:copyrightDate></mods:originInfo> and <mods:subject><mods:temporal> elements/attributes
     attr_reader :start, :end_date, :static, :qualifier, :key_date
-
-    # For <mods:originInfo><mods:dateCreated>,<mods:dateIssued><mods:copyrightDate></mods:originInfo> and <mods:subject><mods:temporal> elements
-    # @param role [Curator::ControlledTerms::Role]
-    # @return [Curator::Mappings::RoleTermModsPresenter] instance
+    # @param[optional] :key_date [Boolean]
+    # @param[optional] :static [String]
+    # @param[optional] :start [String]
+    # @param[optional] :end [String]
+    # @param[optional] :qualifier [String]
+    # @return [Curator::DescriptiveFieldSets::DateModsPresenter] instance
     def initialize(key_date: false, static: nil, start: nil, end: nil, qualifier: nil)
       @static = static
       @start = start
@@ -19,6 +22,7 @@ module Curator
       static.presence || start.presence || end_date.presence
     end
 
+    # @return [Boolean] - Neede for serializer
     def blank?
       %i(static start end_date).all? { |attr| public_send(attr).blank? }
     end

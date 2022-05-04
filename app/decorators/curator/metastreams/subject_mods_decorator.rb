@@ -3,6 +3,7 @@
 module Curator
   class Metastreams::SubjectModsDecorator < Decorators::BaseDecorator
     include Curator::ControlledTerms::NamePartableMods
+    # This class delegates and wraps multiple objects for serializing <mods:subject> sub elements
 
     def self.wrap_multiple(subjects = [])
       subjects.map(&method(:new))
@@ -65,7 +66,7 @@ module Curator
 
       return @cartographic_subject = geographic_subject.cartographic if geographic_subject.present?
 
-      @cartographic_subject = Curator::DescriptiveFieldSets::CartographicModsPresenter.new(scale: cartographic.scale, projection: cartographic.projection)
+      @cartographic_subject = Curator::DescriptiveFieldSets::CartographicModsPresenter.new(projection: cartographic.projection, scale: cartographic.scale)
     end
 
     def name_subject

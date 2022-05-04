@@ -2,6 +2,7 @@
 
 module Curator
   class DescriptiveFieldSets::LanguageOfCatalogingModsPresenter
+    # This class is for serializing <mods:recordInfo><mods:LanguageOfCataloging> elements/attributes
     DEFAULT_USAGE = 'primary'
     DEFAULT_LANG_TERM_ATTRS = {
       label: 'eng',
@@ -11,6 +12,8 @@ module Curator
       value_uri: 'http://id.loc.gov/vocabulary/iso639-2/eng'
     }.freeze
 
+    #
+    #
     LanguageTerm = Struct.new(:label, :type, :authority, :authority_uri, :value_uri, keyword_init: true)
 
     attr_reader :language_term, :usage

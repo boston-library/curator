@@ -2,11 +2,22 @@
 
 module Curator
   class ControlledTerms::GeographicModsPresenter
+    # This classs acts as a wrapper for serializing <mods:subject><mods:geographic>, <mods:hierarchicalGeographic> and <mods:cartographic> elements/attributes
     class TgnHierGeo
-      # For serializing <mods:subject><mods:hierarchicalGeographic> elements
+      # This class is for serializing <mods:subject><mods:hierarchicalGeographic> elements
       attr_reader(*Curator::Parsers::Constants::TGN_HIER_GEO_ATTRS)
-      # @param[optional] city [String]
-      # @param[optional] city_section [String]
+      # @param[optional] :continent [String]
+      # @param[optional] :country [String]
+      # @param[optional] :region [String]
+      # @param[optional] :province [String]
+      # @param[optional] :state [String]
+      # @param[optional] :territory [String]
+      # @param[optional] :county [String]
+      # @param[optional] :island [String]
+      # @param[optional] :city [String]
+      # @param[optional] :city_section [String]
+      # @param[optional] :area [String]
+      # @param[optional] :extraterrestrial_area [String]
       # @return [Curator::ControlledTerms::GeographicModsPresenter::HierGeo] instance
       def initialize(**hier_geo_attrs)
         hier_geo_attrs.each do |k, v|
@@ -46,6 +57,7 @@ module Curator
     def label
       return geographic.label if !has_hier_geo?
 
+      # don't render as <mods:geographic> if the value is included in the hier_values
       return if hierarchical_geographic.hier_values.include?(geographic.label)
 
       geographic.label
@@ -73,7 +85,7 @@ module Curator
     #
     # @return [Curator::DescriptiveFieldSets::CartographicModsPresenter | nil ]
     def create_cartographic
-      cartographic_attrs = %i(scale projection bounding_box coordinates).inject({}) do |ret, attr|
+      cartographic_attrs = %i(projection bounding_box coordinates scale).inject({}) do |ret, attr|
         next ret if !geographic.respond_to?(attr) || geographic.public_send(attr).blank?
 
         ret[attr] = geographic.public_send(attr)
@@ -85,8 +97,8 @@ module Curator
       Curator::DescriptiveFieldSets::CartographicModsPresenter.new(**cartographic_attrs)
     end
 
-    #
-    # @return [Curator::ControlledTerms::GeographicModsPresenter::HierGeo | nil]
+    # Fetches hier data for tgns
+    # @return [Curator::ControlledTerms::GeographicModsPresenter::TgnHierGeo | nil]
     def fetch_heir_geographic
       return if bpldc_url.blank?
 

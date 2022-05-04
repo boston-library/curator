@@ -2,11 +2,12 @@
 
 module Curator
   class Mappings::NamePartModsPresenter
-    attr_reader :label, :is_date
     # For serializing <mods:name><mods:namePart> elements
     # @param label [String]
     # @param[optional] is_date [Boolean]
     # @return [Curator::Mappings::RoleTermModsPresenter] instance
+    attr_reader :label, :is_date
+
     def initialize(label, is_date = false)
       @label = label
       @is_date = is_date
