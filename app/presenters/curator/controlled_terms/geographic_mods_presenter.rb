@@ -85,7 +85,7 @@ module Curator
     #
     # @return [Curator::DescriptiveFieldSets::CartographicModsPresenter | nil ]
     def create_cartographic
-      cartographic_attrs = %i(projection bounding_box coordinates scale).inject({}) do |ret, attr|
+      cartographic_attrs = %i(bounding_box coordinates).inject({}) do |ret, attr|
         next ret if !geographic.respond_to?(attr) || geographic.public_send(attr).blank?
 
         ret[attr] = geographic.public_send(attr)

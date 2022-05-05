@@ -3,13 +3,13 @@
 module Curator
   class Metastreams::HoldingSimpleModsPresenter
     # For serializing <mods:location><mods:holdingSimple> elements
-
-    # Subclass CopyInformation[Struct]
-    # For serializing <mods:location><mods:holdingSimple><mods:copyInformation> elements
-    # CopyInformation#initialize
-    # @param[optional] :sub_location [String | nil]
-    # @param[optional] :shelf_locator [String | nil]
-    # @return [Curator::Metastreams::HoldingSimpleModsPresenter::CopyInformation] instance
+    #
+    ## Subclass CopyInformation[Struct]
+    ## This Struct is for serializing <mods:location><mods:holdingSimple><mods:copyInformation> elements
+    ## CopyInformation#initialize
+    ## @param[optional] :sub_location [String | nil]
+    ## @param[optional] :shelf_locator [String | nil]
+    ## @return [Curator::Metastreams::HoldingSimpleModsPresenter::CopyInformation] instance
     CopyInformation = Struct.new(:sub_location, :shelf_locator, keyword_init: true)
 
     attr_reader :copy_information

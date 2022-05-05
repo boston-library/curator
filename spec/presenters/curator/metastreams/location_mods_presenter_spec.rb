@@ -3,5 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Curator::Metastreams::LocationModsPresenter, type: :presenters do
-  pending 'pending'
+  subject { described_class }
+
+  
 end

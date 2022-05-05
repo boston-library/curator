@@ -3,5 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe Curator::DescriptiveFieldSets::TemporalSubjectModsPresenter, type: :presenters do
-  pending 'pending'
+  subject { described_class }
+
+  it { is_expected.to respond_to(:wrap_multiple).with(0..1).arguments }
+  it { is_expected.to respond_to(:new).with(1).argument }
+
+  skip 'instance' do
+  end
 end

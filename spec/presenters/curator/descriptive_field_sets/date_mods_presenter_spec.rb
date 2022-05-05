@@ -3,5 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe Curator::DescriptiveFieldSets::DateModsPresenter, type: :presenters do
-  pending 'pending'
+  subject { described_class }
+
+  it { is_expected.to respond_to(:new).with_keywords(:key_date, :static, :start, :end, :qualifier) }
+
+  skip 'instance' do
+  end
 end

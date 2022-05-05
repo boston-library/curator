@@ -3,5 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe Curator::DescriptiveFieldSets::RelatedItemModsPresenter, type: :presenters do
-  pending 'pending'
+  subject { described_class }
+
+  it { is_expected.to respond_to(:new).with(1).argument.and_keywords(:title_info, :xlink, :display_label) }
+
+  skip 'instance' do
+  end
 end

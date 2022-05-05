@@ -8,17 +8,17 @@ module Curator
     delegate :label, to: :resource_type, allow_nil: true
 
     #
-    # @param resource_types Array[Curator::ControlledTerms::ResourceType]
-    # @param[optional] resource_type_manuscript Boolean[default false]
-    # @return Array[Curator::ControlledTerms::ResourceTypeModsPresenter]
+    # @param[optional] resource_types [Array[Curator::ControlledTerms::ResourceType]]
+    # @param[optional] :resource_type_manuscript [Boolean[default false]]
+    # @return [Array[Curator::ControlledTerms::ResourceTypeModsPresenter]]
     def self.wrap_multiple(resource_types = [], resource_type_manuscript: false)
       resource_types.map { |rt| new(rt, resource_type_manuscript: resource_type_manuscript) }
     end
 
     #
-    # @param resource_type Curator::ControlledTerms::ResourceType
-    # @param[optional] resource_type_manuscript Boolean[default false]
-    # @return Curator::ControlledTerms::ResourceTypeModsPresenter
+    # @param[required] resource_type [Curator::ControlledTerms::ResourceType]
+    # @param[optional] :resource_type_manuscript Boolean[default false]
+    # @return [Curator::ControlledTerms::ResourceTypeModsPresenter]
     def initialize(resource_type, resource_type_manuscript: false)
       @resource_type = resource_type
       @resource_type_manuscript = resource_type_manuscript
