@@ -60,6 +60,7 @@ module Curator
       temporal_presenters + date_temporal_presenters
     end
 
+    # NOTE: #to_a is used to wrap all the subject relations in an array and pass to the SubjectModsDecorator.wrap_multiple method 
     def to_a
       Array.wrap(topics) + Array.wrap(geos) + Array.wrap(names) + Array.wrap(titles) + Array.wrap(temporal_mods)
     end

@@ -3,5 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe Curator::Metastreams::SubjectNameModsPresenter, type: :presenters do
-  pending 'pending'
+  subject { described_class }
+
+  it { is_expected.to respond_to(:new).with(1..2).arguments }
+
+  skip 'instance' do
+  end
 end

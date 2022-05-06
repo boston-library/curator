@@ -17,8 +17,7 @@ RSpec.describe Curator::DescriptiveFieldSets::LanguageOfCatalogingModsPresenter,
     it { is_expected.to be <= Struct }
     it { is_expected.to respond_to(:new) }
 
-    # NOTE: structs attributes have to be tested this(below) way and won't work with respond_to(...).with_keywords(...)
-
+    # NOTE: Struct initializer arguments/keywords have to be tested this(below) way and won't work with respond_to(...).with_keywords(...)
     it 'is expected to have the following member attributes' do
       expect(subject.members).to include(:label, :type, :authority, :authority_uri, :value_uri)
     end

@@ -2,6 +2,13 @@
 
 module Curator
   class Metastreams::RecordInfoModsDecorator < Decorators::BaseDecorator
+    # RecordInfoModsDecorator#initialize
+    # @param obj [Curator::Metastreams::Descriptive]
+    # @return [Curator::Metastreams::RecordInfoModsDecorator]
+    # USAGE:
+    ##  desc = Curator.metastreams.descriptive_class.for_serialization.find_by(..)
+    ##  record_info = Curator::Metastreams:RecordInfoModsDecorator.new(desc)
+
     def record_origin
       return if __getobj__.blank?
 

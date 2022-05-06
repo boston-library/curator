@@ -16,9 +16,9 @@ RSpec.describe Curator::ControlledTerms::GeographicModsPresenter, type: :present
     specify { expect(subject).to respond_to(:new).with_keywords(*tgn_hier_geo_attrs) }
 
     describe 'instance' do
-      subject { described_class.new(attrs) }
+      subject { described_class.new(**hier_attrs) }
 
-      let!(:attrs) do
+      let!(:hier_attrs) do
         {
           continent: 'North America',
           city: Faker::Address.city,
@@ -41,14 +41,14 @@ RSpec.describe Curator::ControlledTerms::GeographicModsPresenter, type: :present
       it 'is expected to respond_to and have the correct values' do
         tgn_hier_geo_attrs.each do |tgn_hier_geo_attr|
           expect(subject).to respond_to(tgn_hier_geo_attr).with(0).arguments
-          expect(subject.public_send(tgn_hier_geo_attr)).to eql(attrs[tgn_hier_geo_attr])
+          expect(subject.public_send(tgn_hier_geo_attr)).to eql(hier_attrs[tgn_hier_geo_attr])
         end
       end
 
       it 'expects #hier_values to retunr an array of matching values' do
         expect(subject.hier_values).to be_a_kind_of(Array)
         expect(subject.hier_values).to all(be_a_kind_of(String))
-        expect(subject.hier_values).to match_array(attrs.values)
+        expect(subject.hier_values).to match_array(hier_attrs.values)
       end
     end
   end

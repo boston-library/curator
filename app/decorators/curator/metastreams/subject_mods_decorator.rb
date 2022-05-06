@@ -3,8 +3,14 @@
 module Curator
   class Metastreams::SubjectModsDecorator < Decorators::BaseDecorator
     include Curator::ControlledTerms::NamePartableMods
-    # This class delegates and wraps multiple objects for serializing <mods:subject> sub elements
-
+    # This class delegates and wraps multiple objects for serializing the various <mods:subject> sub elements
+    # Curator::Metastreams::SubjectModsDecorator#initialize
+    ## @param obj [Curator::ControlledTerms::Name | Curator::ControlledTerms::Geographic | Curator::ControlledTerms::Subject | Curator::DescriptiveFieldSets::Title | Curator::DescriptiveFieldSets::Cartographic | Curator::DescriptiveFieldSets::Subject |  Array[Curator::DescriptiveFieldSets::TemporalSubjectModsPresenter]]]
+    ## @return [Curator::ControlledTerms::SubjectModsDecorator] instance
+    #
+    # @param subjects [Array[Curator::ControlledTerms::Name | Curator::ControlledTerms::Geographic | Curator::ControlledTerms::Subject | Curator::DescriptiveFieldSets::Title | Curator::DescriptiveFieldSets::Cartographic | Curator::DescriptiveFieldSets::Subject |  Array[Curator::DescriptiveFieldSets::TemporalSubjectModsPresenter]]]
+    # @return [Array[Curator::Metastreams::SubjectModsDecorator]
+    # NOTE: See SubjectDecorator#to_a method
     def self.wrap_multiple(subjects = [])
       subjects.map(&method(:new))
     end
