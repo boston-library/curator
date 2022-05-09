@@ -20,7 +20,10 @@ module Curator
             object_ids = rights_statement_of.pluck(:digital_object_id)
           when 'Name', 'Role'
             object_ids = desc_name_roles.joins(:descriptive).pluck(:'metastreams_descriptives.digital_object_id')
-            object_ids += physical_locations_of.pluck(:digital_object_id) if term_type == 'Name'
+            if term_type == 'Name'
+              object_ids += physical_locations_of.pluck(:digital_object_id)
+              object_ids += desc_terms.joins(:descriptive).pluck(:'metastreams_descriptives.digital_object_id')
+            end
             object_ids.uniq!
           else
             object_ids = desc_terms.joins(:descriptive).pluck(:'metastreams_descriptives.digital_object_id')
