@@ -24,6 +24,7 @@ module Curator
               geo_auth = subject_geo.authority&.code
               coords = subject_geo.coordinates
               context.output_hash['subject_geo_label_sim'] << geo_label if geo_auth
+              hier_geo = false
 
               if geo_auth == 'tgn'
                 auth_url = "#{geo_auth}/#{subject_geo.id_from_auth}"
@@ -32,6 +33,7 @@ module Curator
                 raise Curator::Exceptions::GeographicIndexerError.new('No data received from authority service', auth_url) if auth_data.blank?
 
                 if auth_data[:hier_geo].present?
+                  hier_geo = true
                   if auth_data[:non_hier_geo].present?
                     other_geo_value = auth_data[:non_hier_geo][:value]
                     other_geo_value << " (#{subject_geo.area_type})" if subject_geo.area_type.present?
@@ -52,7 +54,9 @@ module Curator
                   context.output_hash['subject_hiergeo_geojson_ssm'] << hiergeo_geojson.to_json
                   display_placename = Curator::Parsers::GeoParser.display_placename(auth_data[:hier_geo])
                 end
-              else
+              end
+
+              unless hier_geo
                 context.output_hash['subject_geographic_tim'] << geo_label
                 context.output_hash['subject_geographic_sim'] << geo_label
                 context.output_hash['subject_geo_other_ssm'] << geo_label
