@@ -18,5 +18,11 @@ RSpec.shared_examples 'curator_decorator', type: :decorators do
 end
 
 RSpec.shared_examples 'curator_multi_decorator', type: :decorators do
-  pending 'pending'
+  specify { expect(described_class).to respond_to(:wrap_multiple) }
+
+  describe '.wrap_multiple' do
+    subject { wrapped }
+
+    it { is_expected.to be_kind_of(Enumerable).and all(be_an_instance_of(described_class)) }
+  end
 end

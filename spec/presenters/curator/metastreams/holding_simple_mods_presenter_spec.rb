@@ -12,6 +12,7 @@ RSpec.describe Curator::Metastreams::HoldingSimpleModsPresenter, type: :presente
 
     it { is_expected.to be <= Struct }
     it { is_expected.to respond_to(:new) }
+
     # NOTE: Struct initializer attributes/keywords have to be tested this(below) way and won't work with respond_to(:new).with_keywords(...)
     it 'is expected to have the following member attributes' do
       expect(subject.members).to include(:sub_location, :shelf_locator)

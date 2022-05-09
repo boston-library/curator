@@ -2,6 +2,13 @@
 
 module Curator
   class ControlledTerms::GenreModsDecorator < Decorators::BaseDecorator
+    # This class wraps and delegates Curator::ControlledTerms::Genre objects to serialize/display <mods:genre> elements
+    # Curator::ControlledTerms::GenreModsDecorator#initialize
+    ## @param obj [Curator::ControlledTerms::Genre]
+    ## @return [Curator::ControlledTerms::GenreModsDecorator] instance
+    #
+    # @param genres [Array[Curator::ControlledTerms::Genre]]
+    # @return [Array[Curator::ControlledTerms::GenreModsDecorator]]
     def self.wrap_multiple(genres = [])
       genres.map(&method(:new))
     end
@@ -22,12 +29,14 @@ module Curator
       super if __getobj__.respond_to?(:value_uri)
     end
 
+    # @return [String] - Used to determine the displayLabel attributes' value
     def display_label
       return if __getobj__.blank? || !__getobj__.respond_to?(:basic?)
 
       __getobj__.basic? ? 'general' : 'specific'
     end
 
+    # @return [Boolean] - Needed for serializer due to complexity
     def blank?
       return true if __getobj__.blank?
 

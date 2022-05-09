@@ -2,9 +2,13 @@
 
 module Curator
   class ControlledTerms::AccessConditionModsDecorator < Decorators::BaseDecorator
-    #
-    # @param access_conditions Array[Curator::ControlledTerms::AccessCondition]
-    # @return Array[Curator::ControlledTerms::AccessConditionModsDecorator]
+    # This class wraps and delegates classes inherited form Curator::ControlledTerms::AccessCondition to serialize/display <mods:accessCondition> elements
+    # Curator::ControlledTerms::AccessConditionModsDecorator#initialize
+    ## @param obj [Curator::ControlledTerms::License | Curator::ControlledTerms::RightsStatement]
+    ## @return [Curator::ControlledTerms::AccessConditionModsDecorator]
+
+    # @param access_conditions Array[Curator::ControlledTerms::License | Curator::ControlledTerms::RightsStatement]
+    # @return [Array[Curator::ControlledTerms::AccessConditionModsDecorator]]
     def self.wrap_multiple(access_conditions = [])
       access_conditions.map(&method(:new))
     end
@@ -23,6 +27,7 @@ module Curator
       ControlledTerms::ACCESS_CONDITION_TYPE
     end
 
+    # @return [String] - Used to determine the displayLabel attributes' value
     def display_label
       return if __getobj__.blank?
 
@@ -34,6 +39,7 @@ module Curator
       end
     end
 
+    # @return [Boolean] - Needed for serialzer due to complexity
     def blank?
       return true if __getobj__.blank?
 

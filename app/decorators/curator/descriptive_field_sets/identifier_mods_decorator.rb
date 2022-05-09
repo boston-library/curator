@@ -2,7 +2,10 @@
 
 module Curator
   class DescriptiveFieldSets::IdentifierModsDecorator < Decorators::BaseDecorator
-    # NOTE: The base object for this decorator class is Curator::Metastreams::Descriptive
+    # This class wraps and delegates a Curator::Metastreams::Descriptive to display/serialize <mods:identifier> elements
+    # Curator::DescriptiveFieldSets::IdentifierModsDecorator#initialize
+    ## @param obj [Curator::DescriptiveFieldSets::Identifier]
+    ## @returns [Curator::DescriptiveFieldSets::IdentifierModsDecorator] instance
 
     def digital_object
       super if __getobj__.respond_to?(:digital_object)
@@ -26,7 +29,7 @@ module Curator
       filtered_identifiers.any? { |ident| ident.type == 'uri' }
     end
 
-    # Exlude uri-preview and iiif-manifest from the identifier list
+    # @returns [Array[Curator::DescriptiveFieldSets::Identifier]] - Exclude uri-preview and iiif-manifest from the identifier list
     def filtered_identifiers
       return @filtered_identifiers if defined?(@filtered_identifiers)
 
@@ -35,13 +38,15 @@ module Curator
       @filtered_identifiers = identifiers.select { |ident| DescriptiveFieldSets::EXCLUDED_MODS_IDENTIFIER_TYPES.exclude?(ident.type) }
     end
 
-    # Only return the ark identifer if there is NO uri identifer present in the filtered list
+    # @returns [Array[Curator::DescriptiveFieldSets::Identifier]] - Only return the ark identifer if there is NO uri identifer present in the filtered list
+    # NOTE: this is needed based on how <mods:identifier> elements are displayed mods
     def to_a
       return Array.wrap(filtered_identifiers) if has_uri_identifier?
 
       Array.wrap(ark_identifier) + Array.wrap(filtered_identifiers)
     end
 
+    # @returns [Boolean] - Needed for serializer due to complexity
     def blank?
       return true if __getobj__.blank?
 

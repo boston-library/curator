@@ -12,7 +12,7 @@ RSpec.describe Curator::MetastreamDecorator, type: :decorators do
     end
   end
 
-  describe 'Decorator instance' do
+  describe 'Decorator specific behavior' do
     subject { described_class.new(metastreamable_record) }
 
     let(:expected_blank_condition) { subject.administrative.blank? && subject.descriptive.blank? && subject.workflow.blank? }

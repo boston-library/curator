@@ -2,6 +2,8 @@
 
 module Curator
   class Metastreams::OriginInfoModsDecorator < Decorators::BaseDecorator
+    # This class wraps and delegates Curator::Metastreams::Descriptive objects to serialize/display <mods:originInfo> elements and sub elements
+
     def publication
       return @publication if defined?(@publication)
 
@@ -10,12 +12,14 @@ module Curator
       @publication = __getobj__.publication
     end
 
+    # @return [String | nil] - Used for <mods:edition> elements
     def edition
       return if publication.blank?
 
       publication.edition_name
     end
 
+    # @return [String | nil] - Used for <mods:publisher> elements
     def publisher
       super if __getobj__.respond_to?(:publisher)
     end
@@ -24,6 +28,7 @@ module Curator
       super if __getobj__.respond_to?(:date)
     end
 
+    # @return [Curator::Metastreams::PlaceModsPresenter] -used for <mods:place><mods:placeTerm> sub elements
     def place
       return @place if defined?(@place)
 
@@ -32,12 +37,14 @@ module Curator
       @place = Curator::Metastreams::PlaceModsPresenter.new(__getobj__.place_of_publication)
     end
 
+    # @return [Boolean] - Used for detecting if the dates should be parsed as inferred
     def dates_inferred?
       return false if !__getobj__.respond_to?(:note) || __getobj__.note.blank?
 
       __getobj__.note.any? { |n| n.inferred_date? }
     end
 
+      # @return [Array[Curator::DescriptiveFieldSets::DateModsPresenter]] - for <mods:dateCreated> sub elements
     def date_created
       return @date_created if defined?(@date_created)
 
@@ -46,6 +53,7 @@ module Curator
       @date_created = map_date_presenters(date.created, 'dateCreated')
     end
 
+    # @return [Array[Curator::DescriptiveFieldSets::DateModsPresenter]] - for <mods:dateIssued> sub elements
     def date_issued
       return @date_issued if defined?(@date_issued)
 
@@ -54,6 +62,7 @@ module Curator
       @date_issued = map_date_presenters(date.issued, 'dateIssued')
     end
 
+    # @return [Array[Curator::DescriptiveFieldSets::DateModsPresenter]] - for <mods:copyrightDate> sub elements
     def copyright_date
       return @copyright_date if defined?(@copyright_date)
 
@@ -62,6 +71,7 @@ module Curator
       @copyright_date = map_date_presenters(date.copyright, 'dateCopyright')
     end
 
+    # @return [Boolean] - Needed for serializer due to complexity
     def blank?
       return true if __getobj__.blank?
 

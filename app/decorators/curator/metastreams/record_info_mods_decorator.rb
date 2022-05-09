@@ -2,6 +2,8 @@
 
 module Curator
   class Metastreams::RecordInfoModsDecorator < Decorators::BaseDecorator
+
+    # This class wraps and delegates a Curator::Metastreams::Descriptive to serialize and display sub elements for <mods:recordInfo>
     # RecordInfoModsDecorator#initialize
     # @param obj [Curator::Metastreams::Descriptive]
     # @return [Curator::Metastreams::RecordInfoModsDecorator]

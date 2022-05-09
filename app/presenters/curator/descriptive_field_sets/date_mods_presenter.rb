@@ -22,7 +22,7 @@ module Curator
       static.presence || start.presence || end_date.presence
     end
 
-    # @return [Boolean] - Neede for serializer
+    # @return [Boolean] - Needed for serializer
     def blank?
       %i(static start end_date).all? { |attr| public_send(attr).blank? }
     end

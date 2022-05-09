@@ -4,6 +4,10 @@ module Curator
   class Mappings::NameRoleModsDecorator < Decorators::BaseDecorator
     include Curator::ControlledTerms::NamePartableMods
 
+    # This class wraps and delegates Curator::Mappings::NameRole objects to serialize/display <mods:name> elements and sub elements
+
+    # @param name_roles [Array[Curator::Mappings::NameRole]]
+    # @returns [Array[Curator::Mappings::NameRoleModsDecorator]]
     def self.wrap_multiple(name_roles = [])
       name_roles.map(&method(:new))
     end
@@ -43,7 +47,7 @@ module Curator
     def role_term
       Mappings::RoleTermModsPresenter.new(role) if role.present?
     end
-
+    # @returns [Boolean] - Needed for serializer
     def blank?
       return true if __getobj__.blank?
 
