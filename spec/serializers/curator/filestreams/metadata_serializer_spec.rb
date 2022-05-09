@@ -36,6 +36,10 @@ RSpec.describe Curator::Filestreams::MetadataSerializer, type: :serializers do
             attributes :ark_id
           end
 
+          has_many :file_set_members_of do
+            attributes :ark_id
+          end
+
           has_one :metastreams do
             has_one :administrative do
               attributes :description_standard, :harvestable, :flagged, :destination_site, :hosting_status

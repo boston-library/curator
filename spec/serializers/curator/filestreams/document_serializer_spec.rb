@@ -31,6 +31,10 @@ RSpec.describe Curator::Filestreams::DocumentSerializer, type: :serializers do
             attributes :ark_id
           end
 
+          has_many :file_set_members_of do
+            attributes :ark_id
+          end
+
           one :pagination do
             attributes :page_label, :page_type, :hand_side
           end

@@ -17,7 +17,7 @@ RSpec.describe Curator::Filestreams::AudioSerializer, type: :serializers do
     it_behaves_like 'json_serialization' do
       let(:json_record) { record }
       let(:json_array) { record_collection }
-      
+
       let(:expected_json_serializer_class) do
         serializer_test_class do
           root_key :file_set, :file_sets
@@ -29,6 +29,10 @@ RSpec.describe Curator::Filestreams::AudioSerializer, type: :serializers do
           end
 
           has_one :file_set_of do
+            attributes :ark_id
+          end
+
+          has_many :file_set_members_of do
             attributes :ark_id
           end
 
