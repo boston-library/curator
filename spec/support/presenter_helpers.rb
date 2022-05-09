@@ -12,6 +12,14 @@ module PresenterHelpers
     end
   end
 
+  module RelatedHelper
+    def related_type_lookup(type)
+      return if !Curator::DescriptiveFieldSets::RELATED_TYPES.key?(type)
+
+      Curator::DescriptiveFieldSets::RELATED_TYPES[type]
+    end
+  end
+
   module NameHelper
     def name_parts(name)
     end
@@ -21,4 +29,5 @@ end
 
 RSpec.configure do |config|
   config.include PresenterHelpers::DateHelper, type: :presenters
+  config.include PresenterHelpers::RelatedHelper, type: :presenters
 end

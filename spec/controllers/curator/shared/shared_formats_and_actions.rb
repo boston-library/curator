@@ -215,7 +215,7 @@ RSpec.shared_examples 'shared_post', type: :controller do |skip_post: true, reso
   end
 end
 
-RSpec.shared_examples "shared_formats", type: :controller do |include_ark_context: false, has_collection_methods: true, has_member_methods: true, skip_put_patch: true, skip_post: true, resource_key: nil, file_set_type: nil|
+RSpec.shared_examples "shared_formats", type: :controller do |include_ark_context: false, has_collection_methods: true, has_member_methods: true, skip_put_patch: true, skip_post: true, resource_key: nil, file_set_type: nil, has_xml_context: false|
   specify { expect(base_params).to be_truthy.and be_a_kind_of(Hash) }
   specify { expect(resource).to be_truthy.and be_a_kind_of(ActiveRecord::Base) }
 
@@ -233,9 +233,9 @@ RSpec.shared_examples "shared_formats", type: :controller do |include_ark_contex
     include_examples 'shared_put_patch', skip_put_patch: skip_put_patch, resource_key: resource_key.to_sym
   end
 
-  context 'XML' do
-    let(:format) { :xml }
-
-    
+  context 'XML', if: has_xml_context do
+    let!(:format) { :xml }
+    let!(:params) {base_params.dup.merge({ format: format })}
+    let(:xml_string) { serializer_class.new(resource.reload, adapter_key: format).serialize }
   end
 end
