@@ -72,7 +72,7 @@ module Curator
         HTMLEntities.new.decode(ActionView::Base.full_sanitizer.sanitize(value.gsub(/<br[\s]*\/>/, ' '))).gsub("\\'", "'").squish
       end
 
-      ##
+	##
       # @param value [String] raw input
       # @return [String] UTF-8 encoded, no HTML tags, no line breaks, etc.
       def self.strip_value(value)
@@ -84,6 +84,16 @@ module Curator
         end
 
         utf8_encode(value)
+      end
+
+      ##
+      # wrapper for chaining steps related to 'cleaning' text prior to indexing
+      # @param value [String] raw input
+      # @return [String]
+      def self.clean_text(value)
+        value = Curator::Parsers::InputParser.utf8_encode(value)
+        # remove Zooniverse transcription markup
+        value.gsub(/\[\/?(deletion|insertion|table|unclear|underline)\]/, '').squish
       end
     end
   end
