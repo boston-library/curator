@@ -29,7 +29,7 @@ module Curator
 
         context.output_hash['has_ocr_text_bsi'] = true
         record.text_plain_attachment.download do |file|
-          context.output_hash['ocr_tsiv'] = Curator::Parsers::InputParser.utf8_encode(file)
+          context.output_hash['ocr_tsiv'] = Curator::Parsers::InputParser.clean_text(file)
         end
       end
     end

@@ -38,7 +38,7 @@ module Curator
         next if text_plain_attachment.blank?
 
         text_plain_attachment.download do |file|
-          context.output_hash['ocr_tiv'] = Curator::Parsers::InputParser.utf8_encode(file)
+          context.output_hash['ocr_tiv'] = Curator::Parsers::InputParser.clean_text(file)
         end
       end
     end

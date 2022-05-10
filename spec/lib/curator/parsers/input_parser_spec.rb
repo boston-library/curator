@@ -26,4 +26,11 @@ RSpec.describe Curator::Parsers::InputParser do
       expect(described_class.utf8_encode(bad_string)).to eq 'Lorem ipsum dolor'
     end
   end
+
+  describe '#clean_text' do
+    it 'removes Zooniverse transcription markup' do
+      zoo_string = 'a sad [deletion][unclear][/deletion] one to you.'
+      expect(described_class.clean_text(zoo_string)).to eq 'a sad one to you.'
+    end
+  end
 end
