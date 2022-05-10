@@ -22,6 +22,6 @@ RSpec.describe Curator::Metastreams::DescriptivesController, type: :controller d
   let(:invalid_update_attributes) { valid_update_attributes.dup.update(toc_url: 'xyz://foo.bar.org') }
 
   context "with :metastreamable_type as DigitalObject" do
-    include_examples 'shared_formats', include_ark_context: true, has_collection_methods: false, skip_put_patch: false, resource_key: 'descriptive'
+    include_examples 'shared_formats', include_ark_context: true, has_collection_methods: false, skip_put_patch: false, resource_key: 'descriptive', has_xml_context: true
   end
 end

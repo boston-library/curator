@@ -21,7 +21,25 @@ module PresenterHelpers
   end
 
   module NameHelper
-    def name_parts(name)
+    # @returns [Array[Curator::Mappings::NamePartModsPresenter]]
+    def map_name_parts(name = nil)
+      return [] if name.blank?
+
+      case name.name_type
+      when 'corporate'
+        Curator::Parsers::InputParser.corp_name_part_splitter(name.label).map { |np| Curator::Mappings::NamePartModsPresenter.new(np) }
+      when 'personal'
+        names_hash = Curator::Parsers::InputParser.pers_name_part_splitter(name.label)
+        names_hash.reduce([]) do |ret, (key, val)|
+          next ret if val.blank?
+
+          is_date = key == :date_part
+          ret << Curator::Mappings::NamePartModsPresenter.new(val, is_date)
+          ret
+        end
+      else
+        [Curator::Mappings::NamePartModsPresenter.new(name.label)]
+      end
     end
   end
 end
@@ -30,4 +48,5 @@ end
 RSpec.configure do |config|
   config.include PresenterHelpers::DateHelper, type: :presenters
   config.include PresenterHelpers::RelatedHelper, type: :presenters
+  config.include PresenterHelpers::NameHelper, type: :presenters
 end

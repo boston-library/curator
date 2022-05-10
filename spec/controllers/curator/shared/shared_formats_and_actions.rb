@@ -58,7 +58,7 @@ RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: f
       end
 
       context 'with invalid :id' do
-        it 'return a :not_found response' do
+        it 'returns a :not_found response' do
           invalid_id_params = params.dup
           invalid_id_params[:id] = '0'
 
@@ -233,9 +233,54 @@ RSpec.shared_examples "shared_formats", type: :controller do |include_ark_contex
     include_examples 'shared_put_patch', skip_put_patch: skip_put_patch, resource_key: resource_key.to_sym
   end
 
-  context 'XML', if: has_xml_context do
+  describe 'XML', if: has_xml_context do
+    routes { Curator::Engine.routes }
+
     let!(:format) { :xml }
-    let!(:params) {base_params.dup.merge({ format: format })}
-    let(:xml_string) { serializer_class.new(resource.reload, adapter_key: format).serialize }
+    let!(:params) { base_params.dup.merge({ format: format }) }
+    let!(:charset) { 'charset=utf-8' }
+    let!(:expected_content_type) { "#{Mime[format].to_str}; #{charset}" }
+    let!(:xml_string) { serializer_class.new(resource.reload, adapter_key: :mods).serialize }
+
+    describe 'GET' do
+      context 'with :id' do
+        it "returns a successful mods xml response" do
+          resource.reload
+
+          id_params = params.dup
+          id_params[:id] ||= resource.to_param
+          get :show, params: id_params
+          expect(response).to have_http_status(:ok)
+          expect(response.content_type).to eql(expected_content_type)
+          expect(response.body).to eql(xml_string)
+        end
+      end
+
+      context 'with :ark_id as :id', if: include_ark_context do
+        it 'returns a successful mods xml response' do
+          ark_params = params.dup
+
+          ark_params[:id] = ark_params.delete(:ark_id) if ark_params.key?(:ark_id)
+          ark_params[:id] ||= resource.ark_id if resource.respond_to?(:ark_id)
+          get :show, params: ark_params
+          expect(response).to have_http_status(:ok)
+          expect(response.content_type).to eq(expected_content_type)
+          expect(response.body).to eql(xml_string)
+        end
+      end
+
+      context 'with invalid id' do
+        it 'returns a :not_found response as json' do
+          invalid_id_params = params.dup
+          invalid_id_params[:id] = '0'
+
+          get :show, params: invalid_id_params
+          expect(response).to have_http_status(:not_found)
+          expect(response.content_type).to eq('application/json; charset=utf-8')
+          expect(json_response).to be_a_kind_of(Hash).and have_key(:errors)
+          expect(json_response[:errors][0]).to include(:status => 404, :title => 'Record Not Found', :detail => a_kind_of(String), :source => a_hash_including(:pointer))
+        end
+      end
+    end
   end
 end
