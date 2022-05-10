@@ -7,7 +7,7 @@ RSpec.describe Curator::DescriptiveFieldSets::RelatedItemModsPresenter, type: :p
 
   it { is_expected.to respond_to(:new).with(1).argument.and_keywords(:title_label, :xlink, :display_label) }
 
-  skip 'instance' do
+  describe 'instance' do
     let!(:related_obj) { create(:curator_descriptives_related) }
 
     context 'host' do
@@ -44,10 +44,10 @@ RSpec.describe Curator::DescriptiveFieldSets::RelatedItemModsPresenter, type: :p
     end
 
     context 'series' do
-      subject { described_class.new(related_type, title_label: title_label) }
+      subject { described_class.new(related_type, title_label: series) }
 
       let!(:series) { Faker::Lorem.words.join(' ') }
-      let!(:related_type) { fetch_related_type(:series) }
+      let!(:related_type) { related_type_lookup(:series) }
 
       it { is_expected.to respond_to(:type, :xlink, :title_info, :display_label).with(0).arguments }
 
