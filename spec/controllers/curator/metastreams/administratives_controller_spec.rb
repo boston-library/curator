@@ -34,7 +34,7 @@ RSpec.describe Curator::Metastreams::AdministrativesController, type: :controlle
         attributes
       end
       let(:invalid_update_attributes) { valid_update_attributes.dup.update(destination_site: ['not valid']) }
-      include_examples 'shared_formats', include_ark_context: true, skip_put_patch: false, has_collection_methods: false, resource_key: 'administrative', has_xml_context: false
+      include_examples 'shared_formats', include_ark_context: true, skip_put_patch: false, has_collection_methods: false, resource_key: 'administrative'
     end
   end
 
@@ -56,7 +56,7 @@ RSpec.describe Curator::Metastreams::AdministrativesController, type: :controlle
         let!(:valid_update_attributes) { {} }
 
         let(:invalid_update_attributes) { valid_update_attributes.dup }
-        include_examples 'shared_formats', include_ark_context: true, has_collection_methods: false, resource_key: 'administrative', has_xml_context: false
+        include_examples 'shared_formats', include_ark_context: true, has_collection_methods: false, resource_key: 'administrative'
       end
     end
   end

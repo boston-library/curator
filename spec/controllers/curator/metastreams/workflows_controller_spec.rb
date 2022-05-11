@@ -27,7 +27,7 @@ RSpec.describe Curator::Metastreams::WorkflowsController, type: :controller do
 
       let(:invalid_update_attributes) { valid_update_attributes.dup.update(publishing_state: 'FOO') }
 
-      include_examples 'shared_formats', include_ark_context: true, skip_put_patch: false, has_collection_methods: false, resource_key: 'workflow', has_xml_context: false
+      include_examples 'shared_formats', include_ark_context: true, skip_put_patch: false, has_collection_methods: false, resource_key: 'workflow'
     end
   end
 
@@ -47,7 +47,7 @@ RSpec.describe Curator::Metastreams::WorkflowsController, type: :controller do
           }
         end
 
-        include_examples 'shared_formats', include_ark_context: true, skip_put_patch: true, has_collection_methods: false, resource_key: 'workflow', has_xml_context: false
+        include_examples 'shared_formats', include_ark_context: true, skip_put_patch: true, has_collection_methods: false, resource_key: 'workflow'
       end
     end
   end

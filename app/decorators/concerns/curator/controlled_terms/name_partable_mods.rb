@@ -11,22 +11,9 @@ module Curator
     end
 
     module InstanceMethods
-      # NOTE - These two methods ensure that these methods are defined in the included class
-      def name
-        return super if defined?(super)
-
-        raise Curator::Exceptions::CuratorError, "name is not defined in #{self.class.name}"
-      end
-
-      def name_type
-        return super if defined?(super)
-
-        raise Curator::Exceptions::CuratorError, "name_type is not defined in #{self.class.name}"
-      end
-
       # @returns [Array[Curator::Mappings::NamePartModsPresenter]]
       def name_parts
-        return [] if name.blank?
+        return [] if !respond_to?(:name) && name.blank?
 
         case name_type
         when 'corporate'

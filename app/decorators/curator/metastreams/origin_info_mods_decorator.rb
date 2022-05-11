@@ -2,7 +2,13 @@
 
 module Curator
   class Metastreams::OriginInfoModsDecorator < Decorators::BaseDecorator
-    # This class wraps and delegates Curator::Metastreams::Descriptive objects to serialize/display <mods:originInfo> elements and sub elements
+    # DESCRIPTION: This class wraps and delegates Curator::Metastreams::Descriptive objects to serialize/display <mods:originInfo> elements and sub elements
+    # OriginInfoModsDecorator#initialize
+    ## @param obj [Curator::Metastreams::Descriptive]
+    ## @returns [Curator::Metastreams::OriginInfoModsDecorator]
+    ## USAGE:
+    ### desc = Curator.metastreams.descriptive_class.for_serialization.find_by(..)
+    ### origin_info = Curator::Metastreams:OriginInfoModsDecorator.new(desc)
 
     def publication
       return @publication if defined?(@publication)
@@ -12,7 +18,7 @@ module Curator
       @publication = __getobj__.publication
     end
 
-    # @return [String | nil] - Used for <mods:edition> elements
+    # @return [String | nil] - for <mods:edition>  sub elements
     def edition
       return if publication.blank?
 
@@ -71,7 +77,7 @@ module Curator
       @copyright_date = map_date_presenters(date.copyright, 'dateCopyright')
     end
 
-    # @return [Boolean] - Needed for serializer due to complexity
+    # @return [Boolean] - Needed for mods serializer
     def blank?
       return true if __getobj__.blank?
 

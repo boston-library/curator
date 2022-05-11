@@ -8,7 +8,7 @@ RSpec.describe Curator::ControlledTerms::GenreModsDecorator, type: :decorators d
 
   describe 'Base Behavior' do
     it_behaves_like 'curator_decorator' do
-      let(:decorator) { described_class.new(genres.last) }
+      let(:decorator) { described_class.new(genres.sample) }
     end
 
     it_behaves_like 'curator_multi_decorator' do
@@ -19,11 +19,11 @@ RSpec.describe Curator::ControlledTerms::GenreModsDecorator, type: :decorators d
   describe 'Decorator specific behavior' do
     subject { described_class.new(genre) }
 
-    let(:genre) { genres.first }
-    let(:expected_display_label) { genre.basic? ? 'general' : 'specific' }
-    let(:expected_blank_condition) { subject.label.blank? && subject.authority.blank? && subject.authority_uri.blank? && subject.value_uri.blank? && subject.display_label.blank? }
+    let!(:genre) { genres.sample}
+    let!(:expected_display_label) { genre.basic? ? 'general' : 'specific' }
+    let!(:expected_blank_condition) { subject.label.blank? && subject.authority.blank? && subject.authority_uri.blank? && subject.value_uri.blank? && subject.display_label.blank? }
 
-    it { is_expected.to respond_to(:label, :authority, :authority_uri, :value_uri, :display_label) }
+    it { is_expected.to respond_to(:label, :authority, :authority_uri, :value_uri, :display_label).with(0).arguments }
 
     it 'is expected to return #blank? based on the :expected_blank_condition' do
       expect(subject.blank?).to eq(expected_blank_condition)

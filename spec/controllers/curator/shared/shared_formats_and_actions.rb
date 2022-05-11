@@ -233,14 +233,14 @@ RSpec.shared_examples "shared_formats", type: :controller do |include_ark_contex
     include_examples 'shared_put_patch', skip_put_patch: skip_put_patch, resource_key: resource_key.to_sym
   end
 
-  describe 'XML', if: has_xml_context do
+  context 'XML', :if => has_xml_context do
     routes { Curator::Engine.routes }
 
-    let!(:format) { :xml }
-    let!(:params) { base_params.dup.merge({ format: format }) }
-    let!(:charset) { 'charset=utf-8' }
-    let!(:expected_content_type) { "#{Mime[format].to_str}; #{charset}" }
     let!(:xml_string) { serializer_class.new(resource.reload, adapter_key: :mods).serialize }
+    let(:format) { :xml }
+    let(:params) { base_params.dup.merge({ format: format }) }
+    let(:charset) { 'charset=utf-8' }
+    let(:expected_content_type) { "#{Mime[format].to_str}; #{charset}" }
 
     describe 'GET' do
       context 'with :id' do
@@ -256,7 +256,7 @@ RSpec.shared_examples "shared_formats", type: :controller do |include_ark_contex
         end
       end
 
-      context 'with :ark_id as :id', if: include_ark_context do
+      context 'with :ark_id as :id', if: has_xml_context && include_ark_context do # This needs to check both for some reason??
         it 'returns a successful mods xml response' do
           ark_params = params.dup
 
@@ -269,7 +269,7 @@ RSpec.shared_examples "shared_formats", type: :controller do |include_ark_contex
         end
       end
 
-      context 'with invalid id' do
+      context 'with invalid :id' do
         it 'returns a :not_found response as json' do
           invalid_id_params = params.dup
           invalid_id_params[:id] = '0'

@@ -5,16 +5,16 @@ require_relative '../shared/curator_decorator'
 
 RSpec.describe Curator::Metastreams::SubjectDecorator, type: :decorators do
   let!(:desc_term_counts) { 3 }
-  let!(:subject_record) { create(:curator_metastreams_descriptive, :with_all_desc_terms, desc_term_count: desc_term_counts) }
+  let!(:descriptive) { create(:curator_metastreams_descriptive, :with_all_desc_terms, desc_term_count: desc_term_counts) }
 
   describe 'Base Behavior' do
     it_behaves_like 'curator_decorator' do
-      let(:decorator) { described_class.new(subject_record) }
+      let(:decorator) { described_class.new(descriptive) }
     end
   end
 
   describe 'Decorator instance' do
-    subject { described_class.new(subject_record) }
+    subject { described_class.new(descriptive) }
 
     let(:expected_blank_condition) { subject.topics.blank? && subject.names.blank? && subject.titles.blank? && subject.other.blank? }
 

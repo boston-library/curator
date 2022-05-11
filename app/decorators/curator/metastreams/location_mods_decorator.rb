@@ -94,7 +94,8 @@ module Curator
       return @location_uri_list = map_location_url_presenters
     end
 
-    # NOTE: the to_a method needs to include the uri elments spearate from the other based on how the mods is displayed
+    # NOTE: the #to_a method needs to include the uri elments spearate from the other based on how the mods is displayed
+    # @return Array[Curator::Metastreams::LocationModsPresenter]
     def to_a
       ret_array = []
       ret_array << Curator::Metastreams::LocationModsPresenter.new(physical_location_name: physical_location_name, holding_simple: holding_simple) if physical_location_name.present? || holding_simple.present?
@@ -102,6 +103,7 @@ module Curator
       ret_array
     end
 
+    # @return [Boolean] - Needed for mods serializer
     def blank?
       return true if __getobj__.blank?
 

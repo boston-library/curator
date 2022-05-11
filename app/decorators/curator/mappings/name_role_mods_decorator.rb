@@ -13,41 +13,47 @@ module Curator
     end
 
     def name
-      __getobj__.name if __getobj__.respond_to?(:name)
+      super if __getobj__.respond_to?(:name)
     end
 
     def role
-      __getobj__.role if __getobj__.respond_to?(:role)
+      super if __getobj__.respond_to?(:role)
     end
 
+    # @return [String] - Used for <mods:name type=''> attribute value
     def name_type
       return if name.blank?
 
       name.name_type
     end
 
+    # @return [String] - Used for <mods:name authority=''> attribute value
     def name_authority
       return if name.blank?
 
       name.authority_code
     end
 
+    # @return [String] - Used for <mods:name authorityURI=''> attribute value
     def name_authority_uri
       return if name.blank?
 
       name.authority_base_url
     end
 
+    # @return [String] - Used for <mods:name valueURI=''> attribute value
     def name_value_uri
       return if name.blank?
 
       name.value_uri
     end
 
+    # @return [Curator::Mappings::RoleTermModsPresenter | nil] - Used for <mods:role><mods:roleTerm> sub elements
     def role_term
       Mappings::RoleTermModsPresenter.new(role) if role.present?
     end
-    # @returns [Boolean] - Needed for serializer
+
+    # @return [Boolean] - Needed for mods serializer
     def blank?
       return true if __getobj__.blank?
 

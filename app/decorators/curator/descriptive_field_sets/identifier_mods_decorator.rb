@@ -2,11 +2,14 @@
 
 module Curator
   class DescriptiveFieldSets::IdentifierModsDecorator < Decorators::BaseDecorator
-    # This class wraps and delegates a Curator::Metastreams::Descriptive to display/serialize <mods:identifier> elements
+    # This class wraps and delegates a Curator::Metastreams::Descriptive to display/serialize multiple <mods:identifier> elements
     # Curator::DescriptiveFieldSets::IdentifierModsDecorator#initialize
-    ## @param obj [Curator::DescriptiveFieldSets::Identifier]
+    ## @param obj [Curator::Metastreams::Descriptive]
     ## @returns [Curator::DescriptiveFieldSets::IdentifierModsDecorator] instance
-
+    ## USAGE:
+    ### NOTE: using to_a on the decorator instance is the preferred way of usage in serializer
+    ### desc = Curator.metastreams.descriptive_class.for_serialization.find_by(..)
+    ### identifier_list = Curator::DescriptiveFieldSets:IdentifierModsDecorator.new(desc).to_a
     def digital_object
       super if __getobj__.respond_to?(:digital_object)
     end
@@ -46,7 +49,7 @@ module Curator
       Array.wrap(ark_identifier) + Array.wrap(filtered_identifiers)
     end
 
-    # @returns [Boolean] - Needed for serializer due to complexity
+    # @return [Boolean] - Needed for mods serializer
     def blank?
       return true if __getobj__.blank?
 

@@ -2,11 +2,13 @@
 
 module Curator
   class DescriptiveFieldSets::RelatedModsDecorator < Decorators::BaseDecorator
-    # This class wraps and delegates Curator::Metastreams::Descriptive objects to serialize/display <mods:relatedItem> elemenst and sub elements
+    # DESCRIPTION: This class wraps and delegates Curator::Metastreams::Descriptive objects to serialize/display <mods:relatedItem> elemenst and sub elements
     # Curator::DescriptiveFieldSets::RelatedModsDecorator#initialize
     ## @param obj [Curator::Metastreams::Descriptive]
     ## @return [Curator::DescriptiveFieldSets::RelatedModsDecorator]
-    
+    ## USAGE:
+    ### desc = Curator.metastreams.descriptive_class.for_serialization.find_by(..)
+    ### related_mods = Curator::DescriptiveFieldSets::RelatedModsDecorator.new(desc).to_a
     def related
       super if __getobj__.respond_to?(:related)
     end
@@ -85,13 +87,13 @@ module Curator
       @host_collection_names = __getobj__.host_collections.names
     end
 
+    # NOTE: #to_a method is needed due to how <mods:relatedItem> elementsare displayed in mods
     # @return [Array[Curator::DescriptiveFieldSets::RelatedItemModsPresenter |  Curator::DescriptiveFieldSets::RelatedSeriesModsPresenter]]
-    # Note: This is needed due to how <mods:relatedItem> elementsare displayed in mods
     def to_a
       Array.wrap(related_hosts) + Array.wrap(related_series) + Array.wrap(related_constituent) + Array.wrap(related_references) + Array.wrap(related_review_of) + Array.wrap(related_referenced_by)
     end
 
-    # @return [Boolean] - Needed for serializer due to complexity
+    # @return [Boolean] - Needed for mods serializer
     def blank?
       return false if __getobj__.blank?
 

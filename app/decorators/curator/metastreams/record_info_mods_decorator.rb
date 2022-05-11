@@ -2,14 +2,13 @@
 
 module Curator
   class Metastreams::RecordInfoModsDecorator < Decorators::BaseDecorator
-
-    # This class wraps and delegates a Curator::Metastreams::Descriptive to serialize and display sub elements for <mods:recordInfo>
+    # DESCRIPTION: This class wraps and delegates a Curator::Metastreams::Descriptive to serialize and display sub elements for <mods:recordInfo>
     # RecordInfoModsDecorator#initialize
-    # @param obj [Curator::Metastreams::Descriptive]
-    # @return [Curator::Metastreams::RecordInfoModsDecorator]
-    # USAGE:
-    ##  desc = Curator.metastreams.descriptive_class.for_serialization.find_by(..)
-    ##  record_info = Curator::Metastreams:RecordInfoModsDecorator.new(desc)
+    ## @param obj [Curator::Metastreams::Descriptive]
+    ## @return [Curator::Metastreams::RecordInfoModsDecorator]
+    ## USAGE:
+    ###  desc = Curator.metastreams.descriptive_class.for_serialization.find_by(..)
+    ###  record_info = Curator::Metastreams:RecordInfoModsDecorator.new(desc)
 
     def record_origin
       return if __getobj__.blank?
@@ -96,6 +95,7 @@ module Curator
       Metastreams::DEFAULT_MODS_DESC_STANDARD_AUTH
     end
 
+    # @return [Boolean] - Needed for mods serializer
     def blank?
       return true if __getobj__.blank?
 
