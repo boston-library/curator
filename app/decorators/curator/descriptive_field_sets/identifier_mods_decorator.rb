@@ -7,7 +7,7 @@ module Curator
     ## @param obj [Curator::Metastreams::Descriptive]
     ## @returns [Curator::DescriptiveFieldSets::IdentifierModsDecorator] instance
     ## USAGE:
-    ### NOTE: using to_a on the decorator instance is the preferred way of usage in serializer
+    ### NOTE: using to_a on the decorator instance is the preferred way of usage in mods serializer
     ### desc = Curator.metastreams.descriptive_class.for_serialization.find_by(..)
     ### identifier_list = Curator::DescriptiveFieldSets:IdentifierModsDecorator.new(desc).to_a
     def digital_object

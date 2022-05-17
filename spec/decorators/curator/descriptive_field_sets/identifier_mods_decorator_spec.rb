@@ -25,12 +25,17 @@ RSpec.describe Curator::DescriptiveFieldSets::IdentifierModsDecorator, type: :de
     end
 
     describe '#to_a' do
+      let(:expected_decorator_array) { subject.has_uri_identifier? ? Array.wrap(subject.filtered_identifiers) : Array.wrap(subject.ark_identifier) + Array.wrap(subject.filtered_identifiers) }
+
       it 'is expected to return an array of Curator::DescriptiveFieldSets::Identifier' do
         expect(subject.to_a).to be_an_instance_of(Array)
         expect(subject.to_a).not_to be_empty
         expect(subject.to_a).to all(be_an_instance_of(Curator::DescriptiveFieldSets::Identifier))
       end
-    end
 
+      it 'is expected to match the :expected_decorator_array' do
+        expect(subject.to_a).to match_array(expected_decorator_array)
+      end
+    end
   end
 end

@@ -9,7 +9,7 @@ module Curator
     def blank?
       return true if __getobj__.blank?
 
-      __getobj__.administrative.blank? && __getobj__.workflow.blank? && descriptive.blank? 
+      __getobj__.administrative.blank? && __getobj__.workflow.blank? && descriptive.blank?
     end
   end
 end

@@ -48,7 +48,7 @@ RSpec.describe Curator::Metastreams::SubjectNameModsPresenter, type: :presenters
     context 'corporate_name' do
       subject { described_class.new(corp_name_subject, corp_name_parts) }
 
-      let!(:corp_name_subject) { create(:curator_controlled_terms_name, name_type: 'corporate', label: Faker::University.name ) }
+      let!(:corp_name_subject) { create(:curator_controlled_terms_name, name_type: 'corporate', label: Faker::University.name) }
       let!(:corp_name_parts) { map_name_parts(corp_name_subject) }
 
       it 'expects all the #name_parts to be instances of Curator::Mappings::NamePartModsPresenter' do

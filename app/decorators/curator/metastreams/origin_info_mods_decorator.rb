@@ -34,7 +34,7 @@ module Curator
       super if __getobj__.respond_to?(:date)
     end
 
-    # @return [Curator::Metastreams::PlaceModsPresenter] -used for <mods:place><mods:placeTerm> sub elements
+    # @return [Curator::Metastreams::PlaceModsPresenter] - used for <mods:place><mods:placeTerm> sub elements
     def place
       return @place if defined?(@place)
 
@@ -50,7 +50,7 @@ module Curator
       __getobj__.note.any? { |n| n.inferred_date? }
     end
 
-      # @return [Array[Curator::DescriptiveFieldSets::DateModsPresenter]] - for <mods:dateCreated> sub elements
+    # @return [Array[Curator::DescriptiveFieldSets::DateModsPresenter]] - for <mods:dateCreated> sub elements
     def date_created
       return @date_created if defined?(@date_created)
 

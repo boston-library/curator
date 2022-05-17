@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe Curator::Parsers::InputParser do
+  subject { described_class }
+
+  it { is_expected.to respond_to(:get_proper_title, :pers_name_part_splitter, :corp_name_part_splitter, :utf8_encode, :strip_value, :clean_text).with(1).argument }
+
   describe '#get_proper_title' do
     it 'splits the title into nonSort and main components' do
       expect(described_class.get_proper_title('The Book of Sand')).to eq ['The ', 'Book of Sand']
@@ -12,11 +16,39 @@ RSpec.describe Curator::Parsers::InputParser do
   end
 
   describe '#corp_name_part_splitter' do
-    pending 'TODO'
+    subject { described_class.corp_name_part_splitter(corp_name) }
+
+    let!(:corp_name) { 'United States. Veterans Administration. Central Office. Office of Dentistry.' }
+
+    it 'returns an array of strings' do
+      expect(subject).to be_an_instance_of(Array)
+      expect(subject).not_to be_empty
+      expect(subject).to match_array(['United States', 'Veterans Administration', 'Central Office', 'Office of Dentistry'])
+    end
   end
 
   describe '#pers_name_part_splitter' do
-    pending 'TODO'
+    subject { described_class.pers_name_part_splitter(personal_name) }
+
+    let!(:personal_name) { 'Jones, Leslie' }
+
+    it 'returns a hash' do
+      expect(subject).to be_an_instance_of(Hash)
+      expect(subject).not_to be_empty
+      expect(subject).to include(:name_part => personal_name, :date_part => nil)
+    end
+
+    context 'with date part' do
+      subject { described_class.pers_name_part_splitter(personal_name_with_date) }
+
+      let!(:personal_name_with_date) { "#{personal_name}, 1886-1967" }
+
+      it 'returns a hash with a date_part present' do
+        expect(subject).to be_an_instance_of(Hash)
+        expect(subject).not_to be_empty
+        expect(subject).to include(:name_part => personal_name, :date_part => '1886-1967')
+      end
+    end
   end
 
   describe '#utf8_encode' do

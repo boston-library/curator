@@ -44,7 +44,6 @@ module PresenterHelpers
   end
 end
 
-
 RSpec.configure do |config|
   config.include PresenterHelpers::DateHelper, type: :presenters
   config.include PresenterHelpers::RelatedHelper, type: :presenters

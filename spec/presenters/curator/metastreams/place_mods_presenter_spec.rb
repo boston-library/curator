@@ -41,7 +41,7 @@ RSpec.describe Curator::Metastreams::PlaceModsPresenter, type: :presenters do
     let!(:place_term_type) { described_class.const_get(:PLACE_TERM_MODS_TYPE) }
     let!(:place_of_publication) { Faker::University.name }
 
-    it { is_expected.to respond_to(:place_term)}
+    it { is_expected.to respond_to(:place_term) }
 
     it 'expects place term  to be a Curator::Metastreams::PlaceModsPresenter::PlaceTerm with the correct values' do
       expect(subject.place_term).to be_present.and be_an_instance_of(Curator::Metastreams::PlaceModsPresenter::PlaceTerm)

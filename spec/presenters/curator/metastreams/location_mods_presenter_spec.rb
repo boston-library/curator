@@ -14,7 +14,7 @@ RSpec.describe Curator::Metastreams::LocationModsPresenter, type: :presenters do
     let!(:physical_location_name) { Faker::University.name }
     let!(:holding_simple_attrs) { { sub_location: Faker::Educator.campus, shelf_locator: 'Box 002' } }
     let!(:holding_simple) { Curator::Metastreams::HoldingSimpleModsPresenter.new(**holding_simple_attrs) }
-    let!(:uri) { Curator::DescriptiveFieldSets::LocationUrlModsPresenter.new(digital_object.ark_identifier.label, usage: 'primary', access: 'object in context')}
+    let!(:uri) { Curator::DescriptiveFieldSets::LocationUrlModsPresenter.new(digital_object.ark_identifier.label, usage: 'primary', access: 'object in context') }
     let!(:uri_list) { Array.wrap(uri) }
 
     it { is_expected.to respond_to(:physical_location_name, :holding_simple, :uri_list).with(0).arguments }

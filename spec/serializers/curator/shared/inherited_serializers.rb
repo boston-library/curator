@@ -52,7 +52,6 @@ RSpec.shared_examples_for 'access_condition_serializer', type: :serializers do
   end
 end
 
-
 RSpec.shared_examples_for 'nomenclature_serializer', type: :serializers do
   describe 'Curator::ControlledTerms::NomenclatureSerializer' do
     let(:adapter_key) { :json }

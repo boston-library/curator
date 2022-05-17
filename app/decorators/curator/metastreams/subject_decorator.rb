@@ -3,44 +3,65 @@
 module Curator
   class Metastreams::SubjectDecorator < Decorators::BaseDecorator
     # DESCRIPTION: This class acts as a wrapper for a Curator::Metastreams::Descriptive in order for usage in both mods and json serialization
+    # NOTE: There is an instance method on Curator::Metastreams::Descriptive that instantiates this decorator
+    # SubjectDecorator#initialize
+    ## @param obj
+    ## @return [Curator::Metastreams::SubjectDecorator]
+    ## USAGE(JSON):
+    ### desc = Curator.metastreams.descriptive_class.for_serialization.find_by(..)
+    ### subject_other = Curator::Metastreams::SubjectDecorator.new(desc) OR desc.subject
+    ## USAGE(MODS):
+    ### desc = Curator.metastreams.descriptive_class.for_serialization.find_by(..)
+    ### subjects = Curator::Metastreams::SubjectDecorator.new(desc).to_a OR desc.subject.to_a
+    ### subject_mods = Curator::Metastreams::SubjectModsDecorator.wrap_multiple(subjects)
+
+    # @return [ActiveRecord::Relation[Curator::ControlledTerms::Subject]]
     def topics
       __getobj__.subject_topics if __getobj__.respond_to?(:subject_topics)
     end
 
+    # @return [ActiveRecord::Relation[Curator::ControlledTerms::Name]]
     def names
       __getobj__.subject_names if __getobj__.respond_to?(:subject_names)
     end
 
+    # @return [ActiveRecord::Relation[Curator::ControlledTerms::Geographic]]
     def geos
       __getobj__.subject_geos if __getobj__.respond_to?(:subject_geos)
     end
 
+    # @return [Curator::DescriptiveFieldSets::Subject]
     def other
       __getobj__.subject_other if __getobj__.respond_to?(:subject_other)
     end
 
+    # @return [Array[Curator::DescriptiveFieldSets::Cartographic]]
     def cartographics
       __getobj__.cartographics if __getobj__.respond_to(:cartographic)
     end
 
+    # @return [Array[Curator::DescriptiveFieldSets::Title]]
     def titles
       return [] if other.blank?
 
       other.titles
     end
 
+    # @return [Array[String]]
     def temporals
       return [] if other.blank?
 
       other.temporals
     end
 
+    # @return [Array[String]]
     def dates
       return [] if other.blank?
 
       other.dates
     end
 
+    # @return [Array[Curator::DescriptiveFieldSets::TemporalSubjectModsPresenter]]
     def temporal_mods
       return [] if temporals.blank? && dates.blank?
 
@@ -61,8 +82,7 @@ module Curator
       temporal_presenters + date_temporal_presenters
     end
 
-    # NOTE: #to_a is used to wrap all the subject relations in an array and pass to the SubjectModsDecorator.wrap_multiple class method
-    # @return Array[Misc]
+    # @return Array[Misc] - This method is used to wrap all the subject relations in an array and pass to the SubjectModsDecorator.wrap_multiple class method.
     def to_a
       Array.wrap(topics) + Array.wrap(geos) + Array.wrap(names) + Array.wrap(titles) + Array.wrap(temporal_mods)
     end

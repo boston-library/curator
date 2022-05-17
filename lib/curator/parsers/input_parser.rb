@@ -72,7 +72,7 @@ module Curator
         HTMLEntities.new.decode(ActionView::Base.full_sanitizer.sanitize(value.gsub(/<br[\s]*\/>/, ' '))).gsub("\\'", "'").squish
       end
 
-	##
+      ##
       # @param value [String] raw input
       # @return [String] UTF-8 encoded, no HTML tags, no line breaks, etc.
       def self.strip_value(value)

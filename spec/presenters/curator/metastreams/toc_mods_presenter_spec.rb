@@ -44,11 +44,13 @@ RSpec.describe Curator::Metastreams::TocModsPresenter, type: :presenters do
 
       it { is_expected.to be_an_instance_of(Array).and all(be_an_instance_of(described_class)) }
 
+      # rubocop:disable Performance/Count
       it 'is expected to be non empty and have one xlink and one label element' do
         expect(subject.reject(&:blank?).count).to be(subject.count)
         expect(subject.select { |sub| sub.label == label }.count).to be(1)
         expect(subject.select { |sub| sub.xlink == xlink }.count).to be(1)
       end
+      # rubocop:enable Performance/Count
     end
   end
 end

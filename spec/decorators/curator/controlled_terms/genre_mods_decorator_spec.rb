@@ -19,7 +19,7 @@ RSpec.describe Curator::ControlledTerms::GenreModsDecorator, type: :decorators d
   describe 'Decorator specific behavior' do
     subject { described_class.new(genre) }
 
-    let!(:genre) { genres.sample}
+    let!(:genre) { genres.sample }
     let!(:expected_display_label) { genre.basic? ? 'general' : 'specific' }
     let!(:expected_blank_condition) { subject.label.blank? && subject.authority.blank? && subject.authority_uri.blank? && subject.value_uri.blank? && subject.display_label.blank? }
 

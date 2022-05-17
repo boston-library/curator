@@ -10,18 +10,21 @@ module Curator
     ###  desc = Curator.metastreams.descriptive_class.for_serialization.find_by(..)
     ###  record_info = Curator::Metastreams:RecordInfoModsDecorator.new(desc)
 
+    # @return [String] - this is used to serialize/display the <mods:recordInfo><mods:recordOrigin> sub element
     def record_origin
       return if __getobj__.blank?
 
       Metastreams::DEFAULT_MODS_RECORD_ORIGIN
     end
 
+    # @return [String] - this is used for any <mods:recordInfo> sub elements that have an encoding attribute like <mods:recordInfo><mods:recordCreationDate encoding='this value'>
     def date_encoding
       return if __getobj__.blank?
 
       Curator::Parsers::Constants::DATE_ENCODING
     end
 
+    # @return [String] - this is used to serialize/display the <mods:recordInfo><mods:recordContentSource> sub element
     def record_content_source
       return if record_hosting_status.blank?
 
@@ -49,6 +52,7 @@ module Curator
       @record_institution_name = digital_object.institution&.name
     end
 
+    # @return [ISO8601-String] - this is used to serialize/display <mods:recordInfo><mods:recordCreationDate> sub element
     def record_creation_date
       return @record_creation_date if defined?(@record_creation_date)
 
@@ -57,6 +61,7 @@ module Curator
       @record_creation_date = __getobj__.created_at&.iso8601
     end
 
+    # @return [ISO8601-String] - this is used to serialize/display the <mods:recordInfo><mods:recordChangeDate> sub element
     def record_change_date
       return @record_change_date if defined?(@record_change_date)
 
@@ -65,14 +70,12 @@ module Curator
       @record_change_date = __getobj__.updated_at&.iso8601
     end
 
+    # @return [Curator::DigitalObject] parent
     def digital_object
-      return @digital_object if defined?(@digital_object)
-
-      return @digital_object = nil if __getobj__.blank? || !__getobj__.respond_to?(:digital_object)
-
-      @digital_object = __getobj__.digital_object
+      return super if __getobj__.respond_to?(:digital_object)
     end
 
+    # @return [Curator::DescriptiveFieldSets::LanguageOfCatalogingModsPresenter] instance - This is used to serialize/display the <mods:recordInfo><mods:languageOfCataloging> sub elements
     def language_of_cataloging
       return @language_of_cataloging if defined?(@language_of_cataloging)
 
@@ -81,6 +84,7 @@ module Curator
       @language_of_cataloging = Curator::DescriptiveFieldSets::LanguageOfCatalogingModsPresenter.new
     end
 
+    # @return [String] - This is used to serialize/display the <mods:recordInfo><mods:descriptionStandard> sub element
     def description_standard
       return @description_standard if defined?(@description_standard)
 
@@ -89,6 +93,7 @@ module Curator
       @description_standard = digital_object.administrative.description_standard
     end
 
+    # @return [String] - This is used to get the value for the authority attribute in <mods:recordInfo><mods:descriptionStandard authority='this value'>
     def description_standard_authority
       return if __getobj__.blank?
 

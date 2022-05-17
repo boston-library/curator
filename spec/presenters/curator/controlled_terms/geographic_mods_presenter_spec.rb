@@ -56,14 +56,13 @@ RSpec.describe Curator::ControlledTerms::GeographicModsPresenter, type: :present
   describe 'instance' do
     subject do
       geographic_presenter = nil
-      VCR.use_cassette("presenters/controlled_terms/geographic_subject") do
+      VCR.use_cassette('presenters/controlled_terms/geographic_subject') do
         geographic_presenter = described_class.new(geographic_subject)
       end
       geographic_presenter
     end
 
     let!(:geographic_subject) { create(:curator_controlled_terms_geographic, :with_tgn_id) }
-    let!(:cartographic_attrs) { %i(bounding_box coordinates) }
 
     it { is_expected.to respond_to(:geographic, :cartographic, :hierarchical_geographic, :label, :display_label, :has_hier_geo?).with(0).arguments }
 
