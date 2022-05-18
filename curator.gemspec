@@ -43,14 +43,14 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'htmlentities', '~> 4.3' # TODO: Look into replacing this since the last released in 2014. I recommend turning this into its own parser class.
   spec.add_dependency 'http', '~> 5.0'
   spec.add_dependency 'mime-types', '~> 3.3'
-  spec.add_dependency 'nokogiri', '~> 1.13.3'
+  spec.add_dependency 'nokogiri', '>= 1.13.6'
   spec.add_dependency 'oj', '~> 3.13'
   spec.add_dependency 'ox', '2.14.11'
   spec.add_dependency 'paper_trail', '~> 11.1'
   spec.add_dependency 'paper_trail-association_tracking', '~> 2.1'
-  spec.add_dependency 'rails', '~> 6.1.5', '< 7'
+  spec.add_dependency 'rails', '~> 6.1.6', '< 7'
   spec.add_dependency 'rsolr', '~> 2.5'
-  spec.add_dependency 'traject', '~> 3.6'
+  spec.add_dependency 'traject', '~> 3.7'
 
   spec.add_development_dependency 'image_processing', '~> 1.12'
   spec.add_development_dependency 'mini_magick', '~> 4.11'

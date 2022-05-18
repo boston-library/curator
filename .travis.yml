@@ -38,4 +38,4 @@ env:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
     - INGEST_SOURCE_DIRECTORY=/opt/ingest_source
   jobs:
-    - "RAILS_VERSION=6.1.5.1"
+    - "RAILS_VERSION=6.1.6"
