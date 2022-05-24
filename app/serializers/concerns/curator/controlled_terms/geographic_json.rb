@@ -2,11 +2,11 @@
 
 module Curator
   module ControlledTerms
-    module JsonGeographic
+    module GeographicJson
       extend ActiveSupport::Concern
 
       included do
-        include Curator::ControlledTerms::JsonNomenclature
+        include Curator::ControlledTerms::NomenclatureJson
         attributes :area_type, :coordinates, :bounding_box, :authority_code
       end
     end

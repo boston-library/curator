@@ -5,7 +5,7 @@ module Curator
     build_schema_as_json do
       root_key :resource_type, :resource_types
 
-      include Curator::ControlledTerms::JsonResourceType
+      include Curator::ControlledTerms::ResourceTypeJson
     end
   end
 end

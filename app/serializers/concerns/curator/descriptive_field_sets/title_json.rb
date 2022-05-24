@@ -2,7 +2,7 @@
 
 module Curator
   module DescriptiveFieldSets
-    module JsonTitle
+    module TitleJson
       extend ActiveSupport::Concern
 
       included do

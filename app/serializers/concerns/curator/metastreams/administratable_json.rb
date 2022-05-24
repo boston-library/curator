@@ -2,7 +2,7 @@
 
 module Curator
   module Metastreams
-    module JsonAdministratable
+    module AdministratableJson
       extend ActiveSupport::Concern
 
       included do

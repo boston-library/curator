@@ -9,6 +9,9 @@ module Curator
     ## USAGE:
     ### desc = Curator.metastreams.descriptive_class.for_serialization.find_by(..)
     ### physical_description = Curator::Metastreams:PhysicalDescriptionModsDecorator.new(desc)
+    include Curator::DigitalObjectable
+
+    EXCLUDED_PD_MODS_MEDIA_TYPES = %w(xml txt).freeze
 
     # @return [String | nil] - <mods:digitalOrigin> sub element
     def digital_origin
@@ -22,10 +25,6 @@ module Curator
 
     def note
       super if __getobj__.respond_to?(:note)
-    end
-
-    def digital_object
-      super if __getobj__.respond_to?(:digital_object)
     end
 
     def file_sets

@@ -2,6 +2,7 @@
 
 module Curator
   class DescriptiveFieldSets::IdentifierModsDecorator < Decorators::BaseDecorator
+    include Curator::DigitalObjectable
     # This class wraps and delegates a Curator::Metastreams::Descriptive to display/serialize multiple <mods:identifier> elements
     # Curator::DescriptiveFieldSets::IdentifierModsDecorator#initialize
     ## @param obj [Curator::Metastreams::Descriptive]
@@ -10,10 +11,6 @@ module Curator
     ### NOTE: using to_a on the decorator instance is the preferred way of usage in mods serializer
     ### desc = Curator.metastreams.descriptive_class.for_serialization.find_by(..)
     ### identifier_list = Curator::DescriptiveFieldSets:IdentifierModsDecorator.new(desc).to_a
-    def digital_object
-      super if __getobj__.respond_to?(:digital_object)
-    end
-
     def identifiers
       return [] if __getobj__.blank?
 

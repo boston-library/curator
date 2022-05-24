@@ -2,7 +2,7 @@
 
 module Curator
   module Metastreams
-    module ModsDescriptable
+    module DescriptableMods
       extend ActiveSupport::Concern
 
       included do

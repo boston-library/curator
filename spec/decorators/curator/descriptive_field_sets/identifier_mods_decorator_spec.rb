@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 require_relative '../shared/curator_decorator'
+require_relative '../shared/digital_objectable'
 
 RSpec.describe Curator::DescriptiveFieldSets::IdentifierModsDecorator, type: :decorators do
   let!(:desc_term_counts) { 3 }
@@ -13,12 +14,18 @@ RSpec.describe Curator::DescriptiveFieldSets::IdentifierModsDecorator, type: :de
     end
   end
 
+  describe 'DigitalObjectable' do
+    subject { described_class.new(descriptive) }
+
+    it_behaves_like 'digital_objectable'
+  end
+
   describe 'Decorator Specific Behavior' do
     subject { described_class.new(descriptive) }
 
     let!(:expected_blank_condition) { subject.digital_object.blank? && subject.identifiers.blank? }
 
-    it { is_expected.to respond_to(:digital_object, :identifiers, :ark_identifier, :has_uri_identifier?, :filtered_identifiers, :to_a).with(0).arguments }
+    it { is_expected.to respond_to(:identifiers, :ark_identifier, :has_uri_identifier?, :filtered_identifiers, :to_a).with(0).arguments }
 
     it 'is expected to return #blank? based on the :expected_blank_condition' do
       expect(subject.blank?).to eq(expected_blank_condition)

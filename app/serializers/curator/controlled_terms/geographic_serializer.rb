@@ -5,7 +5,7 @@ module Curator
     build_schema_as_json do
       root_key :geographic, :geographics
 
-      include Curator::ControlledTerms::JsonGeographic
+      include Curator::ControlledTerms::GeographicJson
     end
   end
 end

@@ -2,7 +2,7 @@
 
 module Curator
   module ControlledTerms
-    module JsonNomenclature
+    module NomenclatureJson
       extend ActiveSupport::Concern
 
       included do

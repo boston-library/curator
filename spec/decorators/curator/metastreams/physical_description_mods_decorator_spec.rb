@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 require_relative '../shared/curator_decorator'
+require_relative '../shared/digital_objectable'
 
 RSpec.describe Curator::Metastreams::PhysicalDescriptionModsDecorator, type: :decorators do
   let!(:desc_term_counts) { 2 }
@@ -13,13 +14,29 @@ RSpec.describe Curator::Metastreams::PhysicalDescriptionModsDecorator, type: :de
     end
   end
 
+  describe 'Decorator Constants' do
+    subject { described_class }
+
+    it { is_expected.to be_const_defined(:EXCLUDED_PD_MODS_MEDIA_TYPES) }
+
+    it 'expects constant to be a specifc type' do
+      expect(subject.const_get(:EXCLUDED_PD_MODS_MEDIA_TYPES)).to be_a_kind_of(Array).and all(be_an_instance_of(String)).and be_frozen
+    end
+  end
+
+  describe 'DigitalObjectable' do
+    subject { described_class.new(descriptive) }
+
+    it_behaves_like 'digital_objectable'
+  end
+
   describe 'Decorator Specific Behavior' do
     subject { described_class.new(descriptive) }
 
     let!(:expected_blank_condition) { subject.digital_origin.blank? && subject.extent.blank? && subject.physical_description_note_list.blank? && subject.internet_media_type_list.blank? }
     let!(:expected_digital_origin) { descriptive.digital_origin.tr('_', ' ') }
 
-    it { is_expected.to respond_to(:digital_origin, :extent, :note, :digital_object, :file_sets, :physical_description_note_list, :internet_media_type_list).with(0).arguments }
+    it { is_expected.to respond_to(:digital_origin, :extent, :note, :file_sets, :physical_description_note_list, :internet_media_type_list).with(0).arguments }
 
     it 'is expected to return #blank? based on the :expected_blank_condition' do
       expect(subject.blank?).to eq(expected_blank_condition)

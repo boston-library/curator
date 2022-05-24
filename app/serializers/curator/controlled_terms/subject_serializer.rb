@@ -5,7 +5,7 @@ module Curator
     build_schema_as_json do
       root_key :subject, :subjects
 
-      include Curator::ControlledTerms::JsonSubject
+      include Curator::ControlledTerms::SubjectJson
     end
   end
 end

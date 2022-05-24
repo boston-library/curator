@@ -25,21 +25,21 @@ module Curator
 
       one :metastreams do
         has_one :administrative do
-          include Curator::Metastreams::JsonAdministratable
+          include Curator::Metastreams::AdministratableJson
         end
 
         has_one :descriptive do
-          include Curator::Metastreams::JsonDescriptable
+          include Curator::Metastreams::DescriptableJson
         end
 
         has_one :workflow do
-          include Curator::Metastreams::JsonWorkflowable
+          include Curator::Metastreams::WorkflowableJson
         end
       end
     end
 
     build_schema_as_mods do
-      include Curator::Metastreams::ModsDescriptable
+      include Curator::Metastreams::DescriptableMods
     end
   end
 end

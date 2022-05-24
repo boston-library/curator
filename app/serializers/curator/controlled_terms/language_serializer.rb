@@ -5,7 +5,7 @@ module Curator
     build_schema_as_json do
       root_key :language, :languages
 
-      include Curator::ControlledTerms::JsonLanguage
+      include Curator::ControlledTerms::LanguageJson
     end
   end
 end

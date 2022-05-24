@@ -2,12 +2,12 @@
 
 module Curator
   module ControlledTerms
-    module JsonName
+    module ResourceTypeJson
       extend ActiveSupport::Concern
 
       included do
-        include Curator::ControlledTerms::JsonNomenclature
-        attributes :affiliation, :authority_code, :name_type
+        include Curator::ControlledTerms::NomenclatureJson
+        attributes :authority_code
       end
     end
   end

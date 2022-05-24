@@ -5,7 +5,7 @@ module Curator
     build_schema_as_json do
       root_key :workflow, :workflows
 
-      include Curator::Metastreams::JsonWorkflowable
+      include Curator::Metastreams::WorkflowableJson
     end
   end
 end

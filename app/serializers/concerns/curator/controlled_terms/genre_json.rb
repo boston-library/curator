@@ -2,12 +2,12 @@
 
 module Curator
   module ControlledTerms
-    module JsonResourceType
+    module GenreJson
       extend ActiveSupport::Concern
 
       included do
-        include Curator::ControlledTerms::JsonNomenclature
-        attributes :authority_code
+        include Curator::ControlledTerms::NomenclatureJson
+        attributes :basic, :authority_code
       end
     end
   end

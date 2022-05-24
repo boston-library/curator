@@ -9,12 +9,16 @@ module Curator
     ## USAGE:
     ###  desc = Curator.metastreams.descriptive_class.for_serialization.find_by(..)
     ###  record_info = Curator::Metastreams:RecordInfoModsDecorator.new(desc)
+    include Curator::DigitalObjectable
+
+    DEFAULT_MODS_RECORD_ORIGIN = 'human prepared'
+    DEFAULT_MODS_DESC_STANDARD_AUTH = 'marcdescription'
 
     # @return [String] - this is used to serialize/display the <mods:recordInfo><mods:recordOrigin> sub element
     def record_origin
       return if __getobj__.blank?
 
-      Metastreams::DEFAULT_MODS_RECORD_ORIGIN
+      DEFAULT_MODS_RECORD_ORIGIN
     end
 
     # @return [String] - this is used for any <mods:recordInfo> sub elements that have an encoding attribute like <mods:recordInfo><mods:recordCreationDate encoding='this value'>
@@ -70,11 +74,6 @@ module Curator
       @record_change_date = __getobj__.updated_at&.iso8601
     end
 
-    # @return [Curator::DigitalObject] parent
-    def digital_object
-      return super if __getobj__.respond_to?(:digital_object)
-    end
-
     # @return [Curator::DescriptiveFieldSets::LanguageOfCatalogingModsPresenter] instance - This is used to serialize/display the <mods:recordInfo><mods:languageOfCataloging> sub elements
     def language_of_cataloging
       return @language_of_cataloging if defined?(@language_of_cataloging)
@@ -97,7 +96,7 @@ module Curator
     def description_standard_authority
       return if __getobj__.blank?
 
-      Metastreams::DEFAULT_MODS_DESC_STANDARD_AUTH
+      DEFAULT_MODS_DESC_STANDARD_AUTH
     end
 
     # @return [Boolean] - Needed for mods serializer

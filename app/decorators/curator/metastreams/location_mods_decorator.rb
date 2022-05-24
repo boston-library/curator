@@ -2,6 +2,7 @@
 
 module Curator
   class Metastreams::LocationModsDecorator < Decorators::BaseDecorator
+    include Curator::DigitalObjectable
     # DESCRIPTION: This class wraps and delegates Curator::Metastreams::Descriptive objects to serialize/display <mods:location> elements and sub elements
     # LocationModsDecorator#initialize
     ## @param obj [Curator::Metastreams::Descriptive]
@@ -11,18 +12,9 @@ module Curator
     ### desc = Curator.metastreams.descriptive_class.for_serialization.find_by(..)
     ### location_mods = Curator::Metastreams:LocationModsDecorator.new(desc)
 
-    # @return parent [Curator::DigitalObject]
-    def digital_object
-      return if !__getobj__.respond_to?(:digital_object)
-
-      super
-    end
-
     # @return [Curator::ControlledTerms::Name]
     def physical_location
-      return if !__getobj__.respond_to?(:physical_location)
-
-      super
+      super if __getobj__.respond_to?(:physical_location)
     end
 
     # @return [String] - This is needed for serializing/displaying <mods:location><mods:physicalLocation> sub elements
@@ -34,16 +26,12 @@ module Curator
 
     # @return [String] - This is needed #holding_simple and #to_a
     def physical_location_department
-      return if !__getobj__.respond_to?(:physical_location_department)
-
-      super
+      super if __getobj__.respond_to?(:physical_location_department)
     end
 
     # @return [String] - This is needed #holding_simple and #to_a
     def physical_location_shelf_locator
-      return if !__getobj__.respond_to?(:physical_location_shelf_locator)
-
-      super
+      super if __getobj__.respond_to?(:physical_location_shelf_locator)
     end
 
     # @return [Array[Curator::DescriptiveFieldSets::Identifier]] - Needed to get <mods:location><mods:uri> sub elements

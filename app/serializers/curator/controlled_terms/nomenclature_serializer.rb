@@ -3,7 +3,7 @@
 module Curator
   class ControlledTerms::NomenclatureSerializer < Curator::Serializers::AbstractSerializer
     build_schema_as_json do
-      include Curator::ControlledTerms::JsonNomenclature
+      include Curator::ControlledTerms::NomenclatureJson
     end
   end
 end

@@ -25,11 +25,11 @@ module Curator
 
       has_one :metastreams do
         has_one :administrative do
-          include Curator::Metastreams::JsonAdministratable
+          include Curator::Metastreams::AdministratableJson
         end
 
         has_one :workflow do
-          include Curator::Metastreams::JsonWorkflowable
+          include Curator::Metastreams::WorkflowableJson
         end
       end
     end

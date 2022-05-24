@@ -2,12 +2,11 @@
 
 module Curator
   module ControlledTerms
-    module JsonSubject
+    module LicenseJson
       extend ActiveSupport::Concern
 
       included do
-        include Curator::ControlledTerms::JsonNomenclature
-        attributes :authority_code
+        include ControlledTerms::AccessConditionJson
       end
     end
   end

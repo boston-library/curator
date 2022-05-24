@@ -2,11 +2,11 @@
 
 module Curator
   module ControlledTerms
-    module JsonRole
+    module SubjectJson
       extend ActiveSupport::Concern
 
       included do
-        include Curator::ControlledTerms::JsonNomenclature
+        include Curator::ControlledTerms::NomenclatureJson
         attributes :authority_code
       end
     end

@@ -5,7 +5,7 @@ module Curator
     build_schema_as_json do
       root_key :administrative, :administratives
 
-      include Curator::Metastreams::JsonAdministratable
+      include Curator::Metastreams::AdministratableJson
     end
   end
 end

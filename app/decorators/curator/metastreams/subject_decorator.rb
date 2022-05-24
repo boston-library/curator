@@ -5,7 +5,7 @@ module Curator
     # DESCRIPTION: This class acts as a wrapper for a Curator::Metastreams::Descriptive in order for usage in both mods and json serialization
     # NOTE: There is an instance method on Curator::Metastreams::Descriptive that instantiates this decorator
     # SubjectDecorator#initialize
-    ## @param obj
+    ## @param obj [Curator::Metastreams::Descriptive]
     ## @return [Curator::Metastreams::SubjectDecorator]
     ## USAGE(JSON):
     ### desc = Curator.metastreams.descriptive_class.for_serialization.find_by(..)
@@ -37,7 +37,7 @@ module Curator
 
     # @return [Array[Curator::DescriptiveFieldSets::Cartographic]]
     def cartographics
-      __getobj__.cartographics if __getobj__.respond_to(:cartographic)
+      __getobj__.cartographic if __getobj__.respond_to(:cartographic)
     end
 
     # @return [Array[Curator::DescriptiveFieldSets::Title]]

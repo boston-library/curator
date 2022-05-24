@@ -5,11 +5,11 @@ module Curator
     build_schema_as_json do
       root_key :descriptive, :descriptives
 
-      include Curator::Metastreams::JsonDescriptable
+      include Curator::Metastreams::DescriptableJson
     end
 
     build_schema_as_mods do
-      include Curator::Metastreams::ModsDescriptable
+      include Curator::Metastreams::DescriptableMods
     end
   end
 end
