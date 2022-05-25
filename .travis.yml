@@ -19,7 +19,7 @@ before_install:
   - sudo cp /etc/postgresql/{9.3,12}/main/pg_hba.conf
   - sudo pg_ctlcluster 12 main restart
   - gem update --system --no-document
-  - gem install bundler:2.3.4 --no-document
+  - gem install bundler:2.3.11 --no-document
 
 before_script:
   - mkdir -p $INGEST_SOURCE_DIRECTORY/BPLDC
@@ -27,7 +27,7 @@ before_script:
   - bundle exec rails app:curator:setup
 
 rvm:
-  - 2.6.9
+  - 2.6.10
 
 env:
   global:
@@ -38,4 +38,4 @@ env:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
     - INGEST_SOURCE_DIRECTORY=/opt/ingest_source
   jobs:
-    - "RAILS_VERSION=6.1.5"
+    - "RAILS_VERSION=6.1.6"

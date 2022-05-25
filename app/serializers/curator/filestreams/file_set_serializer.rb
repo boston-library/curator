@@ -2,21 +2,35 @@
 
 module Curator
   class Filestreams::FileSetSerializer < CuratorSerializer
-    schema_as_json root: :file_set do
-      attributes :file_name_base, :position
-      attribute(:file_set_type) { |record| record.file_set_type.demodulize.downcase }
+    build_schema_as_json do
+      root_key :file_set, :file_sets
 
-      node :file_set_of, target: :key do
-        attributes :ark_id
+      attributes :file_name_base, :position
+
+      attribute :file_set_type do |resource|
+        resource.file_set_type.demodulize.downcase
       end
 
-      node :pagination, if: ->(record, _serializer_params) { record.pagination.present? } do
+      one :pagination do
         attributes :page_label, :page_type, :hand_side
       end
 
-      node :metastreams, target: :key do
-        has_one :administrative, serializer: 'Curator::Metastreams::AdministrativeSerializer'
-        has_one :workflow, serializer: 'Curator::Metastreams::WorkflowSerializer'
+      has_one :file_set_of do
+        attributes :ark_id
+      end
+
+      has_many :file_set_members_of do
+        attributes :ark_id
+      end
+
+      has_one :metastreams do
+        has_one :administrative do
+          include Curator::Metastreams::AdministratableJson
+        end
+
+        has_one :workflow do
+          include Curator::Metastreams::WorkflowableJson
+        end
       end
     end
   end

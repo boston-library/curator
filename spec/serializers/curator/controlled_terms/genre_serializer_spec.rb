@@ -17,12 +17,19 @@ RSpec.describe Curator::ControlledTerms::GenreSerializer, type: :serializers do
     it_behaves_like 'json_serialization' do
       let(:json_record) { record }
       let(:json_array) { record_collection }
-      let(:expected_as_json_options) do
-        {
-          root: true,
-          only: [:label, :id_from_auth, :basic, :authority_code],
-          methods: [:label, :id_from_auth, :basic, :authority_code]
-        }
+
+      let(:expected_json_serializer_class) do
+        serializer_test_class do
+          root_key :genre, :genres
+
+          attributes :label, :id_from_auth, :authority_code, :basic
+        end
+      end
+
+      let(:expected_json) do
+        lambda do |genre|
+          expected_json_serializer_class.new(genre).serialize
+        end
       end
     end
   end

@@ -3,7 +3,7 @@
 module Requests
   module JsonHelpers
     def json_response
-      Oj.load(response.body)
+      Oj.load(response.body, mode: :rails, omit_nil: true, symbol_keys: true)
     rescue StandardError
       {}
     end

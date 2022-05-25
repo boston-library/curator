@@ -17,12 +17,19 @@ RSpec.describe Curator::ControlledTerms::RoleSerializer, type: :serializers do
     it_behaves_like 'json_serialization' do
       let(:json_record) { record }
       let(:json_array) { record_collection }
-      let(:expected_as_json_options) do
-        {
-          root: true,
-          only: [:label, :id_from_auth, :authority_code],
-          methods: [:label, :id_from_auth, :authority_code]
-        }
+
+      let(:expected_json_serializer_class) do
+        serializer_test_class do
+          root_key :role, :roles
+
+          attributes :label, :id_from_auth, :authority_code
+        end
+      end
+
+      let(:expected_json) do
+        lambda do |role|
+          expected_json_serializer_class.new(role).serialize
+        end
       end
     end
   end

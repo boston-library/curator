@@ -17,12 +17,19 @@ RSpec.describe Curator::ControlledTerms::ResourceTypeSerializer, type: :serializ
     it_behaves_like 'json_serialization' do
       let(:json_record) { record }
       let(:json_array) { record_collection }
-      let(:expected_as_json_options) do
-        {
-          root: true,
-          only: [:label, :id_from_auth, :authority_code],
-          methods: [:label, :id_from_auth, :authority_code]
-        }
+
+      let(:expected_json_serializer_class) do
+        serializer_test_class do
+          root_key :resource_type, :resource_types
+
+          attributes :label, :id_from_auth, :authority_code
+        end
+      end
+
+      let(:expected_json) do
+        lambda do |resource_type|
+          expected_json_serializer_class.new(resource_type).serialize
+        end
       end
     end
   end

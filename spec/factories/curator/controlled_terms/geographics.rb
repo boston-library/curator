@@ -11,5 +11,11 @@ FactoryBot.define do
     end
     area_type { Faker::Address.city_prefix }
     type { 'Curator::ControlledTerms::Geographic' }
+
+    trait :with_tgn_id do
+      authority { Curator::ControlledTerms::Authority.find_by!(code: 'tgn') }
+      id_from_auth { '7018159' }
+      coordinates { '45.438611,12.326667' }
+    end
   end
 end

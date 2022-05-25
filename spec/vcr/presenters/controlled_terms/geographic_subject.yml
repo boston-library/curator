@@ -1,0 +1,53 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/tgn/7018159
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.0.4
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"872b9b40c1e1060406b74389f3f9b9f5"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - c2af4e5e-8f9f-4233-bbcf-1edff1bc96c3
+      X-Runtime:
+      - '2.991784'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"45.438611","longitude":"12.326667","combined":"45.438611,12.326667"},"hier_geo":{"city":"Venice","province":"Venezia","continent":"Europe","region":"Venetan","country":"Italy"},"non_hier_geo":null}'
+  recorded_at: Thu, 05 May 2022 18:56:06 GMT
+recorded_with: VCR 6.1.0

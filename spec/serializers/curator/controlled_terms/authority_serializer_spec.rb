@@ -12,11 +12,19 @@ RSpec.describe Curator::ControlledTerms::AuthoritySerializer, type: :serializers
     it_behaves_like 'json_serialization' do
       let(:json_record) { record }
       let(:json_array) { record_collection }
-      let(:expected_as_json_options) do
-        {
-          root: true,
-          only: [:name, :code, :base_url]
-        }
+
+      let(:expected_json_serializer_class) do
+        serializer_test_class do
+          root_key :authority, :authorities
+
+          attributes :name, :code, :base_url
+        end
+      end
+
+      let(:expected_json) do
+        lambda do |authority|
+          expected_json_serializer_class.new(authority).serialize
+        end
       end
     end
   end

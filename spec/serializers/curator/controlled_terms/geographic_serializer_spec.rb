@@ -17,12 +17,19 @@ RSpec.describe Curator::ControlledTerms::GeographicSerializer, type: :serializer
     it_behaves_like 'json_serialization' do
       let(:json_record) { record }
       let(:json_array) { record_collection }
-      let(:expected_as_json_options) do
-        {
-          root: true,
-          only: [:label, :id_from_auth, :authority_code, :bounding_box, :area_type, :coordinates],
-          methods: [:label, :id_from_auth, :authority_code, :bounding_box, :area_type, :coordinates]
-        }
+
+      let(:expected_json_serializer_class) do
+        serializer_test_class do
+          root_key :geographic, :geographics
+
+          attributes :label, :id_from_auth, :authority_code, :bounding_box, :area_type, :coordinates
+        end
+      end
+
+      let(:expected_json) do
+        lambda do |geographic|
+          expected_json_serializer_class.new(geographic).serialize
+        end
       end
     end
   end

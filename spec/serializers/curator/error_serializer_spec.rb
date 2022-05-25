@@ -11,7 +11,18 @@ RSpec.describe Curator::ErrorSerializer, type: :serializers do
     it_behaves_like 'json_serialization' do
       let(:json_record) { error }
       let(:json_array) { error_collection }
-      let(:expected_as_json_options) { { root: true } }
+      let(:expected_json_serializer_class) do
+        serializer_test_class do
+          root_key :error, :errors
+
+          attributes :status, :title, :detail, :source
+        end
+      end
+      let(:expected_json) do
+        lambda do |error|
+          expected_json_serializer_class.new(error).serialize
+        end
+      end
     end
   end
 end

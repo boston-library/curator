@@ -8,6 +8,7 @@ module Curator
 
     ERROR_MAP = {
       'StandardError' => 'Curator::Exceptions::ServerError',
+      'ArgumentError' => 'Curator::Exceptions::UnprocessableEntity', # Needed to put this in for workflow controller specs
       'ActiveRecord::RecordNotFound' => 'Curator::Exceptions::RecordNotFound',
       'ActiveRecord::RecordInvalid' => 'Curator::Exceptions::InvalidRecord',
       'ActiveRecord::RecordNotSaved' => 'Curator::Exceptions::UnprocessableEntity',
@@ -82,7 +83,7 @@ module Curator
                         Array.wrap(error)
                       end
 
-      serialized_error = Curator::ErrorSerializer.new(wrapped_error, :json).render
+      serialized_error = Curator::ErrorSerializer.new(wrapped_error, adapter_key: :json).serialize
       json_response(serialized_error, status)
     end
 

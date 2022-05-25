@@ -2,24 +2,44 @@
 
 module Curator
   class DigitalObjectSerializer < CuratorSerializer
-    schema_as_json root: :digital_object do
-      node :admin_set, target: :key do
-        attribute :ark_id
+    # Overloaded initializer so the record is always set as DigitalObject#descriptive if the adapter_key is :mods
+    def initialize(record, params = {}, adapter_key: :json)
+      super
+      @record = @record.descriptive if adapter_key == :mods
+    end
+
+    build_schema_as_json do
+      root_key :digital_object, :digital_objects
+
+      has_one :admin_set do
+        attributes :ark_id
       end
 
-      node :contained_by, target: :key do
-        attribute :ark_id
+      has_one :contained_by do
+        attributes :ark_id
       end
 
-      node :is_member_of_collection, target: :key do
-        attribute :ark_id
+      has_many :is_member_of_collection do
+        attributes :ark_id
       end
 
-      node :metastreams, target: :key do
-        has_one :administrative, serializer: Curator::Metastreams::AdministrativeSerializer
-        has_one :descriptive, serializer: Curator::Metastreams::DescriptiveSerializer
-        has_one :workflow, serializer: Curator::Metastreams::WorkflowSerializer
+      one :metastreams do
+        has_one :administrative do
+          include Curator::Metastreams::AdministratableJson
+        end
+
+        has_one :descriptive do
+          include Curator::Metastreams::DescriptableJson
+        end
+
+        has_one :workflow do
+          include Curator::Metastreams::WorkflowableJson
+        end
       end
+    end
+
+    build_schema_as_mods do
+      include Curator::Metastreams::DescriptableMods
     end
   end
 end

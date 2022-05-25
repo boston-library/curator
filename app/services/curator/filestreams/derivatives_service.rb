@@ -72,7 +72,7 @@ module Curator
       resp = client.headers(self.class.default_headers).
                post("#{self.class.default_path_prefix}/#{avi_file_class}", json: avi_payload).flush
 
-      json_response = Oj.load(resp.body.to_s)
+      json_response = normalize_response!(resp.body.to_s)
 
       raise Curator::Exceptions::RemoteServiceError.new('Failed to trigger derivatives in avi_processor-api!', json_response, resp.status) if !resp.status.success?
 

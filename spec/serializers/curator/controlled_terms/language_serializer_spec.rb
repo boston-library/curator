@@ -17,12 +17,19 @@ RSpec.describe Curator::ControlledTerms::LanguageSerializer, type: :serializers 
     it_behaves_like 'json_serialization' do
       let(:json_record) { record }
       let(:json_array) { record_collection }
-      let(:expected_as_json_options) do
-        {
-          root: true,
-          only: [:label, :id_from_auth, :authority_code],
-          methods: [:label, :id_from_auth, :authority_code]
-        }
+
+      let(:expected_json_serializer_class) do
+        serializer_test_class do
+          root_key :language, :languages
+
+          attributes :label, :id_from_auth, :authority_code
+        end
+      end
+
+      let(:expected_json) do
+        lambda do |language|
+          expected_json_serializer_class.new(language).serialize
+        end
       end
     end
   end

@@ -35,6 +35,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'acts_as_list', '~> 1.0'
   spec.add_dependency 'addressable', '>= 2.8.0'
   spec.add_dependency 'after_commit_everywhere', '~> 1.1' # Required for using aasm with active record
+  spec.add_dependency 'alba', '~> 1.6.0'
   spec.add_dependency 'attr_json', '~> 1.4.0'
   spec.add_dependency 'concurrent-ruby-ext', '~> 1.1'
   spec.add_dependency 'connection_pool', '~> 2.2'
@@ -42,13 +43,14 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'htmlentities', '~> 4.3' # TODO: Look into replacing this since the last released in 2014. I recommend turning this into its own parser class.
   spec.add_dependency 'http', '~> 5.0'
   spec.add_dependency 'mime-types', '~> 3.3'
+  spec.add_dependency 'nokogiri', '>= 1.13.6'
   spec.add_dependency 'oj', '~> 3.13'
-  spec.add_dependency 'ox', '~> 2.14'
+  spec.add_dependency 'ox', ' ~> 2.14'
   spec.add_dependency 'paper_trail', '~> 11.1'
   spec.add_dependency 'paper_trail-association_tracking', '~> 2.1'
-  spec.add_dependency 'rails', '~> 6.1.5', '< 7'
+  spec.add_dependency 'rails', '~> 6.1.6', '< 7'
   spec.add_dependency 'rsolr', '~> 2.5'
-  spec.add_dependency 'traject', '~> 3.6'
+  spec.add_dependency 'traject', '~> 3.7'
 
   spec.add_development_dependency 'image_processing', '~> 1.12'
   spec.add_development_dependency 'mini_magick', '~> 4.11'

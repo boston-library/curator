@@ -3,22 +3,18 @@
 module Curator
   module Serializers
     class NullAdapter < AdapterBase
-      undef_method :attribute, :attributes, :belongs_to, :has_many, :has_one, :link, :meta, :node
-
-      def_delegators :schema, :root
-
-      def initialize(_options = {}, &_block)
-        @schema = Curator::Serializers::Schema.new(root: nil, options: {})
+      def initialize(*)
+        @schema_builder_class = nil
       end
 
-      def serializable_hash(record = nil, serializer_params = {})
-        return Concurrent::Array.new if record.respond_to?(:each) && serializer_params.dup.fetch(:for_relation, false)
+      def serializable_hash(resource = nil, _params = {})
+        return [] if resource.is_a?(Enumerable)
 
-        Concurrent::Hash.new
+        {}
       end
 
-      def render(record = nil, serializer_params = {})
-        serializable_hash(record, serializer_params)
+      def serialize(record = nil, params = {})
+        serializable_hash(record, params).to_json
       end
     end
   end

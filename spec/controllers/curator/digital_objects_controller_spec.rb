@@ -40,5 +40,5 @@ RSpec.describe Curator::DigitalObjectsController, type: :controller do
   let(:resource_class) { Curator::DigitalObject }
   let(:serializer_class) { Curator::DigitalObjectSerializer }
 
-  include_examples 'shared_formats', include_ark_context: true, skip_put_patch: false, skip_post: false, resource_key: 'digital_object'
+  include_examples 'shared_formats', include_ark_context: true, skip_put_patch: false, skip_post: false, resource_key: 'digital_object', has_xml_context: true
 end
