@@ -11,7 +11,7 @@ module Curator
     ### physical_description = Curator::Metastreams:PhysicalDescriptionModsDecorator.new(desc)
     include Curator::DigitalObjectable
 
-    EXCLUDED_PD_MODS_MEDIA_TYPES = %w(xml txt).freeze
+    EXCLUDED_PD_MODS_MEDIA_TYPES = %w(xml text).freeze
 
     # @return [String | nil] - <mods:digitalOrigin> sub element
     def digital_origin
@@ -48,7 +48,7 @@ module Curator
 
       return @internet_media_type_list = [] if file_sets.blank?
 
-      @internet_media_type_list = ActiveStorage::Attachment.includes(:blob).where(record: file_sets).pluck(Arel.sql('curator.active_storage_blobs.content_type')).uniq.select { |imt| EXCLUDED_PD_MODS_MEDIA_TYPES.any? { |mt| imt.include?(mt) } }
+      @internet_media_type_list = ActiveStorage::Attachment.includes(:blob).where(record: file_sets).pluck(Arel.sql('curator.active_storage_blobs.content_type')).uniq.select { |imt| EXCLUDED_PD_MODS_MEDIA_TYPES.all? { |mt| imt.exclude?(mt) } }
     end
 
     # @return [Boolean] - Needed for mods serializer
