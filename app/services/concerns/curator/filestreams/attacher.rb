@@ -46,8 +46,9 @@ module Curator
             attributes['service_name'] = attachment_service(record, attachment_type)
 
             begin
-              # If the attachment exists it should be purged before it is reattached
-              record.public_send(attachment_type).purge if record.public_send(attachment_type).attached?
+              # During Ingest If the attachment exists it should be purged before it is reattached.
+              # NOTE the atachment SHOULD not be purged if we are updating from the avi processor because this will cause the generated file on the avi end to be destroyed.
+              record.public_send(attachment_type).purge if io_hash.present? && record.public_send(attachment_type).attached?
 
               attachable = create_attachable(attributes, io_hash)
 
