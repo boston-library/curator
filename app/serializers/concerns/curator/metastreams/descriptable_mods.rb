@@ -25,6 +25,7 @@ module Curator
           element :non_sort
           element :title, target_val: :formatted_title_name
           element :sub_title, target_val: :subtitle
+          element :part_number
         end
 
         multi_node :name, target_obj: :name_role_list do
@@ -41,12 +42,15 @@ module Curator
             attribute :name_part_type, xml_label: :type
           end
 
+          element :affiliation, target_val: :name_affiliation
+
           node :role, target_obj: :role_term do
             target_value_blank!
 
             node :roleTerm, target_obj: ->(rt) { rt } do
               target_value_as :label
 
+              attribute :type
               attribute :authority_code, xml_label: :authority
               attribute :authority_base_url, xml_label: :authorityURI
               attribute :value_uri, xml_label: :valueURI
@@ -84,6 +88,7 @@ module Curator
 
           element :publisher
           element :edition
+          element :issuance
 
           node :date_created, multi_valued: true do
             target_value_as :label
@@ -230,6 +235,8 @@ module Curator
 
               attribute :name_part_type, xml_label: :type
             end
+
+            element :affiliation
           end
         end
 
@@ -376,7 +383,10 @@ module Curator
       end
 
       def access_condition_list(desc)
-        Curator::ControlledTerms::AccessConditionModsDecorator.wrap_multiple([desc.rights_statement, desc.license])
+        access_conditions = [desc.rights_statement, desc.license]
+        access_condition_attrs = [{ rights: desc.rights }, { access_restrictions: desc.access_restrictions }]
+        access_conditions += Curator::ControlledTerms::AccessConditionModsPresenter.wrap_multiple(access_condition_attrs)
+        Curator::ControlledTerms::AccessConditionModsDecorator.wrap_multiple(access_conditions)
       end
 
       def identifier_list(desc)

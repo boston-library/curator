@@ -12,6 +12,10 @@ module Curator
       @role = role
     end
 
+    def type
+      'text'
+    end
+
     delegate :label, :authority_code, :authority_base_url, :value_uri, to: :role, allow_nil: true
   end
 end

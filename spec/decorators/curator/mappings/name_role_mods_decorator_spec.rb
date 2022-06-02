@@ -29,7 +29,7 @@ RSpec.describe Curator::Mappings::NameRoleModsDecorator, type: :decorators do
     let!(:name_role) { name_roles.sample }
     let!(:expected_blank_condition) { subject.name.blank? && subject.role.blank? }
 
-    it { is_expected.to respond_to(:name, :role, :name_type, :name_authority, :name_authority_uri, :name_value_uri, :role_term).with(0).arguments }
+    it { is_expected.to respond_to(:name, :role, :name_type, :name_authority, :name_authority_uri, :name_affiliation, :name_value_uri, :role_term).with(0).arguments }
 
     it 'is expected to return #blank? based on the :expected_blank_condition' do
       expect(subject.blank?).to eq(expected_blank_condition)

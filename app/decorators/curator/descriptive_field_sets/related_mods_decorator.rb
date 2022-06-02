@@ -95,9 +95,9 @@ module Curator
       @host_collection_names = __getobj__.host_collections.names
     end
 
-    # @return [Array[Curator::DescriptiveFieldSets::RelatedItemModsPresenter |  Curator::DescriptiveFieldSets::RelatedSeriesModsPresenter]] - this method is needed due to how <mods:relatedItem> elements are displayed/serialized in mods
+    # @return [Array[Curator::DescriptiveFieldSets::RelatedItemModsPresenter | Curator::DescriptiveFieldSets::RelatedSeriesModsPresenter]] - this method is needed due to how <mods:relatedItem> elements are displayed/serialized in mods
     def to_a
-      Array.wrap(related_hosts) + Array.wrap(related_series) + Array.wrap(related_constituent) + Array.wrap(related_references) + Array.wrap(related_review_of) + Array.wrap(related_referenced_by)
+      Array.wrap(related_hosts) + Array.wrap(related_series) + Array.wrap(related_constituent) + Array.wrap(related_references) + Array.wrap(related_review_of) + Array.wrap(related_referenced_by) + Array.wrap(related_other_format)
     end
 
     # @return [Boolean] - Needed for mods serializer

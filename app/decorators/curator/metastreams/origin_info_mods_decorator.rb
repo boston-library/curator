@@ -34,6 +34,10 @@ module Curator
       super if __getobj__.respond_to?(:date)
     end
 
+    def issuance
+      super if __getobj__.respond_to?(:issuance)
+    end
+
     # @return [Curator::Metastreams::PlaceModsPresenter] - used for <mods:place><mods:placeTerm> sub elements
     def place
       return @place if defined?(@place)

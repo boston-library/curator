@@ -31,7 +31,12 @@ module Curator
     def type
       return if __getobj__.blank?
 
-      ControlledTerms::ACCESS_CONDITION_TYPE
+      case __getobj__
+      when Curator::ControlledTerms::RightsStatement, Curator::ControlledTerms::License
+        ControlledTerms::ACCESS_CONDITION_TYPE
+      when Curator::ControlledTerms::AccessConditionModsPresenter
+        __getobj__.type
+      end
     end
 
     # @return [String] - Used to determine the displayLabel attributes' value
@@ -40,9 +45,11 @@ module Curator
 
       case __getobj__
       when Curator::ControlledTerms::RightsStatement
-        'rights'
+        'rightsstatements.org'
       when Curator::ControlledTerms::License
         'license'
+      when Curator::ControlledTerms::AccessConditionModsPresenter
+        __getobj__.display_label
       end
     end
 

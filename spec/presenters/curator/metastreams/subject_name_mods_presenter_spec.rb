@@ -11,7 +11,7 @@ RSpec.describe Curator::Metastreams::SubjectNameModsPresenter, type: :presenters
     subject { described_class.new(name_subject) }
 
     let!(:name_subject) { create(:curator_controlled_terms_name, name_type: 'conference') }
-    let!(:delegated_name_methods) { %i(authority_code authority_base_url value_uri name_type) }
+    let!(:delegated_name_methods) { %i(authority_code authority_base_url value_uri name_type affiliation) }
 
     it { is_expected.to respond_to(:name, :name_parts, *delegated_name_methods).with(0).arguments }
     it { is_expected.not_to be_blank }

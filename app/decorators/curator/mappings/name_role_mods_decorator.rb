@@ -48,6 +48,12 @@ module Curator
       name.value_uri
     end
 
+    def name_affiliation
+      return if name.blank?
+
+      name.affiliation
+    end
+
     # @return [Curator::Mappings::RoleTermModsPresenter | nil] - Used for <mods:role><mods:roleTerm> sub elements
     def role_term
       Mappings::RoleTermModsPresenter.new(role) if role.present?

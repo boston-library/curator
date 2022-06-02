@@ -13,7 +13,7 @@ RSpec.describe Curator::Mappings::RoleTermModsPresenter, type: :presnters do
     let!(:role) { create(:curator_controlled_terms_role) }
     let!(:delegated_methods) { %i(label authority_code authority_base_url value_uri) }
 
-    it { is_expected.to respond_to(:role).with(0).arguments }
+    it { is_expected.to respond_to(:role, :type).with(0).arguments }
 
     it 'expects role to be an instance of Curator::ControlledTerms::Role' do
       expect(subject.role).to be_an_instance_of(Curator::ControlledTerms::Role)
