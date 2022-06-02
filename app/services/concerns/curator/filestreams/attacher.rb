@@ -23,20 +23,10 @@ module Curator
           return if files.blank?
 
           attachments = files.group_by { |file_hash| file_hash['file_type'].underscore }
+          attachment_types = record_attachments(record).select { |at| attachments.key?(at) }
 
-          attachment_types_for_blob = record_attachments(record).select { |at| attachments.key?(at) }
-
-          attachment_types_for_blob.each_slice(ENV.fetch('RAILS_MAX_THREADS', 5).to_i) do |attachment_types|
-            attachment_futures = attachment_types.map do |attachment_type|
-              Concurrent::Promises.future(record, attachment_type, attachments) do |rec, attch_type, attchmnts|
-                Rails.application.executor.wrap do
-                  attach_group!(rec, attch_type, attchmnts[attch_type])
-                end
-              end
-            end
-            ActiveSupport::Dependencies.interlock.permit_concurrent_loads do
-              Concurrent::Promises.zip(*attachment_futures).value! # NOTE: value! will propogate any errors raised to main thread
-            end
+          attachment_types.each do |attachment_type|
+            attach_group!(record, attachment_type, attachments[attachment_type])
           end
         end
 
@@ -56,11 +46,11 @@ module Curator
             attributes['service_name'] = attachment_service(record, attachment_type)
 
             begin
-              attachable = if record.public_send(attachment_type).attached?
-                             update_attachable(record.public_send("#{attachment_type}_blob"), attributes, io_hash)
-                           else
-                             create_attachable(attributes, io_hash)
-                           end
+              # During Ingest If the attachment exists it should be purged before it is reattached.
+              # NOTE the atachment SHOULD not be purged if we are updating from the avi processor because this will cause the generated file on the avi end to be destroyed.
+              record.public_send(attachment_type).purge if io_hash.present? && record.public_send(attachment_type).attached?
+
+              attachable = create_attachable(attributes, io_hash)
 
               record.public_send(attachment_type).attach(attachable)
             rescue Azure::Core::Http::HTTPError, Faraday::Error => e
@@ -93,24 +83,6 @@ module Curator
             identify: attributes['content_type'].present? # This is specified here https://github.com/rails/rails/blob/8929f6f6e492c15a58ca13290f5ff44d00b37ccc/activestorage/app/models/active_storage/blob.rb#L110
           }
           attach_file_via_ingest(ingest_attributes)
-        end
-
-        # @param blob [ActiveStorage::Blob]
-        # @param attributes [Hash]
-        # @param io_hash [Hash]
-        # @returns [ActiveStorage::Blob]
-        def update_attachable(blob, attributes, io_hash = {})
-          return attach_existing_file(attributes) if io_hash.blank?
-
-          return import_file_from_fedora(attributes, content_io(io_hash)) if fedora_content?(io_hash)
-
-          attachment_attributes = attributes.slice('file_name', 'byte_size', 'content_type', 'metadata')
-          attachment_attributes['filename'] = attachment_attributes.delete('file_name') if attachment_attributes['file_name']
-          attachment_attributes['checksum_md5'] = checksum_to_base64(attributes['checksum_md5']) if attributes['checksum_md5']
-
-          blob.upload(content_io(io_hash), identify: false) if blob.update!(attachment_attributes)
-
-          blob
         end
 
         def file_attributes(attachment = {})

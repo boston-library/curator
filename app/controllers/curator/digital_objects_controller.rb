@@ -14,7 +14,7 @@ module Curator
 
     # GET /digital_objects/1
     def show
-      multi_response(serialized_resource(@curator_resource))
+      multi_response(serialized_resource(@curator_resource)) if stale?(strong_etag: @curator_resource, last_modified: @curator_resource.updated_at)
     end
 
     # POST /digital_objects

@@ -9,7 +9,7 @@ module Curator
     before_action :set_descriptive, only: [:show, :update]
 
     def show
-      multi_response(serialized_resource(@descriptive))
+      multi_response(serialized_resource(@descriptive)) if stale?(strong_etag: @descriptive, last_modified: @descriptive.updated_at)
     end
 
     def update
