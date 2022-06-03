@@ -18,7 +18,7 @@ RSpec.describe Curator::Metastreams::OriginInfoModsDecorator, type: :decorators 
 
     let!(:expected_blank_condition) { subject.publisher.blank? && subject.publication.blank? && subject.place.blank? && subject.date.blank? }
 
-    it { is_expected.to respond_to(:publication, :edition, :publisher, :date, :place, :dates_inferred?, :date_created, :date_issued, :copyright_date, :key_date_for).with(0).arguments }
+    it { is_expected.to respond_to(:publication, :edition, :publisher, :date, :place, :dates_inferred?, :date_created, :date_issued, :copyright_date, :issuance, :key_date_for).with(0).arguments }
     it { is_expected.to respond_to(:is_key_date?).with(1).argument }
 
     it 'is expected to return #blank? based on the :expected_blank_condition' do
