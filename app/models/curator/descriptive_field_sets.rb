@@ -13,7 +13,7 @@ module Curator
                   'statement of responsibility'].freeze
 
     INFERRED_DATE_NOTE = 'date is inferred'
-    EXCLUDED_MODS_IDENTIFIER_TYPES = %w(iiif-manifest uri-preview).freeze
+    EXCLUDED_MODS_IDENTIFIER_TYPES = %w(iiif-manifest uri-preview local-filename).freeze
 
     LOCAL_ORIGINAL_IDENTIFIER_TYPES = {
       'local-filename' => 'filename',

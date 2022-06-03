@@ -6,6 +6,7 @@ RSpec.describe Curator::DescriptiveFieldSets::CartographicModsPresenter, type: :
   subject { described_class }
 
   it { is_expected.to respond_to(:new).with_keywords(:projection, :bounding_box, :area_type, :coordinates, :scale) }
+  it { is_expected.to respond_to(:wrap_multiple).with_keywords(:projection, :scale) }
 
   describe 'instance' do
     let!(:geographic) { create(:curator_controlled_terms_geographic) }
@@ -30,7 +31,7 @@ RSpec.describe Curator::DescriptiveFieldSets::CartographicModsPresenter, type: :
         expect(subject.bounding_box).to eql(geographic.bounding_box)
         expect(subject.area_type).to eql(geographic.area_type)
         expect(subject.projection).to be(nil)
-        expect(subject.scale).to be_an_instance_of(Array).and be_empty
+        expect(subject.scale).to be(nil)
       end
 
       it 'expects coordinates to return an array with #bounding_box and #cartesian_coords included' do
@@ -46,7 +47,7 @@ RSpec.describe Curator::DescriptiveFieldSets::CartographicModsPresenter, type: :
       let!(:instance_attrs) do
         {
           projection: cartographic.projection,
-          scale: cartographic.scale
+          scale: cartographic.scale.first
         }
       end
 
@@ -55,7 +56,7 @@ RSpec.describe Curator::DescriptiveFieldSets::CartographicModsPresenter, type: :
 
       it 'expects the instance attributes to have correct values stored' do
         expect(subject.projection).to eql(cartographic.projection)
-        expect(subject.scale).to match_array(cartographic.scale)
+        expect(subject.scale).to eql(cartographic.scale.first)
         expect(subject.cartesian_coords).to be(nil)
         expect(subject.bounding_box).to be(nil)
         expect(subject.area_type).to be(nil)

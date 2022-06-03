@@ -45,7 +45,7 @@ module Curator
     def cartographic
       return if __getobj__.blank?
 
-      __getobj__ if __getobj__.is_a?(Curator::DescriptiveFieldSets::Cartographic)
+      __getobj__ if __getobj__.is_a?(Curator::DescriptiveFieldSets::CartographicModsPresenter)
     end
 
     def temporal_subjects
@@ -77,7 +77,7 @@ module Curator
 
       return @cartographic_subject = geographic_subject.cartographic if geographic_subject.present?
 
-      @cartographic_subject = Curator::DescriptiveFieldSets::CartographicModsPresenter.new(projection: cartographic.projection, scale: cartographic.scale)
+      @cartographic_subject = cartographic
     end
 
     # @return [Curator::Metastreams::SubjectNameModsPresenter] - Used for <mods:subject><mods:name> sub elements

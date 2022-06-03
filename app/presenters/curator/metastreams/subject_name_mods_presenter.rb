@@ -5,7 +5,7 @@ module Curator
     # This class acts as a wrapper for serializing <mods:subject><mods:name><mods:name_part> elements/attributes
     attr_reader :name, :name_parts
 
-    delegate :authority_code, :authority_base_url, :value_uri, :name_type, to: :name, allow_nil: true
+    delegate :authority_code, :authority_base_url, :value_uri, :affiliation, :name_type, to: :name, allow_nil: true
 
     # @param[required] [Curator::ControlledTerms::Name]
     # @param[optional] name_parts [Array[Curator::Mappings::NamePartModsPresenter]]

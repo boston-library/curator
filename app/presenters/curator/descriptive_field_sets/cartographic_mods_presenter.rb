@@ -2,15 +2,25 @@
 
 module Curator
   class DescriptiveFieldSets::CartographicModsPresenter
+    # @param :projection [String]
+    # @param :scale [Array[String]]
+    # @return [Array[Curator::DescriptiveFieldSets::CartographicModsPresenter]]
+    def self.wrap_multiple(projection: nil, scale: [])
+      cart_attrs = []
+      cart_attrs << { projection: projection } if projection.present?
+      cart_attrs += scale.map { |s| { scale: s } }
+      cart_attrs.map(&method(:new))
+    end
+
     # For <mods:geographic><mods:cartographics> elements
     attr_reader :scale, :projection, :bounding_box, :cartesian_coords, :area_type
     # @param[optional] projection [String]
     # @param[optional] bounding_box [String]
     # @param[optional] coordinates [String]
     # @param[optional] area_type [String]
-    # @param[optional] scale [Array[String]]
+    # @param[optional] scale [String]
     # @return [Curator::DescriptiveFieldSets::CartographicModsPresenter] instance
-    def initialize(projection: nil, bounding_box: nil, area_type: nil, coordinates: nil, scale: [])
+    def initialize(projection: nil, bounding_box: nil, area_type: nil, coordinates: nil, scale: nil)
       @projection = projection
       @bounding_box = bounding_box
       @area_type = area_type

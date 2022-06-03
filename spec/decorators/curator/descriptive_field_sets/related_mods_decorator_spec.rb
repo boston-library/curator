@@ -75,7 +75,7 @@ RSpec.describe Curator::DescriptiveFieldSets::RelatedModsDecorator, type: :decor
 
     describe '#to_a' do
       let(:expected_decorator_array) do
-        Array.wrap(subject.related_hosts) + Array.wrap(subject.related_series) + Array.wrap(subject.related_constituent) + Array.wrap(subject.related_references) + Array.wrap(subject.related_review_of) + Array.wrap(subject.related_referenced_by)
+        Array.wrap(subject.related_hosts) + Array.wrap(subject.related_series) + Array.wrap(subject.related_constituent) + Array.wrap(subject.related_references) + Array.wrap(subject.related_review_of) + Array.wrap(subject.related_referenced_by) + Array.wrap(subject.related_other_format)
       end
 
       it 'is expected to return an array of Curator::DescriptiveFieldSets::RelatedItemModsPresenter and Curator::DescriptiveFieldSets::RelatedSeriesModsPresenter' do
