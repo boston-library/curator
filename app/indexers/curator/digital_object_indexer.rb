@@ -22,6 +22,9 @@ module Curator
       to_field 'contained_by_ssi', obj_extract('contained_by', 'ark_id')
       to_field('filenames_ssim') { |rec, acc| acc.concat rec.file_sets.pluck(:file_name_base).uniq }
       each_record do |record, context|
+        serializer = Curator::DigitalObjectSerializer.new(record, adapter_key: :mods)
+        context.output_hash['mods_xml_ss'] = Base64.strict_encode64(Zlib::Deflate.deflate(serializer.serialize))
+
         if record.image_file_sets.present?
           has_searchable_pages, georeferenced = false, false
           record.image_file_sets.each do |image_file_set|
