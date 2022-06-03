@@ -34,7 +34,7 @@ RSpec.describe Curator::ControlledTerms::AccessConditionModsDecorator, type: :de
     it 'expects the decorator methods to return the correct values' do
       expect(subject.label).to eql(access_condition.label)
       expect(subject.uri).to eql(access_condition.uri)
-      expect(subject.display_label).to eql('license').or eql('rights')
+      expect(subject.display_label).to eql('license').or eql('rights').or eql('rightsstatements.org')
       expect(subject.type).to eql(expected_type)
     end
   end

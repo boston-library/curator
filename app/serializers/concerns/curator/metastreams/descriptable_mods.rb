@@ -195,11 +195,11 @@ module Curator
 
             element :projection
 
-            node :coordinates, multi_valued: true do
+            node :coordinates do
               target_value_as :to_s
             end
 
-            node :scale, multi_valued: true do
+            node :scale do
               target_value_as :to_s
             end
           end

@@ -88,15 +88,38 @@ module Curator
       publisher.blank? && publication.blank? && place.blank? && date.blank?
     end
 
+    # @return [String] - Used for determinining which date the keyDate attribute should be for
+    def key_date_for
+      return if date.blank?
+
+      if date.created.present?
+        'dateCreated'
+      elsif date.issued.present?
+        'dateIssued'
+      elsif date.copyright.present?
+        'dateCopyright'
+      end
+    end
+
+    # @param type [String]
+    # @return [Boolean]
+    def is_key_date?(type)
+      return false if date.blank?
+
+      key_date_for == type
+    end
+
     private
 
     def map_date_presenters(date, type)
       date_hash = Curator::Parsers::EdtfDateParser.edtf_date_parser(date: date, type: type, inferred: dates_inferred?)
       date_hash = date_hash.except(:type)
 
-      return Array.wrap(Curator::DescriptiveFieldSets::DateModsPresenter.new(key_date: true, **date_hash)) if date_hash[:start].blank? || date_hash[:end].blank?
+      key_date = is_key_date?(type)
+      date_hash = date_hash.merge(key_date: key_date)
+      return Array.wrap(Curator::DescriptiveFieldSets::DateModsPresenter.new(**date_hash)) if date_hash[:start].blank? || date_hash[:end].blank?
 
-      [date_hash.dup.except(:end).merge(key_date: true), date_hash.dup.except(:start)].map { |date_attrs| Curator::DescriptiveFieldSets::DateModsPresenter.new(**date_attrs) }
+      [date_hash.dup.except(:end), date_hash.dup.except(:start)].map { |date_attrs| Curator::DescriptiveFieldSets::DateModsPresenter.new(**date_attrs) }
     end
   end
 end

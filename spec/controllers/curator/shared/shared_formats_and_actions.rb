@@ -236,20 +236,20 @@ RSpec.shared_examples "shared_formats", type: :controller do |include_ark_contex
   context 'XML', :if => has_xml_context do
     routes { Curator::Engine.routes }
 
+    let!(:format) { :xml }
+    let!(:params) { base_params.dup.merge({ format: format }) }
+    let!(:charset) { 'charset=utf-8' }
+    let!(:expected_content_type) { "#{Mime[format].to_str}; #{charset}" }
     let!(:xml_string) { serializer_class.new(resource.reload, adapter_key: :mods).serialize }
-    let(:format) { :xml }
-    let(:params) { base_params.dup.merge({ format: format }) }
-    let(:charset) { 'charset=utf-8' }
-    let(:expected_content_type) { "#{Mime[format].to_str}; #{charset}" }
 
     describe 'GET' do
       context 'with :id' do
         it "returns a successful mods xml response" do
           resource.reload
-
           id_params = params.dup
           id_params[:id] ||= resource.to_param
           get :show, params: id_params
+
           expect(response).to have_http_status(:ok)
           expect(response.content_type).to eql(expected_content_type)
           expect(response.body).to eql(xml_string)

@@ -110,13 +110,15 @@ module Curator
             end
 
             def serialize
-              return Ox.dump(document, indent: params[:indent]) if params[:indent]
+              return Ox.dump(serializable_document, indent: params[:indent]) if params[:indent]
 
-              Ox.dump(document)
+              Ox.dump(serializable_document)
             end
 
             def serializable_document
-              document
+              return @_serializable_document if defined?(@_serializable_document) && !@_serializable_document.nil?
+
+              @_serializable_document = document
             end
 
             def serializable_hash
@@ -126,6 +128,24 @@ module Curator
 
             protected
 
+            def document
+              doc = Ox::Document.new
+
+              xml_instruct = Ox::Instruct.new(:xml)
+              xml_instruct[:version] = '1.0'
+              xml_instruct[:encoding] = 'UTF-8'
+
+              doc << xml_instruct
+
+              if object_is_collection?
+                object.each { |obj| build_elements(root_element, obj, xml_elements) }
+              else
+                build_elements(root_element, object, xml_elements)
+              end
+              doc << root_element
+              doc
+            end
+
             def root_element
               return @_root_element if defined?(@_root_element) && !@_root_element.nil?
 
@@ -134,26 +154,6 @@ module Curator
               root_attributes.each_pair { |attr_name, attr_value| @_root_element[attr_name] = attr_value }
 
               @_root_element
-            end
-
-            def document
-              return @document if defined?(@document) && !@document.nil?
-
-              @document = Ox::Document.new
-
-              xml_instruct = Ox::Instruct.new(:xml)
-              xml_instruct[:version] = '1.0'
-              xml_instruct[:encoding] = 'UTF-8'
-
-              @document << xml_instruct
-
-              if object_is_collection?
-                object.each { |obj| build_elements(root_element, obj, xml_elements) }
-              else
-                build_elements(root_element, object, xml_elements)
-              end
-              @document << root_element
-              @document
             end
 
             private

@@ -37,7 +37,7 @@ module Curator
 
     # @return [Array[Curator::DescriptiveFieldSets::Cartographic]]
     def cartographics
-      __getobj__.cartographic if __getobj__.respond_to(:cartographic)
+      __getobj__.cartographic if __getobj__.respond_to?(:cartographic)
     end
 
     # @return [Array[Curator::DescriptiveFieldSets::Title]]
@@ -82,9 +82,15 @@ module Curator
       temporal_presenters + date_temporal_presenters
     end
 
+    def cartographic_mods
+      return [] if cartographics.blank?
+
+      Curator::DescriptiveFieldSets::CartographicModsPresenter.wrap_multiple(projection: cartographics.projection, scale: cartographics.scale)
+    end
+
     # @return Array[Misc] - This method is used to wrap all the subject relations in an array and pass to the SubjectModsDecorator.wrap_multiple class method.
     def to_a
-      Array.wrap(topics) + Array.wrap(geos) + Array.wrap(names) + Array.wrap(titles) + Array.wrap(temporal_mods)
+      Array.wrap(topics) + Array.wrap(geos) + Array.wrap(cartographic_mods) + Array.wrap(names) + Array.wrap(titles) + Array.wrap(temporal_mods)
     end
 
     # @return [Boolean] - Needed for json and mods serializers

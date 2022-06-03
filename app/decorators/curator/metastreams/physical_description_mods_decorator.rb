@@ -11,7 +11,7 @@ module Curator
     ### physical_description = Curator::Metastreams:PhysicalDescriptionModsDecorator.new(desc)
     include Curator::DigitalObjectable
 
-    EXCLUDED_PD_MODS_MEDIA_TYPES = %w(xml text).freeze
+    EXCLUDED_PD_MODS_MEDIA_TYPES = %w(xml json text txt).freeze
 
     # @return [String | nil] - <mods:digitalOrigin> sub element
     def digital_origin

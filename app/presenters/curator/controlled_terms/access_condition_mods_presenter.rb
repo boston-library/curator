@@ -2,21 +2,25 @@
 
 module Curator
   class ControlledTerms::AccessConditionModsPresenter
-    attr_reader :rights, :access_restrictions
+    # DESCRIPTION: this class is for wapping string fields on the Curator::Metastreams::Descriptive to serialize/display them as <mods:accessCondition> elements
 
+    # @param access_condition_attrs [Array[Hash]]
+    # @return [Array[Curator::ControlledTerms::AccessConditionModsPresenter]]
     def self.wrap_multiple(access_condition_attrs = [])
       access_condition_attrs.map(&method(:new))
+    end
+
+    attr_reader :rights, :access_restrictions
+
+    def initialize(rights: nil, access_restrictions: nil)
+      @rights = rights
+      @access_restrictions = access_restrictions
     end
 
     def label
       return if blank?
 
       rights || access_restrictions
-    end
-
-    def initialize(rights: nil, access_restrictions: nil)
-      @rights = rights
-      @access_restrictions = access_restrictions
     end
 
     def display_label
