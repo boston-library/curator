@@ -65,5 +65,16 @@ RSpec.describe Curator::DigitalObjectIndexer, type: :indexer do
         end
       end
     end
+
+    describe 'MODS XML indexing' do
+      let(:mods_xml) do
+        serializer = Curator::DigitalObjectSerializer.new(digital_object, adapter_key: :mods)
+        Base64.strict_encode64(Zlib::Deflate.deflate(serializer.serialize))
+      end
+
+      it 'sets the mods_xml field' do
+        expect(indexed['mods_xml_ss']).to eq mods_xml
+      end
+    end
   end
 end
