@@ -76,6 +76,8 @@ module Curator
         node :origin_info do
           target_value_blank!
 
+          attribute :event_type
+
           node :place do
             target_value_blank!
 
