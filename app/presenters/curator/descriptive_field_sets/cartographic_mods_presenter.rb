@@ -29,9 +29,11 @@ module Curator
     end
 
     def coordinates
-      return [] if bounding_box.blank? && cartesian_coords.blank?
+      return if bounding_box.blank? && cartesian_coords.blank?
 
-      Array.wrap(bounding_box) + Array.wrap(cartesian_coords)
+      return bounding_box if bounding_box.present?
+
+      cartesian_coords
     end
 
     # @return [Boolean] - Needed for serializer

@@ -44,7 +44,7 @@ module Curator
 
           element :affiliation, target_val: :name_affiliation
 
-          node :role, target_obj: :role_term do
+          node :roles, multi_valued: true, target_obj: :role_terms do
             target_value_blank!
 
             node :roleTerm, target_obj: ->(rt) { rt } do
@@ -285,7 +285,10 @@ module Curator
         multi_node :identifier, target_obj: :identifier_list do
           target_value_as :label
 
-          attribute :type
+          attribute :type do |ident|
+            ident.type == 'videorecording' ? 'videorecording-identifier' : ident.type
+          end
+
           attribute :invalid do |ident|
             ident.invalid == true ? 'yes' : nil
           end
@@ -342,8 +345,6 @@ module Curator
           node :language_of_cataloging do
             target_value_blank!
 
-            attribute :usage
-
             node :language_term do
               target_value_as :label
 
@@ -377,7 +378,8 @@ module Curator
       end
 
       def name_role_list(desc)
-        Curator::Mappings::NameRoleModsDecorator.wrap_multiple(desc.name_roles)
+        grouped_name_roles = Curator::Mappings::GroupedNameRoleModsPresenter.wrap_multiple(desc.name_roles.group_by(&:name))
+        Curator::Mappings::NameRoleModsDecorator.wrap_multiple(grouped_name_roles)
       end
 
       def note_list(desc)

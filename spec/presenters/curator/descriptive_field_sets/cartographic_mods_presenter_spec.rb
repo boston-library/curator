@@ -34,10 +34,9 @@ RSpec.describe Curator::DescriptiveFieldSets::CartographicModsPresenter, type: :
         expect(subject.scale).to be(nil)
       end
 
-      it 'expects coordinates to return an array with #bounding_box and #cartesian_coords included' do
-        expect(subject.coordinates).to be_an_instance_of(Array)
-        expect(subject.coordinates).not_to be_empty
-        expect(subject.coordinates).to include(geographic.coordinates, geographic.bounding_box)
+      it 'expects coordinates to  be a String and return and eql bounding_box or cartesian_coords' do
+        expect(subject.coordinates).to be_an_instance_of(String)
+        expect(subject.coordinates).to eql(geographic.coordinates).or eql(geographic.bounding_box)
       end
     end
 
@@ -62,9 +61,8 @@ RSpec.describe Curator::DescriptiveFieldSets::CartographicModsPresenter, type: :
         expect(subject.area_type).to be(nil)
       end
 
-      it 'expects coordinates to return an empty array' do
-        expect(subject.coordinates).to be_an_instance_of(Array)
-        expect(subject.coordinates).to be_empty
+      it 'expects coordinates to be blank' do
+        expect(subject.coordinates).to be_blank
       end
     end
   end
