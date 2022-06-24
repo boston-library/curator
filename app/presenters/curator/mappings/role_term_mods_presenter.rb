@@ -4,6 +4,10 @@ module Curator
   class Mappings::RoleTermModsPresenter
     # For serializing <mods:role><mods:roleTerm> elements
 
+    def self.wrap_multiple(roles = [])
+      roles.map(&method(:new))
+    end
+
     attr_reader :role
 
     # @param role [Curator::ControlledTerms::Role]

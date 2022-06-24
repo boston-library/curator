@@ -5,11 +5,10 @@ require 'rails_helper'
 RSpec.describe Curator::DescriptiveFieldSets::LanguageOfCatalogingModsPresenter, type: :presenters do
   subject { described_class }
 
-  specify { expect(subject).to be_const_defined(:DEFAULT_USAGE) }
   specify { expect(subject).to be_const_defined(:DEFAULT_LANG_TERM_ATTRS) }
   specify { expect(subject).to be_const_defined(:LanguageTerm) }
 
-  it { is_expected.to respond_to(:new).with(0..2).arguments }
+  it { is_expected.to respond_to(:new).with(0..1).arguments }
 
   describe Curator::DescriptiveFieldSets::LanguageOfCatalogingModsPresenter::LanguageTerm do
     subject { described_class }
@@ -50,13 +49,8 @@ RSpec.describe Curator::DescriptiveFieldSets::LanguageOfCatalogingModsPresenter,
     subject { described_class.new }
 
     let!(:default_lang_term_attrs) { described_class.const_get(:DEFAULT_LANG_TERM_ATTRS) }
-    let!(:default_usage) { described_class.const_get(:DEFAULT_USAGE) }
 
-    it { is_expected.to respond_to(:language_term, :usage).with(0).arguments }
-
-    it 'expects #usage to eql :DEFAULT_USAGE' do
-      expect(subject.usage).to eql(default_usage)
-    end
+    it { is_expected.to respond_to(:language_term).with(0).arguments }
 
     it 'expects #language_term to be a Curator::DescriptiveFieldSets::LanguageOfCatalogingModsPresenter::LanguageTerm' do
       expect(subject.language_term).to be_an_instance_of(Curator::DescriptiveFieldSets::LanguageOfCatalogingModsPresenter::LanguageTerm)

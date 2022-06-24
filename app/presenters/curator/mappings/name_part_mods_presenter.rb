@@ -2,7 +2,7 @@
 
 module Curator
   class Mappings::NamePartModsPresenter
-    # For serializing <mods:name><mods:namePart> elements
+    # DESCRIPTION For serializing <mods:name><mods:namePart> elements
     # @param label [String]
     # @param[optional] is_date [Boolean]
     # @return [Curator::Mappings::RoleTermModsPresenter] instance

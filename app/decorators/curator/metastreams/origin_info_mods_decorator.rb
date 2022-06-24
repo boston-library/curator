@@ -10,6 +10,14 @@ module Curator
     ### desc = Curator.metastreams.descriptive_class.for_serialization.find_by(..)
     ### origin_info = Curator::Metastreams:OriginInfoModsDecorator.new(desc)
 
+    def event_type
+      return @event_type if defined?(@event_type)
+
+      return @event_type = nil if !__getobj__.respond_to?(:origin_event)
+
+      @event_type = __getobj__.origin_event
+    end
+
     def publication
       return @publication if defined?(@publication)
 
@@ -85,7 +93,7 @@ module Curator
     def blank?
       return true if __getobj__.blank?
 
-      publisher.blank? && publication.blank? && place.blank? && date.blank?
+      event_type.blank? && publisher.blank? && publication.blank? && place.blank? && date.blank?
     end
 
     # @return [String] - Used for determinining which date the keyDate attribute should be for

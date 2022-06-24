@@ -6,18 +6,18 @@ module Curator
 
     # This class wraps and delegates Curator::Mappings::NameRole objects to serialize/display <mods:name> elements and sub elements
 
-    # @param name_roles [Array[Curator::Mappings::NameRole]]
+    # @param name_roles [Array[Curator::Mappings::GroupedNameRoleModsPresenter]]
     # @returns [Array[Curator::Mappings::NameRoleModsDecorator]]
-    def self.wrap_multiple(name_roles = [])
-      name_roles.map(&method(:new))
+    def self.wrap_multiple(grouped_name_roles = [])
+      grouped_name_roles.map(&method(:new))
     end
 
     def name
       super if __getobj__.respond_to?(:name)
     end
 
-    def role
-      super if __getobj__.respond_to?(:role)
+    def roles
+      super if __getobj__.respond_to?(:roles)
     end
 
     # @return [String] - Used for <mods:name type=''> attribute value
@@ -54,16 +54,16 @@ module Curator
       name.affiliation
     end
 
-    # @return [Curator::Mappings::RoleTermModsPresenter | nil] - Used for <mods:role><mods:roleTerm> sub elements
-    def role_term
-      Mappings::RoleTermModsPresenter.new(role) if role.present?
+    # @return [Array[Curator::Mappings::RoleTermModsPresenter | nil]] - Used for <mods:role><mods:roleTerm> sub elements
+    def role_terms
+      Mappings::RoleTermModsPresenter.wrap_multiple(roles) if roles.present?
     end
 
     # @return [Boolean] - Needed for mods serializer
     def blank?
       return true if __getobj__.blank?
 
-      name.blank? && role.blank?
+      name.blank? && roles.blank?
     end
   end
 end
