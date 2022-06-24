@@ -44,7 +44,7 @@ module Curator
 
           element :affiliation, target_val: :name_affiliation
 
-          node :roles, multi_valued: true, target_obj: :role_terms do
+          node :role, multi_valued: true, target_obj: :role_terms do
             target_value_blank!
 
             node :roleTerm, target_obj: ->(rt) { rt } do
@@ -76,7 +76,7 @@ module Curator
         node :origin_info do
           target_value_blank!
 
-          attribute :event_type
+          attribute :event_type, xml_label: :eventType
 
           node :place do
             target_value_blank!
@@ -184,6 +184,7 @@ module Curator
             element :area
             element :province
             element :region
+            element :county
             element :country
             element :continent
             element :island
