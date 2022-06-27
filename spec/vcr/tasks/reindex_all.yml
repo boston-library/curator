@@ -306,4 +306,55 @@ http_interactions:
       encoding: UTF-8
       string: '{"error":"undefined method `geoname'' for #\u003cNokogiri::XML::Element:0x00007fac04131d40\u003e"}'
   recorded_at: Mon, 12 Jul 2021 20:44:41 GMT
-recorded_with: VCR 6.0.0
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/tgn/2050042
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.0.4
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"f60d89b4333c40d9816a003455dd0e9b"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - dc665b94-1e3b-4a8e-8aa9-edf8dcb75417
+      X-Runtime:
+      - '0.990839'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"42.4667","longitude":"-70.95","combined":"42.4667,-70.95"},"hier_geo":{"city":"Lynn","continent":"North
+        and Central America","county":"Essex","country":"United States","state":"Massachusetts"},"non_hier_geo":null}'
+  recorded_at: Mon, 27 Jun 2022 20:16:35 GMT
+recorded_with: VCR 6.1.0

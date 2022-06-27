@@ -19,10 +19,12 @@ RSpec.describe Curator::Metastreams::RecordInfoModsDecorator, type: :decorators 
 
     it { is_expected.to be_const_defined(:DEFAULT_MODS_RECORD_ORIGIN) }
     it { is_expected.to be_const_defined(:DEFAULT_MODS_DESC_STANDARD_AUTH) }
+    it { is_expected.to be_const_defined(:HARVESTED_MODS_RECORD_ORIGIN) }
 
     it 'expects the constants to be specific types' do
       expect(subject.const_get(:DEFAULT_MODS_RECORD_ORIGIN)).to be_a_kind_of(String)
       expect(subject.const_get(:DEFAULT_MODS_DESC_STANDARD_AUTH)).to be_a_kind_of(String)
+      expect(subject.const_get(:HARVESTED_MODS_RECORD_ORIGIN)).to be_a_kind_of(String)
     end
   end
 

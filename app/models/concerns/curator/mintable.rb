@@ -33,6 +33,8 @@ module Curator
 
         return @ark_iiif_manifest_identifier = nil if self.class.name != 'Curator::DigitalObject' || ark_uri.blank? || is_harvested?
 
+        return @ark_iiif_manifest_identifier = nil if respond_to?(:image_file_sets) && image_file_sets.blank?
+
         ark_iiif_ident = Curator::DescriptiveFieldSets::Identifier.new(type: 'iiif-manifest', label: "#{ark_uri}/manifest")
 
         return @ark_iiif_manifest_identifier = nil if !ark_iiif_ident.valid?

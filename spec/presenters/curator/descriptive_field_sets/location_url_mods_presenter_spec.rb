@@ -11,7 +11,7 @@ RSpec.describe Curator::DescriptiveFieldSets::LocationUrlModsPresenter, type: :p
     let!(:digital_object) { create(:curator_digital_object) }
     let!(:ark_uri_identifier) { digital_object.ark_identifier }
     let!(:ark_preview_identifier) { digital_object.ark_preview_identifier }
-    let!(:ark_iiif_uri_identifier) { digital_object.ark_iiif_manifest_identifier }
+    let!(:ark_iiif_uri_identifier) { create(:curator_descriptives_identifier, type: 'iiif-manifest', label: "#{digital_object.ark_uri}/manifest") }
 
     context 'with :ark_uri_identifier' do
       subject { described_class.new(ark_uri_identifier.label, **uri_attributes) }

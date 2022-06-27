@@ -5,9 +5,14 @@ FactoryBot.define do
     description_standard { Curator::Metastreams::Administrative.description_standards.keys.sample }
     administratable { nil }
     for_institution
+    hosted
 
     trait :is_flagged do
       flagged { Curator::Metastreams::Administrative::VALID_FLAGGED_VALUES.sample }
+    end
+
+    trait :hosted do
+      hosting_status { 'hosted' }
     end
 
     trait :non_havestable do
