@@ -22,7 +22,7 @@ RSpec.describe Curator::Indexer::AdministrativeIndexer do
     end
 
     it 'sets the oai_header_id field' do
-      expect(indexed['oai_header_id_ss']).to eq [administrative.oai_header_id]
+      expect(indexed['oai_header_id_ssi']).to eq [administrative.oai_header_id]
     end
 
     it 'sets the hosting_status field' do
