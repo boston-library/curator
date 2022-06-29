@@ -20,7 +20,7 @@ module Curator
         accumulator.concat record.is_member_of_collection.pluck(:ark_id)
       end
       to_field 'contained_by_ssi', obj_extract('contained_by', 'ark_id')
-      to_field('filenames_ssim') { |rec, acc| acc.concat rec.file_sets.pluck(:file_name_base).uniq }
+      to_field('filenames_ssim') { |rec, acc| acc.concat rec.file_set_members.pluck(:file_name_base).uniq }
       each_record do |record, context|
         serializer = Curator::DigitalObjectSerializer.new(record, adapter_key: :mods)
         context.output_hash['mods_xml_ss'] = Base64.strict_encode64(Zlib::Deflate.deflate(serializer.serialize))
