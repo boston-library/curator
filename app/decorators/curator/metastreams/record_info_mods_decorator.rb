@@ -13,10 +13,13 @@ module Curator
 
     DEFAULT_MODS_RECORD_ORIGIN = 'human prepared'
     DEFAULT_MODS_DESC_STANDARD_AUTH = 'marcdescription'
+    HARVESTED_MODS_RECORD_ORIGIN = 'OAI-PMH request'
 
     # @return [String] - this is used to serialize/display the <mods:recordInfo><mods:recordOrigin> sub element
     def record_origin
       return if __getobj__.blank?
+
+      return HARVESTED_MODS_RECORD_ORIGIN if is_harvested?
 
       DEFAULT_MODS_RECORD_ORIGIN
     end
@@ -60,7 +63,7 @@ module Curator
     def record_creation_date
       return @record_creation_date if defined?(@record_creation_date)
 
-      return @record_creation_date = nil if __getobj__.blank? || !__getobj__.respond_to?(:created_at)
+      return @record_creation_date = nil if __getobj__.blank? || !__getobj__.respond_to?(:created_at) || is_harvested?
 
       @record_creation_date = __getobj__.created_at&.iso8601
     end
@@ -69,7 +72,7 @@ module Curator
     def record_change_date
       return @record_change_date if defined?(@record_change_date)
 
-      return @record_change_date = nil if __getobj__.blank? || !__getobj__.respond_to?(:updated_at)
+      return @record_change_date = nil if __getobj__.blank? || !__getobj__.respond_to?(:updated_at) || is_harvested?
 
       @record_change_date = __getobj__.updated_at&.iso8601
     end
@@ -78,7 +81,7 @@ module Curator
     def language_of_cataloging
       return @language_of_cataloging if defined?(@language_of_cataloging)
 
-      return @language_of_cataloging = nil if __getobj__.blank?
+      return @language_of_cataloging = nil if __getobj__.blank? || is_harvested?
 
       @language_of_cataloging = Curator::DescriptiveFieldSets::LanguageOfCatalogingModsPresenter.new
     end

@@ -15,7 +15,7 @@ module Curator
 
     # @return [String | nil] - <mods:digitalOrigin> sub element
     def digital_origin
-      super.tr('_', ' ') if __getobj__.respond_to?(:digital_origin)
+      super.to_s.tr('_', ' ') if __getobj__.respond_to?(:digital_origin)
     end
 
     # @return [String | nil] - <mods:extent> sub element
@@ -46,7 +46,7 @@ module Curator
     def internet_media_type_list
       return @internet_media_type_list if defined?(@internet_media_type_list)
 
-      return @internet_media_type_list = [] if file_sets.blank?
+      return @internet_media_type_list = [] if is_harvested? || file_sets.blank?
 
       @internet_media_type_list = ActiveStorage::Attachment.includes(:blob).where(record: file_sets).pluck(Arel.sql('curator.active_storage_blobs.content_type')).uniq.select { |imt| EXCLUDED_PD_MODS_MEDIA_TYPES.all? { |mt| imt.exclude?(mt) } }
     end

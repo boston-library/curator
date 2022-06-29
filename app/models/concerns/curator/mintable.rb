@@ -33,6 +33,8 @@ module Curator
 
         return @ark_iiif_manifest_identifier = nil if self.class.name != 'Curator::DigitalObject' || ark_uri.blank? || is_harvested?
 
+        return @ark_iiif_manifest_identifier = nil if respond_to?(:image_file_sets) && image_file_sets.blank?
+
         ark_iiif_ident = Curator::DescriptiveFieldSets::Identifier.new(type: 'iiif-manifest', label: "#{ark_uri}/manifest")
 
         return @ark_iiif_manifest_identifier = nil if !ark_iiif_ident.valid?
@@ -44,6 +46,8 @@ module Curator
         return @ark_preview_identifier if defined?(@ark_preview_identifier)
 
         return @ark_preview_identifier = nil if self.class.name != 'Curator::DigitalObject' || ark_uri.blank?
+
+        return @ark_preview_identifier = nil if is_harvested? && respond_to?(:metadata_file_sets) && metadata_file_sets.with_attached_image_thumbnail_300.all? { |fs| !fs.image_thumbnail_300.uploaded? }
 
         ark_preview_ident = Curator::DescriptiveFieldSets::Identifier.new(type: 'uri-preview', label: "#{ark_uri}/thumbnail")
 
