@@ -15,7 +15,7 @@ module Curator
 
     # @return [String | nil] - <mods:digitalOrigin> sub element
     def digital_origin
-      super.tr('_', ' ') if __getobj__.respond_to?(:digital_origin)
+      super.to_s.tr('_', ' ') if __getobj__.respond_to?(:digital_origin)
     end
 
     # @return [String | nil] - <mods:extent> sub element

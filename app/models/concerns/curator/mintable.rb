@@ -47,6 +47,8 @@ module Curator
 
         return @ark_preview_identifier = nil if self.class.name != 'Curator::DigitalObject' || ark_uri.blank?
 
+        return @ark_preview_identifier = nil if is_harvested? && respond_to?(:metadata_file_sets) && metadata_file_sets.with_attached_image_thumbnail_300.all? { |fs| !fs.image_thumbnail_300.uploaded? }
+
         ark_preview_ident = Curator::DescriptiveFieldSets::Identifier.new(type: 'uri-preview', label: "#{ark_uri}/thumbnail")
 
         return @ark_preview_identifier = nil if !ark_preview_ident.valid?
