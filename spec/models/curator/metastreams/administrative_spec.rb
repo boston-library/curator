@@ -59,6 +59,29 @@ RSpec.describe Curator::Metastreams::Administrative, type: :model do
                         backed_by_column_of_type(:integer) }
   end
 
+  describe 'Class' do
+    subject { described_class }
+
+    it { is_expected.to be_const_defined(:VALID_DESTINATION_SITES) }
+    it { is_expected.to be_const_defined(:VALID_FLAGGED_VALUES) }
+
+    it 'expects the constants to be arrays of strings and frozen' do
+      expect(subject.const_get(:VALID_DESTINATION_SITES)).to be_an_instance_of(Array).and all(be_an_instance_of(String)).and be_frozen
+      expect(subject.const_get(:VALID_FLAGGED_VALUES)).to be_an_instance_of(Array).and all(be_an_instance_of(String)).and be_frozen
+    end
+
+    describe 'Scopes' do
+      describe '.local_id_finder' do
+        let(:oai_header_id) { 'oai:some:value' }
+        let(:expected_sql) { described_class.where.not(oai_header_id: nil).where(oai_header_id: oai_header_id).to_sql }
+
+        it 'is expected to match the expected sql' do
+          expect(described_class.local_id_finder(oai_header_id).to_sql).to eql(expected_sql)
+        end
+      end
+    end
+  end
+
   describe 'Instance Methods' do
     it { is_expected.to respond_to(:oai_object?) }
   end
@@ -69,6 +92,10 @@ RSpec.describe Curator::Metastreams::Administrative, type: :model do
 
     it { is_expected.to allow_values(*(Curator::Metastreams.valid_base_types + Curator::Metastreams.valid_filestream_types)).for(:administratable_type) }
     it { is_expected.to allow_values(*(Curator::Metastreams::Administrative::VALID_FLAGGED_VALUES)).for(:flagged) }
+
+    it 'is expected to allow :VALID_DESTINATION_SITES values' do
+      expect(subject).to allow_values(*(Curator::Metastreams::Administrative::VALID_DESTINATION_SITES.each_slice(2).map { |el| el })).for(:destination_site)
+    end
   end
 
   describe 'Default attributes' do
