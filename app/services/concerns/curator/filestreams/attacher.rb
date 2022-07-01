@@ -101,6 +101,10 @@ module Curator
           io.dig('ingest_filepath').present?
         end
 
+        def base64_content?(io = {})
+          io.dig('base64_string').present?
+        end
+
         private
 
         # @param attachment_attributes [Hash]
@@ -195,6 +199,8 @@ module Curator
 
           return file_path_io(io_hash['ingest_filepath']) if ingest_content?(io_hash)
 
+          return base64_io(io_hash['base64_string']) if base64_content?(io_hash)
+
           raise ActiveRecord::RecordNotSaved, "Unknown content for io #{type}"
         end
 
@@ -269,6 +275,10 @@ module Curator
           else
             raise ActiveStorage::Error, "Unknown object class for uploaded file: #{uploaded_file.class}"
           end
+        end
+
+        def base64_io(base64_string)
+          StringIO.new(Base64.decode64(base64_string))
         end
       end
     end
