@@ -19,15 +19,13 @@ module Curator
     after_update_commit :set_as_exemplary
 
     def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
-      if file_set_of.is_harvested?
-        super(%i(metadata_oai image_thumbnail_300))
-      else
-        required_derivatives.any? { |a| derivative_attachment_uploaded?(a) }
-      end
+      return super(%i(metadata_oai image_thumbnail_300)) if file_set_of.is_harvested?
+
+      required_derivatives.any? { |a| derivative_attachment_uploaded?(a) }
     end
 
     def set_as_exemplary
-      return unless image_thumbnail_300.attached? && file_set_of.exemplary_file_set.blank? && file_set_of.is_harvested?
+      return unless image_thumbnail_300.uploaded? && file_set_of.exemplary_file_set.blank? && file_set_of.is_harvested?
 
       exemplary_image_of_mappings.create(exemplary_object: file_set_of)
     end
