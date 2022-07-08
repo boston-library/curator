@@ -40,8 +40,19 @@ Dir.glob('lib/tasks/*.rake').each { |r| import r }
 
 require 'solr_wrapper/rake_task'
 
+desc 'Check that zeitwerk can eager load the application'
+task :check_zeitwerk do
+  if Rake::Task.task_defined?('app:zeitwerk:check')
+    puts 'Invoking app:zeitwerk:check to check eager loading...'
+    Rake::Task['app:zeitwerk:check'].invoke
+    puts 'Zeitwerk eager load check success!'
+  else
+    puts 'app:zeitewerk:check is not defined. skipping check...'
+  end
+end
+
 desc 'Lint, set up test app, spin up Solr, and run specs'
-task ci: [:rubocop] do
+task ci: [:rubocop, :check_zeitwerk] do
   puts 'running continuous integration'
   SolrWrapper.wrap do |solr|
     solr.with_collection do
