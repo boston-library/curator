@@ -24,7 +24,10 @@ module Curator
     has_paper_trail
 
     def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
+      # return super without image service if image_service if the derivative_source
       return super(required_derivatives.dup.delete_if { |el| el == derivative_source.name.to_sym }) if required_derivatives.include?(derivative_source&.name&.to_sym)
+
+      return super(required_derivatives.dup + %i(text_plain text_coordinates_access)) if text_coordinates_primary.uploaded?
 
       super(required_derivatives)
     end
@@ -34,6 +37,9 @@ module Curator
 
       payload = super
       payload[:file_stream][:original_ingest_file_path] = derivative_source.metadata['ingest_filepath']
+      return payload if !text_coordinates_primary.uploaded?
+
+      payload[:file_stream][:mets_alto_stream_attributes] = { original_ingest_file_path: text_coordinates_primary.metadata['ingest_filepath'] }
       payload
     end
 
@@ -48,9 +54,9 @@ module Curator
     protected
 
     def derivative_source
-      return if !image_primary.attached? && !image_service.attached?
+      return if !image_primary.uploaded? && !image_service.uploaded?
 
-      return image_primary if image_primary.attached?
+      return image_primary if image_primary.uploaded?
 
       image_service
     end
