@@ -20,7 +20,8 @@ module Curator
       'internet-archive' => 'barcode',
       'local-barcode' => 'barcode',
       'local-accession' => 'id_local-accession',
-      'local-other' => 'id_local-other'
+      'local-other' => 'id_local-other',
+      'lccn' => 'id_local-other'
     }.freeze
 
     RELATED_TYPES = {
