@@ -104,17 +104,7 @@ module Curator
 
       return ident_params if descriptive&.identifier.blank?
 
-      local_id_precedent.each do |ident_precedent|
-        ident = descriptive.identifier.find { |i| ident_precedent.include?(i.type) }
-
-        next if ident.blank?
-
-        ident_params = { local_original_identifier: ident.label, local_original_identifier_type: ident.local_original_identifier_type }
-
-        break
-      end
-
-      ident_params
+      ident_params.merge(fetch_local_id_by_precedent)
     end
 
     # Sets an array of local_id_types by the same precedent the case/when was setting in the previous
@@ -122,29 +112,55 @@ module Curator
     # Version above works as intended with the right precedent being used and avoids returning an array
     # Method below is a helper method that builds the constant into a 2d array. The constant is also ordered
     # by precedent to ensure that the order is maintained.
+    #
+    # UPDATE: Changed this method to fetch the identifer params based on the order of the keys in the hash.
+    # Due to it causing issues with the NDNP btach processing. Rather than create a 2D array It iterates through the keys
+    # of the LOCAL_ORIGINAL_IDENTIFIER_TYPES (which is still ordered by precedent). The method below is the equivalent of
+    # a case when statement like so
     # For reference here how the local id params were being set before.
     #   case ident.type
-    # when 'internet-archive', 'local-barcode'
+    # when 'local-filename',
     #   return {
     #     local_original_identifier: ident.label,
-    #       local_original_identifier_type: 'Barcode'
+    #       local_original_identifier_type: 'filename'
+    #   }
+    # when 'internet-archive',
+    #   return {
+    #     local_original_identifier: ident.label,
+    #       local_original_identifier_type: 'barcode'
+    #   }
+    # when 'local-barcode'
+    #   return {
+    #     local_original_identifier: ident.label,
+    #       local_original_identifier_type: 'barcode'
     #   }
     # when 'local-accession'
     #   return {
     #     local_original_identifier: ident.label,
-    #       local_original_identifier_type: 'id_local-accession field'
+    #       local_original_identifier_type: 'id_local-accession'
     #   }
     # when 'local-other'
     #   return {
     #     local_original_identifier: ident.label,
-    #       local_original_identifier_type: 'id_local-other field'
+    #       local_original_identifier_type: 'id_local-other'
     #   }
-    def local_id_precedent
-      DescriptiveFieldSets::LOCAL_ORIGINAL_IDENTIFIER_TYPES.reduce({}) do |ret, (k, v)|
-        ret[v] ||= []
-        ret[v] << k
-        ret
-      end.values
+    # when 'lccn'
+    #   return {
+    #     local_original_identifier: ident.label,
+    #       local_original_identifier_type: 'id_local-other'
+    #   }
+
+    def fetch_local_id_by_precedent
+      local_ident_for_params = {}
+      DescriptiveFieldSets::LOCAL_ORIGINAL_IDENTIFIER_TYPES.keys.each do |local_id_type|
+        ident = descriptive.identifier.find { |i| i.type == local_id_type }
+
+        next if ident.blank?
+
+        break local_ident_for_params = { local_original_identifier: ident.label, local_original_identifier_type: ident.local_original_identifier_type }
+      end
+
+      local_ident_for_params
     end
 
     def add_admin_set_to_members
