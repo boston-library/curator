@@ -7,7 +7,7 @@ module Curator
     IDENTIFIER_TYPES = %w(local-accession local-other local-call local-barcode local-filename iiif-manifest internet-archive isbn ismn
                           isrc issn issue-number lccn matrix-number music-plate music-publisher sici uri videorecording uri-preview).freeze
 
-    NOTE_TYPES = ['date', 'lanlocalguage', 'acquisition', 'ownership', 'funding', 'biographical/historical',
+    NOTE_TYPES = ['date', 'language', 'acquisition', 'ownership', 'funding', 'biographical/historical',
                   'citation/reference', 'preferred citation', 'bibliography', 'exhibitions', 'publications',
                   'creation/production credits', 'performers', 'physical description', 'venue', 'arrangement',
                   'statement of responsibility'].freeze
