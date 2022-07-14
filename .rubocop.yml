@@ -420,7 +420,7 @@ Style/UnneededInterpolation:
 
 Metrics/AbcSize:
   Enabled: true
-  Max: 105
+  Max: 107
 
 Metrics/BlockLength:
   Enabled: true
