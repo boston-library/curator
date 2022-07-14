@@ -12,7 +12,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
     @digital_object_json['admin_set']['ark_id'] = parent.ark_id
     @digital_object_json['is_member_of_collection'][0]['ark_id'] = parent.ark_id
     @digital_object_json['contained_by']['ark_id'] = contained_by.ark_id
-    VCR.use_cassette('services/digital_object_factory_service', record: :new_episodes) do
+    VCR.use_cassette('services/digital_object_factory_service') do
       expect do
         @success, @digital_object = handle_factory_result(described_class, @digital_object_json)
       end.to change { Curator::DigitalObject.count }.by(1)
