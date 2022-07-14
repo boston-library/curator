@@ -7,15 +7,17 @@ module Curator
     include Mappings::TermMappable
     include Mappings::NameRolable
     include Mappings::FindOrCreateHostCollection
-    # TODO: set relationships for contained_by values
+
     def call
       with_transaction do
         check_for_existing_ark!
         admin_set_ark_id = @json_attrs.dig('admin_set', 'ark_id')
+        contained_by_ark_id = @json_attrs.dig('contained_by', 'ark_id')
         collection_ark_ids = @json_attrs.fetch('is_member_of_collection', []).pluck('ark_id')
         @record = Curator.digital_object_class.find_or_initialize_by(ark_id: @ark_id).tap do |digital_object|
           admin_set = find_admin_set!(admin_set_ark_id, digital_object)
           digital_object.admin_set = admin_set
+          digital_object.contained_by = find_contained_by!(contained_by_ark_id, digital_object) if contained_by_ark_id.present?
           digital_object.created_at = @created if @created
           digital_object.updated_at = @updated if @updated
 
@@ -120,9 +122,16 @@ module Curator
     end
 
     def find_admin_set!(admin_set_ark_id, digital_object)
-      return Curator.collection_class.select(:id, :ark_id, :institution_id).find_by!(ark_id: admin_set_ark_id)
+      Curator.collection_class.select(:id, :ark_id, :institution_id).find_by!(ark_id: admin_set_ark_id)
     rescue ActiveRecord::RecordNotFound => e
       digital_object.errors.add(:admin_set, "#{e.message} with ark_id=#{admin_set_ark_id}")
+      raise ActiveRecord::RecordInvalid, digital_object
+    end
+
+    def find_contained_by!(contained_by_ark_id, digital_object)
+      Curator.digital_object_class.select(:id, :ark_id).find_by!(ark_id: contained_by_ark_id)
+    rescue ActiveRecord::RecordNotFound => e
+      digital_object.errors.add(:contained_by, "#{e.message} with ark_id=#{contained_by_ark_id}")
       raise ActiveRecord::RecordInvalid, digital_object
     end
   end

@@ -8,9 +8,11 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
     @digital_object_json = load_json_fixture('digital_object')
     # create parent Collection
     parent = create(:curator_collection)
+    contained_by = create(:curator_digital_object)
     @digital_object_json['admin_set']['ark_id'] = parent.ark_id
     @digital_object_json['is_member_of_collection'][0]['ark_id'] = parent.ark_id
-    VCR.use_cassette('services/digital_object_factory_service') do
+    @digital_object_json['contained_by']['ark_id'] = contained_by.ark_id
+    VCR.use_cassette('services/digital_object_factory_service', record: :new_episodes) do
       expect do
         @success, @digital_object = handle_factory_result(described_class, @digital_object_json)
       end.to change { Curator::DigitalObject.count }.by(1)
@@ -41,6 +43,14 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
 
       it 'creates the collection membership relationship' do
         expect(member_of_collection).to be_an_instance_of(Curator::Collection)
+      end
+    end
+
+    describe 'setting conatined by' do
+      let(:conatined_by) { subject.contained_by }
+
+      it 'creates the contained by relationship' do
+        expect(conatined_by).to be_an_instance_of(Curator::DigitalObject)
       end
     end
 
@@ -328,6 +338,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
       let!(:bad_digital_object_json) do
         parent = create(:curator_collection)
         bad_obj_json = load_json_fixture('digital_object')
+        bad_obj_json.delete('contained_by')
         bad_obj_json['admin_set']['ark_id'] = parent.ark_id
         bad_obj_json['is_member_of_collection'][0]['ark_id'] = parent.ark_id
         bad_obj_json['ark_id'] = 'bpl-dev:xinvalidx'
