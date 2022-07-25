@@ -291,6 +291,21 @@
           "review_url": [
             "http://review.net/bar",
             "http://vwx.yz"
+          ],
+          "succeeding": [
+            {
+              "label": "Sacco-Vanzetti case files",
+              "control_number": "0502863112"
+            },
+            {
+              "label": "William Bonk letters",
+              "control_number": "0204164449"
+            }
+          ],
+          "preceding": [
+            {
+              "label": "The man who would be king"
+            }
           ]
         },
         "rights": "Copyright (c) Leslie Jones.",

@@ -10,10 +10,10 @@ RSpec.describe Curator::DescriptiveFieldSets::Title, type: :model do
   describe 'attributes' do
     it { is_expected.to respond_to(:label, :subtitle, :display, :display_label,
                                    :usage, :supplied, :language, :type,
-                                   :authority_code, :id_from_auth, :part_number, :part_name) }
+                                   :authority_code, :id_from_auth, :part_number, :part_name).with(0).arguments }
 
     describe 'instance methods' do
-      it { is_expected.to respond_to(:non_sort, :authority, :authority_uri, :value_uri) }
+      it { is_expected.to respond_to(:non_sort, :authority, :authority_uri, :value_uri).with(0).arguments }
     end
 
     describe 'attr_json settings' do

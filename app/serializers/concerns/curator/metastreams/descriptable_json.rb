@@ -68,6 +68,14 @@ module Curator
           many :referenced_by do
             attributes :label, :url
           end
+
+          many :preceding do
+            attributes :label, :control_number
+          end
+
+          many :succeeding do
+            attributes :label, :control_number
+          end
         end
 
         one :publication do

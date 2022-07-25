@@ -8,7 +8,7 @@ RSpec.describe Curator::DescriptiveFieldSets::Note, type: :model do
   it_behaves_like 'field_set_base'
 
   describe 'attributes' do
-    it { is_expected.to respond_to(:label, :type) }
+    it { is_expected.to respond_to(:label, :type).with(0).arguments }
 
     describe 'validations' do
       it { is_expected.to validate_inclusion_of(:type).

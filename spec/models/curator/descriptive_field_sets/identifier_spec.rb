@@ -8,8 +8,8 @@ RSpec.describe Curator::DescriptiveFieldSets::Identifier, type: :model do
   it_behaves_like 'field_set_base'
 
   describe 'attributes' do
-    it { is_expected.to respond_to(:label, :type, :invalid) }
-    it { is_expected.to respond_to(:local_original_identifier_type) }
+    it { is_expected.to respond_to(:label, :type, :invalid).with(0).arguments }
+    it { is_expected.to respond_to(:local_original_identifier_type).with(0).arguments }
 
     describe 'validations' do
       it { is_expected.to validate_presence_of(:type) }

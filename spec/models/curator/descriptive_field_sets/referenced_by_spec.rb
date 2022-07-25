@@ -8,7 +8,7 @@ RSpec.describe Curator::DescriptiveFieldSets::ReferencedBy, type: :model do
   it_behaves_like 'field_set_base'
 
   describe 'attributes' do
-    it { is_expected.to respond_to(:label, :url) }
+    it { is_expected.to respond_to(:label, :url).with(0).arguments }
 
     describe 'validations' do
       it { is_expected.to validate_presence_of(:url) }

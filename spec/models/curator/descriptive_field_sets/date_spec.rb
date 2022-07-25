@@ -8,7 +8,7 @@ RSpec.describe Curator::DescriptiveFieldSets::Date, type: :model do
   it_behaves_like 'field_set_base'
 
   describe 'attributes' do
-    it { is_expected.to respond_to(:created, :issued, :copyright) }
+    it { is_expected.to respond_to(:created, :issued, :copyright).with(0).arguments }
 
     describe 'attr_json settings' do
       let(:field_types) { %i(created issued copyright).map { |field| described_class.attr_json_registry.fetch(field, nil)&.type } }

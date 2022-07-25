@@ -8,7 +8,7 @@ RSpec.describe Curator::DescriptiveFieldSets::TitleSet, type: :model do
   it_behaves_like 'field_set_base'
 
   describe 'attributes' do
-    it { is_expected.to respond_to(:primary, :other) }
+    it { is_expected.to respond_to(:primary, :other).with(0).arguments }
 
     describe 'validations' do
       it { is_expected.to validate_presence_of(:primary) }

@@ -7,5 +7,7 @@ module Curator
     attr_json :referenced_by, DescriptiveFieldSets::ReferencedBy.to_type, array: true, default: []
     attr_json :references_url, :string, array: true, default: []
     attr_json :review_url, :string, array: true, default: []
+    attr_json :preceding, DescriptiveFieldSets::RelatedTitle.to_type, array: true, default: []
+    attr_json :succeeding, DescriptiveFieldSets::RelatedTitle.to_type, array: true, default: []
   end
 end
