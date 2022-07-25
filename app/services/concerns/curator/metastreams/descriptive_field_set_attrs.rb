@@ -62,6 +62,8 @@ module Curator
           related_hash[k] = related_attrs.fetch(k, nil)
         end
         related_hash[:referenced_by] = related_attrs.fetch(:referenced_by, []).map { |rb_attrs| referenced_by_attr(rb_attrs) }
+        related_hash[:preceding] = related_attrs.fetch(:preceding, []).map { |rtp_attrs| related_title_attrs(rtp_attrs) }
+        related_hash[:succeeding] = related_attrs.fetch(:succeeding, []).map { |rts_attrs| related_title_attrs(rts_attrs) }
         DescriptiveFieldSets::Related.new(related_hash)
       end
 
@@ -106,6 +108,10 @@ module Curator
 
       def referenced_by_attr(json_attrs = {})
         DescriptiveFieldSets::ReferencedBy.new(json_attrs)
+      end
+
+      def related_title_attrs(json_attrs = {})
+        DescriptiveFieldSets::RelatedTitle.new(json_attrs)
       end
     end
   end

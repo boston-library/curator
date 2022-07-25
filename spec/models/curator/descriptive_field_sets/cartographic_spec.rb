@@ -8,7 +8,7 @@ RSpec.describe Curator::DescriptiveFieldSets::Cartographic, type: :model do
   it_behaves_like 'field_set_base'
 
   describe 'attributes' do
-    it { is_expected.to respond_to(:scale, :projection) }
+    it { is_expected.to respond_to(:scale, :projection).with(0).arguments }
 
     describe 'attr_json settings' do
       let(:scale_type) { described_class.attr_json_registry.fetch(:scale, nil)&.type }

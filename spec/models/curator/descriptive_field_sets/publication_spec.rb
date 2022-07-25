@@ -8,8 +8,9 @@ RSpec.describe Curator::DescriptiveFieldSets::Publication, type: :model do
   it_behaves_like 'field_set_base'
 
   describe 'attributes' do
-    let(:fields) { %i(edition_name edition_number volume issue_number) }
-    it { is_expected.to respond_to(*fields) }
+    let!(:fields) { %i(edition_name edition_number volume issue_number) }
+
+    it { is_expected.to respond_to(*fields).with(0).arguments }
 
     describe 'attr_json settings' do
       let(:field_types) { fields.map { |field| described_class.attr_json_registry.fetch(field, nil)&.type } }

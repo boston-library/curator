@@ -8,7 +8,7 @@ RSpec.describe Curator::DescriptiveFieldSets::Subject, type: :model do
   it_behaves_like 'field_set_base'
 
   describe 'attributes' do
-    it { is_expected.to respond_to(:titles, :temporals, :dates) }
+    it { is_expected.to respond_to(:titles, :temporals, :dates).with(0).arguments }
 
     describe 'attr_json settings' do
       let(:titles_attr_type) { described_class.attr_json_registry.fetch(:titles, nil)&.type }

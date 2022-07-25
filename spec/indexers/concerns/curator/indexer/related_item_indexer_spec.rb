@@ -47,6 +47,14 @@ RSpec.describe Curator::Indexer::RelatedItemIndexer do
       expect(indexed['related_item_constituent_tsim']).to eq [descriptive.related.constituent]
     end
 
+    it 'sets the related_item_preceding_ssm field' do
+      expect(indexed['related_item_preceding_ssm'].first).to eq descriptive.related.preceding.first.to_json
+    end
+
+    it 'sets the related_item_succeeding_ssm field' do
+      expect(indexed['related_item_succeeding_ssm'].first).to eq descriptive.related.succeeding.first.to_json
+    end
+
     it 'sets the related_item_isreferencedby field' do
       expect(indexed['related_item_isreferencedby_ssm'].first).to eq descriptive.related.referenced_by.first.to_json
     end
