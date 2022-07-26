@@ -8,7 +8,7 @@ module Curator
 
     # TODO: add indexing for: edit_access_group_ssim
     configure do
-      to_field 'title_info_primary_tsi', obj_extract('name')
+      to_field %w(title_info_primary_tsi title_info_primary_ssi), obj_extract('name')
       to_field 'title_info_primary_ssort' do |record, accumulator|
         accumulator << Curator::Parsers::InputParser.get_proper_title(record.name).last
       end
