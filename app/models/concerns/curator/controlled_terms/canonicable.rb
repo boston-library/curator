@@ -28,15 +28,15 @@ module Curator
           when 'lcgft'
             "show/linked_data/loc/genre/#{id_from_auth}"
           when 'lcsh'
-            "show/linked_data/loc/subjects/#{id_from_auth}"
+            "show/loc/subjects/#{id_from_auth}"
           when 'lctgm', 'gmgpc'
             'search/loc/graphicMaterials'
           when 'naf'
             "show/linked_data/loc/names/#{id_from_auth}"
           when 'tgn'
-            'fetch/linked_data/getty_tgn_ld4l_cache'
+            "geomash/tgn/#{id_from_auth}"
           when 'geonames'
-            'fetch/linked_data/geonames_direct'
+            "geomash/geonames/#{id_from_auth}"
           when 'ulan'
             'fetch/linked_data/getty_ulan_ld4l_cache'
           end
@@ -46,7 +46,7 @@ module Curator
           return {} if !can_query_bpldc?
 
           case authority_code
-          when 'aat', 'ulan', 'tgn', 'geonames'
+          when 'aat', 'ulan'
             { uri: value_uri }
           when 'lctgm', 'gmgpc'
             { q: id_from_auth }
