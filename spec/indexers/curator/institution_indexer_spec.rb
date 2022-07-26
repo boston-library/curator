@@ -8,7 +8,9 @@ RSpec.describe Curator::InstitutionIndexer do
     let(:indexed) { indexer.map_record(institution) }
 
     it 'sets the title fields' do
-      expect(indexed['title_info_primary_tsi']).to eq [institution.name]
+      %w(title_info_primary_tsi title_info_primary_ssi).each do |field|
+        expect(indexed[field]).to eq [institution.name]
+      end
       expect(
         indexed['title_info_primary_ssort']
       ).to eq [Curator::Parsers::InputParser.get_proper_title(institution.name).last]
