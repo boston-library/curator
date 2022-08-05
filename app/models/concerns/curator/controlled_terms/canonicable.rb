@@ -26,13 +26,13 @@ module Curator
           when 'aat'
             'fetch/linked_data/getty_aat_ld4l_cache'
           when 'lcgft'
-            "show/linked_data/loc/genre/#{id_from_auth}"
+            "show/linked_data/loc_direct/genre/#{id_from_auth}"
           when 'lcsh'
-            "show/loc/subjects/#{id_from_auth}"
+            "show/linked_data/loc_direct/subjects/#{id_from_auth}"
           when 'lctgm', 'gmgpc'
             'search/loc/graphicMaterials'
           when 'naf'
-            "show/linked_data/loc/names/#{id_from_auth}"
+            "show/linked_data/loc_direct/names/#{id_from_auth}"
           when 'tgn'
             "geomash/tgn/#{id_from_auth}"
           when 'geonames'
