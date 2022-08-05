@@ -24,7 +24,7 @@ module Curator
 
           case authority_code
           when 'aat'
-            'fetch/linked_data/getty_aat_ld4l_cache'
+            'fetch/getty/aat'
           when 'lcgft'
             "show/linked_data/loc_direct/genre/#{id_from_auth}"
           when 'lcsh'
@@ -34,11 +34,22 @@ module Curator
           when 'naf'
             "show/linked_data/loc_direct/names/#{id_from_auth}"
           when 'tgn'
-            "geomash/tgn/#{id_from_auth}"
+            "tgn/#{id_from_auth}"
           when 'geonames'
-            "geomash/geonames/#{id_from_auth}"
+            "geonames/#{id_from_auth}"
           when 'ulan'
-            'fetch/linked_data/getty_ulan_ld4l_cache'
+            'fetch/getty/ulan'
+          end
+        end
+
+        def bpldc_path_prefix
+          return if !can_query_bpldc?
+
+          case authority_code
+          when 'tgn', 'geonames'
+            '/geomash'
+          else
+            '/qa'
           end
         end
 
@@ -55,20 +66,47 @@ module Curator
           end
         end
 
+        def bpldc_label_json_block
+          return if !can_query_bpldc?
+
+          case authority_code
+          when 'aat', 'ulan'
+            lambda do |json_body|
+              return if json_body.blank?
+
+              results = json_body.dig('results', 'bindings')
+
+              return if results.blank? || !results.is_a?(Array)
+
+              label_results = results.select { |r| r.dig('Predicate', 'value') == 'http://www.w3.org/2000/01/rdf-schema#label' && r.dig('Object', 'xml:lang') == 'en' }
+
+              return if label_results.blank?
+
+              label_results.first&.dig('Object', 'value')
+            end
+          when 'tgn', 'geonames'
+            lambda do |json_body|
+              return if json_body.blank?
+
+              json_body.dig('non_hier_geo', 'value') || json_body.fetch('hier_geo', {}).values.first
+            end
+          else
+            lambda do |json_body|
+              return if json_body.blank?
+
+              el = json_body.is_a?(Array) ? json_body.first : json_body
+
+              return el['label'].join if el['label'].is_a?(Array)
+
+              el['label']
+            end
+          end
+        end
+
         def fetch_canonical_label
           return if bpldc_query_path.blank?
 
-          label_json_block = lambda do |json_body|
-            return if json_body.blank?
-
-            el = json_body.is_a?(Array) ? json_body.first : json_body
-
-            return el['label'].join if el['label'].is_a?(Array)
-
-            el['label']
-          end
-
-          self.label = ControlledTerms::AuthorityService.call(path: bpldc_query_path, path_prefix: '/qa', query: bpldc_query, &label_json_block)
+          self.label = ControlledTerms::AuthorityService.call(path: bpldc_query_path, path_prefix: bpldc_path_prefix, query: bpldc_query, &bpldc_label_json_block)
         end
       end
     end
