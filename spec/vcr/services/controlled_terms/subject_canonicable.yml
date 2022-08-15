@@ -44,4 +44,60 @@ http_interactions:
         Maria, 2017"],"http://id.loc.gov/vocabulary/identifiers/lccn":["sh2018001243"],"http://www.loc.gov/mads/rdf/v1#hasBroaderAuthority":["http://id.loc.gov/authorities/subjects/sh85063195"],"http://www.w3.org/2004/02/skos/core#altLabel":["Maria,
         Hurricane, 2017"],"http://id.loc.gov/ontologies/bflc/subjectOf":["http://id.loc.gov/resources/works/20797367","http://id.loc.gov/resources/works/20887869","http://id.loc.gov/resources/works/21294439","http://id.loc.gov/resources/works/20989074","http://id.loc.gov/resources/works/21075387","http://id.loc.gov/resources/works/20925565","http://id.loc.gov/resources/works/20665304","http://id.loc.gov/resources/works/21201503","http://id.loc.gov/resources/works/21431140","http://id.loc.gov/resources/works/21066972","http://id.loc.gov/resources/works/20855959","http://id.loc.gov/resources/works/21230274","http://id.loc.gov/resources/works/20855950","http://id.loc.gov/resources/works/21536217"],"http://www.loc.gov/mads/rdf/v1#isMemberOfMADSCollection":["http://id.loc.gov/authorities/subjects/collection_LCSH_General","http://id.loc.gov/authorities/subjects/collection_LCSHAuthorizedHeadings"],"http://www.w3.org/2004/02/skos/core#closeMatch":["http://www.wikidata.org/entity/Q40178187","http://id.worldcat.org/fast/2002745"]}}'
   recorded_at: Wed, 16 Sep 2020 20:39:37 GMT
-recorded_with: VCR 6.0.0
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/qa/show/linked_data/loc_direct/subjects/sh2018001243
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.1.0
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"b31975b8d98d7983e423be38a97b7456"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - ef204fca-c38c-43f5-ac33-9c2524fca45f
+      X-Runtime:
+      - '1.536880'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"uri":"http://id.loc.gov/authorities/subjects/sh2018001243","id":"sh2018001243","label":["Hurricane
+        Maria, 2017"],"altlabel":["Maria, Hurricane, 2017"],"broader":["http://id.loc.gov/authorities/subjects/sh85063195"],"sameas":["info:lc/authorities/sh2018001243","http://id.loc.gov/authorities/sh2018001243#concept"],"predicates":{"http://www.w3.org/1999/02/22-rdf-syntax-ns#type":["http://www.loc.gov/mads/rdf/v1#Topic","http://www.loc.gov/mads/rdf/v1#Authority","http://www.w3.org/2004/02/skos/core#Concept"],"http://www.loc.gov/mads/rdf/v1#authoritativeLabel":["Hurricane
+        Maria, 2017"],"http://www.loc.gov/mads/rdf/v1#hasCloseExternalAuthority":["http://www.wikidata.org/entity/Q40178187","http://id.worldcat.org/fast/2002745"],"http://www.loc.gov/mads/rdf/v1#hasBroaderAuthority":["http://id.loc.gov/authorities/subjects/sh85063195"],"http://www.loc.gov/mads/rdf/v1#isMemberOfMADSCollection":["http://id.loc.gov/authorities/subjects/collection_LCSHAuthorizedHeadings","http://id.loc.gov/authorities/subjects/collection_LCSH_General"],"http://id.loc.gov/ontologies/bflc/subjectOf":["http://id.loc.gov/resources/works/20989074","http://id.loc.gov/resources/works/22167523","http://id.loc.gov/resources/works/21230274","http://id.loc.gov/resources/works/22154046","http://id.loc.gov/resources/works/22154039","http://id.loc.gov/resources/works/22147858","http://id.loc.gov/resources/works/21075387","http://id.loc.gov/resources/works/21767508","http://id.loc.gov/resources/works/22147987","http://id.loc.gov/resources/works/22180135","http://id.loc.gov/resources/works/22400001","http://id.loc.gov/resources/works/22156820","http://id.loc.gov/resources/works/22167778","http://id.loc.gov/resources/works/21857228","http://id.loc.gov/resources/works/22118098","http://id.loc.gov/resources/works/22125501","http://id.loc.gov/resources/works/21857213","http://id.loc.gov/resources/works/22452875","http://id.loc.gov/resources/works/21857218","http://id.loc.gov/resources/works/21857223","http://id.loc.gov/resources/works/20925565","http://id.loc.gov/resources/works/21431140","http://id.loc.gov/resources/works/20797367","http://id.loc.gov/resources/works/22146592","http://id.loc.gov/resources/works/20665304","http://id.loc.gov/resources/works/22331413","http://id.loc.gov/resources/works/22163275","http://id.loc.gov/resources/works/20470348","http://id.loc.gov/resources/works/22154168","http://id.loc.gov/resources/works/20855959","http://id.loc.gov/resources/works/20834046","http://id.loc.gov/resources/works/22158230","http://id.loc.gov/resources/works/22154033","http://id.loc.gov/resources/works/22167526","http://id.loc.gov/resources/works/22074697","http://id.loc.gov/resources/works/20855950","http://id.loc.gov/resources/works/22147896","http://id.loc.gov/resources/works/21201503","http://id.loc.gov/resources/works/20887869","http://id.loc.gov/resources/works/21294439","http://id.loc.gov/resources/works/21066972","http://id.loc.gov/resources/works/21536217","http://id.loc.gov/resources/works/22120648","http://id.loc.gov/resources/works/21482282","http://id.loc.gov/resources/works/21451074"],"http://www.loc.gov/mads/rdf/v1#isMemberOfMADSScheme":["http://id.loc.gov/authorities/subjects"],"http://id.loc.gov/vocabulary/identifiers/lccn":["sh2018001243"],"http://www.w3.org/2002/07/owl#sameAs":["info:lc/authorities/sh2018001243","http://id.loc.gov/authorities/sh2018001243#concept"],"http://www.w3.org/2004/02/skos/core#prefLabel":["Hurricane
+        Maria, 2017"],"http://www.w3.org/2004/02/skos/core#broader":["http://id.loc.gov/authorities/subjects/sh85063195"],"http://www.w3.org/2004/02/skos/core#closeMatch":["http://www.wikidata.org/entity/Q40178187","http://id.worldcat.org/fast/2002745"],"http://www.w3.org/2004/02/skos/core#inScheme":["http://id.loc.gov/authorities/subjects"],"http://www.w3.org/2004/02/skos/core#altLabel":["Maria,
+        Hurricane, 2017"]}}'
+  recorded_at: Thu, 11 Aug 2022 18:01:20 GMT
+recorded_with: VCR 6.1.0

@@ -43,4 +43,60 @@ http_interactions:
         Byron, 1829-1891"],"http://www.loc.gov/mads/rdf/v1#hasCloseExternalAuthority":["http://www.wikidata.org/entity/Q5004456","http://id.worldcat.org/fast/385888"],"http://www.loc.gov/mads/rdf/v1#hasExactExternalAuthority":["http://viaf.org/viaf/sourceID/LC%7Cn++97003077#skos:Concept"],"http://www.w3.org/2004/02/skos/core#inScheme":["http://id.loc.gov/authorities/names"],"http://www.loc.gov/mads/rdf/v1#identifiesRWO":["http://id.loc.gov/rwo/agents/n97003077"],"http://www.w3.org/2004/02/skos/core#closeMatch":["http://www.wikidata.org/entity/Q5004456","http://id.worldcat.org/fast/385888"],"http://www.w3.org/2004/02/skos/core#prefLabel":["Reed,
         Byron, 1829-1891"],"http://id.loc.gov/vocabulary/identifiers/lccn":["n 97003077"],"http://www.loc.gov/mads/rdf/v1#isMemberOfMADSCollection":["http://id.loc.gov/authorities/names/collection_LCNAF","http://id.loc.gov/authorities/names/collection_NamesAuthorizedHeadings"],"http://www.w3.org/2004/02/skos/core#exactMatch":["http://viaf.org/viaf/sourceID/LC%7Cn++97003077#skos:Concept"],"http://www.loc.gov/mads/rdf/v1#isMemberOfMADSScheme":["http://id.loc.gov/authorities/names"]}}'
   recorded_at: Wed, 16 Sep 2020 20:28:25 GMT
-recorded_with: VCR 6.0.0
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/qa/show/linked_data/loc_direct/names/n97003077
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.1.0
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"9b7b3255a8050fc9f935ea2e6d18e351"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 16f75cd3-62f5-42ed-8e76-10809ddde4dd
+      X-Runtime:
+      - '6.247440'
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"uri":"http://id.loc.gov/authorities/names/n97003077","id":"n 97003077","label":["Reed,
+        Byron, 1829-1891"],"sameas":["http://viaf.org/viaf/sourceID/LC%7Cn++97003077#skos:Concept"],"predicates":{"http://www.w3.org/1999/02/22-rdf-syntax-ns#type":["http://www.loc.gov/mads/rdf/v1#PersonalName","http://www.loc.gov/mads/rdf/v1#Authority","http://www.w3.org/2004/02/skos/core#Concept"],"http://www.loc.gov/mads/rdf/v1#authoritativeLabel":["Reed,
+        Byron, 1829-1891"],"http://www.loc.gov/mads/rdf/v1#hasCloseExternalAuthority":["http://www.wikidata.org/entity/Q5004456","http://id.worldcat.org/fast/385888"],"http://www.loc.gov/mads/rdf/v1#isMemberOfMADSCollection":["http://id.loc.gov/authorities/names/collection_NamesAuthorizedHeadings","http://id.loc.gov/authorities/names/collection_LCNAF"],"http://www.loc.gov/mads/rdf/v1#hasExactExternalAuthority":["http://viaf.org/viaf/sourceID/LC%7Cn++97003077#skos:Concept"],"http://www.loc.gov/mads/rdf/v1#identifiesRWO":["http://id.loc.gov/rwo/agents/n97003077"],"http://www.loc.gov/mads/rdf/v1#isMemberOfMADSScheme":["http://id.loc.gov/authorities/names"],"http://id.loc.gov/vocabulary/identifiers/lccn":["n
+        97003077"],"http://www.w3.org/2004/02/skos/core#prefLabel":["Reed, Byron,
+        1829-1891"],"http://www.w3.org/2004/02/skos/core#exactMatch":["http://viaf.org/viaf/sourceID/LC%7Cn++97003077#skos:Concept"],"http://www.w3.org/2004/02/skos/core#closeMatch":["http://www.wikidata.org/entity/Q5004456","http://id.worldcat.org/fast/385888"],"http://www.w3.org/2004/02/skos/core#inScheme":["http://id.loc.gov/authorities/names"]}}'
+  recorded_at: Thu, 11 Aug 2022 18:08:11 GMT
+recorded_with: VCR 6.1.0
