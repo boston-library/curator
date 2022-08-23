@@ -37,7 +37,7 @@
           {
             "name": {
               "name_type": "corporate",
-              "label": "Fowler u0026 Downs"
+              "label": "Fowler \u0026 Downs"
             },
             "role": {
               "label": "Creator",
@@ -68,7 +68,7 @@
         ],
         "digital_origin": "reformatted_digital",
         "place_of_publication": "Boston",
-        "publisher": "Hughes u0026 Bailey,",
+        "publisher": "Hughes \u0026 Bailey,",
         "date": {
           "created": "1916"
         },
@@ -85,7 +85,7 @@
             "label": "Includes list of businesses and 46 illustrations of buildings."
           },
           {
-            "label": "Fowler u0026 Downs del.",
+            "label": "Fowler \u0026 Downs del.",
             "type": "statement of responsibility"
           }
         ],
