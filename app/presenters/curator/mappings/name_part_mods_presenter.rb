@@ -9,7 +9,7 @@ module Curator
     attr_reader :label, :is_date
 
     def initialize(label, is_date = false)
-      @label = label
+      @label = label.to_s.encode('utf-8')
       @is_date = is_date
     end
 

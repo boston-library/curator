@@ -23,12 +23,12 @@ end
 group :development, :test do
   gem 'awesome_print', '~> 1.9'
   gem 'azure-storage-blob', '~> 2.0', require: false
-  gem 'dotenv-rails', '~> 2.7'
+  gem 'dotenv-rails', '~> 2.8'
   gem 'factory_bot_rails', '~> 6.2'
-  gem 'faker', '~> 2.19'
+  gem 'faker', '~> 2.22'
   gem 'pry', '~> 0.13.1'
   gem 'pry-rails'
-  gem 'puma', '~> 5.6.4'
+  gem 'puma', '~> 5.6.5'
   gem 'rubocop', '~> 0.75.1', require: false
   gem 'rubocop-performance', '~> 1.5', require: false
   gem 'rubocop-rails', '~> 2.4.2', require: false
@@ -41,6 +41,6 @@ group :test do
   gem 'database_cleaner-active_record', '~> 2'
   gem 'rspec-rails', '~> 5.1'
   gem 'shoulda-matchers', '~> 5.1'
-  gem 'vcr', '~> 6.0'
-  gem 'webmock', '~> 3.14'
+  gem 'vcr', '~> 6.1'
+  gem 'webmock', '~> 3.18'
 end

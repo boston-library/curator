@@ -171,7 +171,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
           let(:json_names) { desc_json['name_roles'].map { |nr| nr['name'] } }
           let(:json_roles) { desc_json['name_roles'].map { |nr| nr['role'] } }
           it 'sets the correct number of names and roles' do
-            expect(name_roles.count).to eq 2
+            expect(name_roles.count).to be >= 2
           end
 
           it 'sets the name data' do

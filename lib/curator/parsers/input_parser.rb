@@ -49,15 +49,20 @@ module Curator
         return [input_string] if !input_string.match?(Curator::Parsers::Constants::CORP_NAME_INPUT_MATCHER)
 
         name_parts_array = []
-        in_str = input_string
+        in_str = input_string.dup
 
-        while in_str =~ Curator::Parsers::Constants::CORP_NAME_INPUT_MATCHER
+        # Changed to use #match? rater than =~ since it retuns true/false rather than Integer/nil
+        while in_str.match?(Curator::Parsers::Constants::CORP_NAME_INPUT_MATCHER)
           snip = Curator::Parsers::Constants::CORP_NAME_INPUT_MATCHER.match(in_str).post_match
           sub_part = in_str.gsub(snip, '')
           name_parts_array << sub_part.gsub(/\.\z/, '').strip
           in_str = snip
         end
-
+        # Add the last part of the in_str(with rmoved periods and stripped whitespace) if it isn't already present in the name_parts_array
+        # Added this due to corporate names like "United States. Work Projects Administration" only returning [United States]
+        # This last part was missing from the original bplmodels code https://github.com/boston-library/bplmodels/blob/e780be71db82b8b39278973ff9015cc7df7208a9/lib/bplmodels/datastream_input_funcs.rb#L42
+        final_name_part = in_str.gsub(/\.\z/, '').strip
+        name_parts_array << final_name_part if final_name_part.present? && name_parts_array.exclude?(final_name_part)
         name_parts_array
       end
 
