@@ -50,6 +50,8 @@ module Curator
         json_attr_update!
 
         %w(physical_location license rights_statement).each do |term|
+          next if is_attr_empty?(term)
+
           term_json = send(term, @json_attrs)
           @record.public_send("#{term}=", term_json) if term_json && @record.public_send("#{term}_id") != term_json.id
         end
