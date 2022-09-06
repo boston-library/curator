@@ -30,7 +30,7 @@ Currently all data models have been created with basic routes and json serialize
     * `Postgresql ~9.6(v 12 stable is recommended)`
     * `Redis`
     * `Imagemagick`
-    * `Ruby  >= 2.6.8`
+    * `Ruby  >= 2.6.10`
     * [Docker](https://docs.docker.com/)
 
 2. Clone Project
@@ -44,7 +44,7 @@ Currently all data models have been created with basic routes and json serialize
 6. `cd` into the `spec/internal` directory and:
     * run `$ rails curator:setup` -- this will run the database setup scripts for you
     * run `$ rails generate curator:install` (optional) -- this will add an initializer for customizing `Curator.config` settings
-   
+
 
 ## Running (for development only)
 Curator requires several additional services:
