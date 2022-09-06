@@ -19,7 +19,7 @@ Currently all data models have been created with basic routes and json serialize
   - ~~Build JSON/XML Serializer~~
     - Refactor to be less complex
     - Use `AdapterBase` class to build extended functionality for the following
-      * Mods XML
+      * ~~Mods XML~~
       * Dublic Core XML
       * Marc XML
       * RDF
