@@ -60,5 +60,11 @@ module Curator
 
       image_service
     end
+
+    def invalidate_iiif_manifest
+    end
+
+    def invalidate_iiif_cache
+    end
   end
 end
