@@ -21,6 +21,8 @@ module Curator
       has_one_attached :text_coordinates_access
     end
 
+    after_destroy_commit :invalidate_iiif_cache
+
     has_paper_trail
 
     def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
@@ -61,10 +63,8 @@ module Curator
       image_service
     end
 
-    def invalidate_iiif_manifest
-    end
-
     def invalidate_iiif_cache
+      Curator::Filestreams::IIIFCacheInvalidateJob.set(wait: s.seconds).perform_later(ark_id)
     end
   end
 end

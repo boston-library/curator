@@ -25,6 +25,18 @@ module Curator::Exceptions
     end
   end
 
+  class IIIFServerUnavailable < CuratorError
+    def message
+      'IIIF Server is not available'
+    end
+  end
+
+  class IIIFManifestEndpointUnavailable < CuratorError
+    def message
+      'IIIF Manifest Endpoint is not available'
+    end
+  end
+
   # NOTE: do not inherit sub classes from this
   class RemoteServiceError < CuratorError
     attr_reader :json_response, :code

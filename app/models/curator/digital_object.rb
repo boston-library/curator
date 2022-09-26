@@ -47,6 +47,8 @@ module Curator
       has_many :video_file_sets, class_name: 'Curator::Filestreams::Video'
     end
 
+    after_destroy_commit :invalidate_iiif_manifest
+
     def all_file_sets_complete?
       return false if file_sets.blank?
 
@@ -165,6 +167,10 @@ module Curator
 
     def add_admin_set_to_members
       collection_members.build(collection: admin_set) if admin_set.present?
+    end
+
+    def invalidate_iiif_manifest
+      Curator::IIIFManifestInvalidateJob.set(wait: 2.seconds).perform_later(ark_id)
     end
   end
 end

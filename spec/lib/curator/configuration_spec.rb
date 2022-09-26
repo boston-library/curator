@@ -71,7 +71,9 @@ RSpec.describe Curator::Configuration do
     describe 'iiif_server_credentials' do
       let(:iiif_server_credentials) { subject.iiif_server_credentials }
       it 'returns a hash of values' do
-        
+        %i(username secret).each do |k|
+          expect(iiif_server_credentials[k]).to be_a_kind_of(String)
+        end
       end
     end
   end

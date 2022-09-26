@@ -68,6 +68,7 @@ module Curator
         inflect.singular 'metadata', 'metadata'
         inflect.acronym '300'
         inflect.acronym '800'
+        inflect.acronym 'IIIF'
       end
     end
 

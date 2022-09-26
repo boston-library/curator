@@ -1,0 +1,45 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://iiif-dc3dev.bpl.org/tasks
+    body:
+      encoding: UTF-8
+      string: '{"verb":"PurgeItemFromCache","identifier":"bpl-dev:987654321"}'
+    headers:
+      Authorization:
+      - Basic YnBsaWlpZjpDd3dvdG9RVTVlVk93VlY5b2RJNA==
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - iiif-dc3dev.bpl.org
+      User-Agent:
+      - http.rb/5.1.0
+  response:
+    status:
+      code: 202
+      message: Accepted
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Mon, 26 Sep 2022 19:58:31 GMT
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Powered-By:
+      - Cantaloupe/5.0.2
+      Cache-Control:
+      - no-cache
+      Location:
+      - https://iiif-dc3dev.bpl.org/tasks/625373f2-6842-4c30-b552-bfc768e8a9a8
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+  recorded_at: Mon, 26 Sep 2022 19:58:31 GMT
+recorded_with: VCR 6.1.0

@@ -5,22 +5,23 @@ module Curator
     include Curator::Services::RemoteService
 
     self.base_url = Curator.config.iiif_server_url
-    self.default_headers = { accept: 'application/json', content_type: 'application/json' }
+    self.default_headers = { content_type: 'application/json' }
     self.timeout_options = Curator.config.default_remote_service_timeout_opts
 
     attr_reader :ark_id
 
+    # @param Curator::Filestreams::Image#ark_id [String]
     def initialize(ark_id)
       @ark_id = ark_id
     end
 
     def call
       begin
-        iiif_json = self.class.with_client do |client|
+        iiif_response = self.class.with_client do |client|
           call_iiif_api(client)
         end
 
-        return iiif_json
+        return iiif_response
       rescue HTTP::Error => e
         base_message = 'HTTP Error Occurred Calling IIIF Server'
         json_reason = { 'reason' => e.message }.as_json
@@ -72,11 +73,10 @@ module Curator
       }
 
       resp = client.basic_auth(auth_payload).headers(self.class.default_headers).post('/tasks', json: iiif_payload).flush
-      json_response = normalize_response!(resp.body.to_s)
 
-      raise Curator::Exceptions::RemoteServiceError.new('Failed to trigger cache purge in iiif server!', json_response, resp.status) if !resp.status.success?
+      raise Curator::Exceptions::RemoteServiceError.new('Failed to trigger cache purge in iiif server!', { response: resp.body.to_s }, resp.status) if [202, 204].exclude?(resp.status)
 
-      json_response
+      { location: resp.headers['Location'] }
     end
   end
 end
