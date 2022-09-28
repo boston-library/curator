@@ -22,6 +22,7 @@ module Curator
     end
 
     after_destroy_commit :invalidate_iiif_cache
+    after_update_commit :invalidate_iiif_manifest, if: :saved_change_to_position?
 
     has_paper_trail
 
@@ -48,9 +49,9 @@ module Curator
     def derivative_source_changed?
       return false if derivative_source.blank?
 
-      return image_primary_blob.changed? if derivative_source.name == 'image_primary'
+      return image_primary.changed? if derivative_source.name == 'image_primary'
 
-      image_service_blob.changed?
+      image_service.changed?
     end
 
     protected
@@ -63,8 +64,12 @@ module Curator
       image_service
     end
 
+    def invalidate_iiif_manifest
+      Curator::IIIFManifestInvalidateJob.set(wait: 3.seconds).perform_later(file_set_of.ark_id)
+    end
+
     def invalidate_iiif_cache
-      Curator::Filestreams::IIIFCacheInvalidateJob.set(wait: s.seconds).perform_later(ark_id)
+      Curator::Filestreams::IIIFCacheInvalidateJob.set(wait: 2.seconds).perform_later(ark_id)
     end
   end
 end
