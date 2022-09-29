@@ -95,6 +95,8 @@ module Curator
       autoload :AuthorityApiUnavailable, File.expand_path('./exceptions/remote_service_errors.rb', __dir__)
       autoload :AviProcessorApiUnavailable, File.expand_path('./exceptions/remote_service_errors.rb', __dir__)
       autoload :RemoteServiceError, File.expand_path('./exceptions/remote_service_errors.rb', __dir__)
+      autoload :IIIFServerUnavailable, File.expand_path('./exceptions/remote_service_errors.rb', __dir__)
+      autoload :IIIFManifestEndpointUnavailable, File.expand_path('./exceptions/remote_service_errors.rb', __dir__)
       # Indexer Errors
       autoload :IndexerError, File.expand_path('./exceptions/indexer_errors.rb', __dir__)
       autoload :IndexerBadRequestError, File.expand_path('./exceptions/indexer_errors.rb', __dir__)

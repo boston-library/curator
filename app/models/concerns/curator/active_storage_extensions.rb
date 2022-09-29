@@ -2,7 +2,7 @@
 
 module Curator
   module ActiveStorageExtensions
-    module Attachment
+    module AttachmentUploaded
       extend ActiveSupport::Concern
 
       def uploaded?
@@ -12,13 +12,23 @@ module Curator
       end
     end
 
-    module Blob
+    module BlobUploaded
       extend ActiveSupport::Concern
 
       def uploaded?
         return false if new_record? || key.blank?
 
         service.exist?(key)
+      end
+    end
+
+    module AttachedOneUploaded
+      extend ActiveSupport::Concern
+
+      def uploaded?
+        return false if blank?
+
+        attachment.uploaded?
       end
     end
   end

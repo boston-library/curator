@@ -25,6 +25,7 @@ module Curator
               uniqueness: { scope: :id }, unless: -> { contained_by.blank? }
 
     before_create :add_admin_set_to_members
+    after_destroy_commit :invalidate_iiif_manifest
 
     belongs_to :admin_set, inverse_of: :admin_set_objects, class_name: 'Curator::Collection'
     belongs_to :contained_by, inverse_of: :container_for, class_name: 'Curator::DigitalObject', optional: true
@@ -45,12 +46,6 @@ module Curator
       has_many :metadata_file_sets, class_name: 'Curator::Filestreams::Metadata'
       has_many :text_file_sets, class_name: 'Curator::Filestreams::Text'
       has_many :video_file_sets, class_name: 'Curator::Filestreams::Video'
-    end
-
-    def all_file_sets_complete?
-      return false if file_sets.blank?
-
-      Curator.metastreams.workflow_class.select(:workflowable_type, :workflowable_id, :processing_state).where(workflowable_type: 'Curator::Filestreams::FileSet', workflowable_id: file_set_ids).all?(&:complete?)
     end
 
     has_many :container_for, inverse_of: :contained_by, class_name: 'Curator::DigitalObject',
@@ -76,6 +71,12 @@ module Curator
       has_many :metadata_file_set_members, class_name: 'Curator::Filestreams::Metadata'
       has_many :text_file_set_members, class_name: 'Curator::Filestreams::Text'
       has_many :video_file_set_members, class_name: 'Curator::Filestreams::Video'
+    end
+
+    def all_file_sets_complete?
+      return false if file_sets.blank?
+
+      Curator.metastreams.workflow_class.select(:workflowable_type, :workflowable_id, :processing_state).where(workflowable_type: 'Curator::Filestreams::FileSet', workflowable_id: file_set_ids).all?(&:complete?)
     end
 
     def ark_params
@@ -165,6 +166,10 @@ module Curator
 
     def add_admin_set_to_members
       collection_members.build(collection: admin_set) if admin_set.present?
+    end
+
+    def invalidate_iiif_manifest
+      Curator::IIIFManifestInvalidateJob.set(wait: 2.seconds).perform_later(ark_id)
     end
   end
 end

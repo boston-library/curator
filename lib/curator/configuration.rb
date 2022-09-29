@@ -17,6 +17,24 @@ module Curator
       @avi_processor_api_url || ENV['AVI_PROCESSOR_API_URL']
     end
 
+    attr_writer :iiif_manifest_url # NOTE: this hits the Commonwealth-public-interface url and NOT the cantaloupe server url
+    def iiif_manifest_url
+      @iiif_manifest_url || ENV['IIIF_MANIFEST_URL']
+    end
+
+    attr_writer :iiif_server_url # NOTE: cantaloupe server url
+    def iiif_server_url
+      @iiif_server_url || ENV['IIIF_SERVER_URL']
+    end
+
+    attr_writer :iiif_server_credentials # NOTE: Cantaloupe server credentials
+    def iiif_server_credentials
+      @iiif_server_credentials || {
+        username: ENV['IIIF_SERVER_USER'],
+        secret: ENV['IIIF_SERVER_SECRET']
+      }.freeze
+    end
+
     attr_writer :ingest_source_directory
     def ingest_source_directory
       @ingest_source_directory || ENV['INGEST_SOURCE_DIRECTORY']

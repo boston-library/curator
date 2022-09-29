@@ -1,33 +1,39 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require_relative './shared/jobs_shared'
+require_relative '../shared/jobs_shared'
 
-RSpec.describe Curator::ArkDestroyJob, type: :job do
+RSpec.describe Curator::Filestreams::IIIFCacheInvalidateJob, type: :job do
   describe 'expected job behavior' do
     subject { described_class }
 
     let(:job_args) { 'bpl-dev:987654321' }
-    let(:expected_queue) { 'arks' }
+    let(:expected_queue) { 'default' }
 
     it_behaves_like 'queueable'
 
     describe '#perform_later' do
-      let(:ark_manager_destroy_url) { "#{Curator.config.ark_manager_api_url}/api/v2/arks/#{job_args}" }
+      let(:iiif_server_url) { "#{Curator.config.iiif_server_url}/tasks" }
+      let(:body) do
+        {
+          verb: 'PurgeItemFromCache',
+          identifier: job_args
+        }
+      end
 
       around(:each) do |spec|
         ActiveJob::Base.queue_adapter.perform_enqueued_at_jobs = true
         ActiveJob::Base.queue_adapter.perform_enqueued_jobs = true
-        VCR.use_cassette('jobs/ark_delete_job') do
+        VCR.use_cassette('jobs/filestreams/iiif_cache_invalidate') do
           spec.run
         end
         ActiveJob::Base.queue_adapter.perform_enqueued_at_jobs = false
         ActiveJob::Base.queue_adapter.perform_enqueued_jobs = false
       end
 
-      it 'sends a delete request to the ark manager service' do
+      it 'sends a request to invalidate the IIIF cache' do
         subject.perform_later(job_args)
-        expect(a_request(:delete, ark_manager_destroy_url)).to have_been_made.at_least_once
+        expect(a_request(:post, iiif_server_url).with(body: body)).to have_been_made.at_least_once
       end
     end
   end

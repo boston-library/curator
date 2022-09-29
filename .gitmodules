@@ -1,4 +1,4 @@
 [submodule "spec/internal/solr/conf"]
 	path = spec/internal/solr/conf
 	url = https://github.com/boston-library/solr-core-conf.git
-	branch = dc3
+	branch = master

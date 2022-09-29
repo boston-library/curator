@@ -57,7 +57,7 @@ Curator requires several additional services:
 
 To set up these services:
 1. Add Environment variables. Make sure the URLs for these services are set as `ENV` variables (`AUTHORITY_API_URL`, `SOLR_URL`, `AVI_PROCESSOR_API_URL`, `INGEST_SOURCE_DIRECTORY`). You can set
- these using the `spec/internal/.env.#{RAILS_ENV}` files. You are also required to create an `.env` and set the variables listed in the `.env.docker.sample` file in the root of curator. These are required to start the docker containers
+ these using the `spec/internal/.env.#{RAILS_ENV}.sample` files. For development copy/rename the `spec/internal/.env.development.sample` to `spec/internal/.env` OR `spec/internal/.env.development`.  You are also required to create an `.env` and set the variables listed in the `.env.docker.sample` file in the root of curator. These are required to start the docker containers
 2. Start the docker containers with `docker-compose up` This will run docker images of the `ark_manager`, `bpldc_authority_api`, `azurite` as well as internal shared `postgres` and `redis` containers. On start the `ark-manager` and `bpldc_authority_api` apps will run `bundle exec rails db:prepare` which will wither run pending migrations OR run `rails db:setup`. NOTE the postgres container is NOT exposed to the host machine so you will need to run a local instance of postgres for the curator app itself.
 3. Install the [Azure Cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) on your local machine for your given operating system. NOTE.If installing on linux apt/deb DO NOT use the install with one command option as it appears broken in Ubuntu 16.04. Follow the step by step guide instead.
 4. Setup azure containers on azurite instance.
