@@ -25,6 +25,12 @@ module Curator
         acc << true if rec.respond_to?(:text_coordinates_access_attachment) && rec.text_coordinates_access_attachment.present?
       end
       each_record do |record, context|
+        if record.file_set_of.administrative.destination_site.include?('newspapers')
+          issue_title = record.file_set_of.descriptive.title.primary.label
+          page_title = record.pagination['page_label'] || "Page #{record.position + 1}"
+          context.output_hash['title_ss'] = "#{issue_title}: #{page_title}"
+        end
+
         next unless record.respond_to?(:text_plain_attachment) && record.text_plain_attachment.present?
 
         context.output_hash['has_ocr_text_bsi'] = true
