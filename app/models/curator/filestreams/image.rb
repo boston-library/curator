@@ -40,6 +40,21 @@ module Curator
 
       payload = super
       payload[:file_stream][:original_ingest_file_path] = derivative_source.metadata['ingest_filepath']
+      if derivative_source.name == 'image_primary' && image_service.uploaded?
+        payload[:file_stream][:image_primary_data] = {
+          derivatives: {
+            id: image_service.key,
+            storage: "#{image_service.service_name}_store",
+            metadata: {
+              filename: image_service.filename.to_s,
+              md5: image_service.checksum,
+              size: image_service.byte_size,
+              mime_type: image_service.content_type
+            }
+          }
+        }
+      end
+
       return payload if !text_coordinates_primary.uploaded?
 
       payload[:file_stream][:mets_alto_stream_attributes] = { original_ingest_file_path: text_coordinates_primary.metadata['ingest_filepath'] }
