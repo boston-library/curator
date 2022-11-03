@@ -52,7 +52,7 @@ module Curator
             mime_type: image_service.content_type
           }
         }
-        payload[:file_streams][:image_primary_data] = image_primary_data
+        payload[:file_stream][:image_primary_data] = image_primary_data
       end
 
       return payload if !text_coordinates_primary.uploaded?
