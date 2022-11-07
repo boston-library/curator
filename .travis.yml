@@ -27,7 +27,7 @@ before_script:
   - bundle exec rails app:curator:setup
 
 rvm:
-  - 2.6.10
+  - 2.7.6
 
 env:
   global:
