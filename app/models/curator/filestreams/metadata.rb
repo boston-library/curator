@@ -14,7 +14,7 @@ module Curator
     has_one_attached :metadata_mods
     has_one_attached :metadata_oai
 
-    has_paper_trail
+    has_paper_trail skip: %i(lock_version)
 
     after_update_commit :set_as_exemplary
 

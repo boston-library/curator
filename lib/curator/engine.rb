@@ -56,6 +56,7 @@ module Curator
 
     config.before_initialize do
       Alba.backend = :oj_rails
+      PaperTrail.config.version_limit = 5
       PaperTrail.config.track_associations = true
       PaperTrail.config.has_paper_trail_defaults = { on: %i(update destroy touch) }
       Curator.setup!

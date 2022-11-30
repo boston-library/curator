@@ -14,6 +14,6 @@ module Curator
 
     validates :type, presence: true, inclusion: { in: ControlledTerms.nomenclature_types.collect { |type| "Curator::ControlledTerms::#{type}" } }
 
-    has_paper_trail
+    has_paper_trail ignore: %i(lock_version)
   end
 end

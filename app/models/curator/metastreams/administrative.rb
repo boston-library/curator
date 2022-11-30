@@ -19,7 +19,7 @@ module Curator
 
     validate :validate_destination_site
 
-    has_paper_trail if: proc { |a| [Curator.digital_object_class.name, Curator::Filestreams::FileSet.name].include?(a.administratable_type) }
+    has_paper_trail skip: %i(lock_version), if: proc { |a| [Curator.digital_object_class.name, Curator::Filestreams::FileSet.name].include?(a.administratable_type) }
 
     scope :local_id_finder, -> (oai_header_id) { where.not(oai_header_id: nil).where(oai_header_id: oai_header_id) }
 
