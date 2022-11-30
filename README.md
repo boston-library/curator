@@ -30,7 +30,7 @@ Currently all data models have been created with basic routes and json serialize
     * `Postgresql ~9.6(v 12 stable is recommended)`
     * `Redis`
     * `Imagemagick`
-    * `Ruby  >= 2.6.10`
+    * `Ruby  >= 2.7`
     * [Docker](https://docs.docker.com/)
 
 2. Clone Project
