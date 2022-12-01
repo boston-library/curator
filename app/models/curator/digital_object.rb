@@ -9,7 +9,7 @@ module Curator
     include Curator::Mappings::Exemplary::Object
     include Curator::Indexable
 
-    has_paper_trail
+    has_paper_trail skip: %i(lock_version)
 
     self.curator_indexable_mapper = Curator::DigitalObjectIndexer.new
 

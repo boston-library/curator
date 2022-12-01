@@ -9,7 +9,7 @@ module Curator
     has_one_attached :text_plain, service: :derivatives
     has_one_attached :text_coordinates_primary
 
-    has_paper_trail
+    has_paper_trail skip: %i(lock_version)
 
     def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
       super(required_derivatives)

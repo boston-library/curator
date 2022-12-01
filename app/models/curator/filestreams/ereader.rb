@@ -14,7 +14,7 @@ module Curator
       has_one_attached :ebook_access_daisy
     end
 
-    has_paper_trail
+    has_paper_trail skip: %i(lock_version)
 
     def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
       super(required_derivatives)

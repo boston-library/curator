@@ -18,7 +18,7 @@ module Curator
       has_many :subjects, class_name: 'Curator::ControlledTerms::Subject'
     end
 
-    has_paper_trail
+    has_paper_trail ignore: %i(lock_version)
 
     # code below for fetching canonical name is deprecated
     # authorities are pre-loaded using db/seeds.rb with data from BPLDC Authority API

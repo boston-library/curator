@@ -24,7 +24,7 @@ module Curator
     after_destroy_commit :invalidate_iiif_cache
     after_update_commit :invalidate_iiif_manifest, if: :saved_change_to_position?
 
-    has_paper_trail
+    has_paper_trail skip: %i(lock_version)
 
     def required_derivatives_complete?(required_derivatives = DEFAULT_REQUIRED_DERIVATIVES)
       # return super without image service if image_service if the derivative_source

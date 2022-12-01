@@ -65,7 +65,7 @@ module Curator
       end
     end
 
-    has_paper_trail if: proc { |w| w.is_processable? }
+    has_paper_trail skip: %i(lock_version), if: proc { |w| w.is_processable? }
 
     ## START GUARD CLAUSES
     def is_processable?

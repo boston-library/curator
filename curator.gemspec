@@ -46,8 +46,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'nokogiri', '>= 1.13.8'
   spec.add_dependency 'oj', '~> 3.13'
   spec.add_dependency 'ox', ' ~> 2.14'
-  spec.add_dependency 'paper_trail', '~> 11.1'
-  spec.add_dependency 'paper_trail-association_tracking', '~> 2.1'
+  spec.add_dependency 'paper_trail', '~> 12.3'
+  spec.add_dependency 'paper_trail-association_tracking', '~> 2.2'
   spec.add_dependency 'rails', '~> 6.1.7', '< 7'
   spec.add_dependency 'rsolr', '~> 2.5'
   spec.add_dependency 'traject', '~> 3.7'
@@ -55,6 +55,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'image_processing', '~> 1.12'
   spec.add_development_dependency 'mini_magick', '~> 4.11'
   spec.add_development_dependency 'pg', '>= 0.18', '< 2.0'
-  spec.add_development_dependency 'redis', '~> 4.7', '< 5'
+  spec.add_development_dependency 'redis', '~> 4.8', '< 5'
   spec.add_development_dependency 'solr_wrapper', '~> 4'
 end
