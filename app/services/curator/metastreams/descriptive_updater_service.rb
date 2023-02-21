@@ -42,7 +42,8 @@ module Curator
     def call
       with_transaction do
         simple_attributes_update(SIMPLE_ATTRIBUTES_LIST) do |simple_attr|
-          next if !@json_attrs.key?(simple_attr)
+          # NOTE see simple_attributes_update in lib/curator/services/updater_service.rb
+          # I almost forgot it skips the attribute key if its not detected in the @json_attr hash there
 
           @record.public_send("#{simple_attr}=", @json_attrs.fetch(simple_attr))
         end
