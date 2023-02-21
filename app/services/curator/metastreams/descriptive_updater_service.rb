@@ -42,6 +42,9 @@ module Curator
     def call
       with_transaction do
         simple_attributes_update(SIMPLE_ATTRIBUTES_LIST) do |simple_attr|
+          # NOTE see simple_attributes_update in lib/curator/services/updater_service.rb
+          # I almost forgot it skips the attribute key if its not detected in the @json_attr hash there
+
           @record.public_send("#{simple_attr}=", @json_attrs.fetch(simple_attr))
         end
 
@@ -143,7 +146,7 @@ module Curator
 
       host_collections = host_collection_names.map do |host_col_name|
         find_or_create_host_collection(host_col_name, @record.digital_object.institution)
-      end.compact.delete_if { |hc| @record.desc_host_collections.exists?(host_collection: hc) }
+      end.compact.reject { |hc| @record.desc_host_collections.exists?(host_collection: hc) }
 
       return if host_collections.blank?
 
@@ -155,7 +158,7 @@ module Curator
     def add_subject_terms!(subject_terms = [])
       return if subject_terms.blank?
 
-      terms_to_add = subject_terms.delete_if { |st| @record.desc_terms.exists?(mapped_term: st) }
+      terms_to_add = subject_terms.reject { |st| @record.desc_terms.exists?(mapped_term: st) }
 
       return if terms_to_add.blank?
 
@@ -165,7 +168,7 @@ module Curator
     def remove_subject_terms!(subject_terms = [])
       return if subject_terms.blank?
 
-      terms_to_destroy = subject_terms.delete_if { |st| !@record.desc_terms.exists?(mapped_term: st) }
+      terms_to_destroy = subject_terms.reject { |st| !@record.desc_terms.exists?(mapped_term: st) }
 
       return if terms_to_destroy.blank?
 
@@ -179,7 +182,7 @@ module Curator
         next if map_attrs.key?(:_destroy)
 
         term_for_mapping(map_attrs, nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
-      end.compact.delete_if { |mt| @record.desc_terms.exists?(mapped_term: mt) }
+      end.compact.reject { |mt| @record.desc_terms.exists?(mapped_term: mt) }
 
       return if terms_to_add.blank?
 
@@ -194,7 +197,7 @@ module Curator
 
         term_for_mapping(map_attrs.except(:_destroy),
                          nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
-      end.compact.delete_if { |mt| !@record.desc_terms.exists?(mapped_term: mt) }
+      end.compact.reject { |mt| !@record.desc_terms.exists?(mapped_term: mt) }
 
       return if terms_to_destroy.blank?
 
@@ -206,11 +209,11 @@ module Curator
 
       mapped_name_roles = name_role_attrs.map do |nr_attrs|
         name_role(nr_attrs.fetch(:name), nr_attrs.fetch(:role))
-      end.compact.delete_if { |mnr_attrs| @record.name_roles.exists?(mnr_attrs) }
+      end.compact.reject { |mnr_attrs| @record.name_roles.exists?(**mnr_attrs) }
 
       return if mapped_name_roles.blank?
 
-      mapped_name_roles.each { |mnr| @record.name_roles.build(mnr) }
+      mapped_name_roles.each { |mnr| @record.name_roles.build(**mnr) }
     end
 
     def remove_name_roles!(name_role_attrs = [])
@@ -218,11 +221,11 @@ module Curator
 
       mapped_name_roles = name_role_attrs.map do |nr_attrs|
         name_role(nr_attrs.fetch(:name), nr_attrs.fetch(:role))
-      end.compact.delete_if { |mnr_attrs| !@record.name_roles.exists?(mnr_attrs) }
+      end.compact.reject { |mnr_attrs| !@record.name_roles.exists?(**mnr_attrs) }
 
       return if mapped_name_roles.blank?
 
-      @record.name_roles.destroy_by(mapped_name_roles)
+      mapped_name_roles.each { |mnr| @record.name_roles.destroy_by(**mnr) }
     end
   end
 end
