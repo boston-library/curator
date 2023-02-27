@@ -268,8 +268,8 @@
           "projection": "azimuthal equal-area proj."
         },
         "host_collections": [
-          "Medieval and Early Renaissance Manuscripts (Collection of Distinction)",
-          "Colonial and Revolutionary Boston"
+          { "name": "Medieval and Early Renaissance Manuscripts (Collection of Distinction)" },
+          { "name": "Colonial and Revolutionary Boston" }
         ],
         "series": "Series value the first",
         "subseries": "Subseries value",

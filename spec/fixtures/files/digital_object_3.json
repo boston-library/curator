@@ -162,7 +162,7 @@
           ]
         },
         "host_collections": [
-          "Norman B. Leventhal Map Center Collection"
+          { "name": "Norman B. Leventhal Map Center Collection" }
         ],
         "physical_location": {
           "label": "Boston Public Library",

@@ -78,21 +78,23 @@ module Curator
       Mime::Type.register 'application/mods+xml', :mods
     end
 
-    initializer 'curator.active_storage_table_names' do
-      ActiveStorage::Attached::One.send(:include, Curator::ActiveStorageExtensions::AttachedOneUploaded)
+    initializer 'curator.active_storage_table_names' do |app|
+      app.reloader.to_prepare do
+        ActiveStorage::Attached::One.send(:include, Curator::ActiveStorageExtensions::AttachedOneUploaded)
 
-      ActiveSupport.on_load(:active_storage_record) do
-        ActiveStorage::VariantRecord.table_name = 'curator.active_storage_variant_records'
-      end
+        ActiveSupport.on_load(:active_storage_record) do
+          ActiveStorage::VariantRecord.table_name = 'curator.active_storage_variant_records'
+        end
 
-      ActiveSupport.on_load(:active_storage_blob) do
-        self.table_name = 'curator.active_storage_blobs'
-        include Curator::ActiveStorageExtensions::BlobUploaded
-      end
+        ActiveSupport.on_load(:active_storage_blob) do
+          self.table_name = 'curator.active_storage_blobs'
+          include Curator::ActiveStorageExtensions::BlobUploaded
+        end
 
-      ActiveSupport.on_load(:active_storage_attachment) do
-        self.table_name = 'curator.active_storage_attachments'
-        include Curator::ActiveStorageExtensions::AttachmentUploaded
+        ActiveSupport.on_load(:active_storage_attachment) do
+          self.table_name = 'curator.active_storage_attachments'
+          include Curator::ActiveStorageExtensions::AttachmentUploaded
+        end
       end
     end
 

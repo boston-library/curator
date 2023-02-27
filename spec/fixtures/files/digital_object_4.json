@@ -126,7 +126,7 @@
           ]
         },
         "host_collections": [
-          "Tallulah Morgan et al. vs James W. Hennigan et al. Case File, 1972 - 1995"
+          { "name": "Tallulah Morgan et al. vs James W. Hennigan et al. Case File, 1972 - 1995" }
         ],
         "physical_location": {
           "label": "National Archives at Boston",

@@ -249,10 +249,12 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
 
         describe 'host_collections' do
           let(:host_collections) { descriptive.host_collections }
+          let(:host_collection_attributes) { host_collections.map { |hc| { 'name' => hc.name } } }
+
           it 'sets the host_collection data' do
             expect(host_collections.count).to eq 2
             expect(host_collections).to all(be_an_instance_of(Curator::Mappings::HostCollection))
-            expect(host_collections.pluck(:name)).to contain_exactly(*desc_json['host_collections'])
+            expect(host_collection_attributes).to contain_exactly(*desc_json['host_collections'])
           end
         end
 

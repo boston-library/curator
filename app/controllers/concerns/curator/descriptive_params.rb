@@ -11,7 +11,7 @@ module Curator
     module ParamsPermitHelpers
       private
 
-      REMOVABLE_TERMS = [:genres, :languages, :name_roles, :resource_types].freeze
+      REMOVABLE_TERMS = [:genres, :languages, :name_roles, :resource_types, :host_collections].freeze
 
       REMOVABLE_SUBJECT_TERMS = [:topics, :names, :geos].freeze
 
@@ -37,7 +37,7 @@ module Curator
         :toc_url,
         cartographic: [:projection, scale: []],
         date: [:created, :issued, :copyright],
-        host_collections: [],
+        host_collections: [:name],
         identifier: [:label, :type, :invalid],
         genres: [:label, :id_from_auth, :authority_code, :basic],
         languages: [:label, :id_from_auth, :authority_code],
