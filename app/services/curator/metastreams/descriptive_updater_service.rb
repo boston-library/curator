@@ -78,8 +78,8 @@ module Curator
 
         next if mapped_terms.blank?
 
+        terms_to_add = mapped_terms.reject(&SHOULD_REMOVE)
         terms_to_remove = mapped_terms.select(&SHOULD_REMOVE)
-        terms_to_add = mapped_terms.select { |term_attrs| !SHOULD_REMOVE.call(term_attrs) }
 
         next if terms_to_add.blank? && terms_to_remove.blank?
 
@@ -94,15 +94,8 @@ module Curator
 
       return if name_role_attrs.blank?
 
-      name_roles_to_add = name_role_attrs.reduce([]) do |ret, nr_attrs|
-        ret << nr_attrs if !SHOULD_REMOVE.call(nr_attrs)
-        ret
-      end
-
-      name_roles_to_remove = name_role_attrs.reduce([]) do |ret, nr_attrs|
-        ret << nr_attrs if SHOULD_REMOVE.call(nr_attrs)
-        ret
-      end
+      name_roles_to_add = name_role_attrs.reject(&SHOULD_REMOVE)
+      name_roles_to_remove = name_role_attrs.select(&SHOULD_REMOVE)
 
       return if name_roles_to_add.blank? && name_roles_to_remove.blank?
 
@@ -116,7 +109,7 @@ module Curator
       return if subject_terms.blank?
 
       terms_to_add = subject_terms.reduce({}) do |ret, (k, v)|
-        ret.merge(k => v.select { |term_attrs| !SHOULD_REMOVE.call(term_attrs) })
+        ret.merge(k => v.reject(&SHOULD_REMOVE))
       end.with_indifferent_access
 
       terms_to_remove = subject_terms.reduce({}) do |ret, (k, v)|
@@ -140,21 +133,23 @@ module Curator
     end
 
     def host_collections_update!
-      host_collection_names = @json_attrs.fetch(:host_collections, [])
+      host_collection_attrs = @json_attrs.fetch(:host_collections, [])
 
-      return if host_collection_names.blank?
+      return if host_collection_attrs.blank?
 
-      host_collections = host_collection_names.map do |host_col_name|
-        find_or_create_host_collection(host_col_name, @record.digital_object.institution)
-      end.compact.reject { |hc| @record.desc_host_collections.exists?(host_collection: hc) }
+      host_collections_to_add = host_collection_attrs.reject(&SHOULD_REMOVE)
+      host_collections_to_remove = host_collection_attrs.select(&SHOULD_REMOVE)
 
-      return if host_collections.blank?
+      return if host_collections_to_add.blank? && host_collections_to_remove.blank?
 
-      host_collections.each { |hc| @record.desc_host_collections.build(host_collection: hc) }
+      add_host_collections!(host_collections_to_add)
+      remove_host_collections!(host_collections_to_remove)
     end
 
     private
 
+    # @param subject_terms [Array[Hash]]
+    # @return [NilClass]
     def add_subject_terms!(subject_terms = [])
       return if subject_terms.blank?
 
@@ -165,16 +160,20 @@ module Curator
       terms_to_add.each { |term_to_add| @record.desc_terms.build(mapped_term: term_to_add) }
     end
 
+    # @param subject_terms [Array[Hash]]
+    # @return [NilClass]
     def remove_subject_terms!(subject_terms = [])
       return if subject_terms.blank?
 
-      terms_to_destroy = subject_terms.reject { |st| !@record.desc_terms.exists?(mapped_term: st) }
+      terms_to_destroy = subject_terms.select { |st| @record.desc_terms.exists?(mapped_term: st) }
 
       return if terms_to_destroy.blank?
 
       @record.desc_terms.destroy_by(mapped_term: terms_to_destroy)
     end
 
+    # @param map_type [String]
+    # @param mapped_terms Array[Hash]
     def add_mapped_terms!(map_type, mapped_terms = [])
       return if mapped_terms.blank?
 
@@ -189,6 +188,8 @@ module Curator
       terms_to_add.each { |term_to_add| @record.desc_terms.build(mapped_term: term_to_add) }
     end
 
+    # @param map_type [String]
+    # @param mapped_terms Array[Hash]
     def remove_mapped_terms!(map_type, mapped_terms = [])
       return if mapped_terms.blank?
 
@@ -197,13 +198,14 @@ module Curator
 
         term_for_mapping(map_attrs.except(:_destroy),
                          nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
-      end.compact.reject { |mt| !@record.desc_terms.exists?(mapped_term: mt) }
+      end.compact.select { |mt| @record.desc_terms.exists?(mapped_term: mt) }
 
       return if terms_to_destroy.blank?
 
       @record.desc_terms.destroy_by(mapped_term: terms_to_destroy)
     end
 
+    # @param name_role_attrs [Array[Hash]]
     def add_name_roles!(name_role_attrs = [])
       return if name_role_attrs.blank?
 
@@ -216,16 +218,41 @@ module Curator
       mapped_name_roles.each { |mnr| @record.name_roles.build(**mnr) }
     end
 
+    # @param name_role_attrs [Array[Hash]]
     def remove_name_roles!(name_role_attrs = [])
       return if name_role_attrs.blank?
 
       mapped_name_roles = name_role_attrs.map do |nr_attrs|
         name_role(nr_attrs.fetch(:name), nr_attrs.fetch(:role))
-      end.compact.reject { |mnr_attrs| !@record.name_roles.exists?(**mnr_attrs) }
+      end.compact.select { |mnr_attrs| @record.name_roles.exists?(**mnr_attrs) }
 
       return if mapped_name_roles.blank?
 
       mapped_name_roles.each { |mnr| @record.name_roles.destroy_by(**mnr) }
+    end
+
+    # @param host_collection_attrs [Array[Hash]]
+    def add_host_collections!(host_collection_attrs = [])
+      return if host_collection_attrs.blank?
+
+      host_collections = host_collection_attrs.map do |host_col_attrs|
+        find_or_create_host_collection(host_col_attrs[:name], @record.digital_object.institution)
+      end.compact.reject { |hc| @record.desc_host_collections.exists?(host_collection: hc) }
+
+      return if host_collections.blank?
+
+      host_collections.each { |hc| @record.desc_host_collections.build(host_collection: hc) }
+    end
+
+    # @param host_collection_attrs [Array[Hash]]
+    def remove_host_collections!(host_collection_attrs = [])
+      return if host_collection_attrs.blank?
+
+      host_collections = host_collection_attrs.map do |host_col_attrs|
+        find_host_collection(host_col_attrs[:name], @record.digital_object.institution)
+      end.compact.select { |hc| @record.desc_host_collections.exists?(host_collection: hc) }
+
+      @record.desc_host_collections.destroy_by(host_collection: host_collections)
     end
   end
 end

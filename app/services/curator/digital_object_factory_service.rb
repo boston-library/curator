@@ -62,27 +62,23 @@ module Curator
             %w(genres resource_types languages).each do |map_type|
               mapped_terms = @desc_json_attrs.fetch(map_type, []).map do |map_attrs|
                 term_for_mapping(map_attrs, nomenclature_class: Curator.controlled_terms.public_send("#{map_type.singularize}_class"))
-              end.compact.delete_if { |mt| !descriptive.new_record? && descriptive.desc_terms.exists?(mapped_term: mt) }
+              end.compact.reject { |mt| !descriptive.new_record? && descriptive.desc_terms.exists?(mapped_term: mt) }
 
               next if mapped_terms.blank?
 
               mapped_terms.each { |mt| descriptive.desc_terms.build(mapped_term: mt) }
             end
 
-            host_collections = @desc_json_attrs.fetch(:host_collections, []).uniq.map do |host_col|
-              next if admin_set.blank?
+            host_collection_names = @desc_json_attrs.fetch(:host_collections, []).pluck(:name).uniq
 
-              find_or_create_host_collection(host_col, admin_set.institution)
-            end.compact.delete_if { |hc| !descriptive.new_record? && descriptive.desc_host_collections.exists?(host_collection: hc) }
+            build_host_collections!(descriptive, admin_set, host_collection_names)
 
-            host_collections.each { |hc| descriptive.desc_host_collections.build(host_collection: hc) }
-
-            subject_mapped_terms = terms_for_subject(@desc_json_attrs.fetch(:subject, {})).delete_if { |st| !descriptive.new_record? && descriptive.desc_terms.exists?(mapped_term: st) }
+            subject_mapped_terms = terms_for_subject(@desc_json_attrs.fetch(:subject, {})).reject { |st| !descriptive.new_record? && descriptive.desc_terms.exists?(mapped_term: st) }
             subject_mapped_terms.each { |smt| descriptive.desc_terms.build(mapped_term: smt) }
 
             mapped_name_roles = @desc_json_attrs.fetch(:name_roles, []).map do |name_role_attrs|
               name_role(name_role_attrs.fetch(:name), name_role_attrs.fetch(:role))
-            end.compact.delete_if { |nr_attrs| !descriptive.new_record? && descriptive.name_roles.exists?(nr_attrs) }
+            end.compact.reject { |nr_attrs| !descriptive.new_record? && descriptive.name_roles.exists?(nr_attrs) }
 
             mapped_name_roles.each { |mnr| descriptive.name_roles.build(mnr) }
           end
@@ -102,6 +98,18 @@ module Curator
       return if admin_set_ark_id.blank? || (identifier.blank? && oai_header_id.blank?)
 
       Curator.digital_object_class.local_id_finder(admin_set_ark_id, identifier, oai_header_id)&.first
+    end
+
+    def build_host_collections!(descriptive, admin_set = nil, host_collection_names = [])
+      return if admin_set.blank? || host_collection_names.blank?
+
+      host_collections = host_collection_names.map do |host_col_name|
+        find_or_create_host_collection(host_col_name, admin_set.institution)
+      end.compact.reject { |hc| !descriptive.new_record? && descriptive.desc_host_collections.exists?(host_collection: hc) }
+
+      return if host_collections.blank?
+
+      host_collections.each { |hc| descriptive.desc_host_collections.build(host_collection: hc) }
     end
 
     def find_or_build_collection_members!(digital_object, admin_set_ark_id, collection_ark_ids = [])
