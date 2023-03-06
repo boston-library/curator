@@ -10,6 +10,7 @@ module Curator
 
         on_error :ignore
 
+
         private
 
         # @returns [Hash] Overrides Alba::Resource#converter
@@ -25,7 +26,7 @@ module Curator
                         deep_format_and_compact(value)
                       when Array
                         value.map { |v| v.is_a?(Hash) ? deep_format_and_compact(v) : v }
-                      when ActiveSupport::TimeWithZone
+                      when ActiveSupport::TimeWithZone, DateTime, Time
                         value.iso8601
                       else
                         value

@@ -4,7 +4,6 @@ module Curator
   class Metastreams::Descriptive < ApplicationRecord
     include AttrJson::Record
     include AttrJson::Record::QueryScopes
-    include AttrJson::Record::Dirty
     include AttrJson::NestedAttributes
 
     has_paper_trail skip: %i(lock_version)

@@ -15,7 +15,7 @@ RSpec.describe Curator::Serializers::JSONAdapter, type: :lib_serializers do
         :name => record.name,
         :abstract => record.abstract,
         :collection_ark_ids => record.collections.pluck(:ark_id)
-      }
+      }.stringify_keys
     end
   end
 

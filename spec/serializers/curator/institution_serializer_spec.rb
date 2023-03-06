@@ -26,7 +26,7 @@ RSpec.describe Curator::InstitutionSerializer, type: :serializers do
             attributes :area_type, :coordinates, :bounding_box, :authority_code, :label, :id_from_auth
           end
 
-          has_one :metastreams do
+          nested :metastreams do
             has_one :administrative do
               attributes :description_standard, :harvestable, :flagged, :destination_site, :hosting_status
             end

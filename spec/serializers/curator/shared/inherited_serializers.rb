@@ -11,7 +11,7 @@ RSpec.shared_examples_for 'curator_serializer', type: :serializers do
       expect(described_class_instance).to be_a_kind_of(Curator::CuratorSerializer)
     end
 
-    it 'expects the base attribute keys to be in the described class attriubute keys' do
+    it 'expects the base attribute keys to be in the described class attribute keys' do
       expect(described_class_attribute_keys).to include(*base_attribute_keys)
     end
 
@@ -19,7 +19,7 @@ RSpec.shared_examples_for 'curator_serializer', type: :serializers do
       subject { described_class_instance.serializable_hash }
 
       it 'is expected to have base attributes in serializable_hash' do
-        expect(subject.keys).to include(*base_attribute_keys)
+        expect(subject.keys).to include(*base_attribute_keys.map(&:to_s))
       end
     end
   end

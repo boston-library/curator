@@ -39,7 +39,7 @@ RSpec.describe Curator::Filestreams::VideoSerializer, type: :serializers do
             attributes :ark_id
           end
 
-          has_one :metastreams do
+          nested :metastreams do
             has_one :administrative do
               attributes :description_standard, :harvestable, :flagged, :destination_site, :hosting_status
             end

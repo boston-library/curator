@@ -2,30 +2,8 @@
 
 module Curator
   class Engine < ::Rails::Engine
-    require 'aasm'
-    require 'activerecord/postgres_enum'
-    require 'after_commit_everywhere'
-    require 'alba'
-    require 'concurrent'
-    require 'connection_pool'
-    require 'delegate'
-    require 'forwardable'
-    require 'http'
-    require 'down/http'
-    require 'addressable'
-    require 'acts_as_list'
-    require 'attr_json'
-    require 'htmlentities'
-    require 'mime/types'
-    require 'nokogiri'
-    require 'oj'
-    require 'ox'
-    require 'paper_trail'
-    require 'paper_trail-association_tracking'
-    require 'rsolr'
-    require 'singleton'
-    require 'traject'
-    require 'digest'
+    isolate_namespace Curator
+    engine_name 'curator'
 
     if Rails.env.development? || Rails.env.test?
       begin
@@ -38,9 +16,6 @@ module Curator
       require 'dotenv'
       Dotenv.load(".env.#{ENV.fetch('RAILS_ENV', 'development')}", '.env')
     end
-
-    isolate_namespace Curator
-    engine_name 'curator'
 
     config.generators do |g|
       g.orm :active_record

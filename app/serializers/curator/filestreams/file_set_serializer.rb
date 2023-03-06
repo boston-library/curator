@@ -23,7 +23,7 @@ module Curator
         attributes :ark_id
       end
 
-      has_one :metastreams do
+      nested :metastreams do
         has_one :administrative do
           include Curator::Metastreams::AdministratableJson
         end
