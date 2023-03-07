@@ -26,7 +26,15 @@ RSpec.describe Curator::DigitalObjectSerializer, type: :serializers do
         serializer_test_class do
           root_key :digital_object, :digital_objects
 
-          attributes :ark_id, :created_at, :updated_at
+          attributes :ark_id
+
+          attribute :created_at do |resource|
+            format_time_iso8601(resource.created_at)
+          end
+
+          attribute :updated_at do |resource|
+            format_time_iso8601(resource.updated_at)
+          end
 
           has_one :admin_set do
             attributes :ark_id

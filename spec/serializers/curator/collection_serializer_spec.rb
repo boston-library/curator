@@ -23,7 +23,15 @@ RSpec.describe Curator::CollectionSerializer, type: :serializers do
         serializer_test_class do
           root_key :collection, :collections
 
-          attributes :ark_id, :created_at, :updated_at, :abstract, :name
+          attributes :ark_id, :abstract, :name
+
+          attribute :created_at do |resource|
+            format_time_iso8601(resource.created_at)
+          end
+
+          attribute :updated_at do |resource|
+            format_time_iso8601(resource.updated_at)
+          end
 
           has_one :institution do
             attributes :ark_id

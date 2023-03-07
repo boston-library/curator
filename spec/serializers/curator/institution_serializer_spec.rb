@@ -22,6 +22,14 @@ RSpec.describe Curator::InstitutionSerializer, type: :serializers do
 
           attributes :ark_id, :created_at, :updated_at, :name, :abstract, :url
 
+          attribute :created_at do |resource|
+            format_time_iso8601(resource.created_at)
+          end
+
+          attribute :updated_at do |resource|
+            format_time_iso8601(resource.updated_at)
+          end
+
           has_one :location do
             attributes :area_type, :coordinates, :bounding_box, :authority_code, :label, :id_from_auth
           end

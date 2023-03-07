@@ -22,9 +22,21 @@ RSpec.describe Curator::Serializers::JSONAdapter, type: :lib_serializers do
   let(:schema_block) do
     proc do
       root_key :institution, :institutions
-      attributes :id, :created_at, :updated_at, :name, :abstract
+      attributes :id, :name, :abstract
+
+      attribute(:created_at) do |record|
+        format_time_iso8601(record.created_at)
+      end
+
+      attribute(:updated_at) do |record|
+        format_time_iso8601(record.updated_at)
+      end
 
       attribute(:collection_ark_ids) { |record| record.collections.pluck(:ark_id) }
+
+      def format_time_iso8601(time)
+        time.iso8601 if time.respond_to?(:iso8601)
+      end
     end
   end
 

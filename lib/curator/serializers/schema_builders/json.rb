@@ -10,30 +10,12 @@ module Curator
 
         on_error :ignore
 
-
-        private
-
-        # @returns [Hash] Overrides Alba::Resource#converter
-        def converter
-          super >> proc { |hash| deep_format_and_compact(hash) }
+        def format_time_iso8601(time)
+          time.iso8601 if time.respond_to?(:iso8601)
         end
 
-        # @return [Hash] - Removes blank values and formats time ActiveSupport::TimeWithZone values to iso8601
-        def deep_format_and_compact(hash)
-          hash.reduce({}) do |ret, (key, value)|
-            new_val = case value
-                      when Hash
-                        deep_format_and_compact(value)
-                      when Array
-                        value.map { |v| v.is_a?(Hash) ? deep_format_and_compact(v) : v }
-                      when ActiveSupport::TimeWithZone, DateTime, Time
-                        value.iso8601
-                      else
-                        value
-                      end
-            ret[key] = new_val
-            ret
-          end.compact_blank
+        def select(_key, val)
+          val.respond_to?(:empty?) ? !val.empty? : !val.nil?
         end
       end
     end

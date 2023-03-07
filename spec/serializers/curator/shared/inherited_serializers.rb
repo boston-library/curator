@@ -3,8 +3,8 @@
 RSpec.shared_examples_for 'curator_serializer', type: :serializers do
   describe 'Curator::CuratorSerializer' do
     let!(:adapter_key) { :json }
-    let!(:base_attribute_keys) { serializer_adapter_schema_attributes(Curator::CuratorSerializer, adapter_key) }
-    let!(:described_class_attribute_keys) { serializer_adapter_schema_attributes(described_class, adapter_key) }
+    let!(:base_attribute_keys) { serializer_adapter_schema_attributes(Curator::CuratorSerializer, adapter_key).map(&:to_s) }
+    let!(:described_class_attribute_keys) { serializer_adapter_schema_attributes(described_class, adapter_key).map(&:to_s) }
     let!(:described_class_instance) { described_class.new(record, adapter_key: adapter_key) }
 
     it 'is expected to be a kind of Curator::CuratorSerializer'do
@@ -19,7 +19,7 @@ RSpec.shared_examples_for 'curator_serializer', type: :serializers do
       subject { described_class_instance.serializable_hash }
 
       it 'is expected to have base attributes in serializable_hash' do
-        expect(subject.keys).to include(*base_attribute_keys.map(&:to_s))
+        expect(subject.keys).to include(*base_attribute_keys)
       end
     end
   end
@@ -28,8 +28,8 @@ end
 RSpec.shared_examples_for 'access_condition_serializer', type: :serializers do
   describe 'Curator::ControlledTerms::AccessConditionSerializer' do
     let!(:adapter_key) { :json }
-    let!(:base_attribute_keys) { serializer_adapter_schema_attributes(Curator::ControlledTerms::AccessConditionSerializer, adapter_key) }
-    let!(:described_class_attribute_keys) { serializer_adapter_schema_attributes(described_class, adapter_key) }
+    let!(:base_attribute_keys) { serializer_adapter_schema_attributes(Curator::ControlledTerms::AccessConditionSerializer, adapter_key).map(&:to_s) }
+    let!(:described_class_attribute_keys) { serializer_adapter_schema_attributes(described_class, adapter_key).map(&:to_s) }
     let!(:described_class_instance) { described_class.new(record, adapter_key: adapter_key) }
 
     it 'is expected to be a kind of Curator::CuratorSerializer'do
