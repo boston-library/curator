@@ -141,16 +141,9 @@ module SerializerHelper
     def base_serializer_test_class
       Class.new do
         include Alba::Resource
+        include Curator::Serializers::SchemaBuilders::JSON::AlbaHelpers
 
         on_error :ignore
-
-        def format_time_iso8601(time)
-          time.iso8601 if time.respond_to?(:iso8601)
-        end
-
-        def select(_key, val)
-          val.respond_to?(:empty?) ? !val.empty? : !val.nil?
-        end
       end
     end
 

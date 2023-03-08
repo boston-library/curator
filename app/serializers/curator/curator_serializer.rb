@@ -5,7 +5,7 @@ module Curator
     build_schema_as_json do
       attributes :ark_id
       attribute :created_at do |curator_resource|
-        format_time_iso8601(curator_resource.iso8601)
+        format_time_iso8601(curator_resource.created_at)
       end
 
       attribute :updated_at do |curator_resource|

@@ -12,6 +12,8 @@ module Curator
       end
 
       nested :metastreams do
+        include Curator::Serializers::SchemaBuilders::JSON::AlbaHelpers
+
         has_one :administrative do
           include Curator::Metastreams::AdministratableJson
         end

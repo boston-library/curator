@@ -33,10 +33,6 @@ RSpec.describe Curator::Serializers::JSONAdapter, type: :lib_serializers do
       end
 
       attribute(:collection_ark_ids) { |record| record.collections.pluck(:ark_id) }
-
-      def format_time_iso8601(time)
-        time.iso8601 if time.respond_to?(:iso8601)
-      end
     end
   end
 

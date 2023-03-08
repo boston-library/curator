@@ -38,11 +38,17 @@ RSpec.describe Curator::CollectionSerializer, type: :serializers do
           end
 
           nested :metastreams do
+            include Curator::Serializers::SchemaBuilders::JSON::AlbaHelpers
+
             has_one :administrative do
+              include Curator::Serializers::SchemaBuilders::JSON::AlbaHelpers
+
               attributes :description_standard, :harvestable, :flagged, :destination_site, :hosting_status
             end
 
             has_one :workflow do
+              include Curator::Serializers::SchemaBuilders::JSON::AlbaHelpers
+
               attributes :publishing_state, :processing_state, :ingest_origin
             end
           end
