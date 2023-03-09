@@ -141,7 +141,7 @@ module SerializerHelper
     def base_serializer_test_class
       Class.new do
         include Alba::Resource
-        include Curator::Serializers::SchemaBuilders::JSON::AlbaHelpers
+        include Curator::Serializers::SchemaBuilders::AlbaJsonHelpers
 
         on_error :ignore
       end

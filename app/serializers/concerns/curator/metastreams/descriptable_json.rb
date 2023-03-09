@@ -6,7 +6,6 @@ module Curator
       extend ActiveSupport::Concern
 
       included do
-        include Curator::Serializers::SchemaBuilders::JSON::AlbaHelpers
         attributes :abstract, :digital_origin, :origin_event, :text_direction, :resource_type_manuscript, :place_of_publication, :publisher, :issuance, :frequency, :extent, :physical_location_department, :physical_location_shelf_locator, :series, :subseries, :subsubseries, :rights, :access_restrictions, :toc, :toc_url, :title, :note, :cartographic, :date, :related, :publication
 
         attribute :host_collections do |descriptable|

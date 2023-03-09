@@ -32,6 +32,10 @@ RSpec.describe Curator::Filestreams::AudioSerializer, type: :serializers do
             format_time_iso8601(resource.created_at)
           end
 
+          attribute :updated_at do |resource|
+            format_time_iso8601(resource.updated_at)
+          end
+
           has_one :file_set_of do
             attributes :ark_id
           end

@@ -15,7 +15,6 @@ module Curator
       #   end
       # end
       included do
-        include Curator::Serializers::SchemaBuilders::JSON::AlbaHelpers
         attributes :publishing_state, :processing_state, :ingest_origin
       end
     end
