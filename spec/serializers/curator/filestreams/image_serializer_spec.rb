@@ -22,10 +22,18 @@ RSpec.describe Curator::Filestreams::ImageSerializer, type: :serializers do
         serializer_test_class do
           root_key :file_set, :file_sets
 
-          attributes :ark_id, :created_at, :updated_at, :file_name_base, :position, :exemplary_image_of
+          attributes :ark_id, :file_name_base, :position, :exemplary_image_of
 
           attribute :file_set_type do |resource|
             resource.file_set_type.demodulize.downcase
+          end
+
+          attribute :created_at do |resource|
+            format_time_iso8601(resource.created_at)
+          end
+
+          attribute :updated_at do |resource|
+            format_time_iso8601(resource.updated_at)
           end
 
           one :pagination do
@@ -40,7 +48,7 @@ RSpec.describe Curator::Filestreams::ImageSerializer, type: :serializers do
             attributes :ark_id
           end
 
-          has_one :metastreams do
+          nested :metastreams do
             has_one :administrative do
               attributes :description_standard, :harvestable, :flagged, :destination_site, :hosting_status
             end

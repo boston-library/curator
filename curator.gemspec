@@ -32,25 +32,25 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'aasm', '~> 5.3' # Acts as a state machine. Useful for tracking states of objects and triggering call backs between state trasnistion
   spec.add_dependency 'activerecord-postgres_enum', '~> 1.7', '< 2.0' # For using defined postgres enum types
-  spec.add_dependency 'acts_as_list', '~> 1.0'
+  spec.add_dependency 'acts_as_list', '~> 1.1'
   spec.add_dependency 'addressable', '>= 2.8.1'
   spec.add_dependency 'after_commit_everywhere', '~> 1.3' # Required for using aasm with active record
-  spec.add_dependency 'alba', '~> 1.6.0', '< 2'
-  spec.add_dependency 'attr_json', '~> 1.4.0'
+  spec.add_dependency 'alba', '~> 2.2'
+  spec.add_dependency 'attr_json', '~> 2'
   spec.add_dependency 'concurrent-ruby-ext', '~> 1.1'
   spec.add_dependency 'connection_pool', '~> 2.3'
-  spec.add_dependency 'down', '~> 5.3'
+  spec.add_dependency 'down', '~> 5.4'
   spec.add_dependency 'htmlentities', '~> 4.3' # TODO: Look into replacing this since the last released in 2014. I recommend turning this into its own parser class.
   spec.add_dependency 'http', '~> 5.1'
   spec.add_dependency 'mime-types', '~> 3.4'
   spec.add_dependency 'nokogiri', '>= 1.13.8'
-  spec.add_dependency 'oj', '~> 3.13'
+  spec.add_dependency 'oj', '~> 3.14'
   spec.add_dependency 'ox', ' ~> 2.14'
   spec.add_dependency 'paper_trail', '~> 12.3'
   spec.add_dependency 'paper_trail-association_tracking', '~> 2.2'
   spec.add_dependency 'rails', '~> 6.1.7', '< 7'
   spec.add_dependency 'rsolr', '~> 2.5'
-  spec.add_dependency 'traject', '~> 3.7'
+  spec.add_dependency 'traject', '~> 3.8'
 
   spec.add_development_dependency 'image_processing', '~> 1.12'
   spec.add_development_dependency 'mini_magick', '~> 4.11'

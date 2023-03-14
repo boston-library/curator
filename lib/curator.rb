@@ -1,5 +1,32 @@
 # frozen_string_literal: true
 
+# Core dependencies
+require 'aasm'
+require 'activerecord/postgres_enum'
+require 'after_commit_everywhere'
+require 'alba'
+require 'concurrent'
+require 'connection_pool'
+require 'delegate'
+require 'forwardable'
+require 'http'
+require 'down/http'
+require 'addressable'
+require 'acts_as_list'
+require 'attr_json'
+require 'htmlentities'
+require 'mime/types'
+require 'nokogiri'
+require 'oj'
+require 'ox'
+require 'paper_trail'
+require 'paper_trail-association_tracking'
+require 'rsolr'
+require 'singleton'
+require 'traject'
+require 'digest'
+
+# Curator specific files
 require 'curator/engine'
 require 'curator/namespace_accessor'
 require 'curator/indexable_settings'

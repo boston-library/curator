@@ -33,7 +33,6 @@ RSpec.shared_examples 'nomenclature', type: :model do
     it 'expects attr_json to be configured correctly' do
       expect(described_class).to respond_to(:attr_json_config, :attr_json, :attr_json_registry, :jsonb_contains)
       expect(described_class.attr_json_config.default_container_attribute).to be(:term_data)
-      expect(subject).to respond_to(:attr_json_changes)
     end
 
     describe 'base nomenclature json attributes' do

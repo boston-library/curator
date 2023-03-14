@@ -3,7 +3,6 @@
 module Curator
   class ControlledTerms::Nomenclature < ApplicationRecord
     include AttrJson::Record
-    include AttrJson::Record::Dirty
     include AttrJson::Record::QueryScopes
     include Mappings::MappedTerms
 

@@ -11,7 +11,7 @@ module Curator
         include Curator::ControlledTerms::GeographicJson
       end
 
-      one :metastreams do
+      nested :metastreams do
         has_one :administrative do
           include Curator::Metastreams::AdministratableJson
         end

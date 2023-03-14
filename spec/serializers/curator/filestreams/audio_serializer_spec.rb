@@ -22,10 +22,18 @@ RSpec.describe Curator::Filestreams::AudioSerializer, type: :serializers do
         serializer_test_class do
           root_key :file_set, :file_sets
 
-          attributes :ark_id, :created_at, :updated_at, :file_name_base, :position
+          attributes :ark_id, :file_name_base, :position
 
           attribute :file_set_type do |resource|
             resource.file_set_type.demodulize.downcase
+          end
+
+          attribute :created_at do |resource|
+            format_time_iso8601(resource.created_at)
+          end
+
+          attribute :updated_at do |resource|
+            format_time_iso8601(resource.updated_at)
           end
 
           has_one :file_set_of do
@@ -40,7 +48,7 @@ RSpec.describe Curator::Filestreams::AudioSerializer, type: :serializers do
             attributes :page_label, :page_type, :hand_side
           end
 
-          has_one :metastreams do
+          nested :metastreams do
             has_one :administrative do
               attributes :description_standard, :harvestable, :flagged, :destination_site, :hosting_status
             end

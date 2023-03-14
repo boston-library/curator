@@ -8,7 +8,6 @@ module Curator
 
     include AttrJson::Record
     include AttrJson::Record::QueryScopes
-    include AttrJson::Record::Dirty
     include Curator::Filestreams::Characterizable
     include Curator::Filestreams::MetadataFoxable
     include Curator::Mappings::Exemplary::FileSet

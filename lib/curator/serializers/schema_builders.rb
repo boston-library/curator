@@ -6,6 +6,7 @@ module Curator
       extend ActiveSupport::Autoload
 
       eager_autoload do
+        autoload :AlbaJsonHelpers
         autoload :BuilderHelpers
         autoload :JSON
         autoload :XML
