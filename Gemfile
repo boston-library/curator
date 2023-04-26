@@ -28,7 +28,7 @@ group :development, :test do
   gem 'faker', '~> 2.22'
   gem 'pry', '~> 0.13.1'
   gem 'pry-rails'
-  gem 'puma', '~> 5.6.5', '< 6'
+  gem 'puma', '~> 6.2'
   gem 'rubocop', '~> 0.80.1', require: false
   gem 'rubocop-performance', '~> 1.6', require: false
   gem 'rubocop-rails', '~> 2.5', require: false
