@@ -111,9 +111,20 @@ module Curator
 
         # Explicitly raises error if the nomenclature is not found
         def find_nomenclature!(nomenclature_class, term_data = {}, authority = nil)
-          return nomenclature_class.jsonb_contains(**term_data).first! if authority.blank?
+          return find_nomenclature_for_geographic!(nomenclature_class, term_data, authority) if nomenclature_class == Curator::ControlledTerms::Geographic
+
+          return nomenclature_class.where(authority: nil).jsonb_contains(**term_data).first! if authority.blank?
 
           nomenclature_class.where(authority: authority).jsonb_contains(**term_data).first!
+        end
+
+        # Geographic objects need to be queried different since the jsonb_contains method is returning false positive matches
+        def find_nomenclature_for_geographic!(nomenclature_class, term_data = {}, authority = nil)
+          raise ActiveRecord::RecordNotFound, "#{nomenclature_class} is not a Curator::ControlledTerms::Geographic!" if nomenclature_class != Curator::ControlledTerms::Geographic
+
+          return nomenclature_class.where(authority: nil, term_data: term_data).first! if authority.blank?
+
+          nomenclature_class.where(authority: authority, term_data: term_data).first!
         end
 
         def create_nomenclature!(nomenclature_class, term_data = {}, authority = nil)
