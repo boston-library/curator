@@ -157,6 +157,10 @@ RSpec.configure do |config|
     metadata[:type] = :presenters
   end
 
+  config.define_derived_metadata(file_path: Regexp.new('/spec/validators/')) do |metadata|
+    metadata[:type] = :validators
+  end
+
   config.infer_spec_type_from_file_location!
 
   # Filter lines from Rails gems in backtraces.
