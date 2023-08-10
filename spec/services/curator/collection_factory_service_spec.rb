@@ -11,7 +11,7 @@ RSpec.describe Curator::CollectionFactoryService, type: :service do
     @object_json['institution']['ark_id'] = parent.ark_id
     expect do
       @success, @collection = handle_factory_result(described_class, @object_json)
-    end.to change { Curator::Collection.count }.by(1)
+    end.to change(Curator::Collection, :count).by(1)
   end
 
   specify { expect(@success).to be_truthy }

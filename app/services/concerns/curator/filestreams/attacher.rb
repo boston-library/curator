@@ -47,13 +47,13 @@ module Curator
 
             begin
               # During Ingest If the attachment exists it should be purged before it is reattached.
-              # NOTE the atachment SHOULD not be purged if we are updating from the avi processor because this will cause the generated file on the avi end to be destroyed.
+              # NOTE: the atachment SHOULD not be purged if we are updating from the avi processor because this will cause the generated file on the avi end to be destroyed.
               record.public_send(attachment_type).purge if io_hash.present? && record.public_send(attachment_type).attached?
 
               attachable = create_attachable(attributes, io_hash)
 
               record.public_send(attachment_type).attach(attachable)
-            rescue Azure::Core::Http::HTTPError, Faraday::Error => e
+            rescue Faraday::Error => e
               raise ActiveRecord::RecordNotSaved, "Could not attach files due to an Azure Http Error. Reason: #{e.message}"
             rescue StandardError
               raise
@@ -71,7 +71,7 @@ module Curator
 
           return import_file_from_fedora(attributes, content_io(io_hash)) if fedora_content?(io_hash)
 
-          # NOTE we should be passing a Hash to the attach method. This is more in line with what vanilla active storage does and will cut back on errors. See this file for more info https://github.com/rails/rails/blob/e3e3a97ada3f2b4c0c8d48f941c2ea05c859cdda/activestorage/lib/active_storage/attached/changes/create_one.rb#L52
+          # NOTE: we should be passing a Hash to the attach method. This is more in line with what vanilla active storage does and will cut back on errors. See this file for more info https://github.com/rails/rails/blob/e3e3a97ada3f2b4c0c8d48f941c2ea05c859cdda/activestorage/lib/active_storage/attached/changes/create_one.rb#L52
           # UPDATE: This is wrong since according to some answes online the upload ONLY happens once the object is comitted. So we should pass this into a new method I created that uses the create_after_unfurling method
           ingest_attributes = {
             key: attributes['key'],
@@ -142,7 +142,7 @@ module Curator
         end
 
         def attach_file_via_ingest(attachment_attributes = {})
-          ActiveStorage::Blob.create_and_upload!(attachment_attributes)
+          ActiveStorage::Blob.create_and_upload!(**attachment_attributes)
         end
 
         def record_attachments(record)

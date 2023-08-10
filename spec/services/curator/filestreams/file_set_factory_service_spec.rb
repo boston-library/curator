@@ -17,7 +17,7 @@ RSpec.describe Curator::Filestreams::FileSetFactoryService, type: :service do
     @file_set_json['files'] = @files_json
     expect do
       @success, @file_set = handle_factory_result(described_class, @file_set_json)
-    end.to change { Curator::Filestreams::FileSet.count }.by(1)
+    end.to change(Curator::Filestreams::FileSet, :count).by(1)
   end
 
   specify { expect(@success).to be_truthy }

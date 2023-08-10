@@ -23,15 +23,14 @@ end
 group :development, :test do
   gem 'awesome_print', '~> 1.9'
   gem 'azure-storage-blob', '>= 2.0', require: false
+  gem 'debug', platforms: %i(mri mingw x64_mingw)
   gem 'dotenv-rails', '~> 2.8'
   gem 'factory_bot_rails', '~> 6.2'
-  gem 'faker', '~> 2.22'
-  gem 'pry', '~> 0.13.1'
-  gem 'pry-rails'
+  gem 'faker', '~> 3.2'
   gem 'puma', '~> 6.2'
-  gem 'rubocop', '~> 0.80.1', require: false
-  gem 'rubocop-performance', '~> 1.6', require: false
-  gem 'rubocop-rails', '~> 2.5', require: false
+  gem 'rubocop', '~> 1.36', require: false
+  gem 'rubocop-performance', '~> 1.15', require: false
+  gem 'rubocop-rails', '~> 2.16', require: false
   gem 'rubocop-rspec', require: false
 end
 
@@ -39,7 +38,7 @@ group :test do
   gem 'climate_control', '~> 1.0'
   gem 'coveralls', require: false
   gem 'database_cleaner-active_record', '~> 2'
-  gem 'rspec-rails', '~> 5.1'
+  gem 'rspec-rails', '~> 6.0'
   gem 'shoulda-matchers', '~> 5.2'
   gem 'vcr', '~> 6.1'
   gem 'webmock', '~> 3.18'

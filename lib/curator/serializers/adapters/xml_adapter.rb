@@ -24,7 +24,7 @@ module Curator
       protected
 
       def builder(record, params = {})
-        schema_builder_class.new(record, params)
+        schema_builder_class.new(record, params: params)
       end
     end
   end

@@ -2,14 +2,15 @@
 
 require 'rails_helper'
 RSpec.describe Curator::IndexableSettings do
-  subject { described_class.new(attrs.map { |attr| [attr, send(attr)] }.to_h) }
+  subject { described_class.new(**attrs.map { |attr| [attr, send(attr)] }.to_h) }
 
   let(:solr_url) { Curator.config.solr_url }
   let(:writer_class_name) { 'Traject::SolrJsonWriter' }
   let(:writer_settings) { {} }
   let(:model_name_solr_field) { 'model_name_ssi' }
   let(:solr_id_value_attribute) { 'ark_id' }
-  let(:attrs) { [:solr_url, :writer_class_name, :writer_settings, :model_name_solr_field, :solr_id_value_attribute] }
+  let(:batching_mode_batch_size) { 200 }
+  let(:attrs) { [:solr_url, :writer_class_name, :writer_settings, :model_name_solr_field, :solr_id_value_attribute, :batching_mode_batch_size] }
 
   describe 'instance vars' do
     it 'sets instance vars' do

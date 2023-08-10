@@ -3,8 +3,9 @@
 require 'rails_helper'
 require_relative './../shared/indexable_shared'
 RSpec.describe Curator::Indexable::RecordIndexUpdater do
-  include_context 'indexable_shared'
   subject { described_class.new(indexable_record) }
+
+  include_context 'indexable_shared'
 
   let(:indexable_record) { create(:curator_institution) }
 

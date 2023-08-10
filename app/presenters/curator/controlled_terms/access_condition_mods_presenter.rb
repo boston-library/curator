@@ -7,7 +7,7 @@ module Curator
     # @param access_condition_attrs [Array[Hash]]
     # @return [Array[Curator::ControlledTerms::AccessConditionModsPresenter]]
     def self.wrap_multiple(access_condition_attrs = [])
-      access_condition_attrs.map(&method(:new))
+      access_condition_attrs.map { |ac_kwargs| new(**ac_kwargs) }
     end
 
     attr_reader :rights, :access_restrictions

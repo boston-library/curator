@@ -88,8 +88,8 @@ module Curator
         writer_class_name: 'Traject::SolrJsonWriter',
         writer_settings: {
           'solr_writer.thread_pool' => 0,
-          'solr_writer.batch_size' => 1,
           'solr_writer.solr_update_args' => { softCommit: true },
+          'solr_writer.batch_size' => 1,
           'solr_writer.http_timeout' => 3,
           'logger' => Rails.logger
         },

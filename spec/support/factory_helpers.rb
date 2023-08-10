@@ -8,6 +8,7 @@ module FactoryHelpers
       desc_class.to_s.underscore.tr!('/', '_').to_sym
     end
   end
+
   module CollectionAsJson
     def collection_as_json(collection, opts = {})
       collection.as_json(opts).each(&:compact!)
