@@ -33,7 +33,7 @@ module Internal
       console do
         require 'awesome_print'
         AwesomePrint.irb!
-        config.console = Irb
+        config.console = IRB
       end
     end
     config.active_storage.analyzers = []
