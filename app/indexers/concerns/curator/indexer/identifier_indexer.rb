@@ -11,15 +11,17 @@ module Curator
                      isrc_ssim issue_number_ssim matrix_number_ssim music_plate_ssim music_publisher_ssim
                      sici_ssim videorecording_ssim).freeze
       ID_URI_FIELD = 'identifier_uri_ss'
+      ID_IIIF_MANIFEST_FIELD = 'identifier_iiif_manifest_ss'
       included do
         configure do
           each_record do |record, context|
             next unless record.descriptive&.identifier
 
-            if record.administrative.hosting_status == 'hosted' &&
-               record.descriptive.identifier.find { |i| i.type == 'uri' }.blank?
-              id_uri_value = "#{Curator.config.ark_manager_api_url}/ark:/#{Curator.config.default_ark_params[:namespace_ark]}/#{record.ark_id.split(':').last}"
-              context.output_hash[ID_URI_FIELD] = [id_uri_value]
+            if record.administrative.hosting_status == 'hosted'
+              ark_uri = "#{Curator.config.ark_manager_api_url}/ark:/#{Curator.config.default_ark_params[:namespace_ark]}/#{record.ark_id.split(':').last}"
+
+              context.output_hash[ID_URI_FIELD] = [ark_uri] if record.descriptive.identifier.find { |i| i.type == 'uri' }.blank?
+              context.output_hash[ID_IIIF_MANIFEST_FIELD] = ["#{ark_uri}/manifest"] if record.descriptive.identifier.find { |i| i.type == 'iiif_manifest' }.blank?
             end
 
             ID_FIELDS.each { |field| context.output_hash["identifier_#{field}"] ||= [] }
@@ -39,7 +41,7 @@ module Curator
                            when 'uri_preview'
                              'identifier_uri_preview_ss'
                            when 'iiif_manifest'
-                             'identifier_iiif_manifest_ss'
+                             ID_IIIF_MANIFEST_FIELD
                            when 'lccn', 'isbn', 'issn', 'ismn', 'isrc', 'issue_number', 'matrix_number', 'music_plate',
                                 'music_publisher', 'sici', 'videorecording'
                              "identifier_#{id_type}_ssim"

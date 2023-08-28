@@ -22,6 +22,7 @@ RSpec.describe Curator::Indexer::IdentifierIndexer do
         expect(indexed["identifier_#{identifier_field}_tsim"]).to include(identifier.label), "failed on #{identifier_field}"
       end
       expect(indexed['identifier_uri_ss'].first).to include(descriptable_object.ark_id.split(':').last)
+      expect(indexed['identifier_iiif_manifest_ss'].first).to include("#{descriptable_object.ark_id.split(':').last}/manifest")
     end
   end
 end
