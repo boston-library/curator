@@ -9,9 +9,10 @@ RSpec.describe Curator::Indexer::IdentifierIndexer do
       end
     end
     let(:indexer) { indexer_test_class.new }
-    let(:descriptive) { create(:curator_metastreams_descriptive) }
-    let(:descriptable_object) { descriptive.digital_object }
-    let(:indexed) { indexer.map_record(descriptable_object) }
+    let(:image_file_set) { create(:curator_filestreams_image) } # need this to test IIIF manifest indexing
+    let(:digital_object) { Curator::DigitalObject.find(image_file_set.file_set_of_id) }
+    let(:descriptive) { digital_object.descriptive }
+    let(:indexed) { indexer.map_record(digital_object) }
 
     it 'sets the identifier fields' do
       descriptive.identifier.each do |identifier|
@@ -21,8 +22,8 @@ RSpec.describe Curator::Indexer::IdentifierIndexer do
         identifier_field = "#{id_type}#{identifier.invalid ? '_invalid' : ''}"
         expect(indexed["identifier_#{identifier_field}_tsim"]).to include(identifier.label), "failed on #{identifier_field}"
       end
-      expect(indexed['identifier_uri_ss'].first).to include(descriptable_object.ark_id.split(':').last)
-      expect(indexed['identifier_iiif_manifest_ss'].first).to include("#{descriptable_object.ark_id.split(':').last}/manifest")
+      expect(indexed['identifier_uri_ss'].first).to include(digital_object.ark_id.split(':').last)
+      expect(indexed['identifier_iiif_manifest_ss'].first).to include("#{digital_object.ark_id.split(':').last}/manifest")
     end
   end
 end

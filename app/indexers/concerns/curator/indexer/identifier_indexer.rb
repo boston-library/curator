@@ -21,7 +21,8 @@ module Curator
               ark_uri = "#{Curator.config.ark_manager_api_url}/ark:/#{Curator.config.default_ark_params[:namespace_ark]}/#{record.ark_id.split(':').last}"
 
               context.output_hash[ID_URI_FIELD] = [ark_uri] if record.descriptive.identifier.find { |i| i.type == 'uri' }.blank?
-              context.output_hash[ID_IIIF_MANIFEST_FIELD] = ["#{ark_uri}/manifest"] if record.descriptive.identifier.find { |i| i.type == 'iiif_manifest' }.blank?
+              context.output_hash[ID_IIIF_MANIFEST_FIELD] = ["#{ark_uri}/manifest"] if record.image_file_sets.present? &&
+                                                                                       record.descriptive.identifier.find { |i| i.type == 'iiif_manifest' }.blank?
             end
 
             ID_FIELDS.each { |field| context.output_hash["identifier_#{field}"] ||= [] }
