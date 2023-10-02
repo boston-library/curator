@@ -24,21 +24,21 @@ module Curator
 
           case authority_code
           when 'aat'
-            'fetch/getty/aat'
+            'fetch/linked_data/getty_aat_ld4l_cache'
           when 'lcgft'
-            "show/linked_data/loc_direct/genre/#{id_from_auth}"
+            "show/linked_data/loc/genre/#{id_from_auth}"
           when 'lcsh'
-            "show/linked_data/loc_direct/subjects/#{id_from_auth}"
+            "show/linked_data/loc/subjects/#{id_from_auth}"
           when 'lctgm', 'gmgpc'
             'search/loc/graphicMaterials'
           when 'naf'
-            "show/linked_data/loc_direct/names/#{id_from_auth}"
+            "show/linked_data/loc/names/#{id_from_auth}"
           when 'tgn'
             "tgn/#{id_from_auth}"
           when 'geonames'
             "geonames/#{id_from_auth}"
           when 'ulan'
-            'fetch/getty/ulan'
+            'fetch/linked_data/getty_ulan_ld4l_cache'
           end
         end
 
