@@ -70,20 +70,6 @@ module Curator
           return if !can_query_bpldc?
 
           case authority_code
-          when 'aat', 'ulan'
-            lambda do |json_body|
-              return if json_body.blank?
-
-              results = json_body.dig('results', 'bindings')
-
-              return if results.blank? || !results.is_a?(Array)
-
-              label_results = results.select { |r| r.dig('Predicate', 'value') == 'http://www.w3.org/2000/01/rdf-schema#label' && r.dig('Object', 'xml:lang') == 'en' }
-
-              return if label_results.blank?
-
-              label_results.first&.dig('Object', 'value')
-            end
           when 'tgn', 'geonames'
             lambda do |json_body|
               return if json_body.blank?
