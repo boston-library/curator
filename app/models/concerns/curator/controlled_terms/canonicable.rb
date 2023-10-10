@@ -81,10 +81,7 @@ module Curator
               return if json_body.blank?
 
               el = json_body.is_a?(Array) ? json_body.first : json_body
-
-              return el['label'].join if el['label'].is_a?(Array)
-
-              el['label']
+              el['label'].is_a?(Array) ? el['label'].first : el['label']
             end
           end
         end
