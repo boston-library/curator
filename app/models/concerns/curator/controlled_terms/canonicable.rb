@@ -5,11 +5,11 @@ module Curator
     module Canonicable
       extend ActiveSupport::Concern
       included do
-        before_validation :fetch_canonical_label, if: :should_fetch_canonical_label?, on: :create
+        before_validation :set_canonical_label, if: :should_set_canonical_label?, on: :create
 
         protected
 
-        def should_fetch_canonical_label?
+        def should_set_canonical_label?
           new_record? && label.blank? && value_uri.present?
         end
 
@@ -24,7 +24,7 @@ module Curator
 
           case authority_code
           when 'aat'
-            'fetch/linked_data/getty_aat_ld4l_cache'
+            "show/getty/aat/#{id_from_auth}"
           when 'lcgft'
             "show/linked_data/loc/genre/#{id_from_auth}"
           when 'lcsh'
@@ -38,7 +38,7 @@ module Curator
           when 'geonames'
             "geonames/#{id_from_auth}"
           when 'ulan'
-            'fetch/linked_data/getty_ulan_ld4l_cache'
+            "show/getty/ulan/#{id_from_auth}"
           end
         end
 
@@ -57,8 +57,6 @@ module Curator
           return {} if !can_query_bpldc?
 
           case authority_code
-          when 'aat', 'ulan'
-            { uri: value_uri }
           when 'lctgm', 'gmgpc'
             { q: id_from_auth }
           else
@@ -70,11 +68,29 @@ module Curator
           return if !can_query_bpldc?
 
           case authority_code
+          when 'aat', 'ulan'
+            lambda do |json_body|
+              return if json_body.blank?
+
+              results = json_body.dig('results', 'bindings')
+              return if results.blank? || !results.is_a?(Array)
+
+              label_results = nil
+              %w(en-us en).each do |lang|
+                next if label_results.present?
+
+                label_results = results.select { |r| r.dig('Predicate', 'value') == 'http://www.w3.org/2000/01/rdf-schema#label' && r.dig('Object', 'xml:lang') == lang }
+              end
+              return if label_results.blank?
+
+              label_results.first&.dig('Object', 'value')
+            end
           when 'tgn', 'geonames'
             lambda do |json_body|
               return if json_body.blank?
 
-              json_body.dig('non_hier_geo', 'value') || json_body.fetch('hier_geo', {}).values.first
+              hier_geo_values = json_body.fetch('hier_geo', {}).values
+              json_body.dig('non_hier_geo', 'value') || (authority_code == 'tgn' ? hier_geo_values.first : hier_geo_values.last)
             end
           else
             lambda do |json_body|
@@ -89,7 +105,12 @@ module Curator
         def fetch_canonical_label
           return if bpldc_query_path.blank?
 
-          self.label = ControlledTerms::AuthorityService.call(path: bpldc_query_path, path_prefix: bpldc_path_prefix, query: bpldc_query, &bpldc_label_json_block)
+          self.label = ControlledTerms::AuthorityService.call(path: bpldc_query_path, path_prefix: bpldc_path_prefix,
+                                                              query: bpldc_query, &bpldc_label_json_block)
+        end
+
+        def set_canonical_label
+          self.label = fetch_canonical_label
         end
       end
     end

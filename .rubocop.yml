@@ -186,6 +186,9 @@ Lint/EmptyInterpolation:
 Lint/EmptyWhen:
   Enabled: true
 
+Lint/EndInMethod:
+  Enabled: true
+
 Lint/EnsureReturn:
   Enabled: true
 
@@ -285,6 +288,9 @@ Lint/UselessAccessModifier:
   Enabled: true
 
 Lint/UselessAssignment:
+  Enabled: true
+
+Lint/UselessComparison:
   Enabled: true
 
 Lint/UselessElseWithoutRescue:
@@ -439,6 +445,8 @@ Metrics/ClassLength:
 Metrics/CyclomaticComplexity:
   Enabled: true
   Max: 25
+  Exclude:
+    - 'app/models/concerns/curator/controlled_terms/canonicable.rb'
 
 Metrics/MethodLength:
   Enabled: true
@@ -705,6 +713,9 @@ RSpec/HooksBeforeExamples:
 
 RSpec/InstanceVariable:
   Enabled: false
+
+RSpec/InvalidPredicateMatcher:
+  Enabled: true
 
 RSpec/ItBehavesLike:
   Enabled: true
