@@ -439,6 +439,8 @@ Metrics/ClassLength:
 Metrics/CyclomaticComplexity:
   Enabled: true
   Max: 15
+  Exclude:
+    - 'app/models/concerns/curator/controlled_terms/canonicable.rb'
 
 Metrics/MethodLength:
   Enabled: true
