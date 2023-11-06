@@ -15,7 +15,7 @@ RSpec.describe Curator::ControlledTerms::Geographic, type: :model do
   it_behaves_like 'id_from_auth_uniqueness_validatable' do
     # rubocop:disable RSpec/LetSetup
     let!(:authority) { find_authority_by_code('tgn') }
-    let!(:term_data) { { id_from_auth: '7004939', label: 'Piacenza', area_type: 'city', coordinates: '45.016667,9.666667' } }
+    let!(:term_data) { { id_from_auth: '7004939', label: 'Piacenza', area_type: 'city', coordinates: '45.016667,9.666667' } } # NOTE: Using invalid data to test that validation fails as expected
 
     before(:each) { VCR.insert_cassette('services/controlled_terms/id_from_auth_uniqueness_validatable_geographic', allow_playback_repeats: true) }
 

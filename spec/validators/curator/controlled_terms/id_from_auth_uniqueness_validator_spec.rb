@@ -14,7 +14,7 @@ RSpec.describe Curator::ControlledTerms::IdFromAuthUniquenessValidator, type: :v
 
     it { is_expected.to respond_to(:validate).with(1).argument }
 
-    context 'no id_from_auth' do
+    context 'when no id_from_auth' do
       subject! { validator_instance.validate(record) }
 
       let!(:authority) { find_authority_by_code('gmgpc') }
@@ -23,7 +23,7 @@ RSpec.describe Curator::ControlledTerms::IdFromAuthUniquenessValidator, type: :v
       it { is_expected.to be(nil) }
     end
 
-    context 'no authority' do
+    context 'when no authority' do
       subject! { validator_instance.validate(record) }
 
       let!(:record) { create(:curator_controlled_terms_subject, authority: nil, term_data: { id_from_auth: 'testetstetst', label: 'Bar' }) }
@@ -31,7 +31,7 @@ RSpec.describe Curator::ControlledTerms::IdFromAuthUniquenessValidator, type: :v
       it { is_expected.to be(nil) }
     end
 
-    context 'validation failure' do
+    context 'when validation failure' do
       subject!(:record) { build(:curator_controlled_terms_subject, authority: authority, term_data: { id_from_auth: 'foobar', label: 'FooBar' }) }
 
       let!(:authority) { find_authority_by_code('gmgpc') }
@@ -45,6 +45,22 @@ RSpec.describe Curator::ControlledTerms::IdFromAuthUniquenessValidator, type: :v
       it 'is expected to contain errors' do
         expect(record.errors).to have_key(:id_from_auth)
         expect(record.errors.full_messages).to include(expected_error_message)
+      end
+    end
+
+    context 'when validation success' do
+      subject!(:record) { build(:curator_controlled_terms_subject, authority: authority, term_data: { id_from_auth: 'sh85040989', label: 'Education' }) }
+
+      let!(:authority) { find_authority_by_code('lcsh') }
+
+      before(:each) do
+        validator_instance.validate(record)
+      end
+
+      it { is_expected.to be_valid }
+
+      it 'is expected not to contain errors' do
+        expect(record.errors.full_messages).to be_empty
       end
     end
   end
