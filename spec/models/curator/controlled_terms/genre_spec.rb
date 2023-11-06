@@ -15,7 +15,7 @@ RSpec.describe Curator::ControlledTerms::Genre, type: :model do
   it_behaves_like 'id_from_auth_uniqueness_validatable' do
     # rubocop:disable RSpec/LetSetup
     let!(:authority) { find_authority_by_code('gmgpc') }
-    let!(:term_data) { { id_from_auth: 'tgm008084' } } # NOTE: Using invalid data to test that validation fails as expected
+    let!(:term_data) { { id_from_auth: 'tgm008084' } }
 
     before(:each) { VCR.insert_cassette('services/controlled_terms/id_from_auth_uniqueness_validatable_genre', allow_playback_repeats: true) }
 

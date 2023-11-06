@@ -15,7 +15,7 @@ RSpec.describe Curator::ControlledTerms::ResourceType, type: :model do
   it_behaves_like 'id_from_auth_uniqueness_validatable' do
     # rubocop:disable RSpec/LetSetup
     let!(:authority) { find_authority_by_code('resourceTypes') }
-    let!(:term_data) { { id_from_auth: 'foo', label: 'Foo' } } # NOTE: Using invalid data to test that validation fails as expected
+    let!(:term_data) { { id_from_auth: 'foo', label: 'Foo' } }
 
     before(:each) { VCR.insert_cassette('services/controlled_terms/id_from_auth_uniqueness_validatable_resource_type', allow_playback_repeats: true) }
 
