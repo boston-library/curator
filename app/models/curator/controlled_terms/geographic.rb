@@ -5,6 +5,7 @@ module Curator
     include ControlledTerms::AuthorityDelegation
     include ControlledTerms::Canonicable
     include ControlledTerms::ReindexDescriptable
+    include ControlledTerms::IdFromAuthUniqueValidatable
     include Mappings::MappedTerms
 
     belongs_to :authority, inverse_of: :geographics, class_name: 'Curator::ControlledTerms::Authority', optional: true
