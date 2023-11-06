@@ -5,6 +5,7 @@ module Curator
     include ControlledTerms::AuthorityDelegation
     include ControlledTerms::Canonicable
     include ControlledTerms::ReindexDescriptable
+    include ControlledTerms::IdFromAuthUniqueValidatable
     include Mappings::MappedTerms
 
     VALID_NAME_TYPES = %w(personal corporate conference family).freeze

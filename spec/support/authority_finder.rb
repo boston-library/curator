@@ -8,4 +8,5 @@ end
 
 RSpec.configure do |config|
   config.include AuthorityFinder, type: :model
+  config.include AuthorityFinder, type: :validators
 end

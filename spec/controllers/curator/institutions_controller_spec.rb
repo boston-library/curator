@@ -34,6 +34,7 @@ RSpec.describe Curator::InstitutionsController, type: :controller do
       id_from_auth: location.id_from_auth,
       coordinates: location.coordinates,
       authority_code: location.authority_code,
+      bounding_box: location.bounding_box,
       area_type: location.area_type
     }
     attributes[:host_collections_attributes] = [
