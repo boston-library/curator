@@ -86,6 +86,7 @@ Layout/IndentationConsistency:
 Layout/IndentationWidth:
   Enabled: true
 
+
 Layout/LeadingEmptyLines:
   Enabled: true
 
@@ -184,9 +185,6 @@ Lint/EmptyInterpolation:
   Enabled: true
 
 Lint/EmptyWhen:
-  Enabled: true
-
-Lint/EndInMethod:
   Enabled: true
 
 Lint/EnsureReturn:
@@ -288,9 +286,6 @@ Lint/UselessAccessModifier:
   Enabled: true
 
 Lint/UselessAssignment:
-  Enabled: true
-
-Lint/UselessComparison:
   Enabled: true
 
 Lint/UselessElseWithoutRescue:
@@ -713,9 +708,6 @@ RSpec/HooksBeforeExamples:
 
 RSpec/InstanceVariable:
   Enabled: false
-
-RSpec/InvalidPredicateMatcher:
-  Enabled: true
 
 RSpec/ItBehavesLike:
   Enabled: true

@@ -28,10 +28,11 @@ group :development, :test do
   gem 'factory_bot_rails', '~> 6.2'
   gem 'faker', '~> 3.2'
   gem 'puma', '~> 6.2'
-  gem 'rubocop', '~> 1.36', require: false
-  gem 'rubocop-performance', '~> 1.15', require: false
-  gem 'rubocop-rails', '~> 2.16', require: false
-  gem 'rubocop-rspec', require: false
+  gem 'rubocop', '~> 1.57.2', require: false
+  gem 'rubocop-factory_bot', '~> 2.24.0' ,require: false
+  gem 'rubocop-performance', '~> 1.19.1', require: false
+  gem 'rubocop-rails', '~> 2.22.1', require: false
+  gem 'rubocop-rspec', '~> 2.25.0' , require: false
 end
 
 group :test do
