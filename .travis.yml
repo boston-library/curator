@@ -15,6 +15,7 @@ addons:
       - postgresql-client-12
 
 before_install:
+  - sudo sed -i 's/port = 5433/port = 5432/' /etc/postgresql/12/main/postgresql.conf
   - sudo pg_ctlcluster 12 main restart
   - gem update --system --no-document
   - gem install bundler:2.3.26 --no-document
