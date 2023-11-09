@@ -16,12 +16,6 @@ addons:
 
 before_install:
   - sudo sed -i 's/port = 5433/port = 5432/' /etc/postgresql/12/main/postgresql.conf
-  - >-
-    sudo sed -i
-    -e '/local.*peer/s/postgres/all/'
-    -e 's/peer\|md5/trust/g'
-    /etc/postgresql/12/main/pg_hba.conf
-  - sudo pg_ctlcluster 12 main restart
   - gem update --system --no-document
   - gem install bundler:2.3.26 --no-document
 
@@ -38,6 +32,7 @@ env:
     - PGVER=12
     - PGHOST=127.0.0.1
     - PGUSER=postgres
+    - PGPASSWORD=postgres
     - PGPORT=5432
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
     - INGEST_SOURCE_DIRECTORY=/opt/ingest_source
