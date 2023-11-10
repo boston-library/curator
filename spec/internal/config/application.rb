@@ -31,10 +31,9 @@ module Internal
     config.api_only = true
     if Rails.env.development?
       console do
-        require 'pry' unless defined? Pry
         require 'awesome_print'
-        AwesomePrint.pry!
-        config.console = Pry
+        AwesomePrint.irb!
+        config.console = IRB
       end
     end
     config.active_storage.analyzers = []

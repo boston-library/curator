@@ -28,9 +28,8 @@ module Curator
       # @param (see #initialize)
       def self.push(**kwargs)
         original = Thread.current[THREAD_CURRENT_KEY]
-        instance = new(kwargs.merge(original_settings: original))
+        instance = new(**kwargs.merge(original_settings: original))
         Thread.current[THREAD_CURRENT_KEY] = instance
-
         instance
       end
 
@@ -60,7 +59,7 @@ module Curator
       def initialize(batching:, disable_callbacks:, original_settings:,
                      writer:, on_finish:)
         @original_settings = original_settings
-        @batching = !!batching
+        @batching = batching
         @disable_callbacks = disable_callbacks
         @on_finish = on_finish
 
@@ -79,11 +78,13 @@ module Curator
       #
       # In case of `batching:true`, the batching writer will be lazily created on
       # first time #writer is asked for.
+      # NOTE: Updated this code from newer kither version https://github.com/sciencehistory/kithe/blob/925f308cbeb927120ee0b3e5cf839abc79e435f0/app/indexing/kithe/indexable/thread_settings.rb#L80
       def writer
         @writer ||= begin
           if @batching
+            batch_size = (@batching == true) ? Curator.config.indexable_settings.batching_mode_batch_size : @batching
             @local_writer = true
-            Curator.config.indexable_settings.writer_instance!('solr_writer.batch_size' => 100, 'solr_writer.thread_pool' => 1)
+            Curator.config.indexable_settings.writer_instance!('solr_writer.batch_size' => batch_size)
           end
         end
       end
@@ -107,7 +108,7 @@ module Curator
           on_finish&.call(@writer)
         end
 
-        Thread.current[THREAD_CURRENT_KEY] = @original_thread_current_settings
+        Thread.current[THREAD_CURRENT_KEY] = @original_settings
       end
 
       # "Null object" representing no current settings set.

@@ -71,7 +71,7 @@ end
 #
 Dir[Curator::Engine.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 
-# NOTE LEAVE THIS COMMENTED!
+# NOTE: LEAVE THIS COMMENTED!
 # maintain_test_schema! is REALLY Broken.
 # # Checks for pending migrations and applies them before tests are run.
 # # If you are not using ActiveRecord, you can remove these lines.

@@ -12,7 +12,7 @@ module Curator
       # since these are tougher to deal with (or non-English specific),
       # and unlikely to be used
       DATE_ENCODING = 'w3cdtf'
-      CORP_NAME_INPUT_MATCHER = /[\S]{5}\.(?!\))/.freeze
+      CORP_NAME_INPUT_MATCHER = /[\S]{5}\.(?!\))/
       TGN_HIER_GEO_ATTRS = %i(continent country region province state territory county island city city_section area extraterrestrial_area).freeze
 
       NONSORT_ARTICLES = %w(

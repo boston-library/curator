@@ -2,8 +2,8 @@
 
 module Curator::Middleware
   class ArkOrIdConstraint
-    ID_REGEX = /\d+/.freeze
-    ARK_REGEX = /\A[a-z]+.*[a-z]*:{1}[a-z0-9]{9}\z/.freeze
+    ID_REGEX = /\d+/
+    ARK_REGEX = /\A[a-z]+.*[a-z]*:{1}[a-z0-9]{9}\z/
 
     attr_reader :pattern
 

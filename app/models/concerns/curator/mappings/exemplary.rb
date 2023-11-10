@@ -16,6 +16,7 @@ module Curator
           has_one :exemplary_file_set, through: :exemplary_image_mapping, source: :exemplary_file_set
         end
       end
+
       module FileSet
         extend ActiveSupport::Concern
         included do

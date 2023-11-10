@@ -411,7 +411,7 @@ module Curator
 
               if_block = options.delete(:if)
               n = BuilderHelpers::RelationalNode.new(node_name.to_sym, **options, &block)
-              @_xml_elements[transformed_key(node_name)] = if_block.blank? ?  n : [n, if_block]
+              @_xml_elements[transformed_key(node_name)] = if_block.blank? ? n : [n, if_block]
             end
 
             def multi_node(node_name, **options, &block)

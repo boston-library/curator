@@ -4,7 +4,7 @@ module Curator
   module NamespaceAccessor
     def self.included(base)
       base.extend(ClassMethods)
-      # NOTE THE ORDER HERE MATTERS
+      # NOTE: THE ORDER HERE MATTERS
       base.module_eval do
         def self.init_namespace_accessors!
           puts 'Initializing namespace accessors' if Rails.env.development?

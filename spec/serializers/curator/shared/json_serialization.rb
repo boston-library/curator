@@ -2,7 +2,7 @@
 
 RSpec.shared_examples 'json_serialization', type: :serializers do |include_collections: true|
   let!(:adapter_key) { :json }
-  let!(:json_regex) { /[{\[]{1}([,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]|".*?")+[}\]]{1}/.freeze }
+  let!(:json_regex) { /[{\[]{1}([,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]|".*?")+[}\]]{1}/ }
 
   describe 'JSON serialization behavior' do
     specify { expect(json_record).to be_truthy }

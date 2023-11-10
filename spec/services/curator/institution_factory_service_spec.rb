@@ -11,7 +11,7 @@ RSpec.describe Curator::InstitutionFactoryService, type: :service do
     VCR.use_cassette('services/institution_factory_service') do
       expect do
         @success, @institution = handle_factory_result(described_class, @object_json)
-      end.to change { Curator::Institution.count }.by(1)
+      end.to change(Curator::Institution, :count).by(1)
     end
   end
 

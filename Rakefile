@@ -29,6 +29,7 @@ RuboCop::RakeTask.new(:rubocop) do |task|
   task.requires << 'rubocop-rails'
   task.requires << 'rubocop-rspec'
   task.requires << 'rubocop-performance'
+  task.requires << 'rubocop-factory_bot'
   task.fail_on_error = true
   # WARNING: Make sure the bottom 3 lines are always commented out before committing
   # task.options << '--safe-auto-correct'

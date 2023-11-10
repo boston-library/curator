@@ -15,7 +15,7 @@ RSpec.describe Curator::DigitalObjectFactoryService, type: :service do
     VCR.use_cassette('services/digital_object_factory_service') do
       expect do
         @success, @digital_object = handle_factory_result(described_class, @digital_object_json)
-      end.to change { Curator::DigitalObject.count }.by(1)
+      end.to change(Curator::DigitalObject, :count).by(1)
     end
   end
 

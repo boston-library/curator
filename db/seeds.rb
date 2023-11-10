@@ -90,7 +90,7 @@ if Rails.env.development?
       puts obj.message
       raise "DigitalObject Errors occured; Details.. #{obj.inspect}"
     end
-  rescue RuntimeError =>  e
+  rescue RuntimeError => e
     puts 'errors occured seeding default development objects!'
     puts "Reason #{e.message}"
   end

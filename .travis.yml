@@ -1,6 +1,6 @@
 language: ruby
 os: linux
-dist: bionic
+dist: focal
 
 cache:
   bundler: true
@@ -16,10 +16,14 @@ addons:
 
 before_install:
   - sudo sed -i 's/port = 5433/port = 5432/' /etc/postgresql/12/main/postgresql.conf
-  - sudo cp /etc/postgresql/{9.3,12}/main/pg_hba.conf
+  - >-
+    sudo sed -i
+    -e '/local.*peer/s/postgres/all/'
+    -e 's/peer\|md5/trust/g'
+    /etc/postgresql/12/main/pg_hba.conf
   - sudo pg_ctlcluster 12 main restart
   - gem update --system --no-document
-  - gem install bundler:2.3.11 --no-document
+  - gem install bundler:2.3.26 --no-document
 
 before_script:
   - mkdir -p $INGEST_SOURCE_DIRECTORY/BPLDC
@@ -27,7 +31,7 @@ before_script:
   - bundle exec rails app:curator:setup
 
 rvm:
-  - 2.7.7
+  - 3.0.6
 
 env:
   global:

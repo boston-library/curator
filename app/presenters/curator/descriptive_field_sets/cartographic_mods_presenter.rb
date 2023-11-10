@@ -9,7 +9,7 @@ module Curator
       cart_attrs = []
       cart_attrs << { projection: projection } if projection.present?
       cart_attrs += scale.map { |s| { scale: s } }
-      cart_attrs.map(&method(:new))
+      cart_attrs.map { |cart_kwargs| new(**cart_kwargs) }
     end
 
     # For <mods:geographic><mods:cartographics> elements

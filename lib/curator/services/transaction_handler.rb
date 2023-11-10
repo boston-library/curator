@@ -79,7 +79,7 @@ module Curator
           @result = e
         ensure
           handle_result!
-          purge_unattached_files! if purge_blobs_on_fail? # NOTE This Will call purge_later on unattached files if success is false
+          purge_unattached_files! if purge_blobs_on_fail? # NOTE: This Will call purge_later on unattached files if success is false
         end
       end
     end

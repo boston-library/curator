@@ -12,7 +12,7 @@ AllCops:
     - 'app/services/curator/filestreams/file_factory_service.rb'
   DisplayCopNames: true
   DisabledByDefault: true
-  TargetRubyVersion: 2.7
+  TargetRubyVersion: 3.0
 
 ####################### BUNDLER/GEMSPEC ###############################
 Bundler/OrderedGems:
@@ -86,6 +86,7 @@ Layout/IndentationConsistency:
 Layout/IndentationWidth:
   Enabled: true
 
+
 Layout/LeadingEmptyLines:
   Enabled: true
 
@@ -146,6 +147,9 @@ Lint/AmbiguousRegexpLiteral:
 Lint/AssignmentInCondition:
   Enabled: true
 
+Lint/BinaryOperatorWithIdenticalOperands:
+  Enabled: true
+
 Lint/CircularArgumentReference:
   Enabled: true
 
@@ -181,9 +185,6 @@ Lint/EmptyInterpolation:
   Enabled: true
 
 Lint/EmptyWhen:
-  Enabled: true
-
-Lint/EndInMethod:
   Enabled: true
 
 Lint/EnsureReturn:
@@ -287,9 +288,6 @@ Lint/UselessAccessModifier:
 Lint/UselessAssignment:
   Enabled: true
 
-Lint/UselessComparison:
-  Enabled: true
-
 Lint/UselessElseWithoutRescue:
   Enabled: true
 
@@ -333,6 +331,9 @@ Style/DefWithParentheses:
   Enabled: true
 
 Style/EmptyElse:
+  Enabled: true
+
+Style/EndBlock:
   Enabled: true
 
 Style/EvalWithLocation:
@@ -424,7 +425,7 @@ Style/RedundantInterpolation:
 
 Metrics/AbcSize:
   Enabled: true
-  Max: 107
+  Max: 120
 
 Metrics/BlockLength:
   Enabled: true
@@ -438,7 +439,7 @@ Metrics/ClassLength:
 
 Metrics/CyclomaticComplexity:
   Enabled: true
-  Max: 15
+  Max: 25
   Exclude:
     - 'app/models/concerns/curator/controlled_terms/canonicable.rb'
 
@@ -707,9 +708,6 @@ RSpec/HooksBeforeExamples:
 
 RSpec/InstanceVariable:
   Enabled: false
-
-RSpec/InvalidPredicateMatcher:
-  Enabled: true
 
 RSpec/ItBehavesLike:
   Enabled: true
