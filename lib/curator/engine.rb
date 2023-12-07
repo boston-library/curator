@@ -73,6 +73,14 @@ module Curator
       end
     end
 
+    initializer 'curator.active_storage_job_override' do |app|
+      app.reloader.to_prepare do
+        ActiveSupport.on_load(:active_job) do
+          ActiveStorage::BaseJob.send(:include, Curator::RetryOnFaradayException)
+        end
+      end
+    end
+
     initializer 'curator.append_migrations' do |app|
       unless app.root.to_s.match root.to_s
         config.paths['db/migrate'].expanded.each do |path|
