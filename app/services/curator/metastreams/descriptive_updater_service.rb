@@ -37,11 +37,12 @@ module Curator
                     subject_other
                     title).freeze
 
+    ALLOW_BLANK_ATTRIBUTES_LIST = %i(abstract).freeze
     TERM_MAPPINGS = %w(genres resource_types languages).freeze
 
     def call
       with_transaction do
-        simple_attributes_update(SIMPLE_ATTRIBUTES_LIST) do |simple_attr|
+        simple_attributes_update(SIMPLE_ATTRIBUTES_LIST, ALLOW_BLANK_ATTRIBUTES_LIST) do |simple_attr|
           # NOTE: see simple_attributes_update in lib/curator/services/updater_service.rb
           # I almost forgot it skips the attribute key if its not detected in the @json_attr hash there
 
