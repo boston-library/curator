@@ -105,8 +105,8 @@ module Curator
         def fetch_canonical_label
           return if bpldc_query_path.blank?
 
-          self.label = ControlledTerms::AuthorityService.call(path: bpldc_query_path, path_prefix: bpldc_path_prefix,
-                                                              query: bpldc_query, &bpldc_label_json_block)
+          ControlledTerms::AuthorityService.call(path: bpldc_query_path, path_prefix: bpldc_path_prefix,
+                                                 query: bpldc_query, &bpldc_label_json_block)
         end
 
         def set_canonical_label
