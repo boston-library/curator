@@ -41,7 +41,7 @@ module Curator
 
     def call
       with_transaction do
-        simple_attributes_update(SIMPLE_ATTRIBUTES_LIST) do |simple_attr|
+        simple_attributes_update(SIMPLE_ATTRIBUTES_LIST, SIMPLE_ATTRIBUTES_LIST) do |simple_attr|
           # NOTE: see simple_attributes_update in lib/curator/services/updater_service.rb
           # I almost forgot it skips the attribute key if its not detected in the @json_attr hash there
 
