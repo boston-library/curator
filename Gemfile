@@ -36,9 +36,9 @@ group :development, :test do
 end
 
 group :test do
-  gem 'climate_control', '~> 1.0'
-  gem 'coveralls', require: false
-  gem 'database_cleaner-active_record', '~> 2'
+  gem 'climate_control', '~> 1.1'
+  gem 'coveralls_reborn', '~> 0.28.0', require: false
+  gem 'database_cleaner-active_record', '~> 2.1'
   gem 'rspec-rails', '~> 6.0'
   gem 'shoulda-matchers', '~> 5.2'
   gem 'vcr', '~> 6.1'

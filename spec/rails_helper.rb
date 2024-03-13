@@ -21,14 +21,9 @@ require File.expand_path('./internal/config/environment', __dir__)
 # Prevent database truncation if the environment is production
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 
-require 'simplecov'
-require 'coveralls'
-Coveralls.wear!('rails')
-
-SimpleCov.formatter = Coveralls::SimpleCov::Formatter
-SimpleCov.start do
-  add_filter '/spec/'
-end
+require 'rspec/rails'
+require 'database_cleaner/active_record'
+require 'factory_bot_rails'
 
 require 'vcr'
 
@@ -42,9 +37,6 @@ VCR.configure do |c|
   end
 end
 
-require 'rspec/rails'
-require 'database_cleaner/active_record'
-require 'factory_bot_rails'
 require 'paper_trail/frameworks/rspec'
 
 Shoulda::Matchers.configure do |config|
