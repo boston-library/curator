@@ -23,7 +23,7 @@ before_install:
     /etc/postgresql/12/main/pg_hba.conf
   - sudo pg_ctlcluster 12 main restart
   - gem update --system --no-document
-  - gem install bundler:2.3.26 --no-document
+  - gem install bundler:2.4.22 --no-document
 
 before_script:
   - mkdir -p $INGEST_SOURCE_DIRECTORY/BPLDC
@@ -31,7 +31,7 @@ before_script:
   - bundle exec rails app:curator:setup
 
 rvm:
-  - 3.0.6
+  - 3.1.4
 
 env:
   global:

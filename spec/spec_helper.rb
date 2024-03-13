@@ -18,6 +18,15 @@
 require 'webmock/rspec'
 require 'aasm/rspec'
 
+require 'simplecov'
+require 'coveralls'
+Coveralls.wear!('rails')
+
+SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+SimpleCov.start do
+  add_filter '/spec/'
+end
+
 WebMock.disable_net_connect!(allow_localhost: true)
 
 RSpec.configure do |config|
