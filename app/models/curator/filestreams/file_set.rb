@@ -123,20 +123,22 @@ module Curator
     end
 
     def reindex_associations
-      Curator::Indexable.indexer_health_check!
-
-      Curator::Indexable.index_with(batching: true) do
-        reindex_digital_objects
-        reindex_collections
-      end
+      reindex_digital_objects
+      reindex_collections
     end
 
     def reindex_digital_objects
-      file_set_members_of.find_each(&:update_index)
+      file_set_members_of.find_each do |obj|
+        obj.queue_indexing_job
+        sleep(0.1)
+      end
     end
 
     def reindex_collections
-      exemplary_image_of_collections.find_each(&:update_index)
+      exemplary_image_of_collections.find_each do |col|
+        col.queue_indexing_job
+        sleep(0.1)
+      end
     end
   end
 end
