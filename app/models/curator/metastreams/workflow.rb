@@ -113,6 +113,14 @@ module Curator
 
     alias regenerate_derivatives generate_derivatives
 
+    def prewarm_iif_manifest
+      return if workflowable_type != 'Curator::Filestreams::FileSet'
+
+      return if workflowable.class.name != 'Curator::Filestreams::Image'
+
+      Curator::Filestreams::IIIFManifestPrewarmJob.set(wait: 2.seconds).perform_later(workflowable.ark_id)
+    end
+
     def touch_parent
       workflowable.file_set_of.touch if workflowable_type == 'Curator::Filestreams::FileSet'
     end
