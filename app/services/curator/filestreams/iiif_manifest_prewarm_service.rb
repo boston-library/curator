@@ -3,10 +3,11 @@
 module Curator
   class Filestreams::IIIFManifestPrewarmService < Services::Base
     include Curator::Services::RemoteService
+    include Curator::Filestreams::IIIFServerHealthCheck
 
     self.base_url = Curator.config.iiif_server_url
     self.default_headers = { content_type: 'application/json' }
-    self.timeout_options = Curator.config.default_remote_service_timeout_opts
+    self.timeout_options = Curator.config.default_remote_service_timeout_opts.merge(read: 300)
 
     attr_reader :ark_id
 
@@ -15,6 +16,37 @@ module Curator
     end
 
     def call
+      begin
+        service_response = self.class.with_client do |client|
+          call_iiif_manifest_endpoint(client)
+        end
+
+        return service_response
+      rescue HTTP::Error => e
+        base_message = 'HTTP Error Occurred Calling IIIF Server'
+        json_reason = { 'reason' => e.message }.as_json
+        Rails.logger.error base_message
+        Rails.logger.error "Reason: #{e.message}"
+        raise Curator::Exceptions::RemoteServiceError.new(base_message, json_reason, 500)
+      rescue Curator::Exceptions::RemoteServiceError => e
+        Rails.logger.error 'Error Occurred Invalidating IIIF Server Cache'
+        Rails.logger.error "Reason: #{e.message}"
+        Rails.logger.error "Response code: #{e.code}"
+        Rails.logger.error "Response: #{e.json_response}"
+        raise
+      end
+      nil
+    end
+
+    protected
+
+    def call_iiif_manifest_endpoint(client)
+      manifest_endpoint = "#{Curator.config.iiif_server_url}/iiif/2/#{ark_id}/info.json"
+      resp = client.headers(self.class.default_headers).get(manifest_endpoint).flush
+
+      return "Successfully created manifest at #{manifest_endpoint}" if resp.status.success?
+
+      raise Curator::Exceptions::RemoteServiceError.new("Failed to pre warm manifest for #{ark_id} in iiif server!", { response: resp.body.to_s }, resp.status)
     end
   end
 end

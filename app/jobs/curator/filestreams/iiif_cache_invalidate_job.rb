@@ -2,7 +2,8 @@
 
 module Curator
   class Filestreams::IIIFCacheInvalidateJob < ApplicationJob
-    queue_as :default
+    include Curator::Filestreams::IIIFReadyable
+    queue_as :iiif
 
     retry_on Curator::Exceptions::IIIFServerUnavailable, wait: 5.seconds, attempts: 5
     retry_on Curator::Exceptions::RemoteServiceError, wait: 5.seconds, attempts: 2
@@ -15,12 +16,6 @@ module Curator
       service_result = Curator::Filestreams::IIIFServerCacheInvalidateService.call(ark_id)
 
       logger.info "IIIF server responded with #{service_result}"
-    end
-
-    protected
-
-    def remote_service_healthcheck!
-      raise Curator::Exceptions::IIIFServerUnavailable if !iiif_server_ready?
     end
 
     private
