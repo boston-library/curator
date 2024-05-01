@@ -25,10 +25,7 @@ module Curator
     private
 
     def reindex_associated_institutions
-      institution_locations.find_each do |inst|
-        inst.queue_indexing_job
-        sleep(0.1)
-      end
+      institution_locations.find_each(&:queue_indexing_job)
     end
   end
 end

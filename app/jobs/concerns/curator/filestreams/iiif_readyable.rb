@@ -19,7 +19,7 @@ module Curator
         private
 
         def iiif_server_ready?
-          raise StandardError, 'Implement Me'
+          raise StandardError, 'Implement in downstream class!'
         end
       end
     end

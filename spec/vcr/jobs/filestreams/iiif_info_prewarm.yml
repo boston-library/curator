@@ -23,7 +23,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Mon, 29 Apr 2024 20:26:01 GMT
+      - Wed, 01 May 2024 19:53:41 GMT
       Content-Type:
       - application/json;charset=utf-8
       Content-Length:
@@ -44,5 +44,5 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"@context":"http://iiif.io/api/image/2/context.json","@id":"https://iiif-dc3dev.bpl.org/iiif/2/bpl-dev:8049g5699","protocol":"http://iiif.io/api/image","width":8503,"height":6386,"sizes":[{"width":133,"height":100},{"width":266,"height":200},{"width":531,"height":399},{"width":1063,"height":798},{"width":2126,"height":1597},{"width":4252,"height":3193},{"width":8503,"height":6386}],"tiles":[{"width":1024,"height":1024,"scaleFactors":[1,2,4,8,16,32,64]}],"profile":["http://iiif.io/api/image/2/level2.json",{"formats":["jpg","tif","gif","png"],"qualities":["bitonal","default","gray","color"],"supports":["regionByPx","sizeByW","sizeByWhListed","cors","regionSquare","sizeByDistortedWh","canonicalLinkHeader","sizeByConfinedWh","sizeByPct","jsonldMediaType","regionByPct","rotationArbitrary","sizeByH","baseUriRedirect","rotationBy90s","profileLinkHeader","sizeByForcedWh","sizeByWh","mirroring"]}]}'
-  recorded_at: Mon, 29 Apr 2024 20:26:01 GMT
+  recorded_at: Wed, 01 May 2024 19:53:41 GMT
 recorded_with: VCR 6.2.0

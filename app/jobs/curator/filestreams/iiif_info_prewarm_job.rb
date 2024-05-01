@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Curator
-  class Filestreams::IIIFManifestPrewarmJob < ApplicationJob
+  class Filestreams::IIIFInfoPrewarmJob < ApplicationJob
     include Curator::Filestreams::IIIFReadyable
     queue_as :iiif
 
@@ -12,7 +12,7 @@ module Curator
     before_perform { remote_service_healthcheck! }
 
     def perform(ark_id)
-      service_result = Curator::Filestreams::IIIFManifestPrewarmService.call(ark_id)
+      service_result = Curator::Filestreams::IIIFInfoPrewarmService.call(ark_id)
 
       logger.info "IIIF server responded with #{service_result}"
     end
@@ -20,7 +20,7 @@ module Curator
     private
 
     def iiif_server_ready?
-      Curator::Filestreams::IIIFManifestPrewarmService.ready?
+      Curator::Filestreams::IIIFInfoPrewarmService.ready?
     end
   end
 end

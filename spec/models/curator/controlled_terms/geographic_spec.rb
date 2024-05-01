@@ -13,10 +13,11 @@ RSpec.describe Curator::ControlledTerms::Geographic, type: :model do
   it_behaves_like 'nomenclature'
   it_behaves_like 'authority_delegation'
 
-  it_behaves_like 'id_from_auth_findable' do
+  it_behaves_like 'id_from_auth_findable', test_multiple: true do
     # rubocop:disable RSpec/LetSetup
     let!(:id_from_auth) { '7004939' }
     let!(:authority) { find_authority_by_code('tgn') }
+    let!(:other_authority) { find_authority_by_code('geonames') }
     let!(:term_data) { { id_from_auth: id_from_auth, label: 'Piacenza', area_type: 'city', coordinates: '45.016667,9.666667' } }
 
     before(:each) { VCR.insert_cassette('services/controlled_terms/id_from_auth_findable_geographic', allow_playback_repeats: true) }

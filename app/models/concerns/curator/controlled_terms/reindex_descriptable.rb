@@ -32,10 +32,7 @@ module Curator
 
           return if object_ids.blank?
 
-          Curator.digital_object_class.where(id: object_ids).find_each do |obj|
-            obj.queue_indexing_job
-            sleep(0.1)
-          end
+          Curator.digital_object_class.where(id: object_ids).find_each(&:queue_indexing_job)
         end
       end
     end

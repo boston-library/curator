@@ -128,17 +128,11 @@ module Curator
     end
 
     def reindex_digital_objects
-      file_set_members_of.find_each do |obj|
-        obj.queue_indexing_job
-        sleep(0.1)
-      end
+      file_set_members_of.find_each(&:queue_indexing_job)
     end
 
     def reindex_collections
-      exemplary_image_of_collections.find_each do |col|
-        col.queue_indexing_job
-        sleep(0.1)
-      end
+      exemplary_image_of_collections.find_each(&:queue_indexing_job)
     end
   end
 end

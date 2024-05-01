@@ -20,7 +20,6 @@ module Curator
     def reindex_descriptable_objects
       desc_host_collections.find_each do |desc_host_col|
         desc_host_col.descriptive.digital_object.queue_indexing_job
-        sleep(0.1)
       end
     end
   end

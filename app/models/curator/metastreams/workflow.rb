@@ -114,16 +114,16 @@ module Curator
     alias regenerate_derivatives generate_derivatives
 
     def finalize_complete
-      prewarm_iif_manifest
+      prewarm_iiif_info
       touch_parent
     end
 
-    def prewarm_iif_manifest
+    def prewarm_iiif_info
       return if workflowable_type != 'Curator::Filestreams::FileSet'
 
       return if workflowable.class.name != 'Curator::Filestreams::Image'
 
-      Curator::Filestreams::IIIFManifestPrewarmJob.set(wait: 2.seconds).perform_later(workflowable.ark_id)
+      Curator::Filestreams::IIIFInfoPrewarmJob.set(wait: 2.seconds).perform_later(workflowable.ark_id)
     end
 
     def touch_parent
