@@ -4,7 +4,7 @@
 ## Warning
 
 
-This Project is currently is still in active **development**
+This Project is currently in active **development**
 
 
 ## Description
