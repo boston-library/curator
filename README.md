@@ -4,7 +4,7 @@
 ## Warning
 
 
-This Project is currently in the early stages of **development** and not recommended for any use outside of **development**
+This Project is currently in active **development**
 
 
 ## Description

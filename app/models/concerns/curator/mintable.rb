@@ -4,6 +4,18 @@ module Curator
   module Mintable
     extend ActiveSupport::Concern
 
+    class_methods do
+      def find_ark(ark_id)
+        find_ark!(ark_id)
+      rescue ActiveRecord::RecordNotFound
+        nil
+      end
+
+      def find_ark!(ark_id)
+        find_by!(ark_id: ark_id)
+      end
+    end
+
     included do
       include InstanceMethods
 

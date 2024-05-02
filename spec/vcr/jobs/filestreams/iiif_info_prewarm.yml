@@ -1,0 +1,48 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://iiif-dc3dev.bpl.org/iiif/2/bpl-dev:8049g5699/info.json
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - iiif-dc3dev.bpl.org
+      User-Agent:
+      - http.rb/5.2.0
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Wed, 01 May 2024 19:53:41 GMT
+      Content-Type:
+      - application/json;charset=utf-8
+      Content-Length:
+      - '903'
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept, Accept-Charset, Accept-Encoding, Accept-Language, Origin
+      - Accept-Encoding
+      X-Powered-By:
+      - Cantaloupe/5.0.5
+      Access-Control-Allow-Origin:
+      - "*"
+      Cache-Control:
+      - max-age=2592000, public, no-transform
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"@context":"http://iiif.io/api/image/2/context.json","@id":"https://iiif-dc3dev.bpl.org/iiif/2/bpl-dev:8049g5699","protocol":"http://iiif.io/api/image","width":8503,"height":6386,"sizes":[{"width":133,"height":100},{"width":266,"height":200},{"width":531,"height":399},{"width":1063,"height":798},{"width":2126,"height":1597},{"width":4252,"height":3193},{"width":8503,"height":6386}],"tiles":[{"width":1024,"height":1024,"scaleFactors":[1,2,4,8,16,32,64]}],"profile":["http://iiif.io/api/image/2/level2.json",{"formats":["jpg","tif","gif","png"],"qualities":["bitonal","default","gray","color"],"supports":["regionByPx","sizeByW","sizeByWhListed","cors","regionSquare","sizeByDistortedWh","canonicalLinkHeader","sizeByConfinedWh","sizeByPct","jsonldMediaType","regionByPct","rotationArbitrary","sizeByH","baseUriRedirect","rotationBy90s","profileLinkHeader","sizeByForcedWh","sizeByWh","mirroring"]}]}'
+  recorded_at: Wed, 01 May 2024 19:53:41 GMT
+recorded_with: VCR 6.2.0

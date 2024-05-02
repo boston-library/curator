@@ -95,6 +95,9 @@ rescue Curator::Exceptions::SolrUnavailable, Curator::Exceptions::AuthorityApiUn
   raise e.message
 end
 
+# NOTE: per this comment https://github.com/sciencehistory/kithe/blob/56a65a97292c3d0e273a822080df6d1db8616cfa/app/indexing/kithe/indexable.rb#L57
+# If we are updating a batch of record in a call back without a background job we should wrap in the index_with batching: true
+
 def reindex_all_with_batching
   Curator::Indexable.index_with(batching: true) do
     ActiveRecord::Base.connection_pool.with_connection do

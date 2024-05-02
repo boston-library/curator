@@ -56,7 +56,7 @@ module Curator
         transitions from: :initialized, to: :derivatives
       end
 
-      event :mark_complete, guards: [:is_processable?, :can_complete?], after_commit: :touch_parent do
+      event :mark_complete, guards: [:is_processable?, :can_complete?], after_commit: :finalize_complete do
         transitions from: :derivatives, to: :complete
       end
 
@@ -112,6 +112,19 @@ module Curator
     end
 
     alias regenerate_derivatives generate_derivatives
+
+    def finalize_complete
+      prewarm_iiif_info
+      touch_parent
+    end
+
+    def prewarm_iiif_info
+      return if workflowable_type != 'Curator::Filestreams::FileSet'
+
+      return if workflowable.class.name != 'Curator::Filestreams::Image'
+
+      Curator::Filestreams::IIIFInfoPrewarmJob.set(wait: 2.seconds).perform_later(workflowable.ark_id)
+    end
 
     def touch_parent
       workflowable.file_set_of.touch if workflowable_type == 'Curator::Filestreams::FileSet'

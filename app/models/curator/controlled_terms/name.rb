@@ -5,6 +5,7 @@ module Curator
     include ControlledTerms::AuthorityDelegation
     include ControlledTerms::Canonicable
     include ControlledTerms::ReindexDescriptable
+    include ControlledTerms::IdFromAuthFindable
     include ControlledTerms::IdFromAuthUniqueValidatable
     include Mappings::MappedTerms
 

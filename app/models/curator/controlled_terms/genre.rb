@@ -6,6 +6,7 @@ module Curator
     include ControlledTerms::Canonicable
     include ControlledTerms::ReindexDescriptable
     include ControlledTerms::IdFromAuthUniqueValidatable
+    include ControlledTerms::IdFromAuthFindable
     include Mappings::MappedTerms
 
     belongs_to :authority, inverse_of: :genres, class_name: 'Curator::ControlledTerms::Authority', optional: true

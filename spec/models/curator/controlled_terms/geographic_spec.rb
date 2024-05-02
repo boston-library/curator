@@ -5,12 +5,26 @@ require_relative '../shared/controlled_terms/nomenclature'
 require_relative '../shared/controlled_terms/authority_delegation'
 require_relative '../shared/controlled_terms/canonicable'
 require_relative '../shared/controlled_terms/id_from_auth_unique_validatable'
+require_relative '../shared/controlled_terms/id_from_auth_findable'
 require_relative '../shared/controlled_terms/reindex_descriptable'
 require_relative '../shared/mappings/mapped_terms'
 
 RSpec.describe Curator::ControlledTerms::Geographic, type: :model do
   it_behaves_like 'nomenclature'
   it_behaves_like 'authority_delegation'
+
+  it_behaves_like 'id_from_auth_findable', test_multiple: true do
+    # rubocop:disable RSpec/LetSetup
+    let!(:id_from_auth) { '7004939' }
+    let!(:authority) { find_authority_by_code('tgn') }
+    let!(:other_authority) { find_authority_by_code('geonames') }
+    let!(:term_data) { { id_from_auth: id_from_auth, label: 'Piacenza', area_type: 'city', coordinates: '45.016667,9.666667' } }
+
+    before(:each) { VCR.insert_cassette('services/controlled_terms/id_from_auth_findable_geographic', allow_playback_repeats: true) }
+
+    after(:each) { VCR.eject_cassette }
+    # rubocop:enable RSpec/LetSetup
+  end
 
   it_behaves_like 'id_from_auth_uniqueness_validatable' do
     # rubocop:disable RSpec/LetSetup
@@ -59,6 +73,24 @@ RSpec.describe Curator::ControlledTerms::Geographic, type: :model do
                         class_name('Curator::Institution').
                         with_foreign_key(:location_id).
                         dependent(:destroy) }
+  end
+
+  describe 'Scopes' do
+    describe '.tgns' do
+      subject { described_class.tgns.to_sql }
+
+      let!(:expected_sql) { described_class.with_authority.where(authority: { code: 'tgn' }).references(:authority).to_sql }
+
+      it { is_expected.to eql(expected_sql) }
+    end
+
+    describe '.geonames' do
+      subject { described_class.geonames.to_sql }
+
+      let!(:expected_sql) { described_class.with_authority.where(authority: { code: 'geonames' }).references(:authority).to_sql }
+
+      it { is_expected.to eql(expected_sql) }
+    end
   end
 
   describe 'Callbacks' do

@@ -6,7 +6,11 @@ module Curator
     include ControlledTerms::Canonicable
     include ControlledTerms::ReindexDescriptable
     include ControlledTerms::IdFromAuthUniqueValidatable
+    include ControlledTerms::IdFromAuthFindable
     include Mappings::MappedTerms
+
+    scope :tgns, -> { with_authority.where(authority: { code: 'tgn' }).references(:authority) }
+    scope :geonames, -> { with_authority.where(authority: { code: 'geonames' }).references(:authority) }
 
     belongs_to :authority, inverse_of: :geographics, class_name: 'Curator::ControlledTerms::Authority', optional: true
 
@@ -21,7 +25,7 @@ module Curator
     private
 
     def reindex_associated_institutions
-      institution_locations.find_each { |inst| inst.update_index }
+      institution_locations.find_each(&:queue_indexing_job)
     end
   end
 end

@@ -63,11 +63,7 @@ module Curator
     def reindex_collection_members
       return if !saved_change_to_name?
 
-      Curator::Indexable.indexer_health_check!
-
-      Curator::Indexable.index_with(batching: true) do
-        Curator.digital_object_class.for_reindex_all.where(id: collection_members.pluck(:digital_object_id)).find_each(&:update_index)
-      end
+      Curator.digital_object_class.where(id: collection_members.pluck(:digital_object_id)).find_each(&:queue_indexing_job)
     end
   end
 end
