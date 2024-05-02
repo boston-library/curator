@@ -29,7 +29,7 @@ module Curator
         Rails.logger.error "Reason: #{e.message}"
         raise Curator::Exceptions::RemoteServiceError.new(base_message, json_reason, 500)
       rescue Curator::Exceptions::RemoteServiceError => e
-        Rails.logger.error 'Error Occurred Invalidating IIIF Server Cache'
+        Rails.logger.error 'Error Occurred Creating info.json on IIIF Server'
         Rails.logger.error "Reason: #{e.message}"
         Rails.logger.error "Response code: #{e.code}"
         Rails.logger.error "Response: #{e.json_response}"
@@ -44,7 +44,7 @@ module Curator
       info_endpoint = "#{Curator.config.iiif_server_url}/iiif/2/#{ark_id}/info.json"
       resp = client.headers(self.class.default_headers).get(info_endpoint).flush
 
-      return "Successfully created manifest at #{info_endpoint}" if resp.status.success?
+      return "Successfully created info.json at #{info_endpoint}" if resp.status.success?
 
       raise Curator::Exceptions::RemoteServiceError.new("Failed to pre warm info for #{ark_id} in iiif server!", { response: resp.body.to_s }, resp.status)
     end
