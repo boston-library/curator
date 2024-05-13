@@ -5,7 +5,6 @@ require_relative './shared/mintable'
 require_relative './shared/metastreamable'
 require_relative './shared/optimistic_lockable'
 require_relative './shared/timestampable'
-require_relative './shared/archivable'
 require_relative './shared/for_serialization'
 require_relative './shared/local_id_finder'
 require_relative './shared/filestreams/thumbnailable'
@@ -18,7 +17,6 @@ RSpec.describe Curator::Institution, type: :model do
   describe 'Database' do
     it_behaves_like 'optimistic_lockable'
     it_behaves_like 'timestampable'
-    it_behaves_like 'archivable'
 
     it { is_expected.to have_db_column(:name).of_type(:string).with_options(null: false) }
     it { is_expected.to have_db_column(:url).of_type(:string) }

@@ -3,7 +3,6 @@
 require 'rails_helper'
 require_relative '../shared/optimistic_lockable'
 require_relative '../shared/timestampable'
-require_relative '../shared/archivable'
 require_relative '../shared/versionable'
 
 RSpec.describe Curator::Metastreams::Workflow, type: :model do
@@ -12,7 +11,6 @@ RSpec.describe Curator::Metastreams::Workflow, type: :model do
   describe 'Database' do
     it_behaves_like 'optimistic_lockable'
     it_behaves_like 'timestampable'
-    it_behaves_like 'archivable'
 
     it { is_expected.to have_db_column(:workflowable_type).
                         of_type(:string).
