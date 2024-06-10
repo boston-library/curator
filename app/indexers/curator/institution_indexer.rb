@@ -17,6 +17,7 @@ module Curator
       to_field 'abstract_tsi', obj_extract('abstract')
       to_field 'institution_url_ss', obj_extract('url')
       to_field %w(genre_basic_ssim genre_basic_tsim), obj_extract('class', 'name', 'demodulize')
+      to_field 'institution_ark_id_ssi', obj_extract('ark_id')
     end
   end
 end

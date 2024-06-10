@@ -33,5 +33,9 @@ RSpec.describe Curator::InstitutionIndexer do
         expect(indexed[field]).to eq [institution.class.name.demodulize]
       end
     end
+
+    it 'sets the institution ark_id field' do
+      expect(indexed['institution_ark_id_ssi']).to eq [institution.ark_id]
+    end
   end
 end
