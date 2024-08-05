@@ -35,8 +35,8 @@ rvm:
 
 env:
   global:
-    - PGVER=12
-    - PGHOST=127.0.0.1
+    - PGVER=15
+    - PGHOST=localhost
     - PGUSER=postgres
     - PGPORT=5432
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
