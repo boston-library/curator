@@ -24,6 +24,13 @@ module Curator
       to_field 'has_wordcoords_json_bsi' do |rec, acc|
         acc << true if rec.respond_to?(:text_coordinates_access_attachment) && rec.text_coordinates_access_attachment.present?
       end
+
+      to_field 'destination_site_ssim' do |rec, acc|
+        if rec.class.name == 'Curator::Filestreams::Image'
+          acc << 'newspapers' if rec.file_set_of&.administrative&.destination_site&.include?('newspapers')
+        end
+      end
+
       each_record do |record, context|
         next unless record.respond_to?(:text_plain_attachment) && record.text_plain_attachment.present?
 

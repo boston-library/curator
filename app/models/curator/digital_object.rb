@@ -15,6 +15,9 @@ module Curator
 
     scope :for_serialization, -> { includes(:file_sets, exemplary_image_mapping: :exemplary_file_set).with_metastreams }
     scope :for_reindex_all, -> { for_serialization.joins(:administrative, :descriptive, :workflow) }
+    scope :issue_object, -> { where.not(contained_by_id: nil) }
+    scope :with_admin_set_ark, ->(admin_set_ark_id) { joins(:admin_set).where(admin_set: { ark_id: admin_set_ark_id }) }
+
     scope :local_id_finder, lambda { |admin_set_ark_id, identifier, oai_header_id = nil|
       return joins(:admin_set, :administrative).where(collections: { ark_id: admin_set_ark_id }).merge(Curator.metastreams.administrative_class.local_id_finder(oai_header_id)).limit(1) if oai_header_id
 
@@ -62,6 +65,7 @@ module Curator
 
     has_many :file_set_member_mappings, -> { includes(:file_set) }, inverse_of: :digital_object,
              class_name: 'Curator::Mappings::FileSetMember', dependent: :destroy
+
     with_options through: :file_set_member_mappings, source: :file_set do
       has_many :file_set_members, class_name: 'Curator::Filestreams::FileSet'
       has_many :audio_file_set_members, class_name: 'Curator::Filestreams::Audio'

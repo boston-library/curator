@@ -62,6 +62,7 @@ RSpec.describe Curator::DigitalObjectIndexer, type: :indexer do
         it 'sets the ocr field' do
           attach_text_file(text_file_set)
           expect(indexed['ocr_tiv']).to include 'Lorem ipsum'
+          expect(indexed['has_transcription_bsi']).to be_truthy
         end
       end
     end

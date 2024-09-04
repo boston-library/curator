@@ -163,6 +163,31 @@ RSpec.describe Curator::DigitalObject, type: :model do
       end
     end
 
+    describe '.issue_object' do
+      subject { described_class }
+
+      let(:expected_scope_sql) { described_class.where.not(contained_by_id: nil).to_sql }
+
+      it { is_expected.to respond_to(:issue_object) }
+
+      it 'expects the scope sql to match the expected_scope_sql' do
+        expect(subject.issue_object.to_sql).to eq(expected_scope_sql)
+      end
+    end
+
+    describe '.with_admin_set_ark' do
+      subject { described_class }
+
+      let(:admin_set_ark_id) { 'bpl-dev:123456789' }
+      let(:expected_scope_sql) { described_class.joins(:admin_set).where(admin_set: { ark_id: admin_set_ark_id }).to_sql }
+
+      it { is_expected.to respond_to(:with_admin_set_ark).with(1).argument }
+
+      it 'expects the scope sql to match the expected_scope_sql' do
+        expect(subject.with_admin_set_ark(admin_set_ark_id).to_sql).to eq(expected_scope_sql)
+      end
+    end
+
     it_behaves_like 'local_id_finder' do
       let(:admin_set_ark_id) { 'bpl-dev:123456789' }
       let(:identifier) { create_list(:curator_descriptives_identifier, 3).as_json }
