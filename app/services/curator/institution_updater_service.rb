@@ -23,7 +23,7 @@ module Curator
         @record.host_collections_attributes = host_collections_attributes if host_collections_attributes.present?
 
         location = location_object(location_json_attrs)
-        @record.location = location unless @record.location_id == location.id
+        @record.location = location unless @record.location_id == location&.id
 
         attach_files!(@record)
         @record.save!
