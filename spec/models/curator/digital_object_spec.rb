@@ -163,15 +163,15 @@ RSpec.describe Curator::DigitalObject, type: :model do
       end
     end
 
-    describe '.issue_object' do
+    describe '.issue_objects' do
       subject { described_class }
 
       let(:expected_scope_sql) { described_class.where.not(contained_by_id: nil).to_sql }
 
-      it { is_expected.to respond_to(:issue_object) }
+      it { is_expected.to respond_to(:issue_objects) }
 
       it 'expects the scope sql to match the expected_scope_sql' do
-        expect(subject.issue_object.to_sql).to eq(expected_scope_sql)
+        expect(subject.issue_objects.to_sql).to eq(expected_scope_sql)
       end
     end
 

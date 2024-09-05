@@ -15,7 +15,7 @@ module Curator
 
     scope :for_serialization, -> { includes(:file_sets, exemplary_image_mapping: :exemplary_file_set).with_metastreams }
     scope :for_reindex_all, -> { for_serialization.joins(:administrative, :descriptive, :workflow) }
-    scope :issue_object, -> { where.not(contained_by_id: nil) }
+    scope :issue_objects, -> { where.not(contained_by_id: nil) }
     scope :with_admin_set_ark, ->(admin_set_ark_id) { joins(:admin_set).where(admin_set: { ark_id: admin_set_ark_id }) }
 
     scope :local_id_finder, lambda { |admin_set_ark_id, identifier, oai_header_id = nil|

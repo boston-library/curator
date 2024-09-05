@@ -29,7 +29,7 @@ module Curator
         end
 
         genre_labels.each do |genre_label|
-          next if genre_label == 'Serial Publications'
+          next if genre_label == 'Serial publications'
 
           accumulator << genre_label if accumulator.exclude?(genre_label)
         end
