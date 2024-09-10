@@ -59,10 +59,16 @@ RSpec.describe Curator::DigitalObjectIndexer, type: :indexer do
         let(:text_file_set) { create(:curator_filestreams_text) }
         let(:digital_object) { Curator::DigitalObject.find(text_file_set.file_set_of_id) }
 
+        before(:each) { attach_text_file(text_file_set) }
+
         it 'sets the ocr field' do
-          attach_text_file(text_file_set)
           expect(indexed['ocr_tiv']).to include 'Lorem ipsum'
+        end
+
+        it 'sets the transcription related fields' do
           expect(indexed['has_transcription_bsi']).to be_truthy
+          expect(indexed['transcription_ark_id_ssi']).to eql(text_file_set.ark_id)
+          expect(indexed['transcription_key_base_ss']).to eql(text_file_set.text_plain_attachment.key.to_s.gsub(/\/[^\/]*\z/, ''))
         end
       end
     end
