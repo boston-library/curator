@@ -50,6 +50,8 @@ module Curator
         end
 
         context.output_hash['has_transcription_bsi'] = true
+        context.output_hash['transcription_ark_id_ssi'] = text_plain_attachment.record.ark_id
+        context.output_hash['transcription_key_base_ss'] = text_plain_attachment.key.to_s.gsub(/\/[^\/]*\z/, '')
       end
     end
   end
