@@ -53,34 +53,31 @@ module Curator
 
       def with_transaction(&_block)
         retries = 0
-        begin
-          Rails.application.executor.wrap do
-            Curator::ApplicationRecord.transaction do
-              begin
-                yield
-              rescue ActiveRecord::StaleObjectError => e
-                if (retries += 1) <= MAX_RETRIES
-                  Rails.logger.info 'Record is stale retrying in 3 seconds...'
-                  sleep(5)
-                  @record.reload if @record.present? && !@record.new_record?
-                  retry
-                else
-                  Rails.logger.error '===============MAX RETRIES REACHED!============'
-                  Rails.logger.error "=================#{e.inspect}=================="
+        Curator::ApplicationRecord.connection_pool.with_connection do
+          Curator::ApplicationRecord.transaction do
+            yield
+          rescue ActiveRecord::StaleObjectError => e
+            if (retries += 1) <= MAX_RETRIES
+              Rails.logger.info 'Record is stale retrying in 5 seconds...'
+              sleep(5)
+              @record.reload if @record.present? && !@record.new_record?
+              retry
+            else
+              Rails.logger.error '===============MAX RETRIES REACHED!============'
+              Rails.logger.error "=================#{e.inspect}=================="
 
-                  raise ActiveRecord::RecordNotSaved.new("Max retries reached on stale object! Caused by: #{e.message}", e.record)
-                end
-              end
+              raise ActiveRecord::RecordNotSaved.new("Max retries reached on stale object! Caused by: #{e.message}", e.record)
             end
           end
-        rescue *RESULT_ERRORS => e
-          Rails.logger.error "=================#{e.inspect}=================="
-          @success = false
-          @result = e
-        ensure
-          handle_result!
-          purge_unattached_files! if purge_blobs_on_fail? # NOTE: This Will call purge_later on unattached files if success is false
         end
+      rescue *RESULT_ERRORS => e
+        Rails.logger.error "=================#{e.inspect}=================="
+        @success = false
+        @result = e
+      ensure
+        handle_result!
+        purge_unattached_files! if purge_blobs_on_fail? # NOTE: This Will call purge_later on unattached files if success is false
+        Curator::ApplicationRecord.clear_active_connections!
       end
     end
   end

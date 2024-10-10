@@ -17,7 +17,7 @@ gemspec
 # gem 'byebug', group: [:development, :test]
 
 group :development do
-  gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'listen'
 end
 
 group :development, :test do
@@ -27,7 +27,7 @@ group :development, :test do
   gem 'dotenv-rails', '~> 2.8'
   gem 'factory_bot_rails', '~> 6.2'
   gem 'faker', '~> 3.2'
-  gem 'puma', '~> 6.2'
+  gem 'puma', '~> 6.4'
   gem 'rubocop', '~> 1.57.2', require: false
   gem 'rubocop-factory_bot', '~> 2.24.0', require: false
   gem 'rubocop-performance', '~> 1.19.1', require: false

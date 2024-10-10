@@ -47,7 +47,7 @@ RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: f
             with_show_primary_params = params.dup
             with_show_primary_params[:id] ||= resource.to_param
             with_show_primary_params[:show_primary_url] = true
-            ActiveStorage::Current.set(host: 'http://localhost:3000') do
+            ActiveStorage::Current.set(url_options: { host: 'http://localhost:3000' }) do
               get :show, params: with_show_primary_params
             end
             expect(response).to have_http_status(:ok)
