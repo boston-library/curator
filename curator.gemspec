@@ -56,5 +56,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'mini_magick', '~> 4.12'
   spec.add_development_dependency 'pg', '>= 0.18', '< 2.0'
   spec.add_development_dependency 'redis', '~> 5'
-  spec.add_development_dependency 'solr_wrapper', '~> 4.1'
+  spec.add_development_dependency 'solr_wrapper', '~> 4.0.2'
 end
