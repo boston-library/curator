@@ -12,7 +12,7 @@ AllCops:
     - 'app/services/curator/filestreams/file_factory_service.rb'
   DisplayCopNames: true
   DisabledByDefault: true
-  TargetRubyVersion: 3.1
+  TargetRubyVersion: 3.2
 
 ####################### BUNDLER/GEMSPEC ###############################
 Bundler/OrderedGems:

@@ -12,7 +12,7 @@ module Curator
       end
 
       def find_ark!(ark_id)
-        find_by!(ark_id: ark_id)
+        find_sole_by(ark_id: ark_id)
       end
     end
 

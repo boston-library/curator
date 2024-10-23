@@ -41,15 +41,19 @@ RSpec.shared_examples 'shared_get', type: :controller do |include_ark_context: f
         end
 
         context 'with :show_primary_url param', if: file_set_type == 'image' do
+          before do
+            described_class.send(:include, ActiveStorage::SetCurrent)
+          end
+
           it 'returns a response with the primary_url' do
             resource.reload
 
             with_show_primary_params = params.dup
             with_show_primary_params[:id] ||= resource.to_param
             with_show_primary_params[:show_primary_url] = true
-            ActiveStorage::Current.set(host: 'http://localhost:3000') do
-              get :show, params: with_show_primary_params
-            end
+
+            get :show, params: with_show_primary_params
+
             expect(response).to have_http_status(:ok)
             expect(json_response).to be_a_kind_of(Hash).and have_key(resource_key)
             expect(json_response[resource_key]).to have_key(:image_primary_url)
