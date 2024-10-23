@@ -17,10 +17,11 @@ module Curator
         end
 
         def find_id_from_auth!(id_from_auth)
-          raise MultipleIdFromAuthError, "Multiple results found for #{id_from_auth}!" if jsonb_contains(id_from_auth: id_from_auth).size > 1
-
-          # NOTE: change this to use the #sole method when updating to rails 7
-          jsonb_contains(id_from_auth: id_from_auth).first!
+          jsonb_contains(id_from_auth: id_from_auth).sole
+        rescue ActiveRecord::SoleRecordExceeded
+          raise MultipleIdFromAuthError, "Multiple results found for #{id_from_auth}!"
+        rescue ActiveRecord::RecordNotFound
+          raise
         end
       end
     end

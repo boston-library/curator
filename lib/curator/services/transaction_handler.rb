@@ -6,11 +6,12 @@ module Curator
       extend ActiveSupport::Concern
 
       MAX_RETRIES = 3
-
+      RETRY_SLEEP_SECONDS = 5
       # These are errors that will be passed to the @result variable. That way these can be raised on failure up the chain
       RESULT_ERRORS = [
                         ActiveRecord::RecordNotFound,
                         ActiveRecord::StatementInvalid,
+                        ActiveRecord::SoleRecordExceeded,
                         ActiveRecord::RecordInvalid,
                         ActiveRecord::RecordNotUnique,
                         ActiveRecord::RecordNotSaved,
@@ -58,8 +59,8 @@ module Curator
             yield
           rescue ActiveRecord::StaleObjectError => e
             if (retries += 1) <= MAX_RETRIES
-              Rails.logger.info 'Record is stale retrying in 5 seconds...'
-              sleep(5)
+              Rails.logger.info "Record is stale retrying in #{RETRY_SLEEP_SECONDS} seconds..."
+              sleep(RETRY_SLEEP_SECONDS)
               @record.reload if @record.present? && !@record.new_record?
               retry
             else

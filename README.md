@@ -8,7 +8,7 @@ This Project is currently in active **development**
 
 
 ## Description
-Rails(~> 6.1) engine that sets up the basic data elements and routes for a more data driven JSON API for digital repositories.
+Rails(~> 7.0) engine that sets up the basic data elements and routes for a more data driven JSON API for digital repositories.
 Implements ActiveStorage for Cloud or local storage for files.
 Currently all data models have been created with basic routes and json serializers
 
