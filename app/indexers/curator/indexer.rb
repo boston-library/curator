@@ -18,8 +18,8 @@ module Curator
     configure do
       to_field 'id', obj_extract('ark_id')
       each_record do |record, context|
-        context.output_hash['system_create_dtsi'] = [record.created_at.to_s(:iso8601)]
-        context.output_hash['system_modified_dtsi'] = [record.updated_at.to_s(:iso8601)]
+        context.output_hash['system_create_dtsi'] = [record.created_at.to_fs(:iso8601)]
+        context.output_hash['system_modified_dtsi'] = [record.updated_at.to_fs(:iso8601)]
       end
       to_field Curator.config.indexable_settings.model_name_solr_field, obj_extract('class', 'name')
       to_field 'curator_model_suffix_ssi', obj_extract('class', 'name', 'demodulize')

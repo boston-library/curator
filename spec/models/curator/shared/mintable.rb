@@ -16,7 +16,7 @@ RSpec.shared_examples_for 'mintable', type: :model do |oai_specific: true, oai_p
         end
 
         it 'expects an ActiveRecord::RecordNotFound error to be raised with invalid_ark_id' do
-          expect { described_class.find_ark!(invalid_ark_id) }.to raise_error(ActiveRecord::RecordNotFound, "Couldn't find #{described_class.name}")
+          expect { described_class.find_ark!(invalid_ark_id) }.to raise_error(ActiveRecord::RecordNotFound, /Couldn't find #{described_class.name}/)
         end
       end
 

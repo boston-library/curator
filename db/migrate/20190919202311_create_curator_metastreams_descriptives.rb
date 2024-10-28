@@ -17,7 +17,7 @@ class CreateCuratorMetastreamsDescriptives < ActiveRecord::Migration[5.2]
           t.jsonb :related, index: { using: :gin, opclass: :jsonb_path_ops }, default: {}
           t.jsonb :cartographic, index: { using: :gin, opclass: :jsonb_path_ops }, default: {}
           t.jsonb :publication, index: { using: :gin, opclass: :jsonb_path_ops }, default: {}
-          t.enum :digital_origin, enum_name: 'curator.metastreams_descriptives_digital_origin', default: 'reformatted_digital'
+          t.enum :digital_origin, enum_type: 'curator.metastreams_descriptives_digital_origin', default: 'reformatted_digital'
           t.integer :text_direction
           t.boolean :resource_type_manuscript, default: false
           t.string :origin_event

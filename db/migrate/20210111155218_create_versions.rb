@@ -12,7 +12,7 @@ class CreateVersions < ActiveRecord::Migration[6.1]
 
   def change
     create_table 'curator.versions' do |t|
-      t.string   :item_type, { :null => false }
+      t.string   :item_type, null: false
       t.bigint   :item_id,   null: false
       t.string   :event,     null: false
       t.string   :whodunnit
