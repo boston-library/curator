@@ -37,6 +37,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'after_commit_everywhere', '~> 1.4' # Required for using aasm with active record
   spec.add_dependency 'alba', '~> 2.4'
   spec.add_dependency 'attr_json', '~> 2.4'
+  spec.add_dependency 'concurrent-ruby', '1.3.4' # lock to 1.3.4 due to Rails 7.0 bug: https://github.com/rails/rails/issues/54260
   spec.add_dependency 'concurrent-ruby-ext', '~> 1.3.4'
   spec.add_dependency 'connection_pool', '~> 2.4'
   spec.add_dependency 'down', '~> 5.4'
