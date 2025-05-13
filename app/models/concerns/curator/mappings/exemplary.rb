@@ -25,6 +25,7 @@ module Curator
                    dependent: :destroy, autosave: true
 
           with_options through: :exemplary_image_of_mappings, source: :exemplary_object do
+            has_many :exemplary_image_of_institutions, source_type: 'Curator::Institution'
             has_many :exemplary_image_of_collections, source_type: 'Curator::Collection'
             has_many :exemplary_image_of_objects, source_type: 'Curator::DigitalObject'
           end
@@ -32,12 +33,17 @@ module Curator
           def exemplary_image_of
             return self.class.none if exemplary_image_of_collections.blank? && exemplary_image_of_objects.blank?
 
+            institution_sql = exemplary_image_of_institutions.select(:id, :ark_id).to_sql.strip
             collection_sql = exemplary_image_of_collections.select(:id, :ark_id).to_sql.strip
             object_sql = exemplary_image_of_objects.select(:id, :ark_id).to_sql.strip
-            union_clause = collection_sql.present? && object_sql.present? ? 'UNION' : ''
+            union_clause = institution_sql.present? && collection_sql.present? ? 'UNION' : ''
+            second_union_clause = collection_sql.present? && object_sql.present? ? 'UNION' : ''
+
             exemplary_clause = <<-SQL.strip_heredoc
-                                  #{collection_sql}
+                                  #{institution_sql}
                                   #{union_clause}
+                                  #{collection_sql}
+                                  #{second_union_clause}
                                   #{object_sql}
                                 SQL
 

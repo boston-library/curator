@@ -7,7 +7,6 @@ require_relative './shared/optimistic_lockable'
 require_relative './shared/timestampable'
 require_relative './shared/for_serialization'
 require_relative './shared/local_id_finder'
-require_relative './shared/filestreams/thumbnailable'
 
 RSpec.describe Curator::Institution, type: :model do
   subject { build(:curator_institution) }
@@ -31,7 +30,6 @@ RSpec.describe Curator::Institution, type: :model do
 
   describe 'Associations' do
     it_behaves_like 'metastreamable_basic'
-    it_behaves_like 'thumbnailable'
 
     it { is_expected.to belong_to(:location).
       inverse_of(:institution_locations).
@@ -73,7 +71,7 @@ RSpec.describe Curator::Institution, type: :model do
     end
 
     it_behaves_like 'for_serialization' do
-      let(:expected_scope_sql) { described_class.with_metastreams.with_location.with_attached_image_thumbnail_300.includes(:host_collections).to_sql }
+      let(:expected_scope_sql) { described_class.with_metastreams.with_location.includes(:host_collections).to_sql }
     end
 
     it_behaves_like 'local_id_finder' do

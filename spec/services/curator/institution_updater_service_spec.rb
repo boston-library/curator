@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require_relative './shared/attachable'
 
 RSpec.describe Curator::InstitutionUpdaterService, type: :service do
   before(:all) do
     @institution ||= create(:curator_institution)
     @host_collection_to_remove ||= create(:curator_mappings_host_collection, institution: @institution)
     @location ||= create(:curator_controlled_terms_geographic)
-    @files_json ||= load_json_fixture('image_file_3', 'files')
 
     @update_attributes ||= {
       abstract: "#{@institution.abstract} [UPDATED]",
@@ -25,8 +23,7 @@ RSpec.describe Curator::InstitutionUpdaterService, type: :service do
         { name: 'Host Collection One' },
         { name: 'Host Collection Two' },
         { id: @host_collection_to_remove.id, _destroy: '1' }
-      ],
-      files: @files_json
+      ]
     }
 
     @success, @result = described_class.call(@institution, json_data: @update_attributes)
@@ -59,11 +56,6 @@ RSpec.describe Curator::InstitutionUpdaterService, type: :service do
         expect(subject.host_collections.pluck(:name)).to include('Host Collection One', 'Host Collection Two')
         expect(subject.host_collections.pluck(:name)).not_to include(@host_collection_to_remove.name)
       end
-    end
-
-    it_behaves_like 'attachable' do
-      let(:record) { @result }
-      let(:file_json) { @files_json.first }
     end
   end
 end

@@ -7,12 +7,12 @@ module Curator
     include Curator::Indexable
     include Curator::Mintable
     include Curator::Metastreamable::Basic
-    include Curator::Filestreams::Thumbnailable
+    include Curator::Mappings::Exemplary::Object
 
     self.curator_indexable_mapper = Curator::InstitutionIndexer.new
 
     scope :with_location, -> { includes(location: :authority) }
-    scope :for_serialization, -> { with_metastreams.with_location.with_attached_image_thumbnail_300.includes(:host_collections) }
+    scope :for_serialization, -> { with_metastreams.with_location.includes(:host_collections) }
     scope :for_reindex_all, -> { for_serialization.joins(:administrative, :workflow) }
     scope :local_id_finder, ->(name) { where(name: name).limit(1) }
 

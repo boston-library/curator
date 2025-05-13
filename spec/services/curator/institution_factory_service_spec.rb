@@ -2,12 +2,10 @@
 
 require 'rails_helper'
 require_relative './shared/factory_service_metastreams_shared'
-require_relative './shared/attachable'
 
 RSpec.describe Curator::InstitutionFactoryService, type: :service do
   before(:all) do
     @object_json = load_json_fixture('institution_with_thumbnail', 'institution')
-    @object_json['files'][0]['io'] = { uploaded_file: Rack::Test::UploadedFile.new(file_fixture('image_thumbnail_300_institution.png').to_s, 'image/png') }
     VCR.use_cassette('services/institution_factory_service') do
       expect do
         @success, @institution = handle_factory_result(described_class, @object_json)
@@ -43,9 +41,5 @@ RSpec.describe Curator::InstitutionFactoryService, type: :service do
 
     it_behaves_like 'factory_workflowable'
     it_behaves_like 'factory_administratable'
-    it_behaves_like 'attachable' do
-      let(:record) { @institution }
-      let(:file_json) { @object_json.fetch('files', []).first }
-    end
   end
 end
