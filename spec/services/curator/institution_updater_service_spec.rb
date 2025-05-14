@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe Curator::InstitutionUpdaterService, type: :service do
   before(:all) do
     @institution ||= create(:curator_institution)
+    @image_file_set ||= create(:curator_filestreams_image, file_set_of: create(:curator_digital_object, admin_set: create(:collection, institution: @institution)))
     @host_collection_to_remove ||= create(:curator_mappings_host_collection, institution: @institution)
     @location ||= create(:curator_controlled_terms_geographic)
 
@@ -18,6 +19,9 @@ RSpec.describe Curator::InstitutionUpdaterService, type: :service do
         authority_code: @location.authority_code,
         bounding_box: @location.bounding_box,
         area_type: @location.area_type
+      },
+      exemplary_file_set: {
+        ark_id: @image_file_set.ark_id
       },
       host_collections_attributes: [
         { name: 'Host Collection One' },
@@ -55,6 +59,12 @@ RSpec.describe Curator::InstitutionUpdaterService, type: :service do
         expect(subject.host_collections.count).to eq(2)
         expect(subject.host_collections.pluck(:name)).to include('Host Collection One', 'Host Collection Two')
         expect(subject.host_collections.pluck(:name)).not_to include(@host_collection_to_remove.name)
+      end
+
+      it 'expects the #exemplary_file_set to have been set' do
+        expect(subject.exemplary_file_set).to be_valid
+        expect(subject.exemplary_file_set.ark_id).not_to eq(@image_file_set.ark_id)
+        expect(subject.exemplary_file_set.ark_id).to eq(@image_file_set.ark_id)
       end
     end
   end

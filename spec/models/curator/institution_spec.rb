@@ -5,6 +5,7 @@ require_relative './shared/mintable'
 require_relative './shared/metastreamable'
 require_relative './shared/optimistic_lockable'
 require_relative './shared/timestampable'
+require_relative './shared/mappings/has_exemplary_file_set'
 require_relative './shared/for_serialization'
 require_relative './shared/local_id_finder'
 
@@ -30,6 +31,26 @@ RSpec.describe Curator::Institution, type: :model do
 
   describe 'Associations' do
     it_behaves_like 'metastreamable_basic'
+    it_behaves_like 'has_exemplary_file_set'
+
+    let!(:file_sets_source_map) do
+      [
+        :file_sets,
+        :audio_file_sets,
+        :image_file_sets,
+        :document_file_sets,
+        :ereader_file_sets,
+        :metadata_file_sets,
+        :text_file_sets,
+        :video_file_sets
+      ]
+    end
+
+    let!(:file_set_options) do
+      {
+        through: :collection_admin_set_objects
+      }
+    end
 
     it { is_expected.to belong_to(:location).
       inverse_of(:institution_locations).
@@ -43,6 +64,15 @@ RSpec.describe Curator::Institution, type: :model do
 
     it { is_expected.to have_many(:collection_admin_set_objects).
       through(:collections).source(:admin_set_objects) }
+
+    ########### FILE SETS ###################################################
+    it 'is expected to have various #file_sets relationships defined' do
+      file_sets_source_map.each do |relation_key|
+        expect(subject).to have_many(relation_key).
+          through(file_set_options[:through]).
+          source(relation_key)
+      end
+    end
   end
 
   describe 'Scopes' do
@@ -71,7 +101,7 @@ RSpec.describe Curator::Institution, type: :model do
     end
 
     it_behaves_like 'for_serialization' do
-      let(:expected_scope_sql) { described_class.with_metastreams.with_location.includes(:host_collections).to_sql }
+      let(:expected_scope_sql) { described_class.includes(exemplary_image_mapping: :exemplary_file_set).with_metastreams.with_location.includes(:host_collections).to_sql }
     end
 
     it_behaves_like 'local_id_finder' do

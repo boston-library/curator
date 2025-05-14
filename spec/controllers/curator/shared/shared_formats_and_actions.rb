@@ -129,7 +129,7 @@ RSpec.shared_examples 'shared_put_patch', type: :controller do |skip_put_patch: 
         merged_params
       end
 
-      it 'renders a 200 JSON response with the new resource' do
+      it 'renders a 200 JSON response with the updated resource' do
         VCR.use_cassette("controllers/#{resource_key}_update") do
           put :update, params: valid_update_params, session: valid_session
         end

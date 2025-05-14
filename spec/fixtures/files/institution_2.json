@@ -26,18 +26,6 @@
         "ingest_origin": "RoslindaleCommunityLibrary_Batch1-MODS.xls",
         "publishing_state": "published"
       }
-    },
-    "files": [
-      {
-        "file_name": "image_thumbnail_300_institution.png",
-        "file_type": "image_thumbnail_300",
-        "content_type": "image/png",
-        "byte_size": 11475,
-        "checksum_md5": "3ea351df3cb8b0ca4c5361727e191d0b",
-        "metadata": {
-          "ingest_filepath": "BPLDC/curator_fixtures/files/image_thumbnail_300_institution.png"
-        }
-      }
-    ]
+    }
   }
 }

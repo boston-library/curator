@@ -16,18 +16,11 @@ RSpec.describe Curator::InstitutionsController, type: :controller do
 
   let!(:valid_update_attributes) do
     attributes = resource.attributes.slice('abstract', 'url').symbolize_keys
-    thumbnail_path = file_fixture('image_thumbnail_300.jpg')
     location = create(:curator_controlled_terms_geographic)
-
-    file_attributes = [{
-      file_name: thumbnail_path.basename.to_s,
-      file_type: 'image_thumbnail_300',
-      content_type: 'image/jpeg',
-      io: {
-        uploaded_file: Rack::Test::UploadedFile.new(thumbnail_path, content_type = 'image/jpeg')
-      }
-    }]
-    attributes[:files] = file_attributes
+    admin_set = create(:curator_collection, institution: resource)
+    digital_object = create(:curator_digital_object, admin_set: admin_set)
+    image_file = create(:curator_filestreams_image, file_set_of: digital_object)
+    attributes[:exemplary_file_set] = { ark_id: image_file.ark_id }
 
     attributes[:location] = {
       label: location.label,

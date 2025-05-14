@@ -31,7 +31,7 @@ before_script:
   - bundle exec rails app:curator:setup
 
 rvm:
-  - 3.2.5
+  - 3.2.8
 
 env:
   global:
@@ -42,4 +42,4 @@ env:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
     - INGEST_SOURCE_DIRECTORY=/opt/ingest_source
   jobs:
-    - "RAILS_VERSION=7.0.8.5"
+    - "RAILS_VERSION=7.0.8.7"

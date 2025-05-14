@@ -5,7 +5,7 @@ require_relative './shared/factory_service_metastreams_shared'
 
 RSpec.describe Curator::InstitutionFactoryService, type: :service do
   before(:all) do
-    @object_json = load_json_fixture('institution_with_thumbnail', 'institution')
+    @object_json = load_json_fixture('institution_2', 'institution')
     VCR.use_cassette('services/institution_factory_service') do
       expect do
         @success, @institution = handle_factory_result(described_class, @object_json)

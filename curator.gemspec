@@ -39,12 +39,12 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'attr_json', '~> 2.4'
   spec.add_dependency 'concurrent-ruby', '1.3.4' # lock to 1.3.4 due to Rails 7.0 bug: https://github.com/rails/rails/issues/54260
   spec.add_dependency 'concurrent-ruby-ext', '~> 1.3.4'
-  spec.add_dependency 'connection_pool', '~> 2.4'
+  spec.add_dependency 'connection_pool', '~> 2.5'
   spec.add_dependency 'down', '~> 5.4'
   spec.add_dependency 'htmlentities', '~> 4.3' # TODO: Look into replacing this since the last released in 2014. I recommend turning this into its own parser class.
   spec.add_dependency 'http', '~> 5.2'
   spec.add_dependency 'mime-types', '~> 3.4'
-  spec.add_dependency 'nokogiri', '>= 1.16.7'
+  spec.add_dependency 'nokogiri', '>= 1.18.8'
   spec.add_dependency 'oj', '~> 3.16'
   spec.add_dependency 'ox', ' ~> 2.14'
   spec.add_dependency 'paper_trail', '~> 12.3'

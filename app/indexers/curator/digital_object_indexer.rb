@@ -28,15 +28,11 @@ module Curator
         serializer = Curator::DigitalObjectSerializer.new(record, adapter_key: :mods)
         context.output_hash['mods_xml_ss'] = Base64.strict_encode64(Zlib::Deflate.deflate(serializer.serialize))
 
-        if record.image_file_sets.present?
-          has_searchable_pages, georeferenced = false, false
-          record.image_file_sets.each do |image_file_set|
-            has_searchable_pages = true if image_file_set.text_plain_attachment.present?
-            georeferenced = true if image_file_set.image_georectified_primary_attachment.present?
-          end
+        next if record.image_file_sets.blank? && record.text_file_sets.blank?
 
-          context.output_hash['has_searchable_pages_bsi'] = has_searchable_pages.presence
-          context.output_hash['georeferenced_bsi'] = georeferenced.presence
+        if record.image_file_sets.present?
+          context.output_hash['has_searchable_pages_bsi'] = record.has_searchable_pages?
+          context.output_hash['georeferenced_bsi'] = record.georeferenced?
         end
 
         next if record.text_file_sets.blank?

@@ -12,8 +12,12 @@ module Curator
     before_perform { remote_service_healthcheck! }
 
     def perform(obj_class, obj_id)
-      indexable_object = Object.const_get(obj_class).for_reindex_all.find(obj_id)
-      indexable_object.update_index
+      ActiveRecord::Base.connection_pool.with_connection do
+        indexable_object = Object.const_get(obj_class).for_reindex_all.find(obj_id)
+        indexable_object.update_index
+      end
+    ensure
+      ActiveRecord::Base.clear_active_connections!
     end
 
     protected
