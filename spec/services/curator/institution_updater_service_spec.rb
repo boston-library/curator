@@ -63,7 +63,6 @@ RSpec.describe Curator::InstitutionUpdaterService, type: :service do
 
       it 'expects the #exemplary_file_set to have been set' do
         expect(subject.exemplary_file_set).to be_valid
-        expect(subject.exemplary_file_set.ark_id).not_to eq(@image_file_set.ark_id)
         expect(subject.exemplary_file_set.ark_id).to eq(@image_file_set.ark_id)
       end
     end
