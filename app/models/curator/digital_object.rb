@@ -83,6 +83,18 @@ module Curator
       Curator.metastreams.workflow_class.select(:workflowable_type, :workflowable_id, :processing_state).where(workflowable_type: 'Curator::Filestreams::FileSet', workflowable_id: file_set_ids).all?(&:complete?)
     end
 
+    def has_searchable_pages?
+      return false if image_file_sets.blank?
+
+      ActiveStorage::Attachment.where(name: 'text_plain', record_type: 'Curator::Filestreams::FileSet', record_id: image_file_sets.pluck(:id)).limit(1).exists?
+    end
+
+    def georeferenced?
+      return false if image_file_sets.blank?
+
+      ActiveStorage::Attachment.where(name: 'image_georectified_primary', record_type: 'Curator::Filestreams::FileSet', record_id: image_file_sets.pluck(:id)).limit(1).exists?
+    end
+
     def ark_params
       return super.except(:oai_namespace_id).merge({
         parent_pid: admin_set&.ark_id,

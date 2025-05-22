@@ -4,7 +4,6 @@ module Curator
   class InstitutionFactoryService < Services::Base
     include Services::FactoryService
     include ControlledTerms::Locateable
-    include Filestreams::Attacher
 
     def initialize(json_data: {})
       super(json_data: json_data)
@@ -34,7 +33,7 @@ module Curator
             destination_site = @admin_json_attrs.fetch(:destination_site, nil)
             administrative.destination_site = destination_site if destination_site
           end
-          attach_files!(institution) if institution.valid?
+
           institution.save!
         end
       end

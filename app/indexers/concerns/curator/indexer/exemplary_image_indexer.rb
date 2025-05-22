@@ -7,20 +7,19 @@ module Curator
       included do
         configure do
           each_record do |record, context|
-            exemplary = if record.is_a?(Curator::Institution)
-                          record if record.image_thumbnail_300.attached?
-                        else
-                          record.exemplary_file_set
-                        end
+            exemplary = record.exemplary_file_set
+
             next if exemplary.blank?
 
             context.output_hash['exemplary_image_ssi'] = exemplary.ark_id
-            key_base = exemplary&.image_thumbnail_300&.key&.gsub(/\/[^\/]*\z/, '')
+            key_base = exemplary.image_thumbnail_300&.key&.gsub(/\/[^\/]*\z/, '')
             context.output_hash['exemplary_image_key_base_ss'] = key_base
 
-            next unless exemplary.respond_to?(:file_set_type)
-
             context.output_hash['exemplary_image_iiif_bsi'] = false unless exemplary.file_set_type == 'Curator::Filestreams::Image'
+
+            next if record.is_a?(Curator::DigitalObject)
+
+            context.output_hash['exemplary_image_digobj_ss'] = exemplary.file_set_of.ark_id
           end
         end
       end

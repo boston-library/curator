@@ -2,7 +2,7 @@
 
 module Curator
   class Mappings::ExemplaryImage < ApplicationRecord
-    VALID_EXEMPLARY_OBJECT_TYPES = %w(Collection DigitalObject).freeze
+    VALID_EXEMPLARY_OBJECT_TYPES = %w(Collection DigitalObject Institution).freeze
     VALID_EXEMPLARY_FILE_SET_TYPES = %w(Image Document Video Metadata).freeze
 
     delegated_type :exemplary_object, types: VALID_EXEMPLARY_OBJECT_TYPES.collect { |obj_type| "Curator::#{obj_type}" }, inverse_of: :exemplary_image_mapping

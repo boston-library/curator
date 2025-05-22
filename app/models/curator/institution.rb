@@ -7,12 +7,12 @@ module Curator
     include Curator::Indexable
     include Curator::Mintable
     include Curator::Metastreamable::Basic
-    include Curator::Filestreams::Thumbnailable
+    include Curator::Mappings::Exemplary::Object
 
     self.curator_indexable_mapper = Curator::InstitutionIndexer.new
 
     scope :with_location, -> { includes(location: :authority) }
-    scope :for_serialization, -> { with_metastreams.with_location.with_attached_image_thumbnail_300.includes(:host_collections) }
+    scope :for_serialization, -> { includes(exemplary_image_mapping: :exemplary_file_set).with_metastreams.with_location.includes(:host_collections) }
     scope :for_reindex_all, -> { for_serialization.joins(:administrative, :workflow) }
     scope :local_id_finder, ->(name) { where(name: name).limit(1) }
 
@@ -31,6 +31,18 @@ module Curator
     accepts_nested_attributes_for :host_collections, allow_destroy: true, reject_if: :all_blank
 
     after_update_commit :reindex_associations
+
+    with_options through: :collection_admin_set_objects do
+      has_many :file_sets, source: :file_sets do
+        def exemplaryable
+          where(file_set_type: EXEMPLARYABLE_FILE_SETS)
+        end
+      end
+      has_many :image_file_sets, source: :image_file_sets
+      has_many :document_file_sets, source: :document_file_sets
+      has_many :metadata_file_sets, source: :metadata_file_sets
+      has_many :video_file_sets, source: :video_file_sets
+    end
 
     def ark_params
       super.except(:oai_namespace_id).merge({
