@@ -36,12 +36,9 @@ RSpec.describe Curator::Institution, type: :model do
     let!(:file_sets_source_map) do
       [
         :file_sets,
-        :audio_file_sets,
         :image_file_sets,
         :document_file_sets,
-        :ereader_file_sets,
         :metadata_file_sets,
-        :text_file_sets,
         :video_file_sets
       ]
     end

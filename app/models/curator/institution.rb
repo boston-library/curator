@@ -38,12 +38,9 @@ module Curator
           where(file_set_type: EXEMPLARYABLE_FILE_SETS)
         end
       end
-      has_many :audio_file_sets, source: :audio_file_sets
       has_many :image_file_sets, source: :image_file_sets
       has_many :document_file_sets, source: :document_file_sets
-      has_many :ereader_file_sets, source: :ereader_file_sets
       has_many :metadata_file_sets, source: :metadata_file_sets
-      has_many :text_file_sets, source: :text_file_sets
       has_many :video_file_sets, source: :video_file_sets
     end
 

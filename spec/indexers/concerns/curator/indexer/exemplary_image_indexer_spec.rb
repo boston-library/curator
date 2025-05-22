@@ -15,14 +15,9 @@ RSpec.describe Curator::Indexer::ExemplaryImageIndexer, type: :indexer do
       fs
     end
 
-    let!(:digital_object) do
-      digital_obj = create(:curator_digital_object, admin_set: admin_set)
-      # create(:curator_mappings_exemplary_image, exemplary_object: digital_obj, exemplary_file_set: file_set)
-      digital_obj
-    end
-
     let!(:institution) { create(:curator_institution) }
     let!(:admin_set) { create(:curator_collection, institution: institution) }
+    let!(:digital_object) { create(:curator_digital_object, admin_set: admin_set) }
     let!(:indexer) { indexer_test_class.new }
 
     let!(:obj_indexed) do
