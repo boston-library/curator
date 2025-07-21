@@ -33,6 +33,7 @@ module Curator
         if record.image_file_sets.present?
           context.output_hash['has_searchable_pages_bsi'] = record.has_searchable_pages?
           context.output_hash['georeferenced_bsi'] = record.georeferenced?
+          context.output_hash['georeferenced_allmaps_bsi'] = record.georeferenced_in_allmaps?
         end
 
         next if record.text_file_sets.blank?
