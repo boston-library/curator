@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Curator
-  class AllmapsAnnotationService < Services::Base
+  class AllmapsAnnotationsService < Services::Base
     include Curator::Services::RemoteService
 
     self.base_url = Curator.config.allmaps_annotations_url
@@ -23,25 +23,25 @@ module Curator
 
     def call
       begin
-        allmaps_annotation_response = self.class.with_client do |client|
-          call_allmaps_annotation(client)
+        allmaps_annotations_response = self.class.with_client do |client|
+          call_allmaps_annotations(client)
         end
 
-        return allmaps_annotation_response
+        return allmaps_annotations_response
       rescue HTTP::Error => e
-        base_message = 'HTTP Error Occurred Calling Allmaps Annotation Endpoint!'
+        base_message = 'HTTP Error Occurred Calling Allmaps Annotations Endpoint!'
         json_reason = { 'reason' => e.message }.as_json
         Rails.logger.error base_message
         Rails.logger.error "Reason: #{e.message}"
         raise Curator::Exceptions::RemoteServiceError.new(base_message, json_reason, 500)
       rescue Oj::Error => e
-        base_message = 'Invalid JSON Response From Allmaps Annotation Endpoint!'
+        base_message = 'Invalid JSON Response From Allmaps Annotations Endpoint!'
         json_reason = { 'reason' => e.message }.as_json
         Rails.logger.error base_message
         Rails.logger.error "Reason: #{e.message}"
         raise Curator::Exceptions::RemoteServiceError.new(base_message, json_reason, 500)
       rescue Curator::Exceptions::RemoteServiceError => e
-        Rails.logger.error 'Error Occurred calling Allmaps Annotation API'
+        Rails.logger.error 'Error Occurred calling Allmaps Annotations API'
         Rails.logger.error "Reason: #{e.message}"
         Rails.logger.error "Response code: #{e.code}"
         Rails.logger.error "Response: #{e.json_response}"
@@ -52,7 +52,7 @@ module Curator
 
     protected
 
-    def call_allmaps_annotation(client)
+    def call_allmaps_annotations(client)
       resp = client.headers(self.class.default_headers).get(request_uri.to_s).flush
       resp.status.success? ? normalize_response!(resp.body.to_s) : {}
     end

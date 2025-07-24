@@ -50,9 +50,22 @@ RSpec.describe Curator::DigitalObjectIndexer, type: :indexer do
         expect(indexed['has_searchable_pages_bsi']).to be_truthy
       end
 
-      it 'sets the georeferenced field' do
-        attach_georeferenced_file(file_set)
-        expect(indexed['georeferenced_bsi']).to be_truthy
+      describe 'georeferencing properties' do
+        before(:each) { attach_georeferenced_file(file_set) }
+
+        let(:indexed) do
+          VCR.use_cassette('indexers/digital_object_indexer') do
+            indexer.map_record(digital_object)
+          end
+        end
+
+        it 'sets the georeferenced field' do
+          expect(indexed['georeferenced_bsi']).to be_truthy
+        end
+
+        it 'sets the georeferenced_allmaps field' do
+          expect(indexed['georeferenced_allmaps_bsi']).to be_a_kind_of(FalseClass)
+        end
       end
 
       describe 'full text indexing' do

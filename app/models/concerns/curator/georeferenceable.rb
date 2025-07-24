@@ -18,7 +18,7 @@ module Curator
     def georeferenced_in_allmaps?
       return false unless georeferenceable?
 
-      allmaps_annotation = Curator::AllmapsAnnotationService.call("#{ark_uri}/manifest")
+      allmaps_annotation = Curator::AllmapsAnnotationsService.call("#{ark_uri}/manifest")
       allmaps_annotation.present?
     end
   end

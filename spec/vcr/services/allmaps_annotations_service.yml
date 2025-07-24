@@ -1,0 +1,48 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://dev.annotations.allmaps.org/manifests/da39a3ee5e6b4b0d
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - dev.annotations.allmaps.org
+      User-Agent:
+      - http.rb/5.2.0
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '53'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Thu, 24 Jul 2025 18:42:43 GMT
+      Etag:
+      - W/"35-c3gPSDvcRZ2lCROf2QRLIMDxxo0"
+      Server:
+      - railway-edge
+      X-Powered-By:
+      - Express
+      X-Railway-Edge:
+      - railway/us-east4
+      X-Railway-Request-Id:
+      - pj8oG0llT1-aL4F6I_kN5A
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "error": "Manifest not found: da39a3ee5e6b4b0d"
+        }
+  recorded_at: Thu, 24 Jul 2025 18:42:43 GMT
+recorded_with: VCR 6.1.0
