@@ -5,19 +5,19 @@ RSpec.shared_examples 'georeferenceable', type: :model do
 
   describe '#georeferenceable?' do
     it 'returns a boolean value' do
-      expect([TrueClass, FalseClass].include?(subject.georeferenceable?.class)).to be_truthy
+      expect([TrueClass, FalseClass].include?(subject.georeferenceable?.class)).to be(true)
     end
   end
 
   describe '#georeferenced?' do
     it 'returns a boolean value' do
-      expect([TrueClass, FalseClass].include?(subject.georeferenced?.class)).to be_truthy
+      expect([TrueClass, FalseClass].include?(subject.georeferenced?.class)).to be(true)
     end
   end
 
   describe '#georeferenced_in_allmaps?' do
     it 'returns a boolean value' do
-      expect([TrueClass, FalseClass].include?(subject.georeferenced_in_allmaps?.class)).to be_truthy
+      expect([TrueClass, FalseClass].include?(subject.georeferenced_in_allmaps?.class)).to be(true)
     end
   end
 end

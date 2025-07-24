@@ -40,26 +40,24 @@ RSpec.describe Curator::DigitalObjectIndexer, type: :indexer do
       # otherwise file_set-related indexing doesn't work in test env
       let(:file_set) { create(:curator_filestreams_image) }
       let(:digital_object) { Curator::DigitalObject.find(file_set.file_set_of_id) }
+      let(:indexed) do
+        VCR.use_cassette('indexers/digital_object_indexer') do
+          indexer.map_record(digital_object)
+        end
+      end
 
       it 'sets the filenames field' do
         expect(indexed['filenames_ssim']).to include file_set.file_name_base
       end
 
-      it 'sets the has_searchable_pages and filenames fields' do
+      it 'sets the has_searchable_pages fields' do
         attach_text_file(file_set)
         expect(indexed['has_searchable_pages_bsi']).to be_truthy
       end
 
       describe 'georeferencing properties' do
-        before(:each) { attach_georeferenced_file(file_set) }
-
-        let(:indexed) do
-          VCR.use_cassette('indexers/digital_object_indexer') do
-            indexer.map_record(digital_object)
-          end
-        end
-
         it 'sets the georeferenced field' do
+          attach_georeferenced_file(file_set)
           expect(indexed['georeferenced_bsi']).to be_truthy
         end
 
