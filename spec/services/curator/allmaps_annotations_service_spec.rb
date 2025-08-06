@@ -19,13 +19,12 @@ RSpec.describe Curator::AllmapsAnnotationsService, type: :service do
       end
     end
 
-    # TODO: prefer to use a manifest URL that returns a non-empty response from Allmaps dev site,
-    #       but this should still pass
-    let(:iiif_manifest_url) { '' }
+    let(:iiif_manifest_url) { 'https://ark.digitalcommonwealth.org/ark:/50959/4f16g0150/manifest' }
 
     it 'expects the result to be successful' do
       expect(subject).to be_truthy
       expect(subject).to be_a_kind_of(Hash)
+      expect(subject).to_not be_blank
     end
   end
 end

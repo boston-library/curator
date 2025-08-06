@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://dev.annotations.allmaps.org/manifests/da39a3ee5e6b4b0d
+    uri: https://annotations.allmaps.org/manifests/f5896c3bfbb807a1
     body:
       encoding: UTF-8
       string: ''
@@ -12,24 +12,24 @@ http_interactions:
       Connection:
       - Keep-Alive
       Host:
-      - dev.annotations.allmaps.org
+      - annotations.allmaps.org
       User-Agent:
       - http.rb/5.2.0
   response:
     status:
-      code: 404
-      message: Not Found
+      code: 200
+      message: OK
     headers:
       Access-Control-Allow-Origin:
       - "*"
       Content-Length:
-      - '53'
+      - '4812'
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Thu, 24 Jul 2025 18:42:43 GMT
+      - Wed, 06 Aug 2025 20:09:11 GMT
       Etag:
-      - W/"35-c3gPSDvcRZ2lCROf2QRLIMDxxo0"
+      - W/"12cc-z6sjryLshiZgDxhNFYS5y8OmDbA"
       Server:
       - railway-edge
       X-Powered-By:
@@ -37,12 +37,188 @@ http_interactions:
       X-Railway-Edge:
       - railway/us-east4
       X-Railway-Request-Id:
-      - pj8oG0llT1-aL4F6I_kN5A
+      - IdytfKTiQ0aJp6CdvLKlrw
     body:
       encoding: UTF-8
       string: |-
         {
-          "error": "Manifest not found: da39a3ee5e6b4b0d"
+          "type": "AnnotationPage",
+          "@context": "http://www.w3.org/ns/anno.jsonld",
+          "items": [
+            {
+              "id": "https://annotations.allmaps.org/maps/17fedcdf41c5b9fd",
+              "type": "Annotation",
+              "@context": [
+                "http://iiif.io/api/extension/georef/1/context.json",
+                "http://iiif.io/api/presentation/3/context.json"
+              ],
+              "created": "2025-08-05T21:25:51.549Z",
+              "modified": "2025-08-05T21:25:51.549Z",
+              "motivation": "georeferencing",
+              "target": {
+                "type": "SpecificResource",
+                "source": {
+                  "id": "https://iiif.digitalcommonwealth.org/iiif/2/commonwealth:00002w46b",
+                  "type": "ImageService2",
+                  "height": 4220,
+                  "width": 5161,
+                  "partOf": [
+                    {
+                      "id": "https://ark.digitalcommonwealth.org/ark:/50959/4f16g0150/canvas/00002w46b",
+                      "type": "Canvas",
+                      "label": {
+                        "none": [
+                          "image 1"
+                        ]
+                      },
+                      "partOf": [
+                        {
+                          "id": "https://ark.digitalcommonwealth.org/ark:/50959/4f16g0150/manifest",
+                          "type": "Manifest",
+                          "label": {
+                            "none": [
+                              "Africa or Libia Ulterior"
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "selector": {
+                  "type": "SvgSelector",
+                  "value": "<svg width=\"5161\" height=\"4220\"><polygon points=\"135,380 5000,395 5011,3561 139,3535\" /></svg>"
+                }
+              },
+              "body": {
+                "type": "FeatureCollection",
+                "transformation": {
+                  "type": "polynomial",
+                  "options": {
+                    "order": 1
+                  }
+                },
+                "features": [
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "resourceCoords": [
+                        4135,
+                        783
+                      ]
+                    },
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        19.6929355,
+                        30.4754143
+                      ]
+                    }
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "resourceCoords": [
+                        789,
+                        2687
+                      ]
+                    },
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        -12.8958863,
+                        7.5920118
+                      ]
+                    }
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "resourceCoords": [
+                        1359,
+                        3034
+                      ]
+                    },
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        -7.5988701,
+                        4.3560597
+                      ]
+                    }
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "resourceCoords": [
+                        539,
+                        890
+                      ]
+                    },
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        -15.5940151,
+                        28.0163008
+                      ]
+                    }
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "resourceCoords": [
+                        3096,
+                        3085
+                      ]
+                    },
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        8.8699084,
+                        3.752261
+                      ]
+                    }
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "resourceCoords": [
+                        4025,
+                        2006
+                      ]
+                    },
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        14.5194032,
+                        13.0773092
+                      ]
+                    }
+                  }
+                ],
+                "_allmaps": {
+                  "id": "https://annotations.allmaps.org/maps/17fedcdf41c5b9fd",
+                  "version": "https://annotations.allmaps.org/maps/17fedcdf41c5b9fd@639ff99d1c8b074d",
+                  "image": {
+                    "id": "https://annotations.allmaps.org/images/a575e664a6e93216",
+                    "version": "https://annotations.allmaps.org/images/a575e664a6e93216@289479774e780f48",
+                    "canvases": [
+                      {
+                        "id": "https://annotations.allmaps.org/canvases/3a1dd4e7865c68f7",
+                        "manifests": [
+                          {
+                            "id": "https://annotations.allmaps.org/manifests/f5896c3bfbb807a1"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "scale": 0.000887,
+                  "area": 19578072047011.82
+                }
+              }
+            }
+          ]
         }
-  recorded_at: Thu, 24 Jul 2025 18:42:43 GMT
+  recorded_at: Wed, 06 Aug 2025 20:09:11 GMT
 recorded_with: VCR 6.1.0
