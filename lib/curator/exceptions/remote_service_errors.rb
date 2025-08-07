@@ -37,6 +37,12 @@ module Curator::Exceptions
     end
   end
 
+  class AllmapsAnnotationsUnavailable < CuratorError
+    def message
+      'Allmaps Annotations endpoint is not available'
+    end
+  end
+
   # NOTE: do not inherit sub classes from this
   class RemoteServiceError < CuratorError
     attr_reader :json_response, :code

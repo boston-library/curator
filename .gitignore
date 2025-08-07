@@ -4,6 +4,7 @@ pkg/
 Gemfile.lock
 .ruby-version
 spec/internal/storage/
+spec/internal/.env.development
 log/
 tmp/
 **/db/schema.rb
