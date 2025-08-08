@@ -2,6 +2,11 @@
 
 module Curator
   class Configuration
+    attr_writer :allmaps_annotations_url
+    def allmaps_annotations_url
+      @allmaps_annotations_url || ENV['ALLMAPS_ANNOTATIONS_URL']
+    end
+
     attr_writer :ark_manager_api_url
     def ark_manager_api_url
       @ark_manager_api_url || ENV['ARK_MANAGER_API_URL']

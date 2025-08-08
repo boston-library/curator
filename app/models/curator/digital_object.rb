@@ -8,6 +8,7 @@ module Curator
     include Curator::Metastreamable::All
     include Curator::Mappings::Exemplary::Object
     include Curator::Indexable
+    include Curator::Georeferenceable
 
     has_paper_trail skip: %i(lock_version)
 
@@ -87,12 +88,6 @@ module Curator
       return false if image_file_sets.blank?
 
       ActiveStorage::Attachment.where(name: 'text_plain', record_type: 'Curator::Filestreams::FileSet', record_id: image_file_sets.pluck(:id)).limit(1).exists?
-    end
-
-    def georeferenced?
-      return false if image_file_sets.blank?
-
-      ActiveStorage::Attachment.where(name: 'image_georectified_primary', record_type: 'Curator::Filestreams::FileSet', record_id: image_file_sets.pluck(:id)).limit(1).exists?
     end
 
     def ark_params

@@ -32,7 +32,14 @@ module Curator
 
         if record.image_file_sets.present?
           context.output_hash['has_searchable_pages_bsi'] = record.has_searchable_pages?
-          context.output_hash['georeferenced_bsi'] = record.georeferenced?
+
+          if record.georeferenceable?
+            context.output_hash['georeferenced_bsi'] = record.georeferenced?
+
+            raise Curator::Exceptions::AllmapsAnnotationsUnavailable unless Curator::AllmapsAnnotationsService.ready?
+
+            context.output_hash['georeferenced_allmaps_bsi'] = record.georeferenced_in_allmaps?
+          end
         end
 
         next if record.text_file_sets.blank?

@@ -9,12 +9,14 @@ require_relative './shared/for_serialization'
 require_relative './shared/local_id_finder'
 require_relative './shared/mappings/has_exemplary_file_set'
 require_relative './shared/versionable'
+require_relative './shared/georeferenceable'
 
 RSpec.describe Curator::DigitalObject, type: :model do
   subject { build(:curator_digital_object) }
 
   it_behaves_like 'mintable'
   it_behaves_like 'versionable'
+  it_behaves_like 'georeferenceable'
 
   describe 'Database' do
     it_behaves_like 'optimistic_lockable'
