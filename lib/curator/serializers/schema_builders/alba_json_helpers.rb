@@ -20,8 +20,7 @@ module Curator
           end
 
           def serializable_hash
-            serialized = super
-            collection? ? deep_collection_compact(serialized) : deep_compact(serialized)
+            Alba.collection?(@object) ? deep_collection_compact(super) : deep_compact(super)
           end
 
           private

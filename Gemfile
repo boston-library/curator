@@ -21,11 +21,10 @@ group :development do
 end
 
 group :development, :test do
-  gem 'awesome_print', '~> 1.9'
   gem 'azure-storage-blob', '>= 2.0', require: false
-  gem 'debug', platforms: %i(mri mingw x64_mingw)
+  gem 'debug', platforms: %i(mri windows)
   gem 'dotenv-rails', '~> 2.8'
-  gem 'factory_bot_rails', '~> 6.2'
+  gem 'factory_bot_rails', '~> 6.5'
   gem 'faker', '~> 3.2'
   gem 'puma', '~> 6.6'
   gem 'rubocop', '~> 1.57.2', require: false
@@ -39,8 +38,8 @@ group :test do
   gem 'climate_control', '~> 1.1'
   gem 'coveralls_reborn', '~> 0.28.0', require: false
   gem 'database_cleaner-active_record', '~> 2.1'
-  gem 'rspec-rails', '~> 6.0'
+  gem 'rspec-rails', '~> 7.1'
   gem 'shoulda-matchers', '~> 5.2'
-  gem 'vcr', '~> 6.1'
-  gem 'webmock', '~> 3.18'
+  gem 'vcr', '~> 6.3'
+  gem 'webmock', '~> 3.25'
 end

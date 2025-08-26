@@ -360,4 +360,544 @@ http_interactions:
           "error": "Manifest not found: 17b9059bcb90c32c"
         }
   recorded_at: Thu, 07 Aug 2025 20:02:17 GMT
-recorded_with: VCR 6.1.0
+- request:
+    method: get
+    uri: https://annotations.allmaps.org/manifests/d3467e408aff962c
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - annotations.allmaps.org
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '53'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 25 Aug 2025 15:42:57 GMT
+      Etag:
+      - W/"35-V4o5SuAbd6f7mRoayRTydyOs4NE"
+      Server:
+      - railway-edge
+      X-Powered-By:
+      - Express
+      X-Railway-Edge:
+      - railway/us-east4-eqdc4a
+      X-Railway-Request-Id:
+      - iCjLLfNwS5Gx3eqQezItjw
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "error": "Manifest not found: d3467e408aff962c"
+        }
+  recorded_at: Mon, 25 Aug 2025 15:42:57 GMT
+- request:
+    method: get
+    uri: https://annotations.allmaps.org/manifests/1f65604bba814857
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - annotations.allmaps.org
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '53'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 25 Aug 2025 15:42:58 GMT
+      Etag:
+      - W/"35-Y0uNRsQwLZ/vCGaxBdgbAf0Z1ow"
+      Server:
+      - railway-edge
+      X-Powered-By:
+      - Express
+      X-Railway-Edge:
+      - railway/us-east4-eqdc4a
+      X-Railway-Request-Id:
+      - dEIyc5oiSlWSkLzkwoOzXw
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "error": "Manifest not found: 1f65604bba814857"
+        }
+  recorded_at: Mon, 25 Aug 2025 15:42:58 GMT
+- request:
+    method: get
+    uri: https://annotations.allmaps.org/manifests/28ed1c711935f61f
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - annotations.allmaps.org
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '53'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 25 Aug 2025 15:43:00 GMT
+      Etag:
+      - W/"35-JN9t8D2wBGRgv+J4HshLHXNvHwM"
+      Server:
+      - railway-edge
+      X-Powered-By:
+      - Express
+      X-Railway-Edge:
+      - railway/us-east4-eqdc4a
+      X-Railway-Request-Id:
+      - M2zpO26aSJu5YkUVBT7zVQ
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "error": "Manifest not found: 28ed1c711935f61f"
+        }
+  recorded_at: Mon, 25 Aug 2025 15:43:00 GMT
+- request:
+    method: get
+    uri: https://annotations.allmaps.org/manifests/63ef55f64437b08f
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - annotations.allmaps.org
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '53'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 25 Aug 2025 15:43:01 GMT
+      Etag:
+      - W/"35-7Gbqu270iVQfjIwvwiH1CBEgtr0"
+      Server:
+      - railway-edge
+      X-Powered-By:
+      - Express
+      X-Railway-Edge:
+      - railway/us-east4-eqdc4a
+      X-Railway-Request-Id:
+      - BG5J_CcDRA-AqebaozsQ6Q
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "error": "Manifest not found: 63ef55f64437b08f"
+        }
+  recorded_at: Mon, 25 Aug 2025 15:43:01 GMT
+- request:
+    method: get
+    uri: https://annotations.allmaps.org/manifests/a8e2837018e6360c
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - annotations.allmaps.org
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '53'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 25 Aug 2025 16:04:34 GMT
+      Etag:
+      - W/"35-dOjl+xo8EKEg6DATqzX4X0f5SGk"
+      Server:
+      - railway-edge
+      X-Powered-By:
+      - Express
+      X-Railway-Edge:
+      - railway/us-east4-eqdc4a
+      X-Railway-Request-Id:
+      - k3ja7Fa8SKaD5crWozsQ6Q
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "error": "Manifest not found: a8e2837018e6360c"
+        }
+  recorded_at: Mon, 25 Aug 2025 16:04:34 GMT
+- request:
+    method: get
+    uri: https://annotations.allmaps.org/manifests/11694a6efd2cf4d2
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - annotations.allmaps.org
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '53'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 25 Aug 2025 16:04:35 GMT
+      Etag:
+      - W/"35-KcqOZlmUKN6vrP4g4SgswFy300g"
+      Server:
+      - railway-edge
+      X-Powered-By:
+      - Express
+      X-Railway-Edge:
+      - railway/us-east4-eqdc4a
+      X-Railway-Request-Id:
+      - 9UVt06lxRwOzsFQ9ozsQ6Q
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "error": "Manifest not found: 11694a6efd2cf4d2"
+        }
+  recorded_at: Mon, 25 Aug 2025 16:04:35 GMT
+- request:
+    method: get
+    uri: https://annotations.allmaps.org/manifests/404674ca499d8199
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - annotations.allmaps.org
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '53'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 25 Aug 2025 16:04:36 GMT
+      Etag:
+      - W/"35-L8IGFChN2n/1XO6nEh88OPw83ZM"
+      Server:
+      - railway-edge
+      X-Powered-By:
+      - Express
+      X-Railway-Edge:
+      - railway/us-east4-eqdc4a
+      X-Railway-Request-Id:
+      - FpYrh8OlTvq1r4pGwoOzXw
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "error": "Manifest not found: 404674ca499d8199"
+        }
+  recorded_at: Mon, 25 Aug 2025 16:04:36 GMT
+- request:
+    method: get
+    uri: https://annotations.allmaps.org/manifests/842aada37743d271
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - annotations.allmaps.org
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '53'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 25 Aug 2025 16:04:37 GMT
+      Etag:
+      - W/"35-2/lBRMNWSiIBHt/Q46CNCpWXpf8"
+      Server:
+      - railway-edge
+      X-Powered-By:
+      - Express
+      X-Railway-Edge:
+      - railway/us-east4-eqdc4a
+      X-Railway-Request-Id:
+      - Lt0COU-tSne0Q3wfCx5-qw
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "error": "Manifest not found: 842aada37743d271"
+        }
+  recorded_at: Mon, 25 Aug 2025 16:04:37 GMT
+- request:
+    method: get
+    uri: https://annotations.allmaps.org/manifests/54bb8975cf56705e
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - annotations.allmaps.org
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '53'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 25 Aug 2025 18:23:10 GMT
+      Etag:
+      - W/"35-i9yf9/H47FkQoTzE/94YyxKI4es"
+      Server:
+      - railway-edge
+      X-Powered-By:
+      - Express
+      X-Railway-Edge:
+      - railway/us-east4-eqdc4a
+      X-Railway-Request-Id:
+      - LAYMbUdBRZ2SHbFYezItjw
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "error": "Manifest not found: 54bb8975cf56705e"
+        }
+  recorded_at: Mon, 25 Aug 2025 18:23:11 GMT
+- request:
+    method: get
+    uri: https://annotations.allmaps.org/manifests/6d28592beda37417
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - annotations.allmaps.org
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '53'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 25 Aug 2025 18:23:11 GMT
+      Etag:
+      - W/"35-Cx4xS7BR1RyB+SfA8TmLMv9wizE"
+      Server:
+      - railway-edge
+      X-Powered-By:
+      - Express
+      X-Railway-Edge:
+      - railway/us-east4-eqdc4a
+      X-Railway-Request-Id:
+      - VykwAR7pTq2lghgBBT7zVQ
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "error": "Manifest not found: 6d28592beda37417"
+        }
+  recorded_at: Mon, 25 Aug 2025 18:23:12 GMT
+- request:
+    method: get
+    uri: https://annotations.allmaps.org/manifests/c2c3c49fce00c065
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - annotations.allmaps.org
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '53'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 25 Aug 2025 18:23:13 GMT
+      Etag:
+      - W/"35-mNPFTNJt9LIj21FFWdgE3Pe46vM"
+      Server:
+      - railway-edge
+      X-Powered-By:
+      - Express
+      X-Railway-Edge:
+      - railway/us-east4-eqdc4a
+      X-Railway-Request-Id:
+      - k5ThBAhOQKK0WdyBBT7zVQ
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "error": "Manifest not found: c2c3c49fce00c065"
+        }
+  recorded_at: Mon, 25 Aug 2025 18:23:13 GMT
+- request:
+    method: get
+    uri: https://annotations.allmaps.org/manifests/251f7a48de6c85d3
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - annotations.allmaps.org
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '53'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 25 Aug 2025 18:23:14 GMT
+      Etag:
+      - W/"35-XBPRrQB1LjVpiC7BQQgh6KZnVRA"
+      Server:
+      - railway-edge
+      X-Powered-By:
+      - Express
+      X-Railway-Edge:
+      - railway/us-east4-eqdc4a
+      X-Railway-Request-Id:
+      - cbhE6EzJQhSRYtSqCx5-qw
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "error": "Manifest not found: 251f7a48de6c85d3"
+        }
+  recorded_at: Mon, 25 Aug 2025 18:23:14 GMT
+recorded_with: VCR 6.3.1

@@ -44,19 +44,19 @@ module Curator
 
     # NOTE: per changes in  attr_json 1.2 we can now use the built in #serialize method
     # #Title
-    serialize :title, DescriptiveFieldSets::TitleSet.to_serialization_coder
+    serialize :title, coder: DescriptiveFieldSets::TitleSet.to_serialization_coder
     # Date
-    serialize :date, DescriptiveFieldSets::Date.to_serialization_coder
+    serialize :date, coder: DescriptiveFieldSets::Date.to_serialization_coder
     # Publication
-    serialize :publication, DescriptiveFieldSets::Publication.to_serialization_coder
+    serialize :publication, coder: DescriptiveFieldSets::Publication.to_serialization_coder
     # Related
-    serialize :related, DescriptiveFieldSets::Related.to_serialization_coder
+    serialize :related, coder: DescriptiveFieldSets::Related.to_serialization_coder
 
     # Cartographics
-    serialize :cartographic, DescriptiveFieldSets::Cartographic.to_serialization_coder
+    serialize :cartographic, coder: DescriptiveFieldSets::Cartographic.to_serialization_coder
 
     # Non REL Subjects
-    serialize :subject_other, DescriptiveFieldSets::Subject.to_serialization_coder
+    serialize :subject_other, coder: DescriptiveFieldSets::Subject.to_serialization_coder
 
     # RELS
     # PARENTS
