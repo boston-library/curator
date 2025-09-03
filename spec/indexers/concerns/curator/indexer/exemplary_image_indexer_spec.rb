@@ -21,17 +21,17 @@ RSpec.describe Curator::Indexer::ExemplaryImageIndexer, type: :indexer do
     let!(:indexer) { indexer_test_class.new }
 
     let!(:obj_indexed) do
-      create(:curator_mappings_exemplary_image, exemplary_object: digital_object, exemplary_file_set: file_set)
+      create(:curator_mappings_exemplary_image, exemplary_object: digital_object, exemplary_file_set: file_set.reload)
       indexer.map_record(digital_object)
     end
 
     let(:inst_indexed) do
-      create(:curator_mappings_exemplary_image, exemplary_object: institution, exemplary_file_set: file_set)
+      create(:curator_mappings_exemplary_image, exemplary_object: institution, exemplary_file_set: file_set.reload)
       indexer.map_record(institution)
     end
 
     let(:col_indexed) do
-      create(:curator_mappings_exemplary_image, exemplary_object: admin_set, exemplary_file_set: file_set)
+      create(:curator_mappings_exemplary_image, exemplary_object: admin_set, exemplary_file_set: file_set.reload)
       indexer.map_record(admin_set)
     end
 

@@ -37,6 +37,7 @@ RSpec.describe Curator::FileSetIndexer, type: :indexer do
     describe 'attachment properties' do
       it 'sets the full text fields' do
         attach_text_file(file_set)
+        file_set.reload
         attach_text_coordinates_file(file_set)
         expect(indexed['has_wordcoords_json_bsi']).to be_truthy
         expect(indexed['has_ocr_text_bsi']).to be_truthy
