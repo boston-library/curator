@@ -1,4 +1,3 @@
-version: "3"
 services:
   pg:
     container_name: curator_postgres

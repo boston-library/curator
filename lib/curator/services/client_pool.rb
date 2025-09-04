@@ -20,13 +20,13 @@ module Curator
 
         def reload_pool(key)
           __clients.compute_if_present(key) do |pool|
-            pool.reload { |client| client.close if client }
+            pool.reload { |client| client&.close }
           end
         end
 
         def shutdown_pool(key)
           __clients.compute_if_present(key) do |pool|
-            pool.shutdown { |client| client.close if client }
+            pool.shutdown { |client| client&.close }
           end
         end
 

@@ -1,3 +1,10 @@
+plugins:
+  - rubocop-rspec
+  - rubocop-rails
+  - rubocop-performance
+  - rubocop-factory_bot
+  - rubocop-rspec_rails
+
 AllCops:
   Exclude:
     - 'scratch.rb'
@@ -398,6 +405,9 @@ Style/RescueStandardError:
     - 'app/services/curator/digital_object_factory_service.rb'
     - 'lib/curator/services/factory_service.rb'
 
+Style/SafeNavigation:
+  Enabled: true
+
 Style/SignalException:
   Enabled: true
 
@@ -546,14 +556,13 @@ Rails/Output:
     - 'lib/curator/engine.rb'
     - 'lib/curator/namespace_accessor.rb'
     - 'lib/curator/services/factory_service.rb'
+    - 'spec/lib/curator/serializers/adapter_registry_spec.rb'
+    - 'spec/lib/curator/serializers/serialization_dsl_spec.rb'
 
 # TODO Investigate if string class names are better than using the namespace accessors.
 
 Rails/ReflectionClassName:
   Enabled: false
-
-Rails/SafeNavigation:
-  Enabled: true
 
 Rails/ScopeArgs:
   Enabled: true

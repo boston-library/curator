@@ -27,11 +27,11 @@ group :development, :test do
   gem 'factory_bot_rails', '~> 6.5'
   gem 'faker', '~> 3.2'
   gem 'puma', '~> 6.6'
-  gem 'rubocop', '~> 1.57.2', require: false
-  gem 'rubocop-factory_bot', '~> 2.24.0', require: false
-  gem 'rubocop-performance', '~> 1.19.1', require: false
-  gem 'rubocop-rails', '~> 2.22.1', require: false
-  gem 'rubocop-rspec', '~> 2.25.0', require: false
+  gem 'rubocop', '~> 1.80.2', require: false
+  gem 'rubocop-factory_bot', '~> 2.27.1', require: false
+  gem 'rubocop-performance', '~> 1.25.0', require: false
+  gem 'rubocop-rails', '~> 2.33.3', require: false
+  gem 'rubocop-rspec_rails', '~> 2.31'
 end
 
 group :test do
@@ -39,7 +39,7 @@ group :test do
   gem 'coveralls_reborn', '~> 0.28.0', require: false
   gem 'database_cleaner-active_record', '~> 2.1'
   gem 'rspec-rails', '~> 7.1'
-  gem 'shoulda-matchers', '~> 5.2'
+  gem 'shoulda-matchers', '~> 6.5'
   gem 'vcr', '~> 6.3'
   gem 'webmock', '~> 3.25'
 end
