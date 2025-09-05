@@ -1,29 +1,29 @@
 language: ruby
 os: linux
-dist: focal
+dist: jammy
 
 cache:
   bundler: true
   apt: true
 
 addons:
-  postgresql: "13"
+  postgresql: "14"
   apt:
     update: true
     packages:
-      - postgresql-13
-      - postgresql-client-13
+      - postgresql-14
+      - postgresql-client-14
 
 before_install:
-  - sudo sed -i 's/port = 5433/port = 5432/' /etc/postgresql/13/main/postgresql.conf
+  - sudo sed -i 's/port = 5433/port = 5432/' /etc/postgresql/14/main/postgresql.conf
   - >-
     sudo sed -i
     -e '/local.*peer/s/postgres/all/'
     -e 's/peer\|md5/trust/g'
-    /etc/postgresql/13/main/pg_hba.conf
-  - sudo pg_ctlcluster 13 main restart
+    /etc/postgresql/14/main/pg_hba.conf
+  - sudo pg_ctlcluster 14 main restart
   - gem update --system --no-document
-  - gem install bundler:2.5.19 --no-document
+  - gem install bundler:2.7.1 --no-document
 
 before_script:
   - mkdir -p $INGEST_SOURCE_DIRECTORY/BPLDC
@@ -31,15 +31,15 @@ before_script:
   - bundle exec rails app:curator:setup
 
 rvm:
-  - 3.2.8
+  - 3.3.9
 
 env:
   global:
-    - PGVER=13
+    - PGVER=14
     - PGHOST=localhost
     - PGUSER=postgres
     - PGPORT=5432
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
     - INGEST_SOURCE_DIRECTORY=/opt/ingest_source
   jobs:
-    - "RAILS_VERSION=7.0.8.7"
+    - "RAILS_VERSION=7.1.5.2"

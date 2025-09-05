@@ -44,7 +44,7 @@ module Curator
     class ModelErrorWrapper < CuratorError
       attr_reader :model_errors, :status
       def initialize(model_errors: {})
-        @status = :unprocessable_entity
+        @status = :unprocessable_content
         @model_errors = format_model_errors(model_errors)
       end
 
@@ -63,7 +63,7 @@ module Curator
       def format_model_errors(errors = {})
         errors.reduce([]) do |r, (att, msg)|
           r << SerializableError.new(
-            title: 'Unprocessable Entity',
+            title: 'Unprocessable Content',
             status: status,
             detail: Array.wrap(msg).join('. '),
             source: { pointer: "/data/attributes/#{att}" }

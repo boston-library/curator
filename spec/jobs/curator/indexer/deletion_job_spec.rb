@@ -9,7 +9,8 @@ RSpec.describe Curator::Indexer::DeletionJob, type: :job do
   describe 'expected job behavior' do
     subject { described_class }
 
-    let(:job_args) { 'bpl-dev:987654321' }
+    let(:ark_id) { 'bpl-dev:987654321' }
+    let(:job_args) { [ark_id] }
     let(:expected_queue) { 'indexing' }
 
     it_behaves_like 'queueable'
@@ -24,8 +25,8 @@ RSpec.describe Curator::Indexer::DeletionJob, type: :job do
       end
 
       it 'sends a delete request to the indexing service' do
-        subject.perform_later(job_args)
-        expect(a_request(:post, solr_update_url).with(body: { 'delete' => job_args }.to_json)).to have_been_made.at_least_once
+        subject.perform_later(*job_args)
+        expect(a_request(:post, solr_update_url).with(body: { 'delete' => ark_id }.to_json)).to have_been_made.at_least_once
       end
     end
   end

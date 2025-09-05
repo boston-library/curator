@@ -7,13 +7,14 @@ RSpec.describe Curator::Filestreams::IIIFInfoPrewarmJob, type: :job do
   describe 'expected job behavior' do
     subject { described_class }
 
-    let(:job_args) { 'bpl-dev:8049g5699' }
+    let(:ark_id) { 'bpl-dev:8049g5699' }
+    let(:job_args) { [ark_id] }
     let(:expected_queue) { 'iiif' }
 
     it_behaves_like 'queueable'
 
     describe '#perform_later' do
-      let(:iiif_info_url) { "#{Curator.config.iiif_server_url}/iiif/2/#{job_args}/info.json" }
+      let(:iiif_info_url) { "#{Curator.config.iiif_server_url}/iiif/2/#{ark_id}/info.json" }
 
       around(:each) do |spec|
         ActiveJob::Base.queue_adapter.perform_enqueued_at_jobs = true
@@ -26,7 +27,7 @@ RSpec.describe Curator::Filestreams::IIIFInfoPrewarmJob, type: :job do
       end
 
       it 'sends a request to invalidate the IIIF cache' do
-        subject.perform_later(job_args)
+        subject.perform_later(*job_args)
         expect(a_request(:get, iiif_info_url)).to have_been_made.at_least_once
       end
     end

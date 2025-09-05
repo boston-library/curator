@@ -18,7 +18,7 @@ module Curator
         indexable_object.update_index
       end
     ensure
-      ActiveRecord::Base.clear_active_connections!
+      ActiveRecord::Base.connection_handler.clear_active_connections!
     end
 
     protected

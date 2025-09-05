@@ -7,13 +7,14 @@ RSpec.describe Curator::ArkDestroyJob, type: :job do
   describe 'expected job behavior' do
     subject { described_class }
 
-    let(:job_args) { 'bpl-dev:987654321' }
+    let(:ark_id) { 'bpl-dev:987654321' }
+    let(:job_args) { [ark_id] }
     let(:expected_queue) { 'arks' }
 
     it_behaves_like 'queueable'
 
     describe '#perform_later' do
-      let(:ark_manager_destroy_url) { "#{Curator.config.ark_manager_api_url}/api/v2/arks/#{job_args}" }
+      let(:ark_manager_destroy_url) { "#{Curator.config.ark_manager_api_url}/api/v2/arks/#{ark_id}" }
 
       around(:each) do |spec|
         ActiveJob::Base.queue_adapter.perform_enqueued_at_jobs = true
@@ -26,7 +27,7 @@ RSpec.describe Curator::ArkDestroyJob, type: :job do
       end
 
       it 'sends a delete request to the ark manager service' do
-        subject.perform_later(job_args)
+        subject.perform_later(*job_args)
         expect(a_request(:delete, ark_manager_destroy_url)).to have_been_made.at_least_once
       end
     end

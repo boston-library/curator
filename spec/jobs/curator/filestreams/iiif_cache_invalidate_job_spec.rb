@@ -7,7 +7,8 @@ RSpec.describe Curator::Filestreams::IIIFCacheInvalidateJob, type: :job do
   describe 'expected job behavior' do
     subject { described_class }
 
-    let(:job_args) { 'bpl-dev:987654321' }
+    let(:ark_id) { 'bpl-dev:987654321' }
+    let(:job_args) { [ark_id] }
     let(:expected_queue) { 'iiif' }
 
     it_behaves_like 'queueable'
@@ -17,7 +18,7 @@ RSpec.describe Curator::Filestreams::IIIFCacheInvalidateJob, type: :job do
       let(:body) do
         {
           verb: 'PurgeItemFromCache',
-          identifier: job_args
+          identifier: ark_id
         }
       end
 
@@ -32,7 +33,7 @@ RSpec.describe Curator::Filestreams::IIIFCacheInvalidateJob, type: :job do
       end
 
       it 'sends a request to invalidate the IIIF cache' do
-        subject.perform_later(job_args)
+        subject.perform_later(*job_args)
         expect(a_request(:post, iiif_server_url).with(body: body)).to have_been_made.at_least_once
       end
     end
