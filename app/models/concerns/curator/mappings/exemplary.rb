@@ -31,7 +31,7 @@ module Curator
           end
 
           def exemplary_image_of
-            return self.class.none if exemplary_image_of_collections.blank? && exemplary_image_of_objects.blank?
+            return self.class.none if exemplary_image_of_collections.blank? && exemplary_image_of_objects.blank? && exemplary_image_of_institutions.blank?
 
             institution_sql = exemplary_image_of_institutions.select(:id, :ark_id).to_sql.strip
             collection_sql = exemplary_image_of_collections.select(:id, :ark_id).to_sql.strip
