@@ -74,7 +74,7 @@ module Curator
 
         value = value.force_encoding('UTF-8')
         value = value.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') unless value.valid_encoding?
-        HTMLEntities.new.decode(ActionView::Base.full_sanitizer.sanitize(value.gsub(/<br[\s]*\/>/, ' '))).gsub("\\'", "'").squish
+        value.gsub("\\'", "'").squish
       end
 
       ##
