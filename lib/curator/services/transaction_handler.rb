@@ -54,8 +54,8 @@ module Curator
 
       def with_transaction(&_block)
         retries = 0
-        Curator::ApplicationRecord.connection_pool.with_connection do
-          Curator::ApplicationRecord.transaction do
+        Curator::ApplicationRecord.with_connection do |conn|
+          conn.transaction do
             yield
           rescue ActiveRecord::StaleObjectError => e
             if (retries += 1) <= MAX_RETRIES

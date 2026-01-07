@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+
 RSpec.describe Curator::Indexer::GeographicIndexer do
   include AuthorityFinder
   describe 'indexing' do
@@ -19,7 +20,7 @@ RSpec.describe Curator::Indexer::GeographicIndexer do
       geo_subjects.each do |geo|
         authority = find_authority_by_code(geo['authority_code'])
         geo[:authority] = authority if authority
-        descriptive_ms.subject_geos.build(geo.except('authority_code'))
+        descriptive_ms.subject_geos << build(:curator_controlled_terms_geographic, **geo.except('authority_code'))
       end
       descriptive_ms
     end
@@ -75,8 +76,10 @@ RSpec.describe Curator::Indexer::GeographicIndexer do
     end
 
     it 'sets the subject_coordinates_geospatial field' do
-      expect(indexed['subject_coordinates_geospatial'].compact.length).to eq(
-        descriptive.subject_geos.count { |geo| geo.coordinates.present? || geo.bounding_box.present? }
+      expect(indexed['subject_coordinates_geospatial'].compact.count).to eq(
+        descriptive.subject_geos.sum do |geo|
+          [geo.coordinates, geo.bounding_box].count(&:present?)
+        end
       )
     end
 

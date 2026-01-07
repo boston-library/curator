@@ -57,8 +57,8 @@ module Curator
       app.reloader.to_prepare do
         ActiveStorage::Attached::One.send(:include, Curator::ActiveStorageExtensions::AttachedOneUploaded)
 
-        ActiveSupport.on_load(:active_storage_record) do
-          ActiveStorage::VariantRecord.table_name = 'curator.active_storage_variant_records'
+        ActiveSupport.on_load(:active_storage_variant_record) do
+          self.table_name = 'curator.active_storage_variant_records'
         end
 
         ActiveSupport.on_load(:active_storage_blob) do
