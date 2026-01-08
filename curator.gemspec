@@ -10,8 +10,8 @@ require 'curator/version'
 Gem::Specification.new do |spec|
   spec.name        = 'curator'
   spec.version     = Curator::VERSION
-  spec.authors     = ['bbarberBPL']
-  spec.email       = ['bbarber@bpl.org']
+  spec.authors     = ['bbarberBPL', 'ebenenglish']
+  spec.email       = ['bbarber@bpl.org', 'eenglish@bpl.org']
   spec.homepage    = 'https://github.com/boston-library/curator'
   spec.summary     = 'Summary of Curator.'
   spec.description = 'Description of Curator.'

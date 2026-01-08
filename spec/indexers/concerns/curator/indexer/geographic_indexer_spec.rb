@@ -13,7 +13,7 @@ RSpec.describe Curator::Indexer::GeographicIndexer do
     let(:indexer) { indexer_test_class.new }
     # use geo subjects from digital_object JSON fixture;
     # admittedly brittle, but allows us to test edge cases in source data
-    let(:descriptive) do
+    let!(:descriptive) do
       descriptive_ms = create(:curator_metastreams_descriptive)
       object_json = load_json_fixture('digital_object')
       geo_subjects = object_json.dig(:metastreams, :descriptive, :subject, :geos) || []

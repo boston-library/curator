@@ -11,7 +11,7 @@ services:
 
 before_install:
   - gem update --system --no-document
-  - gem install bundler:2.7.1 --no-document
+  - gem install bundler:2.7.2 --no-document
 
 before_script:
   - mkdir -p $INGEST_SOURCE_DIRECTORY/BPLDC
@@ -19,7 +19,7 @@ before_script:
   - bundle exec rails app:curator:setup
 
 rvm:
-  - 3.3.9
+  - 3.3.10
 
 env:
   global:
@@ -30,4 +30,4 @@ env:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
     - INGEST_SOURCE_DIRECTORY=/opt/ingest_source
   jobs:
-    - "RAILS_VERSION=7.1.5.2"
+    - "RAILS_VERSION=7.2.3"
