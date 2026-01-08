@@ -7263,4 +7263,94 @@ http_interactions:
           "error": "Manifest not found: 6042c2e03aa22713"
         }
   recorded_at: Wed, 07 Jan 2026 21:09:41 GMT
+- request:
+    method: get
+    uri: https://annotations.allmaps.org/manifests/701372f8f9182f24
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - annotations.allmaps.org
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '53'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Thu, 08 Jan 2026 20:15:40 GMT
+      Etag:
+      - W/"35-Xcq9xaO5ufkqDU8DAkhvbzGlBAA"
+      Server:
+      - railway-edge
+      X-Powered-By:
+      - Express
+      X-Railway-Edge:
+      - railway/us-east4-eqdc4a
+      X-Railway-Request-Id:
+      - pHJ4UlJpT2iFDKrtCx5-qw
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "error": "Manifest not found: 701372f8f9182f24"
+        }
+  recorded_at: Thu, 08 Jan 2026 20:15:40 GMT
+- request:
+    method: get
+    uri: https://annotations.allmaps.org/manifests/6862369382bda2fc
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - annotations.allmaps.org
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '53'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Thu, 08 Jan 2026 20:15:40 GMT
+      Etag:
+      - W/"35-8QG2XKPZhmw3L6Mg2dRO/mzKVJU"
+      Server:
+      - railway-edge
+      X-Powered-By:
+      - Express
+      X-Railway-Edge:
+      - railway/us-east4-eqdc4a
+      X-Railway-Request-Id:
+      - F2he0Sk0QhKu3KAsg4a9AQ
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "error": "Manifest not found: 6862369382bda2fc"
+        }
+  recorded_at: Thu, 08 Jan 2026 20:15:40 GMT
 recorded_with: VCR 6.3.1
