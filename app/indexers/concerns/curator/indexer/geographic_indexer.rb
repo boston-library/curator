@@ -23,7 +23,7 @@ module Curator
               display_placename = geo_label
               geo_auth = subject_geo.authority&.code
               coords = subject_geo.coordinates
-              context.output_hash['subject_geo_label_sim'] << geo_label if geo_auth
+              context.output_hash['subject_geo_label_sim'] << geo_label if geo_auth && geo_label
               hier_geo = false
 
               if geo_auth == 'tgn'

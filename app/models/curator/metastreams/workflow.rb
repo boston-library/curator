@@ -10,12 +10,12 @@ module Curator
 
     belongs_to :workflowable, polymorphic: true, inverse_of: :workflow, touch: true
 
-    enum publishing_state: { draft: 'draft',
+    enum :publishing_state, { draft: 'draft',
                              review: 'review',
                              published: 'published'
                            }.freeze
 
-    enum processing_state: { initialized: 'initialized',
+    enum :processing_state, { initialized: 'initialized',
                              derivatives: 'derivatives',
                              complete: 'complete'
                            }.freeze

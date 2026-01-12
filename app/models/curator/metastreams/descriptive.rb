@@ -8,14 +8,14 @@ module Curator
 
     has_paper_trail skip: %i(lock_version)
 
-    enum digital_origin: {
+    enum :digital_origin, {
       born_digital: 'born_digital',
       reformatted_digital: 'reformatted_digital',
       digitized_microfilm: 'digitized_microfilm',
       digitized_other_analog: 'digitized_other_analog'
     }.freeze
 
-    enum text_direction: %w(ltr rtl).freeze
+    enum :text_direction, %w(ltr rtl).freeze
     # JSON ATTRS
     scope :with_physical_location, -> { includes(physical_location: :authority) }
 

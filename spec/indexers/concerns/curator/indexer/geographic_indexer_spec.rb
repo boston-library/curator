@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+
 RSpec.describe Curator::Indexer::GeographicIndexer do
   include AuthorityFinder
   describe 'indexing' do
@@ -12,14 +13,19 @@ RSpec.describe Curator::Indexer::GeographicIndexer do
     let(:indexer) { indexer_test_class.new }
     # use geo subjects from digital_object JSON fixture;
     # admittedly brittle, but allows us to test edge cases in source data
-    let(:descriptive) do
+    let!(:descriptive) do
       descriptive_ms = create(:curator_metastreams_descriptive)
       object_json = load_json_fixture('digital_object')
       geo_subjects = object_json.dig(:metastreams, :descriptive, :subject, :geos) || []
+      geo_subject_keys = attributes_for(:curator_controlled_terms_geographic).except(:type).keys.map(&:to_s)
       geo_subjects.each do |geo|
-        authority = find_authority_by_code(geo['authority_code'])
-        geo[:authority] = authority if authority
-        descriptive_ms.subject_geos.build(geo.except('authority_code'))
+        authority = find_authority_by_code(geo.delete('authority_code'))
+        geo_attrs = geo_subject_keys.index_with { |key| geo[key] }
+        geo_attrs[:authority] = authority if authority
+
+        geo_sub = Curator::ControlledTerms::Geographic.find_id_from_auth(geo_attrs['id_from_auth']) if geo_attrs['id_from_auth']
+        geo_sub = build(:curator_controlled_terms_geographic, **geo_attrs) if geo_sub.blank?
+        descriptive_ms.subject_geos << geo_sub
       end
       descriptive_ms
     end
@@ -75,8 +81,10 @@ RSpec.describe Curator::Indexer::GeographicIndexer do
     end
 
     it 'sets the subject_coordinates_geospatial field' do
-      expect(indexed['subject_coordinates_geospatial'].compact.length).to eq(
-        descriptive.subject_geos.count { |geo| geo.coordinates.present? || geo.bounding_box.present? }
+      expect(indexed['subject_coordinates_geospatial'].compact.count).to eq(
+        descriptive.subject_geos.sum do |geo|
+          [geo.coordinates, geo.bounding_box].count(&:present?)
+        end
       )
     end
 
