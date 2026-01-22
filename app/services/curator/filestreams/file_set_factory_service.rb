@@ -39,12 +39,14 @@ module Curator
           end
 
           map_exemplary_objects!(file_set)
-          attach_files!(file_set) if file_set.valid?
           file_set.save!
+          ActiveRecord.after_all_transactions_commit do
+            attach_files!(file_set) if file_set.valid?
+          end
         end
       end
 
-      return @success, @result
+      [@success, @result]
     end
 
     protected

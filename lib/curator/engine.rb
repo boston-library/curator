@@ -53,9 +53,10 @@ module Curator
       Mime::Type.register 'application/mods+xml', :mods
     end
 
-    initializer 'curator.active_storage_table_names' do |app|
+    initializer 'curator.active_storage' do |app|
       app.reloader.to_prepare do
         ActiveStorage::Attached::One.send(:include, Curator::ActiveStorageExtensions::AttachedOneUploaded)
+        ActiveStorage::BaseJob.send(:include, Curator::RetryOnFaradayException)
 
         ActiveSupport.on_load(:active_storage_variant_record) do
           self.table_name = 'curator.active_storage_variant_records'
@@ -73,13 +74,6 @@ module Curator
       end
     end
 
-    initializer 'curator.active_storage_job_override' do |app|
-      app.reloader.to_prepare do
-        ActiveSupport.on_load(:active_job) do
-          ActiveStorage::BaseJob.send(:include, Curator::RetryOnFaradayException)
-        end
-      end
-    end
 
     initializer 'curator.append_migrations' do |app|
       unless app.root.to_s.match root.to_s
