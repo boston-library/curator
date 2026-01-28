@@ -40,9 +40,10 @@ module Curator
 
           map_exemplary_objects!(file_set)
           file_set.save!
-          ActiveRecord.after_all_transactions_commit do
-            attach_files!(file_set) if file_set.valid?
-          end
+        end
+
+        ActiveRecord.after_all_transactions_commit do
+          attach_files!(@record) # this attaches the files once the record is persisted. It will not be called if any rollbacks are triggered. This ensures nothing is attached if the record is invalid
         end
       end
 
