@@ -78,7 +78,6 @@ module Curator
       ensure
         handle_result!
         purge_unattached_files! if purge_blobs_on_fail? # NOTE: This Will call purge_later on unattached files if success is false
-        Curator::ApplicationRecord.connection_handler.clear_active_connections!
       end
     end
   end

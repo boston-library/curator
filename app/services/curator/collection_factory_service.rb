@@ -32,7 +32,7 @@ module Curator
           collection.save!
         end
       end
-      return @success, @result
+      [@success, @result]
     end
 
     private

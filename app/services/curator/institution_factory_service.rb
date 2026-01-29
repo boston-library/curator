@@ -37,7 +37,7 @@ module Curator
           institution.save!
         end
       end
-      return @success, @result
+      [@success, @result]
     end
 
     private

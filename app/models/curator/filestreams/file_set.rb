@@ -128,11 +128,23 @@ module Curator
     end
 
     def reindex_digital_objects
-      file_set_members_of.find_each(&:queue_indexing_job)
+      return if file_set_member_of_mappings.blank?
+
+      reindex_jobs = file_set_members_of_ids.map do |digital_object_id|
+        Curator::Indexer::IndexingJob.new(Curator.digital_object_class.name, digital_object_id).set(wait: 2.seconds)
+      end
+
+      ActiveJob.perform_all_later(reindex_jobs)
     end
 
     def reindex_collections
-      exemplary_image_of_collections.find_each(&:queue_indexing_job)
+      return if exemplary_image_of_collections.blank?
+
+      reindex_jobs = exemplary_image_of_collection_ids.map do |collection_id|
+        Curator::Indexer::IndexingJob.new(Curator.collection_class.name, collection_id).set(wait: 2.seconds)
+      end
+
+      ActiveJob.perform_all_later(reindex_jobs)
     end
   end
 end

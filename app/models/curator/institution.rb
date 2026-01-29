@@ -58,9 +58,14 @@ module Curator
     def reindex_associations
       return if !saved_change_to_name?
 
-      collections.eager_load(:collection_members).find_each do |col|
-        Curator.digital_object_class.where(id: col.collection_members.pluck(:digital_object_id)).find_each(&:queue_indexing_job)
-        col.queue_indexing_job
+      collections.includes(:collection_members).find_each do |col|
+        reindex_jobs = col.collection_members.pluck(:digital_object_id).map do |digital_object_id|
+          Curator::Indexer::IndexingJob.new(Curator.digital_object_class.name, digital_object_id).set(wait: 2.seconds)
+        end
+
+        reindex_jobs << Curator::Indexer::IndexingJob.new(col.class.name col.id).set(wait: 2.seconds)
+
+        ActiveJob.perform_all_later(reindex_jobs)
       end
     end
   end

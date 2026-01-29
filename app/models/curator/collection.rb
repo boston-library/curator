@@ -63,7 +63,13 @@ module Curator
     def reindex_collection_members
       return if !saved_change_to_name?
 
-      Curator.digital_object_class.where(id: collection_members.pluck(:digital_object_id)).find_each(&:queue_indexing_job)
+      return if collection_members.blank?
+
+      reindex_jobs = collection_members.pluck(:digital_object_id).map do |digital_object_id|
+        Curator::Indexer::IndexingJob.new(Curator.digital_object_class.name, digital_object_id).set(wait: 2.seconds)
+      end
+
+      ActiveJob.perform_all_later(reindex_jobs)
     end
   end
 end

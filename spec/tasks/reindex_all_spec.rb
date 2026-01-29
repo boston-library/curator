@@ -15,6 +15,13 @@ RSpec.describe 'curator:reindex_all task', type: :task do
   let(:solr_response_docs) { solr_client.get('get', params: solr_query).dig('response', 'docs') || [] }
   let(:record_timestamps) { solr_response_docs.pluck('timestamp') }
 
+  # Prevents recording new episodes with junk allmaps requests
+  # rubocop:disable RSpec/AnyInstance
+  before(:each) do
+    allow_any_instance_of(Curator::DigitalObject).to receive(:georeferenceable?).and_return(false)
+  end
+  # rubocop:enable RSpec/AnyInstance
+
   it 'Updates the solr index for all the objects in the DB' do
     current_timestamp = Time.current
     VCR.use_cassette('tasks/reindex_all') do

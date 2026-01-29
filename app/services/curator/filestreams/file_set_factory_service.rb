@@ -44,7 +44,7 @@ module Curator
         end
       end
 
-      return @success, @result
+      [@success, @result]
     end
 
     protected

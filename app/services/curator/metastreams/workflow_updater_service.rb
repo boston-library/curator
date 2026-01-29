@@ -14,7 +14,7 @@ module Curator
         @record.save!
       end
 
-      return @success, @result
+      [@success, @result]
     end
   end
 end

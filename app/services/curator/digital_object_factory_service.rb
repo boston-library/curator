@@ -85,7 +85,7 @@ module Curator
           digital_object.save!
         end
       end
-      return @success, @result
+      [@success, @result]
     end
 
     private

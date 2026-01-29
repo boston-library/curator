@@ -20,7 +20,7 @@ module Curator
         attach_files!(@record)
         @record.save!
       end
-      return @success, @result
+      [@success, @result]
     end
 
     protected
