@@ -3,7 +3,7 @@
 require 'rails_helper'
 RSpec.describe Curator::DigitalObjectIndexer, type: :indexer do
   describe 'indexing' do
-    let!(:digital_object) { create(:curator_digital_object, :with_contained_by) }
+    let!(:digital_object) { create(:curator_digital_object, :with_contained_by, ark_id: 'bpl-dev:fjdshlfh') }
     let(:indexer) { described_class.new }
     let(:indexed) { indexer.map_record(digital_object) }
     let(:collections) { digital_object.is_member_of_collection }
@@ -38,7 +38,8 @@ RSpec.describe Curator::DigitalObjectIndexer, type: :indexer do
     describe 'attachment-related properties' do
       # instantiate digital_object from file_set.file_set_of_id
       # otherwise file_set-related indexing doesn't work in test env
-      let(:file_set) { create(:curator_filestreams_image) }
+      # Note needed to create the digital_objects with a static ark id in order to prevent allmaps requests updating the vcr file every time the specs are run
+      let(:file_set) { create(:curator_filestreams_image, file_set_of: create(:curator_digital_object, ark_id: 'bpl-dev:asdfghjk')) }
       let(:digital_object) { Curator::DigitalObject.find(file_set.file_set_of_id) }
       let(:indexed) do
         VCR.use_cassette('indexers/digital_object_indexer') do
@@ -67,7 +68,7 @@ RSpec.describe Curator::DigitalObjectIndexer, type: :indexer do
       end
 
       describe 'full text indexing' do
-        let(:text_file_set) { create(:curator_filestreams_text) }
+        let(:text_file_set) { create(:curator_filestreams_text, file_set_of: create(:curator_digital_object, ark_id: 'bpl-dev:qwertyu')) }
         let(:digital_object) { Curator::DigitalObject.find(text_file_set.file_set_of_id) }
 
         before(:each) { attach_text_file(text_file_set) }

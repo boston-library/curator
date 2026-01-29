@@ -32,7 +32,11 @@ module Curator
 
           return if object_ids.blank?
 
-          Curator.digital_object_class.where(id: object_ids).find_each(&:queue_indexing_job)
+          reindex_jobs = object_ids.uniq.map do |object_id|
+            Curator::Indexer::IndexingJob.new(Curator.digital_object_class.name, object_id).set(wait: 2.seconds)
+          end
+
+          ActiveJob.perform_all_later(reindex_jobs)
         end
       end
     end

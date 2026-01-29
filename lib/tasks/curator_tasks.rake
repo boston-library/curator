@@ -100,7 +100,7 @@ end
 
 def reindex_all_with_batching
   Curator::Indexable.index_with(batching: true) do
-    ActiveRecord::Base.connection_pool.with_connection do
+    ActiveRecord::Base.with_connection do
       yield
     end
   end
