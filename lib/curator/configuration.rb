@@ -7,6 +7,11 @@ module Curator
       @allmaps_annotations_url || ENV['ALLMAPS_ANNOTATIONS_URL']
     end
 
+    attr_writer :allmaps_data_export_url
+    def allmaps_data_export_url
+      @allmaps_data_export_url || ENV['ALLMAPS_DATA_EXPORT_URL']
+    end
+
     attr_writer :ark_manager_api_url
     def ark_manager_api_url
       @ark_manager_api_url || ENV['ARK_MANAGER_API_URL']
