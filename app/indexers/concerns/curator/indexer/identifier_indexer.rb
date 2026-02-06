@@ -9,7 +9,7 @@ module Curator
                      local_barcode_tsim local_barcode_invalid_tsim local_accession_tsim isbn_ssim
                      lccn_ssim ia_id_ssi uri_ss iiif_manifest_ss uri_preview_ss issn_ssim ismn_ssim
                      isrc_ssim issue_number_ssim matrix_number_ssim music_plate_ssim music_publisher_ssim
-                     sici_ssim videorecording_ssim).freeze
+                     oclcnum_ssim sici_ssim videorecording_ssim).freeze
       ID_URI_FIELD = 'identifier_uri_ss'
       ID_IIIF_MANIFEST_FIELD = 'identifier_iiif_manifest_ss'
       included do
@@ -42,7 +42,7 @@ module Curator
                            when 'iiif_manifest'
                              ID_IIIF_MANIFEST_FIELD
                            when 'lccn', 'isbn', 'issn', 'ismn', 'isrc', 'issue_number', 'matrix_number', 'music_plate',
-                                'music_publisher', 'sici', 'videorecording'
+                                'music_publisher', 'oclcnum', 'sici', 'videorecording'
                              "identifier_#{id_type}_ssim"
                            else
                              "identifier_#{id_type}_tsim"

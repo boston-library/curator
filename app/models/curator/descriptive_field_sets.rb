@@ -4,13 +4,14 @@ module Curator
   module DescriptiveFieldSets
     extend Curator::NamespaceAccessor
 
-    IDENTIFIER_TYPES = %w(local-accession local-other local-call local-barcode local-filename iiif-manifest internet-archive isbn ismn
-                          isrc issn issue-number lccn matrix-number music-plate music-publisher sici uri videorecording uri-preview).freeze
+    IDENTIFIER_TYPES = %w(iiif-manifest internet-archive isbn ismn isrc issn issue-number lccn
+                          local-accession local-barcode local-call local-filename local-other
+                          matrix-number music-plate music-publisher oclcnum sici uri uri-preview videorecording).freeze
 
-    NOTE_TYPES = ['date', 'language', 'acquisition', 'ownership', 'funding', 'biographical/historical',
-                  'citation/reference', 'preferred citation', 'bibliography', 'exhibitions', 'publications',
-                  'creation/production credits', 'performers', 'physical description', 'venue', 'arrangement',
-                  'statement of responsibility'].freeze
+    NOTE_TYPES = ['acquisition', 'arrangement', 'bibliography', 'biographical/historical', 'citation/reference',
+                  'creation/production credits', 'date', 'exhibitions', 'funding', 'language', 'ownership',
+                  'performers', 'physical description', 'preferred citation', 'publications',
+                  'statement of responsibility', 'venue'].freeze
 
     INFERRED_DATE_NOTE = 'date is inferred'
     EXCLUDED_MODS_IDENTIFIER_TYPES = %w(iiif-manifest uri-preview local-filename).freeze
@@ -21,7 +22,8 @@ module Curator
       'local-barcode' => 'barcode',
       'local-accession' => 'id_local-accession',
       'local-other' => 'id_local-other',
-      'lccn' => 'id_local-other'
+      'lccn' => 'id_local-other',
+      'oclcnum' => 'id_local-other'
     }.freeze
 
     RELATED_TYPES = {
