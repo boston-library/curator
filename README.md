@@ -1,28 +1,11 @@
 # Curator
 [![Build Status](https://travis-ci.org/boston-library/curator.svg?branch=master)](https://travis-ci.org/boston-library/curator) [![Coverage Status](https://coveralls.io/repos/github/boston-library/curator/badge.svg?branch=master)](https://coveralls.io/github/boston-library/curator?branch=master)
 
-## Warning
-
-
-This Project is currently in active **development**
-
-
 ## Description
-Rails(~> 7.0) engine that sets up the basic data elements and routes for a more data driven JSON API for digital repositories.
+Rails(~> 7.0) engine that provides data models and services for a JSON API for digital asset management.
 Implements ActiveStorage for Cloud or local storage for files.
-Currently all data models have been created with basic routes and json serializers
 
-## Todo
-
-1. Development
-  * Create Additional Seralizer Functionality (In priority)
-  - ~~Build JSON/XML Serializer~~
-    - Refactor to be less complex
-    - Use `AdapterBase` class to build extended functionality for the following
-      * ~~Mods XML~~
-      * Dublic Core XML
-      * Marc XML
-      * RDF
+Please see the [Wiki](https://github.com/boston-library/curator/wiki) for more information.
 
 ## Installation (for development only)
 
@@ -41,9 +24,9 @@ Currently all data models have been created with basic routes and json serialize
 
 5. Check `spec/internal/config/database.yml` and make sure your `postgres` credentials are correct.
 
-6. `cd` into the `spec/internal` directory and:
-    * run `$ rails curator:setup` -- this will run the database setup scripts for you
-    * run `$ rails generate curator:install` (optional) -- this will add an initializer for customizing `Curator.config` settings
+6. Run `$ rails curator:setup` -- this will run the database setup scripts for you
+
+7. (Optional) run `$ rails generate curator:install` -- this will add an initializer for customizing `Curator.config` settings
 
 
 ## Running (for development only)
@@ -67,19 +50,17 @@ To set up these services:
     - If both containers return `{exist: false}` run the following two commands:
       - `az storage container create -n primary --connection-string "UseDevelopmentStorage=true" --public-access off`
       - `az storage container create -n derivatives --connection-string "UseDevelopmentStorage=true" --public-access container`
-
-
-4 In the Curator project, start Solr using the following command (see [solr_wrapper](https://github.com/cbeer/solr_wrapper) for more documentation):
-    * `$ cd ./spec/internal && solr_wrapper` (development)
-    * `$ solr_wrapper` (test)
+5. In the Curator project, start Solr using the following command (see [solr_wrapper](https://github.com/cbeer/solr_wrapper) for more documentation):
+    - `$ cd ./spec/internal && solr_wrapper` (development)
+    - `$ solr_wrapper` (test)
 
 
 ## Contributing
-Any Input/ Suggestions are appreciated as we develop this. Please contact [Ben](mailto:bbarber@bpl.org) or [Eben](mailto:eenglish@bpl.org).
+Any input/suggestions are appreciated as we develop this. Please contact [Ben](mailto:bbarber@bpl.org) or [Eben](mailto:eenglish@bpl.org).
 
 ### Running specs
 
-Solr needs to be running before specs can be run.
+In addition to the Docker containers described above, Solr needs to be running before specs can be run.
 
 Prior to starting Solr, create config directory (only needs to be run once):
 ```

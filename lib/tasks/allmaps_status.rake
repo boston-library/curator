@@ -3,6 +3,7 @@
 namespace :curator do
   desc 'check Allmaps georeferencing status for cartographic materials and reindex'
   task allmaps_status: :environment do
+    Rails.logger.info 'Running allmaps_status task, checking for newly georeferenced items...'
     data_resp = Faraday.get(Curator.config.allmaps_data_export_url)
     raise Curator::Exceptions::AllmapsAnnotationsUnavailable, 'COULD NOT PARSE ALLMAPS DATA EXPORT' unless data_resp.status == 200
 
@@ -26,8 +27,10 @@ namespace :curator do
     ark_ids.uniq.each do |ark_id|
       next unless nongeorefd.include?(ark_id)
 
+      Rails.logger.info "Reindexing #{ark_id} to update georeferencing status"
       Curator.digital_object_class.find_ark(ark_id).queue_indexing_job
       sleep(1)
     end
+    Rails.logger.info 'allmaps_status task completed.'
   end
 end

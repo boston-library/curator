@@ -11,7 +11,8 @@ RSpec.describe 'curator:allmaps_status task', type: :task do
   let!(:digital_object) { create(:curator_digital_object, admin_set: collection) }
   let!(:ark_id) { digital_object.ark_id }
   let!(:solr_client) { RSolr.connect url: Curator.config.solr_url }
-  let(:digital_object_timestamp) { } # TK, figure out how to fetch a single record with RSolr
+  let(:solr_response_doc) { solr_client.get('get', params: "id:#{ark_id}").dig('response', 'docs')&.first || {} }
+  let(:digital_object_timestamp) { solr_response_doc['timestamp'] }
   before(:each) do
     annotation_data = { type: 'AnnotationPage',
                         '@context' => 'http://www.w3.org/ns/anno.jsonld',
@@ -39,17 +40,19 @@ RSpec.describe 'curator:allmaps_status task', type: :task do
                           }
                         ]
     }
-    # TK write the data to spec/internal/public/allmaps_annotations_export_test.json
+    File.open(Rails.root.join('public/allmaps_annotations_export_test.json'), 'w+') do |f|
+      f.write(JSON.pretty_generate(annotation_data))
+    end
   end
 
   it 'triggers a reindex for items in the data export file' do
     current_timestamp = Time.current
     VCR.use_cassette('tasks/allmaps_status') do
-      Rails.logger.silence do
-        Rake::Task['curator:allmaps_status'].invoke
-      end
+      # Rails.logger.silence do
+      #   Rake::Task['curator:allmaps_status'].invoke
+      # end
+      Rake::Task['curator:allmaps_status'].invoke
     end
-    expect(record_timestamps.count).to eq(ark_ids.count)
-    expect(record_timestamps).to all(be > current_timestamp)
+    expect(digital_object_timestamp).to be_greater_than current_timestamp
   end
 end
