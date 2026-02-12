@@ -8,12 +8,12 @@ namespace :curator do
     raise Curator::Exceptions::AllmapsAnnotationsUnavailable, 'COULD NOT PARSE ALLMAPS DATA EXPORT' unless data_resp.status == 200
 
     allmaps_data = JSON.parse(data_resp.body)
-    regexp_pattern = /https:\/\/ark.digitalcommonwealth.org\/ark:\/50959\/[0-9a-z]{9}\/manifest/
+    regexp_pattern = /#{Curator.config.ark_manager_api_url}\/ark:\/50959\/[0-9a-z]{9}\/manifest/
     ark_ids = []
     # iterate over the data, find items with IIIF manifest links
     allmaps_data['items'].each do |am_item|
       manifest_url = am_item.to_s.match(regexp_pattern).to_s
-      ark_ids << "commonwealth:#{manifest_url.split('/')[-2]}" if manifest_url.present?
+      ark_ids << "#{Curator.config.default_ark_params[:namespace_id]}:#{manifest_url.split('/')[-2]}" if manifest_url.present?
     end
 
     # reindex any items that are currently un-georeferenced,
