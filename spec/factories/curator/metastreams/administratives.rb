@@ -20,7 +20,7 @@ FactoryBot.define do
     end
 
     trait :nblmc_destination_site do
-      destination_site { %w[nblmc] }
+      destination_site { %w(nblmc) }
     end
 
     trait :for_institution do
