@@ -59,7 +59,6 @@ RSpec.describe 'curator:allmaps_status task', type: :task do
 
   it 'triggers a reindex for the ARK ids in the data export file' do
     initial_timestamp = DateTime.now
-    sleep(2)
     VCR.use_cassette('tasks/allmaps_status') do
       Rake::Task['curator:allmaps_status'].invoke
     end
