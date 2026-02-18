@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Curator::Metastreams::AdministrativeUpdaterService, type: :service do
   before(:all) do
-    @administrative ||= build(:curator_metastreams_administrative, :is_flagged, :non_havestable)
+    @administrative ||= build(:curator_metastreams_administrative, :is_flagged, :non_harvestable)
     @digital_object ||= create(:curator_digital_object, administrative: @administrative)
     @administratable_updated_at = @digital_object.updated_at
     @update_attributes ||= {

@@ -15,8 +15,12 @@ FactoryBot.define do
       hosting_status { 'hosted' }
     end
 
-    trait :non_havestable do
+    trait :non_harvestable do
       harvestable { false }
+    end
+
+    trait :nblmc_destination_site do
+      destination_site { %w(nblmc) }
     end
 
     trait :for_institution do
