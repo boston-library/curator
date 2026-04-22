@@ -21,7 +21,7 @@ module Curator
         els en enne et ett eyn eyne gl' gli ha- hai he hē he- heis hena henas het
         hin hina hinar hinir hinn hinna hinnar hinni hins hinu hinum hið ho hoi i
         ih' il il- ka ke l' l- la las le les lh lhi li lis lo los lu mga mia
-        'n na njē ny 'o os 'r 's 't ta tais tas tē tēn tēs the tō tois tōn tou um
+        'n na njē ny o 'o os 'r 's 't ta tais tas tē tēn tēs the tō tois tōn tou um
         uma un un' una une unei unha uno uns unui y ye yr
       ).freeze
 
