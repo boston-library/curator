@@ -16,11 +16,7 @@ jobs:
       PGPASSWORD: postgres
       PGPORT: 5432
       NOKOGIRI_USE_SYSTEM_LIBRARIES: true
-      IIIF_URL: https://iiifserver.example.org/
-      OAI_URL: https://oaiprovider.example.org/
-      OAUTH_APP_URL: http://localhost:3000
-      OAUTH_USER_APP_ID: ${{ secrets.OAUTH_USER_APP_ID }}
-      OAUTH_USER_APP_SECRET: ${{ secrets.OAUTH_USER_APP_SECRET }}
+      INGEST_SOURCE_DIRECTORY: /opt/ingest_source
 
     # Services start sidecar containers (Postgres) automatically
     services:
@@ -50,6 +46,13 @@ jobs:
           ruby-version: '.ruby-version'
           # Automatically runs 'bundle install' and caches gems
           bundler-cache: true
+
+      - name: create ingest source directory 
+        run: |
+          echo $INGEST_SOURCE_DIRECTORY
+          mkdir -p $INGEST_SOURCE_DIRECTORY/BPLDC  || true
+          [[ ! -L $INGEST_SOURCE_DIRECTORY/BPLDC/curator_fixtures ]] && sudo ln -sf $PWD/spec/fixtures $INGEST_SOURCE_DIRECTORY/BPLDC/curator_fixtures
+          [[ -d $PWD/spec/internal/tmp/solr-test  ]] && sudo rm -rf $PWD/spec/internal/tmp/solr-test
 
       - name: Run Tests
         run: RAILS_ENV=test bundle exec rake --trace
