@@ -1,0 +1,59 @@
+name: Build branches 
+
+on: [push, pull_request]
+
+jobs:
+
+  build-on-branches:
+
+    runs-on: ubuntu-22.04
+
+    # Define environment variables globally for the job
+    env:
+      RAILS_ENV: test
+      PGHOST: localhost
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGPORT: 5432
+      NOKOGIRI_USE_SYSTEM_LIBRARIES: true
+      IIIF_URL: https://iiifserver.example.org/
+      OAI_URL: https://oaiprovider.example.org/
+      OAUTH_APP_URL: http://localhost:3000
+      OAUTH_USER_APP_ID: ${{ secrets.OAUTH_USER_APP_ID }}
+      OAUTH_USER_APP_SECRET: ${{ secrets.OAUTH_USER_APP_SECRET }}
+
+    # Services start sidecar containers (Postgres) automatically
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: commonwealth_admin_test
+        ports:
+          - 5432:5432
+        # Health check ensures Postgres is ready before the script runs
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          # Automatically reads the .ruby-version file
+          ruby-version: '.ruby-version'
+          # Automatically runs 'bundle install' and caches gems
+          bundler-cache: true
+
+      - name: Database Setup
+        run: |
+          RAILS_ENV=test bundle exec rails db:prepare
+
+      - name: Run Tests
+        run: RAILS_ENV=test bundle exec rake ci

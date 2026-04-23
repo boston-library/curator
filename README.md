@@ -1,5 +1,6 @@
 # Curator
-[![Build Status](https://travis-ci.org/boston-library/curator.svg?branch=master)](https://travis-ci.org/boston-library/curator) [![Coverage Status](https://coveralls.io/repos/github/boston-library/curator/badge.svg?branch=master)](https://coveralls.io/github/boston-library/curator?branch=master)
+
+![Build Status](https://github.com/boston-library/curator/actions/workflows/action-build.yaml/badge.svg)
 
 ## Description
 Rails(~> 7.0) engine that provides data models and services for a JSON API for digital asset management.
