@@ -51,9 +51,5 @@ jobs:
           # Automatically runs 'bundle install' and caches gems
           bundler-cache: true
 
-      - name: Database Setup
-        run: |
-          RAILS_ENV=test bundle exec rails db:prepare
-
       - name: Run Tests
-        run: RAILS_ENV=test bundle exec rake ci
+        run: RAILS_ENV=test bundle exec rake
