@@ -43,7 +43,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           # Automatically reads the .ruby-version file
-          ruby-version: '.ruby-version'
+          ruby-version: 3.3.10
           # Automatically runs 'bundle install' and caches gems
           bundler-cache: true
 
