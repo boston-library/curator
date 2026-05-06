@@ -63,4 +63,8 @@ jobs:
           echo "Miao"
 
       - name: Run Tests
-        run: bundle exec rake --trace
+        run: |
+          echo "Daniel Miao"
+          pwd
+          ls 
+          bundle exec rake --trace
