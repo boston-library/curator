@@ -63,4 +63,4 @@ jobs:
           echo "Miao"
 
       - name: Run Tests
-        run: RAILS_ENV=test bundle exec rake --trace
+        run: bundle exec rake --trace
