@@ -55,10 +55,12 @@ jobs:
           pwd 
           [[ ! -L $INGEST_SOURCE_DIRECTORY/BPLDC/curator_fixtures ]] && sudo ln -sf $PWD/spec/fixtures $INGEST_SOURCE_DIRECTORY/BPLDC/curator_fixtures
           pwd 
+          echo "Daniel"
           echo "path=$INGEST_SOURCE_DIRECTORY/BPLDC/curator_fixtures"
           [[ -d $PWD/spec/internal/tmp/solr-test  ]] && sudo rm -rf $PWD/spec/internal/tmp/solr-test
           pwd 
           ls
+          echo "Miao"
 
       - name: Run Tests
         run: RAILS_ENV=test bundle exec rake --trace
