@@ -1,4 +1,4 @@
-# Curator
+# Curator 
 
 ![Build Status](https://github.com/boston-library/curator/actions/workflows/action-build.yaml/badge.svg)
 
