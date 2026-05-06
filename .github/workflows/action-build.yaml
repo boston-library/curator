@@ -51,8 +51,14 @@ jobs:
         run: |
           echo $INGEST_SOURCE_DIRECTORY
           mkdir -p $INGEST_SOURCE_DIRECTORY/BPLDC  || true
+          ls 
+          pwd 
           [[ ! -L $INGEST_SOURCE_DIRECTORY/BPLDC/curator_fixtures ]] && sudo ln -sf $PWD/spec/fixtures $INGEST_SOURCE_DIRECTORY/BPLDC/curator_fixtures
+          pwd 
+          echo "path=$INGEST_SOURCE_DIRECTORY/BPLDC/curator_fixtures"
           [[ -d $PWD/spec/internal/tmp/solr-test  ]] && sudo rm -rf $PWD/spec/internal/tmp/solr-test
+          pwd 
+          ls
 
       - name: Run Tests
         run: RAILS_ENV=test bundle exec rake --trace
