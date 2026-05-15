@@ -66,6 +66,5 @@ jobs:
         run: |
           echo "Daniel Miao"
           pwd
-          cd ..
           ls 
           RAILS_ENV=test bundle exec rake --trace
