@@ -38,6 +38,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with: 
+          submodules: true
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
