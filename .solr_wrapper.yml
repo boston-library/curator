@@ -5,5 +5,4 @@ instance_dir: ./spec/internal/tmp/solr-test
 collection:
   persist: false
   dir: ./spec/internal/solr/conf/
-#   dir: solr/conf/
   name: curator_test
