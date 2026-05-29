@@ -56,6 +56,7 @@ jobs:
 
       # bundle exec rails app:curator:setup
       # work # bundle exec rails app:db:prepare
+      # work # bundle exec rails app:curator:setup
       - name: Run curator setup
         run: |
           bundle exec rails app:curator:setup 
