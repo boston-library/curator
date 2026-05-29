@@ -56,9 +56,9 @@ jobs:
 
       - name: Run curator setup
         run: |
-          RAILS_ENV=test bundle exec rails app:curator:setup
+          bundle exec rails app:curator:setup
 
 
       - name: Run Tests
         run: |
-          RAILS_ENV=test bundle exec rake --trace
+          bundle exec rake --trace
