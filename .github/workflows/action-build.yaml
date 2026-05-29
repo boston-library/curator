@@ -25,7 +25,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          ## POSTGRES_DB: commonwealth_admin_test
+          POSTGRES_DB: commonwealth_admin_test
         ports:
           - 5432:5432
         # Health check ensures Postgres is ready before the script runs
@@ -54,15 +54,10 @@ jobs:
           mkdir -p "$INGEST_SOURCE_DIRECTORY/BPLDC"
           ln -s "$GITHUB_WORKSPACE/spec/fixtures" "$INGEST_SOURCE_DIRECTORY/BPLDC/curator_fixtures"
 
-      # bundle exec rails app:curator:setup
-      # work # bundle exec rails app:db:prepare
-      # work # bundle exec rails app:curator:setup
       - name: Run curator setup
         run: |
           bundle exec rails app:db:prepare 
           
-
-
       - name: Run Tests
         run: |
           bundle exec rake --trace
