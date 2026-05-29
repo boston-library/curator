@@ -55,9 +55,10 @@ jobs:
           ln -s "$GITHUB_WORKSPACE/spec/fixtures" "$INGEST_SOURCE_DIRECTORY/BPLDC/curator_fixtures"
 
       # bundle exec rails app:curator:setup
+      # work # bundle exec rails app:db:prepare
       - name: Run curator setup
         run: |
-          bundle exec rails app:db:prepare 
+          bundle exec rails app:curator:setup 
           
 
 

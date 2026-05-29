@@ -19,7 +19,7 @@ Please see the [Wiki](https://github.com/boston-library/curator/wiki) for more i
 
 2. Clone Project
 
-3. Run `bundle install` 
+3. Run `bundle install`
 
 4. Setup development dependencies(See the Running guide below)
 
