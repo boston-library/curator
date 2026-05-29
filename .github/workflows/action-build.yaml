@@ -54,12 +54,12 @@ jobs:
           mkdir -p "$INGEST_SOURCE_DIRECTORY/BPLDC"
           ln -s "$GITHUB_WORKSPACE/spec/fixtures" "$INGEST_SOURCE_DIRECTORY/BPLDC/curator_fixtures"
 
-      # bundle exec rails app:curator:setup
-      # work # bundle exec rails app:db:prepare
-      # work # bundle exec rails app:curator:setup
-      - name: Run curator setup
-        run: |
-          bundle exec rails app:curator:setup 
+      # # bundle exec rails app:curator:setup
+      # # work # bundle exec rails app:db:prepare
+      # # work # bundle exec rails app:curator:setup
+      # - name: Run curator setup
+      #   run: |
+      #     bundle exec rails app:curator:setup 
           
 
 
