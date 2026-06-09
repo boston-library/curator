@@ -26,7 +26,7 @@ group :development, :test do
   gem 'dotenv-rails', '~> 2.8'
   gem 'factory_bot_rails', '~> 6.5'
   gem 'faker', '~> 3.2'
-  gem 'puma', '~> 6.6'
+  gem 'puma', '~> 7.2'
   gem 'rubocop', '~> 1.80.2', require: false
   gem 'rubocop-factory_bot', '~> 2.27.1', require: false
   gem 'rubocop-performance', '~> 1.25.0', require: false

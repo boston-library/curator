@@ -71,4 +71,29 @@ RSpec.describe Curator::Filestreams::FileSetFactoryService, type: :service do
       end
     end
   end
+
+  context 'with video file sets' do
+    before(:all) do
+      @video_file_set_json = load_json_fixture('video_file_set', 'file_set')
+      @video_files_json = load_json_fixture('video_file_2', 'files')
+      @video_files_json += load_json_fixture('video_file_3', 'files')
+      # create parent DigitalObject
+      VCR.use_cassette('services/filestreams/video_factory_service') do
+        parent_obj = create(:curator_digital_object, ark_id: 'bpl-dev:0a075df91ec')
+        @video_file_set_json['file_set_of']['ark_id'] = parent_obj.ark_id
+        @video_file_set_json['files'] = @video_files_json
+        expect do
+          @video_success, @video_file_set = handle_factory_result(described_class, @video_file_set_json)
+        end.to change(Curator::Filestreams::FileSet, :count).by(1)
+      end
+    end
+
+    specify { expect(@video_success).to be_truthy }
+    specify { expect(@video_file_set).to be_valid }
+
+    it 'is expected to have attachments' do
+      expect(@video_file_set.video_access_mp4).to be_attached
+      expect(@video_file_set.web_vtt_captions).to be_attached
+    end
+  end
 end

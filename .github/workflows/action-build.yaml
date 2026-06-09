@@ -43,7 +43,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.3.10
+          ruby-version: 3.3.11
           # Automatically runs 'bundle install' and caches gems
           bundler-cache: true
 

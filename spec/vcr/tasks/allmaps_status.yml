@@ -51,4 +51,49 @@ http_interactions:
           ]
         }
   recorded_at: Wed, 11 Feb 2026 22:02:26 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3000/allmaps_annotations_export_test.json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v1.10.5
+  response:
+    status:
+      code: 200
+      message: ''
+    headers: {}
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "type": "AnnotationPage",
+          "@context": "http://www.w3.org/ns/anno.jsonld",
+          "items": [
+            {
+              "id": "https://annotations.allmaps.org/maps/123456789abcdef",
+              "type": "Annotation",
+              "target": {
+                "source": {
+                  "id": "https://iiif-dc3dev.bpl.orgbpl-dev:a0b1c2d3e",
+                  "partOf": [
+                    {
+                      "id": "http://127.0.0.1:3002/ark:/50959/a0b1c2d3e/canvas/abcd123456",
+                      "type": "Canvas",
+                      "partOf": [
+                        {
+                          "id": "http://127.0.0.1:3002/ark:/50959/a0b1c2d3e/manifest",
+                          "type": "Manifest"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+  recorded_at: Mon, 08 Jun 2026 19:36:52 GMT
 recorded_with: VCR 6.4.0

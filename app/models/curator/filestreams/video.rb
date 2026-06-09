@@ -16,6 +16,7 @@ module Curator
       has_one_attached :text_plain
       has_one_attached :video_access_mp4
       has_one_attached :video_access_webm
+      has_one_attached :web_vtt_captions
     end
 
     has_paper_trail skip: %i(lock_version)

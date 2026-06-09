@@ -30,6 +30,9 @@ RSpec.describe Curator::Filestreams::FileSetsController, type: :controller do
           # file_attributes[0]['metadata']['ingest_filepath'] = file_fixture('image_thumbnail_300.jpg').to_s
           attributes[:files] = file_attributes
         end
+
+        attributes[:files] << load_json_fixture('video_file_3', 'files') if file_set_type == 'video'
+
         attributes.merge!({
                    file_set_of: { ark_id: parent_obj.ark_id },
                    metastreams: relation_attributes.dup.delete('metastreams')
