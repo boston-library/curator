@@ -41,11 +41,11 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'concurrent-ruby-ext', '~> 1.3'
   spec.add_dependency 'connection_pool', '~> 2.5'
   spec.add_dependency 'down', '~> 5.4'
-  spec.add_dependency 'htmlentities', '~> 4.3' # TODO: Look into replacing this since the last released in 2014. I recommend turning this into its own parser class.
+  spec.add_dependency 'htmlentities', '~> 4.4' # TODO: Look into replacing this since the last released in 2014. I recommend turning this into its own parser class. - UPDATE it had a release as of late 2025 but not sure how much time the owner is going to dedicate to this
   spec.add_dependency 'http', '~> 5.3'
   spec.add_dependency 'mime-types', '~> 3.7'
-  spec.add_dependency 'nokogiri', '>= 1.18.10'
-  spec.add_dependency 'oj', '~> 3.16'
+  spec.add_dependency 'nokogiri', '>= 1.19.3'
+  spec.add_dependency 'oj', '~> 3.17'
   spec.add_dependency 'ox', ' ~> 2.14'
   spec.add_dependency 'paper_trail', '~> 15.2.0'
   spec.add_dependency 'paper_trail-association_tracking', '~> 2.3'

@@ -1,0 +1,10 @@
+{
+  "files": [{
+    "file_name": "web_vtt_captions.vtt",
+    "file_type": "web_vtt_captions",
+    "content_type": "text/vtt",
+    "metadata": {
+      "ingest_filepath": "BPLDC/curator_fixtures/files/web_vtt_captions.vtt"
+    }
+  }]
+}

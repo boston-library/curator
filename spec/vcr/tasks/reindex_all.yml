@@ -8118,4 +8118,483 @@ http_interactions:
           "error": "Manifest not found: 98e1b7893d2e703f"
         }
   recorded_at: Thu, 29 Jan 2026 16:40:23 GMT
-recorded_with: VCR 6.3.1
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/tgn/1005467
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"b8a8cb27e089326b304524c13cbc64ef"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - aec29cb5-2a3f-410d-ac13-e90edd09e4b1
+      X-Runtime:
+      - '0.841113'
+      Server-Timing:
+      - sql.active_record;dur=4.71, start_processing.action_controller;dur=0.28, cache_read.active_support;dur=1.91,
+        cache_generate.active_support;dur=768.89, cache_write.active_support;dur=1.39,
+        process_action.action_controller;dur=774.95
+      Content-Length:
+      - '272'
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"42.2833","longitude":"-71.1167","combined":"42.2833,-71.1167"},"hier_geo":{"city_section":"Roslindale","city":"Boston","continent":"North
+        and Central America","county":"Suffolk","country":"United States","state":"Massachusetts"},"non_hier_geo":null}'
+  recorded_at: Mon, 08 Jun 2026 19:40:11 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/tgn/2050042
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"f60d89b4333c40d9816a003455dd0e9b"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 1a4bfd13-c377-4e5b-8899-1d8777009615
+      X-Runtime:
+      - '0.596741'
+      Server-Timing:
+      - start_processing.action_controller;dur=0.00, cache_read.active_support;dur=0.20,
+        cache_generate.active_support;dur=591.77, cache_write.active_support;dur=1.01,
+        process_action.action_controller;dur=594.05
+      Content-Length:
+      - '236'
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"42.4667","longitude":"-70.95","combined":"42.4667,-70.95"},"hier_geo":{"city":"Lynn","continent":"North
+        and Central America","county":"Essex","country":"United States","state":"Massachusetts"},"non_hier_geo":null}'
+  recorded_at: Mon, 08 Jun 2026 19:40:13 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/tgn/2050042
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"f60d89b4333c40d9816a003455dd0e9b"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - f6e96fa6-2331-40e3-81c8-58b3e933cdea
+      X-Runtime:
+      - '0.016642'
+      Server-Timing:
+      - start_processing.action_controller;dur=0.01, cache_read.active_support;dur=15.15,
+        cache_fetch_hit.active_support;dur=0.00, process_action.action_controller;dur=15.48
+      Content-Length:
+      - '236'
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"42.4667","longitude":"-70.95","combined":"42.4667,-70.95"},"hier_geo":{"city":"Lynn","continent":"North
+        and Central America","county":"Essex","country":"United States","state":"Massachusetts"},"non_hier_geo":null}'
+  recorded_at: Mon, 08 Jun 2026 19:40:13 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/tgn/2362636
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"bddf582b4ec532fdcdfac3fd48f0bd34"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 4ae62639-7720-4c3a-acda-12c311da03c1
+      X-Runtime:
+      - '0.552372'
+      Server-Timing:
+      - start_processing.action_controller;dur=0.01, cache_read.active_support;dur=0.26,
+        cache_generate.active_support;dur=547.56, cache_write.active_support;dur=0.93,
+        process_action.action_controller;dur=549.60
+      Content-Length:
+      - '257'
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"43.7333","longitude":"-70.1167","combined":"43.7333,-70.1167"},"hier_geo":{"island":"Great
+        Chebeague Island","continent":"North and Central America","county":"Cumberland","country":"United
+        States","state":"Maine"},"non_hier_geo":null}'
+  recorded_at: Mon, 08 Jun 2026 19:40:14 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/tgn/2120926
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"c129836d4e6eb7932603b6ce55c28aa8"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 5c278dfe-412e-4f4a-b5f9-d740d940e764
+      X-Runtime:
+      - '0.444144'
+      Server-Timing:
+      - start_processing.action_controller;dur=0.01, cache_read.active_support;dur=0.19,
+        cache_generate.active_support;dur=435.20, cache_write.active_support;dur=0.94,
+        process_action.action_controller;dur=438.08
+      Content-Length:
+      - '249'
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"44.9333","longitude":"-91.3833","combined":"44.9333,-91.3833"},"hier_geo":{"city":"Chippewa
+        Falls","continent":"North and Central America","county":"Chippewa","country":"United
+        States","state":"Wisconsin"},"non_hier_geo":null}'
+  recorded_at: Mon, 08 Jun 2026 19:40:14 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/tgn/1004027
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"d660cb537eae2b38a2d76743067df5ef"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 2b2ff97d-4f66-4f24-870a-52a59852c805
+      X-Runtime:
+      - '0.436580'
+      Server-Timing:
+      - start_processing.action_controller;dur=0.00, cache_read.active_support;dur=0.18,
+        cache_generate.active_support;dur=434.04, cache_write.active_support;dur=0.45,
+        process_action.action_controller;dur=435.06
+      Content-Length:
+      - '266'
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"42.35","longitude":"-71.0833","combined":"42.35,-71.0833"},"hier_geo":{"city_section":"Back
+        Bay","city":"Boston","continent":"North and Central America","county":"Suffolk","country":"United
+        States","state":"Massachusetts"},"non_hier_geo":null}'
+  recorded_at: Mon, 08 Jun 2026 19:40:15 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/tgn/2362636
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"bddf582b4ec532fdcdfac3fd48f0bd34"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - b65eb224-fe96-4864-ae1f-69194ed64d8d
+      X-Runtime:
+      - '0.003060'
+      Server-Timing:
+      - start_processing.action_controller;dur=0.00, cache_read.active_support;dur=0.22,
+        cache_fetch_hit.active_support;dur=0.00, process_action.action_controller;dur=0.45
+      Content-Length:
+      - '257'
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"43.7333","longitude":"-70.1167","combined":"43.7333,-70.1167"},"hier_geo":{"island":"Great
+        Chebeague Island","continent":"North and Central America","county":"Cumberland","country":"United
+        States","state":"Maine"},"non_hier_geo":null}'
+  recorded_at: Mon, 08 Jun 2026 19:40:15 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/tgn/2120926
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"c129836d4e6eb7932603b6ce55c28aa8"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 68d547a1-7bc3-4422-afe9-902aefd2416c
+      X-Runtime:
+      - '0.002185'
+      Server-Timing:
+      - start_processing.action_controller;dur=0.00, cache_read.active_support;dur=0.20,
+        cache_fetch_hit.active_support;dur=0.00, process_action.action_controller;dur=0.73
+      Content-Length:
+      - '249'
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"44.9333","longitude":"-91.3833","combined":"44.9333,-91.3833"},"hier_geo":{"city":"Chippewa
+        Falls","continent":"North and Central America","county":"Chippewa","country":"United
+        States","state":"Wisconsin"},"non_hier_geo":null}'
+  recorded_at: Mon, 08 Jun 2026 19:40:15 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:3001/geomash/tgn/1004027
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Connection:
+      - Keep-Alive
+      Host:
+      - 127.0.0.1:3001
+      User-Agent:
+      - http.rb/5.3.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"d660cb537eae2b38a2d76743067df5ef"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 7723d85e-823b-4876-8a69-c957b936dba5
+      X-Runtime:
+      - '0.002647'
+      Server-Timing:
+      - start_processing.action_controller;dur=0.00, cache_read.active_support;dur=0.34,
+        cache_fetch_hit.active_support;dur=0.00, process_action.action_controller;dur=0.66
+      Content-Length:
+      - '266'
+    body:
+      encoding: UTF-8
+      string: '{"coords":{"latitude":"42.35","longitude":"-71.0833","combined":"42.35,-71.0833"},"hier_geo":{"city_section":"Back
+        Bay","city":"Boston","continent":"North and Central America","county":"Suffolk","country":"United
+        States","state":"Massachusetts"},"non_hier_geo":null}'
+  recorded_at: Mon, 08 Jun 2026 19:40:15 GMT
+recorded_with: VCR 6.4.0

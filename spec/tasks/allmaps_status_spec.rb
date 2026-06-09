@@ -59,7 +59,7 @@ RSpec.describe 'curator:allmaps_status task', type: :task do
 
   it 'triggers a reindex for the ARK ids in the data export file' do
     initial_timestamp = DateTime.now
-    VCR.use_cassette('tasks/allmaps_status') do
+    VCR.use_cassette('tasks/allmaps_status', record: :once) do
       Rake::Task['curator:allmaps_status'].invoke
     end
     expect(Time.zone.parse(digital_object_solr_timestamp) > initial_timestamp).to be_truthy
