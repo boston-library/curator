@@ -40,6 +40,8 @@ module Curator
         else
           writer.delete(record.ark_id)
         end
+      ensure
+        writer&.close
       end
 
       # The Traject::Indexer we'll use to map the #record into an index representation,

@@ -11,6 +11,8 @@ module Curator
     def perform(ark_id)
       writer = Curator.config.indexable_settings.writer_instance!
       writer.delete(ark_id)
+    ensure
+      writer&.close
     end
 
     protected

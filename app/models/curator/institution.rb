@@ -9,7 +9,7 @@ module Curator
     include Curator::Metastreamable::Basic
     include Curator::Mappings::Exemplary::Object
 
-    self.curator_indexable_mapper = Curator::InstitutionIndexer.new
+    self.curator_indexable_mapper = Curator::InstitutionIndexer
 
     scope :with_location, -> { includes(location: :authority) }
     scope :for_serialization, -> { includes(exemplary_image_mapping: :exemplary_file_set).with_metastreams.with_location.includes(:host_collections) }
@@ -63,7 +63,7 @@ module Curator
           Curator::Indexer::IndexingJob.new(Curator.digital_object_class.name, digital_object_id).set(wait: 2.seconds)
         end
 
-        reindex_jobs << Curator::Indexer::IndexingJob.new(col.class.name col.id).set(wait: 2.seconds)
+        reindex_jobs << Curator::Indexer::IndexingJob.new(col.class.name, col.id).set(wait: 2.seconds)
 
         ActiveJob.perform_all_later(reindex_jobs)
       end

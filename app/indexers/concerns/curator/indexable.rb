@@ -63,10 +63,10 @@ module Curator
     end
 
     included do
-      # in including model class, set to an _instance_ of a Curator::Indexer or Traject::Indexer subclass.
-      # as in: self.curator_indexable_mapper = MyWorkIndexer.new
+      # in including model class, set subclass of a Curator::Indexer or Traject::Indexer subclass.
+      # as in: self.curator_indexable_mapper = MyWorkIndexer
       #
-      # Re-using the same instance performs better because of how traject is set up,
+      # We want to create a new instance of a mapper so that it is thread safe for sidekiq jobs,
       # although may do weird things with dev-mode class reloading
       class_attribute :curator_indexable_mapper
 
@@ -81,7 +81,7 @@ module Curator
     # By default will use:
     #  - curator_indexable_mapper
     #  - a per-update writer, or thread/block-specific writer configured with `self.index_with`
-    def update_index(mapper: curator_indexable_mapper, writer: nil)
+    def update_index(mapper: curator_indexable_mapper.new, writer: nil)
       RecordIndexUpdater.new(self, mapper: mapper, writer: writer).update_index
     end
 

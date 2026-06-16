@@ -36,7 +36,7 @@ services:
       - ./docker/bpldc_authority_entry.sh:/bpldc_authority_entry.sh
     environment:
       - RAILS_ENV=development
-      - WEB_CONCURRENCY=0
+      - WEB_CONCURRENCY=2
       - RAILS_LOG_TO_STDOUT=true
       - POSTGRES_HOST=pg
       - BPLDC_REDIS_CACHE_URL=redis://cache:6379/1
@@ -59,7 +59,7 @@ services:
     environment:
       - RAILS_ENV=development
       - RAILS_LOG_TO_STDOUT=true
-      - WEB_CONCURRENCY=0
+      - WEB_CONCURRENCY=2
       - ARK_MANAGER_DATABASE_HOST=pg
       - ARK_MANAGER_REDIS_CACHE_URL=redis://cache:6379/0
     depends_on:
