@@ -15,6 +15,7 @@ module Curator
       has_one_attached :audio_access
       has_one_attached :document_access
       has_one_attached :text_plain
+      has_one_attached :web_vtt_captions
     end
 
     has_paper_trail skip: %i(lock_version)

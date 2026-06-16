@@ -9,7 +9,7 @@ module Curator
     include Curator::Mappings::Exemplary::Object
     include Curator::Indexable
 
-    self.curator_indexable_mapper = Curator::CollectionIndexer.new
+    self.curator_indexable_mapper = Curator::CollectionIndexer
 
     scope :for_serialization, -> { includes(exemplary_image_mapping: :exemplary_file_set).with_metastreams }
     scope :for_reindex_all, -> { for_serialization.joins(:administrative, :workflow) }

@@ -21,7 +21,7 @@ module Curator
     #   includes(attachment_reflections)
     # end
 
-    self.curator_indexable_mapper = Curator::FileSetIndexer.new
+    self.curator_indexable_mapper = Curator::FileSetIndexer
 
     scope :for_serialization, -> { with_metastreams }
 

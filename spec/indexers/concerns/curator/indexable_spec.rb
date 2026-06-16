@@ -24,7 +24,7 @@ RSpec.describe Curator::Indexable do
   describe 'included class attributes' do
     describe 'curator_indexable_mapper' do
       it 'returns as expected' do
-        expect(@indexable_object.curator_indexable_mapper.class.superclass).to eq Curator::Indexer
+        expect(@indexable_object.curator_indexable_mapper).to be <= Curator::Indexer
       end
     end
 
@@ -41,7 +41,7 @@ RSpec.describe Curator::Indexable do
     describe 'called directly on object' do
       it 'makes an update request to the solr_url' do
         inst_to_update = @indexable_object.clone
-        inst_to_update.curator_indexable_mapper = Curator::Indexer.new
+        inst_to_update.curator_indexable_mapper = Curator::Indexer
         inst_to_update.update_index
         assert_requested :post, solr_update_url,
                          body: body_for_update_request(inst_to_update)

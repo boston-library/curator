@@ -11,7 +11,7 @@ RSpec.describe Curator::Indexable::RecordIndexUpdater do
 
   describe '#mapper' do
     it 'returns the curator_indexable_mapper' do
-      expect(subject.mapper.class.superclass).to eq Curator::Indexer
+      expect(subject.mapper).to be <= Curator::Indexer
     end
   end
 

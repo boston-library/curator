@@ -12,7 +12,7 @@ module Curator
 
     has_paper_trail skip: %i(lock_version)
 
-    self.curator_indexable_mapper = Curator::DigitalObjectIndexer.new
+    self.curator_indexable_mapper = Curator::DigitalObjectIndexer
 
     scope :for_serialization, -> { includes(:file_sets, exemplary_image_mapping: :exemplary_file_set).with_metastreams }
     scope :for_reindex_all, -> { for_serialization.joins(:administrative, :descriptive, :workflow) }
