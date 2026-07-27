@@ -36,16 +36,13 @@ worker_timeout 3600 if ENV.fetch('RAILS_ENV', 'development') == 'development'
 # Allow puma to be restarted by `rails restart` command.
 
 # NOTE: These need to be added in the curator_app config/puma.rb
-before_worker_fork do
-  Curator::Services::RemoteService.clear!
-end
 
 before_worker_boot do
-  Curator::Services::RemoteService.reload!
+  HttpConnectionPool::Registry.instance.close_all
 end
 
 before_worker_shutdown do
-  Curator::Services::RemoteService.clear!
+  HttpConnectionPool::Registry.instance.close_all
 end
 
 plugin :tmp_restart

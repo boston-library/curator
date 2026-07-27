@@ -5,24 +5,19 @@ module Curator
     include Curator::Services::RemoteService
 
     self.base_url = Curator.config.iiif_manifest_url
-    self.default_path_prefix = '/search'
-    self.default_headers = { content_type: 'application/json' }
-    self.timeout_options = Curator.config.default_remote_service_timeout_opts
+    self.pool_options = { headers: { 'Content-Type' => 'application/json'  } }.merge(Curator.config.default_remote_service_timeout_opts)
+    self.pool_timeout = Curator.config.default_remote_service_pool_opts[:pool_timeout]
+    self.pool_size = Curator.config.default_remote_service_pool_opts[:pool_size]
 
     attr_reader :ark_id
 
-    # @param Curator::DigitalObject#ark_id [String]
     def initialize(ark_id)
       @ark_id = ark_id
     end
 
     def call
       begin
-        iiif_manifest_response = self.class.with_client do |client|
-          call_invalidate_iiif_manifest(client)
-        end
-
-        return iiif_manifest_response
+        call_invalidate_iiif_manifest!
       rescue HTTP::Error => e
         base_message = 'HTTP Error Occurred Calling IIIF Manifest Invalidate Endpoint!'
         json_reason = { 'reason' => e.message }.as_json
@@ -47,13 +42,12 @@ module Curator
 
     protected
 
-    def call_invalidate_iiif_manifest(client)
-      resp = client.headers(self.class.default_headers).post("#{self.class.default_path_prefix}/#{ark_id}/manifest/cache_invalidate")
-
-      json_response = normalize_response!(resp.body.to_s)
-      raise Curator::Exceptions::RemoteServiceError.new('Failed to trigger manifest purge !', json_response, resp.status) if [200, 404].exclude?(resp.status)
-
-      json_response
+    def call_invalidate_iiif_manifest!
+      response = with_connection do |conn|
+        client.post("/search/#{ark_id}/manifest/cache_invalidate").flush
+      end
+      raise Curator::Exceptions::RemoteServiceError.new('Failed to trigger manifest purge !', json_response, resp.status) if [200, 404].exclude?(response.code)
+      normalize_response!(response.body.to_s)
     end
   end
 end

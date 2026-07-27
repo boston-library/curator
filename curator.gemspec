@@ -42,7 +42,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'connection_pool', '~> 2.5'
   spec.add_dependency 'down', '~> 5.4'
   spec.add_dependency 'htmlentities', '~> 4.4' # TODO: Look into replacing this since the last released in 2014. I recommend turning this into its own parser class. - UPDATE it had a release as of late 2025 but not sure how much time the owner is going to dedicate to this
-  spec.add_dependency 'http', '~> 5.3'
+  spec.add_dependency 'http', '~> 6'
+  spec.add_dependency 'http_connection_pool', '~> 0.1'
   spec.add_dependency 'mime-types', '~> 3.7'
   spec.add_dependency 'nokogiri', '>= 1.19.3'
   spec.add_dependency 'oj', '~> 3.17'
@@ -51,7 +52,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'paper_trail-association_tracking', '~> 2.3'
   spec.add_dependency 'rails', '~> 7.2', '< 8'
   spec.add_dependency 'rsolr', '~> 2.6'
-  spec.add_dependency 'traject', '~> 3.8'
+  spec.add_dependency 'traject', '~> 3.9'
+  spec.add_dependency 'traject-solr_pool', '~> 0.1'
 
   spec.add_development_dependency 'image_processing', '~> 1.14'
   spec.add_development_dependency 'mini_magick', '~> 5.3'

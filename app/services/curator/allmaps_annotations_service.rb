@@ -5,29 +5,29 @@ module Curator
     include Curator::Services::RemoteService
 
     self.base_url = Curator.config.allmaps_annotations_url
-    self.default_path_prefix = 'manifests'
-    self.default_headers = { content_type: 'application/json' }
-    self.timeout_options = Curator.config.default_remote_service_timeout_opts
 
-    attr_reader :request_uri
+    self.pool_options = { headers: { 'Content-Type' => 'application/json' } }.merge(Curator.config.default_remote_service_timeout_opts)
+    self.pool_timeout = Curator.config.default_remote_service_pool_opts[:pool_timeout]
+    self.pool_size = Curator.config.default_remote_service_pool_opts[:pool_size]
+
+    attr_reader :iiif_manifest_url
 
     def initialize(iiif_manifest_url)
       raise Curator::Exceptions::RemoteServiceError.new('Invalid manifest URL') unless iiif_manifest_url
 
-      @request_uri = Addressable::URI.parse("#{self.class.base_url}/#{self.class.default_path_prefix}/#{allmaps_manifest_id(iiif_manifest_url)}")
+      @iiif_manifest_url = iiif_manifest_url
     end
 
-    def allmaps_manifest_id(iiif_manifest_url)
+    def allmaps_manifest_id
       Digest::SHA1.hexdigest(iiif_manifest_url)[0..15]
     end
 
     def call
       begin
-        allmaps_annotations_response = self.class.with_client do |client|
-          call_allmaps_annotations(client)
-        end
-
-        return allmaps_annotations_response
+        call_allmaps_annotations!
+      rescue HttpConnectionPool::Error => e
+        Rails.logger.error "Connection pool error: #{e.inspect}"
+        raise
       rescue HTTP::Error => e
         base_message = 'HTTP Error Occurred Calling Allmaps Annotations Endpoint!'
         json_reason = { 'reason' => e.message }.as_json
@@ -52,9 +52,11 @@ module Curator
 
     protected
 
-    def call_allmaps_annotations(client)
-      resp = client.headers(self.class.default_headers).get(request_uri.to_s).flush
-      resp.status.success? ? normalize_response!(resp.body.to_s) : {}
+    def call_allmaps_annotations!
+      response = with_connection do |conn|
+        conn.get("/manifests/#{allmaps_manifest_id}").flush
+      end
+      response.status.success? ? normalize_response!(response.body.to_s) : {}
     end
   end
 end
