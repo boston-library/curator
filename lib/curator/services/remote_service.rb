@@ -8,6 +8,8 @@ module Curator
       included do
         include HttpConnectionPool::Connectable
         include ResponseNormalizer
+
+        class_attribute :default_path_prefix
       end
 
       module ResponseNormalizer
@@ -26,7 +28,6 @@ module Curator
         end
       end
 
-
       class_methods do
         def ready?
           # TODO: remove line below once remote services are containerized for CI builds
@@ -35,14 +36,18 @@ module Curator
 
           begin
             response = with_connection do |conn|
-              conn.head('/').flush
+              conn.head('/')
             end
 
-            response.success?
+            response.status.success?
           rescue StandardError => e
             Rails.logger.error "Error: #{name} is not available: #{e.message}"
             false
           end
+        end
+
+        def basic_auth_encode(user, pass)
+          Base64.strict_encode64("#{user}:#{pass}")
         end
       end
     end

@@ -12,7 +12,7 @@ module Curator
 
     def call
       begin
-        call_verify_ark!
+        return call_verify_ark!
       rescue HttpConnectionPool::Error => e
         Rails.logger.error "Connection pool error: #{e.inspect}"
         raise
@@ -31,7 +31,7 @@ module Curator
 
     def call_verify_ark!
       response = with_connection do |conn|
-        conn.head("/api/v2/arks/#{ark_id}").flush
+        conn.head("#{self.class.default_path_prefix}/arks/#{ark_id}")
       end
       response.status.success?
     end

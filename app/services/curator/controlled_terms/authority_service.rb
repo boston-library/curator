@@ -5,8 +5,10 @@ module Curator
     include Curator::Services::RemoteService
 
     self.base_url = Curator.config.authority_api_url
+    self.pool_options = { headers: { 'Accept' => 'application/json', 'Content-Type' => 'application/json' } }.merge(Curator.config.default_remote_service_timeout_opts)
+    self.pool_timeout = Curator.config.default_remote_service_pool_opts[:pool_timeout]
+    self.pool_size = Curator.config.default_remote_service_pool_opts[:pool_size]
     self.default_path_prefix = '/bpldc'
-    self.default_headers = { accept: 'application/json', content_type: 'application/json' }
 
     attr_reader :request_uri
 
@@ -17,19 +19,17 @@ module Curator
 
     def call
       begin
-        bpldc_json = self.class.with_client do |client|
-          fetch_auth_data(client)
-        end
+        bpldc_json = call_fetch_auth_data!
 
-        return block_given? ? yield(bpldc_json) : bpldc_json
+        block_given? ? yield(bpldc_json) : bpldc_json
       rescue HTTP::Error => e
-        Rails.logger.error "Error Retreiving Json For Authority at #{@request_uri}"
+        Rails.logger.error "Error Retreiving Json For Authority at #{request_uri}"
         Rails.logger.error "Reason #{e.message}"
       rescue Oj::Error => e
-        Rails.logger.error "Error Parsing Json For Authority at #{@request_uri}"
+        Rails.logger.error "Error Parsing Json For Authority at #{request_uri}"
         Rails.logger.error "Reason #{e.message}"
       rescue Curator::Exceptions::RemoteServiceError => e
-        Rails.logger.error "Error Retreiving Json For Authority at #{@request_uri}"
+        Rails.logger.error "Error Retreiving Json For Authority at #{request_uri}"
         Rails.logger.error "Reason #{e.message}"
       end
       nil
@@ -37,12 +37,15 @@ module Curator
 
     protected
 
-    def fetch_auth_data(client)
-      resp = client.headers(self.class.default_headers).get(request_uri.to_s).flush
-      json_response = normalize_response!(resp.body.to_s)
+    def call_fetch_auth_data!
+      response = with_connection do |conn|
+        conn.get(request_uri.to_s)
+      end
+
+      json_response = normalize_response!(response.to_s)
 
       raise Curator::Exceptions::RemoteServiceError.new('Failed to retrieve data from bpldc_auth_api!',
-                                                        json_response, resp.status) if !resp.status.success?
+                                                        json_response, response.status) unless response.status.success?
 
       json_response
     end

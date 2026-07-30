@@ -29,12 +29,12 @@ module Curator
       settings&.pop
     end
 
-    def self.indexer_health_check!(for_destroy = false)
-      raise Curator::Exceptions::SolrUnavailable if !solr_service_ready?
+    def self.indexer_health_check!(for_destroy = false, current_traject_writer: Curator.config.indexable_settings.writer_instance!)
+      raise Curator::Exceptions::SolrUnavailable unless solr_service_ready?(current_traject_writer: current_traject_writer)
 
       return if for_destroy
 
-      raise Curator::Exceptions::AuthorityApiUnavailable if !authority_service_ready?
+      raise Curator::Exceptions::AuthorityApiUnavailable unless authority_service_ready?
     end
 
     # Are automatic after_commit callbacks currently enabled? Will check a number
@@ -57,8 +57,8 @@ module Curator
         Curator::ControlledTerms::AuthorityService.ready?
       end
 
-      def solr_service_ready?
-        Curator::SolrUtil.ready?
+      def solr_service_ready?(current_traject_writer: Curator.config.indexable_settings.writer_instance!)
+        Curator::SolrUtil.ready?(current_traject_writer: current_traject_writer)
       end
     end
 

@@ -1,6 +1,6 @@
 # Curator 
 
-![Build Status](https://github.com/boston-library/curator/actions/workflows/action-build.yaml/badge.svg)
+![Build Status](https://github.com/boston-library/curator/actions/workflows/ci.yaml/badge.svg)
 
 ## Description
 Rails(~> 7.0) engine that provides data models and services for a JSON API for digital asset management.

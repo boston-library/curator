@@ -5,26 +5,22 @@ module Curator
     include Curator::Services::RemoteService
 
     self.base_url = Curator.config.allmaps_annotations_url
-
     self.pool_options = { headers: { 'Content-Type' => 'application/json' } }.merge(Curator.config.default_remote_service_timeout_opts)
     self.pool_timeout = Curator.config.default_remote_service_pool_opts[:pool_timeout]
     self.pool_size = Curator.config.default_remote_service_pool_opts[:pool_size]
+    self.default_path_prefix = '/manifests'
 
-    attr_reader :iiif_manifest_url
+    attr_reader :request_uri
 
     def initialize(iiif_manifest_url)
       raise Curator::Exceptions::RemoteServiceError.new('Invalid manifest URL') unless iiif_manifest_url
 
-      @iiif_manifest_url = iiif_manifest_url
-    end
-
-    def allmaps_manifest_id
-      Digest::SHA1.hexdigest(iiif_manifest_url)[0..15]
+      @request_uri = Addressable::URI.parse("#{self.class.default_path_prefix}/#{allmaps_manifest_id(iiif_manifest_url)}")
     end
 
     def call
       begin
-        call_allmaps_annotations!
+        return call_allmaps_annotations!
       rescue HttpConnectionPool::Error => e
         Rails.logger.error "Connection pool error: #{e.inspect}"
         raise
@@ -54,9 +50,15 @@ module Curator
 
     def call_allmaps_annotations!
       response = with_connection do |conn|
-        conn.get("/manifests/#{allmaps_manifest_id}").flush
+        conn.get(request_uri.to_s)
       end
-      response.status.success? ? normalize_response!(response.body.to_s) : {}
+      response.status.success? ? normalize_response!(response.to_s) : {}
+    end
+
+    private
+
+    def allmaps_manifest_id(iiif_manifest_url)
+      Digest::SHA1.hexdigest(iiif_manifest_url)[0..15]
     end
   end
 end

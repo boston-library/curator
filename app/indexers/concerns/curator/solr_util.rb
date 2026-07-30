@@ -97,11 +97,9 @@ module Curator
 
     ##
     # check if Solr is online
-    def self.ready?(solr_url: Curator.config.solr_url)
-      rsolr = RSolr.connect url: solr_url
+    def self.ready?(current_traject_writer: Curator.config.indexable_settings.writer_instance!)
       begin
-        ping_request = rsolr.head('admin/ping')
-        ping_request.response[:status] == 200 ? true : false
+        current_traject_writer.ready?
       rescue StandardError => e
         Rails.logger.error "ERROR: Solr is not available: #{e}"
         false

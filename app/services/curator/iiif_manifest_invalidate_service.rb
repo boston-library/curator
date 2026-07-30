@@ -5,7 +5,7 @@ module Curator
     include Curator::Services::RemoteService
 
     self.base_url = Curator.config.iiif_manifest_url
-    self.pool_options = { headers: { 'Content-Type' => 'application/json'  } }.merge(Curator.config.default_remote_service_timeout_opts)
+    self.pool_options = { headers: { 'Content-Type' => 'application/json' } }.merge(Curator.config.default_remote_service_timeout_opts)
     self.pool_timeout = Curator.config.default_remote_service_pool_opts[:pool_timeout]
     self.pool_size = Curator.config.default_remote_service_pool_opts[:pool_size]
 
@@ -18,6 +18,9 @@ module Curator
     def call
       begin
         call_invalidate_iiif_manifest!
+      rescue HttpConnectionPool::Error => e
+        Rails.logger.error "Connection pool error: #{e.inspect}"
+        raise
       rescue HTTP::Error => e
         base_message = 'HTTP Error Occurred Calling IIIF Manifest Invalidate Endpoint!'
         json_reason = { 'reason' => e.message }.as_json
@@ -44,10 +47,12 @@ module Curator
 
     def call_invalidate_iiif_manifest!
       response = with_connection do |conn|
-        client.post("/search/#{ark_id}/manifest/cache_invalidate").flush
+        conn.post("/search/#{ark_id}/manifest/cache_invalidate")
       end
-      raise Curator::Exceptions::RemoteServiceError.new('Failed to trigger manifest purge !', json_response, resp.status) if [200, 404].exclude?(response.code)
-      normalize_response!(response.body.to_s)
+
+      raise Curator::Exceptions::RemoteServiceError.new('Failed to trigger manifest purge !', json_response, response.code) if [200, 404].exclude?(response.code)
+
+      normalize_response!(response.to_s)
     end
   end
 end

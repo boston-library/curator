@@ -12,7 +12,7 @@ module Curator
 
     def call
       begin
-        call_delete_ark!
+        return call_delete_ark!
       rescue HttpConnectionPool::Error => e
         Rails.logger.error "Connection pool error: #{e.inspect}"
         raise
@@ -38,7 +38,7 @@ module Curator
 
     def call_delete_ark!
       response = with_connection do |conn|
-        conn.delete("/api/v2/arks/#{ark_id}").flush
+        conn.delete("#{self.class.default_path_prefix}/arks/#{ark_id}")
       end
 
       return true if response.status.success?
@@ -48,7 +48,7 @@ module Curator
         return true
       end
 
-      json_response = normalize_response(response.body.to_s)
+      json_response = normalize_response(response.to_s)
       raise Curator::Exceptions::RemoteServiceError.new('Failed to destroy ark in ark-manager-api!', json_response, response.code)
     end
   end

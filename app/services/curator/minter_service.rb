@@ -13,7 +13,7 @@ module Curator
     def call
       begin
         ark_json = call_generate_ark!
-        ark_json.dig('ark', 'pid')
+        return ark_json.dig('ark', 'pid')
       rescue HttpConnectionPool::Error => e
         Rails.logger.error "Connection pool error: #{e.inspect}"
         raise
@@ -36,10 +36,10 @@ module Curator
 
     def call_generate_ark!
       response = with_connection do |conn|
-        conn.post("/api/v2/arks", json: ark_create_params).flush
+        conn.post("#{self.class.default_path_prefix}/arks", json: ark_create_params)
       end
 
-      json_response = normalize_response!(response.body.to_s)
+      json_response = normalize_response!(response.to_s)
 
       raise Curator::Exceptions::RemoteServiceError.new('Failed to mint ark from ark-manager-api!', json_response, response.code) unless response.status.success?
 

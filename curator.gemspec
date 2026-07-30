@@ -33,15 +33,17 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'aasm', '~> 5.5' # Acts as a state machine. Useful for tracking states of objects and triggering call backs between state trasnistion
   spec.add_dependency 'activerecord-postgres_enum', '~> 2.1' # For using defined postgres enum types
   spec.add_dependency 'acts_as_list', '~> 1.2'
-  spec.add_dependency 'addressable', '>= 2.8.8'
+  spec.add_dependency 'addressable', '~> 2.9'
   spec.add_dependency 'after_commit_everywhere', '~> 1.6' # Required for using aasm with active record
-  spec.add_dependency 'alba', '~> 3.9'
+  spec.add_dependency 'alba', '3.10'
   spec.add_dependency 'attr_json', '~> 2.6'
   spec.add_dependency 'concurrent-ruby', '~> 1.3'
   spec.add_dependency 'concurrent-ruby-ext', '~> 1.3'
   spec.add_dependency 'connection_pool', '~> 2.5'
   spec.add_dependency 'down', '~> 5.4'
-  spec.add_dependency 'htmlentities', '~> 4.4' # TODO: Look into replacing this since the last released in 2014. I recommend turning this into its own parser class. - UPDATE it had a release as of late 2025 but not sure how much time the owner is going to dedicate to this
+  # TODO: Look into replacing htmlentities since the last released in 2014. I recommend turning this into its own parser class.
+  # UPDATE htmlentities had a release as of late 2025 but not sure how much time the owner is going to dedicate to this
+  spec.add_dependency 'htmlentities', '~> 4.4'
   spec.add_dependency 'http', '~> 6'
   spec.add_dependency 'http_connection_pool', '~> 0.1'
   spec.add_dependency 'mime-types', '~> 3.7'
@@ -59,5 +61,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'mini_magick', '~> 5.3'
   spec.add_development_dependency 'pg', '>= 0.18', '< 2.0'
   spec.add_development_dependency 'redis', '~> 5'
-  spec.add_development_dependency 'solr_wrapper', '~> 4.2'
+  spec.add_development_dependency 'solr_wrapper', '~> 4.3'
 end

@@ -62,7 +62,7 @@ RSpec.describe Curator::Configuration do
     describe 'default_remote_service_timeout_opts' do
       let(:remote_service_timeout_opts) { subject.default_remote_service_timeout_opts }
       it 'return a hash of values' do
-        %i(connect read write keep_alive).each do |k|
+        %i(timeout).each do |k|
           expect(remote_service_timeout_opts[k]).to be_a_kind_of(Integer)
         end
       end

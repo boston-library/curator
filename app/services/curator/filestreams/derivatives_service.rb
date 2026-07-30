@@ -5,9 +5,10 @@ module Curator
     include Curator::Services::RemoteService
 
     self.base_url = Curator.config.avi_processor_api_url
+    self.pool_timeout = Curator.config.default_remote_service_pool_opts[:pool_timeout]
+    self.pool_size = Curator.config.default_remote_service_pool_opts[:pool_size]
+    self.pool_options = { headers: { 'Accept' => 'application/json', 'Content-Type' => 'application/json' } }.merge(Curator.config.default_remote_service_timeout_opts)
     self.default_path_prefix = '/api'
-    self.default_headers = { accept: 'application/json', content_type: 'application/json' }
-    self.timeout_options = Curator.config.default_remote_service_timeout_opts.merge({ connect: 120, read: 1800 })
 
     attr_reader :avi_file_class, :avi_payload
 
@@ -39,11 +40,7 @@ module Curator
 
     def call
       begin
-        avi_json = self.class.with_client do |client|
-          call_derivatives_api(client)
-        end
-
-        return avi_json
+        return call_derivatives_api!
       rescue HTTP::Error => e
         base_message = 'HTTP Error Occurred Calling Derivatives API'
         json_reason = { 'reason' => e.message }.as_json
@@ -68,13 +65,14 @@ module Curator
 
     protected
 
-    def call_derivatives_api(client)
-      resp = client.headers(self.class.default_headers).
-               post("#{self.class.default_path_prefix}/#{avi_file_class}", json: avi_payload).flush
+    def call_derivatives_api!
+      response = with_connection do |conn|
+        conn.post("#{self.class.default_path_prefix}/#{avi_file_class}", json: avi_payload)
+      end
 
-      json_response = normalize_response!(resp.body.to_s)
+      json_response = normalize_response!(response.to_s)
 
-      raise Curator::Exceptions::RemoteServiceError.new('Failed to trigger derivatives in avi_processor-api!', json_response, resp.status) if !resp.status.success?
+      raise Curator::Exceptions::RemoteServiceError.new('Failed to trigger derivatives in avi_processor-api!', json_response, response.code) unless response.status.success?
 
       json_response
     end

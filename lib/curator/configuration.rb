@@ -94,12 +94,11 @@ module Curator
         solr_id_value_attribute: 'ark_id',
         writer_class_name: 'Traject::SolrPool::SolrJsonWriter',
         writer_settings: {
-          'solr_writer.thread_pool' => 4,
+          'solr_writer.thread_pool' => ENV.fetch('RAILS_MAX_THREADS', 5).to_i,
           'solr_writer.solr_update_args' => { softCommit: true },
           'solr_writer.batch_size' => 100,
           'solr_writer.http_timeout' => 5,
           'solr_writer.pool_timeout' => 5,
-          'solr_pool.pool_size' => 5,
           'logger' => Rails.logger
         },
         disable_callbacks: false

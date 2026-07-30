@@ -26,6 +26,7 @@ require 'paper_trail-association_tracking'
 require 'rsolr'
 require 'singleton'
 require 'traject'
+require 'traject/solr_pool'
 require 'digest'
 
 # Curator specific files
