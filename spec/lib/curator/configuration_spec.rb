@@ -53,7 +53,7 @@ RSpec.describe Curator::Configuration do
     describe 'default_remote_service_pool_opts' do
       let(:remote_service_pool_opts) { subject.default_remote_service_pool_opts }
       it 'return a hash of values' do
-        %i(size timeout).each do |k|
+        %i(pool_size pool_timeout).each do |k|
           expect(remote_service_pool_opts[k]).to be_a_kind_of(Integer)
         end
       end

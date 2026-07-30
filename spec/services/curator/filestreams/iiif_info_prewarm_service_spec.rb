@@ -20,7 +20,7 @@ RSpec.describe Curator::Filestreams::IIIFInfoPrewarmService, type: :service do
     end
 
     let(:ark_id) { 'bpl-dev:8049g5699' }
-    let(:iiif_info_url) { "#{Curator.config.iiif_server_url}/iiif/2/#{ark_id}/info.json" }
+    let(:iiif_info_url) { "/iiif/2/#{ark_id}/info.json" }
 
     it 'expects the result to be successful' do
       expect(subject).to be_truthy

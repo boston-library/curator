@@ -41,6 +41,9 @@ module Curator
     def call
       begin
         return call_derivatives_api!
+      rescue HttpConnectionPool::Error => e
+        Rails.logger.error "Connection pool error: #{e.inspect}"
+        raise
       rescue HTTP::Error => e
         base_message = 'HTTP Error Occurred Calling Derivatives API'
         json_reason = { 'reason' => e.message }.as_json

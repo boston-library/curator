@@ -21,7 +21,7 @@ module Curator
       begin
         bpldc_json = call_fetch_auth_data!
 
-        block_given? ? yield(bpldc_json) : bpldc_json
+        return block_given? ? yield(bpldc_json) : bpldc_json
       rescue HTTP::Error => e
         Rails.logger.error "Error Retreiving Json For Authority at #{request_uri}"
         Rails.logger.error "Reason #{e.message}"
