@@ -27,6 +27,10 @@ module Curator
         def complete_workflow
           workflow.mark_complete! if workflow.may_mark_complete?
         end
+
+        def workflow_complete?
+          workflow.complete?
+        end
       end
     end
   end

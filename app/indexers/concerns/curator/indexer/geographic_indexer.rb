@@ -6,10 +6,10 @@ module Curator
       extend ActiveSupport::Concern
 
       GEO_FIELDS = %w(subject_geographic_tim subject_geographic_sim subject_geo_label_sim
-                            subject_geo_city_section_sim subject_geo_city_sim subject_geo_county_sim
-                            subject_geo_state_sim subject_geo_country_sim subject_geo_continent_sim
-                            subject_geo_other_ssm subject_coordinates_geospatial subject_point_geospatial
-                            subject_bbox_geospatial subject_geojson_facet_ssim subject_hiergeo_geojson_ssm).freeze
+                      subject_geo_city_section_sim subject_geo_city_sim subject_geo_county_sim
+                      subject_geo_state_sim subject_geo_country_sim subject_geo_continent_sim
+                      subject_geo_other_ssm subject_coordinates_geospatial subject_point_geospatial
+                      subject_bbox_geospatial subject_geojson_facet_ssim subject_hiergeo_geojson_ssm).freeze
       included do
         configure do
           each_record do |record, context|

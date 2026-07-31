@@ -77,8 +77,11 @@ RSpec.shared_examples 'file_set', type: :model do
   end
 
   describe 'Callbacks' do
+    before(:each) { subject.save! } # Force create so we can test the after_update_commit callback
+
     describe 'reindex_digital_objects' do
       it 'runs the reindex_digital_objects callback' do
+        subject.workflow.processing_state = 'complete'
         expect(subject).to receive(:reindex_digital_objects).at_least(:once)
         subject.save
       end
@@ -86,6 +89,7 @@ RSpec.shared_examples 'file_set', type: :model do
 
     describe 'reindex_collections' do
       it 'runs the reindex_collections callback' do
+        subject.workflow.processing_state = 'complete'
         expect(subject).to receive(:reindex_collections).at_least(:once)
         subject.save
       end

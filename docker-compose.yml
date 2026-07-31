@@ -1,11 +1,13 @@
 services:
   pg:
     container_name: curator_postgres
-    image: postgres:12
+    image: pgautoupgrade/pgautoupgrade:15-bookworm
     volumes:
       - pg_data:/var/lib/postgresql/data
     environment:
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - PGAUTO_REINDEX=yes
   cache:
     mem_reservation: 64mb
     privileged: true
