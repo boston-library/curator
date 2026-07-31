@@ -11,25 +11,22 @@ module Curator
     end
 
     def call
-      begin
-        ark_json = call_generate_ark!
-        return ark_json.dig('ark', 'pid')
-      rescue HttpConnectionPool::Error => e
-        Rails.logger.error "Connection pool error: #{e.inspect}"
-        raise
-      rescue HTTP::Error => e
-        Rails.logger.error 'HTTP Error Occured Generating Ark'
-        Rails.logger.error "Reason #{e.message}"
-      rescue Oj::Error => e
-        Rails.logger.error 'Invalid JSON From Ark Response'
-        Rails.logger.error "Reason #{e.message}"
-      rescue Curator::Exceptions::RemoteServiceError => e
-        Rails.logger.error 'Error Occured Generating Ark'
-        Rails.logger.error "Reason #{e.message}"
-        Rails.logger.error "Response code #{e.code}"
-        Rails.logger.error "Response #{e.json_response}"
-      end
-      nil
+      ark_json = call_generate_ark!
+      ark_json.dig('ark', 'pid')
+    rescue HttpConnectionPool::Error => e
+      Rails.logger.error 'HTTP Connection Pool Error!'
+      Rails.logger.error "Reason: #{e.message}"
+    rescue HTTP::Error => e
+      Rails.logger.error 'HTTP Error Occurred Generating Ark'
+      Rails.logger.error "Reason #{e.message}"
+    rescue Oj::Error => e
+      Rails.logger.error 'Invalid JSON From Ark Response'
+      Rails.logger.error "Reason #{e.message}"
+    rescue Curator::Exceptions::RemoteServiceError => e
+      Rails.logger.error 'Error Occurred Generating Ark'
+      Rails.logger.error "Reason #{e.message}"
+      Rails.logger.error "Response code #{e.code}"
+      Rails.logger.error "Response #{e.json_response}"
     end
 
     protected

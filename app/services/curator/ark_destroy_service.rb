@@ -11,27 +11,25 @@ module Curator
     end
 
     def call
-      begin
-        return call_delete_ark!
-      rescue HttpConnectionPool::Error => e
-        Rails.logger.error "Connection pool error: #{e.inspect}"
-        raise
-      rescue HTTP::Error => e
-        Rails.logger.error 'HTTP Error Occured Destroying Ark'
-        Rails.logger.error "Reason #{e.message}"
-        raise ActiveRecord::RecordNotDestroyed, 'Error Destroying Ark!'
-      rescue Oj::Error => e
-        Rails.logger.error 'Invalid JSON From Ark Response'
-        Rails.logger.error "Reason #{e.message}"
-        raise ActiveRecord::RecordNotDestroyed, 'Error Destroying Ark!'
-      rescue Curator::Exceptions::RemoteServiceError => e
-        Rails.logger.error 'Error Occured Destroying Ark'
-        Rails.logger.error "Reason #{e.message}"
-        Rails.logger.error "Response code #{e.code}"
-        Rails.logger.error "Response #{e.json_response}"
-        raise ActiveRecord::RecordNotDestroyed, 'Error Destroying Ark!'
-      end
-      false
+      call_delete_ark!
+    rescue HttpConnectionPool::Error => e
+      Rails.logger.error 'HTTP Connection Pool Error!'
+      Rails.logger.error "Reason: #{e.message}"
+      raise ActiveRecord::RecordNotDestroyed, "Error Destroying Ark Due to #{e.inspect}!"
+    rescue HTTP::Error => e
+      Rails.logger.error 'HTTP Error Occurred Destroying Ark'
+      Rails.logger.error "Reason #{e.message}"
+      raise ActiveRecord::RecordNotDestroyed, "Error Destroying Ark Due to #{e.inspect}!"
+    rescue Oj::Error => e
+      Rails.logger.error 'Invalid JSON From Ark Response'
+      Rails.logger.error "Reason #{e.message}"
+      raise ActiveRecord::RecordNotDestroyed, "Error Destroying Ark Due to #{e.inspect}!"
+    rescue Curator::Exceptions::RemoteServiceError => e
+      Rails.logger.error 'Error Occurred Destroying Ark'
+      Rails.logger.error "Reason #{e.message}"
+      Rails.logger.error "Response code #{e.code}"
+      Rails.logger.error "Response #{e.json_response}"
+      raise ActiveRecord::RecordNotDestroyed, "Error Destroying Ark Due to #{e.inspect}!"
     end
 
     protected

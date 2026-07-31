@@ -18,21 +18,23 @@ module Curator
     end
 
     def call
-      begin
-        bpldc_json = call_fetch_auth_data!
+      bpldc_json = call_fetch_auth_data!
 
-        return block_given? ? yield(bpldc_json) : bpldc_json
-      rescue HTTP::Error => e
-        Rails.logger.error "Error Retreiving Json For Authority at #{request_uri}"
-        Rails.logger.error "Reason #{e.message}"
-      rescue Oj::Error => e
-        Rails.logger.error "Error Parsing Json For Authority at #{request_uri}"
-        Rails.logger.error "Reason #{e.message}"
-      rescue Curator::Exceptions::RemoteServiceError => e
-        Rails.logger.error "Error Retreiving Json For Authority at #{request_uri}"
-        Rails.logger.error "Reason #{e.message}"
-      end
-      nil
+      return bpldc_json unless block_given?
+
+      yield(bpldc_json)
+    rescue HttpConnectionPool::Error => e
+      Rails.logger.error 'HTTP Connection Pool Error!'
+      Rails.logger.error "Reason: #{e.message}"
+    rescue HTTP::Error => e
+      Rails.logger.error "Error Retrieving Json for Authority at #{request_uri}"
+      Rails.logger.error "Reason: #{e.message}"
+    rescue Oj::Error => e
+      Rails.logger.error "Error Parsing Json for Authority at #{request_uri}"
+      Rails.logger.error "Reason: #{e.message}"
+    rescue Curator::Exceptions::RemoteServiceError => e
+      Rails.logger.error "Error Retrieving Json for Authority at #{request_uri}"
+      Rails.logger.error "Reason: #{e.message}"
     end
 
     protected

@@ -17,7 +17,7 @@ RSpec.describe Curator::Indexable::RecordIndexUpdater do
 
   describe '#writer' do
     it 'returns the Traject::Writer' do
-      expect(subject.writer).to be_an_instance_of Traject::SolrJsonWriter
+      expect(subject.writer).to be_an_instance_of Traject::SolrPool::SolrJsonWriter
     end
   end
 

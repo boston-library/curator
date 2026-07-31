@@ -17,25 +17,25 @@ module Curator
     end
 
     def call
-      begin
-        return call_iiif_info_endpoint!
-      rescue HttpConnectionPool::Error => e
-        Rails.logger.error "Connection pool error: #{e.inspect}"
-        raise
-      rescue HTTP::Error => e
-        base_message = 'HTTP Error Occurred Calling IIIF Server'
-        json_reason = { 'reason' => e.message }.as_json
-        Rails.logger.error base_message
-        Rails.logger.error "Reason: #{e.message}"
-        raise Curator::Exceptions::RemoteServiceError.new(base_message, json_reason, 500)
-      rescue Curator::Exceptions::RemoteServiceError => e
-        Rails.logger.error 'Error Occurred Creating info.json on IIIF Server'
-        Rails.logger.error "Reason: #{e.message}"
-        Rails.logger.error "Response code: #{e.code}"
-        Rails.logger.error "Response: #{e.json_response}"
-        raise
-      end
-      nil
+      call_iiif_info_endpoint!
+    rescue HttpConnectionPool::Error => e
+      base_message = 'HTTP Connection Pool Error!'
+      json_reason = { 'reason' => e.message }.as_json
+      Rails.logger.error base_message
+      Rails.logger.error "Reason: #{e.message}"
+      raise Curator::Exceptions::RemoteServiceError.new(base_message, json_reason, 500)
+    rescue HTTP::Error => e
+      base_message = 'HTTP Error Occurred Calling IIIF Server'
+      json_reason = { 'reason' => e.message }.as_json
+      Rails.logger.error base_message
+      Rails.logger.error "Reason: #{e.message}"
+      raise Curator::Exceptions::RemoteServiceError.new(base_message, json_reason, 500)
+    rescue Curator::Exceptions::RemoteServiceError => e
+      Rails.logger.error 'Error Occurred Creating info.json on IIIF Server'
+      Rails.logger.error "Reason: #{e.message}"
+      Rails.logger.error "Response code: #{e.code}"
+      Rails.logger.error "Response: #{e.json_response}"
+      raise
     end
 
     protected
@@ -47,7 +47,7 @@ module Curator
         conn.get(info_endpoint)
       end
 
-      return "Successfully created info.json at #{info_endpoint}" if response.status.success?
+      return "Successfully created info.json at #{Curator.config.iiif_server_url}#{info_endpoint}" if response.status.success?
 
       raise Curator::Exceptions::RemoteServiceError.new("Failed to pre warm info for #{ark_id} in iiif server!", { response: response.to_s }, response.code)
     end

@@ -39,31 +39,31 @@ module Curator
     end
 
     def call
-      begin
-        return call_derivatives_api!
-      rescue HttpConnectionPool::Error => e
-        Rails.logger.error "Connection pool error: #{e.inspect}"
-        raise
-      rescue HTTP::Error => e
-        base_message = 'HTTP Error Occurred Calling Derivatives API'
-        json_reason = { 'reason' => e.message }.as_json
-        Rails.logger.error base_message
-        Rails.logger.error "Reason: #{e.message}"
-        raise Curator::Exceptions::RemoteServiceError.new(base_message, json_reason, 500)
-      rescue Oj::Error => e
-        base_message = 'Invalid JSON Response From AVI Processor'
-        json_reason = { 'reason' => e.message }.as_json
-        Rails.logger.error base_message
-        Rails.logger.error "Reason: #{e.message}"
-        raise Curator::Exceptions::RemoteServiceError.new(base_message, json_reason, 500)
-      rescue Curator::Exceptions::RemoteServiceError => e
-        Rails.logger.error 'Error Occurred Generating Derivatives'
-        Rails.logger.error "Reason: #{e.message}"
-        Rails.logger.error "Response code: #{e.code}"
-        Rails.logger.error "Response: #{e.json_response}"
-        raise
-      end
-      nil
+      call_derivatives_api!
+    rescue HttpConnectionPool::Error => e
+      base_message = 'HTTP Connection Pool Error!'
+      json_reason = { 'reason' => e.message }.as_json
+      Rails.logger.error base_message
+      Rails.logger.error "Reason: #{e.message}"
+      raise Curator::Exceptions::RemoteServiceError.new(base_message, json_reason, 500)
+    rescue HTTP::Error => e
+      base_message = 'HTTP Error Occurred Calling Derivatives API'
+      json_reason = { 'reason' => e.message }.as_json
+      Rails.logger.error base_message
+      Rails.logger.error "Reason: #{e.message}"
+      raise Curator::Exceptions::RemoteServiceError.new(base_message, json_reason, 500)
+    rescue Oj::Error => e
+      base_message = 'Invalid JSON Response From AVI Processor'
+      json_reason = { 'reason' => e.message }.as_json
+      Rails.logger.error base_message
+      Rails.logger.error "Reason: #{e.message}"
+      raise Curator::Exceptions::RemoteServiceError.new(base_message, json_reason, 500)
+    rescue Curator::Exceptions::RemoteServiceError => e
+      Rails.logger.error 'Error Occurred Generating Derivatives'
+      Rails.logger.error "Reason: #{e.message}"
+      Rails.logger.error "Response code: #{e.code}"
+      Rails.logger.error "Response: #{e.json_response}"
+      raise
     end
 
     protected

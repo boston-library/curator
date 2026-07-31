@@ -11,19 +11,19 @@ module Curator
     end
 
     def call
-      begin
-        return call_verify_ark!
-      rescue HttpConnectionPool::Error => e
-        Rails.logger.error "Connection pool error: #{e.inspect}"
-        raise
-      rescue HTTP::Error => e
-        Rails.logger.error 'HTTP Error Occured Verifying Ark'
-        Rails.logger.error "Reason #{e.message}"
-      rescue Curator::Exceptions::RemoteServiceError => e
-        Rails.logger.error 'Error Occured Verifying Ark'
-        Rails.logger.error "Reason #{e.message}"
-        Rails.logger.error "Response code #{e.code}"
-      end
+      call_verify_ark!
+    rescue HttpConnectionPool::Error => e
+      Rails.logger.error 'HTTP Connection Pool Error!'
+      Rails.logger.error "Reason: #{e.message}"
+      false
+    rescue HTTP::Error => e
+      Rails.logger.error 'HTTP Error Occurred Verifying Ark'
+      Rails.logger.error "Reason #{e.message}"
+      false
+    rescue Curator::Exceptions::RemoteServiceError => e
+      Rails.logger.error 'Error Occurred Verifying Ark'
+      Rails.logger.error "Reason #{e.message}"
+      Rails.logger.error "Response code #{e.code}"
       false
     end
 
