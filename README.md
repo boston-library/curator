@@ -13,7 +13,7 @@ Please see the [Wiki](https://github.com/boston-library/curator/wiki) for more i
 1. Ensure you have the following installed on your development machine
     * `Postgresql ~9.6(v 15 stable is currently recommended)`
     * `Redis`
-    * `vips`
+    * `Imagemagick or vips`
     * `Ruby >= 3.1`, `~> 3.3 recommended`  
     * [Docker](https://docs.docker.com/)
 
