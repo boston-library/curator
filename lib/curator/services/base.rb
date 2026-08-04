@@ -9,7 +9,7 @@ module Curator
         end
       end
 
-      def call(&_block)
+      def call(&)
         raise NotImplementedError, "#{self.class}#call is unimplemented."
       end
     end

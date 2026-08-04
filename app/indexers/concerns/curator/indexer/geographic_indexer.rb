@@ -4,19 +4,27 @@ module Curator
   class Indexer < Traject::Indexer
     module GeographicIndexer
       extend ActiveSupport::Concern
+
+      GEO_FIELDS = %w(subject_geographic_tim subject_geographic_sim subject_geo_label_sim
+                      subject_geo_city_section_sim subject_geo_city_sim subject_geo_county_sim
+                      subject_geo_state_sim subject_geo_country_sim subject_geo_continent_sim
+                      subject_geo_other_ssm subject_coordinates_geospatial subject_point_geospatial
+                      subject_bbox_geospatial subject_geojson_facet_ssim subject_hiergeo_geojson_ssm).freeze
       included do
         configure do
           each_record do |record, context|
             # handle both DigitalObject and Institution
-            geo_subjects = record.try(:descriptive)&.subject_geos || Array.wrap(record.try(:location))
+            geo_subjects = if record.respond_to?(:descriptive)
+                             record.descriptive.subject_geos
+                           elsif record.respond_to?(:location)
+                             Array.wrap(record.location)
+                           else
+                             []
+                           end
+
             next if geo_subjects.blank?
 
-            geo_fields = %w(subject_geographic_tim subject_geographic_sim subject_geo_label_sim
-                            subject_geo_city_section_sim subject_geo_city_sim subject_geo_county_sim
-                            subject_geo_state_sim subject_geo_country_sim subject_geo_continent_sim
-                            subject_geo_other_ssm subject_coordinates_geospatial subject_point_geospatial
-                            subject_bbox_geospatial subject_geojson_facet_ssim subject_hiergeo_geojson_ssm)
-            geo_fields.each { |geo_field| context.output_hash[geo_field] = [] }
+            GEO_FIELDS.each { |geo_field| context.output_hash[geo_field] = [] }
 
             geo_subjects.each do |subject_geo|
               geo_label = subject_geo.label
@@ -87,7 +95,7 @@ module Curator
               geojson_hash[:properties] = { placename: display_placename } if display_placename
               context.output_hash['subject_geojson_facet_ssim'] << geojson_hash.to_json
             end
-            geo_fields.each { |geo_field| context.output_hash[geo_field].uniq! }
+            GEO_FIELDS.each { |geo_field| context.output_hash[geo_field].uniq! }
           end
         end
       end

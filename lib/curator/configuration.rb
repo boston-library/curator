@@ -54,10 +54,7 @@ module Curator
     def default_remote_service_timeout_opts
       @default_remote_service_timeout_opts ||
       {
-        connect: 120,
-        read: 240,
-        write: 120,
-        keep_alive: 120
+        timeout: 120
       }.freeze
     end
 
@@ -65,8 +62,8 @@ module Curator
     def default_remote_service_pool_opts
       @default_remote_service_pool_opts ||
       {
-        size: ENV.fetch('RAILS_MAX_THREADS') { 5 }.to_i + 2,
-        timeout: 15
+        pool_size: ENV.fetch('RAILS_MAX_THREADS', 5).to_i,
+        pool_timeout: 5
       }
     end
 
@@ -95,12 +92,13 @@ module Curator
         solr_url: solr_url,
         model_name_solr_field: 'curator_model_ssi',
         solr_id_value_attribute: 'ark_id',
-        writer_class_name: 'Traject::SolrJsonWriter',
+        writer_class_name: 'Traject::SolrPool::SolrJsonWriter',
         writer_settings: {
-          'solr_writer.thread_pool' => 0,
+          'solr_writer.thread_pool' => ENV.fetch('RAILS_MAX_THREADS', 5).to_i,
           'solr_writer.solr_update_args' => { softCommit: true },
-          'solr_writer.batch_size' => 1,
-          'solr_writer.http_timeout' => 3,
+          'solr_writer.batch_size' => 100,
+          'solr_writer.http_timeout' => 5,
+          'solr_writer.pool_timeout' => 5,
           'logger' => Rails.logger
         },
         disable_callbacks: false

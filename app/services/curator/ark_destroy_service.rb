@@ -11,42 +11,43 @@ module Curator
     end
 
     def call
-      begin
-        return self.class.with_client do |client|
-          delete_ark(client)
-        end
-      rescue HTTP::Error => e
-        Rails.logger.error 'HTTP Error Occured Destroying Ark'
-        Rails.logger.error "Reason #{e.message}"
-        raise ActiveRecord::RecordNotDestroyed, 'Error Destroying Ark!'
-      rescue Oj::Error => e
-        Rails.logger.error 'Invalid JSON From Ark Response'
-        Rails.logger.error "Reason #{e.message}"
-        raise ActiveRecord::RecordNotDestroyed, 'Error Destroying Ark!'
-      rescue Curator::Exceptions::RemoteServiceError => e
-        Rails.logger.error 'Error Occured Destroying Ark'
-        Rails.logger.error "Reason #{e.message}"
-        Rails.logger.error "Response code #{e.code}"
-        Rails.logger.error "Response #{e.json_response}"
-        raise ActiveRecord::RecordNotDestroyed, 'Error Destroying Ark!'
-      end
-      false
+      call_delete_ark!
+    rescue HttpConnectionPool::Error => e
+      Rails.logger.error 'HTTP Connection Pool Error!'
+      Rails.logger.error "Reason: #{e.message}"
+      raise ActiveRecord::RecordNotDestroyed, "Error Destroying Ark Due to #{e.inspect}!"
+    rescue HTTP::Error => e
+      Rails.logger.error 'HTTP Error Occurred Destroying Ark'
+      Rails.logger.error "Reason #{e.message}"
+      raise ActiveRecord::RecordNotDestroyed, "Error Destroying Ark Due to #{e.inspect}!"
+    rescue Oj::Error => e
+      Rails.logger.error 'Invalid JSON From Ark Response'
+      Rails.logger.error "Reason #{e.message}"
+      raise ActiveRecord::RecordNotDestroyed, "Error Destroying Ark Due to #{e.inspect}!"
+    rescue Curator::Exceptions::RemoteServiceError => e
+      Rails.logger.error 'Error Occurred Destroying Ark'
+      Rails.logger.error "Reason #{e.message}"
+      Rails.logger.error "Response code #{e.code}"
+      Rails.logger.error "Response #{e.json_response}"
+      raise ActiveRecord::RecordNotDestroyed, "Error Destroying Ark Due to #{e.inspect}!"
     end
 
     protected
 
-    def delete_ark(client)
-      resp = client.headers(self.class.default_headers).delete("#{self.class.default_path_prefix}/arks/#{ark_id}").flush
+    def call_delete_ark!
+      response = with_connection do |conn|
+        conn.delete("#{self.class.default_path_prefix}/arks/#{ark_id}")
+      end
 
-      return true if resp.status.success?
+      return true if response.status.success?
 
-      if resp.code == 404
+      if response.code == 404
         Rails.logger.warn "Ark #{ark_id} was not found on destroy! It may have been already destroyed previously"
         return true
       end
 
-      json_response = normalize_response(resp.body.to_s)
-      raise Curator::Exceptions::RemoteServiceError.new('Failed to destroy ark in ark-manager-api!', json_response, resp.status)
+      json_response = normalize_response(response.to_s)
+      raise Curator::Exceptions::RemoteServiceError.new('Failed to destroy ark in ark-manager-api!', json_response, response.code)
     end
   end
 end

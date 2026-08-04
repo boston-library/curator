@@ -82,7 +82,7 @@ module Curator
       def writer
         @writer ||= begin
           if @batching
-            batch_size = (@batching == true) ? Curator.config.indexable_settings.batching_mode_batch_size : @batching
+            batch_size = @batching == true ? Curator.config.indexable_settings.batching_mode_batch_size : @batching
             @local_writer = true
             Curator.config.indexable_settings.writer_instance!('solr_writer.batch_size' => batch_size)
           end

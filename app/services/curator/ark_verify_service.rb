@@ -11,26 +11,29 @@ module Curator
     end
 
     def call
-      begin
-        return self.class.with_client do |client|
-          verify_ark(client)
-        end
-      rescue HTTP::Error => e
-        Rails.logger.error 'HTTP Error Occured Verifying Ark'
-        Rails.logger.error "Reason #{e.message}"
-      rescue Curator::Exceptions::RemoteServiceError => e
-        Rails.logger.error 'Error Occured Verifying Ark'
-        Rails.logger.error "Reason #{e.message}"
-        Rails.logger.error "Response code #{e.code}"
-      end
+      call_verify_ark!
+    rescue HttpConnectionPool::Error => e
+      Rails.logger.error 'HTTP Connection Pool Error!'
+      Rails.logger.error "Reason: #{e.message}"
+      false
+    rescue HTTP::Error => e
+      Rails.logger.error 'HTTP Error Occurred Verifying Ark'
+      Rails.logger.error "Reason #{e.message}"
+      false
+    rescue Curator::Exceptions::RemoteServiceError => e
+      Rails.logger.error 'Error Occurred Verifying Ark'
+      Rails.logger.error "Reason #{e.message}"
+      Rails.logger.error "Response code #{e.code}"
       false
     end
 
     protected
 
-    def verify_ark(client)
-      resp = client.headers(self.class.default_headers).head("#{self.class.default_path_prefix}/arks/#{ark_id}").flush
-      resp.code == 200
+    def call_verify_ark!
+      response = with_connection do |conn|
+        conn.head("#{self.class.default_path_prefix}/arks/#{ark_id}")
+      end
+      response.status.success?
     end
   end
 end

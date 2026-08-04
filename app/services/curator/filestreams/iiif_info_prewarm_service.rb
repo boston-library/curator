@@ -6,8 +6,9 @@ module Curator
     include Curator::Filestreams::IIIFServerHealthCheck
 
     self.base_url = Curator.config.iiif_server_url
-    self.default_headers = { content_type: 'application/json' }
-    self.timeout_options = Curator.config.default_remote_service_timeout_opts.merge(read: 300)
+    self.pool_timeout = Curator.config.default_remote_service_pool_opts[:pool_timeout]
+    self.pool_size = Curator.config.default_remote_service_pool_opts[:pool_size]
+    self.pool_options = { headers: { 'Content-Type' => 'application/json' } }.merge(Curator.config.default_remote_service_timeout_opts)
 
     attr_reader :ark_id
 
@@ -16,37 +17,39 @@ module Curator
     end
 
     def call
-      begin
-        service_response = self.class.with_client do |client|
-          call_iiif_info_endpoint(client)
-        end
-
-        return service_response
-      rescue HTTP::Error => e
-        base_message = 'HTTP Error Occurred Calling IIIF Server'
-        json_reason = { 'reason' => e.message }.as_json
-        Rails.logger.error base_message
-        Rails.logger.error "Reason: #{e.message}"
-        raise Curator::Exceptions::RemoteServiceError.new(base_message, json_reason, 500)
-      rescue Curator::Exceptions::RemoteServiceError => e
-        Rails.logger.error 'Error Occurred Creating info.json on IIIF Server'
-        Rails.logger.error "Reason: #{e.message}"
-        Rails.logger.error "Response code: #{e.code}"
-        Rails.logger.error "Response: #{e.json_response}"
-        raise
-      end
-      nil
+      call_iiif_info_endpoint!
+    rescue HttpConnectionPool::Error => e
+      base_message = 'HTTP Connection Pool Error!'
+      json_reason = { 'reason' => e.message }.as_json
+      Rails.logger.error base_message
+      Rails.logger.error "Reason: #{e.message}"
+      raise Curator::Exceptions::RemoteServiceError.new(base_message, json_reason, 500)
+    rescue HTTP::Error => e
+      base_message = 'HTTP Error Occurred Calling IIIF Server'
+      json_reason = { 'reason' => e.message }.as_json
+      Rails.logger.error base_message
+      Rails.logger.error "Reason: #{e.message}"
+      raise Curator::Exceptions::RemoteServiceError.new(base_message, json_reason, 500)
+    rescue Curator::Exceptions::RemoteServiceError => e
+      Rails.logger.error 'Error Occurred Creating info.json on IIIF Server'
+      Rails.logger.error "Reason: #{e.message}"
+      Rails.logger.error "Response code: #{e.code}"
+      Rails.logger.error "Response: #{e.json_response}"
+      raise
     end
 
     protected
 
-    def call_iiif_info_endpoint(client)
-      info_endpoint = "#{Curator.config.iiif_server_url}/iiif/2/#{ark_id}/info.json"
-      resp = client.headers(self.class.default_headers).get(info_endpoint).flush
+    def call_iiif_info_endpoint!
+      info_endpoint = "/iiif/2/#{ark_id}/info.json"
 
-      return "Successfully created info.json at #{info_endpoint}" if resp.status.success?
+      response = with_connection do |conn|
+        conn.get(info_endpoint)
+      end
 
-      raise Curator::Exceptions::RemoteServiceError.new("Failed to pre warm info for #{ark_id} in iiif server!", { response: resp.body.to_s }, resp.status)
+      return "Successfully created info.json at #{Curator.config.iiif_server_url}#{info_endpoint}" if response.status.success?
+
+      raise Curator::Exceptions::RemoteServiceError.new("Failed to pre warm info for #{ark_id} in iiif server!", { response: response.to_s }, response.code)
     end
   end
 end

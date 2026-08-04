@@ -1,9 +1,9 @@
 # Curator 
 
-![Build Status](https://github.com/boston-library/curator/actions/workflows/action-build.yaml/badge.svg)
+![Build Status](https://github.com/boston-library/curator/actions/workflows/ci.yaml/badge.svg)
 
 ## Description
-Rails(~> 7.0) engine that provides data models and services for a JSON API for digital asset management.
+Rails(~> 7.2) engine that provides data models and services for a JSON REST API for digital asset management.
 Implements ActiveStorage for Cloud or local storage for files.
 
 Please see the [Wiki](https://github.com/boston-library/curator/wiki) for more information.
@@ -11,10 +11,10 @@ Please see the [Wiki](https://github.com/boston-library/curator/wiki) for more i
 ## Installation (for development only)
 
 1. Ensure you have the following installed on your development machine
-    * `Postgresql ~9.6(v 12 stable is recommended)`
+    * `Postgresql ~9.6(v 15 stable is currently recommended)`
     * `Redis`
-    * `Imagemagick`
-    * `Ruby  >= 3.1`
+    * `Imagemagick or vips`
+    * `Ruby >= 3.1`, `~> 3.3 recommended`  
     * [Docker](https://docs.docker.com/)
 
 2. Clone Project

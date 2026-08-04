@@ -8,8 +8,10 @@ module Curator
       include Curator::Services::RemoteService
 
       self.base_url = Curator.config.ark_manager_api_url
+      self.pool_timeout = Curator.config.default_remote_service_pool_opts[:pool_timeout]
+      self.pool_size = Curator.config.default_remote_service_pool_opts[:pool_size]
+      self.pool_options = { headers: { 'Accept' => 'application/json', 'Content-Type' => 'application/json' } }.merge(Curator.config.default_remote_service_timeout_opts)
       self.default_path_prefix = '/api/v2'
-      self.default_headers = { accept: 'application/json', content_type: 'application/json' }
     end
   end
 end
