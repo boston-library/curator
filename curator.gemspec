@@ -40,7 +40,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'concurrent-ruby', '~> 1.3'
   spec.add_dependency 'concurrent-ruby-ext', '~> 1.3'
   spec.add_dependency 'connection_pool', '~> 2.5'
-  spec.add_dependency 'down', '~> 5.4'
+  spec.add_dependency 'down', '~> 5.6'
   # TODO: Look into replacing htmlentities since the last released in 2014. I recommend turning this into its own parser class.
   # UPDATE htmlentities had a release as of late 2025 but not sure how much time the owner is going to dedicate to this
   spec.add_dependency 'htmlentities', '~> 4.4'

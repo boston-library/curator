@@ -10,11 +10,10 @@ module Curator
           return true if ENV.fetch('RAILS_ENV', 'development') == 'test'
 
           begin
-            status = with_client do |client|
-              resp = client.headers(default_headers).head('/health').flush
-              resp.status
+            response = with_connection do |connection|
+              connection.head('/health')
             end
-            status == 200
+            response.status.success?
           rescue StandardError => e
             Rails.logger.error "Error: #{name} is not available: #{e.message}"
             false
