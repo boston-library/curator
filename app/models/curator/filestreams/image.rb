@@ -80,11 +80,11 @@ module Curator
     end
 
     def invalidate_iiif_manifest
-      Curator::IIIFManifestInvalidateJob.set(wait: 3.seconds).perform_later(file_set_of.ark_id)
+      Curator::IIIFManifestInvalidateJob.set(wait: 5.seconds).perform_later(file_set_of.ark_id)
     end
 
     def invalidate_iiif_cache
-      Curator::Filestreams::IIIFCacheInvalidateJob.set(wait: 2.seconds).perform_later(ark_id)
+      Curator::Filestreams::IIIFCacheInvalidateJob.set(wait: 5.seconds).perform_later(ark_id)
     end
   end
 end

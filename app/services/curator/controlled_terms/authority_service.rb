@@ -26,15 +26,19 @@ module Curator
     rescue HttpConnectionPool::Error => e
       Rails.logger.error 'HTTP Connection Pool Error!'
       Rails.logger.error "Reason: #{e.message}"
+      nil
     rescue HTTP::Error => e
       Rails.logger.error "Error Retrieving Json for Authority at #{request_uri}"
       Rails.logger.error "Reason: #{e.message}"
+      nil
     rescue Oj::Error => e
       Rails.logger.error "Error Parsing Json for Authority at #{request_uri}"
       Rails.logger.error "Reason: #{e.message}"
+      nil
     rescue Curator::Exceptions::RemoteServiceError => e
       Rails.logger.error "Error Retrieving Json for Authority at #{request_uri}"
       Rails.logger.error "Reason: #{e.message}"
+      nil
     end
 
     protected

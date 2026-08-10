@@ -86,11 +86,11 @@ module Curator
     end
 
     def queue_indexing_job
-      Curator::Indexer::IndexingJob.set(wait: 2.seconds).perform_later(self.class.name, id)
+      Curator::Indexer::IndexingJob.set(wait: 5.seconds).perform_later(self.class.name, id)
     end
 
     def queue_deletion_job
-      Curator::Indexer::DeletionJob.set(wait: 2.seconds).perform_later(ark_id)
+      Curator::Indexer::DeletionJob.set(wait: 5.seconds).perform_later(ark_id)
     end
   end
 end
