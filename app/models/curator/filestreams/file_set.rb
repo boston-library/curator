@@ -131,7 +131,7 @@ module Curator
       return if file_set_member_of_mappings.blank?
 
       reindex_jobs = file_set_members_of_ids.map do |digital_object_id|
-        Curator::Indexer::IndexingJob.new(Curator.digital_object_class.name, digital_object_id).set(wait: 2.seconds)
+        Curator::Indexer::IndexingJob.new(Curator.digital_object_class.name, digital_object_id).set(wait: 5.seconds)
       end
 
       ActiveJob.perform_all_later(reindex_jobs)
@@ -141,7 +141,7 @@ module Curator
       return if exemplary_image_of_collections.blank?
 
       reindex_jobs = exemplary_image_of_collection_ids.map do |collection_id|
-        Curator::Indexer::IndexingJob.new(Curator.collection_class.name, collection_id).set(wait: 2.seconds)
+        Curator::Indexer::IndexingJob.new(Curator.collection_class.name, collection_id).set(wait: 5.seconds)
       end
 
       ActiveJob.perform_all_later(reindex_jobs)

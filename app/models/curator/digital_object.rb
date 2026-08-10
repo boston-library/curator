@@ -180,7 +180,7 @@ module Curator
     end
 
     def invalidate_iiif_manifest
-      Curator::IIIFManifestInvalidateJob.set(wait: 2.seconds).perform_later(ark_id)
+      Curator::IIIFManifestInvalidateJob.set(wait: 5.seconds).perform_later(ark_id)
     end
   end
 end

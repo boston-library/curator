@@ -108,14 +108,14 @@ module Curator
       # Skip Metadata File Set types since they are processed via a different workflow
       return if workflowable.class.name == 'Curator::Filestreams::Metadata'
 
-      Curator::Filestreams::DerivativesJob.set(wait: 2.seconds).perform_later(workflowable_type, workflowable_id)
+      Curator::Filestreams::DerivativesJob.set(wait: 5.seconds).perform_later(workflowable_type, workflowable_id)
     end
 
     alias regenerate_derivatives generate_derivatives
 
     def finalize_complete
       prewarm_iiif_info
-      touch_parent
+      # touch_parent
     end
 
     def prewarm_iiif_info
@@ -123,11 +123,12 @@ module Curator
 
       return if workflowable.class.name != 'Curator::Filestreams::Image'
 
-      Curator::Filestreams::IIIFInfoPrewarmJob.set(wait: 2.seconds).perform_later(workflowable.ark_id)
+      Curator::Filestreams::IIIFInfoPrewarmJob.set(wait: 5.seconds).perform_later(workflowable.ark_id)
     end
 
-    def touch_parent
-      workflowable.file_set_of.touch if workflowable_type == 'Curator::Filestreams::FileSet'
-    end
+    # NOTE: this is probably not needed anymore but I am leaving it here in case we need to roll back. Will remove in future iterations
+    # def touch_parent
+    #   workflowable.file_set_of.touch if workflowable_type == 'Curator::Filestreams::FileSet'
+    # end
   end
 end

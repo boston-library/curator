@@ -60,10 +60,10 @@ module Curator
 
       collections.includes(:collection_members).find_each do |col|
         reindex_jobs = col.collection_members.pluck(:digital_object_id).map do |digital_object_id|
-          Curator::Indexer::IndexingJob.new(Curator.digital_object_class.name, digital_object_id).set(wait: 2.seconds)
+          Curator::Indexer::IndexingJob.new(Curator.digital_object_class.name, digital_object_id).set(wait: 5.seconds)
         end
 
-        reindex_jobs << Curator::Indexer::IndexingJob.new(col.class.name, col.id).set(wait: 2.seconds)
+        reindex_jobs << Curator::Indexer::IndexingJob.new(col.class.name, col.id).set(wait: 5.seconds)
 
         ActiveJob.perform_all_later(reindex_jobs)
       end
