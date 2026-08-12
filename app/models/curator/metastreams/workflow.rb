@@ -115,7 +115,7 @@ module Curator
 
     def finalize_complete
       prewarm_iiif_info
-      # touch_parent
+      touch_parent
     end
 
     def prewarm_iiif_info
@@ -126,9 +126,8 @@ module Curator
       Curator::Filestreams::IIIFInfoPrewarmJob.set(wait: 5.seconds).perform_later(workflowable.ark_id)
     end
 
-    # NOTE: this is probably not needed anymore but I am leaving it here in case we need to roll back. Will remove in future iterations
-    # def touch_parent
-    #   workflowable.file_set_of.touch if workflowable_type == 'Curator::Filestreams::FileSet'
-    # end
+    def touch_parent
+      workflowable.file_set_of&.touch if workflowable_type == 'Curator::Filestreams::FileSet'
+    end
   end
 end

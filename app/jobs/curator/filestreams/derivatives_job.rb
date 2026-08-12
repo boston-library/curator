@@ -4,9 +4,9 @@ module Curator
   class Filestreams::DerivativesJob < ApplicationJob
     queue_as :filestream_derivatives
 
-    retry_on Curator::Exceptions::AviProcessorApiUnavailable, ActiveRecord::StaleObjectError, wait: 5.seconds, attempts: 5
-    retry_on Curator::Exceptions::RemoteServiceError, wait: 5.seconds, attempts: 2
-    retry_on Curator::Exceptions::CuratorError, attempts: 1, wait: 5.seconds
+    retry_on Curator::Exceptions::AviProcessorApiUnavailable, ActiveRecord::StaleObjectError, wait: 30.seconds, attempts: 3
+    retry_on Curator::Exceptions::RemoteServiceError, wait: 30.seconds, attempts: 2
+    retry_on Curator::Exceptions::CuratorError, wait: 30.seconds, attempts: 1
 
     before_perform { remote_service_healthcheck! }
 
