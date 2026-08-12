@@ -5,8 +5,8 @@ module Curator
     module TransactionHandler
       extend ActiveSupport::Concern
 
-      MAX_RETRIES = 3
-      RETRY_SLEEP_SECONDS = 5
+      MAX_RETRIES = 2
+      RETRY_SLEEP_SECONDS = 3
       # These are errors that will be passed to the @result variable. That way these can be raised on failure up the chain
       RESULT_ERRORS = [
                         ActiveRecord::RecordNotFound,
@@ -64,15 +64,18 @@ module Curator
               @record.reload if @record.present? && !@record.new_record?
               retry
             else
-              Rails.logger.error '===============MAX RETRIES REACHED!============'
+              Rails.logger.error '============!!!MAX RETRIES REACHED!!!=========='
               Rails.logger.error "=================#{e.inspect}=================="
+              Rails.logger.error '==============================================='
 
               raise ActiveRecord::RecordNotSaved.new("Max retries reached on stale object! Caused by: #{e.message}", e.record)
             end
           end
         end
       rescue *RESULT_ERRORS => e
+        Rails.logger.error '==============================================='
         Rails.logger.error "=================#{e.inspect}=================="
+        Rails.logger.error '==============================================='
         @success = false
         @result = e
       ensure

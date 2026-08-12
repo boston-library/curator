@@ -4,7 +4,7 @@ module Curator
   class Indexer::DeletionJob < ApplicationJob
     queue_as :indexing
 
-    retry_on Curator::Exceptions::SolrUnavailable, ActiveRecord::StaleObjectError, attempts: 3, wait: 5.seconds
+    retry_on Curator::Exceptions::SolrUnavailable, ActiveRecord::StaleObjectError, attempts: 3, wait: 30.seconds
 
     before_perform { remote_service_healthcheck! }
 
