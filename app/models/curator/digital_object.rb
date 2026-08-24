@@ -179,8 +179,9 @@ module Curator
       collection_members.build(collection: admin_set) if admin_set.present?
     end
 
+    # NOTE: unless the object eager loads the administrative object #oai_object? will return nil in an after_destroy_commit context. Added check on ark_id as a fallback
     def invalidate_iiif_manifest
-      Curator::IIIFManifestInvalidateJob.set(wait: 5.seconds).perform_later(ark_id)
+      Curator::IIIFManifestInvalidateJob.set(wait: 10.seconds).perform_later(ark_id) unless oai_object? || ark_id.include?(Curator.config.default_ark_params[:oai_namespace_id])
     end
   end
 end
