@@ -50,9 +50,11 @@ module Curator
         conn.post("/search/#{ark_id}/manifest/cache_invalidate")
       end
 
+      json_response = normalize_response!(response.to_s)
+
       raise Curator::Exceptions::RemoteServiceError.new('Failed to trigger manifest purge !', json_response, response.code) if [200, 404].exclude?(response.code)
 
-      normalize_response!(response.to_s)
+      json_response
     end
   end
 end
