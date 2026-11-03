@@ -72,8 +72,9 @@ module Curator
           return import_file_from_fedora(attributes, content_io(io_hash)) if fedora_content?(io_hash)
 
           # NOTE: we should be passing a Hash to the attach method. This is more in line with what vanilla active storage does and will cut back on errors. See this file for more info https://github.com/rails/rails/blob/e3e3a97ada3f2b4c0c8d48f941c2ea05c859cdda/activestorage/lib/active_storage/attached/changes/create_one.rb#L52
-          # UPDATE: This is wrong since according to some answes online the upload ONLY happens once the object is comitted. So we should pass this into a new method I created that uses the create_after_unfurling method
-          ingest_attributes = {
+          # UPDATE: This is wrong since according to some answers online the upload ONLY happens once the object is comitted. So we should pass this into a new method I created that uses the create_after_unfurling method
+          # UPDATE: Since we have moved on to rails 7.2 it appears that the correct way to do this now is to pass a hash when creating a file set. This will prevent a cascade of touches and autosave from occuring later
+          {
             key: attributes['key'],
             io: content_io(io_hash),
             service_name: attributes['service_name'],
@@ -82,7 +83,6 @@ module Curator
             metadata: attributes['metadata'],
             identify: attributes['content_type'].present? # This is specified here https://github.com/rails/rails/blob/8929f6f6e492c15a58ca13290f5ff44d00b37ccc/activestorage/app/models/active_storage/blob.rb#L110
           }
-          attach_file_via_ingest(ingest_attributes)
         end
 
         def file_attributes(attachment = {})
@@ -139,10 +139,6 @@ module Curator
           return blob if blob.uploaded?
 
           raise ActiveStorage::FileNotFoundError, "File at #{blob.key} in service #{blob.service_name} not found!"
-        end
-
-        def attach_file_via_ingest(attachment_attributes = {})
-          ActiveStorage::Blob.create_and_upload!(**attachment_attributes)
         end
 
         def record_attachments(record)
